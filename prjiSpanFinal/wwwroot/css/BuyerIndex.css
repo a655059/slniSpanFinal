@@ -1,0 +1,39 @@
+﻿*{
+    margin:0;
+    padding:0;
+}
+.product{
+    display:flex;
+    justify-content:space-between;
+}
+.productPhoto{
+    width:40%;
+}
+
+
+.productPhoto .bigPhoto img {
+    width: 100%;
+    border: 1px solid #E0E0E0;
+}
+.productPhoto .smallPhoto {
+    width: 90%;
+    height: 200px;
+    display: flex;
+    justify-content:center;
+    margin:5px auto 0;
+}
+.productPhoto .smallPhoto > div {
+    width: 100px;
+    height: 100px;
+    padding: 0 5px;
+}
+.productPhoto .smallPhoto > div img {
+    width: 100%;
+    border: 1px solid #E0E0E0;
+}
+
+.productInfo{
+    width:60%;
+    padding-left:10px;
+}
+

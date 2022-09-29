@@ -1,0 +1,36 @@
+﻿@using prjiSpanFinal.ViewModels
+@model prjiSpanFinal.ViewModels.CBuyerIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="~/css/BuyerIndex.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+
+<div class="container">
+    <div class="product">
+        <div class="productPhoto">
+            <div class="bigPhoto">
+                @{
+                    string base64 = Convert.ToBase64String(Model.CProductPics[0].Picture);
+                    string imgSrc = $"data:image/gif;base64,{base64}";
+                    <img src="@imgSrc" />
+                }
+            </div>
+            <div class="smallPhoto">
+                @foreach (CProductPicViewModel i in Model.CProductPics)
+                {
+                    string base65 = Convert.ToBase64String(i.Picture);
+                    string imgSrc1 = $"data:image/gif;base64,{base65}";
+                    <div><img src="@imgSrc1" /></div>
+                }
+            </div>
+        </div>
+        <div class="productInfo">
+            <h3>@Model.CProducts[0].ProductName</h3>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="~/js/BuyerIndex.js"></script>
