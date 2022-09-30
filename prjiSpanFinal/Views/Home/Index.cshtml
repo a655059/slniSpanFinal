@@ -1,8 +1,67 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link href="~/css/LayoutUse.css" rel="stylesheet" />
 
-<div class="text-center">
-    <h1 class="display-4">歡迎商城</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
+    <div class="HomepageIndex">
+        <section>
+            <div class="row">
+                <div class="col-2 view border border-danger border-1">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">
+                            Cras justo odio
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                    </div>
+                </div>
+                <div class="col-1 border border-primary border-1"></div>
+                <!--Carouset-->
+                <div class="col-9 view border border-dark border-1">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-interval="2000" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="~/img/Homepage/Index.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="~/img/Homepage/Index.jpg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="~/img/Homepage/Index.jpg" class="d-block w-100" alt="...">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--/Carouset-->
+        </section>
+    </div>   
+    <div class="clearfix visible-xs"></div>
+    <div class="text-center">
+        <h1 class="display-4">歡迎商城</h1>
+    </div>
+</body>
+<script src="~/js/src/carousel.js"></script>
