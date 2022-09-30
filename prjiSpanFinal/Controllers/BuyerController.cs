@@ -47,5 +47,9 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult Order()
+        {
+            return View();
+        }
     }
 }
