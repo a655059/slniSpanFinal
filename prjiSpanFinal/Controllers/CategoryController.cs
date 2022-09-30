@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
-    public class SellerController : Controller
+    public class CategoryController : Controller
     {
         public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult Order()
         {
             return View();
         }
