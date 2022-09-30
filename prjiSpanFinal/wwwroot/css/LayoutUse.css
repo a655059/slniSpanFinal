@@ -23,3 +23,7 @@
     padding: 0;
     min-width: 0;
 }
+.carousel .carousel-item img {
+    min-height: 575px;
+    object-fit: cover;
+}
