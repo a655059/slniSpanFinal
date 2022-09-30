@@ -1,0 +1,77 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.COrder>
+
+@{
+    ViewData["Title"] = "OrderList";
+}
+
+<h1>OrderList</h1>
+
+<p>
+    <a asp-action="OrderCreate">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderID)
+            </th>
+            <th>
+                賣家名稱
+            </th>
+            <th>
+                下訂日期
+            </th>
+            <th>
+                產品名稱
+            </th>
+            <th>
+                產品單價
+            </th>
+            <th>
+                購買數量
+            </th>
+            <th>
+                總價
+            </th>
+            <th style="width:10% ">
+                訂單狀態
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input value="@item.OrderID" class="form-control-plaintext" readonly />
+                </td>
+                <td>
+                    <input value="@item.MemberName" class="form-control-plaintext" readonly />
+                </td>
+                <td>
+                    <input value="@item.Date" class="form-control-plaintext" readonly />
+                </td>
+                <td>
+                    <input value="@item.ProductName" class="form-control-plaintext" readonly />
+                </td>
+                <td>
+                    <input value="@item.UnitPrice" class="form-control-plaintext" readonly />
+                </td>
+                <td>
+                    <input value="@item.Quantity" class="form-control-plaintext" readonly />
+                </td>
+                <td >
+                    <input value="@item.TotalPrice" class="form-control-plaintext" readonly />
+                </td>
+                <td >
+                    @Html.DisplayFor(modelItem => item.OrderStatus)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "OrderEdit", new { id=item.OrderID}) |
+                    @Html.ActionLink("Delete", "OrderDelete", new { id=item.OrderID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
