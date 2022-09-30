@@ -18,8 +18,6 @@
 .productPhoto .smallPhoto {
     width: 90%;
     height: 200px;
-    display: flex;
-    justify-content:center;
     margin:5px auto 0;
 }
 .productPhoto .smallPhoto > div {
@@ -32,8 +30,36 @@
     border: 1px solid #E0E0E0;
 }
 
-.productInfo{
-    width:60%;
-    padding-left:10px;
+.itemInfo {
+    width: 60%;
+    padding-left: 10px;
 }
 
+.itemInfo .starBox {
+    width: 20px;
+}
+.itemInfo .starBox img {
+    width: 100%;
+    display: block;
+}
+
+.itemInfo a:link {
+    text-decoration: none;
+}
+.itemInfo a:hover {
+    text-decoration: underline
+}
+
+.itemDetails {
+    background-color: #FFFAF4;
+    padding: 0 5px 5px 5px;
+    border-radius: 10px;
+}
+
+.itemKey{
+    width:10%;
+}
+
+.itemStyleContent{
+    width:90%;
+}
