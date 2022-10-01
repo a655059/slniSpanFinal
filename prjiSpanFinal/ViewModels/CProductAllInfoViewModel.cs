@@ -5,17 +5,12 @@ using System.Threading.Tasks;
 
 namespace prjiSpanFinal.ViewModels
 {
-    public class CItemIndexViewModel
+    public class CProductAllInfoViewModel
     {
         public CProductViewModel CProduct { get; set; }
         public List<CProductDetailViewModel> CProductDetails { get; set; }
         public List<CProductPicViewModel> CProductPics { get; set; }
-        public CBigTypeViewModel CBigType { get; set; }
-        public CSmallTypeViewModel CSmallType { get; set; }
         public double CommentAvgScore { get; set; }
-        public int CommentCount { get; set; }
         public int SellCount { get; set; }
-        public List<CProductAllInfoViewModel> SellerProducts { get; set; }
-
     }
 }

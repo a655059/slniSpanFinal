@@ -1,32 +1,30 @@
-﻿*{
-    margin:0;
-    padding:0;
-}
-.product{
-    display:flex;
-    justify-content:space-between;
-}
+﻿
 .productPhoto{
     width:40%;
 }
-
-
+.productPhoto .bigPhoto{
+    width:100%;
+    aspect-ratio:1/1;
+}
 .productPhoto .bigPhoto img {
-    width: 100%;
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:contain;
     border: 1px solid #E0E0E0;
 }
 .productPhoto .smallPhoto {
     width: 90%;
-    height: 200px;
     margin:5px auto 0;
 }
-.productPhoto .smallPhoto > div {
-    width: 100px;
-    height: 100px;
+.productPhoto .smallPhoto div {
+    width: 20%;
+    aspect-ratio:1/1;
     padding: 0 5px;
 }
-.productPhoto .smallPhoto > div img {
+.productPhoto .smallPhoto img {
     width: 100%;
+    aspect-ratio:1/1;
+    object-fit:contain;
     border: 1px solid #E0E0E0;
 }
 
@@ -63,3 +61,54 @@
 .itemStyleContent{
     width:90%;
 }
+
+.sellerProducts .pageSelect button {
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    font-size:20px;
+    font-weight:bold;
+    margin:0 5px;
+}
+
+.sellerProducts #previousPage {
+    background-color: #FFDCB9;
+    color: #D0D0D0;
+}
+.sellerProducts #nextPage {
+    background-color: #FFA042;
+}
+
+.sellerProducts .cardLayout{
+    width:1040px;
+    height:320px;
+    margin: 0 auto;
+    overflow:hidden;
+}
+
+
+.sellerProducts .cardImg{
+    display:block;
+    width:100%;
+    aspect-ratio:1/1;
+}
+
+.sellerProducts .cardTitle{
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+}
+.sellerProducts .cardPrice{
+    color:red;
+    font-size:1em;
+    font-weight:bold;
+}
+
+.sellerProducts .cardInfo{
+    font-size:12px;
+}
+.sellerProducts .starImg{
+    width:12px;
+    aspect-ratio:1/1;
+}
+
