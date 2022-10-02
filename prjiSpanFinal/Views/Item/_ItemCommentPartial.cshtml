@@ -1,0 +1,88 @@
+﻿@model prjiSpanFinal.ViewModels.CItemCommentViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style>
+    .rounded-2 {
+        background-color: #ECF5FF;
+    }
+    .starImg{
+        width:20px;
+    }
+    .commentPic{
+        width:100px;
+        aspect-ratio:1/1;
+        margin-right:5px;
+    }
+    .commentPic img{
+        width:100%;
+        aspect-ratio:1/1;
+        object-fit:contain;
+    }
+</style>
+<div class="rounded-2 px-5 py-3">
+    @{ 
+
+        foreach (var i in Model.CCommentAllInfos)
+        {
+            string buyer = i.CMemberAccount.Name;
+            string buyerName = buyer[0].ToString();
+            for (int j = 1; j < buyer.Length; j++)
+            {
+                buyerName += "*";
+            }
+            int starCount = i.CComment.Star;
+            string style = "";
+            foreach (var j in i.ProductStyles)
+            {
+                if (j == "樣式1")
+                {
+                    break;
+                }
+                else
+                {
+                    style += j + "/";
+                }
+            }
+            if (style.Length != 0)
+            {
+                style = style.Substring(0, style.Length - 1);
+            }
+
+            <div class="fs-6 border-bottom border-secondary border-1 pb-3 mb-3">
+                <div class="mb-1"><span class="fw-bold">買家:&emsp;</span><span class="text-primary">@buyerName</span></div>
+                <div class="d-flex justify-content-start mb-1">
+                    @{
+                        for (int j = 1; j <= 5; j++)
+                        {
+                            if (j <= starCount)
+                            {
+                                <img src="~/img/YellowStar.png" class="starImg" />
+                            }
+                            else
+                            {
+                                <img src="~/img/WhiteStar.png" class="starImg" />
+                            }
+                        }
+                    }
+                </div>
+                <div class="text-black-50 mb-1"><span class="me-1">規格:</span>@style</div>
+                <div class="mb-1">@i.CComment.Comment1</div>
+                <div class="d-flex justify-content-start align-items-center mb-1">
+                    @{ 
+                        if (i.CommentPics.Count != 0)
+                        {
+                            foreach (var j in i.CommentPics)
+                            {
+                                string base64 = Convert.ToBase64String(j.CommentPic1);
+                                string imgSrc = $"data:image/gif;base64,{base64}";
+                                <div class="commentPic"><img src="@imgSrc"/></div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+    
+</div>

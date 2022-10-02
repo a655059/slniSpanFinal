@@ -46,3 +46,4 @@ $("#previousPage").click(function () {
     }
     $(".sellerCard").animate({ left: "+=1050px" });
 });
+

@@ -119,6 +119,101 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-        
+        public IActionResult Description(int? id)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
+            CProductViewModel cProduct = new CProductViewModel();
+            cProduct.product = product;
+
+            var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
+            List<CProductDetailViewModel> cProductDetailsList = new List<CProductDetailViewModel>();
+            foreach (var i in productDetails)
+            {
+                CProductDetailViewModel cProductDetail = new CProductDetailViewModel();
+                cProductDetail.productDetail = i;
+                cProductDetailsList.Add(cProductDetail);
+            }
+
+            var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i).ToList();
+            List<CProductPicViewModel> cProductPicsList = new List<CProductPicViewModel>();
+            if (productPics.Count != 0)
+            {
+                foreach (var i in productPics)
+                {
+                    CProductPicViewModel cProductPic = new CProductPicViewModel();
+                    cProductPic.productPic = i;
+                    cProductPicsList.Add(cProductPic);
+                }
+            }
+            var seller = dbContext.MemberAccounts.Where(i => i.MemberId == product.MemberId).Select(i => i).FirstOrDefault();
+            CMemberAccountViewModel cMemberAccount = new CMemberAccountViewModel();
+            cMemberAccount.memberAccount = seller;
+
+
+            CItemIndexViewModel cItemIndex = new CItemIndexViewModel();
+            cItemIndex.CProduct = cProduct;
+            cItemIndex.CProductDetails = cProductDetailsList;
+            cItemIndex.CProductPics = cProductPicsList;
+            cItemIndex.Seller = cMemberAccount;
+
+            return PartialView("/Views/Item/_ItemDescriptionPartial.cshtml", cItemIndex);
+        }
+        public IActionResult Comment(int? id)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var comments = dbContext.Comments.Where(i => i.ProductId == id).Select(i => i).ToList();
+            List<CCommentAllInfoViewModel> cCommentAllInfosList = new List<CCommentAllInfoViewModel>();
+            if (comments.Count != 0)
+            {
+                foreach (var i in comments)
+                {
+                    CCommentViewModel cComment = new CCommentViewModel();
+                    cComment.comment = i;
+
+                    var buyer = dbContext.MemberAccounts.Where(a => a.MemberId == i.MemberId).Select(a => a).FirstOrDefault();
+                    CMemberAccountViewModel cMemberAccount = new CMemberAccountViewModel();
+                    cMemberAccount.memberAccount = buyer;
+
+                    var productStyles = dbContext.OrderDetails.Where(a => a.ProductDetail.ProductId == id && a.Order.MemberId == buyer.MemberId).Select(a => a.ProductDetail.Style);
+                    List<string> productStyleList = new List<string>();
+                    foreach (var j in productStyles)
+                    {
+                        productStyleList.Add(j);
+                    }
+
+                    var commentPics = dbContext.CommentPics.Where(a => a.CommentId == i.CommentId).Select(a => a).ToList();
+                    List<CommentPic> commentPicList = new List<CommentPic>();
+                    if (commentPics.Count != 0)
+                    {
+                        foreach (var j in commentPics)
+                        {
+                            commentPicList.Add(j);
+                        }
+                    }
+
+                    CCommentAllInfoViewModel cCommentAllInfo = new CCommentAllInfoViewModel();
+                    cCommentAllInfo.CComment = cComment;
+                    cCommentAllInfo.CommentPics = commentPicList;
+                    cCommentAllInfo.CMemberAccount = cMemberAccount;
+                    cCommentAllInfo.ProductStyles = productStyleList;
+                    cCommentAllInfosList.Add(cCommentAllInfo);
+                }
+            }
+            CItemCommentViewModel cItemComment = new CItemCommentViewModel();
+            cItemComment.CCommentAllInfos = cCommentAllInfosList;
+            return PartialView("/Views/Item/_ItemCommentPartial.cshtml", cItemComment);
+        }
+        public IActionResult BuyerCount(int? id)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var orderDetails = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == id && i.Order.StatusId == 6).Select(i => i);
+            List<CBuyerCountAllInfoViewModel> cBuyerCountAllInfosList = new List<CBuyerCountAllInfoViewModel>();
+            foreach (var i in orderDetails)
+            {
+                
+            }
+            return PartialView("/Views/Item/_ItemBuyerCountPartial.cshtml");
+        }
     }
 }

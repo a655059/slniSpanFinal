@@ -78,9 +78,21 @@
     background-color: #FFA042;
 }
 
-.sellerProducts .cardLayout{
-    width:1040px;
+.sellerProducts .sellerCard{
+    width:200px;
     height:320px;
+    top:10px;
+    transition:all .5s 
+}
+.sellerProducts .sellerCard:hover{
+    width:210px;
+    height:340px;
+    top:0px;
+}
+
+.sellerProducts .cardLayout{
+    width:1055px;
+    height:340px;
     margin: 0 auto;
     overflow:hidden;
 }
@@ -90,6 +102,7 @@
     display:block;
     width:100%;
     aspect-ratio:1/1;
+    border-radius:5px;
 }
 
 .sellerProducts .cardTitle{
@@ -97,18 +110,20 @@
     -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
     overflow:hidden;
+    font-size:1em;
+    color:black;
 }
 .sellerProducts .cardPrice{
     color:red;
-    font-size:1em;
+    font-size:0.5em;
     font-weight:bold;
 }
 
 .sellerProducts .cardInfo{
-    font-size:12px;
+    font-size:0.5em;
 }
 .sellerProducts .starImg{
-    width:12px;
+    width:10%;
     aspect-ratio:1/1;
 }
 

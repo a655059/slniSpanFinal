@@ -10,6 +10,7 @@ namespace prjiSpanFinal.ViewModels
         public CProductViewModel CProduct { get; set; }
         public List<CProductDetailViewModel> CProductDetails { get; set; }
         public List<CProductPicViewModel> CProductPics { get; set; }
+        public CMemberAccountViewModel Seller { get; set; }
         public CBigTypeViewModel CBigType { get; set; }
         public CSmallTypeViewModel CSmallType { get; set; }
         public double CommentAvgScore { get; set; }
