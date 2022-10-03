@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
-    public class DeliveryController1 : Controller
+    public class DeliveryController : Controller
     {
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult ShowCart()
         {
             return View();
         }

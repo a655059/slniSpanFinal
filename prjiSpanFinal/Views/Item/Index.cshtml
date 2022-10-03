@@ -60,7 +60,7 @@
                 <div class="d-flex justify-content-start align-items-center mb-1">
                     <div class="itemKey">直購價:</div>
                     @{
-                        string price = $"$499 - $699";
+                        string price = $"$499";
                         <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
@@ -71,16 +71,19 @@
                         <div class="itemKey">規格:</div>
                         <div class="itemStyleContent d-flex flex-wrap ms-3">
                             @{
-                                int count = 0;
+                                
                                 for (int i = 1; i <= 9; i++)
                                 {
-                                    count++;
-                                    string style = $"樣式{count}";
-                                    string imgSrc = $"~/img/product0{count}.png";
+                                    
+                                    string style = $"樣式{i}";
+                                    string imgSrc = $"~/img/product0{i}.png";
+                                    string idValue = $"id{i}";
                                     <div class="ms-1 mb-1">
-                                        <input type="radio" class="btn-check" name="purchaseStyle" id="id" autocomplete="off" value="@style">
-                                        <label class="purchaseStyle btn btn-outline-secondary rounded-1" for="id">@style</label>
-                                        <img class="d-none itemStyleImg" src="@imgSrc" />
+                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@idValue" autocomplete="off" value="2113">
+                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@idValue">@style</label>
+                                        <div class="d-none price">499</div>
+                                        <div class="d-none qty">55</div>
+                                        <img class="d-none itemStyleImg" src="~/img/product05.png" />
                                     </div>
                                 }
                             }
@@ -126,7 +129,7 @@
                         <img src="~/img/shop01.png" class="cardImg" alt="...">
                         <div class="px-1 py-2 d-flex flex-column justify-content-between">
                             <div class="cardTitle">好大一根香蕉</div>
-                            <div class="cardPrice">999</div>
+                            <div class="cardPrice">$999</div>
                             <div class="cardInfo d-flex justify-content-between align-items-center">
                                 <div class="cardComment d-flex justify-content-start align-items-center mt-1">
                                     <div class="starImg">
@@ -182,7 +185,7 @@
     });
     $("#buyerCount").click(function () {
         $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("BuyerCount")');
+        $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
     });
     </script>
 }

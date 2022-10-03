@@ -21,9 +21,9 @@ namespace prjiSpanFinal.Controllers
             int buyerNum = (int)id;
             return PartialView("/Views/Item/_ItemCommentPartial.cshtml", buyerNum);
         }
-        public IActionResult BuyerCount()
+        public IActionResult BuyerCount(int? id)
         {
-            return PartialView("/Views/Item/_ItemBuyerCountPartial.cshtml");
+            return PartialView("/Views/Item/_ItemBuyerCountPartial.cshtml", (int)id);
         }
     }
 }

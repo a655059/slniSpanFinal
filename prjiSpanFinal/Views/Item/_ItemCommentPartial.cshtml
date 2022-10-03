@@ -83,9 +83,11 @@
     <div class="d-flex justify-content-center">
         <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
         <div id="commentPage">
-            @for (int i = 1; i <= 10; i++)
-            {
-                <button class="inactiveButton">@i</button>
+            @{
+                for (int i = 1; i <= 10; i++)
+                {
+                    <button class="inactiveButton">@i</button>
+                }
             }
         </div>
 
