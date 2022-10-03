@@ -12,5 +12,13 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult Description()
+        {
+            return PartialView("/Views/Item/_ItemDescriptionPartial.cshtml");
+        }
+        public IActionResult Comment()
+        {
+            return PartialView("/Views/Item/_ItemCommentPartial.cshtml");
+        }
     }
 }
