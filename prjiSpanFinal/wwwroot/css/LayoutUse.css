@@ -1,29 +1,19 @@
-﻿.loDiv {
-    padding:15px 0;
-}
-.HomepageIndex {
-    position: relative;
-    min-width: 1200px;
+﻿.split {
+    height: 50px;
     width: 100%;
-    min-height: 100%;
-    margin: 0 auto;
-    padding: 0 0 0px;
-    box-sizing: border-box;
 }
-.view {
-    background-color:pink;
-    box-sizing: border-box;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    flex-shrink: 0;
-    align-content: flex-start;
-    border: 0 solid #000;
-    margin: 0;
-    padding: 0;
-    min-width: 0;
+.layoutheader1bg {
+    background-color: #FF7B0F;
 }
-.carousel .carousel-item img {
-    min-height: 575px;
-    object-fit: cover;
+.layoutheader2 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #FFA724;
+}
+.footerbg {
+    background: /*#FFE0B3*/ #FF7B0F;
+    color: #B9BABC;
+}
+.footerbg2 {
+    background:  black;
 }

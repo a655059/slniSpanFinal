@@ -32,11 +32,11 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <!-- HEADER -->
-    <header class="p-2 bg-dark text-white">
+    <header class="p-2 layoutheader1bg text-white">
         <!-- TOP HEADER -->
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -66,7 +66,7 @@
     </header>
     <header>
         <!-- MAIN HEADER -->
-        <div id="header">
+        <div class="layoutheader2">
             <!-- container -->
             <div class="container">
                 <!-- row -->
@@ -174,7 +174,7 @@
     </div>
     <!-- /SECTION -->
     <!-- FOOTER -->
-    <footer id="footer">
+    <footer class="footerbg">
         <!-- top footer -->
         <div class="section">
             <!-- container -->
@@ -240,7 +240,7 @@
         </div>
         <!-- /top footer -->
         <!-- bottom footer -->
-        <div id="bottom-footer" class="section">
+        <div class="section footerbg2">
             <div class="container">
                 <!-- row -->
                 <div class="row">
@@ -267,6 +267,6 @@
     <script src="~/js/nouislider.min.js"></script>
     <script src="~/js/jquery.zoom.min.js"></script>
     <script src="~/js/main.js"></script>
-
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

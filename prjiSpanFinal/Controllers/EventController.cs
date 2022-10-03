@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,9 @@ namespace prjiSpanFinal.Controllers
 {
     public class EventController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Discount()
         {
+            //查USER
             return View();
         }
     }

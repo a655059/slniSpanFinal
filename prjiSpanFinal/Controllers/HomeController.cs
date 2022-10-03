@@ -11,16 +11,39 @@ namespace prjiSpanFinal.Controllers
 {
     public class HomeController : Controller
     {
+        List<CBigType> listCBigType;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
-
+        void fillin()
+        {
+            CBigType a = new CBigType()
+            {
+                BigTypeID = 1,
+                BigTypeName = "食品"
+            };
+            CBigType b = new CBigType()
+            {
+                BigTypeID = 2,
+                BigTypeName = "數位"
+            };
+            CBigType c = new CBigType()
+            {
+                BigTypeID = 3,
+                BigTypeName = "衣裝"
+            };
+            listCBigType = new List<CBigType>();
+            listCBigType.Add(a);
+            listCBigType.Add(b);
+            listCBigType.Add(c);
+        }
         public IActionResult Index()
         {
-            return View();
+            fillin();
+            return View(listCBigType);
         }
 
         public IActionResult Privacy()
