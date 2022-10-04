@@ -14,38 +14,11 @@ namespace prjiSpanFinal.Controllers
         static List<COrder> Orders = new();
         public ManagementController()
         {
-            ADDDATAS();
-        }
-        public IActionResult Home()
-        {
-            return View();
-        }
-        public IActionResult MemberList()
-        {
-            return View(members);
-        }
-        public IActionResult MemberEdit(int? id)
-        {
-            var member = from i in members
-                         where i.Id == id
-                         select i;
-            return View(members.First());
-        }
-        [HttpPost]
-        public IActionResult MemberEdit(CMember mem)
-        {
-            if (mem != null)
+            if (members.Count <= 0 || Orders.Count <= 0 || Products.Count <= 0)
             {
-                var EditMember = from i in members where i.Id == mem.Id select i;
-                EditMember.First().MemName = mem.MemName;
-                EditMember.First().Phone = mem.Phone;
-                EditMember.First().Address = mem.Address;
-                EditMember.First().Email = mem.Email;
-                EditMember.First().Password = mem.Password;
-
-                return RedirectToAction("MemberList");
+                ADDDATAS();
             }
-            return RedirectToAction("MemberList");
+            
         }
         public void ADDDATAS()
         {
@@ -58,8 +31,8 @@ namespace prjiSpanFinal.Controllers
                     Email = "ShopDaoBao@sdbmail.com",
                     MemName = "蘋果" + i,
                     Password = "Apple",
-                    Phone = 7414,
-                    MemberStatus="註冊會員",
+                    Phone = "7414",
+                    MemberStatus = "註冊會員",
                 };
                 members.Add(newm);
                 Random rnd = new();
@@ -84,6 +57,93 @@ namespace prjiSpanFinal.Controllers
                 };
                 Products.Add(cProduct);
             }
+        }
+        public IActionResult Home()
+        {
+            return View();
+        }
+        public IActionResult MemberList()
+        {
+            return View(members);
+        }
+        public IActionResult MemberCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult MemberCreate(CMember mem)
+        {
+            var EditMember = new CMember()
+            {
+                Id = members.Last().Id + 1,
+                MemName = mem.MemName,
+                Phone = mem.Phone,
+                Address = mem.Address,
+                Email = mem.Email,
+                Password = mem.Password,
+                MemberStatus = mem.MemberStatus,
+            };
+            members.Add(EditMember);
+            return RedirectToAction("MemberList");
+        }
+
+        public IActionResult MemberEdit(int? id)
+        {
+            var member = from i in members
+                         where i.Id == id
+                         select i;
+            return View(members.First());
+        }
+        [HttpPost]
+        public IActionResult MemberEdit(CMember mem)
+        {
+            if (mem != null)
+            {
+                var EditMember = from i in members where i.Id == mem.Id select i;
+                EditMember.First().MemName = mem.MemName;
+                EditMember.First().Phone = mem.Phone;
+                EditMember.First().Address = mem.Address;
+                EditMember.First().Email = mem.Email;
+                EditMember.First().Password = mem.Password;
+                EditMember.First().MemberStatus = mem.MemberStatus;
+
+                return RedirectToAction("MemberList");
+            }
+            return RedirectToAction("MemberList");
+        }
+        public IActionResult MemberDelete(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in members)
+                {
+                    if (a.Id == id)
+                    {
+                        a.MemberStatus = "已刪除";
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("MemberList");
+        }
+        public IActionResult MemberRecover(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in members)
+                {
+                    if (a.Id == id && a.MemberStatus == "已刪除")
+                    {
+                        a.MemberStatus = "註冊會員";
+                        break;
+                    }
+                    else if (a.Id == id && a.MemberStatus != "已刪除")
+                    {
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("MemberList");
         }
         public IActionResult OrderList()
         {
@@ -111,11 +171,34 @@ namespace prjiSpanFinal.Controllers
         {
             if (id != null)
             {
-                foreach(var a in Orders)
+                foreach (var a in Orders)
                 {
-                    if (a.OrderID == id)
+                    if (a.OrderID == id && a.OrderStatus != "已刪除")
                     {
-                        Orders.Remove(a);
+                        a.OrderStatus = "已刪除";
+                        break;
+                    }
+                    else if (a.OrderID == id && a.OrderStatus == "已刪除")
+                    {
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("OrderList");
+        }
+        public IActionResult OrderRecover(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in Orders)
+                {
+                    if (a.OrderID == id && a.OrderStatus == "已刪除")
+                    {
+                        a.OrderStatus = "正常";
+                        break;
+                    }
+                    else if (a.OrderID == id && a.OrderStatus != "已刪除")
+                    {
                         break;
                     }
                 }

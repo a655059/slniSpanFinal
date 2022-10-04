@@ -12,26 +12,26 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
+            <th style="width:200px">
+                ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MemName)
+                會員名稱
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phone)
+                連絡電話
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                聯絡地址
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                伊媚兒
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                登入密碼
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MemberStatus)
+                會員狀態
             </th>
             <th></th>
         </tr>
@@ -41,7 +41,7 @@
         {
             <tr>
                 <td>
-                    <input value="@item.Id" class="form-control" readonly />
+                    <input value="@item.Id" class="form-control-plaintext" readonly />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MemName)
@@ -62,8 +62,9 @@
                     @Html.DisplayFor(modelItem => item.MemberStatus)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "MemberEdit", new { id=item.Id}) |
-                    @Html.ActionLink("Delete", "MemberDelete", new { id=item.Id })
+                    @Html.ActionLink("編輯", "MemberEdit", new { id=item.Id}) |
+                    @Html.ActionLink("刪除", "MemberDelete", new { id=item.Id })|
+                    @Html.ActionLink("復原", "MemberRecover", new { id=item.Id}) |
                 </td>
             </tr>
         }
