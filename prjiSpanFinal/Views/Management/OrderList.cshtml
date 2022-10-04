@@ -4,16 +4,16 @@
     ViewData["Title"] = "OrderList";
 }
 
-<h1>OrderList</h1>
+<h1>訂單列表</h1>
 
 <p>
-    <a asp-action="OrderCreate">Create New</a>
+    <a asp-action="OrderCreate">新增一筆訂單</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderID)
+                ID
             </th>
             <th>
                 賣家名稱
@@ -36,7 +36,7 @@
             <th style="width:10% ">
                 訂單狀態
             </th>
-            <th></th>
+            <th style="width:180px"></th>
         </tr>
     </thead>
     <tbody>
@@ -68,8 +68,9 @@
                     @Html.DisplayFor(modelItem => item.OrderStatus)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "OrderEdit", new { id=item.OrderID}) |
-                    @Html.ActionLink("Delete", "OrderDelete", new { id=item.OrderID })
+                    @Html.ActionLink("修改", "OrderEdit", new { id=item.OrderID}) |
+                    @Html.ActionLink("復原", "OrderRecover", new { id=item.OrderID}) |
+                    @Html.ActionLink("刪除", "OrderDelete", new { id=item.OrderID })|
                 </td>
             </tr>
         }
