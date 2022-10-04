@@ -1,0 +1,40 @@
+﻿.split {
+    height: 50px;
+    width: 100%;
+}
+.layoutheader1bg {
+    background-color: #FF7B0F;
+}
+.layoutheader2 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #FFA724;
+}
+.footerbg {
+    background: /*#FFE0B3*/ #FF7B0F;
+    color: white;
+}
+.footerbg2 {
+    background:  black;
+}
+.lofooter {
+    margin: 30px 0px;
+}
+.lofooter-links li + li {
+    margin-top: 15px;
+}
+
+.lofooter-links li a {
+    color:white;
+}
+
+.lofooter-links li i {
+    margin-right: 15px;
+    color: #D10024;
+    width: 14px;
+    text-align: center;
+}
+
+.lofooter-links li a:hover {
+    color: #D10024;
+}

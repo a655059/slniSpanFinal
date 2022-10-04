@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    
+    <style>
+        /*        .list a:link{text-decoration:none;}
+        .list a:visited{color:aquamarine;}
+        .list a:hover{text-decoration:underline;color:green;}
+        .list a:active{color:red;font-size:30px;}*/
+
+        figcaption {
+            color:#FF0000;
+            font-size:40px;
+            margin:0 auto;
+        }
+        .list > li > a:link {
+            text-decoration: none;
+            color: darkslategrey;
+        }
+
+        .list > li > a:visited {
+            color: aquamarine;
+        }
+
+        .list > li > a:hover {
+            text-decoration: underline;
+            color: green;
+        }
+
+        .list > li > a:active {
+            color: red;
+            font-size: 30px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
+    @Html.ActionLink("會員修改", "Edit", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("關注的賣家", "Edit", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("我的優惠券", "Coupon", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("購物清單", "List", "Seller", null, new { @class = "btn btn-secondary" })<br />
+
+    <figure style="background-color:#D1E9E9">
+        <figcaption>買爆清單</figcaption>
+        <a href="https://www.google.com/search?q=irene&tbm=isch&ved=2ahUKEwi1hf22rLz6AhVJdpQKHRygCDIQ2-cCegQIABAA&oq=ir&gs_lcp=CgNpbWcQARgAMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIFCAAQgAQyCAgAEIAEELEDMgUIABCABDIICAAQgAQQsQMyBQgAEIAEMgUIABCABDoICAAQsQMQgwE6BAgAEAM6CwgAEIAEELEDEIMBUKULWLAMYIgfaABwAHgAgAEgiAFbkgEBM5gBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=M8o2Y_WfOsns0QScwKKQAw&bih=506&biw=1349&rlz=1C1ONGR_zh-TWTW949TW949#imgrc=uynzEJRYJs37rM">
+            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+        </a>
+    </figure>
+</body>
+</html>

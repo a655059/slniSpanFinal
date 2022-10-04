@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Coupon";
+}
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <style>
+        /*        .list a:link{text-decoration:none;}
+        .list a:visited{color:aquamarine;}
+        .list a:hover{text-decoration:underline;color:green;}
+        .list a:active{color:red;font-size:30px;}*/
+        figcaption {
+            color: #FF0000;
+            font-size: 40px;
+            margin: 0 auto;
+        }
+
+        .list > li > a:link {
+            text-decoration: none;
+            color: darkslategrey;
+        }
+
+        .list > li > a:visited {
+            color: aquamarine;
+        }
+
+        .list > li > a:hover {
+            text-decoration: underline;
+            color: green;
+        }
+
+        .list > li > a:active {
+            color: red;
+            font-size: 30px;
+        }
+    </style>
+
+</head>
+<body>
+    <div style="opacity: 0.5;text-align:center;font-size:40px">我的優惠券</div>
+    @Html.ActionLink("會員修改", "Edit", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("關注賣家", "Edit", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("喜歡の商品", "Coupon", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("購物清單", "List", "Seller", null, new { @class = "btn btn-secondary" })<br />
+                                                                                       
+    <figure style="background-color:#D1E9E9">
+        <figcaption>
+            @Html.ActionLink("已使用/已失效", "Edit", "Member", null, new { @class = "btn btn-light" })
+        </figcaption>
+        <a href="https://www.google.com/search?q=%E5%84%AA%E6%83%A0%E5%88%B8&rlz=1C1ONGR_zh-TWTW949TW949&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjLxMu978P6AhWVBaYKHcQVBOwQ_AUoAXoECAEQAw&biw=1920&bih=937&dpr=1">
+            <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
+        </a>
+    </figure>
+</body>
+</html>
