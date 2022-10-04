@@ -10,7 +10,7 @@ namespace prjiSpanFinal.Controllers
     public class ManagementController : Controller
     {
         static List<CMember> members = new();
-        static List<CProduct> Products = new();
+        static List<CProductHu> Products = new();
         static List<COrder> Orders = new();
         public ManagementController()
         {
@@ -73,7 +73,7 @@ namespace prjiSpanFinal.Controllers
                     OrderStatus = "未結帳",
                 };
                 Orders.Add(cOrder);
-                CProduct cProduct = new()
+                CProductHu cProduct = new()
                 {
                     ProductId = i,
                     ProductStatus = "可以購買",
