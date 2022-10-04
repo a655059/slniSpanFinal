@@ -59,6 +59,7 @@ namespace prjiSpanFinal.Controllers
                     MemName = "蘋果" + i,
                     Password = "Apple",
                     Phone = 7414,
+                    MemberStatus="註冊會員",
                 };
                 members.Add(newm);
                 Random rnd = new();
