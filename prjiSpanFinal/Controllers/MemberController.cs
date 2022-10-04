@@ -8,7 +8,23 @@ namespace prjiSpanFinal.Controllers
 {
     public class MemberController : Controller
     {
-        public IActionResult Index()
+        public IActionResult List()
+        {
+            return View();
+        }
+        public IActionResult Edit()
+        {
+            return View();
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        public IActionResult Like()
+        {
+            return View();
+        }
+        public IActionResult Coupon()
         {
             return View();
         }

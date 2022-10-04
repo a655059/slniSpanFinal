@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

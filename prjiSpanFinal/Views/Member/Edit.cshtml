@@ -1,0 +1,138 @@
+﻿<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    
+    <style>
+        fieldset {
+            width: 550px;
+            border: 3px solid #4F9D9D;
+            border-radius: 20px;
+            margin: 15px;
+            
+        }
+
+        legend {
+            color: #DAB1D5;
+            margin-left: 30px;
+            
+        }
+
+        .st1 {
+            width: 500px;
+            border-bottom: 3px dashed #D1E9E9;
+            margin: 20px;
+            padding-bottom: 7px ;
+            
+        }
+        .hh {
+            border-bottom: 6px solid #6C6C6C;
+            margin: 20px;
+            padding-bottom: 7px ;
+            opacity:0.5;
+        }
+
+        .st2 {
+            width: 500px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .p1 {
+            width: 100px;
+            text-align: right;
+            float: left;
+        }
+
+        textarea {
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <form action="#" method="get" enctype="multipart/form-data">
+        <div>
+            <h1 class="hh">會員資料修改</h1>
+        </div>
+        <fieldset>
+            <legend>個人資料一</legend>
+            <div class="st1">
+                <label for="acount" class="p1">姓名</label><input type="text" id="acount" name="account" autofocus placeholder="名字" size="40" autocomplete="off" />
+            </div>
+            <div class="st1">
+                <label class="p1">性別</label>
+                <label>
+                    <input type="radio" name="gender" value="male" />男
+                </label>
+                <label>
+                    <input type="radio" name="gender" value="female" />女
+                </label>
+            </div>
+            <div class="st1">
+                <label for="pas" class="p1">密碼</label><input type="password" id="pas" name="pwd" maxlength="6" />
+            </div>
+            <div class="st1">
+                <label class="p1">身分證ID</label>
+                <label>
+                    <input type="text" name="ID" maxlength="10" pattern="[a-z,A-Z]{1}[1-2,8-9]{1}\d{8}" required />
+                </label>
+
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>個人資料二</legend>
+            <div class="st1">
+                <label class="p1">興趣</label>
+                <label>
+                    <input type="checkbox" name="hobby" value="music" />音樂
+                </label>
+                <label>
+                    <input type="checkbox" name="hobby" value="sport" />運動
+                </label>
+            </div>
+            <div class="st1">
+                <label class="p1">居住地</label>
+                <select name="City" size="2">
+                    <option value="TPE">台北市</option>
+                    <option value="TPH" selected>新北市</option>
+                    <option value="TYU">桃園市</option>
+                    <option value="HSC">新竹市</option>
+                </select>
+            </div>
+            <div class="st1">
+                <label class="p1">完整地址</label>
+                <label>
+                    <input type="text" name="add2" size="40" />
+                </label>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>個人資料三</legend>
+            <div class="st1">
+                <label class="p1">上傳檔案</label>
+                <label>
+                    <input type="file" name="file1" multiple />
+                </label>
+            </div>
+            <div class="st1">
+                <label class="p1">瀏覽網址</label>
+                <label>
+                    <input type="url" name="hp" list="hpurls" />
+                    <datalist id="hpurls">
+                        <option value="https://www.google.com.tw">google</option>
+                        <option value="https://tw.yahoo.com/"></option>
+                        <option value="https://www.youtube.com"></option>
+                    </datalist>
+                </label>
+            </div>
+            <div class="st1">
+                <label for="com" class="p1">自傳</label><textarea cols="40" rows="5" id="com" name="memo"></textarea><br />
+            </div>
+        </fieldset>
+        <div class="st2">
+            <input type="submit" value="送出" />
+            <input type="reset" value="清除" />
+        </div>
+    </form>
+</body>
+</html>
