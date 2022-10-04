@@ -34,49 +34,112 @@
             width:20px;
             height:20px;
         }
+        .col-3{
+            border:5px solid red
+        }
     </style>
 }
 
 <h4>購物車</h4>
 
-<div class="w-75 m-auto">
-    <div class="mb-2 border rounded-2 px-2 py-3">
-        <div class="form-check border-bottom pb-2">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-            <label class="form-check-label" for="flexCheckDefault">林小偉的賣場</label>
-        </div>
-        <div class="form-check d-flex justify-content-between align-items-center">
-            <div class="d-flex justify-content-between align-items-center">
+<div class="w-100 row">
+    <div class="col-9">
+        <div class="mb-2 border rounded-2 px-2 py-3">
+            <div class="form-check border-bottom pb-2 d-flex align-items-center">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林小偉的賣場</label>
+            </div>
+            <div class="form-check d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input class="form-check-input" type="checkbox" value="" id="product1" checked>
+                    </div>
+                    <div class="itemImgDiv">
+                        <img src="~/img/product01.png" />
+                    </div>
+                    <div class="w-75">
+                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
+                        <div class="text-black-50">白色，附32g千首歌</div>
+                        <div class="text-danger">$838</div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button class="countMinus">-</button>
+                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
+                    <button class="countPlus">+</button>
+                </div>
+            </div>
+            <div class="form-check d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input class="form-check-input" type="checkbox" value="" id="product1" checked>
+                    </div>
+                    <div class="itemImgDiv">
+                        <img src="~/img/product01.png" />
+                    </div>
+                    <div class="w-75">
+                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
+                        <div class="text-black-50">白色，附32g千首歌</div>
+                        <div class="text-danger">$838</div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button class="countMinus">-</button>
+                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
+                    <button class="countPlus">+</button>
+                </div>
+            </div>
+            <div class="ship border-top d-flex align-items-center pt-3">
                 <div>
-                    <input class="form-check-input" type="checkbox" value="" id="product1" checked>
+                    <img src="~/img/truck.png" />
                 </div>
-                <div class="itemImgDiv">
-                    <img src="~/img/product01.png" />
-                </div>
-                <div class="w-75">
-                    <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
-                    <div class="text-black-50">白色，附32g千首歌</div>
-                    <div class="text-danger">$838</div>
+                <div class="mx-2">
+                    7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
                 </div>
             </div>
-            <div class="d-flex">
-                <button class="countMinus">-</button>
-                <input type="text" name="Count" class="itemCount" value="1" min="1" />
-                <button class="countPlus">+</button>
-            </div>
+
         </div>
-        
-        <div class="ship border-top d-flex align-items-center">
-            <div>
-                <img src="~/img/truck.png" />
+        <div class="mb-2 border rounded-2 px-2 py-3">
+            <div class="form-check border-bottom pb-2 d-flex align-items-center">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林大偉的賣場</label>
             </div>
-            
-            <div>
-                7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
+            <div class="form-check d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input class="form-check-input" type="checkbox" value="" id="product1" checked>
+                    </div>
+                    <div class="itemImgDiv">
+                        <img src="~/img/product01.png" />
+                    </div>
+                    <div class="w-75">
+                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
+                        <div class="text-black-50">白色，附32g千首歌</div>
+                        <div class="text-danger">$838</div>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button class="countMinus">-</button>
+                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
+                    <button class="countPlus">+</button>
+                </div>
+            </div>
+
+            <div class="ship border-top d-flex align-items-center pt-3">
+                <div>
+                    <img src="~/img/truck.png" />
+                </div>
+                <div class="mx-2">
+                    7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
+                </div>
             </div>
         </div>
     </div>
-    
+    <div class="col-3">
+        <div>全站折扣</div>
+        <div>商品小計</div>
+        <button class="btn btn-warning">去結帳</button>
+    </div>
 </div>
 
 @section Scripts{ 
