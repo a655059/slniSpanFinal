@@ -1,0 +1,56 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model prjiSpanFinal.ViewModels.CItemIndexViewModel
+<style>
+    .sellerName {
+        background-color: #84C1FF;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .sellerName + div {
+        width: 100%;
+        background-color: #ECF5FF;
+    }
+
+    .description {
+        line-height: 40px;
+        text-align: justify;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .productImg {
+        width: 100%;
+        aspect-ratio: 1/1;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .productImg img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        margin-top: 5px;
+    }
+</style>
+<div class="rounded-2">
+    <div class="sellerName">@Model.Seller.Name<span>的商店</span></div>
+    <div>
+        <div class="description">@Model.CProduct.Description</div>
+        @{ 
+            foreach (var i in Model.CProductPics)
+            {
+                string base64 = Convert.ToBase64String(i.Picture);
+                string imgSrc = $"data:image/gif;base64,{base64}";
+                <div class="productImg"><img src="@imgSrc" /></div>
+            }
+        }
+    </div>
+    
+</div>
+
+
