@@ -12,5 +12,15 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+
+        public IActionResult 賣場()
+        {
+            return View();
+        }
+
+        public IActionResult 關於我()
+        {
+            return View();
+        }
     }
 }
