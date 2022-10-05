@@ -49,43 +49,39 @@
 
 <div class="w-100 row">
     <div class="col-9">
-        <div class="mb-2 border rounded-2 px-2 py-3">
+        <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
             <div class="form-check border-bottom pb-2 d-flex align-items-center">
                 <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
                 <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林小偉的賣場</label>
             </div>
             <div class="form-check d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <input class="selectItem form-check-input" type="checkbox" value="" id="product1" checked>
-                    </div>
+                    <input class="selectItem form-check-input" type="checkbox" value="" id="product1" checked>
                     <div class="itemImgDiv">
                         <img src="~/img/product01.png" />
                     </div>
                     <div class="w-75">
                         <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
                         <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$838</div>
+                        <div class="text-danger">$<span class="itemPrice">900</span></div>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <button class="countMinus">-</button>
+                    <button class="countMinus btnCount">-</button>
                     <input type="text" name="Count" class="itemCount" value="1" min="1" />
-                    <button class="countPlus">+</button>
+                    <button class="countPlus btnCount">+</button>
                 </div>
             </div>
             <div class="form-check d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <input class="selectItem form-check-input" type="checkbox" value="" id="product1" checked>
-                    </div>
+                    <input class="selectItem form-check-input" type="checkbox" value="" id="product2" checked>
                     <div class="itemImgDiv">
                         <img src="~/img/product01.png" />
                     </div>
                     <div class="w-75">
                         <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
                         <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$838</div>
+                        <div class="text-danger">$<span class="itemPrice">838</span></div>
                     </div>
                 </div>
                 <div class="d-flex">
@@ -104,23 +100,21 @@
             </div>
 
         </div>
-        <div class="mb-2 border rounded-2 px-2 py-3">
+        <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
             <div class="form-check border-bottom pb-2 d-flex align-items-center">
                 <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
                 <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林大偉的賣場</label>
             </div>
             <div class="form-check d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <input class="selectItem form-check-input" type="checkbox" value="" id="product1" checked>
-                    </div>
+                    <input class="selectItem form-check-input" type="checkbox" value="" id="product3" checked>
                     <div class="itemImgDiv">
                         <img src="~/img/product01.png" />
                     </div>
                     <div class="w-75">
                         <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
                         <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$838</div>
+                        <div class="text-danger">$<span class="itemPrice">638</span></div>
                     </div>
                 </div>
                 <div class="d-flex">
@@ -148,15 +142,15 @@
 
         <div class="d-flex justify-content-between mb-3">
             <div>小計</div>
-            <div class="smallPrice">$<span>499</span></div>
+            <div>$<span id="smallPrice">499</span></div>
         </div>
         <div class="divDiscount d-flex justify-content-between mb-3 d-none">
             <div class="selectedCouponID">折扣碼:<span class="text-danger"></span></div>
-            <div class="discountPrice text-danger">-$<span></span></div>
+            <div class="text-danger">-$<span id="discountPrice"></span></div>
         </div>
         <div class="d-flex justify-content-between mb-3 border-top">
             <div>總計</div>
-            <div class="totalPrice">$<span>499</span></div>
+            <div>$<span id="totalPrice">499</span></div>
         </div>
         <button class="btn btn-warning w-100">去結帳</button>
     </div>
@@ -253,9 +247,9 @@
                 let discount = $("input[type='radio']:checked").siblings().children().eq(0).children().html();
                 $(".divDiscount").removeClass("d-none");
                 $(".selectedCouponID").children().html(`${couponID}`);
-                $(".discountPrice").children().html(`${discount}`);
-                let totalPrice = Number($(".smallPrice span").html()) - Number(discount);
-                $(".totalPrice span").html(totalPrice);
+                $("#discountPrice").html(`${discount}`);
+                let totalPrice = Number($("#smallPrice").html()) - Number(discount);
+                $("#totalPrice").html(totalPrice);
             }
             
         });
