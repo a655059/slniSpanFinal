@@ -5,8 +5,8 @@ namespace prjiSpanFinal.Models
     public class CProduct
     {
         public int ProductId { get; set; }
-        public string ProductName { get { return "蘋果"; } }
-        public string SmallType { get { return "食物"; } }
+        public string ProductName { get; set; }
+        public string SmallType { get; set; }
         public string SellerName { get; set; }
         public decimal UnitPrice { get; set; }
         public int Stock { get; set; }

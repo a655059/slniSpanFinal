@@ -1,0 +1,82 @@
+﻿.HomepageIndex {
+    position: relative;
+    min-width: 1200px;
+    width: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 0 0 0px;
+    box-sizing: border-box;
+}
+
+.view {
+    background-color: pink;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-content: flex-start;
+    border: 0 solid #000;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.carousel .carousel-item img {
+    min-height: 575px;
+    object-fit: cover;
+}
+
+.guessLike {
+    float: left
+}
+.split {
+    height: 50px;
+    width: 100%;
+}
+.cardLayout {
+    width: 1265px;
+    height: 340px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+ .sellerCard {
+    width: 200px;
+    height: 320px;
+    top: 10px;
+    transition: all .5s
+}
+
+     .sellerCard:hover {
+        width: 210px;
+        height: 340px;
+        top: 0px;
+    }
+.cardImg {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 5px;
+}
+.cardTitle {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 1em;
+    color: black;
+}
+.cardPrice {
+    color: red;
+    font-size: 0.5em;
+    font-weight: bold;
+}
+
+.cardInfo {
+    font-size: 0.5em;
+}
+
+.starImg {
+    width: 10%;
+    aspect-ratio: 1/1;
+}

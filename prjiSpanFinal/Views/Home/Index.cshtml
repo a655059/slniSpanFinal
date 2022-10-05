@@ -1,30 +1,21 @@
-﻿@{
+﻿@model IEnumerable<prjiSpanFinal.Models.CBigType>
+
+@{
     ViewData["Title"] = "Home Page";
 }
-<link href="~/css/LayoutUse.css" rel="stylesheet" />
-
+@section Styles{
+    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+}
 <body>
+
     <div class="HomepageIndex">
         <section class="rounded-3">
             <div class="row">
                 <div class="col-2 view  rounded-start">
                     <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action">
-                            Cras justo odio
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-                        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+                        @foreach (var item in Model)
+                            @Html.ActionLink(@item.BigTypeName, "Index", "Category","" @*new { id = item.BigTypeID }*@, new { @class = "list-group-item list-group-item-action" })
                     </div>
                 </div>
                 <div class="col-1"></div>
@@ -60,29 +51,56 @@
             </div>
             <!--/Carouset-->
         </section>
-    </div>   
-    <div class="clearfix visible-xs">
-
     </div>
-    <div style="height:50px;width:100%;">
+    <div class="clearfix visible-xs"> </div>
+    <div class="split">
     </div>
     <section>
         <div>
-            <div class="row" style="background-color:lawngreen">
-                <div class="text-center">
-                    猜你喜歡...
-                    <div class="clearfix visible-xs">
-                        <div class="col-2" style="background-color:yellow;float:left">1</div>
-                        <div class="col-2" style="background-color:blue;float:left">2</div>
-                        <div class="col-2" style="background-color:red;float:left">3</div>
-                        <div class="col-2" style="background-color:black;float:left">4</div>
-                        <div class="col-2" style="background-color:orange;float:left">5</div>
-                        <div class="col-2" style="background-color:purple;float:left">6</div>
+            <div class="row">
+                <div class="text-start">
+                    <div>
+                        <span class="fs-3 fw-bold text-primary">猜你喜歡</span>
+                        <span class="fs-6 text-muted">有著你想要的東西...</span>
+                    </div>
+                    <div class="position-relative cardLayout">
+                        @{ int left = -205;
+                            for (int i = 1; i < 7; i++)
+                            {
+                                left += 210;
+                                string shift = $"{left}px";
+
+                                <a href="/Item/Index/2113">
+                                    <div class="sellerCard card position-absolute" style="left:@shift">
+                                        <img src="~/img/shop01.png" class="cardImg" alt="...">
+                                        <div class="px-1 py-2 d-flex flex-column justify-content-between">
+                                            <div class="cardTitle">好大一根香蕉</div>
+                                            <div class="cardPrice">$999</div>
+                                            <div class="cardInfo d-flex justify-content-between align-items-center">
+                                                <div class="cardComment d-flex justify-content-start align-items-center mt-1">
+                                                    <div class="starImg">
+                                                        <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                    </div>
+                                                    <div class="text-black">4.5</div>
+                                                    <div class="mx-2">|</div>
+                                                    <div class="text-black-50">銷售<span>100</span></div>
+                                                </div>
+                                                <div>
+                                                    <form action="/Delivery/CartList" method="post">
+                                                        <input type="submit" value="加入購物車" />
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a> } }
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     </section>
-
+    @section Scripts{
+        <script src="~/js/src/carousel.js"></script>
+        <script src="~/js/ItemIndex.js"></script>
+    }
 </body>
-<script src="~/js/src/carousel.js"></script>

@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<link type="text/css" rel="stylesheet" href="~/css/sidebars.css" />
+<link href="~/css/features.css" rel="stylesheet" />
+<head>
+    <style>
+        .排版 {
+            margin-left: 250px;
+            padding-block: 2px;
+            width: 500px;
+        }
+
+        .左側欄 {
+            text-align-last: center;
+            font-size: 20px;
+        }
+
+        .賣家中心 {
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .圖片 {
+            width: 50%;
+            height: 50%;
+        }
+
+        .商品邊界 {
+            margin-left: 300px;
+        }
+
+        .商品名稱樣式 {
+            text-align: center;
+            font-size: 20px;
+        }
+        .查詢欄位 {
+            width: 200px;
+            border-radius:5px;
+        }
+        .關鍵字 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .th2345 {
+            /*border: solid;*/
+            text-align: center;
+            width: 17%;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+        .th1 {
+            text-align: center;
+            width: 8%;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+        .th67 {
+            text-align: center;
+            width: 12%;
+            font-size: 20px;
+            vertical-align:middle;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="menu" style="float:left">
+        <div style="width: 180px;">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                <span class="賣家中心">賣家中心</span>
+            </a>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <img src="~/img/商品管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        商品管理
+                    </button>
+                    <div class="左側欄 " id="home-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的商品</a></li>
+                            <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded">新增商品</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">商品違規</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/訂單管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        訂單管理
+                    </button>
+                    <div class="左側欄" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的銷售</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">不成立</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">退貨/ 退款</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/物流中心.png" /> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                        物流中心
+                    </button>
+                    <div class="左側欄" id="orders-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">待出貨 </a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">批次出貨</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">物流設定</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/行銷活動.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                        我的行銷活動
+                    </button>
+                    <div class="左側欄" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的行銷活動...</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">蝦皮廣告</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">優惠劵</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <script src="~/js/sidebars.js"></script>
+    </div>
+    @*<div class="商品邊界 col-4">
+            <div class="card " style="width: 18rem;">
+                <img src="~/img/蘋果圖.jpg" class="card-img-top" alt="...">
+                <ul class="list-group list-group-flush">
+                    <li class="商品名稱樣式 ">蘋果</li>
+                </ul>
+                <div class="text-center m-2">
+                    <button type="button" class="btn btn-primary">編輯</button>
+                    <button type="button" class="btn btn-danger">刪除</button>
+                </div>
+            </div>
+        </div>*@
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11 ">
+            <h1 class="d-flex justify-content-center">產品資料表</h1>
+            <div class="d-flex justify-content-center mb-1" >
+                @using (Html.BeginForm() )
+                {
+                    <span class="關鍵字">請輸入關鍵字</span> @Html.TextBox("txtKeyword", "", new { @class = "查詢欄位" }) <input type="submit" value="查詢" class="btn btn-warning" />
+                }
+            </div>
+            <table class="table row align-items-center ">
+                <tbody>@*  *@
+                    <tr>
+                        <th class="th1">
+                            編號
+                        </th>
+                        <th class="th2345">
+                            商品名稱
+                        </th>
+                        <th class="th2345">
+                            商品數量
+                        </th>
+                        <th class="th2345">
+                            銷售金額
+                        </th>
+                        <th class="th2345">
+                            商品照片
+                        </th>
+                        <th class="th67"></th>
+                        <th class="th67"></th>
+                    </tr>                   
+                @*</tbody>
+                <tbody >*@
+                    @{
+                        int count = 0;
+                        for (var i =1;i<=8;i++)
+                        {
+                            count++;
+                                        <tr>
+                                            <th class="th1">@i</th>
+                                            <th class="th2345">蘋果</th>
+                                            <th class="th2345">200</th>
+                                            <th class="th2345">5000</th>
+                                            <th class="th2345"><img src="~/img/蘋果圖.jpg" class="w-50" alt="..."></th>
+                                            <th class="th67">
+                                                @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @class = "btn btn-primary " })
+                                            </th>
+                                            <th class="th67">
+                                                @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
+                                                                            new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger " })
+                                            </th>
+                                        </tr>                            
+                        }
+                    }
+                @*</tbody>*@
+            </table>
+        </div>
+    </div>
+    @*<div class="col-1"></div>*@
+</body>
