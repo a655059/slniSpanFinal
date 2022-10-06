@@ -12,6 +12,10 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        //public IActionResult productShow()
+        //{
+        //    return PartialView("cshtml");
+        //}
         public IActionResult Login()
         {
             return View();

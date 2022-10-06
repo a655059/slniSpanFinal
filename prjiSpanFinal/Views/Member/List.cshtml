@@ -22,25 +22,93 @@
                 <li class="nav-item">
                     <a class="nav-link">聯繫客服</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">購買清單</a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li class="nav-item dropdown" id="drop">
+                    <a  class="nav-link dropdown-toggle"  href="#" data-bs-toggle="dropdown">購買清單</a>
+                    @*<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li><a class="dropdown-item" href="#">待付款</a></li>
                         <li><a class="dropdown-item" href="#">待出貨</a></li>
                         <li><a class="dropdown-item" href="#">待收貨</a></li>
-                    </ul>
+                    </ul>*@
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-<figure style="background-color:#FBFBFF" >
-    <figcaption>尚未有訂單</figcaption>
-    
+<figure style="background-color:#FBFBFF" id="figure" >
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">總覽</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">未結帳</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">已結帳</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">歷史訂單</a>
+        </li>
+    </ul>
+    <table class="table table-hover">
+        <tr>
+            <td>訂單編號</td>
+            <td>結帳時間</td>
+            <td>商品名稱</td>
+            <td>數量</td>
+            <td>單價</td>
+            <td>運費</td>
+            <td>總金額</td>
+            <td>付款方式</td>
+            <td>訂單管理</td>
+            <td>評價</td>
+        </tr>
+        @for (int i = 1; i <= 10; i++)
+        {
+            <tr>
+                <td>@i</td>
+                <td>2022/10/10<br />10:10:10</td>
+                <td>蘋果</td>
+                <td>100</td>
+                <td>10</td>
+                <td>10</td>
+                <td>1000</td>
+                <td>面交</td>
+                <td><a href="#">訂單管理</a></td>
+                <td><a href="#">給評價</a></td>
+            </tr>
+
+        }
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </figure>
 @section Scripts{
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script>
+    const showdrop = document.querySelector("#drop")
+    const showtable = document.querySelector("#figure")
+    showtable.style.display = "none";
+    showdrop.addEventListener("click", () => {
+            showtable.style.display = "block"
+    })
+</script>
 }
 
 
