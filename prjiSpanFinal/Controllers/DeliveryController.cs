@@ -16,5 +16,15 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+        public IActionResult CheckoutPartial(int id)
+        {
+            return PartialView("~/Views/Delivery/_DeliveryCheckoutPartial.cshtml");
+        }
+
+
     }
 }

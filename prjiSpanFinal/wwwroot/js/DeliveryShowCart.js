@@ -12,12 +12,13 @@ $(".selectItem").change(function () {
     CalTotalPrice();
     let count = $(this).closest(".sellerLayout").find(".selectItem").length;
     let checkedCount = $(this).closest(".sellerLayout").find(".selectItem:checked").length;
-    if (checkedCount == count) {
-        $(this).closest(".form-check").siblings().find(".selectAll").prop("checked", true);
-    }
-    if (checkedCount == 0) {
+    if (checkedCount != count) {
         $(this).closest(".form-check").siblings().find(".selectAll").prop("checked", false);
     }
+    else {
+        $(this).closest(".form-check").siblings().find(".selectAll").prop("checked", true);
+    }
+    
 });
 
 $(".itemCount").on("input",function () {
