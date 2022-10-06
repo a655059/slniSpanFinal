@@ -215,18 +215,5 @@ namespace prjiSpanFinal.Controllers
             }
             return PartialView("/Views/Item/_ItemBuyerCountPartial.cshtml");
         }
-        public IActionResult Description()
-        {
-            return PartialView("/Views/Item/_ItemDescriptionPartial.cshtml");
-        }
-        public IActionResult Comment(int? id)
-        {
-            int buyerNum = (int)id;
-            return PartialView("/Views/Item/_ItemCommentPartial.cshtml", buyerNum);
-        }
-        public IActionResult BuyerCount(int? id)
-        {
-            return PartialView("/Views/Item/_ItemBuyerCountPartial.cshtml", (int)id);
-        }
     }
 }
