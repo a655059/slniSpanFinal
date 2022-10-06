@@ -41,14 +41,33 @@
         }
         .關鍵字 {
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 600;
+        }
+        .th2345 {
+            /*border: solid;*/
+            text-align: center;
+            width: 17%;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+        .th1 {
+            text-align: center;
+            width: 8%;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+        .th67 {
+            text-align: center;
+            width: 12%;
+            font-size: 20px;
+            vertical-align:middle;
         }
 
     </style>
 </head>
 <body>
     <div class="menu" style="float:left">
-        <div style="width: 280px;">
+        <div style="width: 180px;">
             <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
                 <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
                 <span class="賣家中心">賣家中心</span>
@@ -123,58 +142,61 @@
         </div>*@
     <div class="row ">
         <div class="col-1"></div>
-        <div class="col-10 ">
+        <div class="col-11 ">
             <h1 class="d-flex justify-content-center">產品資料表</h1>
-            <div class="d-flex justify-content-center" >
+            <div class="d-flex justify-content-center mb-1" >
                 @using (Html.BeginForm() )
                 {
                     <span class="關鍵字">請輸入關鍵字</span> @Html.TextBox("txtKeyword", "", new { @class = "查詢欄位" }) <input type="submit" value="查詢" class="btn btn-warning" />
                 }
             </div>
             <table class="table row align-items-center ">
-                <thead >
+                <tbody>@*  *@
                     <tr>
-                        <th>
+                        <th class="th1">
                             編號
                         </th>
-                        <th>
+                        <th class="th2345">
                             商品名稱
                         </th>
-                        <th>
+                        <th class="th2345">
                             商品數量
                         </th>
-                        <th>
+                        <th class="th2345">
                             銷售金額
                         </th>
-                        <th>
+                        <th class="th2345">
                             商品照片
                         </th>
-                        <th></th>
-                    </tr>
-                </thead >
-                <tbody >
+                        <th class="th67"></th>
+                        <th class="th67"></th>
+                    </tr>                   
+                @*</tbody>
+                <tbody >*@
                     @{
                         int count = 0;
-                        for (var i =1;i<=5;i++)
+                        for (var i =1;i<=8;i++)
                         {
                             count++;
-                            <tr>
-                                <td>@i</td>
-                                <td>蘋果</td>
-                                <td>200</td>
-                                <td>5000</td>
-                                <td><img src="~/img/蘋果圖.jpg" class="w-25" alt="..."></td>
-                                <td>
-                                    @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @class = "btn btn-primary" })
-                                    @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
-new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger" })
-                                </td>
-                            </tr>                            
+                                        <tr>
+                                            <th class="th1">@i</th>
+                                            <th class="th2345">蘋果</th>
+                                            <th class="th2345">200</th>
+                                            <th class="th2345">5000</th>
+                                            <th class="th2345"><img src="~/img/蘋果圖.jpg" class="w-50" alt="..."></th>
+                                            <th class="th67">
+                                                @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @class = "btn btn-primary " })
+                                            </th>
+                                            <th class="th67">
+                                                @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
+                                                                            new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger " })
+                                            </th>
+                                        </tr>                            
                         }
                     }
-                </tbodyclass="mx-auto">
+                @*</tbody>*@
             </table>
         </div>
     </div>
-    <div class="col-1"></div>
+    @*<div class="col-1"></div>*@
 </body>
