@@ -44,3 +44,4 @@ function CalTotalPrice() {
     document.getElementById("totalPrice").innerHTML = totalPrice;
 }
 CalTotalPrice();
+/*i love apple*/
