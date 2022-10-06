@@ -1,4 +1,5 @@
-﻿@model prjiSpanFinal.ViewModels.CItemCommentViewModel
+
+﻿@model int
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -6,51 +7,51 @@
     .rounded-2 {
         background-color: #ECF5FF;
     }
-    .starImg{
-        width:20px;
-    }
-    .commentPic{
-        width:100px;
-        aspect-ratio:1/1;
-        margin-right:5px;
-    }
-    .commentPic img{
-        width:100%;
-        aspect-ratio:1/1;
-        object-fit:contain;
-    }
-</style>
-<div class="rounded-2 px-5 py-3">
-    @{ 
 
-        foreach (var i in Model.CCommentAllInfos)
+    .starImg {
+        width: 20px;
+    }
+
+    .commentPic {
+        width: 100px;
+        aspect-ratio: 1/1;
+        margin-right: 5px;
+    }
+
+    .commentPic img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+    }
+
+    #commentPage button {
+        color: #4F4F4F;
+        transition: all 0.5s;
+    }
+
+    button:hover {
+        text-decoration:underline;
+    }
+
+</style>
+
+
+<div class="rounded-2 px-5 py-3">
+    @{
+        for (int i = Model; i <= Model + 9; i++)
         {
-            string buyer = i.CMemberAccount.Name;
-            string buyerName = buyer[0].ToString();
-            for (int j = 1; j < buyer.Length; j++)
-            {
-                buyerName += "*";
-            }
-            int starCount = i.CComment.Star;
-            string style = "";
-            foreach (var j in i.ProductStyles)
-            {
-                if (j == "樣式1")
-                {
-                    break;
-                }
-                else
-                {
-                    style += j + "/";
-                }
-            }
-            if (style.Length != 0)
-            {
-                style = style.Substring(0, style.Length - 1);
-            }
+
+            int starCount = 4;
+            string style = $"樣式{(i % 10) + 1}";
+            string buyer = $"買家{i}";
 
             <div class="fs-6 border-bottom border-secondary border-1 pb-3 mb-3">
-                <div class="mb-1"><span class="fw-bold">買家:&emsp;</span><span class="text-primary">@buyerName</span></div>
+                <div class="mb-1"><span class="fw-bold">@buyer:&emsp;</span><span class="text-primary">陳X倫</span></div>
                 <div class="d-flex justify-content-start mb-1">
                     @{
                         for (int j = 1; j <= 5; j++)
@@ -67,22 +68,60 @@
                     }
                 </div>
                 <div class="text-black-50 mb-1"><span class="me-1">規格:</span>@style</div>
-                <div class="mb-1">@i.CComment.Comment1</div>
+                <div class="mb-1">值得推薦的好賣家!!!</div>
                 <div class="d-flex justify-content-start align-items-center mb-1">
-                    @{ 
-                        if (i.CommentPics.Count != 0)
+                    @{
+                        for (int j = 1; j <= 4; j++)
                         {
-                            foreach (var j in i.CommentPics)
-                            {
-                                string base64 = Convert.ToBase64String(j.CommentPic1);
-                                string imgSrc = $"data:image/gif;base64,{base64}";
-                                <div class="commentPic"><img src="@imgSrc"/></div>
-                            }
+                            <div class="commentPic"><img src="~/img/shop02.png" /></div>
                         }
                     }
                 </div>
             </div>
-        }
+                        }
     }
-    
+    <div class="d-flex justify-content-center">
+        <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
+        <div id="commentPage">
+            @{
+                for (int i = 1; i <= 10; i++)
+                {
+                    <button class="inactiveButton">@i</button>
+                }
+            }
+        </div>
+
+        <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
+    </div>
 </div>
+<input type="hidden" id="activePage" value="@Model"/>
+
+
+<script>
+    $(function () {
+        let activePage = $("#activePage").val();
+        activePage = Math.ceil(activePage / 10);
+
+        if (activePage == 1) {
+            $("#commentPrevioustPage").attr("disabled", true).css("color", "#ADADAD");
+        }
+        if (activePage == 10) {
+            $("#commentNextPage").attr("disabled", true).css("color", "#ADADAD");
+        }
+        $("#commentPage").children().eq(activePage - 1).css("color", "#000000").css("font-weight", "bold");
+    });
+    $("#commentNextPage").click(function () {
+        @{ int nextPage = Model + 10;}
+        $(".partialView").load('@Url.Action("Comment", "Item", new { id = nextPage })');
+
+    });
+    $("#commentPrevioustPage").click(function () {
+        @{ int previousPage = Model - 10; ;}
+        $(".partialView").load('@Url.Action("Comment", "Item", new { id = previousPage })');
+    });
+    $("#commentPage button").click(function () {
+        let goPage = Number($(this).html());
+        goPage = (goPage * 10) - 9;
+        $(".partialView").load(`/Item/Comment/${goPage}`);
+    });
+</script>

@@ -25,7 +25,7 @@
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="~/css/style.css" />
-
+    @await RenderSectionAsync("Styles", required: false);
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -50,6 +50,7 @@
                     <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                    <li><a href="/Item/Index" class="nav-link px-2 text-white">GoItem</a></li>
                 </ul>
 
                 @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -102,7 +103,7 @@
                             <!-- /Wishlist -->
                             <!-- Cart -->
                             <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" href="/Delivery/ShowCart">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
                                     <div class="qty">3</div>
@@ -267,6 +268,6 @@
     <script src="~/js/nouislider.min.js"></script>
     <script src="~/js/jquery.zoom.min.js"></script>
     <script src="~/js/main.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false);
 </body>
 </html>
