@@ -3,69 +3,66 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SmallType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductStatus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SmallType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductStatus)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+@section Styles{
+    <link href="~/css/CategoryStyles.css" rel="stylesheet" />
 }
-    </tbody>
-</table>
+<div class="CategoryBody">
+    <div class="CategoryHeader">
+        @{
+            int stock = 500;
+            int type = 25;
+            <div class="CategoryHeaderTitle">
+                <div class="CategoryHeaderTitleText">
+                    @ViewBag.prodlist.BigTypeName
+                    <span class="CategoryHeaderStockText">
+                        (@stock)
+                    </span>
+                </div>
+            </div>
+            <div class="CategoryHeaderBody">
+
+                @for (int i = 1; i <= type; i++)
+                {
+                    <a class="CategoryHeaderItem" href="">@ViewBag.prodlist.BigTypeName </a>
+                }
+            </div>
+        }
+    </div>
+    <div class="split"></div>
+    <div class="itembody">
+        @{int itemstock = 30;
+            <div class="itemcol">
+                @for (int i = 1; i <= itemstock; i++)
+                {
+                    <div class="sellsitem">
+                        <a href="/Item/Index/2113">
+                            <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                        </a>
+                        <div class="px-1 d-flex flex-column justify-content-between" >
+                            <div class="cardTitle">好大一根香蕉</div>
+                            <div class="cardPrice">$999</div>
+                            <div class="cardInfo d-flex justify-content-between align-items-end">
+                                <div class="d-flex justify-content-start flex-column mt-1">
+                                    <div class="d-flex justify-content-start">
+                                        <div class="starImg">
+                                            <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                        </div>
+                                        <div class="text-black">4.5</div>
+                                    </div>
+                                    <div class="text-black-50">銷售<span>100</span></div>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+
+}

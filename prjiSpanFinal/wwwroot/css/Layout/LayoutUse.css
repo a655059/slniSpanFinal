@@ -1,0 +1,82 @@
+﻿.split {
+    height: 50px;
+    width: 100%;
+}
+.layoutheader1bg {
+    background-color: #FF7B0F;
+}
+.layoutheader2 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #FFA724;
+}
+.footerbg {
+    background: /*#FFE0B3*/ #FF7B0F;
+    color: white;
+}
+.footerbg2 {
+    background:  black;
+}
+.lofooter {
+    margin: 30px 0px;
+}
+.lofooter-links li + li {
+    margin-top: 15px;
+}
+
+.lofooter-links li a {
+    color:white;
+}
+
+.lofooter-links li i {
+    margin-right: 15px;
+    color: #D10024;
+    width: 14px;
+    text-align: center;
+}
+
+.lofooter-links li a:hover {
+    color: #D10024;
+}
+.logopic{
+    width:80%;
+}
+/*回到最上面*/
+.toTop-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 33%;
+    opacity: 0.6;
+    background: #000;
+    cursor: pointer;
+    position: fixed;
+    right: 10rem;
+    bottom: 5rem;
+    display: none;
+}
+
+    .toTop-arrow::before, .toTop-arrow::after {
+        width: 18px;
+        height: 5px;
+        border-radius: 3px;
+        background: #f90;
+        position: absolute;
+        content: "";
+    }
+
+    .toTop-arrow::before {
+        transform: rotate(-45deg) translate(0, -50%);
+        left: 0.5rem;
+    }
+
+    .toTop-arrow::after {
+        transform: rotate(45deg) translate(0, -50%);
+        right: 0.5rem;
+    }
+
+    .toTop-arrow:focus {
+        outline: none;
+    }
