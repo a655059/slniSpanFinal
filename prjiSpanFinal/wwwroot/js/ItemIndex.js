@@ -31,13 +31,19 @@ $(".addToCart").click(function () {
         return false;
     }
     else {
-        $(".dollarIcon").animate(
-            {
-                top: "-=400",
-                opacity: "0"
-            },
-            1000,
-        )
+        let count = $("#itemCount").val();
+        $(".dollarIcon").children().html(count);
+        $(".dollarIcon").animate({
+            top: "-=50",
+            opacity: "1",
+            zIndex: "0"
+        }, 50).animate({
+            top: "-=30",
+            opacity: "0",
+        }, 500).animate({
+            top: "+=80",
+            zIndex:"-1"
+        });
     }
 });
 
