@@ -80,3 +80,54 @@
     .toTop-arrow:focus {
         outline: none;
     }
+.header-cart {
+    float: right;
+     padding:0px; 
+     width:100px
+}
+
+    .header-cart > div {
+        display: inline-block;
+    }
+
+        .header-cart > div + div {
+            margin-left: 15px;
+        }
+
+        .header-cart > div > a {
+            display: block;
+            position: relative;
+            width: 90px;
+            text-align: center;
+            color: #FFF;
+        }
+
+            .header-cart > div > a > i {
+                display: block;
+                font-size: 18px;
+            }
+
+            .header-cart > div > a > span {
+                font-size: 12px;
+            }
+
+            .header-cart > div > a > .qty {
+                position: absolute;
+                right: 15px;
+                top: -10px;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+                border-radius: 50%;
+                font-size: 10px;
+                color: #FFF;
+                background-color: #D10024;
+            }
+
+    .header-cart .menu-toggle {
+        display: none;
+    }
+.linknoline {
+    text-decoration: none;
+}
