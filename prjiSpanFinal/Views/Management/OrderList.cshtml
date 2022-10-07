@@ -4,12 +4,12 @@
     ViewData["Title"] = "OrderList";
 }
 @section Styles{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 <h1>訂單列表</h1>
 
 
-<table class="table">
+<table class="table" id="top">
     <thead>
         <tr>
             <th>
@@ -74,8 +74,10 @@
                 </td>
             </tr>
         }
-     
-        
+
+
     </tbody>
+
+
 </table>
-<button href="#" style="position:fixed"><i class="fa-regular fa-arrow-up"></i></button>
+<i href="#" class="fa-regular fa-arrow-up"></i>
