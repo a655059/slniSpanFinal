@@ -4,42 +4,42 @@
     ViewData["Title"] = "OrderList";
 }
 @section Styles{
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
-<h1>訂單列表</h1>
+
+    <h1>訂單列表</h1>
 
 
-<table class="table" id="top">
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                賣家名稱
-            </th>
-            <th>
-                下訂日期
-            </th>
-            <th>
-                產品名稱
-            </th>
-            <th>
-                產品單價
-            </th>
-            <th>
-                購買數量
-            </th>
-            <th>
-                總價
-            </th>
-            <th style="width:10% ">
-                訂單狀態
-            </th>
-            <th style="width:180px"></th>
-        </tr>
-    </thead>
-    <tbody>
+    <table class="table" id="top">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    賣家名稱
+                </th>
+                <th>
+                    下訂日期
+                </th>
+                <th>
+                    產品名稱
+                </th>
+                <th>
+                    產品單價
+                </th>
+                <th>
+                    購買數量
+                </th>
+                <th>
+                    總價
+                </th>
+                <th style="width:10% ">
+                    訂單狀態
+                </th>
+                <th style="width:180px"></th>
+            </tr>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -61,10 +61,10 @@
                 <td>
                     <input value="@item.Quantity" class="form-control-plaintext" readonly />
                 </td>
-                <td >
+                <td>
                     <input value="@item.TotalPrice" class="form-control-plaintext" readonly />
                 </td>
-                <td >
+                <td>
                     @Html.DisplayFor(modelItem => item.OrderStatus)
                 </td>
                 <td>
@@ -80,4 +80,9 @@
 
 
 </table>
-<i href="#" class="fa-regular fa-arrow-up"></i>
+<div style="position:relative" class="row">
+    <div class="col-6">
+        <a href="#" class="btn toTop-arrow"></a>
+    </div>
+</div>
+
