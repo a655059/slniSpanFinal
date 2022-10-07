@@ -1,0 +1,127 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<script src="https://kit.fontawesome.com/647b2b4000.js" crossorigin="anonymous"></script>
+<style>
+    .itemThumb{
+        width:200px;
+        aspect-ratio:1/1;
+    }
+    .itemThumb img{
+        width:100%;
+        aspect-ratio:1/1;
+        object-fit:contain;
+    }
+    .ship:hover{
+        cursor:pointer;
+    }
+    .googleMaps{
+        width:100%;
+        aspect-ratio:1/1;
+    }
+    .googleMaps iframe{
+        width:100%;
+        aspect-ratio:1/1;
+        object-fit:contain;
+    }
+</style>
+
+<div class="border rounded-2">
+    <div class="d-flex justify-content-between align-items-center px-2 py-1">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="itemThumb">
+                <img src="~/img/product01.png" />
+            </div>
+            <div>
+                <div class="fs-5">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</div>
+                <div>$900</div>
+            </div>
+        </div>
+        <div class="fs-5 text-black-50">x1</div>
+    </div>
+        
+    <div>
+
+    </div>
+</div>
+<div class="border rounded-2 my-2 px-2 py-1">
+    <div class="d-flex justify-content-start align-items-center">
+        <i class="fa-solid fa-truck-fast"></i>
+        <div>運送方式</div>
+    </div>
+    <div>
+        <div class="fw-bold">郵寄寄送</div>
+        <div class="text-black-50">106台北市大安區復興南路一段390號2樓</div>
+        <div class="d-flex justify-content-between">
+            <div>運費:<span class="text-danger">$0</span></div>
+            <button class="border-0 bg-transparent fs-6 text-primary" data-bs-toggle="modal" data-bs-target="#myModal">變更</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="myModal">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">選擇寄送方式</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <div class="ship border-start border-danger border-3 bg-light fs-5 ps-2">郵寄寄送</div>
+                    <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2">+新增地址</button>
+                </div>
+                <div class="mb-2">
+                    <div class="ship border-start border-secondary border-3 bg-light fs-5 ps-2">7-ELEVEN</div>
+                    <div class="address fs-6 ps-2 d-none"></div>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none">+新增地址</button>
+                </div>
+                <div class="mb-2">
+                    <div class="ship border-start border-secondary border-3 bg-light fs-5 ps-2">萊爾富</div>
+                    <div class="address fs-6 ps-2 d-none"></div>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none"  data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal showMap" tabindex="-1" id="showMap">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">選擇地址或門市</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="googleMaps">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(".ship").click(function () {
+        $(this).removeClass("border-secondary border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-secondary border-danger").addClass("border-secondary");
+    });
+    document.getElementById("showMap").addEventListener("hidden.bs.modal"function () {
+        $("#myModal").show()
+    });
+
+</script>

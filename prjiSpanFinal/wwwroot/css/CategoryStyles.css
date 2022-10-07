@@ -1,42 +1,62 @@
-﻿.HomepageIndex {
-    position: relative;
-    min-width: 1200px;
-    width: 100%;
-    min-height: 100%;
-    margin: 0 auto;
-    padding: 0 0 0px;
-    box-sizing: border-box;
-}
-
-.view {
-    box-sizing: border-box;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    flex-shrink: 0;
-    align-content: flex-start;
-    border: 0 solid #000;
+﻿* {
     margin: 0;
     padding: 0;
-    min-width: 0;
-}
-.carousel {
-    border: 3px solid orange;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
-    .carousel .carousel-item img {
-        min-height: 575px;
-        object-fit: cover;
+.CategoryBody {
+    width: 1250px;
+}
+
+.CategoryHeader {
+    width: 1250px;
+    padding: 10px;
+}
+
+.CategoryHeaderTitle {
+    text-align: left;
+    width: 100%;
+    background-color: #efefef;
+}
+
+.CategoryHeaderTitleText {
+    text-align: center;
+    margin-left: 10px;
+    font-size: 20px;
+    
+}
+
+    .CategoryHeaderTitleText span {
+        margin-left: 3px;
+        font-size: 10px;
     }
-/*分隔線*/
+
+.CategoryHeaderBody {
+    background-color: #f5f5dc;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    line-height: 1.69;
+    text-align: left;
+}
+
+.CategoryHeaderItem {
+    flex: 0 0 calc(20% - 32px);
+    margin: 0 8px;
+    padding: 4px 8px;
+}
+
+    .CategoryHeaderItem:hover {
+        background-color: gray;
+        color: red;
+    }
+
 .split {
     height: 50px;
     width: 100%;
 }
 
-/*猜你喜歡商品區*/
 .itembody {
     width: 1250px;
     padding: 0;
@@ -60,10 +80,11 @@
     border: 1px solid gray;
     border-radius: 5px;
     transition: all .5s
+
 }
 
     .sellsitem:hover {
-        transform: scale(1.05);
+        transform:scale(1.05);
         top: 0px;
     }
 
@@ -104,8 +125,9 @@
     padding: 3px;
     text-align: center;
     width: 100px;
-    color:black;
+    color: black;
 }
+
     .buybtn:hover {
         color: red;
     }
