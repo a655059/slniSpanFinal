@@ -2,67 +2,167 @@
 @{
     ViewData["Title"] = "Order";
 }
+<head>
+    <style>
+        .btn-toggle-nav a:hover,
+        .btn-toggle-nav a:focus {
+            background-color: #d2f4ea;
+        }
+        .排版 {
+            margin-left: 250px;
+            padding-block: 2px;
+            width: 500px
+        }
 
-<h2>訂單管理</h2>
+        .左側欄 {
+            text-align-last: center;
+            font-size: 20px
+        }
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">總覽</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">未結帳</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">已結帳</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">歷史訂單</a>
-    </li>
-</ul>
-<table class="table table-hover">
-    <tr>
-        <td>訂單編號</td>
-        <td>結帳時間</td>
-        <td>商品名稱</td>
-        <td>數量</td>
-        <td>單價</td>
-        <td>運費</td>
-        <td>總金額</td>
-        <td>付款方式</td>
-        <td>訂單管理</td>
-        <td>評價</td>
-    </tr>
-    @for (int i = 1; i <= 10; i++)
-    {
-        <tr>
-            <td>@i</td>
-            <td>2022/10/10<br />10:10:10</td>
-            <td>蘋果</td>
-            <td>100</td>
-            <td>10</td>
-            <td>10</td>
-            <td>1000</td>
-            <td>面交</td>
-            <td><a href="#">訂單管理</a></td>
-            <td><a href="#">給評價</a></td>
-        </tr>
-        
-    }
-</table>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+        .賣家中心 {
+            font-size: 25px;
+            font-weight: 900
+        }
+        td {
+            text-align: center;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu" style="float:left">
+        <div style="width: 180px;">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+                <span class="賣家中心">賣家中心</span>
             </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <img src="~/img/商品管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        商品管理
+                    </button>
+                    <div class="左側欄 " id="home-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a asp-action="Index" class="link-dark d-inline-flex text-decoration-none rounded">我的商品</a></li>
+                            <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded">新增商品</a></li>
+                            <li>@*<a href="#" class="link-dark d-inline-flex text-decoration-none rounded">商品違規</a>*@</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/訂單管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        訂單管理
+                    </button>
+                    <div class="左側欄" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的銷售</a></li>
+                            <li>@*<a href="#" class="link-dark d-inline-flex text-decoration-none rounded">不成立</a>*@</li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">退貨/ 退款</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/物流中心.png" /> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                        物流中心
+                    </button>
+                    <div class="左側欄" id="orders-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">待出貨 </a></li>
+                            @*<li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">批次出貨</a></li>*@
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">物流設定</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <img src="~/img/行銷活動.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                        行銷活動
+                    </button>
+                    <div class="左側欄" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的活動</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">蝦皮廣告</a></li>
+                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">優惠劵</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <script src="~/js/sidebars.js"></script>
+    </div>
+
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11 ">
+            <h2 class="d-flex justify-content-center">我的銷售</h2>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">總覽</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">未結帳</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">已結帳</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">歷史訂單</a>
+                </li>
+            </ul>
+            <table class="table table-hover">
+                <tr>
+                    <td>訂單編號</td>
+                    <td>結帳時間</td>
+                    <td>商品名稱</td>
+                    <td>數量</td>
+                    <td>單價</td>
+                    <td>運費</td>
+                    <td>總金額</td>
+                    <td>付款方式</td>
+                    <td>訂單管理</td>
+                    <td>評價</td>
+                </tr>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>2022/10/10<br />10:10:10</td>
+                        <td>蘋果</td>
+                        <td>100</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>1000</td>
+                        <td>面交</td>
+                        <td><a href="#">訂單管理</a></td>
+                        <td><a href="#">給評價</a></td>
+                    </tr>
+                }
+            </table>
+            <div class="row ">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
