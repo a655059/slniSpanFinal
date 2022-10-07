@@ -2,8 +2,10 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section Styles{ 
+    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+}
 
-<link rel="stylesheet" href="~/css/ItemIndex.css" />
 
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -95,9 +97,10 @@
                     <input type="number" value="1" name="purchaseCount" min="1" class="ms-3" id="itemCount" />
                     <div class="itemRemainingQty ms-3">還剩件數</div>
                 </div>
-                <div class="d-flex justify-content-start align-items-center ps-5">
-                    <input type="submit" value="加入購物車" formaction="/Delivery/CartList" class="btn btn-warning me-3 ms-4" />
-                    <input type="submit" value="直接購買" class="btn btn-success" />
+                <div class="position-relative d-flex justify-content-start align-items-center ps-5">
+                    <img src="~/img/dollar.png" class="dollarIcon position-absolute" />
+                    <input type="button" value="加入購物車" class="addToCart btn btn-warning me-3 ms-4" />
+                    <input type="submit" value="直接購買" class="buyDirectly btn btn-success" />
                 </div>
             </form>
         </div>

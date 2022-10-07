@@ -8,6 +8,7 @@ $(".purchaseStyle").mouseenter(function () {
     let imgSrc = $(this).siblings(".itemStyleImg").attr("src");
     $(".bigPhoto img").attr("src", imgSrc);
 });
+
 $(".purchaseStyle").click(function () {
     let price = $(this).siblings(".price").html();
     $(".itemPrice").html(price);
@@ -16,9 +17,27 @@ $(".purchaseStyle").click(function () {
     $(".itemRemainingQty").html("還剩" + qty + "件");
     $("input[name='purchaseCount']").attr("max", qty)
 });
-$("input[type='submit']").click(function () {
+
+$(".buyDirectly").click(function () {
     if ($("input[name='purchaseStyle']:checked").length != 1) {
         alert("請選擇一個規格");
+        return false;
+    }
+});
+
+$(".addToCart").click(function () {
+    if ($("input[name='purchaseStyle']:checked").length != 1) {
+        alert("請選擇一個規格");
+        return false;
+    }
+    else {
+        $(".dollarIcon").animate(
+            {
+                top: "-=400",
+                opacity: "0"
+            },
+            1000,
+        )
     }
 });
 
@@ -45,4 +64,6 @@ $("#previousPage").click(function () {
     }
     $(".sellerCard").animate({ left: "+=1050px" });
 });
+
+
 

@@ -62,12 +62,18 @@
     width:90%;
 }
 
+.itemDetails .dollarIcon {
+    width: 30px;
+    left:110px;
+    top:-10px;
+}
+
 .sellerProducts .pageSelect button {
     border: 1px solid #E0E0E0;
     border-radius: 5px;
-    font-size:20px;
-    font-weight:bold;
-    margin:0 5px;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 5px;
 }
 
 .sellerProducts #previousPage {
