@@ -7,28 +7,29 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Fourth navbar example">
     <div class="container-fluid">
         <img src="~/img/Homepage/Index.jpg" alt="錯誤圖片" title="我超勇" width="100" />
-        <a class="navbar-brand" href="#">會員中心</a>
+        <div class="row"><img src="~/img/list.png" /></div>
+        <a class="navbar-brand" href="#" id="drop">購買清單</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExample04">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">賣場首頁</a>
+                    <a class="nav-link active" aria-current="page" href="https://localhost:44330/Home/Index">賣場首頁</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">會員設定</a>
+                    <a class="nav-link" href="https://localhost:44330/Member/Edit">會員設定</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link">聯繫客服</a>
                 </li>
-                <li class="nav-item dropdown" id="drop">
-                    <a  class="nav-link dropdown-toggle"  href="#" data-bs-toggle="dropdown">購買清單</a>
-                    @*<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">待付款</a></li>
-                        <li><a class="dropdown-item" href="#">待出貨</a></li>
-                        <li><a class="dropdown-item" href="#">待收貨</a></li>
-                    </ul>*@
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">會員中心</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="https://localhost:44330/Member/Like">喜歡の商品</a></li>
+                        <li><a class="dropdown-item" href="https://localhost:44330/Member/Coupon">我的優惠券</a></li>
+                        <li><a class="dropdown-item" href="https://localhost:44330/SalesCourt/%E8%B3%A3%E5%A0%B4">關注賣家</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>

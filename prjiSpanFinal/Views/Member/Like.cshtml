@@ -38,10 +38,10 @@
 </head>
 <body>
     <div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
-    @Html.ActionLink("會員修改", "Edit", "Member", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("關注的賣家", "Edit", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("會員中心", "List", "Member", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("關注賣家", "賣場", "SalesCourt", null, new { @class = "btn btn-secondary" })
     @Html.ActionLink("我的優惠券", "Coupon", "Member", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("購物清單", "List", "Seller", null, new { @class = "btn btn-secondary" })<br />
+    @Html.ActionLink("購物清單", "Order", "Buyer", null, new { @class = "btn btn-secondary" })<br />
 
     <figure style="background-color:#D1E9E9">
         <figcaption>買爆清單</figcaption>
