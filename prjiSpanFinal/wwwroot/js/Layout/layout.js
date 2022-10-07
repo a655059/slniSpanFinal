@@ -10,3 +10,12 @@
         }
     }).scroll();
 });
+
+const h1 = $("#header1");
+const h2 = document.getElementById("header2");
+sizeble();
+addEventListener('resize', async () =>
+    await sizeble());
+function sizeble() {
+    h2.style.marginTop = (h1.height() + 16) + "px";
+}

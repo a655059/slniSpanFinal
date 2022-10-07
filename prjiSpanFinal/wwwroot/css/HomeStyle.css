@@ -1,8 +1,8 @@
 ﻿.HomepageIndex {
     position: relative;
-    min-width: 1200px;
+    /*min-width: 1200px;*/
     width: 100%;
-    min-height: 100%;
+    /*min-height: 100%;*/
     margin: 0 auto;
     padding: 0 0 0px;
     box-sizing: border-box;
@@ -20,20 +20,41 @@
     padding: 0;
     min-width: 0;
 }
+.cateheader-1 {
+   max-height:60%;
+}
+.cateheader-2 {
+    max-height: 60%;
+}
 .carousel {
-    border: 3px solid orange;
     border-radius: 10px;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
-
-    .carousel .carousel-item img {
-        min-height: 575px;
-        object-fit: cover;
+    .carousel .carousel-item{
+        text-align:center;
+    }
+        .carousel .carousel-item img {
+            min-height:100px;
+            object-fit: cover;
+        }
+.dm {
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+    .dm img {
+        /*object-fit: cover;*/
     }
 /*分隔線*/
 .split {
     height: 50px;
     width: 100%;
+}
+.carosplit {
+    max-height: 5%;
 }
 
 /*猜你喜歡商品區*/
