@@ -39,6 +39,10 @@ namespace prjiSpanFinal.Controllers
             listCBigType.Add(a);
             listCBigType.Add(b);
             listCBigType.Add(c);
+            for(int i = 1; i < 12; i++)
+            {
+                listCBigType.Add(a);
+            }
         }
         public IActionResult Index()
         {
