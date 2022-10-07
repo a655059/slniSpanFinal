@@ -38,8 +38,23 @@
 .lofooter-links li a:hover {
     color: #D10024;
 }
+/**/
+:root {
+}
+.keeppos {
+    position: fixed;
+    top: 0;
+    height:auto;
+    width: 100%;
+    z-index: 9999;
+}
+/*蝦到爆logo大小*/
 .logopic{
-    width:80%;
+    width:60%;
+}
+/* <a> 去底線*/
+.linknoline {
+    text-decoration: none;
 }
 /*回到最上面*/
 .toTop-arrow {
@@ -80,10 +95,12 @@
     .toTop-arrow:focus {
         outline: none;
     }
+    /*上方橫條cart*/
 .header-cart {
     float: right;
-     padding:0px; 
-     width:100px
+     padding-right:30px; 
+     padding-top:10PX;
+     /*width:150px*/
 }
 
     .header-cart > div {
@@ -97,24 +114,24 @@
         .header-cart > div > a {
             display: block;
             position: relative;
-            width: 90px;
+            width: 20px;
             text-align: center;
             color: #FFF;
         }
 
             .header-cart > div > a > i {
                 display: block;
-                font-size: 18px;
+                font-size: 20px;
             }
 
             .header-cart > div > a > span {
-                font-size: 12px;
+                font-size: 8px;
             }
 
             .header-cart > div > a > .qty {
                 position: absolute;
-                right: 15px;
-                top: -10px;
+                right: -15px;
+                top: -15px;
                 width: 20px;
                 height: 20px;
                 line-height: 20px;
@@ -128,6 +145,4 @@
     .header-cart .menu-toggle {
         display: none;
     }
-.linknoline {
-    text-decoration: none;
-}
+
