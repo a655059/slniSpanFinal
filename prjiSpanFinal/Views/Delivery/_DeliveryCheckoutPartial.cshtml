@@ -71,12 +71,12 @@
                 <div class="mb-2">
                     <div class="ship border-start border-danger border-3 bg-light fs-5 ps-2">郵寄寄送</div>
                     <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
-                    <button class="addAddress btn btn-outline-danger btn-sm ms-2">+新增地址</button>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2"   data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
                 </div>
                 <div class="mb-2">
                     <div class="ship border-start border-secondary border-3 bg-light fs-5 ps-2">7-ELEVEN</div>
                     <div class="address fs-6 ps-2 d-none"></div>
-                    <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none">+新增地址</button>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none"   data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
                 </div>
                 <div class="mb-2">
                     <div class="ship border-start border-secondary border-3 bg-light fs-5 ps-2">萊爾富</div>
@@ -120,8 +120,8 @@
     $(".ship").click(function () {
         $(this).removeClass("border-secondary border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-secondary border-danger").addClass("border-secondary");
     });
-    document.getElementById("showMap").addEventListener("hidden.bs.modal"function () {
-        $("#myModal").show()
+    document.getElementById("showMap").addEventListener("hidden.bs.modal", function () {
+        $("#myModal").show();
     });
 
 </script>
