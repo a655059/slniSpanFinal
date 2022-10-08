@@ -2,7 +2,7 @@
 
 namespace prjiSpanFinal.Models
 {
-    public class COrder
+    public class COrderHu
     {
         public int OrderIndex { get; set; }
 
