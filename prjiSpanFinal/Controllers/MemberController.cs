@@ -32,5 +32,9 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult Order()
+        {
+            return View();
+        }
     }
 }

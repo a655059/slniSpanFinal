@@ -1,128 +1,151 @@
-﻿
+﻿@addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "Create";
 }
-<link type="text/css" rel="stylesheet" href="~/css/sidebars.css" />
-<link href="~/css/features.css" rel="stylesheet" />
-<head>
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <style>
-        .排版 {
-            margin-left: 250px;
-            padding-block: 2px;
-            width: 500px
+        .描述欄位 {
+            width: 680px;
+            height: 200px;
+            resize: none;
         }
 
-        .左側欄 {
-            text-align-last: center;
-            font-size: 20px
+        label {
+            font-size: 20px;
+            font-weight: 600;
+            padding-block: 3px;
         }
 
-        .賣家中心 {
-            font-size: 25px;
-            font-weight: 900
+        .名稱寬 {
+            width: 50px;
+        }
+
+        .btntype {
+            height: 40px;
+            width: 700px;
+            border: dashed;
+            border-radius: 7px;
+            border-color: skyblue;
+            background-color: white;
+        }
+
+        .delete, .add {
+            height: 50px;
+            border-radius: 25px;
+            width: 50px;
+            font-size: 10px;
+        }
+
+        物流 {
+            width: 880px;
         }
     </style>
-</head>
-<body>
-    <div class="menu" style="float:left">
-        <div style="width: 280px;">
-            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-                <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-                <span class="賣家中心">賣家中心</span>
-            </a>
-            <ul class="list-unstyled ps-0">
-                <li class="mb-1">
-                    <img src="~/img/商品管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                        商品管理
-                    </button>
-                    <div class="左側欄 " id="home-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的商品</a></li>
-                            <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded">新增商品</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">商品違規</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="border-top my-3"></li>
-                <li class="mb-1">
-                    <img src="~/img/訂單管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                        訂單管理
-                    </button>
-                    <div class="左側欄" id="dashboard-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的銷售</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">不成立</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">退貨/ 退款</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="border-top my-3"></li>
-                <li class="mb-1">
-                    <img src="~/img/物流中心.png" /> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-                        物流中心
-                    </button>
-                    <div class="左側欄" id="orders-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">待出貨 </a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">批次出貨</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">物流設定</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="border-top my-3"></li>
-                <li class="mb-1">
-                    <img src="~/img/行銷活動.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                        我的行銷活動
-                    </button>
-                    <div class="左側欄" id="account-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的行銷活動...</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">蝦皮廣告</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">優惠劵</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <script src="~/js/sidebars.js"></script>
-    </div>
-
-    <div class="text-center  ">
-        <h4>新增商品</h4>
+}
+<vc:seller-ui></vc:seller-ui>
+<div class="row border overflow-auto">
+    <div class="col-1"></div>
+    <div class="col-11 ">
+        <h2 class="d-flex justify-content-start mb-2">新增商品</h2>
         <div class="row">
-            <div class="排版 ">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label class="control-label">商品名稱</label>
-                        <input class="form-control" />
-                        <span class="text-danger"></span>
+            <div class="排版">
+                <h4 class=" mb-4">商品資訊</h4>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group d-flex justify-content-around ">
+                    <label class="名稱寬">名稱</label>
+                    <input class="form-control " />
+                    <span class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-around ">
+                    <label class="名稱寬 mt-2">類別</label>
+                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                        <option value="1">女生衣著</option>
+                        <option value="2">書籍及雜誌期刊</option>
+                        <option value="3">男生衣著</option>
+                        <option value="4">居家生活</option>
+                        <option value="5">運動/健身</option>
+                        <option value="6">美食、伴手禮</option>
+                    </select>
+                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                        <option selected>T恤</option>
+                        <option value="1">長褲</option>
+                        <option value="2">內睡衣</option>
+                        <option value="3">外套</option>
+                        <option value="4">其他</option>
+                        <option value="5">針織/毛衣</option>
+                        <option value="6">多件式套裝</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-around ">
+                    <label class="名稱寬 mt-2">規格</label>
+                    <button class="btntype mt-3 ">新增規格</button>        @*    button  在這   *@
+                    <span class="text-danger"></span>
+                </div>
+                <div class="addStyle">
+                </div>
+                <div class="">
+                    <label class="名稱寬 mt-2">照片</label>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">成本</label>
-                        <input class="form-control" />
-                        <span class="text-danger"></span>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">數量</label>
-                        <input class="form-control" />
-                        <span class="text-danger"></span>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">售價</label>
-                        <input class="form-control" />
-                        <span class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2 ">描述</label>
+                    <textarea class="form-control  描述欄位 mt-3" aria-label="With textarea"></textarea>
+                </div>
+                <div class="form-group d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2">物流</label>
+                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                        <option value="1">全家便利商店</option>
+                        <option value="2">7-ELEVEN</option>
+                        <option value="3">黑貓宅急便</option>
+                        <option value="4">大榮貨運</option>
+                        <option value="5">自取</option>
+                    </select>
+                </div><br />
+                <div class="row ">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <input type="submit" value="新增" class="btn btn-warning" onclick="return confirm('新增成功')" />
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">照片</label>
-                        <input type="file" class="form-control" />
-                        <span class="text-danger"></span>
-                    </div><br />
-                    <div class="btn btn-outline-warning">
-                        <input type="button" value="新增" class="form-control" />
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</body>
+</div>
+@section Scripts{
+    <script src="~/js/sidebars.js"></script>
+    <script>
+        let 規格按鈕 = document.querySelector(".btntype");
+        let 新增樣式 = document.querySelector(".addStyle");
+        let 刪除樣式 = document.querySelector("delete");
+
+        規格按鈕.addEventListener("click", () => {
+            新增樣式.innerHTML +=
+                `<div class="d-flex justify-content-around ">
+                            <label class="名稱寬 mt-4">規格</label>
+                            <input class="form-control m-3 w-25" />
+                            <label class="名稱寬 mt-4">數量</label>
+                            <input class="form-control m-3 w-25" />
+                            <label class="名稱寬 mt-4">售價</label>
+                            <input class="form-control m-3 w-25" />
+                            <button class="btn btn-danger delete m-3 deletebtn">X</button>
+                        </div>`;
+        })
+
+        $(".addStyle").on("click", ".deletebtn", function () {
+            $(this).closest("div").remove();
+        });
+    </script>
+}
