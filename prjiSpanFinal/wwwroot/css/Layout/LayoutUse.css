@@ -126,17 +126,14 @@
     float: right;
      padding-right:30px; 
      padding-top:10PX;
-     /*width:150px*/
+     width:150px
 }
 
     .header-cart > div {
         display: inline-block;
+        margin-left: 15px;
+        margin-right:20px;
     }
-
-        .header-cart > div + div {
-            margin-left: 15px;
-        }
-
         .header-cart > div > a {
             display: block;
             position: relative;
@@ -149,14 +146,9 @@
                 display: block;
                 font-size: 20px;
             }
-
-            .header-cart > div > a > span {
-                font-size: 8px;
-            }
-
             .header-cart > div > a > .qty {
                 position: absolute;
-                right: -15px;
+                right: -10px;
                 top: -13px;
                 width: 15px;
                 height: 15px;
@@ -166,6 +158,9 @@
                 font-size: 10px;
                 color: #FFF;
                 background-color: #D10024;
+            }
+            .header-cart > div > a > .qty-cart {
+                right: -15px;
             }
 
     .header-cart .menu-toggle {
@@ -177,6 +172,31 @@
 .fa-heart-o:hover {
     opacity: 80%;
 }
+.qty-cart{
+    right:-15px;
+}
+.navlog {
+    margin-left: 10px;
+    padding-right: 10px;
+    font-size: 20px;
+    
+}
+.log{
+    padding:0px 10px 0px 10px;
+    color:white;
+}
+.navlog > a {
+    font-weight:bold;
+}
+.navlog > a:hover {
+    opacity:80%;
+    color:red;
+}
+.res {
+    padding: 0px 10px 0px 10px;
+    color: white;
+}
+
 /*搜尋列相關*/
 .searchbar {
     position: relative;
@@ -213,3 +233,41 @@
     .searchkeyword:hover{
         color:yellow;
     }
+
+.searchcart {
+    /*float: right;*/    
+    width: 100%;
+}
+
+    .searchcart > div {
+        display: inline-block;
+    }
+
+        .searchcart > div > a {
+            display: block;
+            position: relative;
+            width: 100%;
+            text-align: center;
+            color: #FFF;
+            
+        }
+
+            .searchcart > div > a > i {
+                display: block;
+                font-size: 3em;
+                margin-top:20px;
+            }
+
+            .searchcart > div > a > .qty {
+                position: absolute;
+                right: -22px;
+                top: -18px;
+                width: 50%;
+                height: 50%;
+                line-height: 22px;
+                text-align: center;
+                border-radius: 50%;
+                font-size: 15px;
+                color: #FFF;
+                background-color: #D10024;
+            }
