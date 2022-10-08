@@ -22,5 +22,9 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+
+        public IActionResult 評價() {
+            return View();
+        }
     }
 }
