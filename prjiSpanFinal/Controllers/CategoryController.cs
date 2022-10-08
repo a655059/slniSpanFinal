@@ -30,6 +30,12 @@ namespace prjiSpanFinal.Controllers
         public IActionResult Index()
         {
             fillin(20);
+            CBigType a = new CBigType()
+            {
+                BigTypeID = 1,
+                BigTypeName = "食品"
+            };
+            ViewBag.prodlist = a;
             return View(listpro);
         }
     }

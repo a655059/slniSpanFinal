@@ -6,7 +6,9 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <title>蝦到爆商城</title>
-    <link href="~/css/LayoutUse.css" rel="stylesheet" />
+
+    <!--Layout自用CSS-->
+    <link href="~/css/Layout/LayoutUse.css" rel="stylesheet" />
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
@@ -25,7 +27,7 @@
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="~/css/style.css" />
-
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -36,35 +38,67 @@
 </head>
 <body>
     <!-- HEADER -->
-    <header class="p-2 layoutheader1bg text-white">
+    <header class="p-2 layoutheader1bg text-white keeppos" id="header1">
         <!-- TOP HEADER -->
-        <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-                </a>
+            <div class="container-lg">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    @*<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                    </a>*@
 
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-                </ul>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2">首頁</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                    </ul>
 
-                @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                        <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
-                    </form>*@
-
-                <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2">Login</button>
-                    <button type="button" class="btn btn-warning">Sign-up</button>
+                    @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>*@
+                    <div class="header-cart">
+                        <!-- Wishlist -->
+                        <div>
+                            <a href="@Url.Content("~/Member/Like")" class="linknoline">
+                                <i class="fa fa-heart-o"></i>
+                                <div class="qty">2</div>
+                            </a>
+                        </div>
+                        <!-- /Wishlist -->
+                        <!-- Cart -->
+                        <div class="dropdown">
+                            <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
+                                <i class="fa fa-shopping-cart"></i>
+                                <div class="qty">3</div>
+                            </a>
+                        </div>
+                        <!-- /Cart -->
+                        <!-- Menu Toogle -->
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                        <!-- /Menu Toogle -->
+                        <!--帳號登入/創建-->
+                    </div>
+                    <div class="text-end">
+                        <a class="btn btn-outline-light me-2" href="@Url.Content("~/Member/Login")">
+                            會員登入
+                        </a>
+                        <a href="@Url.Content("~/Member/Create")" class="btn btn-warning">
+                            會員創建
+                        </a>
+                    </div>
                 </div>
+                <!--/帳號登入/創建-->
             </div>
-        </div>
-        <!-- /TOP HEADER -->
+            <!-- /TOP HEADER -->
     </header>
-    <header>
+    
+    <header class="keeppos2" id="header2">
         <!-- MAIN HEADER -->
         <div class="layoutheader2">
             <!-- container -->
@@ -74,85 +108,23 @@
                     <!-- LOGO -->
                     <div class="col-md-3">
                         <div class="header-logo">
-                            <a href="#" class="logo">
-                                <img src="~/img/logo.png" alt="">
+                            <a href="@Url.Content("~/Home/Index")" class="logo">
+                                <img src="~/img/Layout/LOGO_Long2.png" class="logopic" />
                             </a>
                         </div>
                     </div>
                     <!-- /LOGO -->
                     <!-- SEARCH BAR -->
-                    <div class="col-md-6 align-self-center">
+                    <div class="col-md-7 align-self-center">
                         <div class="input-group loDiv">
                             <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             <button type="button" class="btn btn-primary">search</button>
                         </div>
                     </div>
                     <!-- /SEARCH BAR -->
-                    <!-- ACCOUNT -->
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <!-- Wishlist -->
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
-                            <!-- /Wishlist -->
-                            <!-- Cart -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    <div class="qty">3</div>
-                                </a>
-                                <div class="cart-dropdown">
-                                    <div class="cart-list">
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="~/img/product01.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="~/img/product02.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="cart-summary">
-                                        <small>3 Item(s) selected</small>
-                                        <h5>SUBTOTAL: $2940.00</h5>
-                                    </div>
-                                    <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Cart -->
-                            <!-- Menu Toogle -->
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                            <!-- /Menu Toogle -->
-                        </div>
-                    </div>
-                    <!-- /ACCOUNT -->
+                    <!-- split -->
+                    <div class="col-md-1 clearfix"></div>
+                    <!-- /split -->
                 </div>
                 <!-- row -->
             </div>
@@ -180,15 +152,15 @@
             <!-- container -->
             <div class="container">
                 <!-- row -->
-                <div class="row">
+                <div class="row text-center">
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
-                            <h3 class="footer-title">About Us</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+                            <h3 class="footer-title">關於我們</h3>
+                            <p>蝦到爆是一個讓您安心、快樂、自由享受購物的網路平台。</p>
                             <ul class="lofooter-links">
-                                <li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-                                <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-                                <li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+                                <li><a href="#"><i class="fa fa-map-marker"></i>台北市大安區復興南路一段390號2樓</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i>(+886)2-6631-6588</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>Shopdaobao@gmail.com</a></li>
                             </ul>
                         </div>
                     </div>
@@ -258,6 +230,7 @@
             <!-- /container -->
         </div>
         <!-- /bottom footer -->
+        <button type="button" id="BackTop" class="toTop-arrow"></button>
     </footer>
     <!-- /FOOTER -->
     <!-- jQuery Plugins -->
@@ -266,7 +239,8 @@
     <script src="~/js/slick.min.js"></script>
     <script src="~/js/nouislider.min.js"></script>
     <script src="~/js/jquery.zoom.min.js"></script>
-    <script src="~/js/main.js"></script>
+    @*<script src="~/js/main.js"></script>*@
+    <script src="~/js/Layout/layout.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
