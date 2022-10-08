@@ -166,17 +166,24 @@
 
     <!-- SECTION -->
     <div class="section">
-        <div class="row" style="width:10%;float:left;clear:left;display:block;position:fixed;">
-            <ul class="list-group">
-                @Html.ActionLink("會員管理", "MemberList","Management",null,new{@class="list-group-item"})
-                @Html.ActionLink("訂單管理", "OrderList","Management",null,new{@class="list-group-item"})
-                @Html.ActionLink("檢視報表", "PowerBi","Management",null,new{@class="list-group-item"})
-            </ul>
+
+        
+
+        <div id="sidebar" class="bd-sidebar" style="width:10%;float:left;clear:right;display:block;position:fixed;">
+        <ul class="list-group">
+        @Html.ActionLink("會員管理", "MemberList","Management",null,new{@class="list-group-item"})
+        @Html.ActionLink("訂單管理", "OrderList","Management",null,new{@class="list-group-item"})
+        @Html.ActionLink("產品管理", "ProductList","Management",null,new{@class="list-group-item"})
+        @Html.ActionLink("檢視報表", "PowerBi","Management",null,new{@class="list-group-item"})
+        </ul>
         </div>
         <!-- container -->
         <div class="container">
             <main role="main" class="pb-3">
+
+
                 @RenderBody()
+
             </main>
         </div>
         <!-- /container -->
@@ -267,7 +274,7 @@
             <!-- /container -->
         </div>
         <!-- /bottom footer -->
-@*        <button type="button" id="BackTop" class="toTop-arrow"></button>*@
+        @*        <button type="button" id="BackTop" class="toTop-arrow"></button>*@
     </footer>
     <!-- /FOOTER -->
     <!-- jQuery Plugins -->
