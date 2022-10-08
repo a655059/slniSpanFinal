@@ -11,11 +11,13 @@
     background-color: #FFA724;
 }
 .footerbg {
-    background: /*#FFE0B3*/ #FF7B0F;
+    background: #FF7B0F;
     color: white;
 }
 .footerbg2 {
-    background:  black;
+    background: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .lofooter {
     margin: 30px 0px;
@@ -41,16 +43,40 @@
 /**/
 :root {
 }
-.keeppos {
-    position: fixed;
-    top: 0;
-    height:auto;
-    width: 100%;
-    z-index: 9999;
+.nav-link {
+    padding: 0;
 }
+.nav {
+    align-items: center;
+    font-weight: bold;
+}
+    .nav a:hover{
+        opacity:80%;
+    }
+.navhead{
+    font-size:25px;
+}
+.navbody {
+    font-size: 20px;
+}
+    .keeppos {
+        position: fixed;
+        top: 0;
+        height: auto;
+        width: 100%;
+        z-index: 9999;
+    }
 /*蝦到爆logo大小*/
+.header-logo{
+    overflow:hidden;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+}
 .logopic{
-    width:60%;
+    min-width:70%;
+    text-align:center;
 }
 /* <a> 去底線*/
 .linknoline {
@@ -131,10 +157,10 @@
             .header-cart > div > a > .qty {
                 position: absolute;
                 right: -15px;
-                top: -15px;
-                width: 20px;
-                height: 20px;
-                line-height: 20px;
+                top: -13px;
+                width: 15px;
+                height: 15px;
+                line-height: 15px;
                 text-align: center;
                 border-radius: 50%;
                 font-size: 10px;
@@ -145,4 +171,45 @@
     .header-cart .menu-toggle {
         display: none;
     }
+.fa-shopping-cart:hover {
+    opacity:80%;
+}
+.fa-heart-o:hover {
+    opacity: 80%;
+}
+/*搜尋列相關*/
+.searchbar {
+    position: relative;
+    flex: 1 1 auto;
+    width: 100%;
+    margin-left: -1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.searchkeyspace {
+    margin-top: 5px;
+    max-height: 24px;
+    overflow: hidden;
+}
+.input-text:focus {
+    box-shadow: 0px 0px 0px;
+    border-color: #f8c146;
+    outline: 0px;
+}
 
+.form-control {
+    border: 0px;
+}
+.input-group{
+    border:3px solid white;
+    border-radius:10px
+}
+
+.searchkeyword {
+    padding-left: 2px;
+    color: white;
+    font-size: 1rem;
+}
+    .searchkeyword:hover{
+        color:yellow;
+    }
