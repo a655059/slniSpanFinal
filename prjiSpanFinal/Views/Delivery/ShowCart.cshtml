@@ -40,7 +40,6 @@
             width: 20px;
             height: 20px;
         }
-
         
     </style>
 }
@@ -146,7 +145,11 @@
         </div>
         <div class="divDiscount d-flex justify-content-between mb-3 d-none">
             <div class="selectedCouponID">折扣碼:<span class="text-danger"></span></div>
-            <div class="text-danger">-$<span id="discountPrice"></span></div>
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="text-danger">-$<span id="discountPrice"></span></div>
+                <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
+            </div>
+            
         </div>
         <div class="d-flex justify-content-between mb-3 border-top">
             <div>總計</div>
@@ -210,50 +213,4 @@
 
 @section Scripts{
     <script src="~/js/DeliveryShowCart.js"></script>
-    <script>
-        
-        $(function () {
-            if ($(".itemCount").val() == 1) {
-                $(".countMinus").attr("disabled", true).css("color", "#D0D0D0");
-            }
-        });
-        $(".countMinus").click(function () {
-            let value = Number($(this).next(".itemCount").val()) - 1;
-            $(this).next(".itemCount").val(value);
-            if ($(this).next(".itemCount").val() == 1) {
-                $(this).attr("disabled", true).css("color", "#D0D0D0");
-            }
-        });
-        $(".countPlus").click(function () {
-            let value = Number($(this).prev(".itemCount").val()) + 1;
-            $(this).prev(".itemCount").val(value);
-            if ($(this).prev(".itemCount").val() != 1) {
-                $(this).siblings(".countMinus").attr("disabled", false).css("color", "#000000");
-            }
-        });
-        $(".coupon").click(function () {
-            let discount = $(this).children().eq(0).children().html();
-            $(".discount").children().html(`-$${discount}`);
-        });
-        $(".cancel").click(() => {
-            $(".discount").children().html(`0`);
-            $("input[type='radio']").attr("checked", false);
-        });
-        $(".chose").click(() => {
-            if ($("input[type='radio']:checked").length == 0) {
-                alert("請選擇一個折價券");
-            }
-            else {
-                let couponID = $("input[type='radio']:checked").siblings().children().eq(4).children().html();
-                let discount = $("input[type='radio']:checked").siblings().children().eq(0).children().html();
-                $(".divDiscount").removeClass("d-none");
-                $(".selectedCouponID").children().html(`${couponID}`);
-                $("#discountPrice").html(`${discount}`);
-                let totalPrice = Number($("#smallPrice").html()) - Number(discount);
-                $("#totalPrice").html(totalPrice);
-            }
-            
-        });
-
-    </script>
 }
