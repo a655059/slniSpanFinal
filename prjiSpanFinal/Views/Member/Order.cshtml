@@ -4,13 +4,14 @@
 }
 @section Styles
 {
-    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" /> @*左側欄改這裡*@
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" /> @*你的左側欄css放這裡*@
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
 }
-<vc:seller-ui></vc:seller-ui> @*左側欄改這裡，新開一個viewcomponent MemberUI*@
+<vc:member-ui></vc:member-ui> @*去\Views\Shared\Components\MemberUI\Default.cshtml修改左側欄HTML*@
 <vc:order-list side="1"></vc:order-list>
 @section Scripts
 {
-    <script src="~/js/sidebars.js"></script> @*左側欄改這裡，這個或許不用改*@
+
+    <script src="~/js/MemberUI/sidebars.js"></script> @*你的左側欄js放這裡*@
     <script src="~/js/DataTable/datatable.js"></script>
 }

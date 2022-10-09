@@ -1,4 +1,4 @@
-﻿@import url('~/css/DataTable/dataTables.bootstrap5.min.css');
+﻿@import url("dataTables.bootstrap5.min.css");
 td {
     text-align: left;
     font-size: 20px;
@@ -13,4 +13,8 @@ td {
 .orderdatepicker {
     width: 200px;
     display: inline;
+}
+
+.namenounderline {
+    text-decoration: none;
 }
