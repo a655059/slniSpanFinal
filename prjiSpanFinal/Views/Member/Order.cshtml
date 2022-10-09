@@ -4,13 +4,15 @@
 }
 @section Styles
 {
-    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" /> @*左側欄改這裡*@
+    <link href="~/lib/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
 }
-<vc:seller-ui></vc:seller-ui> @*左側欄改這裡，新開一個viewcomponent MemberUI*@
+<vc:member-ui></vc:member-ui>
+<h2 class="d-flex justify-content-center">購買清單</h2>
 <vc:order-list side="1"></vc:order-list>
 @section Scripts
 {
-    <script src="~/js/sidebars.js"></script> @*左側欄改這裡，這個或許不用改*@
+    <script src="~/js/MemberUI/sidebars.js"></script>
     <script src="~/js/DataTable/datatable.js"></script>
 }
