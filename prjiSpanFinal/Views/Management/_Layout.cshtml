@@ -1,0 +1,68 @@
+﻿@addTagHelper *, prjiSpanFinal
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>蝦到爆商城</title>
+
+    <!--Layout自用CSS-->
+    <link href="~/css/Layout/LayoutUse.css" rel="stylesheet" />
+    <link href="~/css/Layout/style.css" rel="stylesheet" />
+
+    <!-- Bootstrap -->
+    <link href="~/lib/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Slick -->
+    <link href="~/lib/css/slick.css" rel="stylesheet" />
+    <link href="~/lib/css/slick-theme.css" rel="stylesheet" />
+
+    <!-- nouislider -->
+    <link href="~/lib/css/nouislider.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome Icon -->
+    <link href="~/lib/css/font-awesome.min.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+    <header>
+        <vc:layout-header1></vc:layout-header1>
+        <vc:layout-header2></vc:layout-header2>
+        <vc:management-layout></vc:management-layout>
+    </header>
+
+    <!-- SECTION -->
+    <div class="section">
+
+        <!-- container -->
+        <div class="container">
+
+            <main role="main" class="pb-3">
+
+                @RenderBody()
+            </main>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /SECTION -->
+
+    <footer class="footerbg">
+        <vc:layout-footer1></vc:layout-footer1>
+        <vc:layout-footer2></vc:layout-footer2>
+    </footer>
+
+    <!-- jQuery Plugins -->
+    <script src="~/lib/js/jquery.min.js"></script>
+    <script src="~/lib/js/bootstrap.min.js"></script>
+    <script src="~/lib/js/slick.min.js"></script>
+    <script src="~/lib/js/nouislider.min.js"></script>
+    <script src="~/lib/js/jquery.zoom.min.js"></script>
+
+    <script src="~/js/Layout/layout.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,39 +1,38 @@
-﻿@model prjiSpanFinal.Models.CMember
+﻿@model prjiSpanFinal.Models.CMemberHu
 
 @{
     ViewData["Title"] = "MemberCreate";
 }
 
-<h1>MemberCreate</h1>
-
-<h4>CMember</h4>
+<h1>創建新會員</h1>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="MemberCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MemName" class="control-label"></label>
+                <label asp-for="MemName" class="control-label">會員名稱</label>
                 <input asp-for="MemName" class="form-control" />
                 <span asp-validation-for="MemName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
+                <label asp-for="Phone" class="control-label">聯絡電話</label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
+                <label asp-for="Address" class="control-label">聯絡地址</label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">伊媚兒</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
+                <label asp-for="Password" class="control-label">登入密碼</label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -44,6 +43,7 @@
                     <option value="已刪除">已刪除</option>
                     <option value="停權中">停權中</option>
                     <option value="未完成註冊">未完成註冊</option>
+                    <option value="管理員帳號">管理員帳號</option>
                 </select>
             </div>
             <div class="form-group">
@@ -52,7 +52,11 @@
         </form>
     </div>
 </div>
-
+<div style="position:relative" class="row">
+    <div class="col-6">
+        <a href="#" class="btn toTop-arrow"></a>
+    </div>
+</div>
 <div>
     <a asp-action="MemberList">回到會員列表</a>
 </div>

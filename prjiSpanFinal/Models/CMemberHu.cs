@@ -1,6 +1,6 @@
 ﻿namespace prjiSpanFinal.Models
 {
-    public class CMember
+    public class CMemberHu
     {
         public int Id { get; set; } 
         public string MemName { get; set; } 

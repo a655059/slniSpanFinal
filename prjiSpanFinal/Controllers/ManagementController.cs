@@ -9,9 +9,9 @@ namespace prjiSpanFinal.Controllers
 {
     public class ManagementController : Controller
     {
-        static List<CMember> members = new();
+        static List<CMemberHu> members = new();
         static List<CProductHu> Products = new();
-        static List<COrder> Orders = new();
+        static List<COrderHu> Orders = new();
         public ManagementController()
         {
             if (members.Count <= 0 || Orders.Count <= 0 || Products.Count <= 0)
@@ -24,7 +24,7 @@ namespace prjiSpanFinal.Controllers
         {
             for (int i = 0; i <= 20; i++)
             {
-                CMember newm = new()
+                CMemberHu newm = new()
                 {
                     Id = i,
                     Address = "台北市",
@@ -36,7 +36,7 @@ namespace prjiSpanFinal.Controllers
                 };
                 members.Add(newm);
                 Random rnd = new();
-                COrder cOrder = new()
+                COrderHu cOrder = new()
                 {
                     OrderID = i,
                     Quantity = rnd.Next(1, 100),
@@ -62,6 +62,36 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult Test()
+        {
+            return PartialView();
+        }
+        public IActionResult PowerBi()
+        {
+            return View();
+        }
+        public IActionResult ProductList()
+        {
+            return View(Products);
+        }
+        public IActionResult ProductCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ProductCreate(CProductHu mem)
+        {
+            var EditProduct = new CProductHu()
+            {
+                ProductId = Products.Last().ProductId + 1,
+               ProductStatus=mem.ProductStatus,
+               SellerName=mem.SellerName,
+               Stock = mem.Stock,
+               UnitPrice = mem.UnitPrice,
+            };
+            Products.Add(EditProduct);
+            return RedirectToAction("ProductList");
+        }
         public IActionResult MemberList()
         {
             return View(members);
@@ -71,9 +101,9 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult MemberCreate(CMember mem)
+        public IActionResult MemberCreate(CMemberHu mem)
         {
-            var EditMember = new CMember()
+            var EditMember = new CMemberHu()
             {
                 Id = members.Last().Id + 1,
                 MemName = mem.MemName,
@@ -90,12 +120,12 @@ namespace prjiSpanFinal.Controllers
         public IActionResult MemberEdit(int? id)
         {
             var member = from i in members
-                         where i.Id == id
+                         where i.Id == id 
                          select i;
             return View(members.First());
         }
         [HttpPost]
-        public IActionResult MemberEdit(CMember mem)
+        public IActionResult MemberEdit(CMemberHu mem)
         {
             if (mem != null)
             {
@@ -158,7 +188,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult OrderEdit(COrder order)
+        public IActionResult OrderEdit(COrderHu order)
         {
             if (order != null)
             {
@@ -194,7 +224,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     if (a.OrderID == id && a.OrderStatus == "已刪除")
                     {
-                        a.OrderStatus = "正常";
+                        a.OrderStatus = "未結帳";
                         break;
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
