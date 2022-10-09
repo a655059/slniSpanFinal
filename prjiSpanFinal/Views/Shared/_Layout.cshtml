@@ -1,79 +1,64 @@
 ﻿@addTagHelper *, prjiSpanFinal
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>蝦到爆商城</title>
+        <title>蝦到爆商城</title>
 
-    <!--Layout自用CSS-->
-    <link href="~/css/Layout/LayoutUse.css" rel="stylesheet" />
+        <!--Layout自用CSS-->
+        <link href="~/css/Layout/LayoutUse.css" rel="stylesheet" />
+        <link href="~/css/Layout/style.css" rel="stylesheet" />
 
-    <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+        <!-- Bootstrap -->
+        <link href="~/lib/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="~/css/bootstrap.min.css" />
+        <!-- Slick -->
+        <link href="~/lib/css/slick.css" rel="stylesheet" />
+        <link href="~/lib/css/slick-theme.css" rel="stylesheet" />
 
-    <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="~/css/slick.css" />
-    <link type="text/css" rel="stylesheet" href="~/css/slick-theme.css" />
+        <!-- nouislider -->
+        <link href="~/lib/css/nouislider.min.css" rel="stylesheet" />
 
-    <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="~/css/nouislider.min.css" />
+        <!-- Font Awesome Icon -->
+        <link href="~/lib/css/font-awesome.min.css" rel="stylesheet" />
 
-    <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+        @await RenderSectionAsync("Styles", required: false)
+    </head>
+    <body>
 
-    <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="~/css/style.css" />
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+        <header>
+            <vc:layout-header1></vc:layout-header1>
+            <vc:layout-header2></vc:layout-header2>
+        </header>
 
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    @await RenderSectionAsync("Styles", required: false)
-</head>
-<body>
-    <!-- HEADER -->
-    <header>
-        <vc:layout-header1></vc:layout-header1>
-        <vc:layout-header2></vc:layout-header2>
-    </header>
-    <!-- HEADER -->
-
-    <!-- SECTION -->
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
+        <!-- SECTION -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+            <!-- /container -->
         </div>
-        <!-- /container -->
-    </div>
-    <!-- /SECTION -->
+        <!-- /SECTION -->
 
-    <!-- FOOTER -->
-    <footer class="footerbg">
-        <vc:layout-footer1></vc:layout-footer1>
-        <vc:layout-footer2></vc:layout-footer2>
-    </footer>
-    <!-- /FOOTER -->
+        <footer class="footerbg">
+            <vc:layout-footer1></vc:layout-footer1>
+            <vc:layout-footer2></vc:layout-footer2>
+        </footer>
 
-    <!-- jQuery Plugins -->
-    <script src="~/js/jquery.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="~/js/slick.min.js"></script>
-    <script src="~/js/nouislider.min.js"></script>
-    <script src="~/js/jquery.zoom.min.js"></script>
-    <script src="~/js/Layout/layout.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <!-- jQuery Plugins -->
+        <script src="~/lib/js/jquery.min.js"></script>
+        <script src="~/lib/js/bootstrap.min.js"></script>
+        <script src="~/lib/js/slick.min.js"></script>
+        <script src="~/lib/js/nouislider.min.js"></script>
+        <script src="~/lib/js/jquery.zoom.min.js"></script>
+
+        <script src="~/js/Layout/layout.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>
