@@ -134,83 +134,10 @@
         </div>
     </div>
     <div class="col-3 border rounded-2">
-        <div class="d-flex justify-content-between mb-3 fw-bold">
-            <div>全站折扣</div>
-            <button class="selectCoupon border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">選擇折價券<span class="ms-2">></span></button>
-        </div>
-
-        <div class="d-flex justify-content-between mb-3">
-            <div>小計</div>
-            <div>$<span id="smallPrice">499</span></div>
-        </div>
-        <div class="divDiscount d-flex justify-content-between mb-3 d-none">
-            <div class="selectedCouponID">折扣碼:<span class="text-danger"></span></div>
-            <div class="d-flex justify-content-end align-items-center">
-                <div class="text-danger">-$<span id="discountPrice"></span></div>
-                <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
-            </div>
-            
-        </div>
-        <div class="d-flex justify-content-between mb-3 border-top">
-            <div>總計</div>
-            <div>$<span id="totalPrice">499</span></div>
-        </div>
-        <a href="~/Delivery/Checkout"><button class="btn btn-warning w-100">去結帳</button></a>
-        
+        @await Component.InvokeAsync("CalTotalPrice", new { id=1})
     </div>
-</div>
-<!-- Scrollable modal -->
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">選擇折價券或輸入折扣碼</h1>
-                <button type="button" class="cancel btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-header">
-                <input type="text" />
-                <input type="submit" value="領取" class="btn btn-outline-warning"/>
-            </div>
-            <div class="modal-body">
-                <div class="d-flex justify-content-between align-items-end">
-                    <div class="fs-5 fw-bold">蝦到爆折扣</div>
-                    <div class="text-black-50 fs-6">可選擇一張</div>
-                </div>
-                <div>
-                    <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">
-                    <label class="coupon btn btn-outline-warning" for="option1">
-                        <div class="fw-bold">折<span>100</span>元</div>
-                        <div class="fs-6 text-black-50">滿599可用</div>
-                        <div>2022-10-31 00:00結束</div>
-                        <div class="text-dark">數量有限，兌完為止，以實際結帳顯示為準</div>
-                        <div class="couponID">折扣碼:<span>NMSL</span></div>
-                    </label>
-                </div>
-                <div>
-                    <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
-                    <label class="coupon btn btn-outline-warning" for="option2">
-                        <div class="fw-bold">折<span>200</span>元</div>
-                        <div class="fs-6 text-black-50">滿2999可用</div>
-                        <div>2022-10-31 00:00結束</div>
-                        <div class="text-dark">數量有限，兌完為止，以實際結帳顯示為準</div>
-                        <div class="couponID">折扣碼:<span>7414</span></div>
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <div>
-                    <div class="discount">已選折扣<span class="text-danger mx-3">0</span></div>
-                </div>
-                <div>
-                    <button type="button" class="cancel btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="chose btn btn-warning" data-bs-dismiss="modal">確定選擇折價券</button>
-                </div>            
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts{
     <script src="~/js/DeliveryShowCart.js"></script>
+    <script src="~/js/DeliveryCheckout.js"></script>
 }

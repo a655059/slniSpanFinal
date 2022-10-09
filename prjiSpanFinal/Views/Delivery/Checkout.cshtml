@@ -25,7 +25,7 @@
 
 
     <div class="col-3">
-
+        @await Component.InvokeAsync("CalTotalPrice", new { id=2})
     </div>
 </div>
 
@@ -47,5 +47,5 @@
             $("#previousStore").addClass("d-none");
         });
     </script>
-
+    <script src="~/js/DeliveryCheckout.js"></script>
 }
