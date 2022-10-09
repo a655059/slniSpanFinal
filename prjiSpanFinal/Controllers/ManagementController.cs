@@ -3,7 +3,6 @@ using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -18,7 +17,7 @@ namespace prjiSpanFinal.Controllers
             {
                 ADDDATAS();
             }
-            
+
         }
         public void ADDDATAS()
         {
@@ -49,6 +48,8 @@ namespace prjiSpanFinal.Controllers
                 Orders.Add(cOrder);
                 CProductHu cProduct = new()
                 {
+                    ProductName = "蘋果",
+                    SmallType = "食品",
                     ProductId = i,
                     ProductStatus = "可以購買",
                     SellerName = "蘋果" + i,
@@ -74,22 +75,62 @@ namespace prjiSpanFinal.Controllers
         {
             return View(Products);
         }
-        public IActionResult ProductCreate()
+        public IActionResult ProductEdit(int? id)
         {
-            return View();
+            var product = from i in Products
+                          where i.ProductId == id
+                          select i;
+            return View(product.First());
         }
         [HttpPost]
-        public IActionResult ProductCreate(CProductHu mem)
+        public IActionResult ProductEdit(CProductHu prod)
         {
-            var EditProduct = new CProductHu()
+            if (prod != null)
             {
-                ProductId = Products.Last().ProductId + 1,
-               ProductStatus=mem.ProductStatus,
-               SellerName=mem.SellerName,
-               Stock = mem.Stock,
-               UnitPrice = mem.UnitPrice,
-            };
-            Products.Add(EditProduct);
+                var EditProd = from i in Products where i.ProductId == prod.ProductId select i;
+                EditProd.First().ProductName = prod.ProductName;
+                EditProd.First().ProductStatus = prod.ProductStatus;
+                EditProd.First().Stock = prod.Stock;
+                EditProd.First().UnitPrice = prod.UnitPrice;
+                EditProd.First().SmallType = prod.SmallType;
+                EditProd.First().SellerName = prod.SellerName;
+
+                return RedirectToAction("ProductList");
+            }
+            return RedirectToAction("ProductList");
+        }
+        public IActionResult ProductDelete(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in Products)
+                {
+                    if (a.ProductId == id)
+                    {
+                        a.ProductStatus = "已刪除";
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("ProductList");
+        }
+        public IActionResult ProductRecover(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in Products)
+                {
+                    if (a.ProductId == id && a.ProductStatus == "已刪除")
+                    {
+                        a.ProductStatus = "可以購買";
+                        break;
+                    }
+                    else if (a.ProductId == id && a.ProductStatus != "已刪除")
+                    {
+                        break;
+                    }
+                }
+            }
             return RedirectToAction("ProductList");
         }
         public IActionResult MemberList()
@@ -120,7 +161,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult MemberEdit(int? id)
         {
             var member = from i in members
-                         where i.Id == id 
+                         where i.Id == id
                          select i;
             return View(members.First());
         }
@@ -224,11 +265,12 @@ namespace prjiSpanFinal.Controllers
                 {
                     if (a.OrderID == id && a.OrderStatus == "已刪除")
                     {
-                        a.OrderStatus = "未結帳";
+                        a.OrderStatus = "已結帳";
                         break;
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
                     {
+
                         break;
                     }
                 }
