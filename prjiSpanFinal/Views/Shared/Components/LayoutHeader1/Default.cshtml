@@ -1,11 +1,10 @@
-﻿<div class="p-2 layoutheader1bg text-white keeppos" id="header1">
+﻿<div class="p-2 layoutheader1bg text-white header1nav" id="header1">
     <div class="container-lg">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             @*<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                     <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
                 </a>*@
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <ul class="nav col-8 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">首頁</a></li>
                 <li><a href="@Url.Content("~/Management/PowerBi")" class="nav-link px-2 text-white navbody">後台</a></li>
                 <li><a href="@Url.Content("~/Seller/Index")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
@@ -13,15 +12,11 @@
                 @*<li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
         <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
             </ul>
-
-            @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
-                </form>*@
-            <div class="header-cart">
+            <div class="header-cart col-2 d-flex flex-row">
                 <!-- Menu Toogle -->
                 <div>
                     <a href="#" class="linknoline">
-                        <i class="fa-solid fa-bell"></i>
+                        <i class="fa fa-solid fa-bell"></i>
                         <div class="qty">2</div>
                     </a>
                 </div>
@@ -29,14 +24,16 @@
                 <!-- Wishlist -->
                 <div>
                     <a href="@Url.Content("~/Member/Like")" class="linknoline">
-                        <i class="fa fa-heart"></i>
-                        <div class="qty">2</div>
+                        <span>
+                        <i class="fa fa-regular fa-circle-question"></i>
+                            幫助中心
+                        </span>
                     </a>
                 </div>
                 <!-- /Wishlist -->
                 <!--帳號登入/創建-->
             </div>
-            <div class="text-end navlog">
+            <div class="text-end navlog col-2">
                 <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
                     登入
                 </a>
