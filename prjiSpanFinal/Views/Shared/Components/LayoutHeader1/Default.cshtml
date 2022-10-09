@@ -4,18 +4,18 @@
             @*<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                     <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
                 </a>*@
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <ul class="nav col-8 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">首頁</a></li>
                 <li><a href="@Url.Content("~/Seller/Index")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
                 <li><a href="@Url.Content("~/Member/List")" class="nav-link px-2 text-white navbody">買家中心</a></li>
                 @*<li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
                     <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
             </ul>
-            <div class="header-cart">
+            <div class="header-cart col-2 d-flex flex-row">
                 <!-- Menu Toogle -->
                 <div>
                     <a href="#" class="linknoline">
-                        <i class="fa-solid fa-bell"></i>
+                        <i class="fa fa-solid fa-bell"></i>
                         <div class="qty">2</div>
                     </a>
                 </div>
@@ -23,14 +23,16 @@
                 <!-- Wishlist -->
                 <div>
                     <a href="@Url.Content("~/Member/Like")" class="linknoline">
-                        <i class="fa fa-heart"></i>
-                        <div class="qty">2</div>
+                        <span>
+                        <i class="fa fa-regular fa-circle-question"></i>
+                            幫助中心
+                        </span>
                     </a>
                 </div>
                 <!-- /Wishlist -->
                 <!--帳號登入/創建-->
             </div>
-            <div class="text-end navlog">
+            <div class="text-end navlog col-2">
                 <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
                     登入
                 </a>

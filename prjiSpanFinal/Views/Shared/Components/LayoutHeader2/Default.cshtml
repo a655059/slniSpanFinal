@@ -4,7 +4,7 @@
         <!-- row -->
         <div class="row">
             <!-- LOGO -->
-            <div class="col-md-3 lologo">
+            <div class="col-md-2 lologo">
                 <div class="header-logo">
                     <a href="@Url.Content("~/Home/Index")" class="logo">
                         <img src="~/img/Layout/LOGO_Long2.png" class="logopic" />
@@ -28,19 +28,31 @@
                 }
             </div>
             <!-- /SEARCH BAR -->
-            <!-- Cart -->
+            <div class="col-md-1">
+
+            </div>
+            <!-- Searchcart -->
             <div class="col-md-2">
-                <div class="searchcart d-flex justify-content-center align-items-center">
-                    <div>
+                <div class="searchcart d-flex flex-row justify-content-center align-items-center">
+                    <!-- Wishlist -->
+                    <div class="searchcart-Heart">
+                        <a href="@Url.Content("~/Member/Like")" class="linknoline">
+                            <i class="fa fa-heart"></i>
+                            <div class="qty">2</div>
+                        </a>
+                    </div>
+                    <!-- /Wishlist -->
+                    <!-- Cart -->
+                    <div class="searchcart-Cart">
                         <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
                             <i class="fa fa-shopping-cart"></i>
                             <div class="qty">3</div>
                         </a>
                     </div>
-
+                    <!-- /Cart -->
                 </div>
             </div>
-            <!-- /Cart -->
+            <!-- /Searchcart -->
         </div>
         <!-- row -->
     </div>

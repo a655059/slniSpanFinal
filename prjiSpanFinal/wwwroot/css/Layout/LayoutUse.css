@@ -89,12 +89,13 @@
         display: inline-block;
         margin-left: 15px;
         margin-right: 20px;
+        flex:1;
     }
 
         .header-cart > div > a {
             display: block;
             position: relative;
-            width: 20px;
+            max-height:30px;
             text-align: center;
             color: #FFF;
         }
@@ -126,11 +127,17 @@
         display: none;
     }
 
-    .header-cart > div > a > .fa-bell:hover {
+    .header-cart > div > a > .fa:hover {
         opacity: 80%;
     }
-
-    .header-cart > div > a > .fa-heart:hover {
+.header-cart > div > a > span{
+    white-space:nowrap;
+}
+    .header-cart > div > a > span > i{
+        font-size:20px;
+        padding-right:5px;
+    }
+    .header-cart > div > a > span:hover {
         opacity: 80%;
     }
 
@@ -171,10 +178,13 @@
 .lologo{
     overflow:hidden;
 }
-        .lologo > .header-logo > .logo {
-            display: flex;
-            justify-content: center;
-        }
+    .lologo > .header-logo{
+        width:100%;
+    }
+    .lologo > .header-logo > .logo {
+        display: flex;
+        justify-content: center;
+    }
 
             .lologo > .header-logo > .logo > .logopic {
                 min-width: 70%;
@@ -220,6 +230,7 @@
 }
     .searchcart > div {
         display: inline-block;
+        flex:1;
     }
         .searchcart > div > a {
             display: block;
@@ -227,23 +238,24 @@
             width: 100%;
             text-align: center;
             color: #FFF;
+            
         }
             .searchcart > div > a > .qty {
-                position: absolute;
-                right: -22px;
-                top: -18px;
-                width: 50%;
-                height: 50%;
-                line-height: 22px;
+                position: relative;
+                left:65px;
+                bottom:50px;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
                 text-align: center;
                 border-radius: 50%;
                 font-size: 15px;
                 color: #FFF;
-                background-color: #D10024;
+                background-color: #FF2D2D;
             }
             .searchcart > div > a > i {
                 display: block;
-                font-size: 3em;
+                font-size: 2em;
                 margin-top:20px;
             }
                 .searchcart > div > a > i:hover{

@@ -23,17 +23,17 @@ namespace prjiSpanFinal.Controllers
             CBigType a = new CBigType()
             {
                 BigTypeID = 1,
-                BigTypeName = "食品"
+                BigTypeName = "食物"
             };
             CBigType b = new CBigType()
             {
                 BigTypeID = 2,
-                BigTypeName = "數位"
+                BigTypeName = "食物"
             };
             CBigType c = new CBigType()
             {
                 BigTypeID = 3,
-                BigTypeName = "衣裝"
+                BigTypeName = "食物"
             };
             listCBigType = new List<CBigType>();
             listCBigType.Add(a);
