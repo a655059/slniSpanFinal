@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -39,7 +38,7 @@ namespace prjiSpanFinal.Controllers
             listCBigType.Add(a);
             listCBigType.Add(b);
             listCBigType.Add(c);
-            for(int i = 1; i < 12; i++)
+            for (int i = 1; i < 12; i++)
             {
                 listCBigType.Add(a);
             }
