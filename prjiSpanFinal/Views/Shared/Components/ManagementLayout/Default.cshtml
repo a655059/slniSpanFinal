@@ -1,0 +1,66 @@
+﻿<style>
+    label {
+        width: 20px;
+        height: 80px;
+        background-color: #d1d1d1;
+        color: #686666;
+        position: absolute;
+        right: -20px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        line-height: 80px;
+        text-align: center;
+        border-radius: 0 5px 5px 0;
+        box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
+    }
+
+    #sideMenu-active:checked + .sideMenu {
+        transform: translateX(0);
+    }
+
+    label .fas {
+        transform: scaleX(-1);
+    }
+
+
+
+    #sideMenu-active {
+        position: absolute;
+        opacity: 0;
+        z-index: -1;
+    }
+
+    .sideMenu {
+        width: 300px;
+        height: 100%;
+        background-color: #ff7b0f;
+        border-right: 3px solid #d1d1d1;
+        display: flex;
+        opacity: 85%;
+        flex-direction: column;
+        padding: 50px 0;
+        box-shadow: 5px 0 5px rgba(23, 23, 54, 0.6);
+        position: fixed;
+        transform: translateX(-100%);
+        transition: 0.5s;
+        z-index: 999999;
+    }
+</style>
+
+
+
+
+<input type="checkbox" name="" id="sideMenu-active" />
+<div class="sideMenu">
+    <nav class="d-grid gap-1">
+        <a class="btn btn-warning mb-1" href="@Url.Action("ProductList","Management")"><i class="fa-solid fa-p"></i>產品系統</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("MemberList","Management")"><i class="fa-solid fa-m"></i>會員系統</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("OrderList","Management")"><i class="fa-solid fa-o"></i>訂單系統</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("PowerBi","Management")"><i class="fa-solid fa-laptop-medical"></i>檢視報表</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("Home","Management")"><i class="fa-solid fa-rotate-left"></i>回到後台首頁</a><br />
+    </nav>
+    <label for="sideMenu-active">
+        <i class="fas fa-angle-right"></i>
+    </label>
+</div>
