@@ -1,0 +1,61 @@
+﻿<div class="sidemenu">
+    <div style="width: 180px;">
+        <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            <span class="賣家中心">賣家中心</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+                <img src="~/img/商品管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    商品管理
+                </button>
+                <div class="左側欄 " id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="Index" class="link-dark d-inline-flex text-decoration-none rounded">我的商品</a></li>
+                        <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded">新增商品</a></li>
+                        <li>@*<a href="#" class="link-dark d-inline-flex text-decoration-none rounded">商品違規</a>*@</li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <img src="~/img/訂單管理.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                    訂單管理
+                </button>
+                <div class="左側欄" id="dashboard-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded">我的銷售</a></li>
+                        <li>@*<a href="#" class="link-dark d-inline-flex text-decoration-none rounded">不成立</a>*@</li>
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">退貨/ 退款</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <img src="~/img/物流中心.png" /> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                    物流中心
+                </button>
+                <div class="左側欄" id="orders-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">待出貨 </a></li>
+                        @*<li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">批次出貨</a></li>*@
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">物流設定</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <img src="~/img/行銷活動.png" /><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    行銷活動
+                </button>
+                <div class="左側欄" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的活動</a></li>
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">蝦皮廣告</a></li>
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">優惠劵</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
