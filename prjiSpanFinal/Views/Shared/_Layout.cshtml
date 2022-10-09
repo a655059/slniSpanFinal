@@ -28,37 +28,42 @@
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
-    <body>
+<body>
 
-        <header>
-            <vc:layout-header1></vc:layout-header1>
-            <vc:layout-header2></vc:layout-header2>
-        </header>
+    <header>
+        <vc:layout-header1></vc:layout-header1>
+        <vc:layout-header2></vc:layout-header2>
+    </header>
 
-        <!-- SECTION -->
-        <div class="section">
-            <!-- container -->
-            <div class="container">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
-            </div>
-            <!-- /container -->
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-        <!-- /SECTION -->
-        <button type="button" id="BackTop" class="toTop-arrow"></button>
-        <footer class="footerbg">
-            <vc:layout-footer1></vc:layout-footer1>
-            <vc:layout-footer2></vc:layout-footer2>
-        </footer>
+        <!-- /container -->
+    </div>
+    <!-- /SECTION -->
+    <button type="button" id="BackTop" class="toTop-arrow"></button>
+    <button type="button" class="chatroom">
+    <i class="fa fa-comment">
+        <span>聊聊</span>
+    </i>
+    </button>
+    <footer class="footerbg">
+        <vc:layout-footer1></vc:layout-footer1>
+        <vc:layout-footer2></vc:layout-footer2>
+    </footer>
 
-        <!-- jQuery Plugins -->
-        <script src="~/lib/js/jquery.min.js"></script>
-        <script src="~/lib/js/bootstrap.min.js"></script>
-        <script src="~/lib/js/slick.min.js"></script>
-        <script src="~/lib/js/nouislider.min.js"></script>
-        <script src="~/lib/js/jquery.zoom.min.js"></script>
-        <script src="~/js/Layout/layout.js"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
+    <!-- jQuery Plugins -->
+    <script src="~/lib/js/jquery.min.js"></script>
+    <script src="~/lib/js/bootstrap.min.js"></script>
+    <script src="~/lib/js/slick.min.js"></script>
+    <script src="~/lib/js/nouislider.min.js"></script>
+    <script src="~/lib/js/jquery.zoom.min.js"></script>
+    <script src="~/js/Layout/layout.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>
