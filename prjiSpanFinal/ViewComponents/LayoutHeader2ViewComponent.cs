@@ -21,6 +21,10 @@ namespace prjiSpanFinal.ViewComponents
             {
                 return View();
             }
+            else if(ctrlName == "Management")
+            {
+                return View("~/Views/Shared/Components/ManagementLayout/Default.cshtml");
+            }
             //else if(atnName == "")
             else
             {
