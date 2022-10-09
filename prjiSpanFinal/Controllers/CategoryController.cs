@@ -38,5 +38,9 @@ namespace prjiSpanFinal.Controllers
             ViewBag.prodlist = a;
             return View(listpro);
         }
+        public IActionResult SearchResult()
+        {
+            return View();
+        }
     }
 }
