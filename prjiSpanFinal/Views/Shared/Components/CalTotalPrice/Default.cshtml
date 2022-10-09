@@ -32,14 +32,19 @@ else
         </div>
     </div>
 }
-
-
-
 <div class="d-flex justify-content-between mb-3 border-top">
     <div>總計</div>
     <div>$<span id="totalPrice"></span></div>
 </div>
-<a href="~/Delivery/Checkout"><button class="btn btn-warning w-100">去結帳</button></a>
+@if (Model == 1)
+{
+    <a href="~/Delivery/Checkout"><button class="btn btn-warning w-100">去結帳</button></a>
+}
+else
+{
+    <a href="~/Delivery/OrderSuccess"><button class="btn btn-warning w-100">去結帳</button></a>
+}
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-scrollable">

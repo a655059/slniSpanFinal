@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "AddComment";
+}
+
+@section Styles{ 
+    <style>
+        .itemImgDiv{
+            width:100px;
+            height:100px;
+        }
+        .itemImgDiv img, .starImgDiv img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            display: block;
+        }
+
+        .starImgDiv{
+            width:16px;
+            aspect-ratio:1/1;    
+            margin:0 5px;
+        }
+        .starImgDiv:hover{
+            cursor:pointer;
+        }
+
+    </style>
+}
+
+
+<h4>評價此商品</h4>
+<div class="w-75 m-auto">
+    <div class="d-flex justify-content-start align-items-center">
+        <div class="itemImgDiv me-3">
+            <img src="~/img/product01.png" />
+        </div>
+        <div class="d-flex flex-column justify-content-around">
+            <div>108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</div>
+            <div class="text-black-50">規格:白色，附32g千首歌</div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-start align-items-center">
+        <div class="me-5">商品品質</div>
+        <div class="d-flex">
+            @{
+                for (int i = 1; i <= 5; i++)
+                {
+                        <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                }
+            }
+        </div>
+        <div class="commentResult"></div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        $(".starImgDiv").click(function () {
+            $(this).children().attr("src", "@Url.Content("~/img/YellowStar.png")").closest("div").prevAll().children().attr("src", "@Url.Content("~/img/YellowStar.png")").end().end().nextAll().children().attr("src", "@Url.Content("~/img/WhiteStar.png")");
+            $()
+        });
+    </script>
+}
