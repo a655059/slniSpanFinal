@@ -1,4 +1,59 @@
-﻿@page
-@model prjiSpanFinal.Views.Shared.Components.LayoutHeader1.DefaultModel
-@{
-}
+﻿<header class="p-2 layoutheader1bg text-white keeppos" id="header1">
+    <!-- TOP HEADER -->
+    <div class="container-lg">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            @*<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                </a>*@
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2">首頁</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>*@
+            <div class="header-cart">
+                <!-- Wishlist -->
+                <div>
+                    <a href="@Url.Content("~/Member/Like")" class="linknoline">
+                        <i class="fa fa-heart-o"></i>
+                        <div class="qty">2</div>
+                    </a>
+                </div>
+                <!-- /Wishlist -->
+                <!-- Cart -->
+                <div class="dropdown">
+                    <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
+                        <i class="fa fa-shopping-cart"></i>
+                        <div class="qty">3</div>
+                    </a>
+                </div>
+                <!-- /Cart -->
+                <!-- Menu Toogle -->
+                <div class="menu-toggle">
+                    <a href="#">
+                        <i class="fa fa-bars"></i>
+                        <span>Menu</span>
+                    </a>
+                </div>
+                <!-- /Menu Toogle -->
+                <!--帳號登入/創建-->
+            </div>
+            <div class="text-end">
+                <a class="btn btn-outline-light me-2" href="@Url.Content("~/Member/Login")">
+                    會員登入
+                </a>
+                <a href="@Url.Content("~/Member/Create")" class="btn btn-warning">
+                    會員創建
+                </a>
+            </div>
+        </div>
+        <!--/帳號登入/創建-->
+    </div>
+    <!-- /TOP HEADER -->
+</header>
