@@ -1,0 +1,16 @@
+﻿@import url('~/css/DataTable/dataTables.bootstrap5.min.css');
+td {
+    text-align: left;
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.orderbutton {
+    padding: 2px;
+    margin: 4px;
+}
+
+.orderdatepicker {
+    width: 200px;
+    display: inline;
+}

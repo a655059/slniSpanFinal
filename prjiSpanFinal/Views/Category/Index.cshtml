@@ -29,38 +29,57 @@
         }
     </div>
     <div class="split"></div>
-    <div class="itembody">
-        @{int itemstock = 30;
-            <div class="itemcol">
-                @for (int i = 1; i <= itemstock; i++)
-                {
-                    <div class="sellsitem">
-                        <a href="/Item/Index/2113">
-                            <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
-                        </a>
-                        <div class="px-1 d-flex flex-column justify-content-between" >
-                            <div class="cardTitle">好大一根香蕉</div>
-                            <div class="cardPrice">$999</div>
-                            <div class="cardInfo d-flex justify-content-between align-items-end">
-                                <div class="d-flex justify-content-start flex-column mt-1">
-                                    <div class="d-flex justify-content-start">
-                                        <div class="starImg">
-                                            <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+    <div class="row">
+        <div class="filter-body d-flex  flex-wrap align-content-start">
+            <a class="linknoline filter-alltype" href="">
+                <i class="fa fa-bars"></i>
+                全部分類
+            </a>
+            <div class="filter-types d-flex">
+                <a href="" class="linknoline">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span >123</span>
+                </a>
+            </div>
+                <div class="filter-filter">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="itembody">
+                @{int itemstock = 30;
+                    <div class="itemcol">
+                        @for (int i = 1; i <= itemstock; i++)
+                        {
+                            <div class="sellsitem">
+                                <a href="/Item/Index/2113">
+                                    <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                                </a>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle">好大一根香蕉</div>
+                                    <div class="cardPrice">$999</div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                </div>
+                                                <div class="text-black">4.5</div>
+                                            </div>
+                                            <div class="text-black-50">銷售<span>100</span></div>
                                         </div>
-                                        <div class="text-black">4.5</div>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                        </div>
                                     </div>
-                                    <div class="text-black-50">銷售<span>100</span></div>
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 }
             </div>
-        }
-    </div>
+        </div>
 </div>
 
 @section Scripts{
