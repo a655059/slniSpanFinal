@@ -18,9 +18,13 @@ namespace prjiSpanFinal.ViewComponents
             {
                 return View("Manage");
             }
+            else if(ctrlName != "Home")
+            {
+                return View(12345678);
+            }
             else
             {
-                return View();
+                return View(0);
             }
             
         }
