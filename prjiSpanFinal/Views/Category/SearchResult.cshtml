@@ -1,35 +1,11 @@
 ﻿@model IEnumerable<prjiSpanFinal.Models.CProduct>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "SearchResult";
 }
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
 }
 <div class="CategoryBody">
-    <div class="CategoryHeader">
-        @{
-            int stock = 500;
-            int type = 5;
-            <div class="CategoryHeaderTitle">
-                <span class="CategoryHeaderTitleText">食物</span>
-                <span class="CategoryHeaderStockText">(@stock)</span>
-            </div>
-            <div class="CategoryHeaderBody">
-
-                @for (int i = 1; i <= type; i++)
-                {
-                    <a class="CategoryHeaderItem linknoline" href="">@ViewBag.prodlist.BigTypeName </a>
-                }
-            </div>
-        }
-    </div>
-
-    <div class="cateAD">
-        <a href="">
-            <img src="~/img/Category/CateAD.png" />
-        </a>
-    </div>
     <div class="row">
         <div class="filter-body d-flex  flex-wrap align-content-start">
             <a class="linknoline filter-alltype" href="@Url.Content("~/Category/Index")">
@@ -46,7 +22,7 @@
                             <span class="fttitle fttitlemain">食物</span>
                         </a>
                     </li>
-                    @{
+                    @{int type = 5;
                         for (int i = 1; i <= type; i++)
                         {
                             <li>
@@ -106,6 +82,20 @@
             </div>
         </div>
         <div class="itembody">
+            <div class="Searchresult">
+                <div class="Searchresult-ADTitle">
+                    <span>你或許會想知道...</span>
+                </div>
+                <div class="Searchresult-AD d-flex justify-content-center">
+                    <a href="">
+                        <img src="~/img/Category/CateAD2.png" />
+                    </a>
+                </div>
+                <div class="Searchresult-ResultTitle">
+                    <i class="fa fa-search "></i>
+                    <span>搜尋結果：</span>
+                </div>
+            </div>
             <div class="itembody-filter d-flex align-items-center justify-content-between">
                 <div class="itembody-filter1 "><span>篩選</span></div>
                 <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
@@ -132,7 +122,7 @@
                 </div>
                 @*<div class="itembody-filter3 d-flex align-items-center ">123</div>*@
             </div>
-        
+
             @{int itemstock = 30;
                 <div class="itemcol">
                     @for (int i = 1; i <= itemstock; i++)
@@ -169,4 +159,5 @@
 
 @section Scripts{
     <script src="~/js/Category/Index.js"></script>
+    <script src="~/js/Category/SearchResult.js"></script>
 }

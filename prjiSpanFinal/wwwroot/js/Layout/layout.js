@@ -19,3 +19,8 @@ addEventListener('resize', async () =>
 function sizeble() {
     h2.style.marginTop = (h1.height() + 16) + "px";
 }
+
+const sr = document.getElementById("SearchResult");
+sr.addEventListener("click", () => {
+    
+})
