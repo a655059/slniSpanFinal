@@ -24,7 +24,7 @@
         .starImgDiv:hover{
             cursor:pointer;
         }
-
+        
     </style>
 }
 
@@ -41,16 +41,29 @@
         </div>
     </div>
     <div class="d-flex justify-content-start align-items-center">
-        <div class="me-5">商品品質</div>
-        <div class="d-flex">
+        <div>商品品質</div>
+        <div class="d-flex ms-5 me-3">
             @{
                 for (int i = 1; i <= 5; i++)
                 {
-                        <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")"/></div>
                 }
             }
         </div>
-        <div class="commentResult"></div>
+        <div class="commentResult text-black-50"></div>
+    </div>
+    <div class="bg-warning p-2 bg-opacity-10 mt-2">
+        <div class="border p-1 bg-white">
+            <div class="border-bottom">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">品質</span>
+                    <input type="text" class="form-control" placeholder="請提供相關的評價" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div>
+                <textarea placeholder="分享更多有關於此商品的評價以幫助其他買家" rows="5" class="border-0"></textarea>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -58,7 +71,19 @@
     <script>
         $(".starImgDiv").click(function () {
             $(this).children().attr("src", "@Url.Content("~/img/YellowStar.png")").closest("div").prevAll().children().attr("src", "@Url.Content("~/img/YellowStar.png")").end().end().nextAll().children().attr("src", "@Url.Content("~/img/WhiteStar.png")");
-            $()
+            let commentResult = '';
+            let starCount = $(this).prevAll().length + 1;
+            if (starCount == 1) {
+                $(".commentResult").html("很差");
+            } else if (starCount == 2) {
+                $(".commentResult").html("差");
+            } else if (starCount == 3) {
+                $(".commentResult").html("普通");
+            } else if (starCount == 4) {
+                $(".commentResult").html("不錯");
+            } else {
+                $(".commentResult").html("超棒");
+            }
         });
     </script>
 }
