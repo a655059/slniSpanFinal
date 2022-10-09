@@ -95,6 +95,15 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("ProductList");
         }
+        public IActionResult ProductDetail(int? id)
+        {
+            var product = from i in Products
+                          where i.ProductId == id
+                          select i;
+            return View(product.First());
+        }
+  
+      
         public IActionResult ProductDelete(int? id)
         {
             if (id != null)

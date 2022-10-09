@@ -1,0 +1,59 @@
+﻿@model prjiSpanFinal.Models.CProductHu
+
+@{
+    ViewData["Title"] = "ProductDetail";
+}
+
+<h1>商品內容</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            商品編號
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductId)
+        </dd>
+        <dt class="col-sm-2">
+            商品名稱
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt class="col-sm-2">
+            商品類型
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SmallType)
+        </dd>
+        <dt class="col-sm-2">
+            賣家
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SellerName)
+        </dd>
+        <dt class="col-sm-2">
+            商品單價
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+        <dt class="col-sm-2">
+            庫存量
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+        <dt class="col-sm-2">
+            產品狀態
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductStatus)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("修改內容", "ProductEdit", new { id = Model.ProductId},new{@class="btn btn-outline-warning mb-2"}) 
+    <br />
+    <a asp-action="ProductList" class="btn btn-outline-danger"> 返回產品列表</a>
+</div>
