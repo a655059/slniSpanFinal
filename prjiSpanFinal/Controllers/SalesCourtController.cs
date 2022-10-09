@@ -18,6 +18,16 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
 
+        public IActionResult 賣場_價格_排序()
+        {
+            return View();
+        }
+
+        public IActionResult 賣場_熱門度_排序()
+        {
+            return View();
+        }
+
         public IActionResult 關於我()
         {
             return View();
