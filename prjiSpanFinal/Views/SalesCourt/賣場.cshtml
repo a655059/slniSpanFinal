@@ -3,7 +3,17 @@
     ViewData["Title"] = "賣場";
 }
 
-<h1>賣場</h1>
+
+
+@section Styles{
+    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+    @*.itembody {
+    width: 1250px;
+    padding: 0;
+    }*@
+
+}
 
 <!DOCTYPE html>
 
@@ -17,112 +27,103 @@
 </head>
 <body>
 
-    <header class="navbar navbar-dark sticky-top bg-warning flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">賣家資料</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
-        <div class="navbar-nav">
-            <div class="nav-item text-nowrap">
-                <a class="nav-link px-3" href="#">Sign out</a>
-            </div>
-        </div>
-    </header>
-
     <div class="container-fluid">
+
+
         <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <nav id="sidebarMenu" class="col-md-5 col-lg-2 d-md-block bg-light sidebar collapse">
                 <!--左邊的選項欄位-->
-                <div class="position-sticky pt-3 sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">
-                                <span data-feather="home" class="align-text-bottom"></span>
-                                Dashboard
+             
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
+                            <span>賣家資料</span>
+                            <a class="link-secondary" href="#" aria-label="Add a new report">
+                                <span data-feather="plus-circle" class="align-text-bottom"></span>
                             </a>
-                        </li>
+                        </h6>
+                        <img src="~/img/蘋果圖.jpg" width="150" />
+
+
+                        <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
+                        <div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>
+                            </div>
+                            <div class="col">
+                                <div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>
+                            </div>
+                        </div>
+
+
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase bg-warning">
+                            <span>商品分類</span>
+                            <a class="link-secondary" href="#" aria-label="Add a new report">
+                                <span data-feather="plus-circle" class="align-text-bottom"></span>
+                            </a>
+                        </h6>
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file" class="align-text-bottom"></span>
-                                Orders
+                                全部商品(519)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                                Products
+                                防疫相關用品(2)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="users" class="align-text-bottom"></span>
-                                Customers
+                                風扇/循環扇/移動空調(1)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-                                Reports
+                                捕蚊燈(拍)/驅蟲器(6)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="layers" class="align-text-bottom"></span>
-                                Integrations
+                                果汁機/榨汁機(1)
                             </a>
                         </li>
-                    </ul>
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-                        <span>賣家活動</span>
-                        <a class="link-secondary" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle" class="align-text-bottom"></span>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
+              
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text" class="align-text-bottom"></span>
-                                Current month
+                                烘焙用具(106)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text" class="align-text-bottom"></span>
-                                Last quarter
+                                咖啡器具(45)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text" class="align-text-bottom"></span>
-                                Social engagement
+                                汽機車用品(68)
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="file-text" class="align-text-bottom"></span>
-                                Year-end sale
+                                戶外/露營/運動/健身(52)
                             </a>
                         </li>
-                    </ul>
-                </div>
+                 
             </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                            <span data-feather="calendar" class="align-text-bottom"></span>
-                            This week
-                        </button>
-                    </div>
-                </div>
+            <main class="col-md-7 ms-sm-auto col-lg-10 px-md-4">
+
 
                 <section class="py-5">
 
@@ -130,245 +131,132 @@
                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                     <div class="container px-4 px-lg-5 mt-5 ">
                         <div class="text-center text-black-50 bg-warning p-4 mb-5">
-                            <h1 class="display-4 fw-bolder">賣場相關資料</h1>
-                            <p class="lead fw-normal text-black-50 mb-0">With this shop hompeage template</p>
+                            <h1 class="display-2 fw-bolder">賣場相關資料</h1>
+
+
+
+                            <div class="board-text">
+                                👉過年期間出貨公告👈
+                                1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨
+                                .
+                                標題【24H出貨】保證有現貨，不用私訊問有沒有貨，直接下單即可
+                                周一~周五、AM10~PM5，周末及國定假日不出貨
+                                『耐嘉官方正式授權網路經銷商+授權碼A20122108』
+                                .
+                                1.本賣場販售之所有商品，皆由台灣發貨。
+                                2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
+                                3.買家們，收到商品發現有問題或是瑕疵，請【露露通】私訊聯絡我們。
+                                4.單筆訂單未滿88$一律不出貨，直接取消。
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="itembody">
+                                @{int itemstock = 4;
+                                    <div class="itemcol" id="itemcol">
+                                        @for (int i = 1; i <= itemstock; i++)
+                                        {
+                                            <div class="sellsitem col">
+                                                <a href="/Item/Index/2113">
+                                                    <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                                                </a>
+                                                <div class="px-2 d-flex flex-column justify-content-between">
+                                                    <div class="cardTitle">好大一根香蕉</div>
+                                                    <div class="cardPrice">$999</div>
+                                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                                            <div class="d-flex justify-content-start">
+                                                                <div class="starImg">
+                                                                    <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                                </div>
+                                                                <div class="text-black">4.5</div>
+                                                            </div>
+                                                            <div class="text-black-50 m-1">銷售<span>100</span></div>
+                                                        </div>
+                                                        <div>
+                                                            <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="row m-4"></div>
+                        <div class="row">
+                            <div class="itembody">
+                                @{
+                                    <div class="itemcol" id="itemcol">
+                                        @for (int i = 1; i <= 4; i++)
+                                        {
+                                            <div class="sellsitem col">
+                                                <a href="/Item/Index/2113">
+                                                    <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                                                </a>
+                                                <div class="px-2 d-flex flex-column justify-content-between">
+                                                    <div class="cardTitle">好大一根香蕉</div>
+                                                    <div class="cardPrice">$999</div>
+                                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                                            <div class="d-flex justify-content-start">
+                                                                <div class="starImg">
+                                                                    <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                                </div>
+                                                                <div class="text-black">4.5</div>
+                                                            </div>
+                                                            <div class="text-black-50 m-1">銷售<span>100</span></div>
+                                                        </div>
+                                                        <div>
+                                                            <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
                         </div>
 
 
-                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Product image-->
-                                    <img  src="~/img/蘋果圖.jpg" class="card-img-top"  />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Fancy Product</h5>
-                                            <!-- Product price-->
-                                            $40.00 - $80.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">View options</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Sale badge-->
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                        Sale
-                                    </div>
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Special Item</h5>
-                                            <!-- Product reviews-->
-                                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                            </div>
-                                            <!-- Product price-->
-                                            <span class="text-muted text-decoration-line-through">$20.00</span>
-                                            $18.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Sale badge-->
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                        Sale
-                                    </div>
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Sale Item</h5>
-                                            <!-- Product price-->
-                                            <span class="text-muted text-decoration-line-through">$50.00</span>
-                                            $25.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Popular Item</h5>
-                                            <!-- Product reviews-->
-                                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                            </div>
-                                            <!-- Product price-->
-                                            $40.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Sale badge-->
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                        Sale
-                                    </div>
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Sale Item</h5>
-                                            <!-- Product price-->
-                                            <span class="text-muted text-decoration-line-through">$50.00</span>
-                                            $25.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Fancy Product</h5>
-                                            <!-- Product price-->
-                                            $120.00 - $280.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">View options</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Sale badge-->
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">
-                                        Sale
-                                    </div>
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Special Item</h5>
-                                            <!-- Product reviews-->
-                                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                            </div>
-                                            <!-- Product price-->
-                                            <span class="text-muted text-decoration-line-through">$20.00</span>
-                                            $18.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col mb-5">
-                                <div class="card h-100">
-                                    <!-- Product image-->
-                                    <img src="~/img/蘋果圖.jpg" class="card-img-top" />
-                                    <!-- Product details-->
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <!-- Product name-->
-                                            <h5 class="fw-bolder">Popular Item</h5>
-                                            <!-- Product reviews-->
-                                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                                <div class="bi-star-fill"></div>
-                                            </div>
-                                            <!-- Product price-->
-                                            $40.00
-                                        </div>
-                                    </div>
-                                    <!-- Product actions-->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+
                 </section>
 
             </main>
+
+
+
+
+
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
+            <div id="commentPage">
+                <button class="inactiveButton" style="color: rgb(0, 0, 0); font-weight: bold;">1</button>
+                @{
+                    for (int i = 2; i <= 10; i++)
+                    {
+                        <button class="inactiveButton">@i</button>
+                    }
+                }
+            </div>
+
+            <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
         </div>
     </div>
 
 
-    @*<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-        <script src="dashboard.js"></script>*@
 </body>
 </html>
+@*<input type="hidden" id="activePage" value="@Model" />*@
+
+@section Scripts{
+    <script>
+
+    </script>
+}

@@ -3,7 +3,15 @@
     ViewData["Title"] = "關於我";
 }
 
-<h1>關於我</h1>
+@section Styles{
+    .section-seller-overview-horizontal .section-seller-overview__item {
+        display: inline-block;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        flex: none;
+    }
+
+}
 
 <!DOCTYPE html>
 
@@ -20,11 +28,48 @@
         <div class="p-4 p-md-5 mb-4 rounded text-bg-dark bg-warning">
             <div class="col-md-6 px-0">
                 <h1 class="display-4 fst-italic">賣場資訊</h1>
-                <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
             </div>
 
+            <div class="row m-5">
+                <div class="col"><img src="~/img/product.png" width="20" /> 商品:&nbsp;</div>
+                <div class="col"><img src="~/img/fans.png" width="20" />粉絲:&nbsp;</div>
+                <div class="col"><img src="~/img/follow.png" width="20" />關注中:&nbsp;</div>
+                <div class="col"><img src="~/img/star_null.png" width="20" />評價:&nbsp;</div>
+            </div>
 
+            <div class="row m-5">
+                <div class="col">
+                    <div class="bg-secondary">賣場服務時間</div>
+                    <p>
+                        星期一 - 星期五
+                        時間10:00-17:00
+                        國定例假日公休
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="bg-secondary">新品上架時間</div>
+                    <p>
+                        每週
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="bg-secondary">商品類型</div>
+                    <p>
+                        公司貨/平行輸入/水貨/現貨
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="bg-secondary">賣家類型</div>
+                    <p>
+                        公司行號 (統一編號 72640981)
+                        有實體店面 ( 不可刷卡 )
+                        經銷商
+                        代理商
+                    </p>
+                </div>
+            </div>
+
+            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
     </div>
 
@@ -44,7 +89,16 @@
         <div class="p-4 p-md-5 mb-4 rounded text-bg-dark bg-warning">
             <div class="col-md-6 px-0">
                 <h1 class="display-4 fst-italic">注意事項</h1>
-                <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+                <p class="lead my-3">
+                    請記得完成"結帳"動作才算是完整訂單
+                    結帳二筆以上商品，請記得"合併結帳"避免"運費"重複計算
+                    結帳前請先"問與答"詢問是否有 現貨、顏色、尺寸
+                    結帳後，請於露露通提供 ( 產品名稱或編號  款式、顏色  數量  規格尺寸 )
+                    如遇商品缺貨，買家可 無條件取消訂單  退款
+                    由於物流量大，結帳後視同購買，不接受任何理由棄單
+                    請於2天內完成"結帳"動作
+                    因電腦螢幕的解析度不同，商品實品和顏色可能會有些許差距，完美主義者請勿購買
+                </p>
                 <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
             </div>
 
