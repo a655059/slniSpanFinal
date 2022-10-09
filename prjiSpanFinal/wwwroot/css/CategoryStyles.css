@@ -56,11 +56,51 @@
     height: 50px;
     width: 100%;
 }
-
-.itembody {
-    width: 1250px;
-    padding: 0;
+/*filter*/
+.CategoryBody >.row {
+    flex-wrap:nowrap;
 }
+.filter-body{
+    width:100%;
+    max-width:200px;
+    padding:10px;
+    border:1px solid red;
+}
+
+.filter-alltype{
+    width:100%;
+    max-width:180px;
+    border-bottom:1px solid gray;
+    margin-bottom:10px;
+}
+.filter-alltype > i {
+    margin-right: 0.6rem;
+}
+    .filter-alltype > .fa {
+        width: 0.65rem;
+        font-size:100%;
+    }
+
+.filter-types {
+    width: 100%;
+    max-width: 180px;
+    padding-left:30px;
+    position:relative;
+    margin-bottom:10px;
+}
+    .filter-types > a > i {
+        position: absolute;
+        left: 5px;
+        top:3.5px;
+        margin-right:20px;
+        color:red
+    }
+    /*item*/
+    .itembody {
+        width: 100%;
+        max-width: 1040px;
+        padding: 0;
+    }
 
 .itemcol {
     width: 100%;

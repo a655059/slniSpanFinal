@@ -4,7 +4,7 @@
 }
 @section Styles
 {
-    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" /> @*左側欄改這裡*@
     <style>
         td {
             text-align: left;
@@ -23,11 +23,11 @@
         }
     </style>
 }
-<vc:seller-ui></vc:seller-ui>
+<vc:seller-ui></vc:seller-ui> @*左側欄改這裡*@
 <div class="row ">
     <div class="col-1"></div>
     <div class="col-11 ">
-        <h2 class="d-flex justify-content-center">我的銷售</h2>
+        <h2 class="d-flex justify-content-center">購買清單</h2>
         <div style="padding:3px; text-align:right">
             <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" />
             <span>
@@ -66,7 +66,7 @@
             @for (int i = 10; i >= 1; i--)
             {
                 <tr>
-                    <td>@i<br /><a href="#">customer87</a></td>
+                    <td>@i<br /><a href="#">seller9487</a></td>
                     <td>2022/10/10<br />10:10:10</td>
                     <td>
                         <img src="~/img/蘋果圖.jpg" width="50" height="50" />蘋果 紅色 *1 30元<br />
@@ -105,11 +105,11 @@
 </div>
 @section Scripts
 {
-    <script src="~/js/sidebars.js"></script>
+    <script src="~/js/sidebars.js"></script> @*左側欄改這裡，這個或許不用改*@
     <script>
         let today = new Date();
-        let startdatestring = (today.getFullYear()-1) + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
-        let enddatestring = today.getFullYear() + "-" + (today.getMonth() + 1).toString().padStart(2,'0') + "-" + today.getDate().toString().padStart(2,'0');
+        let startdatestring = (today.getFullYear() - 1) + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
+        let enddatestring = today.getFullYear() + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
         $("#startDate").val(startdatestring);
         $("#endDate").val(enddatestring);
     </script>

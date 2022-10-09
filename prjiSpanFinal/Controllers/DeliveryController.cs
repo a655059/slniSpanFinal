@@ -22,9 +22,9 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult CheckoutPartial(int id)
         {
-            return PartialView("~/Views/Delivery/_DeliveryCheckoutPartial.cshtml");
+            return PartialView("~/Views/Delivery/_DeliveryCheckoutPartial.cshtml", id);
         }
-
+        
 
     }
 }

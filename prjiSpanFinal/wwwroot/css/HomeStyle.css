@@ -67,10 +67,13 @@
     height: 30px;
 }
     /*猜你喜歡商品區*/
-    .itembody {
-        width: 1250px;
-        padding: 0;
-    }
+.guessliketitle{
+    padding-left:20px;
+}
+.itembody {
+    width: 1250px;
+    padding: 0;
+}
 
 .itemcol {
     width: 100%;
@@ -130,12 +133,26 @@
     aspect-ratio: 1/1;
 }
 .buybtn {
-    font-size: 10px;
+    font-size: 12px;
     padding: 3px;
     text-align: center;
     width: 100px;
-    color:black;
+    color: black;
+    font-weight: bold;
 }
     .buybtn:hover {
         color: red;
+        --bs-btn-hover-color: red;
+        opacity: 80%;
     }
+.showmoreitem {
+    color: red;
+    border: 1px solid red;
+    font-weight: bold;
+}
+    .showmoreitem:hover {
+        color: white;
+        --bs-btn-hover-color: black;
+        opacity: 80%;
+    }
+
