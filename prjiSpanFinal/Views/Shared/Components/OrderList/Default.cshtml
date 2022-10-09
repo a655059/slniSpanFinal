@@ -54,10 +54,10 @@
         <table id="ordertable" class="table table-hover dataTable">
             <thead>
                 <tr>
-                    <td class="th-sm sorting">訂單資料</td>
-                    <td class="th-sm sorting">結帳時間</td>
+                    <td class="th-sm sorting" id="orderid">訂單資料</td>
+                    <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
                     <td>商品詳情</td>
-                    <td class="th-sm sorting">訂單金額</td>
+                    <td class="th-sm sorting" id="ordersales">訂單金額</td>
                     <td>訂單狀態</td>
                     <td>操作</td>
                 </tr>
@@ -69,11 +69,11 @@
                         @{
                             if (Model == 0)
                             {
-                                <td>@i<br /><a href="#">customer87</a></td>
+                                <td>@i<br /><a class="namenounderline" href="#">customer87</a></td>
                             }
                             else
                             {
-                                <td>@i<br /><a href="#">shop9487</a></td>
+                                <td>@i<br /><a class="namenounderline" href="#">shop9487</a></td>
                             }
                         }
                         <td>2022/10/10<br />10:10:10</td>

@@ -1,5 +1,4 @@
-﻿
-let today = new Date();
+﻿let today = new Date();
 let startdatestring = (today.getFullYear() - 1) + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
 let enddatestring = today.getFullYear() + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
 $("#startDate").val(startdatestring);
