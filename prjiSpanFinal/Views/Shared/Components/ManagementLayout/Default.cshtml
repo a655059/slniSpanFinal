@@ -51,14 +51,14 @@
 
 
 <br/><br /><br /><br /><br /><br /><br />
-<input type="checkbox" name="" id="sideMenu-active" />
+<input type="checkbox" name="" id="sideMenu-active" checked="checked"/>
 <div class="sideMenu">
     <nav class="d-grid gap-1">
+        <a class="btn btn-warning mb-1" href="@Url.Action("PowerBi","Management")"><i class="fa-solid fa-rotate-left"></i>後台首頁</a><br />
         <a class="btn btn-warning mb-1" href="@Url.Action("ProductList","Management")"><i class="fa-solid fa-p"></i>產品系統</a><br />
         <a class="btn btn-warning mb-1" href="@Url.Action("MemberList","Management")"><i class="fa-solid fa-m"></i>會員系統</a><br />
         <a class="btn btn-warning mb-1" href="@Url.Action("OrderList","Management")"><i class="fa-solid fa-o"></i>訂單系統</a><br />
-        <a class="btn btn-warning mb-1" href="@Url.Action("PowerBi","Management")"><i class="fa-solid fa-laptop-medical"></i>檢視報表</a><br />
-        <a class="btn btn-warning mb-1" href="@Url.Action("Home","Management")"><i class="fa-solid fa-rotate-left"></i>回到後台首頁</a><br />
+
     </nav>
     <label for="sideMenu-active">
         <i class="fas fa-angle-right"></i>

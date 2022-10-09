@@ -59,10 +59,6 @@ namespace prjiSpanFinal.Controllers
                 Products.Add(cProduct);
             }
         }
-        public IActionResult Home()
-        {
-            return View();
-        }
         public IActionResult Test()
         {
             return PartialView();

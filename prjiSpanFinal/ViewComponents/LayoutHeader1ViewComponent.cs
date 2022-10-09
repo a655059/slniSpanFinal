@@ -12,7 +12,17 @@ namespace prjiSpanFinal.ViewComponents
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            string ctrlName = RouteData.Values["Controller"].ToString();
+            //string atnName = RouteData.Values["Action"].ToString();
+            if (ctrlName == "Management")
+            {
+                return View("Manage");
+            }
+            else
+            {
+                return View();
+            }
+            
         }
     }
 }
