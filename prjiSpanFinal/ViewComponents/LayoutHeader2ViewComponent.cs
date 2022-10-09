@@ -15,7 +15,7 @@ namespace prjiSpanFinal.ViewComponents
         {
             string ctrlName = RouteData.Values["Controller"].ToString();
             //string atnName = RouteData.Values["Action"].ToString();
-            string[] UsedftHeader2ctrlList = new string[] { "Home", "Item", "Category" };
+            string[] UsedftHeader2ctrlList = new string[] { "Home", "Item", "Category", "SalesCourt" };
 
             if (UsedftHeader2ctrlList.Contains(ctrlName))
             {
