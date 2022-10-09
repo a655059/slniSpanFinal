@@ -1,88 +1,14 @@
-﻿.split {
+﻿/* 泛用功能區 */
+    /*切割區塊*/
+.split {
     height: 50px;
     width: 100%;
 }
-.layoutheader1bg {
-    background-color: #FF7B0F;
-}
-.layoutheader2 {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    background-color: #FFA724;
-}
-.footerbg {
-    background: #FF7B0F;
-    color: white;
-}
-.footerbg2 {
-    background: black;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-.lofooter {
-    margin: 30px 0px;
-}
-.lofooter-links li + li {
-    margin-top: 15px;
-}
-
-.lofooter-links li a {
-    color:white;
-}
-
-.lofooter-links li i {
-    margin-right: 15px;
-    color: #D10024;
-    width: 14px;
-    text-align: center;
-}
-
-.lofooter-links li a:hover {
-    color: #D10024;
-}
-/**/
-:root {
-}
-.nav-link {
-    padding: 0;
-}
-.nav {
-    align-items: center;
-    font-weight: bold;
-}
-    .nav a:hover{
-        opacity:80%;
-    }
-.navhead{
-    font-size:25px;
-}
-.navbody {
-    font-size: 20px;
-}
-    .keeppos {
-        position: fixed;
-        top: 0;
-        height: auto;
-        width: 100%;
-        z-index: 9999;
-    }
-/*蝦到爆logo大小*/
-.header-logo{
-    overflow:hidden;
-}
-.logo {
-    display: flex;
-    justify-content: center;
-}
-.logopic{
-    min-width:70%;
-    text-align:center;
-}
-/* <a> 去底線*/
+    /* <a> 去底線*/
 .linknoline {
     text-decoration: none;
 }
-/*回到最上面*/
+    /*回到最上面*/
 .toTop-arrow {
     width: 2.5rem;
     height: 2.5rem;
@@ -98,7 +24,6 @@
     bottom: 5rem;
     display: none;
 }
-
     .toTop-arrow::before, .toTop-arrow::after {
         width: 18px;
         height: 5px;
@@ -121,19 +46,51 @@
     .toTop-arrow:focus {
         outline: none;
     }
-    /*上方橫條cart*/
+/* /泛用功能區 */
+
+/* Header1 */
+    /*bg*/
+.layoutheader1bg {
+    background-color: #FF7B0F;
+}
+    /*navlink*/
+.header1nav {
+    position: fixed;
+    top: 0;
+    height: auto;
+    width: 100%;
+    z-index: 9999;
+}
+    .header1nav > div > div > .nav {
+        align-items: center;
+        font-weight: bold;
+    }
+        .header1nav > div > div > .nav a {
+            padding: 0;
+        }
+            .header1nav > div > div > .nav a:hover {
+                opacity: 80%;
+            }
+        .header1nav > div > div > .nav > li > .navhead {
+            font-size: 25px;
+        }
+        .header1nav > div > div > .nav > li > .navbody {
+            font-size: 20px;
+        }
+    /*nav 功能區*/
 .header-cart {
     float: right;
-     padding-right:30px; 
-     padding-top:10PX;
-     width:150px
+    padding-right: 30px;
+    padding-top: 10PX;
+    width: 150px
 }
 
     .header-cart > div {
         display: inline-block;
         margin-left: 15px;
-        margin-right:20px;
+        margin-right: 20px;
     }
+
         .header-cart > div > a {
             display: block;
             position: relative;
@@ -146,6 +103,7 @@
                 display: block;
                 font-size: 20px;
             }
+
             .header-cart > div > a > .qty {
                 position: absolute;
                 right: -10px;
@@ -159,6 +117,7 @@
                 color: #FFF;
                 background-color: #D10024;
             }
+
             .header-cart > div > a > .qty-cart {
                 right: -15px;
             }
@@ -166,38 +125,62 @@
     .header-cart .menu-toggle {
         display: none;
     }
-.fa-shopping-cart:hover {
-    opacity:80%;
-}
-.fa-heart-o:hover {
-    opacity: 80%;
-}
-.qty-cart{
-    right:-15px;
-}
+
+    .header-cart > div > a > .fa-bell:hover {
+        opacity: 80%;
+    }
+
+    .header-cart > div > a > .fa-heart:hover {
+        opacity: 80%;
+    }
+
+    /*nav註冊區*/
 .navlog {
     margin-left: 10px;
     padding-right: 10px;
     font-size: 20px;
-    
-}
-.log{
-    padding:0px 10px 0px 10px;
-    color:white;
-}
-.navlog > a {
-    font-weight:bold;
-}
-.navlog > a:hover {
-    opacity:80%;
-    color:red;
-}
-.res {
-    padding: 0px 10px 0px 10px;
-    color: white;
 }
 
-/*搜尋列相關*/
+    .navlog > .log {
+        padding: 0px 10px 0px 10px;
+        color: white;
+    }
+
+    .navlog > .res {
+        padding: 0px 10px 0px 10px;
+        color: white;
+    }
+
+    .navlog > a {
+        font-weight: bold;
+    }
+
+        .navlog > a:hover {
+            opacity: 80%;
+            color: red;
+        }
+/* /Header1 */
+
+/* Header2 */
+.layoutheader2 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #FFA724;
+}
+    /*蝦到爆logo大小*/
+.lologo{
+    overflow:hidden;
+}
+        .lologo > .header-logo > .logo {
+            display: flex;
+            justify-content: center;
+        }
+
+            .lologo > .header-logo > .logo > .logopic {
+                min-width: 70%;
+                text-align: center;
+            }
+    /*搜尋列相關*/
 .searchbar {
     position: relative;
     flex: 1 1 auto;
@@ -211,20 +194,18 @@
     max-height: 24px;
     overflow: hidden;
 }
-.input-text:focus {
-    box-shadow: 0px 0px 0px;
-    border-color: #f8c146;
-    outline: 0px;
+.loschbar > .input-group {
+    border: 3px solid white;
+    border-radius: 10px
 }
-
-.form-control {
-    border: 0px;
-}
-.input-group{
-    border:3px solid white;
-    border-radius:10px
-}
-
+    .loschbar > .input-group > .input-text:focus {
+        box-shadow: 0px 0px 0px;
+        border-color: #f8c146;
+        outline: 0px;
+    }
+    .loschbar > .input-group > .form-control {
+        border: 0px;
+    }
 .searchkeyword {
     padding-left: 2px;
     color: white;
@@ -233,31 +214,20 @@
     .searchkeyword:hover{
         color:yellow;
     }
-
+    /*搜尋右側功能*/
 .searchcart {
-    /*float: right;*/    
     width: 100%;
 }
-
     .searchcart > div {
         display: inline-block;
     }
-
         .searchcart > div > a {
             display: block;
             position: relative;
             width: 100%;
             text-align: center;
             color: #FFF;
-            
         }
-
-            .searchcart > div > a > i {
-                display: block;
-                font-size: 3em;
-                margin-top:20px;
-            }
-
             .searchcart > div > a > .qty {
                 position: absolute;
                 right: -22px;
@@ -271,3 +241,45 @@
                 color: #FFF;
                 background-color: #D10024;
             }
+            .searchcart > div > a > i {
+                display: block;
+                font-size: 3em;
+                margin-top:20px;
+            }
+                .searchcart > div > a > i:hover{
+                    opacity:80%;
+                }
+/* /Header2 */
+
+/* Footer共用 */
+.footerbg {
+    background: #FF7B0F;
+    color: white;
+}
+
+.footerbg2 {
+    background: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.lofooter {
+    margin: 30px 0px;
+}
+.lofooter-links li + li {
+    margin-top: 15px;
+}
+
+.lofooter-links li a {
+    color: white;
+}
+.lofooter-links li i {
+    margin-right: 15px;
+    color: #D10024;
+    width: 14px;
+    text-align: center;
+}
+.lofooter-links li a:hover {
+    color: #D10024;
+}
+/* /Footer共用 */

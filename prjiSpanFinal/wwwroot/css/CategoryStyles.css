@@ -159,7 +159,11 @@
 .starImg {
     width: 10%;
     aspect-ratio: 1/1;
+    margin-right: 10px;
 }
+    .starImg > img {
+        width: 200%;
+    }
 .buybtn {
     font-size: 10px;
     padding: 3px;

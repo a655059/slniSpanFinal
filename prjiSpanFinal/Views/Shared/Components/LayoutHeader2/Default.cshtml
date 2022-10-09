@@ -1,10 +1,10 @@
-﻿<div class="layoutheader2 keeppos2" id="header2">
+﻿<div class="layoutheader2" id="header2">
     <!-- container -->
     <div class="container">
         <!-- row -->
         <div class="row">
             <!-- LOGO -->
-            <div class="col-md-3">
+            <div class="col-md-3 lologo">
                 <div class="header-logo">
                     <a href="@Url.Content("~/Home/Index")" class="logo">
                         <img src="~/img/Layout/LOGO_Long2.png" class="logopic" />
@@ -13,7 +13,7 @@
             </div>
             <!-- /LOGO -->
             <!-- SEARCH BAR -->
-            <div class="col-md-7 align-self-center ">
+            <div class="col-md-7 align-self-center loschbar">
                 <div class="input-group mb-1">
                     <input type="text" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <button class="btn btn-outline-warning btn-lg" type="button"><i class="fa fa-search"></i></button>
@@ -28,20 +28,19 @@
                 }
             </div>
             <!-- /SEARCH BAR -->
-            <!-- split -->
+            <!-- Cart -->
             <div class="col-md-2">
                 <div class="searchcart d-flex justify-content-center align-items-center">
-                    <!-- Cart -->
                     <div>
                         <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
                             <i class="fa fa-shopping-cart"></i>
                             <div class="qty">3</div>
                         </a>
                     </div>
-                    <!-- /Cart -->
+
                 </div>
             </div>
-            <!-- /split -->
+            <!-- /Cart -->
         </div>
         <!-- row -->
     </div>

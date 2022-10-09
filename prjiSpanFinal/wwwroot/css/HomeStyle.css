@@ -131,15 +131,19 @@
 .starImg {
     width: 10%;
     aspect-ratio: 1/1;
+    margin-right:10px;
 }
-.buybtn {
-    font-size: 12px;
-    padding: 3px;
-    text-align: center;
-    width: 100px;
-    color: black;
-    font-weight: bold;
-}
+    .starImg > img{
+        width:200%;
+    }
+    .buybtn {
+        font-size: 12px;
+        padding: 3px;
+        text-align: center;
+        width: 100px;
+        color: black;
+        font-weight: bold;
+    }
     .buybtn:hover {
         color: red;
         --bs-btn-hover-color: red;
