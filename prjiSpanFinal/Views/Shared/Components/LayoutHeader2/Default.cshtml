@@ -15,15 +15,34 @@
                 </div>
                 <!-- /LOGO -->
                 <!-- SEARCH BAR -->
-                <div class="col-md-7 align-self-center">
-                    <div class="input-group loDiv">
-                        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <button type="button" class="btn btn-primary">search</button>
+                <div class="col-md-7 align-self-center ">
+                    <div class="input-group mb-1">
+                        <input type="text" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <button class="btn btn-outline-warning btn-lg" type="button"><i class="fa fa-search"></i></button>
                     </div>
+                    @{ int x = 5;
+                        <div class="searchkeyspace">
+                            @for (int i = 0; i < x; i++)
+                            {
+                                <a class="linknoline searchkeyword" href="">搜尋一</a>
+                            }
+                        </div>
+                    }
                 </div>
                 <!-- /SEARCH BAR -->
                 <!-- split -->
-                <div class="col-md-1 clearfix"></div>
+                <div class="col-md-2">
+                    <div class="searchcart d-flex justify-content-center align-items-center">
+                        <!-- Cart -->
+                        <div>
+                            <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
+                                <i class="fa fa-shopping-cart"></i>
+                                <div class="qty">3</div>
+                            </a>
+                        </div>
+                        <!-- /Cart -->
+                    </div>
+                </div>
                 <!-- /split -->
             </div>
             <!-- row -->
