@@ -261,7 +261,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     if (a.OrderID == id && a.OrderStatus == "已刪除")
                     {
-                        a.OrderStatus = "已結帳";
+                        a.OrderStatus = "未結帳";
                         break;
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
