@@ -4,14 +4,15 @@
 }
 @section Styles
 {
-    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" /> @*你的左側欄css放這裡*@
+    <link href="~/lib/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
 }
-<vc:member-ui></vc:member-ui> @*去\Views\Shared\Components\MemberUI\Default.cshtml修改左側欄HTML*@
+<vc:member-ui></vc:member-ui>
+<h2 class="d-flex justify-content-center">購買清單</h2>
 <vc:order-list side="1"></vc:order-list>
 @section Scripts
 {
-
-    <script src="~/js/MemberUI/sidebars.js"></script> @*你的左側欄js放這裡*@
+    <script src="~/js/MemberUI/sidebars.js"></script>
     <script src="~/js/DataTable/datatable.js"></script>
 }
