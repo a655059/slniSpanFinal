@@ -1,0 +1,1 @@
+﻿$(".layoutheader2").remove();
