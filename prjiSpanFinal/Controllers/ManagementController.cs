@@ -62,9 +62,35 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult Test()
+        {
+            return PartialView();
+        }
         public IActionResult PowerBi()
         {
             return View();
+        }
+        public IActionResult ProductList()
+        {
+            return View(Products);
+        }
+        public IActionResult ProductCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ProductCreate(CProductHu mem)
+        {
+            var EditProduct = new CProductHu()
+            {
+                ProductId = Products.Last().ProductId + 1,
+               ProductStatus=mem.ProductStatus,
+               SellerName=mem.SellerName,
+               Stock = mem.Stock,
+               UnitPrice = mem.UnitPrice,
+            };
+            Products.Add(EditProduct);
+            return RedirectToAction("ProductList");
         }
         public IActionResult MemberList()
         {
