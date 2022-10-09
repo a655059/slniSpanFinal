@@ -1,10 +1,6 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "賣場";
 }
-
-
-
 @section Styles{
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/ItemIndex.css" />
@@ -15,244 +11,221 @@
 
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-
-    <style>
-    </style>
-
-</head>
-<body>
-
-    <div class="container-fluid">
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-5 col-lg-2 d-md-block bg-light sidebar collapse">
+            <!--左邊的選項欄位-->
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
+                    <span>賣家資料</span>
+                    <a class="link-secondary" href="#" aria-label="Add a new report">
+                        <span data-feather="plus-circle" class="align-text-bottom"></span>
+                    </a>
+                </h6>
+                <img src="~/img/蘋果圖.jpg" width="150" />
 
 
-        <div class="row">
-            <nav id="sidebarMenu" class="col-md-5 col-lg-2 d-md-block bg-light sidebar collapse">
-                <!--左邊的選項欄位-->
-             
-                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
-                            <span>賣家資料</span>
-                            <a class="link-secondary" href="#" aria-label="Add a new report">
-                                <span data-feather="plus-circle" class="align-text-bottom"></span>
-                            </a>
-                        </h6>
-                        <img src="~/img/蘋果圖.jpg" width="150" />
+                <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
+                <div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>
+                    </div>
+                    <div class="col">
+                        <div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>
+                    </div>
+                </div>
 
 
-                        <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
-                        <div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase bg-warning">
+                    <span>商品分類</span>
+                    <a class="link-secondary" href="#" aria-label="Add a new report">
+                        <span data-feather="plus-circle" class="align-text-bottom"></span>
+                    </a>
+                </h6>
 
-                        <div class="row">
-                            <div class="col">
-                                <div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>
-                            </div>
-                            <div class="col">
-                                <div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>
-                            </div>
+                <ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file" class="align-text-bottom"></span>
+                            全部商品(519)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                            防疫相關用品(2)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users" class="align-text-bottom"></span>
+                            風扇/循環扇/移動空調(1)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+                            捕蚊燈(拍)/驅蟲器(6)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers" class="align-text-bottom"></span>
+                            果汁機/榨汁機(1)
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text" class="align-text-bottom"></span>
+                            烘焙用具(106)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text" class="align-text-bottom"></span>
+                            咖啡器具(45)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text" class="align-text-bottom"></span>
+                            汽機車用品(68)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text" class="align-text-bottom"></span>
+                            戶外/露營/運動/健身(52)
+                        </a>
+                    </li>
+                </ul>
+        </nav>
+
+        <main class="col-md-7 ms-sm-auto col-lg-10 px-md-4">
+            <section class="py-5">
+                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                <div class="container px-4 px-lg-5 mt-5 ">
+                    <div class="text-center text-black-50 bg-warning p-4 mb-5">
+                        <h1 class="display-2 fw-bolder">賣場相關資料</h1>
+
+
+
+                        <div class="board-text">
+                            👉過年期間出貨公告👈
+                            1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨
+                            .
+                            標題【24H出貨】保證有現貨，不用私訊問有沒有貨，直接下單即可
+                            周一~周五、AM10~PM5，周末及國定假日不出貨
+                            『耐嘉官方正式授權網路經銷商+授權碼A20122108』
+                            .
+                            1.本賣場販售之所有商品，皆由台灣發貨。
+                            2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
+                            3.買家們，收到商品發現有問題或是瑕疵，請【露露通】私訊聯絡我們。
+                            4.單筆訂單未滿88$一律不出貨，直接取消。
                         </div>
-
-
-                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase bg-warning">
-                            <span>商品分類</span>
-                            <a class="link-secondary" href="#" aria-label="Add a new report">
-                                <span data-feather="plus-circle" class="align-text-bottom"></span>
-                            </a>
-                        </h6>
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file" class="align-text-bottom"></span>
-                                全部商品(519)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                                防疫相關用品(2)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="users" class="align-text-bottom"></span>
-                                風扇/循環扇/移動空調(1)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-                                捕蚊燈(拍)/驅蟲器(6)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers" class="align-text-bottom"></span>
-                                果汁機/榨汁機(1)
-                            </a>
-                        </li>
-              
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text" class="align-text-bottom"></span>
-                                烘焙用具(106)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text" class="align-text-bottom"></span>
-                                咖啡器具(45)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text" class="align-text-bottom"></span>
-                                汽機車用品(68)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text" class="align-text-bottom"></span>
-                                戶外/露營/運動/健身(52)
-                            </a>
-                        </li>
-                 
-            </nav>
-
-            <main class="col-md-7 ms-sm-auto col-lg-10 px-md-4">
-
-
-                <section class="py-5">
-
-
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <div class="container px-4 px-lg-5 mt-5 ">
-                        <div class="text-center text-black-50 bg-warning p-4 mb-5">
-                            <h1 class="display-2 fw-bolder">賣場相關資料</h1>
-
-
-
-                            <div class="board-text">
-                                👉過年期間出貨公告👈
-                                1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨
-                                .
-                                標題【24H出貨】保證有現貨，不用私訊問有沒有貨，直接下單即可
-                                周一~周五、AM10~PM5，周末及國定假日不出貨
-                                『耐嘉官方正式授權網路經銷商+授權碼A20122108』
-                                .
-                                1.本賣場販售之所有商品，皆由台灣發貨。
-                                2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
-                                3.買家們，收到商品發現有問題或是瑕疵，請【露露通】私訊聯絡我們。
-                                4.單筆訂單未滿88$一律不出貨，直接取消。
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="itembody">
-                                @{int itemstock = 4;
-                                    <div class="itemcol" id="itemcol">
-                                        @for (int i = 1; i <= itemstock; i++)
-                                        {
-                                            <div class="sellsitem col">
-                                                <a href="/Item/Index/2113">
-                                                    <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
-                                                </a>
-                                                <div class="px-2 d-flex flex-column justify-content-between">
-                                                    <div class="cardTitle">好大一根香蕉</div>
-                                                    <div class="cardPrice">$999</div>
-                                                    <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                        <div class="d-flex justify-content-start flex-column mt-1">
-                                                            <div class="d-flex justify-content-start">
-                                                                <div class="starImg">
-                                                                    <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
-                                                                </div>
-                                                                <div class="text-black">4.5</div>
-                                                            </div>
-                                                            <div class="text-black-50 m-1">銷售<span>100</span></div>
-                                                        </div>
-                                                        <div>
-                                                            <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="row m-4"></div>
-                        <div class="row">
-                            <div class="itembody">
-                                @{
-                                    <div class="itemcol" id="itemcol">
-                                        @for (int i = 1; i <= 4; i++)
-                                        {
-                                            <div class="sellsitem col">
-                                                <a href="/Item/Index/2113">
-                                                    <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
-                                                </a>
-                                                <div class="px-2 d-flex flex-column justify-content-between">
-                                                    <div class="cardTitle">好大一根香蕉</div>
-                                                    <div class="cardPrice">$999</div>
-                                                    <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                        <div class="d-flex justify-content-start flex-column mt-1">
-                                                            <div class="d-flex justify-content-start">
-                                                                <div class="starImg">
-                                                                    <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
-                                                                </div>
-                                                                <div class="text-black">4.5</div>
-                                                            </div>
-                                                            <div class="text-black-50 m-1">銷售<span>100</span></div>
-                                                        </div>
-                                                        <div>
-                                                            <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
 
                     </div>
+                    <div class="row">
+                        <div class="itembody">
+                            @{int itemstock = 4;
+                                <div class="itemcol" id="itemcol">
+                                    @for (int i = 1; i <= itemstock; i++)
+                                    {
+                                        <div class="sellsitem col">
+                                            <a href="/Item/Index/2113">
+                                                <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                                            </a>
+                                            <div class="px-2 d-flex flex-column justify-content-between">
+                                                <div class="cardTitle">好大一根香蕉</div>
+                                                <div class="cardPrice">$999</div>
+                                                <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                    <div class="d-flex justify-content-start flex-column mt-1">
+                                                        <div class="d-flex justify-content-start">
+                                                            <div class="starImg">
+                                                                <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                            </div>
+                                                            <div class="text-black">4.5</div>
+                                                        </div>
+                                                        <div class="text-black-50 m-1">銷售<span>100</span></div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="row m-4"></div>
+                    <div class="row">
+                        <div class="itembody">
+                            @{
+                                <div class="itemcol" id="itemcol">
+                                    @for (int i = 1; i <= 4; i++)
+                                    {
+                                        <div class="sellsitem col">
+                                            <a href="/Item/Index/2113">
+                                                <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
+                                            </a>
+                                            <div class="px-2 d-flex flex-column justify-content-between">
+                                                <div class="cardTitle">好大一根香蕉</div>
+                                                <div class="cardPrice">$999</div>
+                                                <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                    <div class="d-flex justify-content-start flex-column mt-1">
+                                                        <div class="d-flex justify-content-start">
+                                                            <div class="starImg">
+                                                                <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                                            </div>
+                                                            <div class="text-black">4.5</div>
+                                                        </div>
+                                                        <div class="text-black-50 m-1">銷售<span>100</span></div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
 
-                </section>
 
-            </main>
+                </div>
+
+            </section>
+
+        </main>
 
 
 
 
 
-        </div>
-
-        <div class="d-flex justify-content-center">
-            <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
-            <div id="commentPage">
-                <button class="inactiveButton" style="color: rgb(0, 0, 0); font-weight: bold;">1</button>
-                @{
-                    for (int i = 2; i <= 10; i++)
-                    {
-                        <button class="inactiveButton">@i</button>
-                    }
-                }
-            </div>
-
-            <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
-        </div>
     </div>
 
+    <div class="d-flex justify-content-center">
+        <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
+        <div id="commentPage">
+            <button class="inactiveButton" style="color: rgb(0, 0, 0); font-weight: bold;">1</button>
+            @{
+                for (int i = 2; i <= 10; i++)
+                {
+                    <button class="inactiveButton">@i</button>
+                }
+            }
+        </div>
 
+        <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
+    </div>
+</div>
 
-</body>
-</html>
 @*<input type="hidden" id="activePage" value="@Model" />*@
 
 @section Scripts{
