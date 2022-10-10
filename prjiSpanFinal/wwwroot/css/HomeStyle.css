@@ -1,17 +1,6 @@
 ﻿.container{
    
 }
-body {
-    background-color: #FFF7EB;
-}
-.section {
-    padding-top: 10px;
-}
-.pb-3 > .container {
-    padding: 10px 20px 20px 30px;
-    background-color: white;
-    border-radius: 30px;
-}
 .HomepageIndex {
     
     position: relative;

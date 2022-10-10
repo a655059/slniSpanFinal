@@ -2,22 +2,10 @@
     margin: 0;
     padding: 0;
 }
-body {
-    background-color: #FFF7EB;
-}
-.section {
-    padding-top: 5px;
-}
-.CategoryBody {
-    padding:10px 20px 20px 30px;
-    width: 1300px;
-    background-color: white;
-    border-radius: 30px;
-}
-
 .CategoryHeader {
     width: 1250px;
     padding: 10px;
+    margin-left:10px;
 }
 
 .CategoryHeaderTitle {
@@ -80,7 +68,9 @@ body {
     border:1px solid purple;
     margin:10px 0 10px 0 
 }
-
+.cateAD > a > img{
+    width:100%    
+}
 .CategoryBody > .row {
     flex-wrap: nowrap;
 }
