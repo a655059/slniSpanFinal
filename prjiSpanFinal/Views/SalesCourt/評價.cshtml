@@ -3,7 +3,12 @@
     ViewData["Title"] = "評價";
 }
 
-
+@section Styles{
+    .dashed-divider {
+        height: 1px;
+        border-top: 1px dashed #dcdcdc;
+    }
+}
 
 <!DOCTYPE html>
 
@@ -12,141 +17,174 @@
     <meta charset="utf-8" />
 
     <style>
+        .dashed-divider {
+            height: 1px;
+            border-top: 1px dashed #dcdcdc;
+        }
     </style>
 
 </head>
 <body>
-    
+
     <div class="container">
-            <div class="row">
-                <div class="col-1">
+        <div class="row">
 
-                </div>
-                <div class="col-5">
+            <div class="col-6 rounded-2" style="background-color:#f0a98f">
 
-                    <div class="row">
-                        <div class="col-2"></div>
-                        <div class="col-4 m-2">
-                            <img src="~/img/蘋果圖.jpg" width="150" />
-                            @*<p class="align-items-center"></p>*@
-                            <button type="button" class="btn btn-sm btn-outline-secondary">最愛賣家</button>
+                <div class="row">
+
+                    <div class="col-4">
+                        <img src="~/img/member.png" width="150" class="m-3" />
+                        <div class="text-dark rounded-5  text-center m-4" style="background-color:#fb00ff">最愛賣家</div>
+                    </div>
+                    <div class="col-8">
+                        <div>
+                            <span><img src="~/img/YellowStar.png" width="80" /></span>
+                            <span><img src="~/img/YellowStar.png" width="80" /></span>
+                            <span><img src="~/img/YellowStar.png" width="80" /></span>
                         </div>
-                        <div class="col-5 m-2">
-                                                       
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" colspan="5">總金額490元以上免運費</th>
-                                        @*<td class="row-span">總金額490元以上免運費</td>*@
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr class="table-primary">
-                                        <th scope="row"></th>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="table-secondary">
-                                        <th scope="row" colspan="4">優良交易評價:</th>
-                                        <td class="text-bg-info">8888則</td>
-                                       
-                                    </tr>
-                                   
-                                  
-                                </tbody>
-                            </table>
+                        <div class="dashed-divider"></div>
+                        <div class="ps-2 w-auto">
+                            <span class="text-dark" style="font-size:2em">優良交易評價:</span>
+                            <span class="text-danger" style="font-size:3em">37595</span>
+                            <span class="text-dark" style="font-size:2em">則</span>
                         </div>
-                        
+                        <div class="ps-2">
+                            <img src="~/img/truck.png" width="30">
+                            <a href="#" class="text-primary" style="font-size:1.5em">平均出貨天數:</a>
+                            <span class="text-dark" style="font-size:1.5em">0.7天</span>
+                        </div>
+                        <div class="ps-2">
+                            <img src="~/img/follow.png" width="30">
+                            <a href="#" class="text-primary" style="font-size:1.5em">交關過會員數:</a>
+                            <span class="text-dark" style="font-size:1.5em">15044次</span>
+                        </div>
+                        <div class="ps-2">
+                            <img src="~/img/fans.png" width="30">
+                            <a href="#" class="text-primary" style="font-size:1.5em">被加入最愛賣家次數:</a>
+                            <span class="text-dark" style="font-size:1.5em">737次</span>
+                        </div>
+                        <div class="ps-2">
+                            <img src="~/img/trashcan.png" width="30">
+                            <a href="#" class="text-primary" style="font-size:1.5em">棄單次數:</a>
+                            <span class="text-dark" style="font-size:1.5em">0次</span>
+                        </div>
+
                     </div>
 
 
                 </div>
-                <div class="col-5">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">1週之內</th>
-                                <th scope="col">1個月之內</th>
-                                <th scope="col">半年之內</th>
-                                <th scope="col">全部紀錄</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
 
-                            <tr class="table-primary">
-                                <th scope="row">優良評價</th>
-                                <td>241</td>
-                                <td>1489</td>
-                                <td>5587</td>
-                                <td>37519</td>
-                            </tr>
-                            <tr class="table-secondary">
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr class="table-success">
-                                <th scope="row">普通評價</th>
-                                <td>1</td>
-                                <td>4</td>
-                                <td>15</td>
-                                <td>211</td>
-                            </tr>
-                            <tr class="table-danger">
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr class="table-warning">
-                                <th scope="row">差勁評價</th>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>11</td>
-                                <td>135</td>
-                            </tr>
-                            <tr class="table-info">
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr class="table-light">
-                                <th scope="row">評價次數</th>
-                                <td>242</td>
-                                <td>1093</td>
-                                <td>5613</td>
-                                <td>37865</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-1">
-
-                </div>
             </div>
+
+            <div class="col-6">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">1週之內</th>
+                            <th scope="col">1個月之內</th>
+                            <th scope="col">半年之內</th>
+                            <th scope="col">全部紀錄</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-secondary">
+                            <th scope="row" height="30"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr class="table-light">
+                            <th scope="row">優良評價</th>
+                            <td>241</td>
+                            <td>1489</td>
+                            <td>5587</td>
+                            <td>37519</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="row" height="30"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-light">
+                            <th scope="row">普通評價</th>
+                            <td>1</td>
+                            <td>4</td>
+                            <td>15</td>
+                            <td>211</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="row" height="30"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-light">
+                            <th scope="row">差勁評價</th>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>11</td>
+                            <td>135</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="row" height="30"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-light">
+                            <th scope="row">評價次數</th>
+                            <td>242</td>
+                            <td>1093</td>
+                            <td>5613</td>
+                            <td>37865</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
         </div>
+
+
+        <div class="row">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">收到他人的評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">來自買家的評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">來自賣家的評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">給他人的評價</a>
+                </li>
+
+            </ul>
+        </div>
+
+        @{
+            @for (int i = 0; i < 20; i++)
+            {
+                <div class="row rounded" style="background-color:#c2cad5" >
+                    <div class="text-dark" style="font-size:1.5em">買家:31987</div>
+                    <div class="dashed-divider"></div>
+                    <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">【24H出貨】(袋裝) 4米5噸 拖車繩 拉車繩 牽引繩 拖車繩 拖車索 拖車勾 拖車線 汽機車用品</a></div>
+                </div>
+            }
+
+        }
+
+    </div>
 </body>
 </html>
