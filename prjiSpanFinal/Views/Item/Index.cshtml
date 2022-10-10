@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-@section Styles{ 
+@section Styles{
     <link rel="stylesheet" href="~/css/ItemIndex.css" />
 }
 
@@ -32,7 +32,7 @@
         <div style="font-size:14px">
             <div class="d-flex justify-content-between border-top border-bottom p-2">
                 <div>商品編號:<span class="ms-2">948365032</span></div>
-                <div><a href="#">檢舉</a></div>
+                <div><a href="#"><p data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</p></a></div>
             </div>
             <div>
                 <div class="fs-6 fw-b">商品備註</div>
@@ -257,6 +257,41 @@
 
 </div>
 
+<!--Modal-->
+<div class="modal fade" id="reportmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="top: 7rem !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">檢舉視窗</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label>產品名稱</label>
+                    <input class="form-control" placeholder="【JUST台灣現貨】獨家顏色！台灣製造30000mAh PD/QC快充3A 行動電源 保固一年 行動電源 行動充 隨身充" readonly>
+
+                    <label>檢舉理由</label>
+                    <select class="form-select">
+                        <option value="廣告不實">廣告不實</option>
+                        <option value="商品圖片違反善良風俗">商品圖片違反善良風俗</option>
+                        <option value="違法商品">違法商品</option>
+                        <option value="這個賣家太糟糕了">這個賣家太糟糕了</option>
+                        <option value="內容和實際商品不符">內容和實際商品不符</option>
+                    </select>
+                    <label>詳細檢舉理由</label>
+                    <textarea class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal End-->
+
 
 @section Scripts{
     <script src="~/js/ItemIndex.js"></script>
@@ -278,7 +313,7 @@
     });
 
 
-    
+
     </script>
-    
+
 }
