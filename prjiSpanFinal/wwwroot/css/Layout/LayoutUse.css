@@ -310,13 +310,21 @@ body {
 
 .lofooter {
     margin: 30px 0px;
+    
 }
+.lofooter-m{
+    margin:0 5px;
+}
+    .lofooter-m > h3 {
+        color: white;
+    }
 .lofooter-links li + li {
     margin-top: 15px;
 }
 
 .lofooter-links li a {
     color: white;
+    text-decoration:none;
 }
 .lofooter-links li i {
     margin-right: 15px;
