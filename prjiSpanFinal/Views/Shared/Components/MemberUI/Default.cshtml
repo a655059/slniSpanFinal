@@ -34,7 +34,6 @@
                         <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded my-1">訂單列表</a></li>
                         <li><a asp-controller="Delivery" asp-action="ShowCart" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的購物車</a></li>
                         <li><a asp-action="Like" class="link-dark d-inline-flex text-decoration-none rounded my-1">按讚好物</a></li>
-
                     </ul>
                 </div>
             </li>
@@ -46,7 +45,7 @@
                 <div class="membersidebar collapse show" id="orders-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a asp-action="Coupon" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的優惠券 </a></li>
-                        <li><a asp-action="" class="link-dark d-inline-flex text-decoration-none rounded my-1">目前活動</a></li>
+                        <li><a asp-controller="Event" asp-action="Discount" class="link-dark d-inline-flex text-decoration-none rounded my-1">目前活動</a></li>
                     </ul>
                 </div>
             </li>
