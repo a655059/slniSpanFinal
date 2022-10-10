@@ -4,39 +4,45 @@
 }
 
 @section Styles{
-    .section-seller-overview-horizontal .section-seller-overview__item {
-    display: inline-block;
-    padding-top: 0.625rem;
-    padding-bottom: 0.625rem;
-    flex: none;
-    }
+    <style>
+        .section-seller-overview-horizontal .section-seller-overview__item {
+            display: inline-block;
+            padding-top: 0.625rem;
+            padding-bottom: 0.625rem;
+            flex: none;
+        }
+    </style>
+  
 
 }
 
 
-<style>
-</style>
-
 <div class="ps-2">
-    <span class="mx-2 display-6"><a href="~/SalesCourt/賣場" class="text-primary">回賣場</a></span>
-    <span class="mx-2 display-6"><a href="~/SalesCourt/評價" class="text-primary">評價</a></span>
+    <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+        <a href="~/SalesCourt/賣場"> 回賣場</a>
+    </button>
+    <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+        <a href="~/SalesCourt/評價"> 評價</a>
+    </button>
+    @*<span class="mx-2 display-6"><a href="~/SalesCourt/賣場" class="text-primary">回賣場</a></span>
+        <span class="mx-2 display-6"><a href="~/SalesCourt/評價" class="text-primary">評價</a></span>*@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded text-bg-dark bg-warning">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:#e8f206">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">賣場資訊</h1>
         </div>
 
         <div class="row m-5">
-            <div class="col"><img src="~/img/product.png" width="20" /> 商品:&nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品:42 &nbsp;</div>
             @*<div class="col"><i class="fa-solid fa-box-taped" style="width:15px"></i> 商品:&nbsp;</div>*@
-            <div class="col"><img src="~/img/fans.png" width="20" />粉絲:&nbsp;</div>
-            <div class="col"><img src="~/img/follow.png" width="20" />關注中:&nbsp;</div>
-            <div class="col"><img src="~/img/star_null.png" width="20" />評價:&nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/fans.png" width="20" />粉絲:1407&nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:3000&nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:4.4&nbsp;</div>
         </div>
 
-        <div class="row m-5">
+        <div class="row m-5" style="font-size:1.4em">
             <div class="col">
                 <div class="bg-secondary">賣場服務時間</div>
                 <p>
@@ -73,12 +79,12 @@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  bg-warning">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:#e8f206">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">付款與運送的方式</h1>
         </div>
 
-        <div class="row">
+        <div class="row" style="font-size:1.4em">
             <div class="col-6">
                 <div class="text-secondary" style="font-size:1.5em">付款方式</div>
 
@@ -107,10 +113,10 @@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded text-bg-dark bg-warning">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:#e8f206">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">注意事項</h1>
-            <p class="lead my-3">
+            <p class="lead my-3" style="font-size:1.4em">
                 請記得完成"結帳"動作才算是完整訂單
                 結帳二筆以上商品，請記得"合併結帳"避免"運費"重複計算
                 結帳前請先"問與答"詢問是否有 現貨、顏色、尺寸

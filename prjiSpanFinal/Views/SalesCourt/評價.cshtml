@@ -4,26 +4,34 @@
 }
 
 @section Styles{
-    .dashed-divider {
-        height: 1px;
-        border-top: 1px dashed #dcdcdc;
-    }
+    <style>
+        .dashed-divider {
+            height: 1px;
+            border-top: 1px dashed #dcdcdc;
+        }
+
+
+    </style>
 }
 
 
-<style>
-    .dashed-divider {
-        height: 1px;
-        border-top: 1px dashed #dcdcdc;
-    }
-</style>
+
 
 
 
     <div class="container">
         <div class="ps-2">
-            <span class="mx-2 display-6"><a href="~/SalesCourt/賣場" class="text-primary">回賣場</a></span>
-            <span class="mx-2 display-6"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></span>
+            <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+                <a href="~/SalesCourt/賣場"> 回賣場</a>
+            </button>
+            <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+                <a href="~/SalesCourt/關於我"> 關於我</a>
+            </button>
+            @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2" href="~/SalesCourt/關於我">
+                關於我
+            </button>*@
+            @*<span class="mx-2 display-6"><a href="" class="text-primary">回賣場</a></span>
+        <span class="mx-2 display-6"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></span>*@
         </div>
         @*<div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>*@
         <div class="row">
@@ -34,7 +42,10 @@
 
                     <div class="col-4">
                         <img src="~/img/member.png" width="150" class="m-3" />
-                        <div class="text-dark rounded-5  text-center m-4" style="background-color:#fb00ff">最愛賣家</div>
+                        @*<div class="text-dark rounded-5  text-center m-4" style="background-color:#fb00ff">最愛賣家</div>*@
+                        <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
+                            最<i class="fa-sharp fa-solid fa-heart"></i>賣家
+                        </button>
                     </div>
                     <div class="col-8">
                         <div>
