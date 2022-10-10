@@ -106,14 +106,24 @@
             </ul>
         </nav>
 
-        <main class="col-md-7 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-7 ms-sm-auto col-lg-10 ">
 
-
-            <section class="py-5">
+            <section>
 
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <div class="container  ">
                     <div class="text-center text-black-50 bg-warning p-4 mb-5">
+                        <div class="row">
+                            <div class="col-2">
+                                <button class="btn btn-primary btn-sm ms-2">
+                                    <i class="fa-solid fa-thumbs-up"></i>讚<span class="ms-2"></span>25
+                                </button>
+                                <button class="btn btn-primary btn-sm ms-2">
+                                    分享
+                                </button>
+                            </div>
+                        </div>
+
                         <h1 class="display-2 fw-bolder">賣場相關資料</h1>
 
                         <div class="board-text">
@@ -192,119 +202,187 @@
                     <div class="row" style="background-color:#32d6a8">
 
                         <div class="col">
-                            <div class="ps-2"><p class="text-dark">排序</p></div>
+                            <div class="ps-2"><p class="text-dark">      </p></div>
                         </div>
                         <div class="col">
-                            <div class="ps-2"><a href="#" class="text-primary">熱門度</a></div>
+                            <div class="ps-2"><a href="#" class="text-primary">       </a></div>
                         </div>
                         <div class="col">
-                            <div class="ps-2"><a href="#" class="text-primary">價格</a></div>
+                            <div class="ps-2"><a href="#" class="text-primary">       </a></div>
                         </div>
                         <div class="col">
-                            <div class="ps-2"><a href="#" class="text-primary">銷售</a></div>
+                            <div class="ps-2"><a href="#" class="text-primary">       </a></div>
                         </div>
                         <div class="col">
-                            <div class="ps-2"><a href="#" class="text-primary">最新上架</a></div>
+                            <div class="ps-2"><a href="#" class="text-primary">        </a></div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="itembody">
-                            @{int itemstock = 4;
-                                <div class="itemcol" id="itemcol">
-                                    @for (int i = 1; i <= itemstock; i++)
-                                    {
-                                        <div class="sellsitem col">
-                                            <a href="/Item/Index/2113">
-                                                <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
-                                            </a>
-                                            <div class="px-2 d-flex flex-column justify-content-between">
-                                                <div class="cardTitle">好大一根香蕉</div>
-                                                <div class="cardPrice">$999</div>
-                                                <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                    <div class="d-flex justify-content-start flex-column mt-1">
-                                                        <div class="d-flex justify-content-start">
-                                                            <div class="starImg">
-                                                                <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
-                                                            </div>
-                                                            <div class="text-black">4.5</div>
-                                                        </div>
-                                                        <div class="text-black-50 m-1">銷售<span>100</span></div>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
-                                                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">排序</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">熱門度</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">價格</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">銷售</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">最新上架</a>
+                        </li>
+                    </ul>
+
+                    <div class="row m-3">
+                        @{
+                            for (int i = 0; i < 4; i++)
+                            {
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <!-- Product image-->
+                                        <img class="card-img-top img-fluid" src="~/img/蘋果圖.jpg" />
+                                        <!-- Product details-->
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder text-start">好大一根香蕉</h5>
+                                                <!-- Product price-->
+
+                                                <div class="text-danger text-start display-5">$999</div>
+                                                <div class="text-start">
+                                                    <span class="text-black text-start" style="font-size:1.2rem">4.5</span>
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 justify-content-start" style="width:20px" />
+
                                                 </div>
+
+
                                             </div>
                                         </div>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="row m-4"></div>
-                    <div class="row">
-                        <div class="itembody">
-                            @{
-                                <div class="itemcol" id="itemcol">
-                                    @for (int i = 1; i <= 4; i++)
-                                    {
-                                        <div class="sellsitem col">
-                                            <a href="/Item/Index/2113">
-                                                <img href="/Item/Index/2113" src="~/img/蘋果圖.jpg" class="cardImg" alt="..." />
-                                            </a>
-                                            <div class="px-2 d-flex flex-column justify-content-between">
-                                                <div class="cardTitle">好大一根香蕉</div>
-                                                <div class="cardPrice">$999</div>
-                                                <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                    <div class="d-flex justify-content-start flex-column mt-1">
-                                                        <div class="d-flex justify-content-start">
-                                                            <div class="starImg">
-                                                                <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
-                                                            </div>
-                                                            <div class="text-black">4.5</div>
-                                                        </div>
-                                                        <div class="text-black-50 m-1">銷售<span>100</span></div>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
-                                                    </div>
+                                        <!-- Product actions-->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent justify-content-center">
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-black-50 ">銷售<span>100</span></div>
                                                 </div>
                                             </div>
+
+
                                         </div>
-                                    }
+                                    </div>
                                 </div>
                             }
-                        </div>
+                        }
                     </div>
 
+                    <div class="row m-3">
+                        @{
+                            for (int i = 0; i < 4; i++)
+                            {
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <!-- Product image-->
+                                        <img class="card-img-top img-fluid" src="~/img/蘋果圖.jpg" />
+                                        <!-- Product details-->
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder text-start">好大一根香蕉</h5>
+                                                <!-- Product price-->
+
+                                                <div class="text-danger text-start display-5">$999</div>
+                                                <div class="text-start">
+                                                    <span class="text-black text-start" style="font-size:1.2rem">4.5</span>
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 justify-content-start" style="width:20px" />
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <!-- Product actions-->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent justify-content-center">
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-outline-warning buybtn m-1">加入購物車</button>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-black-50 ">銷售<span>100</span></div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+
+
+                    <nav aria-label="Page navigation example" class="justify-content-center d-flex">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                            <li class="page-item"><a class="page-link" href="#">5</a></li>
+                            <li class="page-item"><a class="page-link" href="#">6</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    @*<div class="m-3"></div>
+
+        <div class="row">
+            <div class="col-1">
+                <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
+            </div>
+
+
+            <div id="col-10">
+                <button class="inactiveButton" style="color: rgb(0, 0, 0); font-weight: bold;">1</button>
+                @{
+                    for (int i = 2; i <= 10; i++)
+                    {
+                        <button class="inactiveButton">@i</button>
+                    }
+                }
+            </div>
+
+            <div class="col-1">
+                <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
+            </div>
+        </div>*@
 
                 </div>
-
-            </section>
+        </section>
 
         </main>
 
 
 
-
-
     </div>
 
-    <div class="d-flex justify-content-center">
-        <button id="commentPrevioustPage"><span class="fw-bold"><</span>上一頁</button>
-        <div id="commentPage">
-            <button class="inactiveButton" style="color: rgb(0, 0, 0); font-weight: bold;">1</button>
-            @{
-                for (int i = 2; i <= 10; i++)
-                {
-                    <button class="inactiveButton">@i</button>
-                }
-            }
-        </div>
 
-        <button id="commentNextPage">下一頁<span class="fw-bold">></span></button>
-    </div>
+
+    
 </div>
 
 @*<input type="hidden" id="activePage" value="@Model" />*@
