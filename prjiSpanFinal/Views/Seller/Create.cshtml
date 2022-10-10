@@ -111,10 +111,43 @@
             width:550px;
             margin-left:2px;
         }
-        
+
+        .modal-dialog {
+            top: 7rem !important;
+        }
     </style>
 }
 <vc:seller-ui></vc:seller-ui>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">新增規格</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>樣式:</label>
+                <input type="text" id="text1" class="form-control">
+                <br />
+                <label>數量:</label>
+                <input type="text" id="text2" class="form-control">
+                <br />
+                <label>售價:</label>
+                <input type="text" id="text3" class="form-control">
+                <br />
+                <label>照片:</label>
+                <input type="file" id="text4" class="form-group" accept="image/*">
+                <img id="blah" src="#" alt="your image" />
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row overflow-auto">
     <div class="col-1"></div>
     <div class="col-11 ">
@@ -170,34 +203,6 @@
                     <section class="section d-flex justify-content-start">
                         <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
                     </section>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增規格</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label>樣式:</label>
-                                    <input type="text" id="text1" class="form-control">
-                                    <br />
-                                    <label>數量:</label>
-                                    <input type="text" id="text2" class="form-control">
-                                    <br />
-                                    <label>售價:</label>
-                                    <input type="text" id="text3" class="form-control">
-                                    <br />
-                                    <label>照片:</label>
-                                    <input type="file" id="text4" class="form-group" accept="image/*">
-                                    <img id="blah" src="#" alt="your image" />
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="save" type="button" class="btn btn-warning">新增</button>
-                                    <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="addStyle">
                 </div>
@@ -325,7 +330,10 @@
                 tbody.insertBefore(tr, tbody.children[0])
                 //新增完以後關閉薪資視窗
                 console.log(exampleModal);
-                exampleModal.close();
+
+                var myModalEl = document.getElementById('exampleModal');
+                var modal = bootstrap.Modal.getInstance(myModalEl)
+                modal.hide();
             }
             else {
                 alert("項目,數量和價格不可為空值");
@@ -334,12 +342,6 @@
             console.log("data");
             console.log(data);
         })
-        //彈出 model 的關閉
-        close.addEventListener("click", function () {
-            exampleModal.close();
-        })
-
-
 
         //物流新增
 
