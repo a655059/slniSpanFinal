@@ -1,0 +1,18 @@
+﻿.sidemenu {
+    float: left;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: #d2f4ea;
+}
+
+.membersidebar {
+    text-align-last: center;
+    font-size: 20px;
+}
+
+.membercentercaption {
+    font-size: 25px;
+    font-weight: 900;
+}
