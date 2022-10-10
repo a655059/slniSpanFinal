@@ -38,57 +38,62 @@
     </style>
 }
 <vc:member-ui></vc:member-ui>
-
-<div style="opacity: 0.5;text-align:center;font-size:40px">我的優惠券</div>
-<div class="input-group mb-1">
-    <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4><input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
-    <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
-</div>
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">全部</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">蝦到爆折價券</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">賣場折價券</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">合作商家</a>
-    </li>
-</ul>
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">最新</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">熱門</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">即將到期</a>
-    </li>
-</ul>
-
-<figure style="background-color:#FCFCFC">
-    <figcaption></figcaption>
-        <div>
-            <table>
-                @for (int i = 15; i >= 1; i--)
-                {
-                    <tr>
-                        <td>
-                            <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
-                            <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
-                        </td>
-                    </tr>
-                }
-            </table>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-11 ">
+        <div style="opacity: 0.5;text-align:center;font-size:40px">我的優惠券</div>
+        <div class="input-group mb-1">
+            <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4><input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
         </div>
-</figure>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">全部</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">蝦到爆折價券</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">賣場折價券</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">合作商家</a>
+            </li>
+        </ul>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">最新</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">熱門</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">即將到期</a>
+            </li>
+        </ul>
 
-@section Scripts
+        <figure style="background-color:#FCFCFC">
+            <figcaption></figcaption>
+            <div>
+                <table>
+                    @for (int i = 15; i >= 1; i--)
+                    {
+                        <tr>
+                            <td>
+                                <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
+                                <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </figure>
+    </div>
+</div>
+        
+
+        @section Scripts
 {
-    <script src="~/js/MemberUI/sidebars.js"></script>
-}
+            <script src="~/js/MemberUI/sidebars.js"></script>
+        }
 
