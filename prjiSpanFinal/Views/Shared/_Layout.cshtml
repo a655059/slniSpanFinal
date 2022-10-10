@@ -44,13 +44,17 @@
         <!-- /container -->
     </div>
     <!-- /SECTION -->
-    <button type="button" id="BackTop" class="toTop-arrow"></button>
+    <div class="goTop" id="BackTop">
+        <a href="#" class="goTopBtn jq-goTop">
+            <i class="fas fa-arrow-alt-circle-up fa-3x"></i>
+        </a>
+    </div>
     <vc:message-popup></vc:message-popup>
     <footer class="footerbg">
         <vc:layout-footer1></vc:layout-footer1>
         <vc:layout-footer2></vc:layout-footer2>
     </footer>
-    
+
     <!-- jQuery Plugins -->
     <script src="~/lib/js/jquery.min.js"></script>
     <script src="~/lib/js/bootstrap.bundle.js"></script>
@@ -60,9 +64,9 @@
     <script src="~/js/Layout/layout.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @*<script>
-        $("#btnpopupchatstart").click(function () {
-            if ($("#btnpopupchatstart").attr("aria-expanded") == false)
-        });
-    </script>*@
+            $("#btnpopupchatstart").click(function () {
+                if ($("#btnpopupchatstart").attr("aria-expanded") == false)
+            });
+        </script>*@
 </body>
 </html>

@@ -25,43 +25,21 @@
         color: #FF9224;
     }
     /*回到最上面*/
-    .toTop-arrow {
-        width: 2.5rem;
-        height: 2.5rem;
-        padding: 0;
-        margin: 0;
-        border: 0;
-        border-radius: 33%;
-        opacity: 0.6;
-        background: #000;
-        cursor: pointer;
-        position: fixed;
-        right: 10rem;
-        bottom: 5rem;
-        display: none;
-    }
-    .toTop-arrow::before, .toTop-arrow::after {
-        width: 18px;
-        height: 5px;
-        border-radius: 3px;
-        background: #f90;
-        position: absolute;
-        content: "";
-    }
-
-    .toTop-arrow::before {
-        transform: rotate(-45deg) translate(0, -50%);
-        left: 0.5rem;
-    }
-
-    .toTop-arrow::after {
-        transform: rotate(45deg) translate(0, -50%);
-        right: 0.5rem;
-    }
-
-    .toTop-arrow:focus {
-        outline: none;
-    }
+.goTop {
+    position: fixed;
+    right: 10rem;
+    bottom: 5rem;
+    display:none;
+ }
+.goTopBtn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.goTopBtn > .fa-arrow-alt-circle-up {
+    color:black;
+}
 /* /泛用功能區 */
 
 /* Header1 */
@@ -146,6 +124,9 @@
     .header-cart > div > a > .fa:hover {
         opacity: 80%;
     }
+    .header-cart > div > a > .fa:active {
+        opacity: 100%;
+    }
 .header-cart > div > a > span{
     white-space:nowrap;
 }
@@ -156,8 +137,38 @@
     .header-cart > div > a > span:hover {
         opacity: 80%;
     }
+.notification {
+    position: relative;
+}
+.notification-trigger {
+    position:relative;
+}
+.notification-body {
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    background-color: #FFE4CA;
+    border: 1px solid #FF8000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.notification-item {
+    color: #4F4F4F;
+    width:300px
+}
+.notification-item-title 
+{padding: 10px;
+    text-align: center;
+    background-color:white;
+}
+.notification-item-list {
+    padding: 5px 20px;
+    border-top: 1px solid #BEBEBE;
+}
+.notification-item-listitem{
 
-    /*nav註冊區*/
+}
+/*nav註冊區*/
 .navlog {
     margin-left: 10px;
     padding-right: 10px;
@@ -227,21 +238,28 @@
     border: 3px solid white;
     border-radius: 10px
 }
-    .loschbar > .input-group > .input-text:focus {
-        box-shadow: 0px 0px 0px;
-        border-color: #f8c146;
-        outline: 0px;
+    .loschbar > .input-group > .input-text {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        font-size: 20px;
     }
+.loschbar > .input-group > .input-text:focus {
+    box-shadow: 0px 0px 0px;
+    border-color: #f8c146;
+    outline: 0px;
+}
     .loschbar > .input-group > .form-control {
+        
         border: 0px;
     }
 .searchkeyword {
     padding-left: 2px;
-    color: white;
+    color: #844200;
     font-size: 1rem;
+    font-weight:bold;
 }
     .searchkeyword:hover{
-        color:yellow;
+        color:white;
     }
     /*搜尋右側功能*/
 .searchcart {
