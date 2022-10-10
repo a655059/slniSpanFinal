@@ -40,6 +40,17 @@ $("#msgenter").click(function () {
     </div>
 </a>`;
     }
+    else if (msg.includes("退貨") == true) {
+        setTimeout(function () {
+            $("#messagebody").append(`<div class="d-flex flex-row justify-content-start">
+                                <img src="/img/robot.jpg" alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">您可以在會員中心的購買清單中點擊「申請退貨」，</br>來進行退貨流程。</p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted float-end">16:01 PM | 7月 10</p>
+                                </div>
+                            </div>`);
+        },2000);
+    }
     $("#messagebody").append(`<div class="d-flex flex-row justify-content-end">
                                 <div>
                                     <div class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary" style="max-width:400px;">`+ msg + `</div>
@@ -50,6 +61,16 @@ $("#msgenter").click(function () {
     $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
 });
 
+$("#msgchattarget6").click(function () {
+    $("#messagebody").empty();
+    $("#messagebody").append(`<div class="d-flex flex-row justify-content-start">
+                                <img src="/img/robot.jpg" alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">您好請問我可以做些什麼?</p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted float-end">16:01 PM | 7月 10</p>
+                                </div>
+                            </div>`);
+});
 
 const image_input = document.querySelector("#msgupload");
 image_input.addEventListener("change", function () {
@@ -69,3 +90,4 @@ image_input.addEventListener("change", function () {
     reader.readAsDataURL(this.files[0]);
     $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
 });
+
