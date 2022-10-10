@@ -1,0 +1,122 @@
+﻿.event-header {
+    border: 1px solid #9F35FF;
+    border-radius:10px;
+    overflow:hidden;
+}
+.coupongroup {
+    display: grid;
+    grid-row-gap: 1.875rem;
+    row-gap: 1.875rem;
+    margin: 1.875rem 1.25rem;
+}
+.coupon {
+    height: 270px;
+    border: 1px solid #c4c4c4;
+    border-left: 0px;
+    border-radius: 15px;
+    /*padding: 10px 15px 10px 15px;*/
+    background: repeating-linear-gradient(#c4c4c4,#c4c4c4 8px,transparent 0,transparent 28px,#c4c4c4 0,#c4c4c4 42px) 0/1px 100% no-repeat,radial-gradient(circle at 0 18px,transparent,transparent 10px,#c4c4c4 0,#c4c4c4 11px,currentColor 0) 1px 0/100% 42px repeat-y;
+    
+    overflow: hidden;
+    
+}
+.coupon-enable {
+    color: #FF5809 !important;
+    cursor: pointer !important;
+}
+.coupon-disable {
+    cursor: default !important;
+    color: gray !important;
+}
+.coupon-start {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    
+}
+.coupon-start-head {
+    font-size: 100px;
+    color: white;
+}
+.coupon-start-title {
+    color: white;
+    font-size: 30px;
+    font-weight:bold;
+    white-space:normal;
+
+}
+
+.coupon-end {
+    width: 75%;
+    background-color: white;
+    display: flex;
+    align-items:center;
+    flex-grow:1;    
+}
+.coupon-end-start {
+    padding-left: 3rem;
+    padding-right: 3rem;
+    text-align:start;
+    flex-grow: 1;
+    overflow:hidden;
+    color:black;
+}
+.ces-title{
+    font-size:50px;
+}
+.ces-content{
+    padding-top:10px;
+    font-size:30px;
+}
+.ces-expdate {
+    padding-top: 10px;
+    font-size: 20px;
+    color: gray;
+}
+.coupon-end-end {
+    height: 10.25rem;
+    width: 14.8125rem;
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    display:flex;
+    align-items: center;
+}
+    .coupon-end-end > div {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        text-align: start;
+        overflow: hidden;
+        justify-content: center;
+    }
+.coupon-btn {
+    width: 200px;
+    height: 80px;
+    border: #fff;
+    border-radius: 10px;
+    font-size: 3em;
+    color: white;
+    background-color: #FF8040;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.coupon-enable-btn > .coupon-btn {
+    border-radius: 10px;
+    color: white;
+    background-color: #FF8040;
+}
+    .coupon-enable-btn > .coupon-btn:hover {
+        opacity: 80%;
+    }
+.coupon-disable-btn > .coupon-btn {
+    border: 1px solid black;
+    color: gray;
+    background-color: white;
+}
+    .coupon-disable-btn > .coupon-btn:hover {
+        opacity:100%;
+    }
