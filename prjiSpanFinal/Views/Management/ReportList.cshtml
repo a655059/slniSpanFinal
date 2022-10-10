@@ -7,7 +7,7 @@
 <h1>檢舉案件</h1>
 
 
-<table class="table">
+<table class="table" style="table-layout:fixed" width:100%>
     <thead>
         <tr>
             <th>
@@ -23,41 +23,42 @@
                 案件類型
             </th>
             <th>
-                理由
-            </th>
-            <th>
                 處理狀況
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td >
-                @Html.DisplayFor(modelItem => item.ReportId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReporterID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reason)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportStatus)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReporterID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CProductHu.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportStatus)
+                </td>
+                <td>
+                    @Html.ActionLink("檢視檢舉內容", "ReportDetail", new { id=item.ReportId},new{@class="btn btn-danger mb-2"}) 
+                    <br>
+                    @Html.ActionLink("結案", "ReportApprove", new { id=item.ReportId },new{@class="btn btn-warning mb-2"})
+                    <br>
+                    @Html.ActionLink("判定不成案", "ReportDelete", new { id=item.ReportId },new{@class="btn btn-warning mb-2"})
+                    <br>
+                    @Html.ActionLink("復原", "ReportUndo", new { id=item.ReportId },new{@class="btn btn-warning mb-2"})
+                    <br>
+                    @Html.ActionLink("審核中", "ReportProcess", new { id=item.ReportId },new{@class="btn btn-warning mb-2"})
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

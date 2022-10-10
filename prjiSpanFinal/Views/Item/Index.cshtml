@@ -1,26 +1,26 @@
-﻿
+﻿@model prjiSpanFinal.Models.CReportHu
 @{
     ViewData["Title"] = "Index";
+
 }
-@section Styles{ 
+@section Styles{
     <link rel="stylesheet" href="~/css/ItemIndex.css" />
 }
 
 
 
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">蝦到爆商城</a></li>
-        <li class="breadcrumb-item"><a href="#">大分類</a></li>
-        <li class="breadcrumb-item active" aria-current="page">小分類</li>
-    </ol>
-</nav>
-<div class="d-flex justify-content-between">
-    <div class="productPhoto">
-        <div class="bigPhoto">
-            @{
-
-                <img src="~/img/product01.png" />
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">蝦到爆商城</a></li>
+            <li class="breadcrumb-item"><a href="#">大分類</a></li>
+            <li class="breadcrumb-item active" aria-current="page">小分類</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between">
+        <div class="productPhoto">
+            <div class="bigPhoto">
+                @{
+                        <img src="~/img/product01.png" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
@@ -32,8 +32,43 @@
         <div style="font-size:14px">
             <div class="d-flex justify-content-between border-top border-bottom p-2">
                 <div>商品編號:<span class="ms-2">948365032</span></div>
-                <div><a href="#">檢舉</a></div>
+                <div><button data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</button></div>
             </div>
+            <!--Modal-->
+            <div class="modal fade" id="reportmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">檢舉視窗</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <label>產品名稱</label>
+                                <input class="form-control" placeholder="【JUST台灣現貨】獨家顏色！台灣製造30000mAh PD/QC快充3A 行動電源 保固一年 行動電源 行動充 隨身充" readonly>
+                                
+                                <label>檢舉理由</label>
+                                <select  class="form-select">
+                                    <option value="廣告不實">廣告不實</option>
+                                    <option value="商品圖片違反善良風俗">商品圖片違反善良風俗</option>
+                                    <option value="違法商品">違法商品</option>
+                                    <option value="這個賣家太糟糕了">這個賣家太糟糕了</option>
+                                    <option value="內容和實際商品不符">內容和實際商品不符</option>
+                                </select>
+                                <label>詳細檢舉理由</label>
+                                <textarea class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                            <button id="save" type="button" class="btn btn-warning">新增</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal End-->
+          
             <div>
                 <div class="fs-6 fw-b">商品備註</div>
                 <ul>
@@ -60,21 +95,21 @@
                 {
                     if (i <= starCount)
                     {
-                        <div class="starBox"><img src="~/img/YellowStar.png" /></div>
+                                <div class="starBox"><img src="~/img/YellowStar.png" /></div>
                     }
                     else
                     {
-                        <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
+                                <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
                     }
                 }
-                <div class="ms-3">
-                    4.2
-                </div>
-                <div class="ms-1">
-                    <span>(</span><a href="#">10</a><span>)</span>
-                </div>
-                <div class="ms-3">|</div>
-                <div class="ms-3">已售出: 15</div>
+                        <div class="ms-3">
+                            4.2
+                        </div>
+                        <div class="ms-1">
+                            <span>(</span><a href="#">10</a><span>)</span>
+                        </div>
+                        <div class="ms-3">|</div>
+                        <div class="ms-3">已售出: 15</div>
             }
         </div>
         <div class="itemDetails">
@@ -83,16 +118,16 @@
                     <div class="itemKey">直購價:</div>
                     @{
                         string price = $"$499";
-                        <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                                <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
                     <input type="hidden" name="purchaseProduct" value="2113" />
                     @{
 
-                        <div class="itemKey">規格:</div>
-                        <div class="itemStyleContent d-flex flex-wrap ms-3">
-                            @{
+                                <div class="itemKey">規格:</div>
+                                <div class="itemStyleContent d-flex flex-wrap ms-3">
+                                    @{
 
                                 for (int i = 1; i <= 9; i++)
                                 {
@@ -100,16 +135,16 @@
                                     string style = $"樣式{i}";
                                     string imgSrc = $"~/img/product0{i}.png";
                                     string idValue = $"id{i}";
-                                    <div class="ms-1 mb-1">
-                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@idValue" autocomplete="off" value="2113">
-                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@idValue">@style</label>
-                                        <div class="d-none price">499</div>
-                                        <div class="d-none qty">55</div>
-                                        <img class="d-none itemStyleImg" src="~/img/product05.png" />
-                                    </div>
+                                                    <div class="ms-1 mb-1">
+                                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@idValue" autocomplete="off" value="2113">
+                                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@idValue">@style</label>
+                                                        <div class="d-none price">499</div>
+                                                        <div class="d-none qty">55</div>
+                                                        <img class="d-none itemStyleImg" src="~/img/product05.png" />
+                                                    </div>
                                 }
-                            }
-                        </div>
+                                    }
+                                </div>
                     }
                 </div>
                 <div class="d-flex justify-content-start align-items-center mb-3">
@@ -174,7 +209,7 @@
             </div>
             <div class="col-4" style="font-size:14px">
                 <div class="bg-secondary text-white fw-bold ps-2">買家資訊</div>
-                <div class="ps-2">林小偉<span class="ms-3"><a href="#"><i class="fa-solid fa-comment-dots text-warning"></i></a></span></div>
+                <div class="ps-2" id="seller">林小偉<span class="ms-3"><a href="#"><i class="fa-solid fa-comment-dots text-warning"></i></a></span></div>
                 <div class="d-flex align-items-center ps-2">
                     <div>全部商品:</div>
                     <div class="fs-5 fw-bold text-primary ms-3">311</div>
@@ -213,34 +248,35 @@
                 left += 210;
                 string shift = $"{left}px";
 
-                <a href="/Item/Index/2113">
-                    <div class="sellerCard card position-absolute" style="left:@shift">
-                        <img src="~/img/shop01.png" class="cardImg" alt="...">
-                        <div class="px-1 py-2 d-flex flex-column justify-content-between">
-                            <div class="cardTitle">好大一根香蕉</div>
-                            <div class="cardPrice">$999</div>
-                            <div class="cardInfo d-flex justify-content-between align-items-center">
-                                <div class="cardComment d-flex justify-content-start align-items-center mt-1">
-                                    <div class="starImg">
-                                        <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                        <a href="/Item/Index/2113">
+                            <div class="sellerCard card position-absolute" style="left:@shift">
+                                <img src="~/img/shop01.png" class="cardImg" alt="...">
+                                <div class="px-1 py-2 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle">好大一根香蕉</div>
+                                    <div class="cardPrice">$999</div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-center">
+                                        <div class="cardComment d-flex justify-content-start align-items-center mt-1">
+                                            <div class="starImg">
+                                                <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
+                                            </div>
+                                            <div class="text-black">4.5</div>
+                                            <div class="mx-2">|</div>
+                                            <div class="text-black-50">銷售<span>100</span></div>
+                                        </div>
+                                        <div>
+                                            <form action="/Delivery/CartList" method="post">
+                                                <input type="submit" value="加入購物車" />
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="text-black">4.5</div>
-                                    <div class="mx-2">|</div>
-                                    <div class="text-black-50">銷售<span>100</span></div>
-                                </div>
-                                <div>
-                                    <form action="/Delivery/CartList" method="post">
-                                        <input type="submit" value="加入購物車" />
-                                    </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </a>
+                        </a>
             }
         }
     </div>
 </div>
+
 
 
 
@@ -252,7 +288,6 @@
         <button type="button" class="list-group-item list-group-item-action" id="buyerCount">購買人次 (55)</button>
     </div>
     <div class="partialView">
-
     </div>
 
 </div>
@@ -261,24 +296,21 @@
 @section Scripts{
     <script src="~/js/ItemIndex.js"></script>
     <script>
-    $(function () {
-        $(".partialView").load('@Url.Action("Description")');
-    });
-    $("#description").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("Description")');
-    });
-    $("#comment").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("Comment", new { id=1 })');
-    });
-    $("#buyerCount").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
-    });
-
-
-    
+        $(function () {
+            $(".partialView").load('@Url.Action("Description")');
+        });
+        $("#description").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("Description")');
+        });
+        $("#comment").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("Comment", new { id=1 })');
+        });
+        $("#buyerCount").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
+        });
     </script>
-    
+
 }
