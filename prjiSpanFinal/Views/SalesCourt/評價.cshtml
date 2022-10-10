@@ -10,26 +10,25 @@
     }
 }
 
-<!DOCTYPE html>
 
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
+<style>
+    .dashed-divider {
+        height: 1px;
+        border-top: 1px dashed #dcdcdc;
+    }
+</style>
 
-    <style>
-        .dashed-divider {
-            height: 1px;
-            border-top: 1px dashed #dcdcdc;
-        }
-    </style>
 
-</head>
-<body>
 
     <div class="container">
+        <div class="ps-2">
+            <span class="mx-2 display-6"><a href="~/SalesCourt/賣場" class="text-primary">回賣場</a></span>
+            <span class="mx-2 display-6"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></span>
+        </div>
+        @*<div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>*@
         <div class="row">
 
-            <div class="col-6 rounded-2" style="background-color:#f0a98f">
+            <div class="col-6 rounded-2" @*style="background-color:#e1d02c"*@>
 
                 <div class="row">
 
@@ -75,6 +74,7 @@
 
                 </div>
 
+
             </div>
 
             <div class="col-6">
@@ -98,7 +98,7 @@
                         </tr>
 
                         <tr class="table-light">
-                            <th scope="row">優良評價</th>
+                            <th scope="row"><img src="~/img/greencircle.png" width="20" /> 優良評價</th>
                             <td>241</td>
                             <td>1489</td>
                             <td>5587</td>
@@ -112,7 +112,7 @@
                             <td></td>
                         </tr>
                         <tr class="table-light">
-                            <th scope="row">普通評價</th>
+                            <th scope="row"><img src="~/img/bluetriangle.png" width="20" />普通評價</th>
                             <td>1</td>
                             <td>4</td>
                             <td>15</td>
@@ -126,7 +126,7 @@
                             <td></td>
                         </tr>
                         <tr class="table-light">
-                            <th scope="row">差勁評價</th>
+                            <th scope="row"><img src="~/img/redcross.png" width="20" />差勁評價</th>
                             <td>0</td>
                             <td>0</td>
                             <td>11</td>
@@ -171,20 +171,65 @@
                 </li>
 
             </ul>
+
+        </div>
+
+        <div class="row my-4 bg-opacity-50" style="background-color:#e1dcd7">
+
+            <div class="col">
+                <div class="ps-2"><a href="#" class="text-primary">綜合評價紀錄(5619)</a></div>
+            </div>
+            <div class="col">
+                <div class="ps-2"><a href="#" class="text-primary">優良評價紀錄(5593)</a></div>
+            </div>
+            <div class="col">
+                <div class="ps-2"><a href="#" class="text-primary">普通評價紀錄(15)</a></div>
+            </div>
+            <div class="col">
+                <div class="ps-2"><a href="#" class="text-primary">差勁評價紀錄(11)</a></div>
+            </div>
+
         </div>
 
         @{
             @for (int i = 0; i < 20; i++)
             {
-                <div class="row rounded" style="background-color:#c2cad5" >
-                    <div class="text-dark" style="font-size:1.5em">買家:31987</div>
+                <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                    @*<i class="fa-regular fa-circle"></i>*@
+                    <div>
+                        <img src="~/img/greencircle.png" width="20" />
+                        <span class="text-dark" style="font-size:1.5em">買家:31987</span>
+                    </div>
+
                     <div class="dashed-divider"></div>
                     <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">【24H出貨】(袋裝) 4米5噸 拖車繩 拉車繩 牽引繩 拖車繩 拖車索 拖車勾 拖車線 汽機車用品</a></div>
+
+                    <div class="my-2 text-dark" style="font-size:1.5em">意見：	東西真的不錯耶...我好喜歡，謝謝啊~~ (2022-10-10 08:52:04)</div>
                 </div>
             }
 
         }
 
+
+        <nav aria-label="Page navigation example" class="justify-content-center d-flex m-5">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item"><a class="page-link" href="#">6</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
     </div>
-</body>
-</html>

@@ -24,8 +24,12 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-
         public IActionResult Shipper()
+        {
+            return View();
+        }
+
+        public IActionResult Center()
         {
             return View();
         }

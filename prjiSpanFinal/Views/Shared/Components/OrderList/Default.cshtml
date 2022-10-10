@@ -1,11 +1,23 @@
 ﻿<div class="row ">
     <div class="col-1"></div>
-    <div class="col-11 ">
-        <div class="ordersearchbar" >
+    <div class="col-11">
+        <div class="ordersearchbar">
             <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" />
             <span>
                 <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
             </span>
+        </div>
+        <div class="ordersearchbar">
+            @{
+                if (Model == 0)
+                {
+                    <button type="button" class="btn btn-success">一鍵出貨</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-success">一鍵領收</button>
+                }
+            }
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -52,7 +64,14 @@
                     <td>商品詳情</td>
                     <td class="th-sm sorting" id="ordersales">訂單金額</td>
                     <td>訂單狀態</td>
-                    <td>操作</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                操作
+                            </label>
+                        </div>
+                    </td>
                 </tr>
             </thead>
             <tbody>
@@ -75,9 +94,15 @@
                             <img src="~/img/banana.jpg" width="80" height="80" /> 香蕉 金黃色 *1 $60<br />
                             <img src="~/img/蘋果圖.jpg" width="80" height="80" /> 蘋果 尊爵不凡美麗鮮紅色 *1 $120
                         </td>
-                        <td>$210</td>
+                        <td>$270</td>
                         <td>待評價</td>
-                        <td><button type="button" class="btn btn-primary orderbutton">訂單詳情</button><br /><button type="button" class="btn btn-secondary orderbutton">待給評價</button></td>
+                        <td style="text-align:center">
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="checkboxorder" value="" aria-label="...">
+                            </div>
+                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbutton">訂單詳情</a><br/>
+                            <button type="button" class="btn btn-secondary orderbutton">待給評價</button>
+                        </td>
                     </tr>
                 }
             </tbody>
