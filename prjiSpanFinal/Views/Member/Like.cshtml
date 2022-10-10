@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    
+
     <style>
         /*        .list a:link{text-decoration:none;}
         .list a:visited{color:aquamarine;}
@@ -11,10 +11,11 @@
         .list a:active{color:red;font-size:30px;}*/
 
         figcaption {
-            color:#FF0000;
-            font-size:40px;
-            margin:0 auto;
+            color: #FF0000;
+            font-size: 40px;
+            margin: 0 auto;
         }
+
         .list > li > a:link {
             text-decoration: none;
             color: darkslategrey;
@@ -34,20 +35,44 @@
             font-size: 30px;
         }
     </style>
-    
+
 </head>
 <body>
     <div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
-    @Html.ActionLink("會員中心", "List", "Member", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("關注賣家", "賣場", "SalesCourt", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("我的優惠券", "Coupon", "Member", null, new { @class = "btn btn-secondary" })
-    @Html.ActionLink("購物清單", "Order", "Buyer", null, new { @class = "btn btn-secondary" })<br />
-
-    <figure style="background-color:#D1E9E9">
-        <figcaption>買爆清單</figcaption>
-        <a href="https://www.google.com/search?q=irene&tbm=isch&ved=2ahUKEwi1hf22rLz6AhVJdpQKHRygCDIQ2-cCegQIABAA&oq=ir&gs_lcp=CgNpbWcQARgAMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIFCAAQgAQyCAgAEIAEELEDMgUIABCABDIICAAQgAQQsQMyBQgAEIAEMgUIABCABDoICAAQsQMQgwE6BAgAEAM6CwgAEIAEELEDEIMBUKULWLAMYIgfaABwAHgAgAEgiAFbkgEBM5gBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=M8o2Y_WfOsns0QScwKKQAw&bih=506&biw=1349&rlz=1C1ONGR_zh-TWTW949TW949#imgrc=uynzEJRYJs37rM">
-            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
-        </a>
+    <div class="input-group mb-1">
+        <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">所有商品</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">狀態</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">折扣中</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">類別</a>
+        </li>
+    </ul>
+    <figure style="background-color:#FCFCFC">
+        <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
+        <div>
+            <table>
+                @for (int i = 15; i >= 1; i--)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+                            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </figure>
 </body>
 </html>
+
