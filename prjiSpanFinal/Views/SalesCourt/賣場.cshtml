@@ -4,18 +4,15 @@
 @section Styles{
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/ItemIndex.css" />
-    @*.itembody {
-    width: 1250px;
-    padding: 0;
-    }*@
 
+    <style>
+        .dashed-divider {
+            height: 1px;
+            border-top: 2px dashed #dcdcdc;
+        }
+    </style>
 }
-<style>
-    .dashed-divider {
-        height: 1px;
-        border-top: 2px dashed #dcdcdc;
-    }
-</style>
+
 
 <div class="container-fluid">
 
@@ -38,10 +35,16 @@
 
             <div class="row">
                 <div class="col">
-                    <div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>
+                    @*<div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>*@
+                    <button class="btn  btn-sm text-white rounded-5" style="background-color:#f30959">
+                        最<i class="fa-sharp fa-solid fa-heart"></i>賣家
+                    </button>
                 </div>
                 <div class="col">
-                    <div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>
+                    @*<div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>*@
+                    <button class="btn  btn-sm text-white rounded-5" style="background-color:#fe6502">
+                        蝦蝦通<i class="fa-solid fa-shrimp"></i>
+                    </button>
                 </div>
             </div>
 
@@ -118,7 +121,7 @@
 
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <div class="container  ">
-                    <div class="text-center text-black-50 bg-warning p-4 mb-5">
+                    <div class="text-center text-black-50 p-4 mb-5 " style="background-color:#f6e529">
                         <div class="row">
                             <div class="col-2">
                                 <button class="btn btn-primary btn-sm ms-2">
@@ -130,7 +133,7 @@
                             </div>
                         </div>
 
-                        <h1 class="display-2 fw-bolder">賣場相關資料</h1>
+                        <h1 class="fw-bolder" style="font-size:3rem">賣場相關資料</h1>
 
                         <div class="board-text">
                             👉過年期間出貨公告👈
@@ -142,7 +145,7 @@
                             .
                             1.本賣場販售之所有商品，皆由台灣發貨。
                             2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
-                            3.買家們，收到商品發現有問題或是瑕疵，請【露露通】私訊聯絡我們。
+                            3.買家們，收到商品發現有問題或是瑕疵，請【蝦蝦通】私訊聯絡我們。
                             4.單筆訂單未滿88$一律不出貨，直接取消。
                         </div>
 
@@ -411,7 +414,7 @@
 
 
                 </div>
-        </section>
+            </section>
 
         </main>
 
@@ -421,7 +424,7 @@
 
 
 
-    
+
 </div>
 
 
