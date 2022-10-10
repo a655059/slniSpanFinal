@@ -283,7 +283,19 @@
                     opacity:80%;
                 }
 /* /Header2 */
-
+/* BODY */
+body {
+    background-color: #FFF7EB;
+}
+.layout1renderdiv {
+    padding: 10px 20px 20px 30px;
+    background-color: white;
+    border-radius: 30px;
+}
+.Setionset {
+    padding-top: 10px;
+}
+/* /BODY */
 /* Footer共用 */
 .footerbg {
     background: #FF7B0F;
