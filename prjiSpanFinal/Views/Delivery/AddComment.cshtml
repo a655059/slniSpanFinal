@@ -30,6 +30,15 @@
         .textareaInput{
             width:100%
         }
+        #previewCommentPhoto > div{
+            width:100px;
+            height:100px;
+        }
+        #previewCommentPhoto > div > img {
+            width: 100%;
+            aspect-ratio:1/1;
+            object-fit:contain;
+        }
     </style>
 }
 
@@ -45,47 +54,79 @@
             <div class="text-black-50">規格:白色，附32g千首歌</div>
         </div>
     </div>
+    <div class="fs-5 fw-bold mt-3">關於服務</div>
     <div class="d-flex justify-content-start align-items-center">
         <div>商品品質</div>
         <div class="d-flex ms-5 me-3">
             @{
                 for (int i = 1; i <= 5; i++)
                 {
-                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")"/></div>
+                    <div class="starImgDiv itemQualityImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
                 }
             }
         </div>
         <div class="commentResult text-black-50"></div>
     </div>
+
     <div class="commentLayout bg-warning p-3 bg-opacity-10 mt-2" style="display:none">
-        <form action="/" method="post">
-            <div class="border p-3 bg-white">
-                <div class="border-bottom">
-                    <div class="input-group mb-3">
-                        <span class="commentLabel input-group-text" id="quality">品質</span>
-                        <input type="text" class="form-control" placeholder="請提供相關的評價">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="commentLabel input-group-text">色差</span>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="commentLabel input-group-text">和圖片相符</span>
-                        <input type="text" class="form-control">
-                    </div>
+        <div class="border p-3 bg-white">
+            <div class="border-bottom">
+                <div class="input-group mb-3">
+                    <span class="commentLabel input-group-text" id="quality">品質</span>
+                    <input type="text" class="form-control" placeholder="請提供相關的評價">
                 </div>
                 <div class="input-group mb-3">
-                    <textarea class="textareaInput border-0 px-2 py-1" placeholder="分享更多有關於此商品的評價以幫助其他買家"></textarea>
+                    <span class="commentLabel input-group-text">色差</span>
+                    <input type="text" class="form-control">
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-camera-retro me-2"></i>增加照片</button>
-                </div>
-                <div class="mb-3 text-end">
-                    <button class="border-0 bg-transparent w-25" onclick="history.back()">取消</button>
-                    <a href="~/member/order"><input type="submit" class="btn btn-warning w-25" value="完成" id="submit"></a>
+                <div class="input-group mb-3">
+                    <span class="commentLabel input-group-text">和圖片相符</span>
+                    <input type="text" class="form-control">
                 </div>
             </div>
-        </form>
+            <div class="input-group mb-3">
+                <textarea class="textareaInput border-0 px-2 py-1" placeholder="分享更多有關於此商品的評價以幫助其他買家"></textarea>
+            </div>
+            <div class="mb-3">
+                <div id="previewCommentPhoto" class="d-flex">
+                    
+                </div>
+                <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                    <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                </label>
+                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/gif, image/jpeg, image/png" multiple/>
+            </div>
+
+        </div>
+    </div>
+    <div class="fs-5 fw-bold mt-3">關於服務</div>
+    <div class="d-flex justify-content-start align-items-center">
+        <div>賣家服務</div>
+        <div class="d-flex ms-5 me-3">
+            @{
+                for (int i = 1; i <= 5; i++)
+                {
+                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                }
+            }
+        </div>
+        <div class="commentResult text-black-50"></div>
+    </div>
+    <div class="d-flex justify-content-start align-items-center">
+        <div>物流服務</div>
+        <div class="d-flex ms-5 me-3">
+            @{
+                for (int i = 1; i <= 5; i++)
+                {
+                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                }
+            }
+        </div>
+        <div class="commentResult text-black-50"></div>
+    </div>
+    <div class="mt-3 text-end">
+        <button class="border-0 bg-transparent w-25" id="cancel" onclick="history.back()">取消</button>
+        <a href="@Url.Content("~/member/order")"><input type="submit" class="btn btn-warning w-25" value="完成" id="submit"></a>
     </div>
 </div>
 
@@ -93,19 +134,21 @@
     <script>
         $(".starImgDiv").click(function () {
             $(this).children().attr("src", "@Url.Content("~/img/YellowStar.png")").closest("div").prevAll().children().attr("src", "@Url.Content("~/img/YellowStar.png")").end().end().nextAll().children().attr("src", "@Url.Content("~/img/WhiteStar.png")");
-            let commentResult = '';
+            let resultDiv = $(this).parent().siblings(".commentResult");
             let starCount = $(this).prevAll().length + 1;
             if (starCount == 1) {
-                $(".commentResult").html("很差");
+                resultDiv.html("很差");
             } else if (starCount == 2) {
-                $(".commentResult").html("差");
+                resultDiv.html("差");
             } else if (starCount == 3) {
-                $(".commentResult").html("普通");
+                resultDiv.html("普通");
             } else if (starCount == 4) {
-                $(".commentResult").html("不錯");
+                resultDiv.html("不錯");
             } else {
-                $(".commentResult").html("超棒");
+                resultDiv.html("超棒");
             }
+        });
+        $(".itemQualityImgDiv").click(function () {
             $(".commentLayout").slideDown();
         });
         $("#submit").click(function () {
@@ -121,6 +164,15 @@
             else {
                 alert("請輸入評論");
                 return false;
+            }
+        });
+        $("#commentPhoto").change(function () {
+            const photos = document.getElementById("commentPhoto").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let src = URL.createObjectURL(photo);
+                    $("#previewCommentPhoto").append(`<div><img src="${src}"/></div>`);
+                });
             }
         });
     </script>
