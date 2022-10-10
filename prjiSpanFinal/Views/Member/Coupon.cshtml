@@ -1,16 +1,11 @@
-﻿
+﻿@addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "Coupon";
 }
 
-
-
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-
+@section Styles
+{
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <style>
         /*        .list a:link{text-decoration:none;}
         .list a:visited{color:aquamarine;}
@@ -41,39 +36,39 @@
             font-size: 30px;
         }
     </style>
+}
+<vc:member-ui></vc:member-ui>
 
-</head>
-<body>
-    <div style="opacity: 0.5;text-align:center;font-size:40px">我的優惠券</div>
-    <div class="input-group mb-1">
-        <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4><input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
-    </div>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">全部</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">蝦到爆折價券</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">賣場折價券</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">合作商家</a>
-        </li>
-    </ul>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">最新</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">熱門</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">即將到期</a>
-        </li>
-    </ul>
+<div style="opacity: 0.5;text-align:center;font-size:40px">我的優惠券</div>
+<div class="input-group mb-1">
+    <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4><input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
+</div>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">全部</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">蝦到爆折價券</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">賣場折價券</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">合作商家</a>
+    </li>
+</ul>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">最新</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">熱門</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">即將到期</a>
+    </li>
+</ul>
 
 <figure style="background-color:#FCFCFC">
     <figcaption></figcaption>
@@ -90,7 +85,10 @@
                 }
             </table>
         </div>
-
 </figure>
-</body>
-</html>
+
+@section Scripts
+{
+    <script src="~/js/MemberUI/sidebars.js"></script>
+}
+

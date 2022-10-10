@@ -18,3 +18,8 @@ td {
 .namenounderline {
     text-decoration: none;
 }
+
+.ordersearchbar {
+    padding: 3px;
+    text-align: right;
+}

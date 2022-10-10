@@ -1,17 +1,7 @@
 ﻿<div class="row ">
     <div class="col-1"></div>
     <div class="col-11 ">
-        @{
-            if (Model == 0)
-            {
-                <h2 class="d-flex justify-content-center">我的銷售</h2>
-            }
-            else
-            {
-                <h2 class="d-flex justify-content-center">購買清單</h2>
-            }
-        }
-        <div style="padding:3px; text-align:right">
+        <div class="ordersearchbar" >
             <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" />
             <span>
                 <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
@@ -40,6 +30,9 @@
             }
             <li class="nav-item">
                 <a class="nav-link" href="#">已出貨</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">已到貨</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">退貨處理中</a>

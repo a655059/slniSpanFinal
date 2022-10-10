@@ -1,10 +1,10 @@
-﻿<div class="layoutheader2 keeppos2" id="header2">
+﻿<div class="layoutheader2" id="header2">
     <!-- container -->
     <div class="container">
         <!-- row -->
-        <div class="row">
+        <div class="row justify-content-between">
             <!-- LOGO -->
-            <div class="col-md-3">
+            <div class="col-md-2 lologo">
                 <div class="header-logo">
                     <a href="@Url.Content("~/Home/Index")" class="logo">
                         <img src="~/img/Layout/LOGO_Long2.png" class="logopic" />
@@ -13,26 +13,34 @@
             </div>
             <!-- /LOGO -->
             <!-- SEARCH BAR -->
-            <div class="col-md-7 align-self-center ">
+            <div class="col-md-7 align-self-center loschbar">
                 <div class="input-group mb-1">
-                    <input type="text" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <button class="btn btn-outline-warning btn-lg" type="button"><i class="fa fa-search"></i></button>
+                    <input type="text" id="SearchInput" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <a class="btn btn-outline-warning btn-lg" href="@Url.Content("~/Category/SearchResult")" ><i class="fa fa-search"></i></a>
                 </div>
-                @{ int x = 5;
+                @{ int x = 8;
                     <div class="searchkeyspace">
                         @for (int i = 0; i < x; i++)
                         {
-                            <a class="linknoline searchkeyword" href="">搜尋一</a>
+                            <a class="linknoline searchkeyword" href="@Url.Content("~/Category/SearchResult")">水果</a>
                         }
                     </div>
                 }
             </div>
             <!-- /SEARCH BAR -->
-            <!-- split -->
+            <!-- Searchcart -->
             <div class="col-md-2">
-                <div class="searchcart d-flex justify-content-center align-items-center">
+                <div class="searchcart d-flex flex-row justify-content-center align-items-center">
+                    <!-- Wishlist -->
+                    <div class="searchcart-Heart">
+                        <a href="@Url.Content("~/Member/Like")" class="linknoline">
+                            <i class="fa fa-heart"></i>
+                            <div class="qty">2</div>
+                        </a>
+                    </div>
+                    <!-- /Wishlist -->
                     <!-- Cart -->
-                    <div>
+                    <div class="searchcart-Cart">
                         <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
                             <i class="fa fa-shopping-cart"></i>
                             <div class="qty">3</div>
@@ -41,7 +49,7 @@
                     <!-- /Cart -->
                 </div>
             </div>
-            <!-- /split -->
+            <!-- /Searchcart -->
         </div>
         <!-- row -->
     </div>

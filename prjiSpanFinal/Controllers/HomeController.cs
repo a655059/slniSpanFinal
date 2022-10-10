@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -23,23 +22,23 @@ namespace prjiSpanFinal.Controllers
             CBigType a = new CBigType()
             {
                 BigTypeID = 1,
-                BigTypeName = "食品"
+                BigTypeName = "食物"
             };
             CBigType b = new CBigType()
             {
                 BigTypeID = 2,
-                BigTypeName = "數位"
+                BigTypeName = "食物"
             };
             CBigType c = new CBigType()
             {
                 BigTypeID = 3,
-                BigTypeName = "衣裝"
+                BigTypeName = "食物"
             };
             listCBigType = new List<CBigType>();
             listCBigType.Add(a);
             listCBigType.Add(b);
             listCBigType.Add(c);
-            for(int i = 1; i < 12; i++)
+            for (int i = 1; i < 12; i++)
             {
                 listCBigType.Add(a);
             }
@@ -60,5 +59,6 @@ namespace prjiSpanFinal.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

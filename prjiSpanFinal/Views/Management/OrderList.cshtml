@@ -1,45 +1,45 @@
-﻿@model IEnumerable<prjiSpanFinal.Models.COrder>
+﻿@model IEnumerable<prjiSpanFinal.Models.COrderHu>
 
 @{
     ViewData["Title"] = "OrderList";
 }
+@section Styles{
+}
 
-<h1>訂單列表</h1>
+    <h1>訂單列表</h1>
 
-<p>
-    <a asp-action="OrderCreate">新增一筆訂單</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                賣家名稱
-            </th>
-            <th>
-                下訂日期
-            </th>
-            <th>
-                產品名稱
-            </th>
-            <th>
-                產品單價
-            </th>
-            <th>
-                購買數量
-            </th>
-            <th>
-                總價
-            </th>
-            <th style="width:10% ">
-                訂單狀態
-            </th>
-            <th style="width:180px"></th>
-        </tr>
-    </thead>
-    <tbody>
+
+    <table class="table" id="top">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    賣家名稱
+                </th>
+                <th>
+                    下訂日期
+                </th>
+                <th>
+                    產品名稱
+                </th>
+                <th>
+                    產品單價
+                </th>
+                <th>
+                    購買數量
+                </th>
+                <th>
+                    總價
+                </th>
+                <th style="width:10% ">
+                    訂單狀態
+                </th>
+                <th style="width:180px"></th>
+            </tr>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -61,10 +61,10 @@
                 <td>
                     <input value="@item.Quantity" class="form-control-plaintext" readonly />
                 </td>
-                <td >
+                <td>
                     <input value="@item.TotalPrice" class="form-control-plaintext" readonly />
                 </td>
-                <td >
+                <td>
                     @Html.DisplayFor(modelItem => item.OrderStatus)
                 </td>
                 <td>
@@ -74,5 +74,10 @@
                 </td>
             </tr>
         }
+
+
     </tbody>
+
+
 </table>
+

@@ -1,8 +1,7 @@
-﻿<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
+﻿@addTagHelper *, prjiSpanFinal
+@section Styles
+{
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
 
     <style>
         /*        .list a:link{text-decoration:none;}
@@ -35,44 +34,47 @@
             font-size: 30px;
         }
     </style>
+}
 
-</head>
-<body>
-    <div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
-    <div class="input-group mb-1">
-        <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
+<vc:member-ui></vc:member-ui>
+
+<div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
+<div class="input-group mb-1">
+    <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
+</div>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">所有商品</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">狀態</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">折扣中</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">類別</a>
+    </li>
+</ul>
+<figure style="background-color:#FCFCFC">
+    <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
+    <div>
+        <table>
+            @for (int i = 15; i >= 1; i--)
+            {
+                <tr>
+                    <td>
+                        <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+                        <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+                    </td>
+                </tr>
+            }
+        </table>
     </div>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">所有商品</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">狀態</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">折扣中</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">類別</a>
-        </li>
-    </ul>
-    <figure style="background-color:#FCFCFC">
-        <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
-        <div>
-            <table>
-                @for (int i = 15; i >= 1; i--)
-                {
-                    <tr>
-                        <td>
-                            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
-                            <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
-    </figure>
-</body>
-</html>
+</figure>
 
+@section Scripts
+{
+    <script src="~/js/MemberUI/sidebars.js"></script>
+}
