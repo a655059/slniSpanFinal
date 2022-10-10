@@ -24,6 +24,10 @@ namespace prjiSpanFinal.Controllers
         {
             return PartialView("~/Views/Delivery/_DeliveryCheckoutPartial.cshtml", id);
         }
+        public IActionResult AddComment()
+        {
+            return View();
+        }
         
 
     }
