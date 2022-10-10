@@ -6,10 +6,13 @@
 {
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <style>
+
         .描述欄位 {
             width: 680px;
             height: 200px;
             resize: none;
+            border: solid;
+            border-color: lightslategray;
         }
 
         label {
@@ -22,7 +25,7 @@
             width: 50px;
         }
 
-        .btntype {
+        .btntype, .btntype物流 {
             height: 40px;
             width: 700px;
             border: dashed;
@@ -38,28 +41,96 @@
             font-size: 10px;
         }
 
-        物流 {
+        .物流 {
             width: 880px;
         }
+
+        .框線 {
+            border-color: lightslategray;
+            width:270px;
+        }
+
+        .名稱 {
+            border-color: lightslategray;
+            width:400px;
+            margin-left:2px;
+        }
+
+        .表格寬度 {
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        .貨運框線 {
+            border: 1px;
+            border-bottom: solid;
+            border-color: darkgray;
+            width: 500px;
+            height: 40px;
+            font-size: 20px;
+            align-content: center;
+        }
+
+        .貨運無底框 {
+            border: 1px;
+            border-color: darkgray;
+            width: 500px;
+            height: 40px;
+            font-size: 20px;
+            align-content: center;
+        }
+
+        .貨運字 {
+            float: left;
+            width: 200px;
+        }
+
+        .貨運按鈕 {
+            float: right;
+            width: 10px;
+        }
+
+        .規格列表 {
+            width: 150px;
+            font-size: 18px;
+        }
+
+        .規格按鈕 {
+            font-size: 10px;
+            width: 35px;
+            height: 25px;
+            border-radius: 25px;
+            margin: 0 auto;
+        }
+
+        td {
+            margin-left: 1.5px;
+        }
+
+        .btntype物流{
+            width:550px;
+            margin-left:2px;
+        }
+        
     </style>
 }
 <vc:seller-ui></vc:seller-ui>
-<div class="row border overflow-auto">
+<div class="row overflow-auto">
     <div class="col-1"></div>
     <div class="col-11 ">
-        <h2 class="d-flex justify-content-start mb-2">新增商品</h2>
+        <h2 class="d-flex justify-content-center mb-2">新增商品</h2>
         <div class="row">
             <div class="排版">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group d-flex justify-content-around ">
-                    <label class="名稱寬">名稱</label>
-                    <input class="form-control " />
+                <div class="form-group d-flex justify-content-start ">
+                    <label class="名稱寬 ">名稱</label>
+                    <input class="form-control 名稱" />
                     <span class="text-danger"></span>
                 </div>
-                <div class="d-flex justify-content-around ">
+                <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2">類別</label>
-                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                    <select class="form-select w-25 m-3 " aria-label="Default select example ">
                         <option value="1">女生衣著</option>
                         <option value="2">書籍及雜誌期刊</option>
                         <option value="3">男生衣著</option>
@@ -67,7 +138,7 @@
                         <option value="5">運動/健身</option>
                         <option value="6">美食、伴手禮</option>
                     </select>
-                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                    <select class="form-select w-25 m-3" aria-label="Default select example ">
                         <option selected>T恤</option>
                         <option value="1">長褲</option>
                         <option value="2">內睡衣</option>
@@ -80,72 +151,253 @@
 
                 <div class="d-flex justify-content-around ">
                     <label class="名稱寬 mt-2">規格</label>
-                    <button class="btntype mt-3 ">新增規格</button>        @*    button  在這   *@
+                    @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
                     <span class="text-danger"></span>
+                    <section class="section d-flex justify-content-start">
+                        <table class="table w-100">
+                            <thead>
+                                <tr>
+                                    <th class="col 規格列表">樣式</th>
+                                    <th class="col 規格列表">數量</th>
+                                    <th class="col 規格列表">售價</th>
+                                    <th class="col 規格列表">照片</th>
+                                    <th class="col 規格列表">功能</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </section>
+                    <section class="section d-flex justify-content-start">
+                        <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
+                    </section>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增規格</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label>樣式:</label>
+                                    <input type="text" id="text1" class="form-control">
+                                    <br />
+                                    <label>數量:</label>
+                                    <input type="text" id="text2" class="form-control">
+                                    <br />
+                                    <label>售價:</label>
+                                    <input type="text" id="text3" class="form-control">
+                                    <br />
+                                    <label>照片:</label>
+                                    <input type="file" id="text4" class="form-group" accept="image/*">
+                                    <img id="blah" src="#" alt="your image" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="save" type="button" class="btn btn-warning">新增</button>
+                                    <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="addStyle">
                 </div>
                 <div class="">
-                    <label class="名稱寬 mt-2">照片</label>
+                    <label class="名稱寬 mt-2">封面照片</label>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3" />
-                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3" />
-                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3" />
-                        <input type="file" class="form-control mt-3" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2 ">描述</label>
-                    <textarea class="form-control  描述欄位 mt-3" aria-label="With textarea"></textarea>
+                    <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
                 </div>
-                <div class="form-group d-flex justify-content-start ">
-                    <label class="名稱寬 mt-2">物流</label>
-                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
-                        <option value="1">全家便利商店</option>
-                        <option value="2">7-ELEVEN</option>
-                        <option value="3">黑貓宅急便</option>
-                        <option value="4">大榮貨運</option>
-                        <option value="5">自取</option>
-                    </select>
-                </div><br />
-                <div class="row ">
-                    <div class="col-4"></div>
-                    <div class="col-8">
-                        <input type="submit" value="新增" class="btn btn-warning" onclick="return confirm('新增成功')" />
-                    </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 m-3">物流</label>
+                    <button class="btntype物流 m-4 ">新增規格</button>        @*    button  在這   *@
+                    <span class="text-danger"></span>
+                </div>
+                <div class="add物流 d-flex justify-content-center">
+                </div>
+            </div><br />
+            <div class="row ">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <input type="submit" value="新增" class="btn btn-warning m-3" onclick="return confirm('新增成功')" />
                 </div>
             </div>
         </div>
     </div>
 </div>
 @section Scripts{
-    <script src="~/js/SellerUI/sidebars.js"></script>
     <script>
-        let 規格按鈕 = document.querySelector(".btntype");
-        let 新增樣式 = document.querySelector(".addStyle");
-        let 刪除樣式 = document.querySelector("delete");
+        //資料暫存,後去把data變數傳入後端
+        let data = [
+            //['紅色', 7, 100, ''],
+            //['藍色', 10, 300, '']
+        ]
 
-        規格按鈕.addEventListener("click", () => {
-            新增樣式.innerHTML +=
-                `<div class="d-flex justify-content-around ">
-                            <label class="名稱寬 mt-4">規格</label>
-                            <input class="form-control m-3 w-25" />
-                            <label class="名稱寬 mt-4">數量</label>
-                            <input class="form-control m-3 w-25" />
-                            <label class="名稱寬 mt-4">售價</label>
-                            <input class="form-control m-3 w-25" />
-                            <button class="btn btn-danger delete m-3 deletebtn">X</button>
-                        </div>`;
+        let tbody = document.querySelector('tbody')
+        for (let i = 0; i < data.length; i++) {
+            let tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            for (let j = 0; j < data[i].length; j++) {
+                let td = document.createElement('td');
+                td.innerHTML = data[i][j];
+                tr.appendChild(td);
+            }
+            let td = document.createElement('td');
+            //刪除按紐
+            td.innerHTML = `<a href='javascript:;'>刪除</a>`;
+            let a = td.children[0];
+            a.addEventListener('click', () => {
+                let parent = a.parentNode.parentNode;
+                parent.remove();
+            })
+            tr.appendChild(td);
+        }
+
+        let infoModal = document.getElementById("infoModal");
+        let close = document.getElementById("close");
+        let save = document.getElementById("save");
+
+        //show 出 model 可新增拍賣物品
+        let btn = document.querySelector(".btnnew")
+        btn.addEventListener('click', () => {
+            //清空值
+            clickValue();
+            //show model
+            console.log(infoModal.showModal());
+            /*            infoModal.showModal();*/
         })
 
-        $(".addStyle").on("click", ".deletebtn", function () {
-            $(this).closest("div").remove();
-        });
+        //清空model值
+        function clickValue() {
+            document.getElementById("text1").value = '';
+            document.getElementById("text2").value = '';
+            document.getElementById("text3").value = '';
+            document.getElementById("text4").value = '';
+        }
+
+        save.addEventListener("click", function () {
+            let dataNew = [];
+            let name = document.getElementById("text1").value;//prompt('請輸入姓名');
+            let subject = document.getElementById("text2").value;
+            let score = document.getElementById("text3").value;
+            //todo:取得照片
+            let img = document.getElementById("text4").value;
+
+
+            //判斷資料有值再塞入
+            if (name !== '' && subject !== '' && score !== '') {
+
+                dataNew.push(name);
+                dataNew.push(subject);
+                dataNew.push(score);
+                dataNew.push(img);
+                //塞資料到暫存
+                data.push(dataNew);
+
+                let tr = document.createElement('tr');
+                for (let i = 0; i < dataNew.length; i++) {
+
+                    let td = document.createElement('td');
+                    td.innerHTML = dataNew[i];
+                    tr.appendChild(td);
+                }
+                let td = document.createElement('td');
+                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
+                let a = td.children[0];
+                a.addEventListener('click', () => {
+
+                    let parent = a.parentNode.parentNode;
+                    parent.remove();
+                })
+                tr.appendChild(td);
+                tbody.insertBefore(tr, tbody.children[0])
+                //新增完以後關閉薪資視窗
+                console.log(exampleModal);
+                exampleModal.close();
+            }
+            else {
+                alert("項目,數量和價格不可為空值");
+            }
+
+            console.log("data");
+            console.log(data);
+        })
+        //彈出 model 的關閉
+        close.addEventListener("click", function () {
+            exampleModal.close();
+        })
+
+
+
+        //物流新增
+
+        let 物流按鈕 = document.querySelector(".btntype物流");
+        let 新增物流 = document.querySelector(".add物流");
+        let 刪除物流 = document.querySelector("delete物流");
+
+        物流按鈕.addEventListener("click", () => {
+            新增物流.innerHTML =
+                `<div class="d-flex justify-content-around ">
+                                <table class="table">
+                                    <thead>
+                                        <tr></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">7-ELEVEN</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">全家便利商店</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">萊爾富</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">OK便利商店</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">大榮貨運</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運無底框">
+                                                <div class="貨運字">黑貓宅急便</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                             </div>`;
+            物流按鈕.style.visibility = "hidden";   //隱藏屬性
+        })
+
     </script>
 }

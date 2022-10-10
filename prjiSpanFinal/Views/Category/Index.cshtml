@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 @section Styles{
-    <link href="~/css/CategoryStyles.css" rel="stylesheet" />
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
 }
 <div class="CategoryBody">
     <div class="CategoryHeader">
@@ -24,10 +24,15 @@
             </div>
         }
     </div>
-    <div class="split"></div>
+
+    <div class="cateAD">
+        <a href="">
+            <img src="~/img/Category/CateAD.png" />
+        </a>
+    </div>
     <div class="row">
         <div class="filter-body d-flex  flex-wrap align-content-start">
-            <a class="linknoline filter-alltype" href="">
+            <a class="linknoline filter-alltype" href="@Url.Content("~/Category/Index")">
                 <i class="fa fa-bars"></i>
                 <span class="fatitle">全部分類</span>
             </a>
@@ -45,7 +50,7 @@
                         for (int i = 1; i <= type; i++)
                         {
                             <li>
-                                <a href="" class="linknoline">
+                                <a href="@Url.Content("~/Category/Index")" class="linknoline">
                                     <span class="fttitle">水果</span>
                                 </a>
                             </li>
@@ -101,6 +106,33 @@
             </div>
         </div>
         <div class="itembody">
+            <div class="itembody-filter d-flex align-items-center justify-content-between">
+                <div class="itembody-filter1 "><span>篩選</span></div>
+                <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                    <a class="itembody-filter2-btn linknoline">綜合排序</a>
+                    <a class="itembody-filter2-btn linknoline">最新商品</a>
+                    <a class="itembody-filter2-btn linknoline">熱銷商品</a>
+                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        價格排序
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fa fa-arrow-up"></i>
+                                價格：由低至高
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fa fa-arrow-down"></i>
+                                價格：由高至低
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                @*<div class="itembody-filter3 d-flex align-items-center ">123</div>*@
+            </div>
+        
             @{int itemstock = 30;
                 <div class="itemcol">
                     @for (int i = 1; i <= itemstock; i++)

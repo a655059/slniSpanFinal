@@ -1,0 +1,190 @@
+﻿@addTagHelper *, prjiSpanFinal
+@{
+    ViewData["Title"] = "Shipper";
+}
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+
+        p {
+            font-size: 16px;            
+        }
+
+        label {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .按鈕大小{
+            font-size:20px;
+        }
+
+        .灰體字{
+            color:gray;
+        }
+
+        .線條 {
+            border:2px;
+        }
+        .底線{
+            border-bottom:2px;
+            margin:2px;
+            border-color:gray;
+        }
+        
+        .靠右{
+            float:right;
+        }
+
+        .col{
+            margin:3px;
+        }
+
+    </style>
+}
+<vc:seller-ui></vc:seller-ui>
+<div class="row overflow-auto">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <h2 class="d-flex justify-content-center">物流設定</h2>
+        <p class="border-bottom">找不到適合的物流方式嗎? 您可以使用以下物流方式</p>
+        <div class="m-2 border-bottom">
+            <div><h4>  物流方式</h4></div>
+            <p >蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
+        </div>
+        <div class="m-2">
+            <div><h4>  支援物流</h4></div>
+            <p >蝦到爆購物提供物流整合服務，你可以直接在APP內隨時掌握商品遞送進度。</p>
+        </div>
+        <div class="線條陰影">
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">7-ELEVEN</label>
+                </div>
+                <div class="col ">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字 ">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">全家</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">OK-Mart</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">萊爾富</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">大榮貨運</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row py-2 m-3 border">
+                <div class="col">
+                    <label class="">黑貓物流</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                    </div>
+                </div>
+                <div class="col">
+                    <label class="灰體字">貨到付款</label>
+                </div>
+                <div class="col">
+                    <div class="form-check form-switch 靠右">
+                        <input class="form-check-input 按鈕大小" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-around m-2">
+                <button id="save" type="button" class="btn btn-warning mb-3">確定</button>
+                <button id="close" type="button" class="btn btn-light mb-3">取消</button>
+            </div>
+
+            <div>
+                <p class="border-top mb-3" >我會在 5 天之內出貨 ( 除了國定假日)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+@section Scripts
+{
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.CProductDetailHu>
+
+@{
+    ViewData["Title"] = "ProductDetailList";
+}
+
+<h1>檢視商品內容</h1>
+
+<table class="table" width="100%" style="table-layout:fixed">
+    <thead>
+        <tr>
+            <th>
+                樣式序號
+            </th>
+            <th>
+                商品名稱
+            </th>
+            <th>
+                樣式
+            </th>
+            <th>
+                庫存量
+            </th>
+            <th>
+                單價
+            </th>
+            <th>
+                圖片
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDetailId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CProductHu.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Style)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    <img src="~/img/蘋果圖.jpg" class="w-50" alt="...">
+                </td>
+                <td>
+                    @Html.ActionLink("修改", "ProductDetailEdit", new { id=item.ProductDetailId }) |
+                    @Html.ActionLink("刪除", "ProductDetailDelete", new { id=item.ProductDetailId})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

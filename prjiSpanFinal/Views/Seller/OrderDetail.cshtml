@@ -4,75 +4,13 @@
 }
 @section Styles
 {
+    <link href="~/css/Order/detail.css" rel="stylesheet" />
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
-    <style>
-        td {
-            text-align: left;
-            font-size: 20px;
-            vertical-align: middle;
-        }
-
-        .orderbutton {
-            padding: 2px;
-        }
-    </style>
 }
 <vc:seller-ui></vc:seller-ui>
-<div class="row ">
-    <div class="col-1"></div>
-    <div class="col-11 ">
-        <h2 class="d-flex justify-content-center">訂單明細</h2>
+<h2 class="d-flex justify-content-center">訂單明細</h2>
+<vc:order-detail></vc:order-detail>
 
-        <table class="table table-hover">
-            <tr>
-                <td>訂單資料</td>
-                <td>結帳時間</td>
-                <td>商品詳情</td>
-                <td>訂單金額</td>
-                <td>訂單狀態</td>
-                <td>操作</td>
-            </tr>
-            @for (int i = 10; i >= 1; i--)
-            {
-                <tr>
-                    <td>@i<br />買家: <a href="#">afjiwfo</a></td>
-                    <td>2022/10/10<br />10:10:10</td>
-                    <td>
-                        <img src="~/img/蘋果圖.jpg" width="50" height="50" />蘋果 紅色 *1 30元<br />
-                        <img src="~/img/蘋果圖.jpg" width="50" height="50" />蘋果 玫瑰紅色 *1 60元<br />
-                        <img src="~/img/蘋果圖.jpg" width="50" height="50" />蘋果 尊貴不凡玫瑰紅色 *1 120元
-                    </td>
-                    <td>210元</td>
-                    <td>已完成</td>
-                    <td><button type="button" class="btn btn-primary orderbutton">訂單詳情</button><br /><button type="button" class="btn btn-secondary orderbutton">評價</button></td>
-                </tr>
-            }
-        </table>
-        <div class="row ">
-            <div class="col-4"></div>
-            <div class="col-8">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
 @section Scripts
 {
-    <script src="~/js/SellerUI/sidebars.js"></script>
 }

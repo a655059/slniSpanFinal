@@ -74,11 +74,14 @@
                         <div class="col-12">
                             <label class="form-label">性別</label>
                             <div class="input-group has-validation">
-                                <label>
+                                <label class="ms-3">
                                     <input type="radio" name="gender" value="male" />男生
                                 </label>
-                                <label>
+                                <label class="ms-3">
                                     <input type="radio" name="gender" value="female" />女生
+                                </label>
+                                <label class="ms-3">
+                                    <input type="radio" name="gender" value="female" />其他
                                 </label>
                             </div>
 
@@ -189,7 +192,6 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/form-validation.js"></script>
     <script>
         const clear = document.querySelector("#clear");
         clear.addEventListener("click", eve => {

@@ -2,20 +2,72 @@
 @{
     ViewData["Title"] = "Discount";
 }
-<link href="~/css/LayoutUse.css" rel="stylesheet" />
+@section Styles{
+    <link href="~/css/Event/Discount.css" rel="stylesheet" />
+}
 <body>
     <div>
-        <div class="container" >
-            <figure class="figure" style="background-color:pink">
-                <img class="figure-img img-fluid" src="" alt="折扣DM" />
-            </figure>
+        <div class="w-100 event-header">
+            <img src="~/img/Event/EVENTDM.png" />
         </div>
-        <div class="split" style="background-color:yellow">
+        <div class="split">
         </div>
         <div>
-            <figure class="align-self-center">
-                <img src="~/img/Event/Coupon.png" alt="折扣" />
-            </figure>
+            @*<div style="background-color:red">
+                必逛
+            </div>*@
+        </div>
+        <div>
+            <div class="coupongroup">
+                <div class="coupon coupon-enable d-flex  ">
+                    <div class="coupon-start" style="color:RED">
+                        <div class="coupon-start-head">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        </div>
+                        <span class="coupon-start-title">開站慶<br />單筆訂單八折</span>
+                    </div>
+                    <div div class="coupon-end">
+                        <div div class="coupon-end-start">
+                            <div class="ces-title">訂單 8 折</div>
+                            <div class="ces-content">沒有限制</div>
+                            <div class="ces-expdate">有效期限 永久</div>
+                        </div>
+                        <div div class="coupon-end-end">
+                            <div>
+                                <a class="linknoline coupon-enable-btn" id="coupon-btn">
+                                    <div class="coupon-btn" id="coupon-btn-text">領券</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coupon coupon-disable d-flex  ">
+                    <div class="coupon-start" style="color:RED">
+                        <div class="coupon-start-head">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        </div>
+                        <span class="coupon-start-title">國慶日<br />單筆訂單八折</span>
+                    </div>
+                    <div div class="coupon-end">
+                        <div div class="coupon-end-start">
+                            <div class="ces-title">訂單 8 折</div>
+                            <div class="ces-content">沒有限制</div>
+                            <div class="ces-expdate">有效期限 10/10</div>
+                        </div>
+                        <div div class="coupon-end-end">
+                            <div>
+                                <a class="linknoline coupon-disable-btn">
+                                    <div class="coupon-btn">已失效</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+@section Scripts{
+    <script src="~/js/Event/Coupon.js"></script>
+}

@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace prjiSpanFinal.Controllers
 {
     public class ManagementController : Controller
     {
-        static List<CMemberHu> members = new();
-        static List<CProductHu> Products = new();
+        public static List<CMemberHu> members = new();
+        public static List<CProductHu> Products = new();
         static List<COrderHu> Orders = new();
+        static List<CProductDetailHu> ProductDetails = new();
+        static List<CReportHu> Reports = new();
         public ManagementController()
         {
             if (members.Count <= 0 || Orders.Count <= 0 || Products.Count <= 0)
@@ -19,6 +24,7 @@ namespace prjiSpanFinal.Controllers
             }
 
         }
+        #region
         public void ADDDATAS()
         {
             for (int i = 0; i <= 20; i++)
@@ -57,16 +63,43 @@ namespace prjiSpanFinal.Controllers
                     UnitPrice = 10,
                 };
                 Products.Add(cProduct);
+                foreach (var prods in Products)
+                {
+                    CProductDetailHu cProductDetail = new()
+                    {
+                        CProductHu = prods,
+                        ProductDetailId = i,
+                        ProductId = prods.ProductId,
+                        Quantity = rnd.Next(1, 999),
+                        Style = "樣式" + i,
+                        UnitPrice = 10,
+                    };
+                    ProductDetails.Add(cProductDetail);
+                }
             }
+            CReportHu cReport = new()
+            {
+                ProductID = 3,
+                ReporterID = 1,
+                Reason = "",
+                ReportId = 1,
+                ReportType = "廣告不實",
+                ReportStatus = "未處理",
+            };
         }
-        public IActionResult Test()
+
+        public IActionResult ReportList() 
         {
-            return PartialView();
+            return View();
         }
+        #endregion
+        #region
         public IActionResult PowerBi()
         {
             return View();
         }
+        #endregion
+        #region
         public IActionResult ProductList()
         {
             return View(Products);
@@ -95,6 +128,9 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("ProductList");
         }
+
+
+
         public IActionResult ProductDelete(int? id)
         {
             if (id != null)
@@ -129,6 +165,47 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("ProductList");
         }
+        #endregion
+        #region
+        public IActionResult ProductDetailList(int? id)
+        {
+            var product = from i in ProductDetails
+                          where i.ProductId == id
+                          select i;
+
+            return View(product);
+        }
+        public IActionResult ProductDetailEdit(int? id)
+        {
+            var productdetai = from i in ProductDetails
+                               where i.ProductDetailId == id
+                               select i;
+            return View(productdetai.First());
+        }
+        [HttpPost]
+        public IActionResult ProductDetailEdit(CProductDetailHu prod, IFormFile img)
+        {
+
+            if (prod != null)
+            {
+                var EditProd = from i in ProductDetails where i.ProductDetailId == prod.ProductDetailId select i;
+                var Proddet = EditProd.First();
+                Proddet.Style = prod.Style;
+                Proddet.Quantity = prod.Quantity;
+                Proddet.UnitPrice = prod.UnitPrice;
+
+                if (img != null)
+                {
+                    using var ms = new MemoryStream();
+                    img.CopyTo(ms);
+                    Proddet.Pic = ms.ToArray();
+                }
+                return RedirectToAction("ProductList");
+            }
+            return RedirectToAction("ProductList");
+        }
+        #endregion
+        #region
         public IActionResult MemberList()
         {
             return View(members);
@@ -212,6 +289,8 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("MemberList");
         }
+        #endregion
+        #region
         public IActionResult OrderList()
         {
             return View(Orders);
@@ -266,13 +345,13 @@ namespace prjiSpanFinal.Controllers
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
                     {
-
                         break;
                     }
                 }
             }
             return RedirectToAction("OrderList");
         }
+        #endregion
 
     }
 }

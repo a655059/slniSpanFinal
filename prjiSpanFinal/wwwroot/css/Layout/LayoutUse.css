@@ -8,22 +8,38 @@
 .linknoline {
     text-decoration: none;
 }
-    /*回到最上面*/
-.toTop-arrow {
-    width: 2.5rem;
+    /*聊聊*/
+.chatroom {
+    width: 5.5rem;
     height: 2.5rem;
     padding: 0;
     margin: 0;
-    border: 0;
-    border-radius: 33%;
-    opacity: 0.6;
-    background: #000;
+    margin-right: 10px;
     cursor: pointer;
-    position: fixed;
-    right: 10rem;
-    bottom: 5rem;
-    display: none;
+    border: 0;
+    border-radius: 10% 10% 0 0;
+    background: WHITE;
+    box-shadow: 0 0 10px #FF9224;
 }
+    .chatroom > .fa {
+        color: #FF9224;
+    }
+    /*回到最上面*/
+    .toTop-arrow {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        border-radius: 33%;
+        opacity: 0.6;
+        background: #000;
+        cursor: pointer;
+        position: fixed;
+        right: 10rem;
+        bottom: 5rem;
+        display: none;
+    }
     .toTop-arrow::before, .toTop-arrow::after {
         width: 18px;
         height: 5px;
@@ -204,6 +220,9 @@
     max-height: 24px;
     overflow: hidden;
 }
+.loschbar{
+    /*padding-left:70px;*/
+}
 .loschbar > .input-group {
     border: 3px solid white;
     border-radius: 10px
@@ -227,6 +246,8 @@
     /*搜尋右側功能*/
 .searchcart {
     width: 100%;
+    padding-right: 30px;
+    padding-left: 30px;
 }
     .searchcart > div {
         display: inline-block;
@@ -242,7 +263,7 @@
         }
             .searchcart > div > a > .qty {
                 position: relative;
-                left:65px;
+                left:45px;
                 bottom:50px;
                 width: 20px;
                 height: 20px;
@@ -262,7 +283,19 @@
                     opacity:80%;
                 }
 /* /Header2 */
-
+/* BODY */
+body {
+    background-color: #FFF7EB;
+}
+.layout1renderdiv {
+    padding: 20px 30px 20px 30px;
+    background-color: white;
+    border-radius: 20px;
+}
+.Setionset {
+    padding-top: 10px!important;
+}
+/* /BODY */
 /* Footer共用 */
 .footerbg {
     background: #FF7B0F;
