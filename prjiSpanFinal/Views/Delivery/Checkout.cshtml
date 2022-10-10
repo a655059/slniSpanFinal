@@ -3,16 +3,25 @@
     ViewData["Title"] = "Checkout";
 }
 
-<h4>結帳</h4>
+@section Styles{ 
+    <style>
+        .showCalTotalPriceVC{
+            position:sticky;
+            top:100px;
+        }
+    </style>
+}
 
+<h4>結帳</h4>
+<div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+    <label class="btn btn-outline-warning" for="btnradio1">林小偉的賣場</label>
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+    <label class="btn btn-outline-warning" for="btnradio2">林大偉的賣場</label>
+</div>
 <div class="row">
     <div class="col-9">
-        <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-            <label class="btn btn-outline-warning" for="btnradio1">林小偉的賣場</label>
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-            <label class="btn btn-outline-warning" for="btnradio2">林大偉的賣場</label>
-        </div>
+        
         <div class="checkoutPartialView">
             
         </div>
@@ -25,7 +34,9 @@
 
 
     <div class="col-3">
-        @await Component.InvokeAsync("CalTotalPrice", new { id=2})
+        <div class="showCalTotalPriceVC">
+            @await Component.InvokeAsync("CalTotalPrice", new { id = 2 })
+        </div>
     </div>
 </div>
 

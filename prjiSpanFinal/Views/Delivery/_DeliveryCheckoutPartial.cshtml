@@ -8,11 +8,11 @@
         aspect-ratio: 1/1;
     }
 
-        .itemThumb img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-        }
+    .itemThumb img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+    }
 
     .ship:hover {
         cursor: pointer;
@@ -23,11 +23,14 @@
         aspect-ratio: 1/1;
     }
 
-        .googleMaps iframe {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-        }
+    .googleMaps iframe {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+    }
+    .showMap{
+        z-index:11111;
+    }
 </style>
 
 <div class="border rounded-2">
@@ -130,60 +133,60 @@
 </div>
 
 
-    <div class="modal showMap" tabindex="-1" id="showMap">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">選擇地址或門市</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal showMap" tabindex="-1" id="showMap">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">選擇地址或門市</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="googleMaps">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-                <div class="modal-body">
-                    <div class="googleMaps">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                    <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="saveAddress btn btn-primary" data-bs-dismiss="modal">儲存</button>
-                </div>
+                <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="saveAddress btn btn-primary" data-bs-dismiss="modal">儲存</button>
             </div>
         </div>
     </div>
+</div>
 
 
 
 
-    <script>
-        $(".ship").click(function () {
-            $(this).removeClass("border-secondary border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-secondary border-danger").addClass("border-secondary");
-        });
-        $(".changeShip").click(function () {
+<script>
+    $(".ship").click(function () {
+        $(this).removeClass("border-secondary border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-secondary border-danger").addClass("border-secondary");
+    });
+    $(".changeShip").click(function () {
+        $(".choseShip").slideToggle();
+    });
+
+
+    $(".saveAddress").click(function () {
+        let address = $("#inputAddress").val();
+        if (address == "") {
+            alert("請輸入地址或門市");
+            return false;
+        }
+        else {
+            $(".choseShip").find("div[class*='border-danger']").siblings(".address").html(address).removeClass("d-none");
+        }
+    });
+    $("#confirmedShip").click(function () {
+        let address = $(".choseShip").find("div[class*='border-danger']").siblings(".address").html();
+        if (address == "") {
+            alert("請輸入地址或門市");
+        }
+        else {
+            let ship = $(".choseShip").find("div[class*='border-danger']").html();
+            $("#finalShip").html(ship);
+            $("#finalAddress").html(address);
             $(".choseShip").slideToggle();
-        });
+        }
+    });
 
-
-        $(".saveAddress").click(function () {
-            let address = $("#inputAddress").val();
-            if (address == "") {
-                alert("請輸入地址或門市");
-                return false;
-            }
-            else {
-                $(".choseShip").find("div[class*='border-danger']").siblings(".address").html(address).removeClass("d-none");
-            }
-        });
-        $("#confirmedShip").click(function () {
-            let address = $(".choseShip").find("div[class*='border-danger']").siblings(".address").html();
-            if (address == "") {
-                alert("請輸入地址或門市");
-            }
-            else {
-                let ship = $(".choseShip").find("div[class*='border-danger']").html();
-                $("#finalShip").html(ship);
-                $("#finalAddress").html(address);
-                $(".choseShip").slideToggle();
-            }
-        });
-
-    </script>
+</script>

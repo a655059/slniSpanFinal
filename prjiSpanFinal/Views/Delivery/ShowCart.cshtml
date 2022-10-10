@@ -41,6 +41,10 @@
             height: 20px;
         }
         
+        .showCalTotalPriceVC{
+            position:sticky;
+            top:100px;
+        }
     </style>
 }
 
@@ -133,8 +137,10 @@
             </div>
         </div>
     </div>
-    <div class="col-3 border rounded-2">
-        @await Component.InvokeAsync("CalTotalPrice", new { id=1})
+    <div class="col-3">
+        <div class="showCalTotalPriceVC w-100">
+            @await Component.InvokeAsync("CalTotalPrice", new { id = 1 })
+        </div>
     </div>
 
 @section Scripts{

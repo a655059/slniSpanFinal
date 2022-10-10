@@ -20,7 +20,6 @@ $(".chose").click(() => {
         $("#totalPrice").html(totalPrice);
     }
 });
-
 $(".divDiscount").mouseenter(function () {
     $(".removeCoupon").removeClass("d-none");
 });
