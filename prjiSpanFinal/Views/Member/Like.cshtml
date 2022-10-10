@@ -2,6 +2,7 @@
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
+
     <style>
         /*        .list a:link{text-decoration:none;}
         .list a:visited{color:aquamarine;}
@@ -34,27 +35,77 @@
         }
     </style>
 }
+
 <vc:member-ui></vc:member-ui>
-<div class="row ">
+<div class="row">
     <div class="col-1"></div>
     <div class="col-11 ">
         <div style="opacity: 0.5;text-align:center;font-size:40px">喜歡の商品</div>
-        @Html.ActionLink("會員中心", "List", "Member", null, new { @class = "btn btn-secondary" })
-        @Html.ActionLink("關注賣家", "賣場", "SalesCourt", null, new { @class = "btn btn-secondary" })
-        @Html.ActionLink("我的優惠券", "Coupon", "Member", null, new { @class = "btn btn-secondary" })
-        @Html.ActionLink("購物清單", "Order", "Buyer", null, new { @class = "btn btn-secondary" })
-        <br />
-
-        <figure style="background-color:#D1E9E9">
-            <figcaption>買爆清單</figcaption>
-            <a href="https://www.google.com/search?q=irene&tbm=isch&ved=2ahUKEwi1hf22rLz6AhVJdpQKHRygCDIQ2-cCegQIABAA&oq=ir&gs_lcp=CgNpbWcQARgAMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIFCAAQgAQyCAgAEIAEELEDMgUIABCABDIICAAQgAQQsQMyBQgAEIAEMgUIABCABDoICAAQsQMQgwE6BAgAEAM6CwgAEIAEELEDEIMBUKULWLAMYIgfaABwAHgAgAEgiAFbkgEBM5gBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=M8o2Y_WfOsns0QScwKKQAw&bih=506&biw=1349&rlz=1C1ONGR_zh-TWTW949TW949#imgrc=uynzEJRYJs37rM">
-                <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
-            </a>
+        <div class="input-group mb-1">
+            <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">所有商品</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">狀態</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">折扣中</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">類別</a>
+            </li>
+        </ul>
+        <figure style="background-color:#FCFCFC">
+            <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
+            <div>
+                <table style="margin:auto;">
+                    @for (int i = 15; i >= 1; i--)
+                    {
+                        <tr>
+                            <td>
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="/Item/Index/2113">
+                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">商品:筆電</div>
+                                        <div class="cardPrice">價格:$25000</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                <div class="text-black-50">銷售存量<span>100</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="/Item/Index/2113">
+                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">商品:筆電</div>
+                                        <div class="cardPrice">價格:$25000</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                <div class="text-black-50">銷售存量<span>100</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </figure>
     </div>
 </div>
 
 @section Scripts
 {
-    <script src="~/js/MemberUI/sidebars.js"></script>
 }

@@ -6,54 +6,67 @@
         </a>
         <ul class="list-unstyled ps-0">
             <li class="mb-1">
-                <i class="fa-solid fa-box"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                <i class="fa-solid fa-xl fa-box"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
                     商品管理
                 </button>
-                <div class="左側欄 " id="home-collapse">
+                <div class="sellerleftsiderbar collapse show" id="home-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a asp-action="Index" class="link-dark d-inline-flex text-decoration-none rounded">我的商品</a></li>
-                        <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded">新增商品</a></li>
+                        <li><a asp-action="Index" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的商品</a></li>
+                        <li><a asp-action="Create" class="link-dark d-inline-flex text-decoration-none rounded my-1">新增商品</a></li>
                     </ul>
                 </div>
             </li>
             <li class="border-top my-3"></li>
             <li class="mb-1">
-                <i class="fa-solid fa-list"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                <i class="fa-solid fa-xl fa-list"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
                     訂單管理
                 </button>
-                <div class="左側欄" id="dashboard-collapse">
+                <div class="sellerleftsiderbar collapse show" id="dashboard-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded">我的銷售</a></li>
-                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">退貨/ 退款</a></li>
+                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的銷售</a></li>
+                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded my-1">退貨/退款</a></li>
                     </ul>
                 </div>
             </li>
             <li class="border-top my-3"></li>
             <li class="mb-1">
-                <i class="fa-solid fa-truck"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                <i class="fa-solid fa-xl fa-truck"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
                     物流中心
                 </button>
-                <div class="左側欄" id="orders-collapse">
+                <div class="sellerleftsiderbar collapse show" id="orders-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">待出貨 </a></li>
-                        <li><a asp-action="Shipper" class="link-dark d-inline-flex text-decoration-none rounded">物流設定</a></li>
+                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded my-1">待出貨</a></li>
+                        <li><a asp-action="Shipper" class="link-dark d-inline-flex text-decoration-none rounded my-1">物流設定</a></li>
 
                     </ul>
                 </div>
             </li>
             <li class="border-top my-3"></li>
             <li class="mb-1">
-                <i class="fa-solid fa-tag"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                        行銷活動
-                    </button>
-                    <div class="左側欄" id="account-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">我的活動</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">蝦爆廣告</a></li>
-                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">優惠劵</a></li>
-                        </ul>
-                    </div>
-</li>
+                <i class="fa-solid fa-xl fa-gears"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#court-collapse" aria-expanded="false">
+                    賣場設定
+                </button>
+                <div class="sellerleftsiderbar collapse show" id="court-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">管理評價</a></li>
+                        <li><a asp-action="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">設定分類</a></li>
+                        <li><a asp-action="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯賣場資訊</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <i class="fa-solid fa-xl fa-tag"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    行銷活動
+                </button>
+                <div class="sellerleftsiderbar collapse show" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的活動</a></li>
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">蝦爆廣告</a></li>
+                        <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded my-1">優惠劵</a></li>
+                    </ul>
+                </div>
+            </li>
         </ul>
     </div>
 </div>
