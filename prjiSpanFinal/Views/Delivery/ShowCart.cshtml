@@ -41,10 +41,10 @@
             height: 20px;
         }
         
-        .showCalTotalPriceVC{
+        /*.showCalTotalPriceVC{
             position:sticky;
             top:100px;
-        }
+        }*/
     </style>
 }
 
@@ -144,6 +144,21 @@
     </div>
 
 @section Scripts{
+    <script>
+        $(window).scroll(function () {
+            let scrollTop = $(this).scrollTop();
+            console.log(scrollTop);
+            let divPosition = $(".showCalTotalPriceVC").offset().top;
+            console.log(divPosition);
+            if (scrollTop > divPosition) {
+                $(".showCalTotalPriceVC").css("position", "fixed").css("top", "80px");
+            }
+            else {
+                $(".showCalTotalPriceVC").css("position", "initial").css("top", "");
+            }
+        });
+    </script>
     <script src="~/js/DeliveryShowCart.js"></script>
     <script src="~/js/DeliveryCheckout.js"></script>
+    
 }
