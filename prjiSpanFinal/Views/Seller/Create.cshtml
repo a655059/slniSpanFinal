@@ -47,6 +47,13 @@
 
         .框線 {
             border-color: lightslategray;
+            width:270px;
+        }
+
+        .名稱 {
+            border-color: lightslategray;
+            width:400px;
+            margin-left:2px;
         }
 
         .表格寬度 {
@@ -84,8 +91,8 @@
         }
 
         .規格列表 {
-            width: 80px;
-            font-size: 16px;
+            width: 150px;
+            font-size: 18px;
         }
 
         .規格按鈕 {
@@ -99,25 +106,34 @@
         td {
             margin-left: 1.5px;
         }
+
+        .btntype物流{
+            width:550px;
+            margin-left:2px;
+        }
+        h2 {
+            color: darkorange;
+        }
+        
     </style>
 }
 <vc:seller-ui></vc:seller-ui>
 <div class="row border overflow-auto">
     <div class="col-1"></div>
     <div class="col-11 ">
-        <h2 class="d-flex justify-content-start mb-2">新增商品</h2>
+        <h2 class="d-flex justify-content-center mb-2">新增商品</h2>
         <div class="row">
             <div class="排版">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group d-flex justify-content-around ">
+                <div class="form-group d-flex justify-content-start ">
                     <label class="名稱寬 ">名稱</label>
-                    <input class="form-control 框線" />
+                    <input class="form-control 名稱" />
                     <span class="text-danger"></span>
                 </div>
-                <div class="d-flex justify-content-around ">
+                <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2">類別</label>
-                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                    <select class="form-select w-25 m-3 " aria-label="Default select example ">
                         <option value="1">女生衣著</option>
                         <option value="2">書籍及雜誌期刊</option>
                         <option value="3">男生衣著</option>
@@ -125,7 +141,7 @@
                         <option value="5">運動/健身</option>
                         <option value="6">美食、伴手禮</option>
                     </select>
-                    <select class="form-select w-50 mt-3" aria-label="Default select example ">
+                    <select class="form-select w-25 m-3" aria-label="Default select example ">
                         <option selected>T恤</option>
                         <option value="1">長褲</option>
                         <option value="2">內睡衣</option>
@@ -140,11 +156,11 @@
                     <label class="名稱寬 mt-2">規格</label>
                     @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
                     <span class="text-danger"></span>
-                    <section class="section">
-                        <table class="table">
+                    <section class="section d-flex justify-content-start">
+                        <table class="table w-100">
                             <thead>
                                 <tr>
-                                    <th class="col 規格列表">規格</th>
+                                    <th class="col 規格列表">樣式</th>
                                     <th class="col 規格列表">數量</th>
                                     <th class="col 規格列表">售價</th>
                                     <th class="col 規格列表">照片</th>
@@ -154,7 +170,7 @@
                             <tbody></tbody>
                         </table>
                     </section>
-                    <section class="section">
+                    <section class="section d-flex justify-content-start">
                         <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
                     </section>
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,7 +181,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <label>規格:</label>
+                                    <label>樣式:</label>
                                     <input type="text" id="text1" class="form-control">
                                     <br />
                                     <label>數量:</label>
@@ -191,34 +207,34 @@
                 <div class="">
                     <label class="名稱寬 mt-2">封面照片</label>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3 框線" />
-                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3 框線" />
-                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                     <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3 框線" />
-                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2 ">描述</label>
                     <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
                 </div>
-                <div class="d-flex justify-content-around ">
-                    <label class="名稱寬 mt-2">物流</label>
-                    <button class="btntype物流 mt-3 ">新增規格</button>        @*    button  在這   *@
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 m-3">物流</label>
+                    <button class="btntype物流 m-4 ">新增規格</button>        @*    button  在這   *@
                     <span class="text-danger"></span>
                 </div>
-                <div class="add物流">
+                <div class="add物流 d-flex justify-content-center">
                 </div>
             </div><br />
             <div class="row ">
                 <div class="col-4"></div>
                 <div class="col-8">
-                    <input type="submit" value="新增" class="btn btn-warning" onclick="return confirm('新增成功')" />
+                    <input type="submit" value="新增" class="btn btn-warning m-3" onclick="return confirm('新增成功')" />
                 </div>
             </div>
         </div>
@@ -302,7 +318,7 @@
                     tr.appendChild(td);
                 }
                 let td = document.createElement('td');
-                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn-outline-danger  規格按鈕"> X</button></a>`;
+                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
                 let a = td.children[0];
                 a.addEventListener('click', () => {
 
@@ -312,6 +328,7 @@
                 tr.appendChild(td);
                 tbody.insertBefore(tr, tbody.children[0])
                 //新增完以後關閉薪資視窗
+                console.log(exampleModal);
                 exampleModal.close();
             }
             else {

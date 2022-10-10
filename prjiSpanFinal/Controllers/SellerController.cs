@@ -29,5 +29,10 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+
+        public IActionResult Center()
+        {
+            return View();
+        }
     }
 }
