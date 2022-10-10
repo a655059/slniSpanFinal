@@ -24,7 +24,12 @@
         .starImgDiv:hover{
             cursor:pointer;
         }
-        
+        .commentLabel {
+            width: 15%;
+        }
+        .textareaInput{
+            width:100%
+        }
     </style>
 }
 
@@ -52,18 +57,35 @@
         </div>
         <div class="commentResult text-black-50"></div>
     </div>
-    <div class="bg-warning p-2 bg-opacity-10 mt-2">
-        <div class="border p-1 bg-white">
-            <div class="border-bottom">
+    <div class="commentLayout bg-warning p-3 bg-opacity-10 mt-2" style="display:none">
+        <form action="/" method="post">
+            <div class="border p-3 bg-white">
+                <div class="border-bottom">
+                    <div class="input-group mb-3">
+                        <span class="commentLabel input-group-text" id="quality">品質</span>
+                        <input type="text" class="form-control" placeholder="請提供相關的評價">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="commentLabel input-group-text">色差</span>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="commentLabel input-group-text">和圖片相符</span>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">品質</span>
-                    <input type="text" class="form-control" placeholder="請提供相關的評價" aria-describedby="basic-addon1">
+                    <textarea class="textareaInput border-0 px-2 py-1" placeholder="分享更多有關於此商品的評價以幫助其他買家"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-camera-retro me-2"></i>增加照片</button>
+                </div>
+                <div class="mb-3 text-end">
+                    <button class="border-0 bg-transparent w-25" onclick="history.back()">取消</button>
+                    <a href="~/member/order"><input type="submit" class="btn btn-warning w-25" value="完成" id="submit"></a>
                 </div>
             </div>
-            <div>
-                <textarea placeholder="分享更多有關於此商品的評價以幫助其他買家" rows="5" class="border-0"></textarea>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -83,6 +105,22 @@
                 $(".commentResult").html("不錯");
             } else {
                 $(".commentResult").html("超棒");
+            }
+            $(".commentLayout").slideDown();
+        });
+        $("#submit").click(function () {
+            let arr = [];
+            $("input").not("input[type='submit']").each(function () {
+                if ($(this).val() != "") {
+                    arr.push($(this).val());
+                }
+            });
+            if (arr.length != 0) {
+                alert("新增評論成功，繼續下一筆評論");
+            }
+            else {
+                alert("請輸入評論");
+                return false;
             }
         });
     </script>
