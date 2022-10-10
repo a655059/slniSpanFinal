@@ -75,13 +75,41 @@
         <figure style="background-color:#FCFCFC">
             <figcaption></figcaption>
             <div>
-                <table>
+                <table style="margin:auto;">
                     @for (int i = 15; i >= 1; i--)
                     {
                         <tr>
                             <td>
-                                <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
-                                <img src="~/img/coupon.jpg" alt="錯誤圖片" title="快用我" width="300" />
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="#">
+                                        <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">店到店免運</div>
+                                        <div class="cardPrice">2022/10/10生效</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                 <div class="text-black-50">數量有限用完為止</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="#">
+                                        <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">店到店免運</div>
+                                        <div class="cardPrice">2022/10/10生效</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                <div class="text-black-50">數量有限用完為止</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     }

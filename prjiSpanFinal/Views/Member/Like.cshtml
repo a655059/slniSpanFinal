@@ -62,13 +62,41 @@
         <figure style="background-color:#FCFCFC">
             <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
             <div>
-                <table>
+                <table style="margin:auto;">
                     @for (int i = 15; i >= 1; i--)
                     {
                         <tr>
                             <td>
-                                <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
-                                <img src="~/img/product01.png" alt="錯誤圖片" title="快買我" width="300" />
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="/Item/Index/2113">
+                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">商品:筆電</div>
+                                        <div class="cardPrice">價格:$25000</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                <div class="text-black-50">銷售存量<span>100</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                    <a href="/Item/Index/2113">
+                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitle">商品:筆電</div>
+                                        <div class="cardPrice">價格:$25000</div>
+                                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                                            <div class="d-flex justify-content-start flex-column mt-1">
+                                                <div class="text-black-50">銷售存量<span>100</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     }
