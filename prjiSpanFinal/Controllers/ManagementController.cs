@@ -15,6 +15,7 @@ namespace prjiSpanFinal.Controllers
         public static List<CProductHu> Products = new();
         static List<COrderHu> Orders = new();
         static List<CProductDetailHu> ProductDetails = new();
+        static List<CReportHu> Reports = new();
         public ManagementController()
         {
             if (members.Count <= 0 || Orders.Count <= 0 || Products.Count <= 0)
@@ -76,6 +77,15 @@ namespace prjiSpanFinal.Controllers
                     ProductDetails.Add(cProductDetail);
                 }
             }
+            CReportHu cReport = new()
+            {
+                ProductID = 3,
+                ReporterID = 1,
+                Reason="",
+                ReportId = 1,
+                ReportType="廣告不實",
+                ReportStatus="未處理",
+            };
         }
         #endregion
 
@@ -172,7 +182,6 @@ namespace prjiSpanFinal.Controllers
            
             if (prod != null)
             {
-              
                 var EditProd = from i in ProductDetails where i.ProductDetailId == prod.ProductDetailId select i;
                var Proddet = EditProd.First();
                 Proddet.Style=prod.Style;
