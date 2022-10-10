@@ -71,7 +71,7 @@ namespace prjiSpanFinal.Controllers
                         ProductDetailId = i,
                         ProductId = prods.ProductId,
                         Quantity = rnd.Next(1, 999),
-                        Style="樣式"+i,
+                        Style = "樣式" + i,
                         UnitPrice = 10,
                     };
                     ProductDetails.Add(cProductDetail);
@@ -81,18 +81,24 @@ namespace prjiSpanFinal.Controllers
             {
                 ProductID = 3,
                 ReporterID = 1,
-                Reason="",
+                Reason = "",
                 ReportId = 1,
-                ReportType="廣告不實",
-                ReportStatus="未處理",
+                ReportType = "廣告不實",
+                ReportStatus = "未處理",
             };
         }
-        #endregion
 
+        public IActionResult ReportList() 
+        {
+            return View();
+        }
+        #endregion
+        #region
         public IActionResult PowerBi()
         {
             return View();
         }
+        #endregion
         #region
         public IActionResult ProductList()
         {
@@ -122,7 +128,7 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("ProductList");
         }
-       
+
 
 
         public IActionResult ProductDelete(int? id)
@@ -172,21 +178,21 @@ namespace prjiSpanFinal.Controllers
         public IActionResult ProductDetailEdit(int? id)
         {
             var productdetai = from i in ProductDetails
-                          where i.ProductDetailId == id
-                          select i;
+                               where i.ProductDetailId == id
+                               select i;
             return View(productdetai.First());
         }
         [HttpPost]
-        public IActionResult ProductDetailEdit(CProductDetailHu prod,IFormFile img)
+        public IActionResult ProductDetailEdit(CProductDetailHu prod, IFormFile img)
         {
-           
+
             if (prod != null)
             {
                 var EditProd = from i in ProductDetails where i.ProductDetailId == prod.ProductDetailId select i;
-               var Proddet = EditProd.First();
-                Proddet.Style=prod.Style;
-                Proddet.Quantity=prod.Quantity;
-                Proddet.UnitPrice=prod.UnitPrice;
+                var Proddet = EditProd.First();
+                Proddet.Style = prod.Style;
+                Proddet.Quantity = prod.Quantity;
+                Proddet.UnitPrice = prod.UnitPrice;
 
                 if (img != null)
                 {
@@ -339,7 +345,6 @@ namespace prjiSpanFinal.Controllers
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
                     {
-
                         break;
                     }
                 }
