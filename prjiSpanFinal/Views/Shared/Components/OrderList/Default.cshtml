@@ -77,32 +77,42 @@
             <tbody>
                 @for (int i = 10; i >= 1; i--)
                 {
-                    <tr>
+                <tr>
+                    @{
+                        if (Model == 0)
+                        {
+                            <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">customer87</a></td>
+                        }
+                        else
+                        {
+                            <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">shop9487</a></td>
+                        }
+                    }
+                    <td>2022/10/10<br />10:10:10</td>
+                    <td>
+                        <img src="~/img/蘋果圖.jpg" width="60" height="60" /> 蘋果 紅色 *1 $30<br />
+                        <img src="~/img/banana.jpg" width="60" height="60" /> 香蕉 金黃色 *1 $60<br />
+                        <img src="~/img/蘋果圖.jpg" width="60" height="60" /> 蘋果 尊爵不凡美麗鮮紅色 *1 $120
+                    </td>
+                    <td>$270</td>
+                    <td>待評價</td>
+                    <td style="text-align:center">
+                        <div>
+                            <input class="form-check-input" type="checkbox" id="checkboxorder" value="" aria-label="...">
+                        </div>
+                        <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbutton">訂單詳情</a><br />
                         @{
                             if (Model == 0)
                             {
-                                <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">customer87</a></td>
+                                <button type="button" class="btn btn-secondary orderbutton">待給評價</button>
                             }
                             else
                             {
-                                <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">shop9487</a></td>
+                                <button type="button" class="btn btn-secondary orderbutton">待給評價</button>
+                                <button type="button" class="btn btn-warning orderbutton">申請退貨</button>
                             }
                         }
-                        <td>2022/10/10<br />10:10:10</td>
-                        <td>
-                            <img src="~/img/蘋果圖.jpg" width="80" height="80" /> 蘋果 紅色 *1 $30<br />
-                            <img src="~/img/banana.jpg" width="80" height="80" /> 香蕉 金黃色 *1 $60<br />
-                            <img src="~/img/蘋果圖.jpg" width="80" height="80" /> 蘋果 尊爵不凡美麗鮮紅色 *1 $120
-                        </td>
-                        <td>$270</td>
-                        <td>待評價</td>
-                        <td style="text-align:center">
-                            <div>
-                                <input class="form-check-input" type="checkbox" id="checkboxorder" value="" aria-label="...">
-                            </div>
-                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbutton">訂單詳情</a><br/>
-                            <button type="button" class="btn btn-secondary orderbutton">待給評價</button>
-                        </td>
+                    </td>
                     </tr>
                 }
             </tbody>
