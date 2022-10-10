@@ -288,12 +288,12 @@ body {
     background-color: #FFF7EB;
 }
 .layout1renderdiv {
-    padding: 10px 20px 20px 30px;
+    padding: 20px 30px 20px 30px;
     background-color: white;
-    border-radius: 30px;
+    border-radius: 20px;
 }
 .Setionset {
-    padding-top: 10px;
+    padding-top: 10px!important;
 }
 /* /BODY */
 /* Footer共用 */
