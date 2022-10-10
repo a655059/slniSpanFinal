@@ -82,19 +82,22 @@
             float: right;
             width: 10px;
         }
-        .規格列表{
-            width:80px;
-            font-size:16px;
+
+        .規格列表 {
+            width: 80px;
+            font-size: 16px;
         }
+
         .規格按鈕 {
             font-size: 10px;
             width: 35px;
             height: 25px;
             border-radius: 25px;
-            margin: 0 auto;            
+            margin: 0 auto;
         }
+
         td {
-            margin-left:1.5px;
+            margin-left: 1.5px;
         }
     </style>
 }
@@ -152,12 +155,8 @@
                         </table>
                     </section>
                     <section class="section">
-                        <button class="btn btn-secondary btnnew m-3 w-50 btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
+                        <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
                     </section>
-
-
-
-
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -180,50 +179,50 @@
                                     <img id="blah" src="#" alt="your image" />
                                 </div>
                                 <div class="modal-footer">
-                                    <button id="save" type="button" class="btn btn-primary">新增</button>
-                                    <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>                                   
+                                    <button id="save" type="button" class="btn btn-warning">新增</button>
+                                    <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                                <div class="addStyle">
-                                </div>
-                                <div class="">
-                                    <label class="名稱寬 mt-2">封面照片</label>
-                                    <div class="d-flex justify-content-around ">
-                                        <input type="file" class="form-control mt-3 框線" />
-                                        <input type="file" class="form-control mt-3 框線" />
-                                    </div>
-                                    <div class="d-flex justify-content-around ">
-                                        <input type="file" class="form-control mt-3 框線" />
-                                        <input type="file" class="form-control mt-3 框線" />
-                                    </div>
-                                    <div class="d-flex justify-content-around ">
-                                        <input type="file" class="form-control mt-3 框線" />
-                                        <input type="file" class="form-control mt-3 框線" />
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-start ">
-                                    <label class="名稱寬 mt-2 ">描述</label>
-                                    <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
-                                </div>
-                                <div class="d-flex justify-content-around ">
-                                    <label class="名稱寬 mt-2">物流</label>
-                                    <button class="btntype物流 mt-3 ">新增規格</button>        @*    button  在這   *@
-                                    <span class="text-danger"></span>
-                                </div>
-                                <div class="add物流">
-                                </div>
-                            </div><br />
-                            <div class="row ">
-                                <div class="col-4"></div>
-                                <div class="col-8">
-                                    <input type="submit" value="新增" class="btn btn-warning" onclick="return confirm('新增成功')" />
-                                </div>
-                            </div>
-                        </div>
+                <div class="addStyle">
+                </div>
+                <div class="">
+                    <label class="名稱寬 mt-2">封面照片</label>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線" />
                     </div>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線" />
+                    </div>
+                    <div class="d-flex justify-content-around ">
+                        <input type="file" class="form-control mt-3 框線" />
+                        <input type="file" class="form-control mt-3 框線" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2 ">描述</label>
+                    <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
+                </div>
+                <div class="d-flex justify-content-around ">
+                    <label class="名稱寬 mt-2">物流</label>
+                    <button class="btntype物流 mt-3 ">新增規格</button>        @*    button  在這   *@
+                    <span class="text-danger"></span>
+                </div>
+                <div class="add物流">
+                </div>
+            </div><br />
+            <div class="row ">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <input type="submit" value="新增" class="btn btn-warning" onclick="return confirm('新增成功')" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts{
     <script src="~/js/SellerUI/sidebars.js"></script>
@@ -265,7 +264,7 @@
             clickValue();
             //show model
             console.log(infoModal.showModal());
-/*            infoModal.showModal();*/
+            /*            infoModal.showModal();*/
         })
 
         //清空model值
@@ -283,7 +282,7 @@
             let score = document.getElementById("text3").value;
             //todo:取得照片
             let img = document.getElementById("text4").value;
-            
+
 
             //判斷資料有值再塞入
             if (name !== '' && subject !== '' && score !== '') {
@@ -338,52 +337,52 @@
         物流按鈕.addEventListener("click", () => {
             新增物流.innerHTML =
                 `<div class="d-flex justify-content-around ">
-                            <table class="table">
-                                <thead>
-                                    <tr></tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="d-flex justify-content-around 貨運框線">
-                                            <div class="貨運字">7-ELEVEN</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td class="d-flex justify-content-around 貨運框線">
-                                            <div class="貨運字">全家便利商店</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td class="d-flex justify-content-around 貨運框線">
-                                            <div class="貨運字">萊爾富</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td class="d-flex justify-content-around 貨運框線">
-                                            <div class="貨運字">OK便利商店</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td class="d-flex justify-content-around 貨運框線">
-                                            <div class="貨運字">大榮貨運</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                        <td class="d-flex justify-content-around 貨運無底框">
-                                            <div class="貨運字">黑貓宅急便</div>
-                                            <div class="form-check form-switch 貨運按鈕">
-                                                <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                         </div>`;
+                                <table class="table">
+                                    <thead>
+                                        <tr></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">7-ELEVEN</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">全家便利商店</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">萊爾富</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">OK便利商店</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運框線">
+                                                <div class="貨運字">大榮貨運</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運無底框">
+                                                <div class="貨運字">黑貓宅急便</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                             </div>`;
             物流按鈕.style.visibility = "hidden";   //隱藏屬性
         })
 

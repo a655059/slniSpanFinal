@@ -1,0 +1,95 @@
+﻿@addTagHelper *, prjiSpanFinal
+@{
+    ViewData["Title"] = "Shipper";
+}
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+        .標題圖片 {
+            float: left;
+        }
+
+        .貨運按鈕 {
+            float: right;
+            width: 20px;
+            font-size: 25px;
+            text-align: right;
+        }
+
+        .貨運按鈕標題 {
+            font-size: 25px;
+        }
+
+        .標題字幕 {
+            font-size: 20px;            
+        }
+
+        button{
+            font-size:25px;
+        }
+
+    </style>
+}
+<vc:seller-ui></vc:seller-ui>
+<div class="row border overflow-auto">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <h1 class="d-flex justify-content-center">物流設定</h1>
+        <div>
+            <div ><img src="~/img/物流中心.png" class="標題圖片"/><h2>  物流方式</h2></div>
+            <p class="標題字幕">蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
+        </div>
+        <div>
+            <table class="table table-hover">
+                <tr>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">7-ELEVEN</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">全家便利商店</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">萊爾富</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">OK便利商店</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">大榮貨運</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <div class="d-flex justify-content-start"><h4 class="貨運按鈕標題 ">黑貓宅急便</h4></div>
+                        <div class="form-check form-switch d-flex justify-content-end 貨運按鈕">
+                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="d-flex justify-content-around">
+                <button id="save" type="button" class="btn btn-warning">確定</button>
+                <button id="close" type="button" class="btn btn-light" >取消</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+@section Scripts
+{
+    <script src="~/js/sidebars.js"></script>
+}
