@@ -1,0 +1,56 @@
+﻿<div class="sidemenu">
+    <div style="width: 180px;">
+        <a href="@Url.Content("~/Member/Order")" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            <span class="membercentercaption">會員中心</span>
+        </a>
+        
+
+        <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+                <div>
+                    <img src="~/img/Member/pekopeko.jpg" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">pekopeko</span><br /><a asp-action="Edit">編輯我的資料</a>
+                </div>
+            </li>
+            <li class="mb-1" style="clear: left; ">
+                <br />
+                <div class="border-bottom"></div>
+                <i class="fa-solid fa-user"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    帳戶管理
+                </button>
+                <div class="membersidebar" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="Edit" class="link-dark d-inline-flex text-decoration-none rounded">個人檔案</a></li>
+                        <li><a asp-action="" class="link-dark d-inline-flex text-decoration-none rounded">變更密碼</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <i class="fa-solid fa-bag-shopping"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                    買點東西
+                </button>
+                <div class="membersidebar" id="dashboard-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded">訂單列表</a></li>
+                        <li><a asp-controller="Delivery" asp-action="ShowCart" class="link-dark d-inline-flex text-decoration-none rounded">我的購物車</a></li>
+                        <li><a asp-action="Like" class="link-dark d-inline-flex text-decoration-none rounded">按讚好物</a></li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <i class="fa-solid fa-tag"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                    優惠活動
+                </button>
+                <div class="membersidebar" id="orders-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="Coupon" class="link-dark d-inline-flex text-decoration-none rounded">我的優惠券 </a></li>
+                        <li><a asp-action="" class="link-dark d-inline-flex text-decoration-none rounded">目前活動</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

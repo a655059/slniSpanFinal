@@ -3,28 +3,27 @@ using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
     public class ManagementController : Controller
     {
-        static List<CMember> members = new();
+        static List<CMemberHu> members = new();
         static List<CProductHu> Products = new();
-        static List<COrder> Orders = new();
+        static List<COrderHu> Orders = new();
         public ManagementController()
         {
             if (members.Count <= 0 || Orders.Count <= 0 || Products.Count <= 0)
             {
                 ADDDATAS();
             }
-            
+
         }
         public void ADDDATAS()
         {
             for (int i = 0; i <= 20; i++)
             {
-                CMember newm = new()
+                CMemberHu newm = new()
                 {
                     Id = i,
                     Address = "台北市",
@@ -36,7 +35,7 @@ namespace prjiSpanFinal.Controllers
                 };
                 members.Add(newm);
                 Random rnd = new();
-                COrder cOrder = new()
+                COrderHu cOrder = new()
                 {
                     OrderID = i,
                     Quantity = rnd.Next(1, 100),
@@ -49,6 +48,8 @@ namespace prjiSpanFinal.Controllers
                 Orders.Add(cOrder);
                 CProductHu cProduct = new()
                 {
+                    ProductName = "蘋果",
+                    SmallType = "食品",
                     ProductId = i,
                     ProductStatus = "可以購買",
                     SellerName = "蘋果" + i,
@@ -58,9 +59,84 @@ namespace prjiSpanFinal.Controllers
                 Products.Add(cProduct);
             }
         }
-        public IActionResult Home()
+        public IActionResult Test()
+        {
+            return PartialView();
+        }
+        public IActionResult PowerBi()
         {
             return View();
+        }
+        public IActionResult ProductList()
+        {
+            return View(Products);
+        }
+        public IActionResult ProductEdit(int? id)
+        {
+            var product = from i in Products
+                          where i.ProductId == id
+                          select i;
+            return View(product.First());
+        }
+        [HttpPost]
+        public IActionResult ProductEdit(CProductHu prod)
+        {
+            if (prod != null)
+            {
+                var EditProd = from i in Products where i.ProductId == prod.ProductId select i;
+                EditProd.First().ProductName = prod.ProductName;
+                EditProd.First().ProductStatus = prod.ProductStatus;
+                EditProd.First().Stock = prod.Stock;
+                EditProd.First().UnitPrice = prod.UnitPrice;
+                EditProd.First().SmallType = prod.SmallType;
+                EditProd.First().SellerName = prod.SellerName;
+
+                return RedirectToAction("ProductList");
+            }
+            return RedirectToAction("ProductList");
+        }
+        public IActionResult ProductDetail(int? id)
+        {
+            var product = from i in Products
+                          where i.ProductId == id
+                          select i;
+            return View(product.First());
+        }
+  
+      
+        public IActionResult ProductDelete(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in Products)
+                {
+                    if (a.ProductId == id)
+                    {
+                        a.ProductStatus = "已刪除";
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("ProductList");
+        }
+        public IActionResult ProductRecover(int? id)
+        {
+            if (id != null)
+            {
+                foreach (var a in Products)
+                {
+                    if (a.ProductId == id && a.ProductStatus == "已刪除")
+                    {
+                        a.ProductStatus = "可以購買";
+                        break;
+                    }
+                    else if (a.ProductId == id && a.ProductStatus != "已刪除")
+                    {
+                        break;
+                    }
+                }
+            }
+            return RedirectToAction("ProductList");
         }
         public IActionResult MemberList()
         {
@@ -71,9 +147,9 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult MemberCreate(CMember mem)
+        public IActionResult MemberCreate(CMemberHu mem)
         {
-            var EditMember = new CMember()
+            var EditMember = new CMemberHu()
             {
                 Id = members.Last().Id + 1,
                 MemName = mem.MemName,
@@ -95,7 +171,7 @@ namespace prjiSpanFinal.Controllers
             return View(members.First());
         }
         [HttpPost]
-        public IActionResult MemberEdit(CMember mem)
+        public IActionResult MemberEdit(CMemberHu mem)
         {
             if (mem != null)
             {
@@ -158,7 +234,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult OrderEdit(COrder order)
+        public IActionResult OrderEdit(COrderHu order)
         {
             if (order != null)
             {
@@ -194,11 +270,12 @@ namespace prjiSpanFinal.Controllers
                 {
                     if (a.OrderID == id && a.OrderStatus == "已刪除")
                     {
-                        a.OrderStatus = "正常";
+                        a.OrderStatus = "未結帳";
                         break;
                     }
                     else if (a.OrderID == id && a.OrderStatus != "已刪除")
                     {
+
                         break;
                     }
                 }

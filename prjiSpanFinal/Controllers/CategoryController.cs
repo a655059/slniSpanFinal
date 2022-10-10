@@ -29,18 +29,25 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Index()
         {
-            fillin(20);
+            fillin(5);
             CBigType a = new CBigType()
             {
                 BigTypeID = 1,
-                BigTypeName = "食品"
+                BigTypeName = "水果"
             };
             ViewBag.prodlist = a;
             return View(listpro);
         }
         public IActionResult SearchResult()
         {
-            return View();
+            fillin(5);
+            CBigType a = new CBigType()
+            {
+                BigTypeID = 1,
+                BigTypeName = "水果"
+            };
+            ViewBag.prodlist = a;
+            return View(listpro);
         }
     }
 }

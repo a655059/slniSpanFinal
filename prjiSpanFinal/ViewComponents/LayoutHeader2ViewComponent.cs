@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
@@ -12,7 +13,24 @@ namespace prjiSpanFinal.ViewComponents
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            string ctrlName = RouteData.Values["Controller"].ToString();
+            //string atnName = RouteData.Values["Action"].ToString();
+            string[] UsedftHeader2ctrlList = new string[] { "Home", "Item", "Category", "SalesCourt" };
+
+            if (UsedftHeader2ctrlList.Contains(ctrlName))
+            {
+                return View();
+            }
+            else if(ctrlName == "Management")
+            {
+                return View("~/Views/Shared/Components/ManagementLayout/Default.cshtml");
+            }
+            //else if(atnName == "")
+            else
+            {
+                return View("Blank");
+            }
+            
         }
     }
 }
