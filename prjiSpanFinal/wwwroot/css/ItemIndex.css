@@ -12,6 +12,11 @@
     object-fit:contain;
     border: 1px solid #E0E0E0;
 }
+
+.productPhoto .bigPhoto i:hover{
+    cursor:pointer;
+}
+
 .productPhoto .smallPhoto {
     width: 90%;
     margin:5px auto 0;
@@ -68,6 +73,14 @@
     top:-10px;
     opacity:0;
     z-index:-1;
+}
+
+.couponDiv{
+    width:150px;
+    opacity:0.2;
+}
+.couponDiv img{
+    width:100%;
 }
 
 .sellerProducts .pageSelect button {

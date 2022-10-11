@@ -34,3 +34,9 @@ $(".removeCoupon").click(function () {
     $(".discount").children().html("0");
     CalTotalPrice();
 });
+$(".selectCoupon").click(function () {
+    $(".showCalTotalPriceVC").css("position", "relative");
+});
+$("#exampleModal").on("hidden.bs.modal", function () {
+    $(".showCalTotalPriceVC").css("position", "sticky").css("top", "80px");
+});
