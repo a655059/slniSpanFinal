@@ -10,15 +10,23 @@
 <body>
     <div class="container">
         <div class="HomepageIndex">
-            <section class="rounded-3">
-                <div class="row">
-                    <div class="col-2 view rounded-start">
-                        <div class="list-group">
+            <section class="rounded-3 ">
+                <div class="row justify-content-between">
+                    <div class="col-3 listview rounded-start">
+                        <div class="list-group listview-lg">
                             @foreach (var item in Model)
-                                @Html.ActionLink(@item.BigTypeName, "Index", "Category", "", new { @class = "list-group-item list-group-item-action" })
+                            {
+                                <a href="@Url.Content("~/Category/Index")" class="list-group-item list-group-item-action d-flex justify-content-between">
+                                    <div class="">
+                                        @item.BigTypeName
+                                    </div>
+                                    <span class=""><i class="fa fa-arrow-right"></i></span>
+                                </a>
+                            }
+
                         </div>
                     </div>
-                    <div class="col-1"></div>
+                    @*<div class="col-1"></div>*@
                     <!--Carouset-->
                     <div class="col-9 align-items-center ">
                         <div class="row cateheader">
@@ -56,7 +64,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="split2" ></div>
+                            <div class="split2"></div>
                             <div class="cateheader-2">
                                 <div class="row justify-content-between dm">
                                     <div class="col-6">
@@ -75,12 +83,16 @@
                     </div>
                     <!--/Carouset-->
                 </div>
-
             </section>
         </div>
         <div class="clearfix visible-xs"> </div>
-        <div class="split">
+        <div class="split"></div>
+        <div class="w-100 Homepage-AD d-flex justify-content-center " >
+            <a href="" class="w-100">
+                <img src="~/img/Homepage/DM4.png" class="img-fluid w-100" alt="AD" />
+            </a>
         </div>
+        <div class="split"></div>
         <section>
             <div class="d-flex justify-content-center">
                 <div class="row">
@@ -89,9 +101,9 @@
                             <span class="fs-3 fw-bold text-primary guessliketitle">猜你喜歡</span>
                             <span class="fs-6 text-muted">有著你想要的東西...</span>
                         </div>
-                        <div class="itembody">
+                        <div class="itembody  ">
                             @{int itemstock = 12;
-                                <div class="itemcol" id="itemcol">
+                                <div class="itemcol d-flex justify-content-center" id="itemcol">
                                     @for (int i = 1; i <= itemstock; i++)
                                     {
                                         <div class="sellsitem">
