@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "ChangePw";
+}
+
+@section Styles
+{
+    <style>
+        .bg-image-vertical {
+            position: relative;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: auto 100%;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6 row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="mb-4 ms-4">
+                <a href="@Url.Content("~/Home/Index")">
+                    <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
+                </a>
+            </div>
+            <div style="text-align:center">
+                <form style="width: 23rem;">
+
+                    <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">修改密碼</h3>
+
+                    <div class="form-outline mb-4">
+                        <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                        <label class="form-label mt-3" for="form2Example18">舊密碼</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                        <label class="form-label mt-3" for="form2Example18">新密碼</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                        <label class="form-label mt-3" for="form2Example18">再次確認新密碼</label>
+                    </div>
+
+                    <p> <a href="@Url.Content("~/Member/Login")" class="link-info">確認</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
