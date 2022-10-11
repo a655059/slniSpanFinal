@@ -46,61 +46,39 @@
             <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav-item">
+            <li class="nav-item" id="PDall">
                 <a class="nav-link active" aria-current="page" href="#">所有商品</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">狀態</a>
+            <li class="nav-item" id="PDstage">
+                <a class="nav-link"  href="#">狀態</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="PDdiscount">
                 <a class="nav-link" href="#">折扣中</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="PDclass">
                 <a class="nav-link" href="#">類別</a>
             </li>
         </ul>
         <figure style="background-color:#FCFCFC">
             <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
-            <div>
-                <table style="margin:auto;">
+            <div class="aaa d-flex flex-wrap">
                     @for (int i = 15; i >= 1; i--)
                     {
-                        <tr>
-                            <td>
-                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                    <a href="/Item/Index/2113">
-                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
-                                    </a>
-                                    <div class="px-1 d-flex flex-column justify-content-between">
-                                        <div class="cardTitle">商品:筆電</div>
-                                        <div class="cardPrice">價格:$25000</div>
-                                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                                            <div class="d-flex justify-content-start flex-column mt-1">
-                                                <div class="text-black-50">銷售存量<span>100</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                    <a href="/Item/Index/2113">
-                                        <img href="#" src="~/img/product01.png" width="350" height="200" class="cardImg" alt="..." />
-                                    </a>
-                                    <div class="px-1 d-flex flex-column justify-content-between">
-                                        <div class="cardTitle">商品:筆電</div>
-                                        <div class="cardPrice">價格:$25000</div>
-                                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                                            <div class="d-flex justify-content-start flex-column mt-1">
-                                                <div class="text-black-50">銷售存量<span>100</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                <div class="border w-25">
+                    <div>
+                        <img src="~/img/product01.png" class="w-100" />
+                    </div>
+                    <div class="px-1 d-flex flex-column justify-content-between">
+                        <div class="cardTitle">商品:筆電</div>
+                        <div class="cardPrice">價格:$25000</div>
+                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                            <div class="d-flex justify-content-start flex-column mt-1">
+                                <div class="text-black-50">銷售存量<span>100</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     }
-                </table>
             </div>
         </figure>
     </div>
@@ -108,4 +86,33 @@
 
 @section Scripts
 {
+<script>
+    const pd狀態 = document.querySelector("#PDstage")
+    const pd折扣 = document.querySelector("#PDdiscount")
+    const pd類別 = document.querySelector("#PDclass")
+
+    pd狀態.addEventListener("click", () => {
+        $("#PDstage").children().addClass("active")
+        $("#PDall").children().removeClass("active")
+        let str = ""
+        for (let i = 1; i < 7; i++) {
+            let a = "@Url.Content("~/img/product01.png")";
+            str += ` <div class="border w-25">
+                    <div>
+                        <img src='${a}' class="w-100" />
+                    </div>
+                    <div class="px-1 d-flex flex-column justify-content-between">
+                        <div class="cardTitle">商品:筆電</div>
+                        <div class="cardPrice">價格:$25000</div>
+                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                            <div class="d-flex justify-content-start flex-column mt-1">
+                                <div class="text-black-50">銷售存量<span>100</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+        }
+        $(".aaa").html(str);
+    });
+</script>
 }
