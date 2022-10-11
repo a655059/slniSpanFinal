@@ -23,7 +23,7 @@
 
         .名稱寬 {
             width: 50px;
-            float:left;
+            float: left;
         }
 
         .btntype, .btntype物流 {
@@ -48,13 +48,13 @@
 
         .框線 {
             border-color: lightslategray;
-            width:270px;
+            width: 270px;
         }
 
         .名稱 {
             border-color: lightslategray;
-            width:400px;
-            margin-left:2px;
+            width: 400px;
+            margin-left: 2px;
         }
 
         .表格寬度 {
@@ -108,9 +108,9 @@
             margin-left: 1.5px;
         }
 
-        .btntype物流{
-            width:550px;
-            margin-left:2px;
+        .btntype物流 {
+            width: 550px;
+            margin-left: 2px;
         }
 
         .modal-dialog {
@@ -188,7 +188,7 @@
                     @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
                     <span class="text-danger"></span>
                     <section class="section d-flex justify-content-start">
-                        <table class="table w-100 " >
+                        <table class="table w-100 ">
                             <thead>
                                 <tr>
                                     <th class="col 規格列表">樣式</th>
@@ -202,32 +202,51 @@
                         </table>
                     </section>
                 </div>
-                <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                </div>
                 <div class="addStyle">
                 </div>
                 <div>
-                    <label class="名稱寬 mt-2">封面照片</label>  
+                    <label class="名稱寬 mt-2">封面照片</label>
                     <div class="d-flex justify-content-start">
                         @*    大頭照相片1     *@
-                        <div >
-                            <label class="btn" for="commentPhoto">
-                                <img width="100" height="100" class="border" style="background-image: url('../../wwwroot/img/plus.png');" />
+                        <div>
+                            <label class="btn" for="commentPhoto1">
+                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                             </label>
-                            <input type="file" id="commentPhoto" style="opacity:0;width:0px;" accept="image/*" multiple />
-                        </div>
-                        <div id="previewCommentPhoto" class="d-flex">
-
+                            <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
                         </div>
                         @*    大頭照相片2     *@
-                        <label class="btn btn-outline-warning btn-sm" for="commentPhoto2">
-                            <i class="fa-solid fa-camera-retro me-2">新增照片</i>
-                        </label>
-                        <input type="file" id="commentPhoto2" style="opacity:0;width:0px;" accept="image/*" multiple />
-                        <div id="previewCommentPhoto2" class="d-flex">
-
+                        <div>
+                            <label class="btn" for="commentPhoto2">
+                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto2" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        </div>
+                        @*    大頭照相片3     *@
+                        <div>
+                            <label class="btn" for="commentPhoto3">
+                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto3" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        </div>
+                        @*    大頭照相片4     *@
+                        <div>
+                            <label class="btn" for="commentPhoto4">
+                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto4" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        </div>
+                        @*    大頭照相片5     *@
+                        <div>
+                            <label class="btn" for="commentPhoto5">
+                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto5" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
                         </div>
                     </div>
-                    
+
                     <div class="d-flex justify-content-start ">
                         <input type="file" class="form-control mt-3 框線 相片寬" />
                         <input type="file" class="form-control mt-3 框線 相片寬" />
@@ -271,15 +290,15 @@
                 td.innerHTML = data[i][j];
                 tr.appendChild(td);
             }
-            let td = document.createElement('td');
+            //let td = document.createElement('td');
             //刪除按紐
-            td.innerHTML = `<a href='javascript:;'>刪除</a>`;
-            let a = td.children[0];
-            a.addEventListener('click', () => {
-                let parent = a.parentNode.parentNode;
-                parent.remove();
-            })
-            tr.appendChild(td);
+            //td.innerHTML = `<a href='javascript:;'>刪除</a>`;
+            //let a = td.children[0];
+            //a.addEventListener('click', () => {
+            //    let parent = a.parentNode.parentNode;
+            //    parent.remove();
+            //})
+            /*tr.appendChild(td);*/
         }
 
         let infoModal = document.getElementById("infoModal");
@@ -312,7 +331,6 @@
             //todo:取得照片
             let img = document.getElementById("text4").value;
 
-
             //判斷資料有值再塞入
             if (name !== '' && subject !== '' && score !== '') {
 
@@ -340,8 +358,6 @@
                 })
                 tr.appendChild(td);
                 tbody.insertBefore(tr, tbody.children[0])
-                //新增完以後關閉薪資視窗
-                console.log(exampleModal);
 
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
@@ -350,36 +366,18 @@
             else {
                 alert("項目,數量和價格不可為空值");
             }
-
-            console.log("data");
-            console.log(data);
         })
 
         //大頭照新增  預覽
-        $("#commentPhoto").change(function () {
-            const photos = document.getElementById("commentPhoto").files;
-            if (photos) {
-                $.each(photos, function (idx, photo) {
-                    let src = URL.createObjectURL(photo);
-                    $("#previewCommentPhoto").append(`<div><img src="${src}" class="w-25"/></div>`);
-                });
+        $(".commentphotoclass").change(function () {
+            const photo = document.getElementById($(this).attr("id")).files;
+            if (photo) {
+                let src = URL.createObjectURL(photo[0]);
+                console.log(src);
+                $(this).siblings('label').children().css({ "background-image": `url('${src}')` });
             }
         });
-
-        $("#commentPhoto2").change(function () {
-            const photos = document.getElementById("commentPhoto2").files;
-            if (photos) {
-                $.each(photos, function (idx, photo) {
-                    let src = URL.createObjectURL(photo);
-                    $("#previewCommentPhoto2").append(`<div><img src="${src}" class="w-25"/></div>`);
-                });
-            }
-        });
-
-
-
-
-
+       
         //物流新增
 
         let 物流按鈕 = document.querySelector(".btntype物流");
@@ -389,60 +387,61 @@
         物流按鈕.addEventListener("click", () => {
             新增物流.innerHTML =
                 `<div class="d-flex justify-content-around ">
-                                <table class="table">
-                                    <thead>
-                                        <tr></tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="d-flex justify-content-around 貨運框線">
-                                                <div class="貨運字">7-ELEVEN</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運框線">
-                                                <div class="貨運字">全家便利商店</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運框線">
-                                                <div class="貨運字">萊爾富</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運框線">
-                                                <div class="貨運字">OK便利商店</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運框線">
-                                                <div class="貨運字">大榮貨運</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運無底框">
-                                                <div class="貨運字">黑貓宅急便</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-around 貨運無底框">
-                                                <div class="貨運字">蝦到爆店到店</div>
-                                                <div class="form-check form-switch 貨運按鈕">
-                                                    <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                             </div>`;
+                                    <table class="table">
+                                        <thead>
+                                            <tr></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="d-flex justify-content-around 貨運框線">
+                                                    <div class="貨運字">7-ELEVEN</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運框線">
+                                                    <div class="貨運字">全家便利商店</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運框線">
+                                                    <div class="貨運字">萊爾富</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運框線">
+                                                    <div class="貨運字">OK便利商店</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運框線">
+                                                    <div class="貨運字">大榮貨運</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運無底框">
+                                                    <div class="貨運字">黑貓宅急便</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-around 貨運無底框">
+                                                    <div class="貨運字">蝦到爆店到店</div>
+                                                    <div class="form-check form-switch 貨運按鈕">
+                                                        <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                 </div>`;
             物流按鈕.style.visibility = "hidden";   //隱藏屬性
         })
 
+        
     </script>
 }
