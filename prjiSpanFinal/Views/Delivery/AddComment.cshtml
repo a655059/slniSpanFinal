@@ -15,7 +15,6 @@
             object-fit: contain;
             display: block;
         }
-
         .starImgDiv{
             width:16px;
             aspect-ratio:1/1;    
@@ -43,7 +42,6 @@
             opacity:0;
             color:red;
         }
-        
         #previewCommentPhoto > div > img {
             width: 100%;
             aspect-ratio: 1/1;
@@ -181,22 +179,25 @@
             if (photos) {
                 $.each(photos, function (idx, photo) {
                     let src = URL.createObjectURL(photo);
-                    $("#previewCommentPhoto").append(`<div><i class="deleteCommentPhoto fa-solid fa-circle-xmark"></i><img src="${src}" /></div>`);
+                    $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img src="${src}" /></div>`);
                 });
             }
         });
 
-        //$("#previewCommentPhoto>div").mouseenter(function () {
-        //    $(this).children("i").css("opacity", 1);
-        //});
-        //$("#previewCommentPhoto").on("mouseenter", "#previewCommentPhoto>div", function () {
-        //    $(this).children(".deleteCommentPhoto").css("opacity", "0.7");
-        //});
-        //$("#previewCommentPhoto").on("mouseleave", "#previewCommentPhoto>div", function () {
-        //    $(this).children("i").css("opacity", "0");
-        //});
-        //$("#previewCommentPhoto>div").on("click", ".deleteCommentPhoto", function () {
-        //    $(this).closest("div").remove();
-        //});
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0.3");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0");
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "pointer");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "none");
+        });
+        $("#previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+            $(this).closest(".deleteCommentPhoto").remove();
+        });
     </script>
 }
