@@ -7,11 +7,14 @@
 <h1>產品清單</h1>
 
 
-<table class="table">
+<table class="table" width="150%" style="table-layout:fixed">
     <thead>
         <tr>
             <th>
                 產品編號
+            </th>
+            <th>
+                圖片
             </th>
             <th>
                 產品名稱
@@ -31,6 +34,7 @@
             <th>
                 商品狀態
             </th>
+
             <th></th>
         </tr>
     </thead>
@@ -38,8 +42,11 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td >
+                <td>
                     <input class="form-control-plaintext" type="text" readonly value=@item.ProductId>
+                </td>
+                <td>
+                    <img src="~/img/蘋果圖.jpg" class="w-25" alt="...">
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductName)
@@ -59,11 +66,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductStatus)
                 </td>
+
                 <td>
                     @Html.ActionLink("修改", "ProductEdit", new {  id=item.ProductId }) |
                     @Html.ActionLink("刪除", "ProductDelete", new { id=item.ProductId  }) |
-                    @Html.ActionLink("復原", "ProductRecover", new { id=item.ProductId  }) |
-                    @Html.ActionLink("檢視", "ProductDetailList", new { id=item.ProductId  }) |
+                    @Html.ActionLink("復原", "ProductRecover", new { id=item.ProductId  }) 
+                    @Html.ActionLink("檢視", "ProductDetailList", new { id=item.ProductId},new{@class="btn btn-primary"}) 
 
                 </td>
             </tr>
