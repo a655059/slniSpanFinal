@@ -23,6 +23,7 @@
 
         .名稱寬 {
             width: 50px;
+            float:left;
         }
 
         .btntype, .btntype物流 {
@@ -182,12 +183,12 @@
                     </select>
                 </div>
 
-                <div class="d-flex justify-content-around ">
+                <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2">規格</label>
                     @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
                     <span class="text-danger"></span>
                     <section class="section d-flex justify-content-start">
-                        <table class="table w-100">
+                        <table class="table w-100 " >
                             <thead>
                                 <tr>
                                     <th class="col 規格列表">樣式</th>
@@ -200,23 +201,34 @@
                             <tbody></tbody>
                         </table>
                     </section>
-                    <section class="section d-flex justify-content-start">
-                        <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
-                    </section>
                 </div>
+                <button class="btn btn-secondary btnnew m-3 w-50 btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增</button>
                 <div class="addStyle">
                 </div>
-                <div class="">
-                    <label class="名稱寬 mt-2">封面照片</label>
-                    <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
+                <div>
+                    <label class="名稱寬 mt-2">封面照片</label>  
+                    <div class="d-flex justify-content-start">
+                        @*    大頭照相片1     *@
+                        <div >
+                            <label class="btn" for="commentPhoto">
+                                <img width="100" height="100" class="border" style="background-image: url('../../wwwroot/img/plus.png');" />
+                            </label>
+                            <input type="file" id="commentPhoto" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        </div>
+                        <div id="previewCommentPhoto" class="d-flex">
+
+                        </div>
+                        @*    大頭照相片2     *@
+                        <label class="btn btn-outline-warning btn-sm" for="commentPhoto2">
+                            <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                        </label>
+                        <input type="file" id="commentPhoto2" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        <div id="previewCommentPhoto2" class="d-flex">
+
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-around ">
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
-                    </div>
-                    <div class="d-flex justify-content-around ">
+                    
+                    <div class="d-flex justify-content-start ">
                         <input type="file" class="form-control mt-3 框線 相片寬" />
                         <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
@@ -343,6 +355,31 @@
             console.log(data);
         })
 
+        //大頭照新增  預覽
+        $("#commentPhoto").change(function () {
+            const photos = document.getElementById("commentPhoto").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let src = URL.createObjectURL(photo);
+                    $("#previewCommentPhoto").append(`<div><img src="${src}" class="w-25"/></div>`);
+                });
+            }
+        });
+
+        $("#commentPhoto2").change(function () {
+            const photos = document.getElementById("commentPhoto2").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let src = URL.createObjectURL(photo);
+                    $("#previewCommentPhoto2").append(`<div><img src="${src}" class="w-25"/></div>`);
+                });
+            }
+        });
+
+
+
+
+
         //物流新增
 
         let 物流按鈕 = document.querySelector(".btntype物流");
@@ -390,6 +427,12 @@
                                             </td>
                                             <td class="d-flex justify-content-around 貨運無底框">
                                                 <div class="貨運字">黑貓宅急便</div>
+                                                <div class="form-check form-switch 貨運按鈕">
+                                                    <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </td>
+                                            <td class="d-flex justify-content-around 貨運無底框">
+                                                <div class="貨運字">蝦到爆店到店</div>
                                                 <div class="form-check form-switch 貨運按鈕">
                                                     <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
                                                 </div>
