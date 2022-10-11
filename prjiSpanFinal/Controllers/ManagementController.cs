@@ -92,7 +92,8 @@ namespace prjiSpanFinal.Controllers
             };
             Reports.Add(cReport);
         }
-
+        #endregion
+        #region
         public IActionResult ReportList()
         {
             return View(Reports);
