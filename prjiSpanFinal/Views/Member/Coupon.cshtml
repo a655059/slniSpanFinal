@@ -6,6 +6,8 @@
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
+    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/ItemIndex.css" />
     <style>
         /*        .list a:link{text-decoration:none;}
         .list a:visited{color:aquamarine;}
@@ -77,65 +79,69 @@
             <div class="aaa d-flex flex-wrap">
                 @for (int i = 15; i >= 1; i--)
                 {
-                <div class="border w-25">
-                    <div>
-                        <img src="~/img/coupon.jpg" class="w-100" />
-                    </div>
-                    <div class="px-1 d-flex flex-column justify-content-between">
-                        <div class="cardTitle">店到店免運</div>
-                        <div class="cardPrice">2022/10/10生效</div>
-                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                            <div class="d-flex justify-content-start flex-column mt-1">
-                                <div class="text-black-50">數量有限用完為止</div>
+                    <div class="sellsitem">
+                        <div>
+                            <img src="~/img/coupon.jpg" class="w-100" />
+                        </div>
+                        <div class="px-1 d-flex flex-column justify-content-between">
+                            <div class="cardTitle">店到店免運</div>
+                            <div class="cardPrice">2022/10/10生效</div>
+                            <div class="cardInfo d-flex justify-content-between align-items-end">
+                                <div class="d-flex justify-content-start flex-column mt-1">
+                                    <div class="text-black-50">數量有限用完為止</div>
+                                </div>
                             </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-warning buybtn">稍後使用</button>
+                            </div>
+                            <div class="cardPrice"><a href="/Item/Index/2113">使用規則</a></div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
             @*<div>
-                @for (int i = 15; i >= 1; i--)
-                {
-                    <tr>
-                        <td>
-                            <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                <a href="#">
-                                    <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
-                                </a>
-                                <div class="px-1 d-flex flex-column justify-content-between">
-                                    <div class="cardTitle">店到店免運</div>
-                                    <div class="cardPrice">2022/10/10生效</div>
-                                    <div class="cardInfo d-flex justify-content-between align-items-end">
-                                        <div class="d-flex justify-content-start flex-column mt-1">
-                                             <div class="text-black-50">數量有限用完為止</div>
+                        @for (int i = 15; i >= 1; i--)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                        <a href="#">
+                                            <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
+                                        </a>
+                                        <div class="px-1 d-flex flex-column justify-content-between">
+                                            <div class="cardTitle">店到店免運</div>
+                                            <div class="cardPrice">2022/10/10生效</div>
+                                            <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                <div class="d-flex justify-content-start flex-column mt-1">
+                                                     <div class="text-black-50">數量有限用完為止</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                <a href="#">
-                                    <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
-                                </a>
-                                <div class="px-1 d-flex flex-column justify-content-between">
-                                    <div class="cardTitle">店到店免運</div>
-                                    <div class="cardPrice">2022/10/10生效</div>
-                                    <div class="cardInfo d-flex justify-content-between align-items-end">
-                                        <div class="d-flex justify-content-start flex-column mt-1">
-                                            <div class="text-black-50">數量有限用完為止</div>
+                                </td>
+                                <td>
+                                    <div class="sellsitem" style="border: 2px solid #D0D0D0;">
+                                        <a href="#">
+                                            <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
+                                        </a>
+                                        <div class="px-1 d-flex flex-column justify-content-between">
+                                            <div class="cardTitle">店到店免運</div>
+                                            <div class="cardPrice">2022/10/10生效</div>
+                                            <div class="cardInfo d-flex justify-content-between align-items-end">
+                                                <div class="d-flex justify-content-start flex-column mt-1">
+                                                    <div class="text-black-50">數量有限用完為止</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-        </div>*@
+                                </td>
+                            </tr>
+                        }
+                </div>*@
         </figure>
     </div>
 </div>
-        
+
 
 @section Scripts
 {
