@@ -1,125 +1,57 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model int
 <style>
-    .step-container {
-        width: 80%;
-        height: 80px;
-        margin: 1rem auto 2rem;
-        display: flex;
-        align-items: center;
+    .bar{
+        width:20%;
+        height:2px;
+        background-color:gray;
     }
-
-    .step-item {
-        flex: 1 1;
-        overflow-x: hidden;
-        display: flex;
-        align-items: center;
+    .finish{
+        color:orange
     }
-
-    .step-item:not(:first-child) {
-        padding-left: 1rem;
+    .barfinish{
+        background-color:orange;
     }
-
-    .step-item:last-child {
-        flex: none;
-    }
-
-    .icon,
-    .content {
-        display: inline-block;
-    }
-
-    .icon {
-        flex: none;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        text-align: center;
-        line-height: 32px;
-        color: #ccc;
-    }
-
-    .step-item:not(:last-child) {
-        .content {
-            position: relative;
-            height: 32px;
-            line-height: 32px;
-        }
-
-        .content::after {
-            content: "";
-            position: absolute;
-            top: 16px;
-            left: calc(100% + 1rem);
-            width: 99999px;
-            height: 1px;
-            background-color: #ccc;
-        }
-
-    }
-
-    .content-text {
-        display: none;
-        margin-left: 0.5rem;
-        color: #ccc;
-    }
-
-    // status
-    .step-item.active {
-        .icon {
-            border: none;
-            background-color: crimson;
-            color: #fff;
-        }
-
-        .content::after {
-            background-color: crimson;
-        }
-
-        .content-text {
-            color: crimson;
-        }
-
-    }
-
-    .step-item.complete {
-        .icon {
-            background-color: #333;
-            color: #fff;
-            border: none;
-        }
-
-        .content::after {
-            background-color: #333;
-        }
-
-        .content-text {
-            color: #333;
-        }
-
+    .active{
+        color:red;
     }
 </style>
 
-<div class="step-container">
-    <div class="step-item active">
-        <div class="icon">1</div>
-        <div class="content">
-            <span class="content-text">寄送地址</span>
+<div class="w-75 m-auto">
+    <div class="progressBar d-flex justify-content-around align-items-center">
+        <div class="bar d-none"></div>
+        <div class="text-center">
+            <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+            <div>購物車</div>
         </div>
-    </div>
-    <div class="step-item pending">
-        <div class="icon">2</div>
-        <div class="content">
-            <span class="content-text">運送方式</span>
+        <div class="bar"></div>
+        <div class="text-center">
+            <i class="fa-sharp fa-solid fa-list-ol"></i>
+            <div>填寫訂購資訊</div>
         </div>
-    </div>
-    <div class="step-item pending">
-        <div class="icon">3</div>
-        <div class="content">
-            <span class="content-text">付款資訊</span>
+        <div class="bar"></div>
+        <div class="text-center">
+            <i class="fa-solid fa-file-lines"></i>
+            <div>訂單確認</div>
         </div>
+        <div class="bar"></div>
+        <div class="text-center">
+            <i class="fa-sharp fa-solid fa-circle-check"></i>
+            <div>已完成下訂</div>
+        </div>
+
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+    const checkoutPage = @Model;
+    $(function () {
+        $(".text-center").slice(0, checkoutPage).addClass("finish");
+        $(".bar").slice(0, checkoutPage + 1).addClass("barfinish");
+        $(".text-center").eq(checkoutPage).addClass("active");
+        
+    });
+</script>
+
