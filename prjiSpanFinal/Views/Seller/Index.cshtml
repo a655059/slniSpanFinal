@@ -82,10 +82,10 @@
                 <span class="關鍵字">請輸入關鍵字</span> @Html.TextBox("txtKeyword", "", new { @class = "查詢欄位" }) <input type="submit" value="查詢" class="btn btn-warning" />
             }
         </div>
-        <table class="table row align-items-center ">
+        <table class="table row align-items-center border rounded-2 my-2 px-2 py-1">
             <tbody>
                 @*  *@
-                <tr>
+                <tr class="">
                     <th class="th1">
                         編號
                     </th>
@@ -114,7 +114,7 @@
                     for (var i = 1; i <= 10; i++)
                     {
                         count++;
-                                <tr>
+                                <tr class="">
                                     <th class="th1">@i</th>
                                     <th class="th2345">蘋果</th>
                                     <th class="th2345">紅色<br />藍色</th>

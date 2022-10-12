@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
@@ -77,20 +78,54 @@ namespace prjiSpanFinal.Controllers
                     ProductDetails.Add(cProductDetail);
                 }
             }
+
             CReportHu cReport = new()
             {
-                ProductID = 3,
+                CMemberHu = members.FirstOrDefault(m => m.Id == 1),
+                CProductHu = Products.FirstOrDefault(i => i.ProductId == 3),
+                Reason = "品名寫香蕉圖片卻是蘋果，點進去發現是耳機還有品名根本不是食物，這一切都一團亂",
                 ReporterID = 1,
-                Reason = "",
+                ProductName = "好大一根香蕉",
                 ReportId = 1,
                 ReportType = "廣告不實",
                 ReportStatus = "未處理",
             };
+            Reports.Add(cReport);
         }
-
-        public IActionResult ReportList() 
+        #endregion
+        #region
+        public IActionResult ReportList()
         {
-            return View();
+            return View(Reports);
+        }
+        public IActionResult ReportDetail(int? id)
+        {
+            var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+            return View(Q);
+        }
+        public IActionResult ReportApprove(int? id)
+        {
+            var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatus = "已結案";
+            return RedirectToAction("ReportList");
+        }
+        public IActionResult ReportDelete(int? id)
+        {
+            var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatus = "不成立";
+            return RedirectToAction("ReportList");
+        }
+        public IActionResult ReportUndo(int? id)
+        {
+            var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatus = "未處理";
+            return RedirectToAction("ReportList");
+        }
+        public IActionResult ReportProcess(int? id)
+        {
+            var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatus = "審核中";
+            return RedirectToAction("ReportList");
         }
         #endregion
         #region

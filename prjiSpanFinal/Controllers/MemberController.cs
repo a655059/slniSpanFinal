@@ -44,5 +44,13 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        public IActionResult forgetPw()
+        {
+            return View();
+        }
+        public IActionResult ChangePw()
+        {
+            return View();
+        }
     }
 }

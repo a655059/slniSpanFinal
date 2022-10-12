@@ -6,10 +6,61 @@
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
+    <style>
+        .modal-dialog {
+            top: 7rem !important;
+        }
+    </style>
+    
 }
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">購買清單</h2>
 <vc:order-list side="1"></vc:order-list>
+
+<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">退貨申請</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請選擇退貨理由: </div>
+                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                    <option selected>選擇退貨理由</option>
+                    <option value="1">我沒收到商品</option>
+                    <option value="2">商品與期待不符</option>
+                    <option value="3">商品有損壞</option>
+                    <option value="3">其他</option>
+                </select>
+                <div>請輸入補充資訊: </div>
+                <div class="mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">您的退貨申請已送出</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>您可以與賣家聯繫詢問退貨相關問題，或是從網頁上方幫助中心與客服聯絡以獲得更多資訊。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
 {
     <script src="~/js/DataTable/datatable.js"></script>

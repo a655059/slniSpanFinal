@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
 {
-    public class Argument : Controller
+    public class FAQController : Controller
     {
         public IActionResult Index()
         {

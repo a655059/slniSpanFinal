@@ -10,22 +10,52 @@
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">首頁</a></li>
                 <li><a href="@Url.Content("~/Management/PowerBi")" class="nav-link px-2 text-white navbody">後台</a></li>
                 <li><a href="@Url.Content("~/Seller/Index")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
-                <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">買家中心</a></li>
+                <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">會員中心</a></li>
                 @*<li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
             <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
             </ul>
             <div class="header-cart col-2 d-flex flex-row">
                 <!-- Menu Toogle -->
-                <div>
-                    <a href="#" class="linknoline">
+                <div class="notification">
+                    <div class="collapse notification-body" id="collapseExample1">
+                        <div class="notification-item">
+                            <div class="d-block">
+                                <div class="notification-item-title">最近收到的通知</div>
+                                <ul class="notification-item-list">
+                                    <li class="notification-item-listitem">
+                                        <a href="#!" class="d-flex justify-content-between linknoline">
+                                            <div class="d-flex flex-row">
+                                                <div>
+                                                    <img src="~/img/Member/mikomiko.jpg" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
+                                                    <span class="badge bg-success badge-dot"></span>
+                                                </div>
+                                                <div class="pt-1">
+                                                    <p class="fw-bold mb-0">Miko0001</p>
+                                                    <p class="small text-muted text-start">發給您新的訊息</p>
+                                                </div>
+                                            </div>
+                                            <div class="pt-1">
+                                                <p class="small text-muted mb-1">30 分鐘前</p>
+                                                <span class="badge bg-danger rounded-pill float-end">3</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <a class="linknoline" href="#!">
+                                    <div class="notification-item-title">查看更多</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="linknoline notification-trigger" id="notification-trigger" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
                         <i class="fa fa-solid fa-bell"></i>
-                        <div class="qty">2</div>
+                        <div class="qty">1</div>
                     </a>
                 </div>
                 <!-- /Menu Toogle -->
                 <!-- Wishlist -->
                 <div>
-                    <a href="@Url.Content("~/Member/Like")" class="linknoline">
+                    <a href="@Url.Content("~/FAQ/Index")" class="linknoline">
                         <span>
                             <i class="fa fa-regular fa-circle-question"></i>
                             幫助中心

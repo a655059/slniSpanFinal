@@ -1,8 +1,7 @@
-﻿.container{
-   
+﻿.container {
 }
+
 .HomepageIndex {
-    
     position: relative;
     /*min-width: 1200px;*/
     width: 100%;
@@ -10,10 +9,9 @@
     margin: 0 auto;
     padding: 0 0 0px;
     box-sizing: border-box;
-    
 }
 
-.view {
+.listview {
     box-sizing: border-box;
     display: flex;
     position: relative;
@@ -22,59 +20,107 @@
     align-content: flex-start;
     border: 0 solid #000;
     margin: 0;
-    padding: 0;
+    padding: 0 30px 0 0 ;
     min-width: 0;
+    
+    overflow:hidden;
 }
-.cateheader{
-    max-height:100%;
+    .listview > .listview-lg {
+        border: 1px solid #F75000;
+        border-radius: 20px;
+        font-size: 20px;
+    }
+        .listview > .listview-lg > .list-group-item {
+            font-weight: bold;
+        }
+        .listview > .listview-lg > .list-group-item:hover {
+            background-color: #FFE4CA;
+            color:#F75000;
+            opacity:80%;
+        }
+        .listview > .listview-lg > span {
+            text-align:end;
+        }
+        /*AD*/
+.Homepage-AD {
+    height:300px;
 }
+    .Homepage-AD > a {
+        border-radius:10px;
+        overflow:hidden;
+    }
+        .Homepage-AD > a:hover{
+            opacity:80%;
+        }
+        /*/AD*/
+        .cateheader {
+            max-height: 100%;
+        }
 .cateheader-1 {
     max-height: 420px;
-    height:100%
+    height: 100%
 }
+
 .cateheader-2 {
     max-height: 100%;
     height: 125px;
 }
+ .cateheader-2 img:hover {
+     opacity:80%;
+}
+
 .carousel {
     border-radius: 10px;
     overflow: hidden;
     width: 100%;
     max-height: 420px;
 }
-    .carousel .carousel-item{
-        text-align:center;
+
+    .carousel .carousel-item {
+        text-align: center;
     }
-        .carousel .carousel-item img {
-            min-height:100px;
+
+        .carousel .carousel-item a img {
+            min-height: 100px;
+            width: 100%;
+            display: block;
             object-fit: cover;
         }
+
+            .carousel .carousel-item a img:hover {
+                opacity: 80%;
+            }
+
 .dm {
     overflow: hidden;
     height: 100%;
-    max-height:125px
+    max-height: 125px
 }
-.dm div{
-    max-height:100%;
-}
+
+    .dm div {
+        max-height: 100%;
+    }
+
     .dm img {
         object-fit: cover;
-        max-height:100%;
-        height:100%
+        max-height: 100%;
+        height: 100%
     }
 /*分隔線*/
 .split {
     height: 50px;
     width: 100%;
 }
+
 .split2 {
     max-height: 30px;
     height: 30px;
 }
-    /*猜你喜歡商品區*/
-.guessliketitle{
-    padding-left:20px;
+/*猜你喜歡商品區*/
+.guessliketitle {
+    padding-left: 20px;
 }
+
 .itembody {
     width: 1300px;
     padding: 0;
@@ -139,32 +185,36 @@
 .starImg {
     width: 10%;
     aspect-ratio: 1/1;
-    margin-right:10px;
+    margin-right: 10px;
 }
-    .starImg > img{
-        width:200%;
+
+    .starImg > img {
+        width: 200%;
     }
-    .buybtn {
-        font-size: 12px;
-        padding: 3px;
-        text-align: center;
-        width: 100px;
-        color: black;
-        font-weight: bold;
-    }
+
+.buybtn {
+    font-size: 12px;
+    padding: 3px;
+    text-align: center;
+    width: 100px;
+    color: black;
+    font-weight: bold;
+}
+
     .buybtn:hover {
         color: red;
         --bs-btn-hover-color: red;
         opacity: 80%;
     }
+
 .showmoreitem {
     color: red;
     border: 1px solid red;
     font-weight: bold;
 }
+
     .showmoreitem:hover {
         color: white;
         --bs-btn-hover-color: black;
         opacity: 80%;
     }
-

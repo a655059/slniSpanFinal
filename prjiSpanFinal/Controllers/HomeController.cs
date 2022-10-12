@@ -38,7 +38,7 @@ namespace prjiSpanFinal.Controllers
             listCBigType.Add(a);
             listCBigType.Add(b);
             listCBigType.Add(c);
-            for (int i = 1; i < 12; i++)
+            for (int i = 1; i < 10; i++)
             {
                 listCBigType.Add(a);
             }
