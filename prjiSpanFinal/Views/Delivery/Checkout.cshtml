@@ -3,12 +3,13 @@
     ViewData["Title"] = "Checkout";
 }
 
-@section Styles{ 
+@section Styles{
     <style>
-        .showCalTotalPriceVC{
-            position:sticky;
-            top:80px;
+        .showCalTotalPriceVC {
+            position: sticky;
+            top: 80px;
         }
+
         .modal {
             position: fixed;
             top: 80px;
@@ -16,7 +17,7 @@
     </style>
 }
 
-<h4>結帳</h4>
+@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
 <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
     <label class="btn btn-outline-warning" for="btnradio1">林小偉的賣場</label>
@@ -25,9 +26,9 @@
 </div>
 <div class="row">
     <div class="col-9">
-        
+
         <div class="checkoutPartialView">
-            
+
         </div>
         <div class="text-center">
             <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>
