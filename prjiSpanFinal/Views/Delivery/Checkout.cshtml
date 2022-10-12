@@ -26,9 +26,8 @@
 </div>
 <div class="row">
     <div class="col-9">
-
-        <div class="checkoutPartialView">
-
+        <div class="checkoutFormVC">
+            @await Component.InvokeAsync("DeliveryFillCheckoutForm", new {count=2 }) 
         </div>
         <div class="text-center">
             <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>
@@ -47,21 +46,20 @@
 
 @section Scripts{
     <script>
-        $($(".checkoutPartialView").load("@Url.Content("~/Delivery/CheckoutPartial")"+`?id=2`));
         $("#nextStore").click(function () {
-            $(".checkoutPartialView").load("@Url.Content("~/Delivery/CheckoutPartial")" + `?id=1`);
+            $(".checkoutFormVC").load("@Url.Action("CheckoutForm", "Delivery", new { count = 1 })")
             let nowId = $("#choseStore").children("input:checked").attr("id");
             let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) + 1);
             $("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
             $("#previousStore").removeClass("d-none");
         });
         $("#previousStore").click(function () {
-            $(".checkoutPartialView").load("@Url.Content("~/Delivery/CheckoutPartial")" + `?id=2`);
+            $(".checkoutFormVC").load("@Url.Action("CheckoutForm", "Delivery", new { count = 2 })");
             let nowId = $("#choseStore").children("input:checked").attr("id");
             let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) - 1);
             $("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
             $("#previousStore").addClass("d-none");
-        });
+        })
     </script>
     <script src="~/js/DeliveryCheckout.js"></script>
 }
