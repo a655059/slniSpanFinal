@@ -23,7 +23,6 @@ namespace prjiSpanFinal.Controllers
             {
                 ADDDATAS();
             }
-
         }
         #region DATASRegion
         public void ADDDATAS()
@@ -384,6 +383,5 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("OrderList");
         }
         #endregion
-
     }
 }
