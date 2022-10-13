@@ -1,0 +1,47 @@
+﻿/*DeliveryCheckout main page*/
+
+.showCalTotalPriceVC {
+    position: sticky;
+    top: 80px;
+}
+
+.modal {
+    position: fixed;
+    top: 80px;
+}
+
+
+/*DeliveryFillCheckoutForm ViewComponent*/
+
+.itemThumb {
+    width: 200px;
+    aspect-ratio: 1/1;
+}
+
+.itemThumb img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+}
+
+.ship:hover {
+    cursor: pointer;
+}
+
+.googleMaps {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.googleMaps iframe {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+}
+
+/*CalTotalPrice ViewComponent*/
+
+.modal {
+    position: fixed;
+    top: 80px;
+}
