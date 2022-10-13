@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
@@ -20,15 +23,31 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        public IActionResult CheckoutPartial(int id)
-        {
-            return PartialView("~/Views/Delivery/_DeliveryCheckoutPartial.cshtml", id);
-        }
         public IActionResult AddComment()
         {
             return View();
         }
-        
-
+        public IActionResult CheckoutForm(int? count)
+        {
+            return ViewComponent("DeliveryFillCheckoutForm", count);
+        }
+        public IActionResult OrderSuccess()
+        {
+            //MimeMessage message = new MimeMessage();
+            //message.From.Add(new MailboxAddress("Jacob", "ShopDaoBao@outlook.com"));
+            //message.To.Add(new MailboxAddress("Jacob", "maimaisatt@gmail.com"));
+            //message.Subject = "測試一下";
+            //BodyBuilder builder = new BodyBuilder();
+            //builder.TextBody = "你好，這是測試";
+            //message.Body = builder.ToMessageBody();
+            //using(SmtpClient client = new SmtpClient())
+            //{
+            //    client.Connect("smtp.outlook.com", 25, false);
+            //    client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
+            //    client.Send(message);
+            //    client.Disconnect(true);
+            //}
+            return View();
+        }
     }
 }

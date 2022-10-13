@@ -2,56 +2,32 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model int
-<style>
-    .bar{
-        width:20%;
-        height:2px;
-        background-color:gray;
-    }
-    .finish{
-        color:orange
-    }
-    .barfinish{
-        background-color:orange;
-    }
-    .active{
-        color:red;
-    }
-</style>
 
-<div class="w-75 m-auto">
+
+<div class="w-75 mb-3 mx-auto">
     <div class="progressBar d-flex justify-content-around align-items-center">
         <div class="bar d-none"></div>
-        <div class="text-center">
+        <div class="progressBarStage text-center">
             <i class="fa-sharp fa-solid fa-cart-shopping"></i>
             <div>購物車</div>
         </div>
         <div class="bar"></div>
-        <div class="text-center">
+        <div class="progressBarStage text-center">
             <i class="fa-sharp fa-solid fa-list-ol"></i>
             <div>填寫訂購資訊</div>
         </div>
         <div class="bar"></div>
-        <div class="text-center">
+        <div class="progressBarStage text-center">
             <i class="fa-solid fa-file-lines"></i>
             <div>訂單確認</div>
         </div>
         <div class="bar"></div>
-        <div class="text-center">
+        <div class="progressBarStage text-center">
             <i class="fa-sharp fa-solid fa-circle-check"></i>
             <div>已完成下訂</div>
         </div>
-
+        <div class="d-none" id="checkoutPage">@Model</div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-<script>
-    const checkoutPage = @Model;
-    $(function () {
-        $(".text-center").slice(0, checkoutPage).addClass("finish");
-        $(".bar").slice(0, checkoutPage + 1).addClass("barfinish");
-        $(".text-center").eq(checkoutPage).addClass("active");
-        
-    });
-</script>
+
 

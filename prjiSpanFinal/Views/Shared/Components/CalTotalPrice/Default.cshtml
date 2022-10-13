@@ -48,11 +48,11 @@
     </div>
     @if (Model == 1)
     {
-        <a href="~/Delivery/Checkout"><button class="btn btn-warning w-100">去結帳</button></a>
+        <a href="@Url.Content("~/Delivery/Checkout")"><button class="btn btn-warning w-100">去結帳</button></a>
     }
     else
     {
-        <a href="~/Delivery/AddComment"><button class="btn btn-warning w-100">去結帳</button></a>
+        <a href="@Url.Content("~/Delivery/OrderSuccess")"><button class="btn btn-warning w-100">去結帳</button></a>
     }
 </div>
 

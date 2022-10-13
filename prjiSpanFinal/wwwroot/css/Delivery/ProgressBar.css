@@ -1,0 +1,22 @@
+﻿.bar {
+    width: 20%;
+    height: 2px;
+    background-color: gray;
+}
+
+.progressBarStage {
+    font-size: 1em;
+}
+
+.finish {
+    color: orange
+}
+
+.barfinish {
+    background-color: orange;
+}
+
+.active {
+    color: red;
+    font-size: 1.1em;
+}
