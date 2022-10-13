@@ -31,6 +31,10 @@ namespace prjiSpanFinal.Controllers
         {
             return ViewComponent("DeliveryFillCheckoutForm", count);
         }
+        public IActionResult CheckoutConfirm()
+        {
+            return View();
+        }
         public IActionResult OrderSuccess()
         {
             //MimeMessage message = new MimeMessage();
