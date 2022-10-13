@@ -1,0 +1,114 @@
+﻿@addTagHelper *, prjiSpanFinal
+@{
+    ViewData["Title"] = "Coupon";
+}
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+        .建立按鈕 {
+            font-weight: 700;
+        }
+
+        .內文優惠劵 {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .置中{
+            vertical-align: middle;
+        }
+
+    </style>
+}
+<vc:seller-ui></vc:seller-ui>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">建立優惠劵</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>優惠劵名稱:</label>
+                <input type="text" id="text1" class="form-control my-1">
+                <br />
+                <label>折扣額度:</label>
+                <input type="text" id="text2" class="form-control my-1">
+                <br />
+                <label>優惠券可使用期間:</label>
+                <span>
+                    <input id="startDate" class="form-control orderdatepicker" type="date"> ~ <input id="endDate" class="form-control orderdatepicker" type="date">
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-11 ">
+        <h2 class="d-flex justify-content-center">優惠劵</h2>
+        <div class="">
+            <div class="my-3 mx-2 內文優惠劵">所有優惠劵<button class="btn btn-warning float-end w-25 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">建立+</button></div>
+            <div class="mx-2"><p>建立賣場優惠券或商品優惠券以吸引買家下單！</p></div>
+            <div class="">
+                <div class="mx-2 input-group mb-3 w-50">
+                    <span class="input-group-text">優惠劵名稱</span>
+                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <button class="btn btn-outline-secondary" type="button">確定</button>
+                </div>
+            </div>
+            <div class="">
+                <table class="table border rounded-2">
+                        <tr class="text-bg-secondary p-3">
+                            <td scope="col"></td>
+                            <td scope="col">優惠券名稱</td>
+                            <td scope="col">折扣額度</td>
+                            <td scope="col">優惠券領取期間</td>
+                            <td scope="col">操作</td>
+                        </tr>
+                        @{
+                            for (var i = 1; i <=4; i++)
+                            {
+                                <tr>
+                                    <td scope="row"><img src="~/img/seller coupon.png" /></td>
+                                    <td class="置中">開站優惠</td>
+                                    <td class="置中">100</td>
+                                    <td class="置中">2022/10/13 11:20 - 2022/10/13 12:20</td>
+                                    <td class="置中">
+                                        <div>
+                                            @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@},new { @style = "text-decoration:none;" })
+                                        </div>
+                                        <div>
+                                            @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
+                                                              new { onclick = "return confirm('確定要刪除嗎?')",@style= "text-decoration:none;" })
+                                        </div>
+                                    </td>
+                                </tr>
+                                } 
+                            }
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
+@section Scripts
+{
+}

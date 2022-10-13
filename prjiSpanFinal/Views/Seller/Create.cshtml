@@ -24,6 +24,7 @@
         .名稱寬 {
             width: 50px;
             float: left;
+            margin-right:3px;
         }
 
         .btntype, .btntype物流 {
@@ -53,8 +54,7 @@
 
         .名稱 {
             border-color: lightslategray;
-            width: 400px;
-            margin-left: 2px;
+            width: 500px;
         }
 
         .表格寬度 {
@@ -116,6 +116,9 @@
         .modal-dialog {
             top: 7rem !important;
         }
+        .寬度{
+            position:relative
+        }
     </style>
 }
 <vc:seller-ui></vc:seller-ui>
@@ -149,7 +152,7 @@
     </div>
 </div>
 
-<div class="row overflow-auto">
+<div class="row ">
     <div class="col-1"></div>
     <div class="col-11 ">
         <h2 class="d-flex justify-content-center mb-2">新增商品</h2>
@@ -157,8 +160,8 @@
             <div class="排版">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group d-flex justify-content-start ">
-                    <label class="名稱寬 ">名稱</label>
+                <div class="d-flex justify-content-start">
+                    <label class="名稱寬">名稱</label>
                     <input class="form-control 名稱" />
                     <span class="text-danger"></span>
                 </div>
@@ -187,8 +190,8 @@
                     <label class="名稱寬 mt-2">規格</label>
                     @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
                     <span class="text-danger"></span>
-                    <section class="section d-flex justify-content-start">
-                        <table class="table w-100 ">
+                    <section class="section">
+                        <table class="table w-100 text-center">
                             <thead>
                                 <tr>
                                     <th class="col 規格列表">樣式</th>
@@ -200,11 +203,12 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                        <div class="text-center">
+                            <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                        </div>
                     </section>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <button class="btn btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
-                </div>
+                
                 <div class="addStyle">
                 </div>
                 <div>
@@ -245,11 +249,6 @@
                             </label>
                             <input type="file" id="commentPhoto5" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
                         </div>
-                    </div>
-
-                    <div class="d-flex justify-content-start ">
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
-                        <input type="file" class="form-control mt-3 框線 相片寬" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-start ">
