@@ -8,10 +8,6 @@ namespace prjiSpanFinal.Controllers
 {
     public class SellerController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
         public IActionResult Order()
         {
             return View();
@@ -30,6 +26,21 @@ namespace prjiSpanFinal.Controllers
         }
 
         public IActionResult Center()
+        {
+            return View();
+        }
+
+        public IActionResult NewIndex()
+        {
+            return View();
+        }
+
+        public IActionResult Coupon()
+        {
+            return View();
+        }
+
+        public IActionResult Even()
         {
             return View();
         }
