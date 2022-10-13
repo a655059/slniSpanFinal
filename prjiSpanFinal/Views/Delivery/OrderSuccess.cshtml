@@ -3,7 +3,7 @@
     ViewData["Title"] = "OrderSuccess";
 }
 @section Styles{ 
-
+    <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 3 }) 
@@ -16,3 +16,8 @@
         <div class="fs-6">相關資訊已寄送至Email:aaaa@gmail.com</div>
     </div>
 </div>
+
+
+@section Scripts{ 
+    <script src="~/js/Delivery/ProgressBar.js"></script>
+}

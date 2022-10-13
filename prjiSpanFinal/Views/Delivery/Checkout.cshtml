@@ -4,6 +4,7 @@
 }
 
 @section Styles{
+    <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
     <style>
         .showCalTotalPriceVC {
             position: sticky;
@@ -60,6 +61,8 @@
             $("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
             $("#previousStore").addClass("d-none");
         })
+        
     </script>
-    <script src="~/js/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/ProgressBar.js"></script>
 }

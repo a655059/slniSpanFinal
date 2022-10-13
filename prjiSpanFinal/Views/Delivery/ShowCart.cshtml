@@ -4,17 +4,18 @@
 }
 
 @section Styles{
+    <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
     <style>
         .itemImgDiv {
             width: 200px;
             aspect-ratio: 1/1;
         }
 
-        .itemImgDiv img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-        }
+            .itemImgDiv img {
+                width: 100%;
+                aspect-ratio: 1/1;
+                object-fit: contain;
+            }
 
         .countMinus, .countPlus {
             width: 20px;
@@ -40,11 +41,12 @@
             width: 20px;
             height: 20px;
         }
-        
-        .showCalTotalPriceVC{
-            position:sticky;
-            top:80px;
+
+        .showCalTotalPriceVC {
+            position: sticky;
+            top: 80px;
         }
+
         .modal {
             position: fixed;
             top: 80px;
@@ -53,7 +55,7 @@
 }
 
 
-@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage= 0})
+@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
 <div class="w-100 row mt-3">
     <div class="col-9">
         <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
@@ -147,6 +149,7 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/js/DeliveryShowCart.js"></script>
-    <script src="~/js/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/DeliveryShowCart.js"></script>
+    <script src="~/js/Delivery/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/ProgressBar.js"></script>
 }

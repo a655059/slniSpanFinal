@@ -3,28 +3,6 @@
 *@
 @model int
 
-<style>
-    .bar {
-        width: 20%;
-        height: 2px;
-        background-color: gray;
-    }
-    .progressBarStage{
-        font-size:1em;
-    }
-    .finish {
-        color: orange
-    }
-    .barfinish {
-        background-color: orange;
-    }
-    .active {
-        color: red;
-        font-size:1.1em;
-    }
-</style>
-
-
 
 <div class="w-75 mb-3 mx-auto">
     <div class="progressBar d-flex justify-content-around align-items-center">
@@ -48,17 +26,8 @@
             <i class="fa-sharp fa-solid fa-circle-check"></i>
             <div>已完成下訂</div>
         </div>
-
+        <div class="d-none" id="checkoutPage">@Model</div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-<script src="~/js/"></script>
-<script>
-    const checkoutPage = @Model;
-    $(function () {
-        $(".progressBarStage ").slice(0, checkoutPage).addClass("finish");
-        $(".bar").slice(0, checkoutPage + 1).addClass("barfinish");
-        $(".progressBarStage").eq(checkoutPage).addClass("active");
-    });
-</script>
+
 
