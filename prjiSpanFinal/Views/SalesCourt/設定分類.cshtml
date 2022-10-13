@@ -34,81 +34,14 @@
 }
 
 
-<!--<div class="row m-6" style="background-color:antiquewhite">自訂賣場分類管理</div>
-<div class="class-main">
-    <div class="class-main-intro text-center">
-        <ul class="" >
-            <li style="list-style-type:circle">最多可自訂100個分類，若分類中無商品時，將不會顯示於賣場。</li>
-            <li style="list-style-type:circle">可直接拖曳橘框進行排序，點選商品數量可進行商品歸類。</li>
-            <li style="list-style-type:circle">可直接拖曳橘框進行排序，點選商品數量可進行商品歸類。</li>
-        </ul>-->
-@*<a role="button" href="">刪除</a>
-    <a role="button" href="">新增</a>*@
-
-@*<input type="submit" value="新增" class="btn btn-warning m-3" onclick="return confirm('新增成功')" />*@
-<!--</div>
-</div>
-
-
-<button class="btn btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
-
-
-<div class="row">
-    <div class="col-4">
-        <button id="newbt">新增</button>
-        <button id="delbt">刪除</button>
-    </div>
-
-</div>
-<div class="row">
-    <div class="col">順序</div>
-    <div class="col">類別名稱</div>
-    <div class="col">商品數</div>
-    <div class="col">商品排序方式</div>-->
-@*<span><a href="#" class="text-primary">全部套用</a></span>*@
-<!--<div class="col">管理</div>
-</div>-->
-@*<div class="row">
-        <div class="col-9">
-            <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                <label class="btn btn-outline-warning" for="btnradio1">林小偉的賣場</label>
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                <label class="btn btn-outline-warning" for="btnradio2">林大偉的賣場</label>
-            </div>
-            <div class="checkoutPartialView">
-
-            </div>
-            <div class="text-center">
-                <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>
-                <button class="btn btn-primary" id="nextStore">確認並前往下一筆</button>
-            </div>
-        </div>
-    </div>
 
 
 
 
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">選擇地址或門市</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="googleMaps">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
 
-            <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市">
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="button" class="saveAddress btn btn-primary" data-bs-dismiss="modal">儲存</button>
-            </div>
 
-        </div>
-    </div>*@
-@*前面的按鈕*@
+
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     新增輸入框
 </button>
@@ -117,7 +50,7 @@
 
 <div class="d-flex justify-content-start ">
     <label class="名稱寬 mt-2">規格</label>
-    @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
+   
     <span class="text-danger"></span>
     <section class="section d-flex justify-content-start">
         <table class="table w-100 ">
@@ -138,7 +71,7 @@
 
 
 
-@*要新增的表格*@
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -148,16 +81,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @*...*@
-                <label>樣式:</label>
+
+                <label>順序:</label>
                 <input type="text" id="text1" class="form-control">
                 <br />
-                <label>數量:</label>
+               
                 <input type="text" id="text2" class="form-control">
                 <br />
-                <label>售價:</label>
-                <input type="text" id="text3" class="form-control">
-                <br />
+
+
+                <div class="d-flex justify-content-start ">
+                    <label>類別名稱:</label>
+                    <select class="form-select w-25 m-3 " aria-label="Default select example ">
+                        <option value="1">最新刊登</option>
+                    </select>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -166,27 +105,7 @@
         </div>
     </div>
 </div>
-@*<button style="font-size:3rem"*@
-@*<div class="d-flex justify-content-start ">
-        <label class="名稱寬 mt-2">類別</label>
-        <select class="form-select w-25 m-3 " aria-label="Default select example ">
-            <option value="1">女生衣著</option>
-            <option value="2">書籍及雜誌期刊</option>
-            <option value="3">男生衣著</option>
-            <option value="4">居家生活</option>
-            <option value="5">運動/健身</option>
-            <option value="6">美食、伴手禮</option>
-        </select>
-        <select class="form-select w-25 m-3" aria-label="Default select example ">
-            <option selected>T恤</option>
-            <option value="1">長褲</option>
-            <option value="2">內睡衣</option>
-            <option value="3">外套</option>
-            <option value="4">其他</option>
-            <option value="5">針織/毛衣</option>
-            <option value="6">多件式套裝</option>
-        </select>
-    </div>*@
+
 
 
 
@@ -196,11 +115,8 @@
 
 @section Scripts{
     <script>
-        /*const { Button } = require("../../wwwroot/lib/js/bootstrap.bundle");*/
-        let data = [
-            //['紅色', 7, 100, ''],
-            //['藍色', 10, 300, '']
-        ]
+       
+        let data = [       ]
        
 
         let tbody = document.querySelector('tbody')
@@ -215,19 +131,9 @@
            
         }
 
-        /*let infomodal = document.getelementbyid("infomodal");*/
-        let close = document.getelementbyid("close");
-        let save = document.getelementbyid("save");
+        let save = document.getElementById("save");
 
-        //show 出 model 可新增拍賣物品
-        let btn = document.querySelector(".btnnew")
-        btn.addEventListener('click', () => {
-           
-            clickValue();
-            console.log(infoModal.showModal());
-           
-        })
-
+     
         //清空model值
         function clickValue() {
             document.getElementById("text1").value = '';
@@ -235,8 +141,8 @@
             document.getElementById("text3").value = '';
       
         }
-
-        Save.addEventListener("click", function () {
+        $("select").children("option[value='1      ']")
+        save.addEventListener("click", function () {
             let dataNew = [];
             let type = document.getElementById("text1").value;
             let quantity = document.getElementById("text2").value;
@@ -265,9 +171,9 @@
                     let parent = a.parentNode.parentNode;
                     parent.remove();
                 })
-                tr.appendChild(td);
-                tbody.insertBefore(tr, tbody.children[0])
-
+                Tr.appendChild(td);
+                tbody.insertBefore(Tr, tbody.children[0])
+                clickValue();
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
