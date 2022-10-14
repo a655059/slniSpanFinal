@@ -35,10 +35,26 @@ namespace prjiSpanFinal.Controllers
                 {
                     price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
                 }
-                double starCount = dbContext.Comments.Where(i => i.ProductId == p.ProductId).Average(i=>i.Star);
-                int salesVolume = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == p.ProductId && i.Order.StatusId == 6).Sum(i => i.Quantity);
-
-
+                var starCounts = dbContext.Comments.Where(i => i.ProductId == p.ProductId).Select(i => i.Star);
+                double starCount = 0;
+                if (starCounts.Count() == 0)
+                {
+                    starCount = 0;
+                }
+                else
+                {
+                    starCount = starCounts.Average(i => i);
+                }
+                var salesVolumes = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == p.ProductId && i.Order.StatusId == 6).Select(i => i.Quantity);
+                int salesVolume = 0;
+                if (salesVolumes.Count() == 0)
+                {
+                    salesVolume = 0;
+                }
+                else
+                {
+                    salesVolume = salesVolumes.Sum(i => i);
+                }
                 CItemIndexSellerProductViewModel sellerProduct = new CItemIndexSellerProductViewModel
                 {
                     productName = productName,

@@ -101,11 +101,17 @@
 
 
 
-.sellerProducts sellerProductsLayout {
-    width: 1055px;
-    height: 340px;
-    margin: 0 auto;
+.sellerProducts .sellerProductsLayout {
+    width: 1060px;
+    height:352px;
+    margin: 10px auto;
+    padding:16px 0;
     overflow: hidden;
+    position:relative;
+}
+
+.sellerProductsLayout .productCardLayout{
+    position:absolute;
 }
 
 

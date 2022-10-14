@@ -8,8 +8,20 @@
     <div class="productCardImgDiv">
         <img src="@imgUrl" alt="photo" />
     </div>
-    <div>@Model.productName</div>
-    <div>@Model.price</div>
-    <div>@Model.starCount.ToString("0.0")<span class="mx-2">|</span>@Model.salesVolume</div>
-    
+    <div class="p-2">
+        <div class="productCardTitle">@Model.productName</div>
+        <div class="productCardPrice my-2">@Model.price</div>
+        <div class="productCardInfo">
+            <div>
+                <img src="/img/YellowStar.png" alt="star" class="productCardInfoImg" />
+                <div>@Model.starCount.ToString("0.0")</div>
+                <div class="mx-2">|</div>
+                <div class="productCardSalesVolume">銷售<span>@Model.salesVolume</span></div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+
+    </div>
 </div>
