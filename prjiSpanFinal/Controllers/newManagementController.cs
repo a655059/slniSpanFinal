@@ -23,12 +23,11 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult newProductList()
         {
-
             var C=new CProductListViewModel();
             var Q = from i in db.Products
                     select i;
-          
-            return PartialView(C);
+           C.Products=Q.ToList();
+            return View(C);
         }
         public IActionResult ProductEdit(int? id)
         {
@@ -44,9 +43,9 @@ namespace prjiSpanFinal.Controllers
         public async Task<IActionResult> Index(int? page = 1)
         {
             //每頁幾筆
-            const int pageSize = 3;
+            const int pageSize = 20;
             //處理頁數
-            ViewBag.carsModel = GetPagedProcess(page, pageSize);
+            ViewBag.Prods = GetPagedProcess(page, pageSize);
             //填入頁面資料
             return View(await db.Products.Skip<Product>(pageSize * ((page ?? 1) - 1)).Take(pageSize).ToListAsync());
         }
