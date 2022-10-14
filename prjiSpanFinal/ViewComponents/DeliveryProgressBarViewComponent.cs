@@ -8,9 +8,9 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class DeliveryProgressBarViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(int? checkoutPage)
         {
-            return View();
+            return View(checkoutPage);
         }
     }
 }

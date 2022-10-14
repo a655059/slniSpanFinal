@@ -2,39 +2,41 @@
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
-
-    <style>
-        /*        .list a:link{text-decoration:none;}
+    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+}
+<style>
+    /*        .list a:link{text-decoration:none;}
         .list a:visited{color:aquamarine;}
         .list a:hover{text-decoration:underline;color:green;}
         .list a:active{color:red;font-size:30px;}*/
 
-        figcaption {
-            color: #FF0000;
-            font-size: 40px;
-            margin: 0 auto;
-        }
+    figcaption {
+        color: #FF0000;
+        font-size: 40px;
+        margin: 0 auto;
+    }
 
-        .list > li > a:link {
-            text-decoration: none;
-            color: darkslategrey;
-        }
+    .list > li > a:link {
+        text-decoration: none;
+        color: darkslategrey;
+    }
 
-        .list > li > a:visited {
-            color: aquamarine;
-        }
+    .list > li > a:visited {
+        color: aquamarine;
+    }
 
-        .list > li > a:hover {
-            text-decoration: underline;
-            color: green;
-        }
+    .list > li > a:hover {
+        text-decoration: underline;
+        color: green;
+    }
 
-        .list > li > a:active {
-            color: red;
-            font-size: 30px;
-        }
-    </style>
-}
+    .list > li > a:active {
+        color: red;
+        font-size: 30px;
+    }
+</style>
+
 
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">按讚好物</h2>
@@ -50,7 +52,7 @@
                 <a class="nav-link active" aria-current="page" href="#">所有商品</a>
             </li>
             <li class="nav-item" id="PDstage">
-                <a class="nav-link"  href="#">狀態</a>
+                <a class="nav-link" href="#">狀態</a>
             </li>
             <li class="nav-item" id="PDdiscount">
                 <a class="nav-link" href="#">折扣中</a>
@@ -62,23 +64,34 @@
         <figure style="background-color:#FCFCFC">
             <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
             <div class="aaa d-flex flex-wrap">
-                    @for (int i = 15; i >= 1; i--)
-                    {
-                <div class="border w-25">
-                    <div>
-                        <img src="~/img/product01.png" class="w-100" />
-                    </div>
-                    <div class="px-1 d-flex flex-column justify-content-between">
-                        <div class="cardTitle">商品:筆電</div>
-                        <div class="cardPrice">價格:$25000</div>
-                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                            <div class="d-flex justify-content-start flex-column mt-1">
-                                <div class="text-black-50">銷售存量<span>100</span></div>
+                @for (int i = 15; i >= 1; i--)
+                {
+                    <div class="sellsitem">
+                        <div>
+                            <a href="/Item/Index/2113">
+                                <img src="~/img/product01.png" class="cardImg" />
+                            </a>
+                        </div>
+                        <div class="px-1 d-flex flex-column justify-content-between">
+                            <div class="cardTitle">商品:筆電</div>
+                            <div class="cardPrice">價格:$25000</div>
+                            <div class="cardInfo d-flex justify-content-between align-items-end">
+                                <div class="d-flex justify-content-start flex-column mt-1">
+                                    <div class="d-flex justify-content-start">
+                                        <div class="starImg">
+                                            <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                        </div>
+                                        <div class="text-black">4.5</div>
+                                    </div>
+                                    <div class="text-black-50">銷售<span>100</span></div>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                    }
+                }
             </div>
         </figure>
     </div>
@@ -86,7 +99,7 @@
 
 @section Scripts
 {
-<script>
+    <script>
     const pd狀態 = document.querySelector("#PDstage")
     const pd折扣 = document.querySelector("#PDdiscount")
     const pd類別 = document.querySelector("#PDclass")
@@ -114,5 +127,5 @@
         }
         $(".aaa").html(str);
     });
-</script>
+    </script>
 }
