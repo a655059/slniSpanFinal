@@ -16,6 +16,7 @@ namespace prjiSpanFinal.Models
             OfficialCoupons = new HashSet<OfficialCoupon>();
             Orders = new HashSet<Order>();
             Products = new HashSet<Product>();
+            Reports = new HashSet<Report>();
         }
 
         public int MemberId { get; set; }
@@ -33,6 +34,7 @@ namespace prjiSpanFinal.Models
         public string Bio { get; set; }
         public byte[] MemPic { get; set; }
         public int MemStatusId { get; set; }
+        public string Gender { get; set; }
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
@@ -43,5 +45,6 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<OfficialCoupon> OfficialCoupons { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
     }
 }

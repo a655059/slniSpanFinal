@@ -13,6 +13,7 @@ namespace prjiSpanFinal.Models
             Likes = new HashSet<Like>();
             ProductDetails = new HashSet<ProductDetail>();
             ProductPics = new HashSet<ProductPic>();
+            Reports = new HashSet<Report>();
             ShipperToProducts = new HashSet<ShipperToProduct>();
         }
 
@@ -33,6 +34,7 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<ProductPic> ProductPics { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
     }
 }

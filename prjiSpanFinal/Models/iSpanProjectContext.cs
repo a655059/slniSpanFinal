@@ -42,6 +42,9 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<ProductPic> ProductPics { get; set; }
         public virtual DbSet<ProductStatus> ProductStatuses { get; set; }
         public virtual DbSet<RegionList> RegionLists { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<ReportType> ReportTypes { get; set; }
+        public virtual DbSet<Sellscounttable> Sellscounttables { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<ShipperToProduct> ShipperToProducts { get; set; }
         public virtual DbSet<ShippingStatus> ShippingStatuses { get; set; }
@@ -356,6 +359,8 @@ namespace prjiSpanFinal.Models
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('Email')");
 
+                entity.Property(e => e.Gender).HasMaxLength(50);
+
                 entity.Property(e => e.MemStatusId).HasColumnName("MemStatusID");
 
                 entity.Property(e => e.MemberAcc)
@@ -662,6 +667,69 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RegionList_CountryList");
+            });
+
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.ToTable("Report");
+
+                entity.Property(e => e.ReportId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReportID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.Reason).IsRequired();
+
+                entity.Property(e => e.ReportPic).IsRequired();
+
+                entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
+
+                entity.Property(e => e.ReporterId).HasColumnName("ReporterID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_Product");
+
+                entity.HasOne(d => d.ReportType)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReportTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_ReportType");
+
+                entity.HasOne(d => d.Reporter)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReporterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_MemberAccount");
+            });
+
+            modelBuilder.Entity<ReportType>(entity =>
+            {
+                entity.ToTable("ReportType");
+
+                entity.Property(e => e.ReportTypeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReportTypeID");
+
+                entity.Property(e => e.ReportTypeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Sellscounttable>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("sellscounttable");
+
+                entity.Property(e => e.Bigtype)
+                    .HasMaxLength(50)
+                    .HasColumnName("bigtype");
+
+                entity.Property(e => e.Sellscount).HasColumnName("sellscount");
             });
 
             modelBuilder.Entity<Shipper>(entity =>
