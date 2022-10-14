@@ -24,7 +24,7 @@
         .名稱寬 {
             width: 50px;
             float: left;
-            margin-right:3px;
+            margin-right: 3px;
         }
 
         .btntype, .btntype物流 {
@@ -116,12 +116,13 @@
         .modal-dialog {
             top: 7rem !important;
         }
-        .寬度{
-            position:relative
+
+        .寬度 {
+            position: relative
         }
     </style>
 }
-<vc:seller-ui></vc:seller-ui>
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -152,12 +153,14 @@
     </div>
 </div>
 
+
 <div class="row ">
-    <div class="col-1"></div>
-    <div class="col-11 ">
-        <h2 class="d-flex justify-content-center mb-2">新增商品</h2>
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-10">
+        <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
+        <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
         <div class="row">
-            <div class="排版">
+            <div class="排版 mx-5">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="d-flex justify-content-start">
@@ -208,7 +211,7 @@
                         </div>
                     </section>
                 </div>
-                
+
                 <div class="addStyle">
                 </div>
                 <div>
@@ -266,7 +269,7 @@
             <div class="row ">
                 <div class="col-4"></div>
                 <div class="col-8">
-                    <input type="submit" value="新增" class="btn btn-warning m-3" onclick="return confirm('新增成功')" />
+                    <input type="submit" value="下一步" class="btn btn-warning m-3" />
                 </div>
             </div>
         </div>
@@ -376,7 +379,7 @@
                 $(this).siblings('label').children().css({ "background-image": `url('${src}')` });
             }
         });
-       
+
         //物流新增
 
         let 物流按鈕 = document.querySelector(".btntype物流");
@@ -386,61 +389,61 @@
         物流按鈕.addEventListener("click", () => {
             新增物流.innerHTML =
                 `<div class="d-flex justify-content-around ">
-                                    <table class="table">
-                                        <thead>
-                                            <tr></tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="d-flex justify-content-around 貨運框線">
-                                                    <div class="貨運字">7-ELEVEN</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運框線">
-                                                    <div class="貨運字">全家便利商店</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運框線">
-                                                    <div class="貨運字">萊爾富</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運框線">
-                                                    <div class="貨運字">OK便利商店</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運框線">
-                                                    <div class="貨運字">大榮貨運</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運無底框">
-                                                    <div class="貨運字">黑貓宅急便</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                                <td class="d-flex justify-content-around 貨運無底框">
-                                                    <div class="貨運字">蝦到爆店到店</div>
-                                                    <div class="form-check form-switch 貨運按鈕">
-                                                        <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                 </div>`;
+                                        <table class="table">
+                                            <thead>
+                                                <tr></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="d-flex justify-content-around 貨運框線">
+                                                        <div class="貨運字">7-ELEVEN</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運框線">
+                                                        <div class="貨運字">全家便利商店</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運框線">
+                                                        <div class="貨運字">萊爾富</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運框線">
+                                                        <div class="貨運字">OK便利商店</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運框線">
+                                                        <div class="貨運字">大榮貨運</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運無底框">
+                                                        <div class="貨運字">黑貓宅急便</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                    <td class="d-flex justify-content-around 貨運無底框">
+                                                        <div class="貨運字">蝦到爆店到店</div>
+                                                        <div class="form-check form-switch 貨運按鈕">
+                                                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                     </div>`;
             物流按鈕.style.visibility = "hidden";   //隱藏屬性
         })
 
-        
+
     </script>
 }

@@ -40,37 +40,41 @@
         .col{
             margin:3px;
         }
+        .置中 {
+            vertical-align: middle;
+        }
+        
 
     </style>
 }
-<vc:seller-ui></vc:seller-ui>
+
 <div class="row overflow-auto">
-    <div class="col-2"></div>
-    <div class="col-8">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-9">
         <h2 class="d-flex justify-content-center">物流設定</h2>
         <p class="border-bottom">找不到適合的物流方式嗎? 您可以使用以下物流方式</p>
         <div class="m-2 border-bottom">
             <div><h4>  物流方式</h4></div>
-            <p >蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
+            <p>蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
         </div>
         <div class="m-2">
             <div><h4>  支援物流</h4></div>
-            <p >蝦到爆購物提供物流整合服務，你可以直接在APP內隨時掌握商品遞送進度。</p>
+            <p>蝦到爆購物提供物流整合服務，你可以直接在APP內隨時掌握商品遞送進度。</p>
         </div>
         <div class="線條陰影">
-            <div class="row py-2 m-3 border rounded-2 ">
-                <div class="col">
-                    <label class="">7-ELEVEN</label>
+            <div class="row py-2 m-3 border rounded-2">
+                <div class="col-4">
+                    <label class="d-flex justify-content-start"><img src="~/img/7-11.png" width="40" height="40" class="mx-2" />7-ELEVEN</label>
                 </div>
-                <div class="col ">
+                <div class="col-2">
                     <div class="form-check form-switch 靠右">
                         <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-3">
                     <label class="灰體字 ">貨到付款</label>
                 </div>
-                <div class="col">
+                <div class="col-3">
                     <div class="form-check form-switch 靠右">
                         <input class="form-check-input 按鈕大小" type="checkbox">
                     </div>
@@ -79,7 +83,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">全家</label>
+                    <label class=""><img src="~/img/全家.png" width="40" height="40" class="mx-2" />全家</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -98,7 +102,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">OK-Mart</label>
+                    <label class=""><img src="~/img/OK超商.png" width="40" height="40" class="mx-2" />OK-Mart</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -117,7 +121,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">萊爾富</label>
+                    <label class=""><img src="~/img/萊爾富.png" width="40" height="40" class="mx-2" />萊爾富</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -136,7 +140,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">大榮貨運</label>
+                    <label class=""><img src="~/img/大榮.png" width="40" height="40" class="mx-2" />大榮</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -155,7 +159,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">黑貓物流</label>
+                    <label class=""><img src="~/img/黑貓.png" width="40" height="40" class="mx-2" />黑貓</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -174,7 +178,7 @@
 
             <div class="row py-2 m-3 border rounded-2 ">
                 <div class="col">
-                    <label class="">蝦到爆店到店</label>
+                    <label class=""><img src="~/img/蝦到爆.png" width="40" height="40" class="mx-2" />店到店</label>
                 </div>
                 <div class="col">
                     <div class="form-check form-switch 靠右">
@@ -197,13 +201,9 @@
                 <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
             </div>
 
-            <div>
-                <p class="border-top mb-3">我會在 5 天之內出貨 ( 除了國定假日)</p>
-            </div>
         </div>
-    </div>
-    <div class="col-2"></div>
-</div>
-@section Scripts
+        <div class="col-1"></div>
+        </div>
+        @section Scripts
 {
-}
+        }
