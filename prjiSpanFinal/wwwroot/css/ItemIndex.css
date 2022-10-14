@@ -1,4 +1,4 @@
-﻿
+﻿lay
 .productPhoto{
     width:40%;
 }
@@ -101,11 +101,11 @@
 
 
 
-.sellerProducts .cardLayout{
-    width:1055px;
-    height:340px;
+.sellerProducts sellerProductsLayout {
+    width: 1055px;
+    height: 340px;
     margin: 0 auto;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 

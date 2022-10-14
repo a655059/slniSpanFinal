@@ -1,4 +1,11 @@
-﻿
-<div>
-
+﻿@model prjiSpanFinal.ViewModels.Item.CItemIndexSellerProductViewModel
+<link href="~/css/ProductCard.css" rel="stylesheet"/>
+@{ 
+    string base64 = Convert.ToBase64String(Model.productPic);
+    string imgUrl = 
+}
+<div class="">
+    <div>
+        <img src="#" alt="Alternate Text" />
+    </div>
 </div>

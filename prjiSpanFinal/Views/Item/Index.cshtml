@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Item.CItemIndexViewModel
 @{
     ViewData["Title"] = "Index";
 }
@@ -204,9 +204,13 @@
         </div>
     </div>
 
-    <div class="position-relative cardLayout">
+    <div class="position-relative sellerProductsLayout">
         @{
-//await Component.InvokeAsync("ProductCard", )
+            foreach (var product in Model.sellerProducts)
+            {
+                await Component.InvokeAsync("ProductCard", new { sellerProduct = product });
+            }
+
 
 
 
