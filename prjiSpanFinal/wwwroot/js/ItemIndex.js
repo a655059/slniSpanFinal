@@ -61,7 +61,7 @@ $("#nextPage").click(function () {
     if ($("#page").html() == $("#totalPage").html()) {
         $("#nextPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
     }
-    $(".sellerCard").animate({ left: "-=1050px" });
+    
 });
 
 $("#previousPage").click(function () {

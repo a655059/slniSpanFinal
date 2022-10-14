@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,13 @@ namespace prjiSpanFinal.Controllers
 {
     public class ItemController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
+            var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i);
+            var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i);
+            var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i);
             return View();
         }
         public IActionResult Description()
