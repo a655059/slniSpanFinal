@@ -1,1 +1,16 @@
-﻿
+﻿.productCardLayout {
+    border: 1px solid #F0F0F0;
+    border-radius:5px;
+}
+.productCardImgDiv{
+    width:100%;
+    aspect-ratio:1/1;
+
+}
+.productCardImgDiv img{
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:contain;
+    border-radius:5px;
+}
+
