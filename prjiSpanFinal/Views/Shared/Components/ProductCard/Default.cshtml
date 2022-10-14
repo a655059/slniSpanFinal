@@ -2,10 +2,14 @@
 <link href="~/css/ProductCard.css" rel="stylesheet"/>
 @{ 
     string base64 = Convert.ToBase64String(Model.productPic);
-    string imgUrl = 
+    string imgUrl = $"data:image/gif;base64,{base64}";
 }
 <div class="">
     <div>
-        <img src="#" alt="Alternate Text" />
+        <img src="@imgUrl" alt="photo" />
     </div>
+    <div>@Model.productName</div>
+    <div>@Model.price</div>
+    <div>@Model.salesVolume</div>
+    <div></div>
 </div>
