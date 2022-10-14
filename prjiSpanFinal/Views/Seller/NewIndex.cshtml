@@ -43,19 +43,19 @@
 
         .樣式置中 {
             height: 60px;
-            width:60px;
+            width: 60px;
         }
 
-        .內容文字大小{
-            font-size:20px;
-            font-weight:600;
+        .內容文字大小 {
+            font-size: 20px;
+            font-weight: 600;
         }
     </style>
 }
-<vc:seller-ui></vc:seller-ui>
+
 <div class="row">
-    <div class="col-1"></div>
-    <div class="col-11 ">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-10 ">
         <h2 class="d-flex justify-content-center">我的商品</h2>
         <div class="d-flex justify-content-center mb-1">
             @using (Html.BeginForm())
@@ -116,7 +116,7 @@
                         </div>
                         <div class=" row align-content-center col-1 justify-content-center mx-2">
                             @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
-                                                        new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger " })
+new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger " })
                         </div>
                     </div>
 

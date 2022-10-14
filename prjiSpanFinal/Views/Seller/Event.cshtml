@@ -1,0 +1,102 @@
+﻿@addTagHelper *, prjiSpanFinal
+@{
+    ViewData["Title"] = "Event";
+}
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+        .建立按鈕 {
+            font-weight: 700;
+        }
+
+        .內文優惠劵 {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .置中 {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>商品名稱:</label>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>選擇商品</option>
+                    <option value="1">蘋果</option>
+                    <option value="2">蘋果</option>
+                    <option value="3">蘋果</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-9 ">
+        <h2 class="d-flex justify-content-center">蝦爆活動</h2>
+        <div class="">
+            <div class="my-3 mx-2 內文優惠劵">商品活動</div>
+            <div class="mx-2">
+                <p>
+                    1.曝光資源: 蝦爆專屬活動頁；曝光時間11/11 00:00 - 11/18 23:59 <br />
+                    2.提報時間為即日起至2022/11/4 23:59<br />
+                    3.審核成功後將於活動時間由系統變價 <br />
+                    4.價格必須為平台/市場優勢價 <br />
+                    5.提品方向(不符合主題者不會入選)：一旦入選，不另行通知，也無法取消活動資格，請提報商品時務必注意商品活動價
+                </p>
+            </div>
+            <div class="">
+                <div class="mx-2 input-group mb-3 w-50">
+                    <span class="input-group-text">活動名稱</span>
+                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <button class="btn btn-outline-secondary" type="button">確定</button>
+                </div>
+            </div>
+            <div class="">
+                <table class="table border rounded-2">
+                    <tr class="text-bg-light p-3">
+                        <td class="col-3"></td>
+                        <td class="col-7">活動名稱/活動期間</td>
+                        <td class="col-2"></td>
+                    </tr>
+                    @{
+                        for (var i = 1; i <= 4; i++)
+                        {
+                            <tr>
+                                <td class="col-3"><img src="~/img/活動.png" height="100" width="300"/></td>
+                                <td class="置中 col-6">【蝦爆熱銷品】2022.11.11最強購物節
+                                    <p>報名:子活動現在可報名，最早的報名將结束於21 天 9 小時。</p>
+                                    <p>2022-11-11 00:00:00 到 2022-11-18 23:59:59</p>
+                                </td>  
+                                <td class="置中 col-3">
+                                    <div><button class="btn btn-warning float-end w-50 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">參加活動</button></div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+@section Scripts
+{
+}

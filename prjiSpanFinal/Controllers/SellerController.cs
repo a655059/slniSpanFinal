@@ -40,7 +40,17 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
 
-        public IActionResult Even()
+        public IActionResult AD()
+        {
+            return View();
+        }
+
+        public IActionResult seller跑條(int page)
+        {
+            return ViewComponent("seller跑條",page);
+        }
+
+        public IActionResult Event()
         {
             return View();
         }
