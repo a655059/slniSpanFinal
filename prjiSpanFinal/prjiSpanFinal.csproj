@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\css\Item\" />
     <Folder Include="wwwroot\js\MemberUI\" />
     <Folder Include="wwwroot\js\SellerUI\" />
   </ItemGroup>

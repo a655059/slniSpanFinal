@@ -52,29 +52,39 @@ $(".addToCart").click(function () {
     }
 });
 
-$("#nextPage").click(function () {
-    let page = Number($("#page").html()) + 1;
-    $("#page").html(page);
-    if (Number($("#page").html()) != 1) {
-        $("#previousPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
-    }
-    if ($("#page").html() == $("#totalPage").html()) {
-        $("#nextPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
-    }
-    $(".sellerCard").animate({ left: "-=1050px" });
+$(function () {
+    let i = 10;
+    $(".productCardLayout").each(function () {
+        $(this).css("left", i);
+        i += 210;
+    });
 });
 
-$("#previousPage").click(function () {
-    let page = Number($("#page").html()) - 1;
-    $("#page").html(page);
-    if (Number($("#page").html()) == 1) {
-        $("#previousPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
-    }
-    if ($("#page").html() != $("#totalPage").html()) {
-        $("#nextPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
-    }
-    $(".sellerCard").animate({ left: "+=1050px" });
-});
+
+
+
+//$("#nextPage").click(function () {
+//    let page = Number($("#page").html()) + 1;
+//    $("#page").html(page);
+//    if (Number($("#page").html()) != 1) {
+//        $("#previousPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
+//    }
+//    if ($("#page").html() == $("#totalPage").html()) {
+//        $("#nextPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
+//    }
+//});
+
+//$("#previousPage").click(function () {
+//    let page = Number($("#page").html()) - 1;
+//    $("#page").html(page);
+//    if (Number($("#page").html()) == 1) {
+//        $("#previousPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
+//    }
+//    if ($("#page").html() != $("#totalPage").html()) {
+//        $("#nextPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
+//    }
+//    $(".sellerCard").animate({ left: "+=1050px" });
+//});
 
 
 
