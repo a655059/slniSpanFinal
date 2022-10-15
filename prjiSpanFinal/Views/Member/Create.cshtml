@@ -14,7 +14,7 @@
             /*            margin: 20px;*/
             padding-bottom: 7px;
             opacity: 0.5;
-            background-color: white;
+            background-color:white;
         }
 
         .b-example-divider {
@@ -163,14 +163,21 @@
 
                         <div class="col-md-4">
                             <label for="state" class="form-label">區</label>
-                            <select class="form-select" id="state" required>
+                            <select class="form-select" id="region" required>
                                 <option value="">Choose...</option>
-                                <option>中山區</option>
                             </select>
                             <div class="invalid-feedback">
                                 請選擇所在地區
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <select class="form-select" id="state" style="display:none;">
+                            </select>
+                        </div>
+
+
+
                     </div>
                     <div class="col-12">
                         <label class="form-label" style="margin-top:8px">自傳</label>
@@ -196,6 +203,48 @@
 
     <script>
         const clear = document.querySelector("#clear");
+        const selCity = document.querySelector("#country")
+        const selSite = document.querySelector("#state")
+        const selregion = document.querySelector("#region")
+
+        selCity.addEventListener("change", async () => {
+            //載入鄉鎮區
+            //載入路名
+            await loadSite()
+            await loadregion()
+        })
+
+        async function ajaxCall(url, sel, cb) {
+            let response = await fetch(url)
+            let datas = await response.json()
+            cb(sel, datas)
+        }
+        (async function () {
+            await loadCity()
+            await loadSite()
+            await loadregion()
+        }())
+        async function loadCity() {
+        await ajaxCall("@Url.Content("~/member/City")", selCity, rendering)
+        }
+        async function loadSite() {
+        const city = selCity.options[selCity.selectedIndex].value
+        await ajaxCall("@Url.Content("~/member/getCityID")" + `?city=${city}`, selSite, rendering)
+        }
+
+        async function loadregion() {
+            const region = selSite.options[selSite.selectedIndex].value
+            await ajaxCall("@Url.Content("~/member/Site")" + `?site=${region}`, selregion, rendering)
+        }
+
+        function rendering(sel, datas) {
+            sel.options.length = 0
+            datas.forEach(city => {
+                const opt = new Option(city, city)
+                sel.options.add(opt)
+            })
+        }
+
         clear.addEventListener("click", eve => {
             eve.preventDefault();
             clearData();
@@ -205,4 +254,5 @@
             $('textarea').val("")
         }
     </script>
+
 }
