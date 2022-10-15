@@ -4,7 +4,7 @@
 }
 
 @section Styles{
-    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    @*<link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />*@
     <style>
         .modal-dialog {
             top: 7rem !important;
@@ -29,6 +29,11 @@
             width: 50px;
             float: left;
         }
+
+        .規格列表 {
+            width: 150px;
+            font-size: 18px;
+        }
     </style>
 
 }
@@ -41,25 +46,30 @@
 
 
 
-
+@*最上面的新增規格欄位  叫出modal的按鈕  按下還不是確定新增*@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    新增輸入框
+    新增類別輸入框
 </button>
 
+@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+    修改類別輸入框
+</button>*@
 
 
+@*原本的欄位*@
 <div class="d-flex justify-content-start ">
-    <label class="名稱寬 mt-2">規格</label>
+    @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
    
     <span class="text-danger"></span>
-    <section class="section d-flex justify-content-start">
+    <section class="section d-flex justify-content-center">
         <table class="table w-100 ">
             <thead>
                 <tr>
-                    <th class="col 規格列表">樣式</th>
-                    <th class="col 規格列表">數量</th>
-                    <th class="col 規格列表">售價</th>
-                   
+                    <th class="col 規格列表">順序</th>
+                    <th class="col 規格列表">商品數</th>
+                    <th class="col 規格列表">類別</th>
+                    <th class="col 規格列表">排序方式</th>
+                    <th class="col 規格列表">修改</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -67,35 +77,37 @@
     </section>
 </div>
 
-
-
-
-
-
+@*這邊應該的是按下修改選項    會多出來的畫面*@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">新增 modal</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                <label>順序:</label>
+                @*<label>順序:</label>
                 <input type="text" id="text1" class="form-control">
                 <br />
-               
+
+                <label>商品數:</label>
                 <input type="text" id="text2" class="form-control">
+                <br />*@
+
+
+                <label>類別名稱:</label>
+                <input type="text" id="text3" class="form-control">
                 <br />
 
+                @*<label>排序方式:</label>
+                <input type="text" id="text4" class="form-control">
+                <br />
 
-                <div class="d-flex justify-content-start ">
-                    <label>類別名稱:</label>
-                    <select class="form-select w-25 m-3 " aria-label="Default select example ">
-                        <option value="1">最新刊登</option>
-                    </select>
-                </div>
+                <label>管理:</label>
+                <input type="text" id="text5" class="form-control">
+                <br />*@
 
             </div>
             <div class="modal-footer">
@@ -107,15 +119,49 @@
 </div>
 
 
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">修改 modal</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
+                @*<label>順序:</label>
+                <input type="text" id="text1" class="form-control">
+                <br />
 
+                <label>商品數:</label>
+                <input type="text" id="text2" class="form-control">
+                <br />*@
 
+                <label>類別名稱:</label>
+                <input type="text" id="text3" class="form-control">
+                <br />
 
+                @*<label>排序方式:</label>
+                <input type="text" id="text4" class="form-control">
+                <br />
+
+                <label>管理:</label>
+                <input type="text" id="text5" class="form-control">
+                <br />*@
+
+            </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button id="save" type="button" class="btn btn-primary">新增</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
     <script>
-       
+        let count = 0;
+
         let data = [       ]
        
 
@@ -136,35 +182,36 @@
      
         //清空model值
         function clickValue() {
-            document.getElementById("text1").value = '';
-            document.getElementById("text2").value = '';
+            //document.getElementById("text1").value = '';
+            //document.getElementById("text2").value = '';
             document.getElementById("text3").value = '';
       
         }
-        $("select").children("option[value='1      ']")
+
+        /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
+        /* $("select").children("option[value='1      ']")   */
+
         save.addEventListener("click", function () {
+            count++;
             let dataNew = [];
-            let type = document.getElementById("text1").value;
-            let quantity = document.getElementById("text2").value;
+           /* let type = document.getElementById("text1").value;*/
+            /*let quantity = document.getElementById("text2").value;*/
             let price = document.getElementById("text3").value;
 
-            if (type != '' && quantity != '' && price != '') {
-                dataNew.push(type);
-                dataNew.push(quantity);
+            if (price != '') {
                 dataNew.push(price);
-
-                data.push(dataNew);
 
                 let tbody = document.querySelector('tbody')
                 let Tr = document.createElement('tr');
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
+                    td.setAttribute("id", count);
                     td.innerHTML = dataNew[i];
                     Tr.appendChild(td);
                 }
-
+                /*產生刪除按鈕在modal的畫面*/
                 let td = document.createElement('td');
-                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger" style="font-size:3rem">刪除</button></a>`;
+                td.innerHTML = `<button type="button" class="btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
                 let a = td.children[0];
                 a.addEventListener('click', () => {
 
@@ -176,16 +223,29 @@
                 clickValue();
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
-                modal.hide();
+                //modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
+                modal.toggle();
+
+
+                let td2 = document.createElement('td');
+                td2.innerHTML = `<button type="button" class ="btn btn-warning  change" style="font-size:0.8rem">修改</button>`;
+                Tr.appendChild(td2);
+                tbody.insertBefore(Tr, tbody.children[0])
 
             }
-
             else {
                 alert("項目,數量和價格不可為空值");
             }
 
         })
 
+
+
+        $("change").change(function () {
+            $("change").addClass("d-none");
+            //$("change").attr();
+            //$("change").prop();
+        })
 
     </script>
 }
