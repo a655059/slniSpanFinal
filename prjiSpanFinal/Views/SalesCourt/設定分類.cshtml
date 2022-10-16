@@ -137,7 +137,7 @@
                 <br />*@
 
                 <label>類別名稱:</label>
-                <input type="text" id="text3" class="form-control">
+                <input type="text" id="text_alter" class="form-control">
                 <br />
 
                 @*<label>排序方式:</label>
@@ -151,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button id="save" type="button" class="btn btn-primary">新增</button>
+                <button id="save_alter" type="button" class="btn btn-primary">新增</button>
             </div>
         </div>
     </div>
@@ -162,47 +162,52 @@
     <script>
         let count = 0;
 
-        let data = [       ]
        
 
-        let tbody = document.querySelector('tbody')
-        for (let i = 0; i < data.length; i++) {
-            let tr = document.createElement('tr');
-            tbody.appendChild(tr);
-            for (let j = 0; j < data[i].length; j++) {
-                let td = document.createElement('td');
-                td.innerHTML = data[i][j];
-                tr.appendChild(td);
-            }
-           
-        }
-
         let save = document.getElementById("save");
-
+        let save_alter;
      
-        //清空model值
+        //讀取text
         function clickValue() {
             //document.getElementById("text1").value = '';
             //document.getElementById("text2").value = '';
             document.getElementById("text3").value = '';
-      
+            document.getElementById("text_alter").value = '';
         }
 
         /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
         /* $("select").children("option[value='1      ']")   */
 
+        let id;
+        //下面要做黃色修改
+        
+
+        function sv_alter() {
+            /*let a = document.getElementById(this.s  id);*/
+            id = $(save_alter).prev("id");
+            if (id != '') {
+                console.log(id);
+                console.log(this);
+            }
+
+            /*let now = document.*/
+        }
+
         save.addEventListener("click", function () {
             count++;
             let dataNew = [];
-           /* let type = document.getElementById("text1").value;*/
-            /*let quantity = document.getElementById("text2").value;*/
             let price = document.getElementById("text3").value;
+
 
             if (price != '') {
                 dataNew.push(price);
 
                 let tbody = document.querySelector('tbody')
                 let Tr = document.createElement('tr');
+                let td0 = document.createElement('td');
+                Tr.appendChild(td0);
+                let td1 = document.createElement('td');
+                Tr.appendChild(td1);
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
                     td.setAttribute("id", count);
@@ -212,10 +217,12 @@
                 /*產生刪除按鈕在modal的畫面*/
                 let td = document.createElement('td');
                 td.innerHTML = `<button type="button" class="btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
-                let a = td.children[0];
+                /*let a = td.children[0];*/
+                let a = td;
                 a.addEventListener('click', () => {
 
-                    let parent = a.parentNode.parentNode;
+                    /*let parent = a.parentNode.parentNode;*/
+                    let parent = a.parentNode;
                     parent.remove();
                 })
                 Tr.appendChild(td);
@@ -228,9 +235,21 @@
 
 
                 let td2 = document.createElement('td');
-                td2.innerHTML = `<button type="button" class ="btn btn-warning  change" style="font-size:0.8rem">修改</button>`;
+                td2.innerHTML = `<button type="button" style="font-size:0.8rem" class="btn_alt btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">修改</button>`;
+
+                //let b = td2.children[0];
+                //b.addEventListener('click', () => {
+                //    let parent = b.parentNode.parentNode;
+                //    parent.children[2].setAttribute("value", "test");
+                //})
                 Tr.appendChild(td2);
                 tbody.insertBefore(Tr, tbody.children[0])
+                //clickValue();
+                //var myModal2 = document.getElementById('exampleModal2');
+                //var modal2 = bootstrap.Modal.getInstance(myModal2);
+                save_alter.addEventListener("click", sv_alt);
+                save_alter = document.getElementsByClassName("btn_alt");
+
 
             }
             else {
@@ -241,11 +260,12 @@
 
 
 
-        $("change").change(function () {
-            $("change").addClass("d-none");
-            //$("change").attr();
-            //$("change").prop();
-        })
+
+        //$("change").change(function () {
+        //    $("change").addClass("d-none");
+        //    //$("change").attr();
+        //    //$("change").prop();
+        //})
 
     </script>
 }
