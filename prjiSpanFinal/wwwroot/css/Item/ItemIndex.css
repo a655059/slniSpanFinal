@@ -1,10 +1,13 @@
-﻿lay
+﻿
 .productPhoto{
     width:40%;
 }
 .productPhoto .bigPhoto{
     width:100%;
     aspect-ratio:1/1;
+}
+.productPhoto .addItemLike{
+    display:none;
 }
 .productPhoto .bigPhoto img {
     width:100%;

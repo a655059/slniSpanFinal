@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels.Item;
 using System;
@@ -15,8 +16,13 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
             var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
+            var smallType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.SmallTypeName).FirstOrDefault();
+            var bigType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.BigType.BigTypeName).FirstOrDefault();
             var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
             var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i).ToList();
+
+
+
             var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i).ToList();
             List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
             foreach (var p in sellerProducts)
@@ -71,6 +77,8 @@ namespace prjiSpanFinal.Controllers
             CItemIndexViewModel itemIndex = new CItemIndexViewModel
             {
                 product = product,
+                bigType = bigType,
+                smallType = smallType,
                 productDetails = productDetails,
                 productPics = productPics,
                 sellerProducts = sellerProductList
@@ -78,7 +86,13 @@ namespace prjiSpanFinal.Controllers
 
             return View(itemIndex);
         }
-
+        public IActionResult AddItemLike(string likeInfo)
+        {
+            var jsonObj = JsonConvert.DeserializeObject(likeInfo);
+            
+            
+            return Json(jsonObj);
+        }
 
 
 
