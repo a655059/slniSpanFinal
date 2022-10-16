@@ -21,6 +21,7 @@ namespace prjiSpanFinal.Controllers
             List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
             foreach (var p in sellerProducts)
             {
+                int productID = p.ProductId;
                 string productName = p.ProductName;
                 byte[] productPic = dbContext.ProductPics.Where(i => i.ProductId == p.ProductId).Select(i => i.Picture).FirstOrDefault();
                 var prices = dbContext.ProductDetails.Where(i => i.ProductId == p.ProductId).Select(i => i.UnitPrice).ToList();
@@ -57,6 +58,7 @@ namespace prjiSpanFinal.Controllers
                 }
                 CItemIndexSellerProductViewModel sellerProduct = new CItemIndexSellerProductViewModel
                 {
+                    productID = productID,
                     productName = productName,
                     productPic = productPic,
                     price = price,
