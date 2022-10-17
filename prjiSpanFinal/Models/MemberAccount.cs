@@ -17,9 +17,7 @@ namespace prjiSpanFinal.Models
             Orders = new HashSet<Order>();
             PaymentToSellers = new HashSet<PaymentToSeller>();
             Products = new HashSet<Product>();
-            ReceiveAdrLists = new HashSet<ReceiveAdrList>();
             Reports = new HashSet<Report>();
-            ShipperToSellers = new HashSet<ShipperToSeller>();
         }
 
         public int MemberId { get; set; }
@@ -36,13 +34,7 @@ namespace prjiSpanFinal.Models
         public DateTime Birthday { get; set; }
         public byte[] MemPic { get; set; }
         public int MemStatusId { get; set; }
-        public int Gender { get; set; }
-        public int Balance { get; set; }
-        public string ServiceTime { get; set; }
-        public string SellerCaution { get; set; }
-        public string AfterSales { get; set; }
-        public string RenewProduct { get; set; }
-        public string SellerType { get; set; }
+        public string Gender { get; set; }
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
@@ -54,8 +46,6 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentToSeller> PaymentToSellers { get; set; }
         public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
-        public virtual ICollection<ShipperToSeller> ShipperToSellers { get; set; }
     }
 }
