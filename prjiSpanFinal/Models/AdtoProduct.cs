@@ -12,7 +12,7 @@ namespace prjiSpanFinal.Models
         public int ProductId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public bool SubActive { get; set; }
+        public bool IsSubActive { get; set; }
         public int ExpoTimes { get; set; }
         public int ClickTimes { get; set; }
 
