@@ -53,7 +53,7 @@
                     @Html.DisplayFor(modelItem => item.Region.RegionName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AdFee)
+                    @Html.DisplayFor(modelItem => item.AdtoProducts)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
@@ -61,14 +61,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductStatus.ProductStatusName)
                 </td>
+
                 <td>
-                <td>
-                        @Html.ActionLink("修改", "ProductEdit", new {  id=item.ProductId }) |
-                        @Html.ActionLink("刪除", "ProductDelete", new { id=item.ProductId  }) |
-                        @Html.ActionLink("復原", "ProductRecover", new { id=item.ProductId  })
-                        @Html.ActionLink("檢視", "ProductDetailList", new { id=item.ProductId},new{@class="btn btn-primary"})
+                    @Html.ActionLink("修改", "ProductEdit", new {  id=item.ProductId }) |
+                    @Html.ActionLink("刪除", "ProductDelete", new { id=item.ProductId  }) |
+                    @Html.ActionLink("復原", "ProductRecover", new { id=item.ProductId  })
+                    @Html.ActionLink("檢視", "ProductDetailList", new { id=item.ProductId},new{@class="btn btn-primary"})
                 </td>
-                </td>
+
             </tr>
         }
     </tbody>
