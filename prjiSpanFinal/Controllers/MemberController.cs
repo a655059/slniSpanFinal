@@ -61,7 +61,7 @@ namespace prjiSpanFinal.Controllers
             //        select i;
             //var re = from i in _context.RegionLists
             //         select i;
-            var sites = _context.RegionLists.Where(a => a.RegionName == site).Select(a => a.RegionId).Distinct();
+            var sites = _context.RegionLists.Where(a => a.RegionName == mem.Region.RegionName).Select(a => a.RegionId).Distinct();
 
 
             int reginid_1 = Convert.ToInt32(sites);
