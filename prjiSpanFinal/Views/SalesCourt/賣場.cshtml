@@ -1,4 +1,7 @@
-﻿@{
+﻿@*@model List<prjMvcDemo.Models.CCustomer>*@
+
+@*@model List<prjiSpanFinal.Models.0賣場>*@
+@{
     ViewData["Title"] = "賣場";
 }
 @section Styles{
@@ -28,7 +31,7 @@
                 </a>
             </h6>
             <img src="~/img/蘋果圖.jpg" width="150" />
-
+            <div class="p-2">林小偉的賣場</div>
 
             <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
             <div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>
@@ -122,17 +125,7 @@
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <div class="container  ">
                     <div class="text-center text-black-50 p-4 mb-5 " style="background-color:#f6e529">
-                        <div class="row">
-                            <div class="col-2">
-                                <button class="btn btn-primary btn-sm ms-2">
-                                    <i class="fa-solid fa-thumbs-up"></i>讚<span class="ms-2"></span>25
-                                </button>
-                                <button class="btn btn-primary btn-sm ms-2">
-                                    分享
-                                </button>
-                            </div>
-                        </div>
-
+                        
                         <h1 class="fw-bolder" style="font-size:3rem">賣場相關資料</h1>
 
                         <div class="board-text">
