@@ -9,11 +9,14 @@ namespace prjiSpanFinal.Models
     {
         public Product()
         {
-            Comments = new HashSet<Comment>();
+            AdtoProducts = new HashSet<AdtoProduct>();
             Likes = new HashSet<Like>();
+            PaymentToProducts = new HashSet<PaymentToProduct>();
             ProductDetails = new HashSet<ProductDetail>();
             ProductPics = new HashSet<ProductPic>();
+            Reports = new HashSet<Report>();
             ShipperToProducts = new HashSet<ShipperToProduct>();
+            SubOfficialEventToProducts = new HashSet<SubOfficialEventToProduct>();
         }
 
         public int ProductId { get; set; }
@@ -21,18 +24,23 @@ namespace prjiSpanFinal.Models
         public int SmallTypeId { get; set; }
         public int MemberId { get; set; }
         public int RegionId { get; set; }
-        public decimal AdFee { get; set; }
         public string Description { get; set; }
         public int ProductStatusId { get; set; }
+        public DateTime EditTime { get; set; }
+        public int CustomizedCategoryId { get; set; }
 
+        public virtual CustomizedCategory CustomizedCategory { get; set; }
         public virtual MemberAccount Member { get; set; }
         public virtual ProductStatus ProductStatus { get; set; }
         public virtual RegionList Region { get; set; }
         public virtual SmallType SmallType { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<AdtoProduct> AdtoProducts { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<PaymentToProduct> PaymentToProducts { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<ProductPic> ProductPics { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
+        public virtual ICollection<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
     }
 }
