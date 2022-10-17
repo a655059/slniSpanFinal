@@ -64,7 +64,7 @@ namespace prjiSpanFinal.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True");
             }
         }
 
@@ -195,9 +195,7 @@ namespace prjiSpanFinal.Models
             {
                 entity.ToTable("BigType");
 
-                entity.Property(e => e.BigTypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("BigTypeID");
+                entity.Property(e => e.BigTypeId).HasColumnName("BigTypeID");
 
                 entity.Property(e => e.BigTypeName)
                     .IsRequired()
@@ -322,8 +320,7 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.CustomizedCategoryName)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsFixedLength(true);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -363,9 +360,7 @@ namespace prjiSpanFinal.Models
             {
                 entity.ToTable("FAQType");
 
-                entity.Property(e => e.FaqtypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("FAQTypeID");
+                entity.Property(e => e.FaqtypeId).HasColumnName("FAQTypeID");
 
                 entity.Property(e => e.FaqtypeName)
                     .IsRequired()
@@ -877,9 +872,7 @@ namespace prjiSpanFinal.Models
 
                 entity.ToTable("RegionList");
 
-                entity.Property(e => e.RegionId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("RegionID");
+                entity.Property(e => e.RegionId).HasColumnName("RegionID");
 
                 entity.Property(e => e.CountryId).HasColumnName("CountryID");
 
