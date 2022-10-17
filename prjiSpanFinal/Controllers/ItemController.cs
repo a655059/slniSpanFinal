@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels.Item;
 using System;
@@ -16,15 +15,10 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
             var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
-            var smallType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.SmallTypeName).FirstOrDefault();
-            var bigType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.BigType.BigTypeName).FirstOrDefault();
-
             var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
             var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i).ToList();
-
-
-
             var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i).ToList();
+
             List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
             foreach (var p in sellerProducts)
             {
@@ -53,7 +47,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     starCount = starCounts.Average(i => i);
                 }
-                var salesVolumes = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == p.ProductId && i.Order.StatusId == 6).Select(i => i.Quantity);
+                var salesVolumes = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == p.ProductId && i.Order.StatusId == 7).Select(i => i.Quantity);
                 int salesVolume = 0;
                 if (salesVolumes.Count() == 0)
                 {
@@ -78,8 +72,6 @@ namespace prjiSpanFinal.Controllers
             CItemIndexViewModel itemIndex = new CItemIndexViewModel
             {
                 product = product,
-                bigType = bigType,
-                smallType = smallType,
                 productDetails = productDetails,
                 productPics = productPics,
                 sellerProducts = sellerProductList
@@ -87,28 +79,7 @@ namespace prjiSpanFinal.Controllers
 
             return View(itemIndex);
         }
-        public IActionResult AddItemLike(int memberID, int productID)
-        {
-            iSpanProjectContext dbContext = new iSpanProjectContext();
-            var like = dbContext.Likes.Where(i => i.MemberId == memberID && i.ProductId == productID).Select(i => i).FirstOrDefault();
-            if (like == null)
-            {
-                Like x = new Like
-                {
-                    MemberId = memberID,
-                    ProductId = productID
-                };
-                dbContext.Likes.Add(x);
-                dbContext.SaveChanges();
-                return Content("1");
-            }
-            else
-            {
-                dbContext.Likes.Remove(like);
-                dbContext.SaveChanges();
-                return Content("0");
-            }
-        }
+
 
 
 
