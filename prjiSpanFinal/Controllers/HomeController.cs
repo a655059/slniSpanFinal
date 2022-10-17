@@ -5,48 +5,33 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using prjiSpanFinal.ViewModels;
+using prjiSpanFinal.ViewModels.Home;
 
 namespace prjiSpanFinal.Controllers
 {
     public class HomeController : Controller
     {
-        List<CBigType> listCBigType;
+        iSpanProjectContext _db = new iSpanProjectContext();
+        List<BigType> listBigType;
         private readonly ILogger<HomeController> _logger;
-
+        List<Product> listProd;
+        List<CShowItem> listItem;
+        List<CShowItem> sendlist;
+        int counter { get; set; } = 0;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            listBigType = _db.BigTypes.Select(p => p).ToList();
+            listProd = (new CHomeFactory()).rdnProd(_db.Products.Select(p => p).ToList());
+            listItem = ((new CHomeFactory()).toShowItem(listProd));
+            sendlist = listItem.Take(7).ToList();
         }
-        void fillin()
-        {
-            CBigType a = new CBigType()
-            {
-                BigTypeID = 1,
-                BigTypeName = "食物"
-            };
-            CBigType b = new CBigType()
-            {
-                BigTypeID = 2,
-                BigTypeName = "食物"
-            };
-            CBigType c = new CBigType()
-            {
-                BigTypeID = 3,
-                BigTypeName = "食物"
-            };
-            listCBigType = new List<CBigType>();
-            listCBigType.Add(a);
-            listCBigType.Add(b);
-            listCBigType.Add(c);
-            for (int i = 1; i < 10; i++)
-            {
-                listCBigType.Add(a);
-            }
-        }
+
         public IActionResult Index()
         {
-            fillin();
-            return View(listCBigType);
+            ViewBag.listBigtype = listBigType;
+            return View(sendlist);
         }
 
         public IActionResult Privacy()
@@ -59,6 +44,12 @@ namespace prjiSpanFinal.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        public void ShowMoreItem()
+        {
+            counter++;
+            foreach(var item in ((new CHomeFactory()).toShowMore(listItem, 6 * (counter - 1), 6 * counter))) { 
+            sendlist.Add(item);
+            }
+        }
     }
 }

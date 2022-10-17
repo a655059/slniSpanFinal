@@ -167,8 +167,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
     color: black;
+    text-overflow: ellipsis;
 }
 
 .cardPrice {
