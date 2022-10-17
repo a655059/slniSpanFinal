@@ -12,14 +12,15 @@ namespace prjiSpanFinal.Models
             ArguePics = new HashSet<ArguePic>();
         }
 
-        public int OrderId { get; set; }
         public int ArgumentId { get; set; }
-        public bool ChangeorReturn { get; set; }
-        public string Reason { get; set; }
+        public int OrderdetailId { get; set; }
         public int ArgumentTypeId { get; set; }
+        public int ArgumentReasonId { get; set; }
+        public string ReasonText { get; set; }
 
+        public virtual ArgumentReason ArgumentReason { get; set; }
         public virtual ArgumentType ArgumentType { get; set; }
-        public virtual Order Order { get; set; }
+        public virtual OrderDetail Orderdetail { get; set; }
         public virtual ICollection<ArguePic> ArguePics { get; set; }
     }
 }

@@ -18,41 +18,53 @@ namespace prjiSpanFinal.Models
         }
 
         public virtual DbSet<Ad> Ads { get; set; }
+        public virtual DbSet<AdtoProduct> AdtoProducts { get; set; }
         public virtual DbSet<ArguePic> ArguePics { get; set; }
         public virtual DbSet<Argument> Arguments { get; set; }
+        public virtual DbSet<ArgumentReason> ArgumentReasons { get; set; }
         public virtual DbSet<ArgumentType> ArgumentTypes { get; set; }
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<CommentPic> CommentPics { get; set; }
         public virtual DbSet<CountryList> CountryLists { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
+        public virtual DbSet<CouponWallet> CouponWallets { get; set; }
+        public virtual DbSet<CustomizedCategory> CustomizedCategories { get; set; }
         public virtual DbSet<Faq> Faqs { get; set; }
         public virtual DbSet<Faqtype> Faqtypes { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<Like> Likes { get; set; }
         public virtual DbSet<MemStatus> MemStatuses { get; set; }
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
-        public virtual DbSet<OfficialCoupon> OfficialCoupons { get; set; }
+        public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<PaymentToProduct> PaymentToProducts { get; set; }
+        public virtual DbSet<PaymentToSeller> PaymentToSellers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductDetail> ProductDetails { get; set; }
         public virtual DbSet<ProductPic> ProductPics { get; set; }
         public virtual DbSet<ProductStatus> ProductStatuses { get; set; }
+        public virtual DbSet<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual DbSet<RegionList> RegionLists { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<ReportType> ReportTypes { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<ShipperToProduct> ShipperToProducts { get; set; }
+        public virtual DbSet<ShipperToSeller> ShipperToSellers { get; set; }
         public virtual DbSet<ShippingStatus> ShippingStatuses { get; set; }
         public virtual DbSet<SmallType> SmallTypes { get; set; }
+        public virtual DbSet<SubOfficialEventList> SubOfficialEventLists { get; set; }
+        public virtual DbSet<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework");
             }
         }
 
@@ -72,6 +84,33 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('廣告1')");
+            });
+
+            modelBuilder.Entity<AdtoProduct>(entity =>
+            {
+                entity.ToTable("ADToProduct");
+
+                entity.Property(e => e.AdtoProductId).HasColumnName("ADToProductID");
+
+                entity.Property(e => e.AdId).HasColumnName("AdID");
+
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Ad)
+                    .WithMany(p => p.AdtoProducts)
+                    .HasForeignKey(d => d.AdId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ADToProduct_AD");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.AdtoProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ADToProduct_Product");
             });
 
             modelBuilder.Entity<ArguePic>(entity =>
@@ -99,13 +138,22 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ArgumentId).HasColumnName("ArgumentID");
 
+                entity.Property(e => e.ArgumentReasonId).HasColumnName("ArgumentReasonID");
+
                 entity.Property(e => e.ArgumentTypeId).HasColumnName("ArgumentTypeID");
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.Property(e => e.OrderdetailId).HasColumnName("OrderdetailID");
 
-                entity.Property(e => e.Reason)
+                entity.Property(e => e.ReasonText)
                     .IsRequired()
+                    .HasMaxLength(500)
                     .HasDefaultValueSql("('未輸入')");
+
+                entity.HasOne(d => d.ArgumentReason)
+                    .WithMany(p => p.Arguments)
+                    .HasForeignKey(d => d.ArgumentReasonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Argument_ArgumentReason");
 
                 entity.HasOne(d => d.ArgumentType)
                     .WithMany(p => p.Arguments)
@@ -113,11 +161,22 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Argument_ArgumentType");
 
-                entity.HasOne(d => d.Order)
+                entity.HasOne(d => d.Orderdetail)
                     .WithMany(p => p.Arguments)
-                    .HasForeignKey(d => d.OrderId)
+                    .HasForeignKey(d => d.OrderdetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Argument_Orders");
+                    .HasConstraintName("FK_Argument_OrderDetails");
+            });
+
+            modelBuilder.Entity<ArgumentReason>(entity =>
+            {
+                entity.ToTable("ArgumentReason");
+
+                entity.Property(e => e.ArgumentReasonId).HasColumnName("ArgumentReasonID");
+
+                entity.Property(e => e.ArgumentReasonName)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<ArgumentType>(entity =>
@@ -128,7 +187,7 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ArgumentTypeName)
                     .IsRequired()
-                    .HasMaxLength(500)
+                    .HasMaxLength(100)
                     .HasDefaultValueSql("('糾紛1')");
             });
 
@@ -136,7 +195,9 @@ namespace prjiSpanFinal.Models
             {
                 entity.ToTable("BigType");
 
-                entity.Property(e => e.BigTypeId).HasColumnName("BigTypeID");
+                entity.Property(e => e.BigTypeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("BigTypeID");
 
                 entity.Property(e => e.BigTypeName)
                     .IsRequired()
@@ -156,21 +217,19 @@ namespace prjiSpanFinal.Models
                     .HasColumnName("Comment")
                     .HasDefaultValueSql("('未輸入')");
 
+                entity.Property(e => e.CommentTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(((2000)-(1))-(1))");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+                entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
-                entity.HasOne(d => d.Member)
+                entity.HasOne(d => d.OrderDetail)
                     .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.MemberId)
+                    .HasForeignKey(d => d.OrderDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Comment_MemberAccount");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Comment_Product");
+                    .HasConstraintName("FK_Comment_OrderDetails");
             });
 
             modelBuilder.Entity<CommentPic>(entity =>
@@ -209,6 +268,11 @@ namespace prjiSpanFinal.Models
             {
                 entity.Property(e => e.CouponId).HasColumnName("CouponID");
 
+                entity.Property(e => e.CouponCode)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasDefaultValueSql("(N'XXXXXXXX')");
+
                 entity.Property(e => e.CouponName)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -216,13 +280,58 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.Discount).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.ExpiredDate)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("('9999-12-31')");
+                entity.Property(e => e.ExpiredDate).HasColumnType("datetime");
 
-                entity.Property(e => e.StartDate)
-                    .HasColumnType("date")
-                    .HasDefaultValueSql("('1000-01-01')");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.ReceiveEndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ReceiveStartDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<CouponWallet>(entity =>
+            {
+                entity.ToTable("CouponWallet");
+
+                entity.Property(e => e.CouponWalletId).HasColumnName("CouponWalletID");
+
+                entity.Property(e => e.CouponId).HasColumnName("CouponID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Coupon)
+                    .WithMany(p => p.CouponWallets)
+                    .HasForeignKey(d => d.CouponId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wallet_Coupons");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.CouponWallets)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wallet_MemberAccount");
+            });
+
+            modelBuilder.Entity<CustomizedCategory>(entity =>
+            {
+                entity.ToTable("CustomizedCategory");
+
+                entity.Property(e => e.CustomizedCategoryId).HasColumnName("CustomizedCategoryID");
+
+                entity.Property(e => e.CustomizedCategoryName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.CustomizedCategories)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CustomizedCategory_MemberAccount");
             });
 
             modelBuilder.Entity<Faq>(entity =>
@@ -340,12 +449,18 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .HasDefaultValueSql("('Add')");
 
-                entity.Property(e => e.BackUpEmail).HasMaxLength(50);
+                entity.Property(e => e.AfterSales)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("('')");
 
-                entity.Property(e => e.Bio).HasDefaultValueSql("('這個使用者太怠惰了，現在還沒有介紹')");
+                entity.Property(e => e.BackUpEmail)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Birthday)
                     .HasColumnType("date")
@@ -355,6 +470,11 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('Email')");
+
+                entity.Property(e => e.IsTw)
+                    .IsRequired()
+                    .HasColumnName("IsTW")
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.MemStatusId).HasColumnName("MemStatusID");
 
@@ -373,7 +493,10 @@ namespace prjiSpanFinal.Models
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('Name')");
 
-                entity.Property(e => e.NickName).HasMaxLength(50);
+                entity.Property(e => e.NickName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
@@ -382,10 +505,25 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.RegionId).HasColumnName("RegionID");
 
-                entity.Property(e => e.TworNot)
+                entity.Property(e => e.RenewProduct)
                     .IsRequired()
-                    .HasColumnName("TWorNOT")
-                    .HasDefaultValueSql("((1))");
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.SellerCaution)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.SellerType)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.ServiceTime)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("('')");
 
                 entity.HasOne(d => d.MemStatus)
                     .WithMany(p => p.MemberAccounts)
@@ -400,30 +538,25 @@ namespace prjiSpanFinal.Models
                     .HasConstraintName("FK_MemberAccount_RegionList");
             });
 
-            modelBuilder.Entity<OfficialCoupon>(entity =>
+            modelBuilder.Entity<OfficialEventList>(entity =>
             {
-                entity.HasKey(e => e.OfficialCouponsId)
-                    .HasName("PK_Wallet");
+                entity.ToTable("OfficialEventList");
 
-                entity.Property(e => e.OfficialCouponsId).HasColumnName("OfficialCouponsID");
+                entity.Property(e => e.OfficialEventListId).HasColumnName("OfficialEventListID");
 
-                entity.Property(e => e.CouponId).HasColumnName("CouponID");
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ExpireNA).HasColumnName("ExpireN_A");
+                entity.Property(e => e.EventName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.EventPic).IsRequired();
 
-                entity.HasOne(d => d.Coupon)
-                    .WithMany(p => p.OfficialCoupons)
-                    .HasForeignKey(d => d.CouponId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Wallet_Coupons");
+                entity.Property(e => e.JoinEndDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.OfficialCoupons)
-                    .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Wallet_MemberAccount");
+                entity.Property(e => e.JoinStartDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -442,10 +575,31 @@ namespace prjiSpanFinal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("('2000-01-01')");
 
+                entity.Property(e => e.OrderMessage)
+                    .IsRequired()
+                    .HasMaxLength(300)
+                    .HasDefaultValueSql("(N'給賣家的話')");
+
+                entity.Property(e => e.PaymentDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(((2000)-(1))-(1))");
+
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
+                entity.Property(e => e.ReceiveDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(((2000)-(1))-(1))");
+
                 entity.Property(e => e.RecieveAdr)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .HasDefaultValueSql("('收貨地址')");
+
+                entity.Property(e => e.ShipperId).HasColumnName("ShipperID");
+
+                entity.Property(e => e.ShippingDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(((2000)-(1))-(1))");
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
 
@@ -461,6 +615,18 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Orders_MemberAccount");
 
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Payment");
+
+                entity.HasOne(d => d.Shipper)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ShipperId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Shipper");
+
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.StatusId)
@@ -474,24 +640,15 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.OutAdr)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasDefaultValueSql("('出貨地址')");
-
                 entity.Property(e => e.ProductDetailId).HasColumnName("ProductDetailID");
 
-                entity.Property(e => e.RecieveDate)
+                entity.Property(e => e.ReceiveDate)
                     .HasColumnType("datetime")
-                    .HasDefaultValueSql("('9999-12-31')");
-
-                entity.Property(e => e.ShipperId).HasColumnName("ShipperID");
-
-                entity.Property(e => e.ShippingDate)
-                    .HasColumnType("date")
                     .HasDefaultValueSql("('2000-01-01')");
 
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
+
+                entity.Property(e => e.Unitprice).HasColumnType("money");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
@@ -505,12 +662,6 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Product");
 
-                entity.HasOne(d => d.Shipper)
-                    .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ShipperId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Shipper");
-
                 entity.HasOne(d => d.ShippingStatus)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ShippingStatusId)
@@ -520,6 +671,8 @@ namespace prjiSpanFinal.Models
 
             modelBuilder.Entity<OrderStatus>(entity =>
             {
+                entity.ToTable("OrderStatus");
+
                 entity.Property(e => e.OrderStatusId).HasColumnName("OrderStatusID");
 
                 entity.Property(e => e.OrderStatusName)
@@ -534,11 +687,57 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
 
-                entity.Property(e => e.Fee).HasColumnType("money");
-
                 entity.Property(e => e.PaymentName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<PaymentToProduct>(entity =>
+            {
+                entity.ToTable("PaymentToProduct");
+
+                entity.Property(e => e.PaymentToProductId).HasColumnName("PaymentToProductID");
+
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.PaymentToProducts)
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentToProduct_Payment");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.PaymentToProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentToProduct_Product");
+            });
+
+            modelBuilder.Entity<PaymentToSeller>(entity =>
+            {
+                entity.HasKey(e => e.PaymentToMemberId);
+
+                entity.ToTable("PaymentToSeller");
+
+                entity.Property(e => e.PaymentToMemberId).HasColumnName("PaymentToMemberID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.PaymentToSellers)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentToSeller_MemberAccount");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.PaymentToSellers)
+                    .HasForeignKey(d => d.PaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PaymentToSeller_Payment");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -547,16 +746,22 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.AdFee).HasColumnType("money");
+                entity.Property(e => e.CustomizedCategoryId).HasColumnName("CustomizedCategoryID");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
+                    .HasMaxLength(600)
                     .HasDefaultValueSql("('這個賣家太怠惰了，什麼都沒有寫')");
+
+                entity.Property(e => e.EditTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(((2000)-(1))-(1))");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
+                    .HasMaxLength(200)
                     .HasDefaultValueSql("('產品名稱')");
 
                 entity.Property(e => e.ProductStatusId).HasColumnName("ProductStatusID");
@@ -564,6 +769,12 @@ namespace prjiSpanFinal.Models
                 entity.Property(e => e.RegionId).HasColumnName("RegionID");
 
                 entity.Property(e => e.SmallTypeId).HasColumnName("SmallTypeID");
+
+                entity.HasOne(d => d.CustomizedCategory)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CustomizedCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Product_CustomizedCategory");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Products)
@@ -598,7 +809,9 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.Style).IsRequired();
+                entity.Property(e => e.Style)
+                    .IsRequired()
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.UnitPrice).HasColumnType("money");
 
@@ -611,15 +824,11 @@ namespace prjiSpanFinal.Models
 
             modelBuilder.Entity<ProductPic>(entity =>
             {
-                entity.HasKey(e => e.PicId);
-
                 entity.ToTable("ProductPic");
 
-                entity.Property(e => e.PicId).HasColumnName("PicID");
+                entity.Property(e => e.ProductPicId).HasColumnName("ProductPicID");
 
-                entity.Property(e => e.Picture)
-                    .IsRequired()
-                    .HasColumnName("picture");
+                entity.Property(e => e.Pic).IsRequired();
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -639,6 +848,27 @@ namespace prjiSpanFinal.Models
                 entity.Property(e => e.ProductStatusName)
                     .IsRequired()
                     .HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<ReceiveAdrList>(entity =>
+            {
+                entity.HasKey(e => e.ReceiveAdrList1);
+
+                entity.ToTable("ReceiveAdrList");
+
+                entity.Property(e => e.ReceiveAdrList1).HasColumnName("ReceiveAdrList");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.ReceiveAdr)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.ReceiveAdrLists)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReceiveAdrList_MemberAccount");
             });
 
             modelBuilder.Entity<RegionList>(entity =>
@@ -664,6 +894,52 @@ namespace prjiSpanFinal.Models
                     .HasConstraintName("FK_RegionList_CountryList");
             });
 
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.ToTable("Report");
+
+                entity.Property(e => e.ReportId).HasColumnName("ReportID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.Reason)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
+
+                entity.Property(e => e.ReporterId).HasColumnName("ReporterID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_Product");
+
+                entity.HasOne(d => d.ReportType)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReportTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_ReportType");
+
+                entity.HasOne(d => d.Reporter)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReporterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_MemberAccount");
+            });
+
+            modelBuilder.Entity<ReportType>(entity =>
+            {
+                entity.ToTable("ReportType");
+
+                entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
+
+                entity.Property(e => e.ReportTypeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Shipper>(entity =>
             {
                 entity.ToTable("Shipper");
@@ -683,11 +959,9 @@ namespace prjiSpanFinal.Models
 
             modelBuilder.Entity<ShipperToProduct>(entity =>
             {
-                entity.HasKey(e => e.ProductToShipperId);
-
                 entity.ToTable("ShipperToProduct");
 
-                entity.Property(e => e.ProductToShipperId).HasColumnName("ProductToShipperID");
+                entity.Property(e => e.ShipperToProductId).HasColumnName("ShipperToProductID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -706,8 +980,35 @@ namespace prjiSpanFinal.Models
                     .HasConstraintName("FK_ShipperToProduct_Shipper");
             });
 
+            modelBuilder.Entity<ShipperToSeller>(entity =>
+            {
+                entity.HasKey(e => e.ShipperToMemberId);
+
+                entity.ToTable("ShipperToSeller");
+
+                entity.Property(e => e.ShipperToMemberId).HasColumnName("ShipperToMemberID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.ShipperId).HasColumnName("ShipperID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.ShipperToSellers)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ShipperToSeller_MemberAccount");
+
+                entity.HasOne(d => d.Shipper)
+                    .WithMany(p => p.ShipperToSellers)
+                    .HasForeignKey(d => d.ShipperId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ShipperToSeller_Shipper");
+            });
+
             modelBuilder.Entity<ShippingStatus>(entity =>
             {
+                entity.ToTable("ShippingStatus");
+
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
 
                 entity.Property(e => e.ShipStatusName)
@@ -734,6 +1035,48 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.BigTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SmallType_BigType");
+            });
+
+            modelBuilder.Entity<SubOfficialEventList>(entity =>
+            {
+                entity.ToTable("SubOfficialEventList");
+
+                entity.Property(e => e.SubOfficialEventListId).HasColumnName("SubOfficialEventListID");
+
+                entity.Property(e => e.OfficialEventListId).HasColumnName("OfficialEventListID");
+
+                entity.Property(e => e.SubEventName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasOne(d => d.OfficialEventList)
+                    .WithMany(p => p.SubOfficialEventLists)
+                    .HasForeignKey(d => d.OfficialEventListId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOfficialEventList_OfficialEventList");
+            });
+
+            modelBuilder.Entity<SubOfficialEventToProduct>(entity =>
+            {
+                entity.ToTable("SubOfficialEventToProduct");
+
+                entity.Property(e => e.SubOfficialEventToProductId).HasColumnName("SubOfficialEventToProductID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.SubOfficialEventListId).HasColumnName("SubOfficialEventListID");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.SubOfficialEventToProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOfficialEventToProduct_Product");
+
+                entity.HasOne(d => d.SubOfficialEventList)
+                    .WithMany(p => p.SubOfficialEventToProducts)
+                    .HasForeignKey(d => d.SubOfficialEventListId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOfficialEventToProduct_SubOfficialEventList");
             });
 
             OnModelCreatingPartial(modelBuilder);

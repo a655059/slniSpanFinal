@@ -20,9 +20,9 @@
     <div class="productPhoto">
         <div class="bigPhoto position-relative">
             <div class="addItemLike">加入按讚好物</div>
-            <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-25"></i>
+            <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
             @{
-                string base64 = Convert.ToBase64String(Model.productPics[0].Picture);
+                string base64 = Convert.ToBase64String(Model.productPics[0].Pic);
                 string imgSrc1  = $"data:image/gif;base64,{base64}";
                 <img src="@imgSrc1" />
             }
@@ -30,7 +30,7 @@
         <div class="smallPhoto d-flex justify-content-center">
             @foreach (var i in Model.productPics)
             {
-                string base65 = Convert.ToBase64String(i.Picture);
+                string base65 = Convert.ToBase64String(i.Pic);
                 string imgSrc2 = $"data:image/gif;base64,{base65}";
                 <div><img src="@imgSrc2" /></div>
             }
@@ -55,7 +55,6 @@
         <h4>@Model.product.ProductName</h4>
         <div class="d-flex justify-content-start align-items-center">
             @{
-
                 int starCount = 4;
                 for (int i = 1; i <= 5; i++)
                 {
@@ -276,20 +275,16 @@
     <script src="~/js/Item/ItemIndex.js"></script>
     <script>
         $(".bigPhoto .itemHeart").click(async function () {
-            let likeInfo = { "memberID": 57, "productID":@Model.product.ProductId};
-            let response = await fetch("@Url.Content("~/Item/AddItemLike")", {
-                body: JSON.stringify(likeInfo),
-                headers: {"Content-ype":"application/json"},
-                method: "POST"
-            });
-            let data = await response.json();
+            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=57&productID=${@Model.product.ProductId}`;
+            let response = await fetch(requestUrl);
+            let data = await response.text();
+            if (data == 1) {
+                $(this).addClass("text-danger");
+            }
+            else {
+                $(this).removeClass("text-danger");
+            }
             console.log(data);
-            //if (data == "1") {
-            //    $(this).addClass("text-danger").addClass("opacity-25");
-            //}
-            //else {
-            //    $(this).removeClass("text-danger").removeClass("opacity-25");
-            //}
         })
         $(function () {
             $(".partialView").load('@Url.Action("Description")');
