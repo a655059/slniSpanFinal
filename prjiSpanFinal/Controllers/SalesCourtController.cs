@@ -32,5 +32,10 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+
+        public IActionResult 修改關於我()
+        {
+            return View();
+        }
     }
 }

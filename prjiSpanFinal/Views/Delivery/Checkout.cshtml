@@ -5,17 +5,7 @@
 
 @section Styles{
     <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
-    <style>
-        .showCalTotalPriceVC {
-            position: sticky;
-            top: 80px;
-        }
-
-        .modal {
-            position: fixed;
-            top: 80px;
-        }
-    </style>
+    <link href="~/css/Delivery/DeliveryCheckout.css" rel="stylesheet"/>
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
