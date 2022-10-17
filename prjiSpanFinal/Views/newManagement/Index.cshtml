@@ -1,0 +1,122 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.Product>
+@{
+    ViewData["Title"] = "Index";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
+
+<h1>Index</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SmallType.SmallTypeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Region.RegionName)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.AdFee)*@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductStatus.ProductStatusName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input value="@item.ProductId" readonly>
+                </td>
+                <td>
+                    <input value="@item.ProductName" readonly>
+
+                </td>
+                <td>
+                    <input value="@item.SmallTypeId" readonly>
+                </td>
+                <td>
+                    <input value="@item.MemberId" readonly>
+                </td>
+                <td>
+                    <input value="@item.RegionId" readonly>
+                </td>
+                <td>
+                    @*<input value="@item.AdFee" readonly>*@
+                </td>
+                <td>
+                    <input value="@item.Description" readonly>
+                </td>
+                <td>
+                    <input value="@item.ProductStatusId" readonly>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div style="align-content:center">
+    <div class="pagination-container">
+        
+        <div class="content_detail__pagination cdp" actpage="1">
+            
+            @{for (int i = 1; i <= 262; i++)
+            {
+                    <a href="/newManagement?page=@i-1" class="cdp_i">prev</a>
+                    <a href="/newManagement?page=@i" class="cdp_i">@i</a>
+                    <a href=" /newManagement?page =@i+1" class="cdp_i">next</a>
+            }}
+          
+            
+        </div>
+    </div>
+    </div>
+    
+    //    for (int i = 2; i <= 262; i++)
+    //    {
+    ////    <!--<li class="page-item"><a class="page-link" href="/newManagement?page=i">i</a></li>-->
+    ////    }
+    ////}
+    <!--<li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+        </a>
+    </li>-->
+
+    @*    @(Html.Pager(pagedList)
+    .Url(page => Url.Action("Index", new { page }))
+    .Build())*@

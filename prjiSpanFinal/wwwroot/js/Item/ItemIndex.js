@@ -1,6 +1,4 @@
-﻿$(".bigPhoto i").click(function () {
-    $(this).toggleClass("text-danger").toggleClass("opacity-25");
-})
+﻿
 
 
 $(".smallPhoto>div").mouseenter(function () {

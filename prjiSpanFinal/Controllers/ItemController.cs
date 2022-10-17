@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels.Item;
 using System;
@@ -15,14 +16,21 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
             var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
+            var smallType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.SmallTypeName).FirstOrDefault();
+            var bigType = dbContext.Products.Where(i => i.ProductId == id).Select(i => i.SmallType.BigType.BigTypeName).FirstOrDefault();
+
             var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
             var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i).ToList();
+
+
+
             var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i).ToList();
             List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
             foreach (var p in sellerProducts)
             {
+                int productID = p.ProductId;
                 string productName = p.ProductName;
-                byte[] productPic = dbContext.ProductPics.Where(i => i.ProductId == p.ProductId).Select(i => i.Picture).FirstOrDefault();
+                byte[] productPic = dbContext.ProductPics.Where(i => i.ProductId == p.ProductId).Select(i => i.Pic).FirstOrDefault();
                 var prices = dbContext.ProductDetails.Where(i => i.ProductId == p.ProductId).Select(i => i.UnitPrice).ToList();
                 decimal maxPrice = prices.Max();
                 decimal minPrice = prices.Min();
@@ -35,7 +43,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
                 }
-                var starCounts = dbContext.Comments.Where(i => i.ProductId == p.ProductId).Select(i => i.Star);
+                var starCounts = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.ProductId == p.ProductId).Select(i => i.CommentStar);
                 double starCount = 0;
                 if (starCounts.Count() == 0)
                 {
@@ -57,6 +65,7 @@ namespace prjiSpanFinal.Controllers
                 }
                 CItemIndexSellerProductViewModel sellerProduct = new CItemIndexSellerProductViewModel
                 {
+                    productID = productID,
                     productName = productName,
                     productPic = productPic,
                     price = price,
@@ -69,6 +78,8 @@ namespace prjiSpanFinal.Controllers
             CItemIndexViewModel itemIndex = new CItemIndexViewModel
             {
                 product = product,
+                bigType = bigType,
+                smallType = smallType,
                 productDetails = productDetails,
                 productPics = productPics,
                 sellerProducts = sellerProductList
@@ -76,7 +87,28 @@ namespace prjiSpanFinal.Controllers
 
             return View(itemIndex);
         }
-
+        public IActionResult AddItemLike(int memberID, int productID)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var like = dbContext.Likes.Where(i => i.MemberId == memberID && i.ProductId == productID).Select(i => i).FirstOrDefault();
+            if (like == null)
+            {
+                Like x = new Like
+                {
+                    MemberId = memberID,
+                    ProductId = productID
+                };
+                dbContext.Likes.Add(x);
+                dbContext.SaveChanges();
+                return Content("1");
+            }
+            else
+            {
+                dbContext.Likes.Remove(like);
+                dbContext.SaveChanges();
+                return Content("0");
+            }
+        }
 
 
 
