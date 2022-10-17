@@ -7,8 +7,16 @@ namespace prjiSpanFinal.Models
 {
     public partial class Ad
     {
+        public Ad()
+        {
+            AdtoProducts = new HashSet<AdtoProduct>();
+        }
+
         public int AdId { get; set; }
         public string AdName { get; set; }
         public decimal AdFee { get; set; }
+        public int AdPeriod { get; set; }
+
+        public virtual ICollection<AdtoProduct> AdtoProducts { get; set; }
     }
 }

@@ -5,13 +5,12 @@ using System.Collections.Generic;
 
 namespace prjiSpanFinal.Models
 {
-    public partial class ShipperToSeller
+    public partial class ReceiveAdrList
     {
-        public int ShipperToMemberId { get; set; }
-        public int ShipperId { get; set; }
+        public int ReceiveAdrList1 { get; set; }
         public int MemberId { get; set; }
+        public string ReceiveAdr { get; set; }
 
         public virtual MemberAccount Member { get; set; }
-        public virtual Shipper Shipper { get; set; }
     }
 }

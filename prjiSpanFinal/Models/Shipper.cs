@@ -9,15 +9,17 @@ namespace prjiSpanFinal.Models
     {
         public Shipper()
         {
-            OrderDetails = new HashSet<OrderDetail>();
+            Orders = new HashSet<Order>();
             ShipperToProducts = new HashSet<ShipperToProduct>();
+            ShipperToSellers = new HashSet<ShipperToSeller>();
         }
 
         public int ShipperId { get; set; }
         public string ShipperName { get; set; }
         public string Phone { get; set; }
 
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
+        public virtual ICollection<ShipperToSeller> ShipperToSellers { get; set; }
     }
 }
