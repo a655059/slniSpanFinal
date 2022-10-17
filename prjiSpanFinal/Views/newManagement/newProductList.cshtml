@@ -1,81 +1,90 @@
-﻿@model prjiSpanFinal.ViewModel.CProductListViewModel
-
+﻿@model IEnumerable<prjiSpanFinal.ViewModel.CProductListViewModel>
 @{
     ViewData["Title"] = "newProductList";
+    var pagedList = (IPagedList)ViewBag.Prods;
 }
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent
+@using X.PagedList.Web.Common
 
-<h1>newProductList</h1>
-
-<form asp-action="newProductList" asp-controller="newManagement" method="post">
-<table class="table" width="100% "style=" table-layout:fixed">
-    <thead>
-        <tr>
-            <th>
-                商品ID
-            </th>
-            <th>
-                商品名稱
-            </th>
-            <th>
-                商品類型
-            </th>
-            <th>
-                商品狀態
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products)
+@section Styles{
+    <style>
+        td input {
+            width: 160px;
+        }
+    </style>
+}
+    <h1>商品</h1>
+    <form>
+        <input type="search" name="keyword" />
+        <input type="submit" value="搜尋"/>
+    </form>
+    <table class="table" width="100%" style="table-layout:fixed">
+        <thead>
+            <tr>
+                <th>
+                    商品ID
+                </th>
+                <th>
+                    商品名稱
+                </th>
+                <th>
+                    商品類別
+                </th>
+                <th>
+                    賣家ID
+                </th>
+                <th>
+                    地區
+                </th>
+                <th>
+                    商品狀態
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    <input value="@item.ProductId" readonly>
+                    <input value="@item.Product.ProductId" readonly>
                 </td>
                 <td>
-                    <input value="@item.ProductName" readonly>
+                    <input value="@item.Product.ProductName" readonly>
                 </td>
                 <td>
-                    <input value="@item.SmallTypeId" readonly>
-                </td>
-
-                <td>
-                    <input value="@item.ProductStatusId" readonly>
+                    <input value="@item.SmallTypeName" readonly>
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.ProductId}) |
-                    @Html.ActionLink("Details", "Details", new { id=item.ProductId}) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.ProductId})
+                    <input value="@item.Product.MemberId" readonly>
+                </td>
+                <td>
+                    <input value="@item.RegionName" readonly>
+                </td>
+                <td>
+                    <input value="@item.ProductStatusName" readonly>
+                </td>
+                <td>
+                    <a asp-action="ProductEdit" asp-route-id="@item.Product.ProductId">Edit</a> |
+                    <a asp-action="ProductDetails" asp-route-id="@item.Product.ProductId">Details</a> |
+                    <a asp-action="ProductDelete" asp-route-id="@item.Product.ProductId">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
 </table>
-
-
-<ul class="pagination">
-    @for(int i=1;i<=Model.PageCount;i++)
-    {
-        <li class="page-item">
-            @if(i!=Model.CurrentPageIndex){
-                    <a class="page-link" href="javascript:PageClick(@i)">@i</a>
-            }
-            else{
-                <a class="page-link">@i</a>
-            }
-        </li>
-    }
-</ul>
-
-<input type="hidden" id="hfcurrentpageindex" name="CurrentPageIndex" />
-
-
-</form>
-<script type="text/javascript">
-
-    function PageClick(index)
-    {
-        document.getElementById("hfcurrentpageindex").value=index;
-        document.forms[0].submit();
-    }
-</script>
+<div style="align-content:center">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("Index", new { page }))
+        .Build())
+</div>
