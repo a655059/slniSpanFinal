@@ -14,13 +14,14 @@
         h3 {
             color: gray;
         }
+
         td {
             width: 200px;
             height: 70px;
-            text-align:center;
-            align-items:center;
-            margin:3px;
-            font-size:18px;
+            text-align: center;
+            align-items: center;
+            margin: 3px;
+            font-size: 18px;
         }
     </style>
 }
@@ -28,11 +29,12 @@
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-9 overflow-auto">
         <h2 class="d-flex justify-content-center">賣家首頁</h2>
+        <div class="d-flex justify-content-start mt-2">
+            <h3>待處理事項</h3>
+        </div>
         <div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
-            <div class="d-flex justify-content-start mt-1">
-                <h3>待處理事項</h3>
-            </div>
-            <table class="d-flex justify-content-center mb-4">
+
+            <table class="d-flex justify-content-center my-4">
                 <tr>
                     <td class="border-end">0<br />待付款訂單</td>
                     <td class="border-end">0<br />待出貨訂單</td>
@@ -47,17 +49,21 @@
                 </tr>
             </table>
         </div>
+
+        <p class="border-bottom my-4"></p>
+
+        <div class="d-flex justify-content-start mt-1">
+            <h3>銷售數據</h3>
+        </div>
         <div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
-            <div class="d-flex justify-content-start mt-1">
-                <h3>銷售數據</h3>
-            </div>
+
             <div class="d-flex justify-content-start">
-                <iframe title="power bi" width="1140" height="541" src="https://app.powerbi.com/reportEmbed?reportId=3fd8f24c-b854-4fad-bdbe-1c8388890a80&autoAuth=true&ctid=a43f6cd3-5412-4b1f-a134-2c277364caf6" frameborder="0" allowFullScreen="true"></iframe>
+                <iframe title="power bi" width="1300" height="900" src="https://app.powerbi.com/view?r=eyJrIjoiMTVkYmUxZWYtYTM1Zi00ZmZjLWJmMTUtN2M1YjQ1YWVlNTJjIiwidCI6ImE0M2Y2Y2QzLTU0MTItNGIxZi1hMTM0LTJjMjc3MzY0Y2FmNiIsImMiOjEwfQ%3D%3D&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
             </div>
         </div>
     </div>
- </div>
+</div>
 
-        @section Scripts
+@section Scripts
 {
-        }
+}
