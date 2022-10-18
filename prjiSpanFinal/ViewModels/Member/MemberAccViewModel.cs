@@ -99,6 +99,10 @@ namespace prjiSpanFinal.ViewModels.Member
         public string AfterSales { get; set; }
         public string RenewProduct { get; set; }
         public string SellerType { get; set; }
+        public string regionName { get; set; }
+        public string gender { get; set; }
+        public string TW { get; set; }
         
+
     }
 }

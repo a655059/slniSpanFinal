@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewComponents;
+using prjiSpanFinal.ViewModels.Member;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,7 +50,7 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create1(MemberAccount mem, IFormFile File1)
+        public IActionResult Create1(MemberAccViewModel mem, IFormFile File1)
         {
 
             //string filePath = Path.Combine(_host.WebRootPath, "uploads", File1.FileName);
@@ -61,12 +62,8 @@ namespace prjiSpanFinal.Controllers
             //        select i;
             //var re = from i in _context.RegionLists
             //         select i;
-            var sites = _context.RegionLists.Where(a => a.RegionName == site).Select(a => a.RegionId).Distinct();
-
-
-            int reginid_1 = Convert.ToInt32(sites);
-
-
+            iSpanProjectContext db = new iSpanProjectContext();
+            MemberAccount memberac = new MemberAccount();
 
             byte[] imgByte = null;
             using (var memoryStream = new MemoryStream())
@@ -75,9 +72,30 @@ namespace prjiSpanFinal.Controllers
                 imgByte = memoryStream.ToArray();
             }
             mem.MemPic = imgByte;
-            mem.RegionId = reginid_1;
-            _context.MemberAccounts.Add(mem);
-            _context.SaveChanges();
+            memberac = mem.memACC;
+            memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
+            if (mem.gender == "female")
+            {
+                memberac.Gender = 2;
+            }
+            else if (mem.gender == "male")
+            {
+                memberac.Gender = 1;
+            }
+            else
+            {
+                memberac.Gender = 0;
+            }
+            if (mem.TW == "tw")
+            {
+                memberac.IsTw = true;
+            }
+            else
+            {
+                memberac.IsTw = false;
+            }
+            db.MemberAccounts.Add(memberac);
+            db.SaveChanges();
             return RedirectToAction("Login");
         }
         public IActionResult Like()
