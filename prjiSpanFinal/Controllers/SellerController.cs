@@ -31,7 +31,7 @@ namespace prjiSpanFinal.Controllers
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
-                smallType=smallType,
+                smallType = smallType,
             };
             return View(x);
         }
@@ -83,7 +83,7 @@ namespace prjiSpanFinal.Controllers
             List<List<int>> listQty = new List<List<int>>();
             List<List<decimal>> listPrice = new List<List<decimal>>();
             List<List<byte[]>> listPic = new List<List<byte[]>>();
-            
+
             for (int i = 0; i < myproductlist.Count; i++)  //外迴圈把所有商品列出來存進List
             {
                 List<string> sublistStyle = new List<string>();
@@ -94,7 +94,7 @@ namespace prjiSpanFinal.Controllers
                 listName.Add(q1[i].ProductName);//把商品名稱存進去
                 var detail = q2.Where(p => p.ProductId == q1[i].ProductId).ToList();//找出所有同ID商品的資料
 
-                for(int j = 0;j<detail.Count;j++)//內迴圈把同ID商品所有Style和相關資料列出來存進List
+                for (int j = 0; j < detail.Count; j++)//內迴圈把同ID商品所有Style和相關資料列出來存進List
                 {
                     sublistStyle.Add(detail[j].Style);
                     sublistQty.Add(detail[j].Quantity);
@@ -122,8 +122,39 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Coupon()
         {
-            return View();
+            int id = 1;
+            var x = _db.Coupons.Where(n => n.MemberId == id).Select(n => n).ToList();
+
+            //List<int> CouponId = new List<int>();
+            //List<string> CouponName = new List<string>();
+            //List<DateTime> StartDate = new List<DateTime>();
+            //List<DateTime> ExpiredDate = new List<DateTime>();
+            //List<float> Discount = new List<float>();
+            //List<string> CouponCode = new List<string>();
+
+            //for (int i = 0; i < x.Count; i++)
+            //{
+            //    CouponId.Add(x[i].CouponId);
+            //    CouponName.Add(x[i].CouponName);
+            //    StartDate.Add(x[i].StartDate);
+            //    ExpiredDate.Add(x[i].ExpiredDate);
+            //    Discount.Add(x[i].Discount);
+            //    CouponCode.Add(x[i].CouponCode);
+            //}
+            //CSellerCouponToViewViewModel y = new CSellerCouponToViewViewModel
+            //{
+            //    CouponId= CouponId,
+            //    CouponName= CouponName,
+            //    StartDate= StartDate,
+            //    ExpiredDate= ExpiredDate,
+            //    Discount= Discount,
+            //    CouponCode= CouponCode
+            //};
+
+            return View(x);
         }
+
+
 
         public IActionResult AD()
         {
@@ -132,7 +163,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult seller跑條(int page)
         {
-            return ViewComponent("seller跑條",page);
+            return ViewComponent("seller跑條", page);
         }
 
         public IActionResult Event()
@@ -141,3 +172,5 @@ namespace prjiSpanFinal.Controllers
         }
     }
 }
+
+
