@@ -8,7 +8,14 @@ namespace prjiSpanFinal.ViewModels.Delivery
 {
     public class CDeliveryOrderViewModel
     {
-        public Order order { get; set; }
-        public List<OrderDetail> orderDetails { get; set; }
+        public int sellerID { get; set; }
+        public string sellerName { get; set; }
+        public byte[] productDetailPic { get; set; }
+        public string productName { get; set; }
+        public int purchaseQuantity { get; set; }
+        public int productQuantity { get; set; }
+        public string style { get; set; }
+        public int orderDetailID { get; set; }
+        public decimal unitPrice { get; set; }
     }
 }

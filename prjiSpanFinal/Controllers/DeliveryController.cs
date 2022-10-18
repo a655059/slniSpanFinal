@@ -97,7 +97,7 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
-                return RedirectToAction("Login", "Member");
+                return RedirectToAction("Index", "Home");
             }
         }
         public IActionResult ShowQtyToSpecificMember(int productDetailID)
@@ -144,21 +144,32 @@ namespace prjiSpanFinal.Controllers
                 if (allOrderDetail.Count() > 0)
                 {
                     List<CDeliveryOrderViewModel> cDeliveryOrderList = new List<CDeliveryOrderViewModel>();
-                    var orders = dbContext.Orders.Where(i => i.MemberId == memberID && i.StatusId == 1).Select(i => i).ToList();
+                    //var orders = dbContext.Orders.Where(i => i.MemberId == memberID && i.StatusId == 1).Select(i => i).ToList();
                     foreach (var orderDetail in allOrderDetail)
                     {
-                        //var productDetailName = orderDetail.ProductDetail.
-                        //var orderDetails = allOrderDetail.Where(i => i.OrderId == order.OrderId).Select(i => i).ToList();
-                        //foreach (var orderDetail in orderDetails)
-                        //{
-                        //    var productDetail = 
-                        //}
-                        //CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
-                        //{
-                        //    order = order,
-                        //    orderDetails = orderDetails,
-                        //};
-                        //cDeliveryOrderList.Add(cDeliveryOrder);
+                        int sellerID = orderDetail.ProductDetail.Product.Member.MemberId;
+                        string sellerName = orderDetail.ProductDetail.Product.Member.Name;
+                        byte[] productDetailPic = orderDetail.ProductDetail.Pic;
+                        string productName = orderDetail.ProductDetail.Product.ProductName;
+                        int purchaseQuantity = orderDetail.Quantity;
+                        int productQuantity = orderDetail.ProductDetail.Quantity;
+                        string style = orderDetail.ProductDetail.Style;
+                        int orderDetailID = orderDetail.OrderDetailId;
+                        decimal unitPrice = orderDetail.ProductDetail.UnitPrice;
+                        CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
+                        {
+                            sellerID = sellerID,
+                            sellerName = sellerName,
+                            productDetailPic = productDetailPic,
+                            productName = productName,
+                            purchaseQuantity = purchaseQuantity,
+                            productQuantity = productQuantity,
+                            style = style,
+                            orderDetailID = orderDetailID,
+                            unitPrice = unitPrice
+                        };
+                        cDeliveryOrderList.Add(cDeliveryOrder);
+                        
                     }
                     CDeliveryShowCartViewModel cDeliveryShowCart = new CDeliveryShowCartViewModel
                     {
@@ -169,14 +180,20 @@ namespace prjiSpanFinal.Controllers
                 }
                 else
                 {
-                    return View();
+                    return RedirectToAction("Index","Home");
                 }
             }
             else
             {
                 return RedirectToAction("Login", "Member");
             }
+        }
+        public IActionResult ShowNoItemInCart()
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
             
+
+            return View();
         }
         public IActionResult Checkout()
         {
