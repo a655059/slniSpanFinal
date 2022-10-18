@@ -9,6 +9,8 @@ namespace prjiSpanFinal.Models
     {
         public MemberAccount()
         {
+            ChatLogSendFromNavigations = new HashSet<ChatLog>();
+            ChatLogSendToNavigations = new HashSet<ChatLog>();
             CouponWallets = new HashSet<CouponWallet>();
             CustomizedCategories = new HashSet<CustomizedCategory>();
             FollowFollowedMems = new HashSet<Follow>();
@@ -46,6 +48,8 @@ namespace prjiSpanFinal.Models
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
+        public virtual ICollection<ChatLog> ChatLogSendFromNavigations { get; set; }
+        public virtual ICollection<ChatLog> ChatLogSendToNavigations { get; set; }
         public virtual ICollection<CouponWallet> CouponWallets { get; set; }
         public virtual ICollection<CustomizedCategory> CustomizedCategories { get; set; }
         public virtual ICollection<Follow> FollowFollowedMems { get; set; }

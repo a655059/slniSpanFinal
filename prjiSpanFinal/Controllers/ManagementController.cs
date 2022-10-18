@@ -23,9 +23,8 @@ namespace prjiSpanFinal.Controllers
             {
                 ADDDATAS();
             }
-
         }
-        #region
+        #region DATASRegion
         public void ADDDATAS()
         {
             for (int i = 0; i <= 20; i++)
@@ -93,7 +92,7 @@ namespace prjiSpanFinal.Controllers
             Reports.Add(cReport);
         }
         #endregion
-        #region
+        #region ReportRegion
         public IActionResult ReportList()
         {
             return View(Reports);
@@ -128,13 +127,13 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("ReportList");
         }
         #endregion
-        #region
+        #region PowerBiRegion
         public IActionResult PowerBi()
         {
             return View();
         }
         #endregion
-        #region
+        #region ProductRegion
         public IActionResult ProductList()
         {
             return View(Products);
@@ -163,9 +162,6 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("ProductList");
         }
-
-
-
         public IActionResult ProductDelete(int? id)
         {
             if (id != null)
@@ -201,7 +197,7 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("ProductList");
         }
         #endregion
-        #region
+        #region ProductDetailRegion
         public IActionResult ProductDetailList(int? id)
         {
             var product = from i in ProductDetails
@@ -240,7 +236,7 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("ProductList");
         }
         #endregion
-        #region
+        #region MemberRegion
         public IActionResult MemberList()
         {
             return View(members);
@@ -325,7 +321,7 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("MemberList");
         }
         #endregion
-        #region
+        #region OrderRegion
         public IActionResult OrderList()
         {
             return View(Orders);
@@ -387,6 +383,5 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("OrderList");
         }
         #endregion
-
     }
 }

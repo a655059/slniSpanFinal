@@ -127,7 +127,9 @@
 }
 
 .itemcol {
+    height: 343px;
     width: 100%;
+    overflow:hidden;
     padding-top: 10px;
     display: flex;
     flex-wrap: wrap;
@@ -137,10 +139,10 @@
 .sellsitem {
     width: 200px;
     height: 320px;
-    top: 10px;
     margin: 4px 5px 4px 5px;
     display: inline;
     padding: 0;
+    margin-bottom:10px;
     border: 1px solid #FF8040;
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
@@ -167,8 +169,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
     color: black;
+    text-overflow: ellipsis;
 }
 
 .cardPrice {

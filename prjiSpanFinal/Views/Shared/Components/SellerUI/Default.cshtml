@@ -31,13 +31,12 @@
             <li class="border-top my-3"></li>
             <li class="mb-1">
                 <i class="fa-solid fa-xl fa-truck"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-                    物流中心
+                    物流付款
                 </button>
                 <div class="sellerleftsiderbar collapse show" id="orders-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a asp-action="Order" class="link-dark d-inline-flex text-decoration-none rounded my-1">待出貨</a></li>
-                        <li><a asp-action="Shipper" class="link-dark d-inline-flex text-decoration-none rounded my-1">物流設定</a></li>
-
+                        <li><a asp-action="Shipper" class="link-dark d-inline-flex text-decoration-none rounded my-1">物流/付款設定</a></li>
                     </ul>
                 </div>
             </li>

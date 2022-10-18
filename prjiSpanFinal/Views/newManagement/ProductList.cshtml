@@ -1,0 +1,73 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.Product>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                商品ID
+            </th>
+            <th>
+                商品名稱
+            </th>
+            <th>
+                商品分類
+            </th>
+            <th>
+                賣家
+            </th>
+            <th>
+                地區
+            </th>
+            <th>
+                廣告費
+            </th>
+            <th>
+                商品描述
+            </th>
+            <th>
+                商品狀態
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input class="form-control-plaintext" type="text" readonly value=@item.ProductId>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SmallType.SmallTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Region.RegionName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdtoProducts)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductStatus.ProductStatusName)
+                </td>
+                <td>
+                    @Html.ActionLink("修改", "ProductEdit", new {  id=item.ProductId }) |
+                    @Html.ActionLink("刪除", "ProductDelete", new { id=item.ProductId  }) |
+                    @Html.ActionLink("復原", "ProductRecover", new { id=item.ProductId  })
+                    @Html.ActionLink("檢視", "ProductDetailList", new { id=item.ProductId},new{@class="btn btn-primary"})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

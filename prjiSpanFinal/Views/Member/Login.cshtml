@@ -33,17 +33,17 @@
                         <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">登入</h3>
 
                         <div class="form-outline mb-4">
-                            <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                            <input type="email" id="txtAccount" value="acc1" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example18">帳號</label>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="password" id="form2Example28" class="form-control form-control-lg" />
+                            <input type="password" id="txtPW" value="pw1" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example28">密碼</label>
                         </div>
 
                         <div class="pt-1 mb-4">
-                            <button class="btn btn-info btn-lg btn-block" type="button">登入</button>
+                            <button class="btn btn-info btn-lg btn-block" type="button" id="btnlogin">登入</button>
                         </div>
 
                         <p class="small mb-5 pb-lg-2"><a class="text-muted" href="https://localhost:44330/Member/forgetPw">忘記密碼?</a></p>
@@ -61,3 +61,22 @@
         </div>
     </div>
 </section>
+
+                        
+@section Scripts{
+    <script>
+        let txtAcc = $("#txtAccount");
+        let txtPW = $("#txtPW");
+        $("#btnlogin").click(function () {
+            $.post('@Url.Content("~/Member/LoginCheck")', { "txtAccount": txtAcc.val(), "txtPW": txtPW.val() }, function (data) {
+                if (data == "1") {
+                    window.alert("登入成功");
+                    window.location = "/";
+                }
+                else {
+                    window.alert("密碼錯誤");
+                }
+            })
+        });
+    </script>  
+}
