@@ -197,9 +197,15 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Checkout()
         {
+
             return View();
         }
         public IActionResult AddComment()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddComment(CSubmitCommentViewModel cSubmitComment)
         {
             return View();
         }

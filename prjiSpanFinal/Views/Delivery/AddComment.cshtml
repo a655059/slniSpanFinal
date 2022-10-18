@@ -9,18 +9,14 @@
             width:100px;
             height:100px;
         }
-        .itemImgDiv img, .starImgDiv img {
+        .itemImgDiv img{
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: contain;
             display: block;
         }
-        .starImgDiv{
-            width:16px;
-            aspect-ratio:1/1;    
-            margin:0 5px;
-        }
-        .starImgDiv:hover{
+        
+        .star:hover{
             cursor:pointer;
         }
         .commentLabel {
@@ -62,17 +58,18 @@
             <div class="text-black-50">規格:白色，附32g千首歌</div>
         </div>
     </div>
-    <div class="fs-5 fw-bold mt-3">關於服務</div>
+    <div class="fs-5 fw-bold mt-3">關於商品</div>
     <div class="d-flex justify-content-start align-items-center">
-        <div>商品品質</div>
+        <div class="fs-5">商品品質</div>
         <div class="d-flex ms-5 me-3">
             @{
                 for (int i = 1; i <= 5; i++)
                 {
-                    <div class="starImgDiv itemQualityImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                    <i class="star itemQualityStar fa-regular fa-star me-1"></i>
                 }
             }
         </div>
+        <input type="hidden" name="itemStar" value="" />
         <div class="commentResult text-black-50"></div>
     </div>
 
@@ -102,34 +99,23 @@
                 <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">  
                     <i class="fa-solid fa-camera-retro me-2">新增照片</i>
                 </label>
-                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/gif, image/jpeg, image/png" multiple/>
+                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/*" multiple/>
             </div>
 
         </div>
     </div>
     <div class="fs-5 fw-bold mt-3">關於服務</div>
     <div class="d-flex justify-content-start align-items-center">
-        <div>賣家服務</div>
+        <div class="fs-5">物流服務</div>
         <div class="d-flex ms-5 me-3">
             @{
                 for (int i = 1; i <= 5; i++)
                 {
-                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
+                    <i class="star fa-regular fa-star me-1"></i>
                 }
             }
         </div>
-        <div class="commentResult text-black-50"></div>
-    </div>
-    <div class="d-flex justify-content-start align-items-center">
-        <div>物流服務</div>
-        <div class="d-flex ms-5 me-3">
-            @{
-                for (int i = 1; i <= 5; i++)
-                {
-                    <div class="starImgDiv"><img src="@Url.Content("~/img/WhiteStar.png")" /></div>
-                }
-            }
-        </div>
+        <input type="hidden" name="shipperStar" value="" />
         <div class="commentResult text-black-50"></div>
     </div>
     <div class="mt-3 text-end">
@@ -140,8 +126,10 @@
 
 @section Scripts{ 
     <script>
-        $(".starImgDiv").click(function () {
-            $(this).children().attr("src", "@Url.Content("~/img/YellowStar.png")").closest("div").prevAll().children().attr("src", "@Url.Content("~/img/YellowStar.png")").end().end().nextAll().children().attr("src", "@Url.Content("~/img/WhiteStar.png")");
+        
+
+        $(".star").click(function () {
+            $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end().nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
             let resultDiv = $(this).parent().siblings(".commentResult");
             let starCount = $(this).prevAll().length + 1;
             if (starCount == 1) {
@@ -155,9 +143,11 @@
             } else {
                 resultDiv.html("超棒");
             }
+            $(this).closest("div").siblings("input").val(starCount);
         });
-        $(".itemQualityImgDiv").click(function () {
+        $(".itemQualityStar").click(function () {
             $(".commentLayout").slideDown();
+
         });
         $("#submit").click(function () {
             let arr = [];
