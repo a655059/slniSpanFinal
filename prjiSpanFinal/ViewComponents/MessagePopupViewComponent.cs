@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -33,6 +34,20 @@ namespace prjiSpanFinal.ViewComponents
     }
     public class MessagePopupViewComponent : ViewComponent
     {
+        private IWebHostEnvironment _enviro;
+        public MessagePopupViewComponent(IWebHostEnvironment p)
+        {
+            _enviro = p;
+        }
+
+        public string compareTime(string msg1,string msg2)
+        {
+            string time1 = msg1.Substring(4, 17);
+            string time2 = msg2.Substring(4, 17);
+            DateTime dtime1 = new DateTime(Int32.Parse(time1.Substring(9, 4)), Int32.Parse(time1.Substring(13, 2)), Int32.Parse(time1.Substring(15, 2)), Int32.Parse(time1.Substring(0, 2)), Int32.Parse(time1.Substring(2, 2)), Int32.Parse(time1.Substring(4, 2)), Int32.Parse(time1.Substring(6, 3)));
+            DateTime dtime2 = new DateTime(Int32.Parse(time2.Substring(9, 4)), Int32.Parse(time2.Substring(13, 2)), Int32.Parse(time2.Substring(15, 2)), Int32.Parse(time2.Substring(0, 2)), Int32.Parse(time2.Substring(2, 2)), Int32.Parse(time2.Substring(4, 2)), Int32.Parse(time2.Substring(6, 3)));
+            return dtime1 > dtime2 ? msg1 : msg2;
+        }
 
         public IViewComponentResult Invoke()
         {
@@ -48,11 +63,12 @@ namespace prjiSpanFinal.ViewComponents
             }
             else
             {
-                b.MemPic = File.ReadAllBytes("~/img/Member/nopicmem.jpg");
+                string pName = "/img/Member/nopicmem.jpg";
+                string path = _enviro.WebRootPath + pName;
+                b.MemPic = File.ReadAllBytes(path);
             }
-
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var q = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.SendFrom, c.Msg, c.SendFromNavigation.MemberAcc, c.SendFromNavigation.MemPic, }).DistinctBy(c => c.SendFrom).ToList();
+            var q = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID || c.SendFrom == b.MemID).Select(c => c).OrderByDescending(c=>c.ChatLogId).ToList();
             var q1 = dbcontext.ChatLogs.AsEnumerable().Where(c => c.SendTo == b.MemID).GroupBy(c => c.SendFrom).ToList();
             List<int> idlist = new List<int>();
             List<string> acclist = new List<string>();
@@ -63,7 +79,15 @@ namespace prjiSpanFinal.ViewComponents
             {
                 idlist.Add(q[i].SendFrom);
                 acclist.Add(q[i].MemberAcc);
-                msglist.Add(q[i].Msg);
+                for(int j =0;j<q2.Count;j++)
+                {
+                    if(q[i].SendFrom == q2[j].SendTo)
+                    {
+                        msglist.Add(compareTime(q[i].Msg, q2[j].Msg));
+                        flag = true;
+                        break;
+                    }
+                }
                 hrlist.Add(q1[i].Count(c => c.HaveRead == false));
                 if (q[i].MemPic != null)
                 {
@@ -71,7 +95,9 @@ namespace prjiSpanFinal.ViewComponents
                 }
                 else
                 {
-                    bslist.Add(File.ReadAllBytes("~/img/Member/nopicmem.jpg"));
+                    string pName = "/img/Member/nopicmem.jpg";
+                    string path = _enviro.WebRootPath  + pName;
+                    bslist.Add(File.ReadAllBytes(path));
                 }
             }
             b.CMemPic = bslist;

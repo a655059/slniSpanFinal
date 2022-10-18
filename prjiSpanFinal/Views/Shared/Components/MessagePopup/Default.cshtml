@@ -38,11 +38,11 @@
                                     </div>
 
                                     <div style="position: relative; height: 400px;overflow-y: auto;">
-                                        <ul class="list-unstyled mb-0">
+                                        <ul class="list-unstyled mb-0" id="msgopendialogbody">
                                         @{
-                                            for(int i=0;i<Model.CMemAcc.Count;i++)
+                                            for (int i = 0; i < Model.CMemAcc.Count; i++)
                                             {
-                                                <li class="p-2 border-bottom">
+                                                <li class="p-2 border-bottom msgopendialogli">
                                                     <input type="hidden" class="msgcid" value="@Model.CMemID[i]" />
                                                     <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog">
                                                         <div class="d-flex flex-row">
@@ -56,9 +56,14 @@
                                                             </div>
                                                         </div>
                                                         <div class="pt-1">
-                                                            <input type="hidden" class="msgbodytimestamp" value="@Model.COneMsg[i].Substring(4,17)" />
+                                                            <input type="hidden" class="msgbodytimestamp" value="@Model.COneMsg[i].Substring(4, 17)" />
                                                             <p class="small text-muted mb-1">現在</p>
-                                                            <span class="badge bg-danger rounded-pill float-end">@Model.CHaveread[i]</span>
+                                                            @{
+                                                                if (Model.CHaveread[i] > 0)
+                                                                {
+                                                                    <span class="badge bg-danger rounded-pill float-end">@Model.CHaveread[i]</span>
+                                                                }
+                                                            }
                                                         </div>
                                                     </a>
                                                 </li>
