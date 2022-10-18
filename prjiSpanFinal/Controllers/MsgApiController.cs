@@ -22,9 +22,9 @@ namespace prjiSpanFinal.Controllers
         [HttpGet("{id}")]
         public string Get(int cid, int id)
         {
-            //iSpanProjectContext dbcontext = new iSpanProjectContext();
-            //dbcontext.ChatLogs.Where(i => i.SendFrom == cid && i.SendTo == id).ToList();
-            return ""; /*Json(cities);*/
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var cl = dbcontext.ChatLogs.Where(i => i.SendFrom == cid && i.SendTo == id).ToList();
+            return "";/*Json(cl);*/
         }
 
         // POST api/<MsgApiController>
