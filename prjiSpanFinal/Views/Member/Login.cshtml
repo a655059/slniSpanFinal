@@ -33,12 +33,12 @@
                         <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">登入</h3>
 
                         <div class="form-outline mb-4">
-                            <input type="email" id="txtAccount" class="form-control form-control-lg" />
+                            <input type="email" id="txtAccount" value="acc1" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example18">帳號</label>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="password" id="txtPW" class="form-control form-control-lg" />
+                            <input type="password" id="txtPW" value="pw1" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example28">密碼</label>
                         </div>
 
@@ -71,6 +71,7 @@
             $.post('@Url.Content("~/Member/LoginCheck")', { "txtAccount": txtAcc.val(), "txtPW": txtPW.val() }, function (data) {
                 if (data == "1") {
                     window.alert("登入成功");
+                    window.location = "/";
                 }
                 else {
                     window.alert("密碼錯誤");
