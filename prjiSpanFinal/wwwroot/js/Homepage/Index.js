@@ -1,4 +1,6 @@
-﻿const moreitembtn = document.querySelector("#moreitembtn");
+﻿//const { each } = require("jquery");
+
+const moreitembtn = document.querySelector("#moreitembtn");
 const itemcol = document.querySelector("#itemcol");
 let itemcount = document.querySelector('#itemCount').value;
 let count = 0;
