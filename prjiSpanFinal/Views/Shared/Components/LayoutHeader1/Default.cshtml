@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Header.CHeader1ViewModel
 
 <div class="p-2 layoutheader1bg text-white header1nav" id="header1">
     <div class="container-lg">
@@ -66,7 +66,7 @@
                 <!--帳號登入/創建-->
             </div>
             @{
-                if (Model == 0)
+                if (Model.Mempic == null)
                 {
                     <div class="text-end navlog col-2">
                         <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
@@ -81,7 +81,7 @@
                 {
                     <div class="text-end navlog col-2 dropdown">
                         <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white; ">
-                            <img src="~/img/Member/pekopeko.jpg" width="40" height="40" style="border-radius: 50%;" /><span style="font-size:80%; padding:3px;">pekopeko</span>
+                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="40" height="40" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="@Url.Content("~/Member/Edit")">會員資料</a></li>
