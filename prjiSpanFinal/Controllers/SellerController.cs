@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels.seller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,14 +26,35 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            var bigType = _db.BigTypes.Select(i => i.BigTypeName).ToList();
+            var smallType = _db.SmallTypes.Select(i => i.SmallTypeName).ToList();
+            CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
+            {
+                bigType = bigType,
+                smallType=smallType,
+            };
+            return View(x);
         }
         //[HttpPost]
-        //public iactionresult create(productdetail product)
+        //public IActionResult create(CSellerCreateViewModel product)
         //{
         //    _db.productdetails.add(product);
         //    _db.savechanges();
+        //    var q = 
         //}
+
+
+        //連結小類別選項
+
+        public IActionResult SmallType(string bigtype)
+        {
+            var smalltype = _db.SmallTypes.Where(a => a.BigType.BigTypeName == bigtype).Select(a => a.SmallTypeName).Distinct();
+            return Json(smalltype);
+        }
+
+
+
+
         public IActionResult OrderDetail()
         {
             return View();
@@ -49,7 +71,21 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult NewIndex()
         {
-            return View();
+            //var q = from c in _db.Products where c.MemberId == 
+            //var productID = _db.Products.Select(n => n.ProductId);
+            //var productName = _db.Products.Where(n => n.ProductId = productID).Select(n => n.);
+            //var Quantity = _db.ProductDetails.Select(n => n.Quantity).ToList();
+            //var UnitPrice = _db.ProductDetails.Select(n => n.UnitPrice).ToList();
+            //var Pic = _db.ProductDetails.Select(n => n.Pic).ToList();
+            CSellerNewIndexToViewViewModel x = new CSellerNewIndexToViewViewModel
+            {
+                //productName = productName,
+                //Style = Style.ToString(),
+                //Quantity = Convert.ToInt32(Quantity),
+                //UnitPrice = Convert.ToDecimal(UnitPrice),
+                //Pic= Pic
+            };
+            return View(x);
         }
 
         public IActionResult Coupon()

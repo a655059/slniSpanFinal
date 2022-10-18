@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.seller.CSellerNewIndexToViewViewModel
 @{
     ViewData["Title"] = "NewIndex";
 }
@@ -68,32 +69,32 @@
                 <div class="row col-1 align-content-center justify-content-center 內容文字大小">
                     編號
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="productName">
                     商品名稱
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Style">
                     規格
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Quantity">
                     商品數量
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="UnitPrice">
                     銷售金額
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Pic">
                     商品照片
                 </div>
                 <div class=" row align-content-center col-1 justify-content-center mx-2"></div>
             </div>
             @{
                 int count = 0;
-                for (var i = 1; i <= 10; i++)
+                foreach(var item in Model.productName)
                 {
                     count++;
 
                     <div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
-                        <div class="row col-1 align-content-center justify-content-center 內容文字大小">@i</div>
-                        <div class="row col-2 align-content-center justify-content-center 內容文字大小">蘋果</div>
+                        <div class="row col-1 align-content-center justify-content-center 內容文字大小">@item</div>
+                        <div class="row col-2 align-content-center justify-content-center 內容文字大小">@item</div>
                         <div class="row col-2 align-content-center justify-content-center">
                             <div class="row align-content-center justify-content-center 置中 內容文字大小">紅色</div> <br />
                             <div class="row align-content-center justify-content-center 置中 內容文字大小">藍色</div>
