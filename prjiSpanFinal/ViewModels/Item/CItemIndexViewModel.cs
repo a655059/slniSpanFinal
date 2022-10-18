@@ -12,7 +12,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public string bigType { get; set; }
         public string smallType { get; set; }
         public List<ProductDetail> productDetails { get; set; }
-        public List<ProductPic> productPics { get; set; }
+        public List<byte[]> productPics { get; set; }
         public List<CItemIndexSellerProductViewModel> sellerProducts { get; set; }
     }
 }

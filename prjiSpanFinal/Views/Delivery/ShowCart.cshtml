@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Delivery.CDeliveryShowCartViewModel
 @{
     ViewData["Title"] = "ShowCart";
 }
@@ -12,6 +12,14 @@
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
 <div class="w-100 row mt-3">
     <div class="col-9">
+        @{ 
+            foreach (var i in Model.cart)
+            {
+
+            }
+        }
+
+
         <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
             <div class="form-check border-bottom pb-2 d-flex align-items-center">
                 <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>

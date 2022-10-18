@@ -1,8 +1,16 @@
 ﻿@model prjiSpanFinal.ViewModels.Item.CItemIndexSellerProductViewModel
 <link href="~/css/ProductCard.css" rel="stylesheet"/>
-@{ 
-    string base64 = Convert.ToBase64String(Model.productPic);
-    string imgUrl = $"data:image/gif;base64,{base64}";
+@{            
+    string imgUrl = "";
+    try
+    {
+        string base64 = Convert.ToBase64String(Model.productPic);
+        imgUrl = $"data:image/gif;base64,{base64}";
+    }
+    catch
+    {
+        imgUrl = Url.Content("~/img/imageNotFound.png");
+    }
     string productLink = Url.Content("~/Item/Index") + "?id=" + Model.productID;
 }
 <a href="@productLink">
