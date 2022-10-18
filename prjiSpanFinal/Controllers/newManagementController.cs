@@ -41,21 +41,21 @@ namespace prjiSpanFinal.Controllers
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetStuffFromDatabase();
-            IPagedList<CProductListViewModel> pagelist = listUnpaged.ToPagedList(page ?? 1, pageSize);
+            var listUnpaged =GetStuffFromDatabase();
+            IPagedList<CProductListViewModel> pagelist =listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public async Task<IActionResult> newProductList(int? page = 1)
+        public IActionResult newProductList(int? page = 1)
         {
             var db = new iSpanProjectContext();
             //每頁幾筆
-            const int pageSize = 20;
+            const int pageSize = 3;
             //處理頁數
             ViewBag.Prods = GetPagedProcess(page, pageSize);
-           var PList = GetPagedProcess(page, pageSize);
+           var PList =GetPagedProcess(page, pageSize);
             //填入頁面資料
             return View(PList);
         }
