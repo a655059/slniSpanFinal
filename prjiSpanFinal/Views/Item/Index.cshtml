@@ -1,39 +1,44 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Item.CItemIndexViewModel
 @{
     ViewData["Title"] = "Index";
 }
 @section Styles{
-    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+    <link rel="stylesheet" href="~/css/Item/ItemIndex.css" />
+    <link href="~/css/ProductCard.css" rel="stylesheet" />
 }
 
 
 
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">蝦到爆商城</a></li>
-        <li class="breadcrumb-item"><a href="#">大分類</a></li>
-        <li class="breadcrumb-item active" aria-current="page">小分類</li>
+        <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
+        <li class="breadcrumb-item"><a href="#">@Model.bigType</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.smallType</li>
     </ol>
 </nav>
 <div class="d-flex justify-content-between">
     <div class="productPhoto">
         <div class="bigPhoto position-relative">
-            <i class="fa-solid fa-heart position-absolute top-0 end-0 fs-1 opacity-25"></i>
+            <div class="addItemLike">加入按讚好物</div>
+            <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
             @{
-
-                <img src="~/img/product01.png" />
+                string base64 = Convert.ToBase64String(Model.productPics[0].Pic);
+                string imgSrc1  = $"data:image/gif;base64,{base64}";
+                <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
-            @for (int i = 1; i <= 5; i++)
+            @foreach (var i in Model.productPics)
             {
-                <div><img src="~/img/product02.png" /></div>
+                string base65 = Convert.ToBase64String(i.Pic);
+                string imgSrc2 = $"data:image/gif;base64,{base65}";
+                <div><img src="@imgSrc2" /></div>
             }
         </div>
         <div style="font-size:14px">
-            <div class="d-flex justify-content-between border-top border-bottom p-2">
-                <div>商品編號:<span class="ms-2">948365032</span></div>
-                <div><a href="#"><p data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</p></a></div>
+            <div class="d-flex justify-content-between border-top border-bottom py-2">
+                <div>商品編號:<span class="ms-2">@Model.product.ProductId</span></div>
+                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
             </div>
             <div>
                 <div class="fs-6 fw-b">商品備註</div>
@@ -47,10 +52,9 @@
         </div>
     </div>
     <div class="itemInfo">
-        <h4>【JUST台灣現貨】獨家顏色！台灣製造30000mAh PD/QC快充3A 行動電源 保固一年 行動電源 行動充 隨身充</h4>
+        <h4>@Model.product.ProductName</h4>
         <div class="d-flex justify-content-start align-items-center">
             @{
-
                 int starCount = 4;
                 for (int i = 1; i <= 5; i++)
                 {
@@ -204,40 +208,15 @@
         </div>
     </div>
 
-    <div class="position-relative cardLayout">
-        @{
-            int left = -205;
-            for (int i = 1; i < 100; i++)
-            {
-                left += 210;
-                string shift = $"{left}px";
-
-                <a href="/Item/Index/2113">
-                    <div class="sellerCard card position-absolute" style="left:@shift">
-                        <img src="~/img/shop01.png" class="cardImg" alt="...">
-                        <div class="px-1 py-2 d-flex flex-column justify-content-between">
-                            <div class="cardTitle">好大一根香蕉</div>
-                            <div class="cardPrice">$999</div>
-                            <div class="cardInfo d-flex justify-content-between align-items-center">
-                                <div class="cardComment d-flex justify-content-start align-items-center mt-1">
-                                    <div class="starImg">
-                                        <img src="/img/YellowStar.png" alt="" class="me-1 w-100 d-block" />
-                                    </div>
-                                    <div class="text-black">4.5</div>
-                                    <div class="mx-2">|</div>
-                                    <div class="text-black-50">銷售<span>100</span></div>
-                                </div>
-                                <div>
-                                    <form action="/Delivery/CartList" method="post">
-                                        <input type="submit" value="加入購物車" />
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+    <div class="sellerProductsLayout">
+        <div class="">
+            @{
+                foreach (var product in Model.sellerProducts)
+                {
+                    @await Component.InvokeAsync("ProductCard", new { sellerProduct = product });
+                }
             }
-        }
+        </div>
     </div>
 </div>
 
@@ -293,22 +272,34 @@
 
 
 @section Scripts{
-    <script src="~/js/ItemIndex.js"></script>
+    <script src="~/js/Item/ItemIndex.js"></script>
     <script>
-    $(function () {
-        $(".partialView").load('@Url.Action("Description")');
-    });
-    $("#description").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("Description")');
-    });
-    $("#comment").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("Comment", new { id=1 })');
-    });
-    $("#buyerCount").click(function () {
-        $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-        $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
-    });
+        $(".bigPhoto .itemHeart").click(async function () {
+            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=57&productID=${@Model.product.ProductId}`;
+            let response = await fetch(requestUrl);
+            let data = await response.text();
+            if (data == 1) {
+                $(this).addClass("text-danger");
+            }
+            else {
+                $(this).removeClass("text-danger");
+            }
+            console.log(data);
+        })
+        $(function () {
+            $(".partialView").load('@Url.Action("Description")');
+        });
+        $("#description").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("Description")');
+        });
+        $("#comment").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("Comment", new { id=1 })');
+        });
+        $("#buyerCount").click(function () {
+            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+            $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
+        });
     </script>
 }

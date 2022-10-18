@@ -4,56 +4,12 @@
 }
 
 @section Styles{
-    <style>
-        .itemImgDiv {
-            width: 200px;
-            aspect-ratio: 1/1;
-        }
+    <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
 
-        .itemImgDiv img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-        }
-
-        .countMinus, .countPlus {
-            width: 20px;
-            aspect-ratio: 1/1;
-            border: 1px solid #7B7B7B;
-        }
-
-        .countMinus {
-            border-radius: 5px 0 0 5px;
-        }
-
-        .countPlus {
-            border-radius: 0 5px 5px 0;
-        }
-
-        .itemCount {
-            border: 1px solid #7B7B7B;
-            text-align: center;
-            width: 100px;
-        }
-
-        .ship img {
-            width: 20px;
-            height: 20px;
-        }
-        
-        .showCalTotalPriceVC{
-            position:sticky;
-            top:80px;
-        }
-        .modal {
-            position: fixed;
-            top: 80px;
-        }
-    </style>
+    <link href="~/css/Delivery/DeliveryShowCar.css" rel="stylesheet" />
 }
 
-@*<h4>購物車</h4>*@
-@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage= 0})
+@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
 <div class="w-100 row mt-3">
     <div class="col-9">
         <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
@@ -147,6 +103,7 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/js/DeliveryShowCart.js"></script>
-    <script src="~/js/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/DeliveryShowCart.js"></script>
+    <script src="~/js/Delivery/DeliveryCheckout.js"></script>
+    <script src="~/js/Delivery/ProgressBar.js"></script>
 }

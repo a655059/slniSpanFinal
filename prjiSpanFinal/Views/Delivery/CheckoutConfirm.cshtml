@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "CheckoutConfirm";
+}
+@section Styles{
+    <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
+}
+
+
+
+@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 2 })
+
+<a href="@Url.Content("~/Delivery/OrderSuccess")"><button class="btn btn-warning">確認</button></a>
+
+
+@section Scripts{
+    <script src="~/js/Delivery/ProgressBar.js"></script>
+}
