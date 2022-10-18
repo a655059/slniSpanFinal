@@ -12,14 +12,7 @@ $(".purchaseStyle").mouseenter(function () {
     $(".bigPhoto img").attr("src", imgSrc);
 });
 
-$(".purchaseStyle").click(function () {
-    let price = $(this).siblings(".price").html();
-    $(".itemPrice").html(price);
-    $(this).removeClass("btn-outline-secondary").addClass("btn-danger").closest("div").siblings().children("label").removeClass("btn-danger").addClass("btn-outline-secondary");
-    let qty = $(this).siblings(".qty").html();
-    $(".itemRemainingQty").html("還剩" + qty + "件");
-    $("input[name='purchaseCount']").attr("max", qty)
-});
+
 
 $(".buyDirectly").click(function () {
     if ($("input[name='purchaseStyle']:checked").length != 1) {
@@ -28,27 +21,7 @@ $(".buyDirectly").click(function () {
     }
 });
 
-$(".addToCart").click(function () {
-    if ($("input[name='purchaseStyle']:checked").length != 1) {
-        alert("請選擇一個規格");
-        return false;
-    }
-    else {
-        let count = $("#itemCount").val();
-        $(".dollarIcon").children().html(count);
-        $(".dollarIcon").animate({
-            top: "-=50",
-            opacity: "1",
-            zIndex: "0"
-        }, 50).animate({
-            top: "-=30",
-            opacity: "0",
-        }, 500).animate({
-            top: "+=80",
-            zIndex:"-1"
-        });
-    }
-});
+
 
 $(function () {
     let i = 10;
