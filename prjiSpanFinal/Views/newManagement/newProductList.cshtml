@@ -85,6 +85,6 @@
 </table>
 <div style="align-content:center">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("Index", new { page }))
+        .Url(page => Url.Action("newProductList", new { page }))
         .Build())
 </div>
