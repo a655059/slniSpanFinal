@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels.Member;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,6 +46,9 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Index()
         {
+            if (!HttpContext.Session.Keys.Contains(Dictionary.sk_登入key_User)) { 
+            return RedirectToAction("Login", "Member");
+            }
             fillin();
             return View(listCBigType);
         }

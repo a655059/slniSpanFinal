@@ -41,6 +41,7 @@ namespace prjiSpanFinal.Controllers
             message.To.Add(new MailboxAddress("Jacob", "maimaisatt@gmail.com"));
             message.Subject = "測試一下";
             BodyBuilder builder = new BodyBuilder();
+
             builder.HtmlBody = System.IO.File.ReadAllText("./Views/Delivery/MailContent.cshtml");
             message.Body = builder.ToMessageBody();
             using (SmtpClient client = new SmtpClient())
