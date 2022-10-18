@@ -5,13 +5,12 @@ using System.Collections.Generic;
 
 namespace prjiSpanFinal.Models
 {
-    public partial class Like
+    public partial class ReceiveAdrList
     {
-        public int LikeId { get; set; }
+        public int ReceiveAdrList1 { get; set; }
         public int MemberId { get; set; }
-        public int ProductId { get; set; }
+        public string ReceiveAdr { get; set; }
 
         public virtual MemberAccount Member { get; set; }
-        public virtual Product Product { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +10,15 @@ namespace prjiSpanFinal.Controllers
 {
     public class SellerController : Controller
     {
+        private readonly IWebHostEnvironment _enviro;
+        private readonly iSpanProjectContext _db;
+
+        public SellerController(IWebHostEnvironment p, iSpanProjectContext db)
+        {
+            _enviro = p;
+            _db = db;
+        }
+
         public IActionResult Order()
         {
             return View();
@@ -16,6 +27,12 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        //[HttpPost]
+        //public iactionresult create(productdetail product)
+        //{
+        //    _db.productdetails.add(product);
+        //    _db.savechanges();
+        //}
         public IActionResult OrderDetail()
         {
             return View();

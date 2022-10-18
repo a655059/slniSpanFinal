@@ -9,7 +9,6 @@ namespace prjiSpanFinal.Models
     {
         public Order()
         {
-            Arguments = new HashSet<Argument>();
             OrderDetails = new HashSet<OrderDetail>();
         }
 
@@ -20,11 +19,18 @@ namespace prjiSpanFinal.Models
         public DateTime FinishDate { get; set; }
         public int CouponId { get; set; }
         public int StatusId { get; set; }
+        public int ShipperId { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public DateTime ShippingDate { get; set; }
+        public DateTime ReceiveDate { get; set; }
+        public int PaymentId { get; set; }
+        public string OrderMessage { get; set; }
 
         public virtual Coupon Coupon { get; set; }
         public virtual MemberAccount Member { get; set; }
+        public virtual Payment Payment { get; set; }
+        public virtual Shipper Shipper { get; set; }
         public virtual OrderStatus Status { get; set; }
-        public virtual ICollection<Argument> Arguments { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

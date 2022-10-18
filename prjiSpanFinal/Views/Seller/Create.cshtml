@@ -132,8 +132,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                
                 <label>樣式:</label>
-                <input type="text" id="text1" class="form-control">
+                <input type="text" id="text1" class="form-control" required><div class="invalid-feedback">必填欄位</div>
                 <br />
                 <label>數量:</label>
                 <input type="text" id="text2" class="form-control">
@@ -269,7 +270,7 @@
             <div class="row ">
                 <div class="col-4"></div>
                 <div class="col-8">
-                    @Html.ActionLink("下一步", "AD", new { @*id = item.FId*@}, new { @class = "btn btn-warning m-3" })
+                    @Html.ActionLink("下一步", "AD", new { @*id = item.FId*@}, new { @class = "btn btn-warning m-3" ,@type="submit"})
                 </div>
             </div>
         </div>
