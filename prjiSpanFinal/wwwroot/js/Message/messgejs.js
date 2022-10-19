@@ -19,11 +19,12 @@ $("#msgenter").click(function () {
     connection.invoke("SendMessage", memacc, message, activec).catch(function (err) {
         return console.error(err.toString());
     });
+    dialogsort(activec);
 });
 
 function loadactivemsg(scid) {
 
-    $.getJSON(`https://localhost:44330/api/Msgapi?scid=${scid}&sid=${memacc}`, function (data) {
+    $.getJSON(`/api/Msgapi?scid=${scid}&sid=${memacc}`, function (data) {
         $("#messagebody").html("");
         activec = scid;
         for (let i = 0; i < data.length; i++) {
@@ -40,6 +41,7 @@ function loadactivemsg(scid) {
         connection.invoke("ReadMessage", memacc, activec);
         $(`.msgcid[value="${activec}"]`).siblings("a").children().eq(1).children("span").remove();
         refreshtimestamp();
+        $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
     });
 }
 
@@ -88,6 +90,7 @@ connection.on("ReceiveMessage", function (sendFrom, message, sendTo, msgid) {
     }
 
     refreshtimestamp();
+    dialogsort(activec);
 });
 
 
@@ -130,18 +133,10 @@ function refreshtimestamp() {
             $(hiddens[i]).siblings("p").text(+timeval.substr(0, 2) + ":" + timeval.substr(2, 2) + " , " + +timeval.substr(13, 2) + "/" + timeval.substr(15, 2));
         }
     }
-    dialogsort();
 }
 
-function dialogsort() {
-    let lilist = $(".msgopendialogli");
-    console.log(lilist);
-    let temp;
-    for (let i = 0; i < lilist.length-1; i++) {
-        for (let j = 1; j < lilist.length; j++) {
-            console.log(timestamptodatetime(lilist.eq(i).children("a").children("div").eq(1).children("input").val()));
-        }
-    }
+function dialogsort(id) {
+    $(`.msgcid[value="${id}"]`).parent().prependTo("#msgopendialogbody");
 }
 
 function MyMessagePack(head,msg,time) {
@@ -179,6 +174,31 @@ function pageload() {
 }
 if (memacc != null) {
     pageload();
+}
+
+$(".chatroom").click(function () {
+    if (memacc != null) {
+        $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+    }
+})
+
+$("#msgautoComplete").on("input",async () => {
+    $("#msgautoCompletebox").css("display", "block");
+    let htmlDatas;
+    $.getJSON(`/api/MsgAccAutoApi?keyword=${$("#msgautoComplete").val()}`, function (data) {
+        htmlDatas = data.map(data => {
+            return (
+                `<button type="button" onclick="read(event)" class="list-group-item list-group-item-action">${data}</button>`
+            );
+        })
+        $("#msgautoCompletebox").html(htmlDatas.join(""));
+    });
+    
+})
+
+function read(evt) {
+    $("#msgautoComplete").val(evt.target.textContent);
+    $("#msgautoCompletebox").css("display", "none");
 }
 
 

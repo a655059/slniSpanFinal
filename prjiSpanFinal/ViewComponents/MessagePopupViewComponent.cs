@@ -68,31 +68,69 @@ namespace prjiSpanFinal.ViewComponents
                 b.MemPic = File.ReadAllBytes(path);
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var q = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID || c.SendFrom == b.MemID).Select(c => c).OrderByDescending(c=>c.ChatLogId).ToList();
-            var q1 = dbcontext.ChatLogs.AsEnumerable().Where(c => c.SendTo == b.MemID).GroupBy(c => c.SendFrom).ToList();
+            var q1 = dbcontext.ChatLogs.Where(c => c.SendFrom == b.MemID).Select(c => new { c.ChatLogId,c.SendTo,c.Msg,c.HaveRead,c.SendToNavigation.MemberAcc,c.SendToNavigation.MemPic}).OrderByDescending(c=>c.ChatLogId).DistinctBy(c => c.SendTo).ToList();
+            var q2 = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.ChatLogId, c.SendFrom, c.Msg, c.HaveRead, c.SendFromNavigation.MemberAcc, c.SendFromNavigation.MemPic }).OrderByDescending(c => c.ChatLogId).DistinctBy(c => c.SendFrom).ToList();
             List<int> idlist = new List<int>();
             List<string> acclist = new List<string>();
             List<string> msglist = new List<string>();
             List<byte[]> bslist = new List<byte[]>();
             List<int> hrlist = new List<int>();
-            List<int> ProSendFrom = new List<int>();
-            List<int> ProSendTo = new List<int>();
-            for (int i = 0; i < q.Count ; i++)
+            List<int> SendList = new List<int>();
+            int count = q1.Count + q2.Count;
+            int count1 = 0, count2 = 0;
+            q1.Add(new { ChatLogId = 0, SendTo = 0, Msg = "000", HaveRead = false, MemberAcc = "aaa", MemPic = new byte[5] });
+            q2.Add(new { ChatLogId = 0, SendFrom = 0, Msg = "000", HaveRead = false, MemberAcc = "aaa", MemPic = new byte[5] });
+            for (; count1+count2 < count ;)
             {
-                if((ProSendFrom.Contains(q[i].SendFrom)||ProSendTo.Contains(q[i].SendTo)) && (q[i].SendFrom != b.MemID && q[i].SendTo != b.MemID))
+                if(q1[count1].ChatLogId > q2[count2].ChatLogId)
                 {
-
-                }
-
-                if (q[i].MemPic != null)
-                {
-                    bslist.Add(q[i].MemPic);
+                    if(SendList.Contains(q1[count1].SendTo))
+                    {
+                        count1++;
+                        continue;
+                    }
+                    if (q1[count1].MemPic != null)
+                    {
+                        bslist.Add(q1[count1].MemPic);
+                    }
+                    else
+                    {
+                        string pName = "/img/Member/nopicmem.jpg";
+                        string path = _enviro.WebRootPath + pName;
+                        bslist.Add(File.ReadAllBytes(path));
+                    }
+                    acclist.Add(q1[count1].MemberAcc);
+                    int id = q1[count1].SendTo;
+                    idlist.Add(id);
+                    msglist.Add(q1[count1].Msg);
+                    hrlist.Add(0);
+                    SendList.Add(q1[count1].SendTo);
+                    count1++;
                 }
                 else
                 {
-                    string pName = "/img/Member/nopicmem.jpg";
-                    string path = _enviro.WebRootPath  + pName;
-                    bslist.Add(File.ReadAllBytes(path));
+                    if (SendList.Contains(q2[count2].SendFrom))
+                    {
+                        count2++;
+                        continue;
+                    }
+                    if (q2[count2].MemPic != null)
+                    {
+                        bslist.Add(q2[count2].MemPic);
+                    }
+                    else
+                    {
+                        string pName = "/img/Member/nopicmem.jpg";
+                        string path = _enviro.WebRootPath + pName;
+                        bslist.Add(File.ReadAllBytes(path));
+                    }
+                    acclist.Add(q2[count2].MemberAcc);
+                    int id = q2[count2].SendFrom;
+                    idlist.Add(id);
+                    msglist.Add(q2[count2].Msg);
+                    hrlist.Add(q2.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
+                    SendList.Add(q2[count2].SendFrom);
+                    count2++;
                 }
             }
             b.CMemPic = bslist;

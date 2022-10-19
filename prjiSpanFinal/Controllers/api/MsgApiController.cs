@@ -12,14 +12,6 @@ namespace prjiSpanFinal.Controllers
     [ApiController]
     public class MsgApiController : Controller
     {
-        // GET: api/<MsgApiController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<MsgApiController>/5
         [HttpGet]
         public IActionResult Get(string scid, string sid)
         {
@@ -28,24 +20,6 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             var cl = dbcontext.ChatLogs.Where(i => (i.SendFrom == cid && i.SendTo == id) || (i.SendFrom == id && i.SendTo == cid)).ToList();
             return Json(cl);
-        }
-
-        // POST api/<MsgApiController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<MsgApiController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MsgApiController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
