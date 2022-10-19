@@ -1,5 +1,6 @@
 ﻿let connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 let memacc = $("#msgmemid").val();
+let truememacc = $("#msgmemacc").val();
 let activec = "0";
 let mempic = $("#header1mempic").attr("src");
 
@@ -24,7 +25,7 @@ $("#msgenter").click(function () {
 
 function loadactivemsg(scid) {
 
-    $.getJSON(`/api/Msgapi?scid=${scid}&sid=${memacc}`, function (data) {
+    $.getJSON(`Msgapi/Getchat/`, { scid : scid , sid : memacc}, function (data) {
         $("#messagebody").html("");
         activec = scid;
         for (let i = 0; i < data.length; i++) {
@@ -70,23 +71,31 @@ connection.on("ReceiveMessage", function (sendFrom, message, sendTo, msgid) {
         });
         $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
         $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
+        $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(msgbody);
     }
 
     else if (sendFrom == activec) {
         $("#messagebody").append(CMessagePack( msgheader,msgbody, msgtimestamp));
         $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
+        $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(msgbody);
     }
     else {
-        let t = $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("span");
-        if (t.html() != null) {
-            let v = parseInt(t.html()) + 1;
-            t.html(v);
+        if ($(`.msgcid[value="${sendFrom}"]`) == undefined) {
+            $.getJSON(`Msgapi/GetmempicbyId/`, { id: sendFrom }, function (data) {
+                console.log(data);
+            });
         }
         else {
-            $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).append(`<span class="badge bg-danger rounded-pill float-end">1</span>`);
+            let t = $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("span");
+            if (t.html() != null) {
+                let v = parseInt(t.html()) + 1;
+                t.html(v);
+            }
+            else {
+                $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).append(`<span class="badge bg-danger rounded-pill float-end">1</span>`);
+            }
+            $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
         }
-        $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
-        
     }
 
     refreshtimestamp();
@@ -164,6 +173,30 @@ function CMessagePack(head, msg, time) {
     return str;
 }
 
+function CMessageDialog(id,img, msg, time, acc, read=1) {
+    let str = `<li class="p-2 border-bottom msgopendialogli">
+                <input type="hidden" class="msgcid" value="${id}" />
+                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog">
+                    <div class="d-flex flex-row">
+                        <div>
+                            <img src="data:image;base64,${img}" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
+                            <span class="badge bg-success badge-dot"></span>
+                        </div>
+                        <div class="pt-1">
+                            <p class="fw-bold mb-0">${acc}</p>
+                            <p class="small text-muted">${msg}</p>
+                        </div>
+                    </div>
+                    <div class="pt-1">
+                        <input type="hidden" class="msgbodytimestamp" value="${time}" />
+                        <p class="small text-muted mb-1">現在</p>
+                        <span class="badge bg-danger rounded-pill float-end">${read}</span>
+                    </div>
+                    </a>
+                </li>`
+    return str;
+}
+
 function pageload() {
     if ($("#msgopendialogbody").html == "") {
         $("#msgenter").attr("disabled", true);
@@ -185,11 +218,13 @@ $(".chatroom").click(function () {
 $("#msgautoComplete").on("input",async () => {
     $("#msgautoCompletebox").css("display", "block");
     let htmlDatas;
-    $.getJSON(`/api/MsgAccAutoApi?keyword=${$("#msgautoComplete").val()}`, function (data) {
+    $.getJSON(`Msgapi/AutoComplete/`, { keyword: $("#msgautoComplete").val() }, function (data) {
         htmlDatas = data.map(data => {
-            return (
-                `<button type="button" onclick="read(event)" class="list-group-item list-group-item-action">${data}</button>`
-            );
+            if (data != "admin" && data != truememacc) {
+                return (
+                    `<button type="button" onclick="read(event)" class="list-group-item list-group-item-action">${data}</button>`
+                );
+            }
         })
         $("#msgautoCompletebox").html(htmlDatas.join(""));
     });
@@ -201,7 +236,17 @@ function read(evt) {
     $("#msgautoCompletebox").css("display", "none");
 }
 
-
+$("#msgsearch").click(function () {
+    if ($("#msgautoComplete").val() == "") {
+        return;
+    }
+    let today = new Date();
+    let timestamp = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+    $.getJSON(`Msgapi/GetmembyAcc/`, { acc: $("#msgautoComplete").val() }, function (data) {
+        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memberPic, "", timestamp, data.memberAcc,""));
+        console.log(data);
+    });
+})
     //let time = new Date();
     //let hm = time.getHours() + ":" + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
     //let head = message.substr(0, 5);
