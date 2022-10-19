@@ -69,52 +69,66 @@
                 <div class="row col-1 align-content-center justify-content-center 內容文字大小">
                     編號
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="productName">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" >
                     商品名稱
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Style">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" >
                     規格
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Quantity">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" >
                     商品數量
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="UnitPrice">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" >
                     銷售金額
                 </div>
-                <div class="row col-2 align-content-center justify-content-center 內容文字大小" name="Pic">
+                <div class="row col-2 align-content-center justify-content-center 內容文字大小" >
                     商品照片
                 </div>
                 <div class=" row align-content-center col-1 justify-content-center mx-2"></div>
             </div>
             @{
-                int count = 0;
-                foreach(var item in Model.productName)
+                for (int i = 0; i < Model.productName.Count; i++)
                 {
-                    count++;
 
                     <div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
-                        <div class="row col-1 align-content-center justify-content-center 內容文字大小">@item</div>
-                        <div class="row col-2 align-content-center justify-content-center 內容文字大小">@item</div>
+                        <div class="row col-1 align-content-center justify-content-center 內容文字大小">@(i + 1)</div>
+                        <div class="row col-2 align-content-center justify-content-center 內容文字大小">@Model.productName[i]</div>
                         <div class="row col-2 align-content-center justify-content-center">
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">紅色</div> <br />
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">藍色</div>
+                            @{
+                                for (int j = 0; j < Model.Style[i].Count; j++)
+                                {
+                                    <div class="row align-content-center justify-content-center 置中 內容文字大小">@Model.Style[i][j]</div>
+                                }
+                            }
                         </div>
                         <div class="row col-2 align-content-center justify-content-center">
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">200</div><br />
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">500</div>
+                            @{
+                                for (int j = 0; j < Model.Quantity[i].Count; j++)
+                                {
+                                    <div class="row align-content-center justify-content-center 置中 內容文字大小">@Model.Quantity[i][j]</div>
+                                }
+                            }
                         </div>
                         <div class="row col-2 align-content-center justify-content-center">
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">5000</div><br />
-                            <div class="row align-content-center justify-content-center 置中 內容文字大小">1000</div>
-                        </div>
+                            @{
+                                for (int j = 0; j < Model.UnitPrice[i].Count; j++)
+                                {
+                                    <div class="row align-content-center justify-content-center 置中 內容文字大小">@Model.UnitPrice[i][j].ToString("0")</div>
+                                }
+                            }
+                         </div>
                         <div class="row col-2 align-content-center justify-content-center">
-                            <div><img src="~/img/蘋果圖.jpg" class="w-50 mx-4" alt="蘋果"></div><br />
-                            <div><img src="~/img/蘋果圖.jpg" class="w-50 mx-4" alt="蘋果"></div>
+                            @{
+                                for (int j = 0; j < Model.Pic[i].Count; j++)
+                                {
+                                    <div class="row align-content-center justify-content-center 置中 內容文字大小"><img src="data:image;base64,@System.Convert.ToBase64String(Model.Pic[i][j])" height="55"/></div>
+                                }
+                            }
                         </div>
                         <div class=" row align-content-center col-1 justify-content-center mx-2">
                             @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @class = "btn btn-primary " })<br />
                             @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
-                                                        new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger " })
+                                                        new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger mt-2" })
                         </div>
                     </div>
 

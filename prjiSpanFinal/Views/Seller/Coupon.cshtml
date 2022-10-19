@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model List<prjiSpanFinal.Models.Coupon>
 @{
     ViewData["Title"] = "Coupon";
 }
@@ -76,20 +77,20 @@
                         <td scope="col">操作</td>
                     </tr>
                     @{
-                        for (var i = 1; i <= 4; i++)
+                        for (var i = 0; i < Model.Count; i++)
                         {
                             <tr>
                                 <td scope="row"><img src="~/img/seller coupon.png" /></td>
-                                <td class="置中">開站優惠</td>
-                                <td class="置中">100</td>
-                                <td class="置中">2022/10/13 11:20 - 2022/10/13 12:20</td>
+                                <td class="置中">@Model[i].CouponName</td>
+                                <td class="置中">@Model[i].Discount</td>
+                                <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
                                 <td class="置中">有效</td>
                                 <td class="置中">
                                     <div>
-                                        @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @style = "text-decoration:none;" })
+                                        @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
                                     </div>
                                     <div>
-                                        @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
+                                        @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
                                     new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
                                     </div>
                                 </td>
