@@ -6,6 +6,7 @@
 
 <h1>商品細節</h1>
 
+@Html.ActionLink("回到列表","newProductList")
 
 <table class="table">
     <thead>
@@ -32,6 +33,16 @@
         </tr>
     </thead>
     <tbody>
+        @{
+            if (Model.Count() <= 0)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("回到列表","newProductList");
+                    </td>
+                </tr>
+            }
+        }
         @foreach (var item in Model)
         {
             <tr>
@@ -58,9 +69,20 @@
                     <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
-                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId  },new{onclick="return confirm('確定要刪除嗎?')"})
+                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId  },new{onclick="really()"})
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<script>
+    function really() {
+        var yes = confirm('你確定要刪除嗎？');
+        return yes;
+        if (yes) {
+            return confirm("真的會從資料庫刪除喔?確定嗎?");
+        } else {
+            return;
+        }
+    }
+</script>

@@ -17,7 +17,7 @@
 }
     <h1>會員</h1>
     <form>
-        <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋" class="form-control" />
+        <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋,或是不輸入回到列表" class="form-control" />
         <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
@@ -64,29 +64,29 @@
         {
             <tr>
                 <td>
-                    <input value="@item.MemberAccount.MemberId" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.MemberId" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.MemberAcc" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.MemberAcc" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.MemberPw" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.MemberPw" readonly>
                 </td>
                 
                 <td>
-                    <input value="@item.RegionName" readonly>
+                    <input class="form-control-plaintext" value="@item.RegionName" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.Phone" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.Phone" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.Email" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.Email" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.Address" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.Address" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.Name" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAccount.Name" readonly>
                 </td>
                 <td>
                     @{
@@ -105,7 +105,7 @@
                     }
                 </td>
                 <td>
-                    <input value="@item.MemStatusName" class="statusname" readonly>
+                    <input class="form-control-plaintext statusname" value="@item.MemStatusName" readonly>
                 </td>
                 <td>
                     @{
@@ -124,7 +124,7 @@
                             gender = "女";
                         }
                     }
-                    <input value="@gender" readonly>
+                    <input class="form-control-plaintext" value="@gender" readonly>
                 </td>
             
                 <td>
