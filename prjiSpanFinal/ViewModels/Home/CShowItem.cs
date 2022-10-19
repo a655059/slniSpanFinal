@@ -11,7 +11,7 @@ namespace prjiSpanFinal.ViewModels.Home
         public Product Product { get; set; }
         public List<decimal> Price { get; set; }
         public byte[] Pic { get; set; }
-        public int sells { get; set; }
-        public int stars { get; set; }
+        public int salesVolume { get; set; }
+        public double starCount { get; set; }
     }
 }
