@@ -105,4 +105,5 @@ namespace prjiSpanFinal.ViewModels.Member
         public string PhoneMail { get; set; }
 
     }
+
 }

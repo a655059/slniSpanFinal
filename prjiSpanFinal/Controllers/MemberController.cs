@@ -55,18 +55,23 @@ namespace prjiSpanFinal.Controllers
             return Content("0", "text/plain", Encoding.UTF8); ;
         }
         
-        public IActionResult Edit(int? id)
+        public IActionResult Edit()
         {
-            if (id != null)
+            iSpanProjectContext db = new iSpanProjectContext();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                iSpanProjectContext db = new iSpanProjectContext();
-                MemberAccount prod = db.MemberAccounts.FirstOrDefault(p => p.MemberId == id);
-                if (prod != null)
-                {
-                    return View(prod);
-                }
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
             }
-            return RedirectToAction("Login");
+            else
+            {
+                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+                int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId; //字串轉物件
+                var mem = db.MemberAccounts.FirstOrDefault(m => m.MemberId==memID);
+                MemberAccViewModel qq = new MemberAccViewModel();
+                qq.memACC = mem;
+
+                return View(qq);
+            }
         }
         [HttpPost]
         public IActionResult Edit(MemberAccViewModel mem)
@@ -89,7 +94,7 @@ namespace prjiSpanFinal.Controllers
                     acc.IsTw = mem.IsTw;
                     acc.MemPic = mem.MemPic;
                     acc.NickName = mem.NickName;
-                    
+
                 }
             }
             return View();
@@ -156,10 +161,13 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Order()
         {
+
+
             return View();
         }
         public IActionResult OrderDetail()
         {
+
             return View();
         }
         public IActionResult forgetPw() 

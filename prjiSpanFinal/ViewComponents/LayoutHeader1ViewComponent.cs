@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Header;
+using prjiSpanFinal.ViewModels.Member;
 using System;
 using System.Collections.Generic;
 using System.IO;

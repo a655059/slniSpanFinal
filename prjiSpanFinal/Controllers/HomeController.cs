@@ -18,6 +18,7 @@ namespace prjiSpanFinal.Controllers
         List<Product> listProd;
         List<CShowItem> listItem;
         List<SmallType> listSmallType;
+        List<MemberAccount> MemberID;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -25,6 +26,7 @@ namespace prjiSpanFinal.Controllers
             listProd = (new CHomeFactory()).rdnProd(_db.Products.Select(p => p).ToList());
             listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(48).ToList();
             listSmallType = _db.SmallTypes.Select(p => p).ToList();
+            MemberID = _db.MemberAccounts.Select(p => p).ToList();
         }
 
         public IActionResult Index()
@@ -34,6 +36,7 @@ namespace prjiSpanFinal.Controllers
                 lSmallType = listSmallType,
                 lBigType = listBigType,
                 cShowItem = listItem,
+                cMemberID= MemberID,
             };
             return View(home);
         }
