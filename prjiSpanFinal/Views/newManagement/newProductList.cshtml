@@ -85,7 +85,8 @@
     <tfoot>
         <tr>
             <td class="text-muted" colspan="5">
-                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，
+                共 @pagedList.PageCount 頁。
                 每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
             </td>
         </tr>
@@ -93,7 +94,10 @@
 </table>
 <div style="align-content:center" class="paginations">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("newProductList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3).Build()
+        .Url(page => Url.Action("newProductList", new { page })).
+        DisplayEllipsesWhenNotShowingAllPageNumbers().
+        MaximumPageNumbersToDisplay(3).
+        Build()
         )
 
 </div>
