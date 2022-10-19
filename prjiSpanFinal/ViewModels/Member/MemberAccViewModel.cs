@@ -102,7 +102,7 @@ namespace prjiSpanFinal.ViewModels.Member
         public string regionName { get; set; }
         public string gender { get; set; }
         public string TW { get; set; }
-        
+        public string PhoneMail { get; set; }
 
     }
 }
