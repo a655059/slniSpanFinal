@@ -17,6 +17,7 @@ namespace prjiSpanFinal.Models
         public int ShipperId { get; set; }
         public string ShipperName { get; set; }
         public string Phone { get; set; }
+        public int Fee { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
