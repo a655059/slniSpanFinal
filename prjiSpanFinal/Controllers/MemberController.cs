@@ -36,10 +36,21 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        //public IActionResult Edit1()
-        //{
-        //   return View();    
-        //}
+        public IActionResult LoginCheck(string txtAccount, string txtPW)
+        {
+            var mem = _context.MemberAccounts.FirstOrDefault(m => m.MemberAcc == txtAccount);
+            if (mem != null)
+            {
+                if (mem.MemberPw == txtPW)
+                {
+                    string jsonUser = JsonSerializer.Serialize(mem);
+                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, jsonUser);
+                    return Content("1", "text/plain", Encoding.UTF8);
+                }
+            }
+            return Content("0", "text/plain", Encoding.UTF8); ;
+        }
+
         public IActionResult Edit(int? id)
         {
             if (id != null)
