@@ -21,13 +21,13 @@ namespace prjiSpanFinal.Controllers
             IQueryable<Product> Prods = null;
             if (keyword == null)
             {
-               Prods = db.Products.Select(i=>i);
+                Prods = db.Products.Select(i => i);
             }
-            else if(int.TryParse(keyword,out int key))
+            else if (int.TryParse(keyword, out int key))
             {
-               Prods = db.Products.
-                    Where(i => i.ProductId==key).
-                    Select(e =>e);
+                Prods = db.Products.
+                     Where(i => i.ProductId == key).
+                     Select(e => e);
             }
             else
             {
@@ -62,7 +62,7 @@ namespace prjiSpanFinal.Controllers
 
             return list;
         }
-        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize,string keyword)
+        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
@@ -75,17 +75,17 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult newProductList(string keyword,int? page = 1)
+        public IActionResult newProductList(string keyword, int? page = 1)
         {
             //每頁幾筆
             const int pageSize = 3;
             //處理頁數
-            ViewBag.Prods = GetPagedProcess(page, pageSize,keyword);
-            var PList = GetPagedProcess(page, pageSize,keyword);
+            ViewBag.Prods = GetPagedProcess(page, pageSize, keyword);
+            var PList = GetPagedProcess(page, pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
-            public IActionResult newProductList2(int? id)
+        public IActionResult newProductList2(int? id)
         {
             var Q = from u in new iSpanProjectContext().Products
                     where u.ProductId == id
@@ -148,17 +148,17 @@ namespace prjiSpanFinal.Controllers
                     select d;
             db.ProductDetails.Remove(D.First());
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList",new { id =id});
+            return RedirectToAction("ProductDetailList", new { id = id });
         }
         #endregion
         #region MemberRegion
-      
+
         public List<CMemberListViewModel> GetMembersFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
             List<CMemberListViewModel> list = new();
             IQueryable<MemberAccount> mems = null;
-            if (String.IsNullOrEmpty( keyword))
+            if (String.IsNullOrEmpty(keyword))
             {
                 mems = db.MemberAccounts.Select(i => i);
             }
@@ -171,7 +171,7 @@ namespace prjiSpanFinal.Controllers
             else
             {
                 mems = db.MemberAccounts.
-                    Where(i => i.Name.Contains(keyword)||i.Phone.Contains(keyword)||i.Email.Contains(keyword)|| i.MemberAcc.Contains(keyword)).
+                    Where(i => i.Name.Contains(keyword) || i.Phone.Contains(keyword) || i.Email.Contains(keyword) || i.MemberAcc.Contains(keyword)).
                     Select(e => e); ;
             }
             foreach (var p in mems)
@@ -180,8 +180,8 @@ namespace prjiSpanFinal.Controllers
                 {
                     MemberAccount = p,
                     MemStatusName = (from i in db.MemStatuses
-                                         where i.MemStatusId == p.MemStatusId
-                                         select i.MemStatusName).First(),
+                                     where i.MemStatusId == p.MemStatusId
+                                     select i.MemStatusName).First(),
                     RegionName = (from i in db.RegionLists
                                   where i.RegionId == p.RegionId
                                   select i.RegionName).First(),
@@ -251,14 +251,12 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content("1");
         }
-
-
-    
-
-
-
-
-
+        #endregion
+        #region PowerBi
+        public IActionResult PowerBi()
+        {
+            return View();
+        }
         #endregion
     }
 }

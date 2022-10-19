@@ -26,7 +26,7 @@ namespace prjiSpanFinal.ViewComponents
         {
             string ctrlName = RouteData.Values["Controller"].ToString();
             //string atnName = RouteData.Values["Action"].ToString();
-            if (ctrlName == "Management")
+            if (ctrlName == "newManagement")
             {
                 return View("Manage");
             }
