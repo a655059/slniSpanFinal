@@ -40,6 +40,7 @@ namespace prjiSpanFinal.Models
         public int MemStatusId { get; set; }
         public int Gender { get; set; }
         public int Balance { get; set; }
+        public string Description { get; set; }
         public string ServiceTime { get; set; }
         public string SellerCaution { get; set; }
         public string AfterSales { get; set; }
