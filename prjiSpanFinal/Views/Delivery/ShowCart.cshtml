@@ -1,100 +1,93 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Delivery.CDeliveryShowCartViewModel
 @{
     ViewData["Title"] = "ShowCart";
+    Dictionary<int, string> sellerDic = new Dictionary<int, string>();
+    foreach (var i in Model.cart)
+    {
+        if (sellerDic.ContainsKey(i.sellerID))
+        {
+            continue;
+        }
+        else
+        {
+            sellerDic.Add(i.sellerID, i.sellerName);
+        }
+    }
+    List<int> sellerIDList = sellerDic.Keys.ToList();
 }
 
 @section Styles{
     <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
-
     <link href="~/css/Delivery/DeliveryShowCar.css" rel="stylesheet" />
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
 <div class="w-100 row mt-3">
     <div class="col-9">
-        <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
-            <div class="form-check border-bottom pb-2 d-flex align-items-center">
-                <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林小偉的賣場</label>
-            </div>
-            <div class="form-check d-flex justify-content-between align-items-center">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input class="selectItem form-check-input" type="checkbox" value="" id="product1" checked>
-                    <div class="itemImgDiv">
-                        <img src="~/img/product01.png" />
+        @{
+            foreach (int sellerID in sellerIDList)
+            {
+                <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
+                    <div class="form-check border-bottom pb-2 d-flex align-items-center">
+                        <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                        <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label>
                     </div>
-                    <div class="w-75">
-                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
-                        <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$<span class="itemPrice">900</span></div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <button class="countMinus btnCount">-</button>
-                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
-                    <button class="countPlus btnCount">+</button>
-                </div>
-            </div>
-            <div class="form-check d-flex justify-content-between align-items-center">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input class="selectItem form-check-input" type="checkbox" value="" id="product2" checked>
-                    <div class="itemImgDiv">
-                        <img src="~/img/product01.png" />
-                    </div>
-                    <div class="w-75">
-                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
-                        <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$<span class="itemPrice">838</span></div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <button class="countMinus">-</button>
-                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
-                    <button class="countPlus">+</button>
-                </div>
-            </div>
-            <div class="ship border-top d-flex align-items-center pt-3">
-                <div>
-                    <img src="~/img/truck.png" />
-                </div>
-                <div class="mx-2">
-                    7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
-                </div>
-            </div>
-        </div>
-        <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
-            <div class="form-check border-bottom pb-2 d-flex align-items-center">
-                <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">林大偉的賣場</label>
-            </div>
-            <div class="form-check d-flex justify-content-between align-items-center">
-                <div class="d-flex justify-content-between align-items-center">
-                    <input class="selectItem form-check-input" type="checkbox" value="" id="product3" checked>
-                    <div class="itemImgDiv">
-                        <img src="~/img/product01.png" />
-                    </div>
-                    <div class="w-75">
-                        <label class="form-check-label" for="product1">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</label>
-                        <div class="text-black-50">白色，附32g千首歌</div>
-                        <div class="text-danger">$<span class="itemPrice">638</span></div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <button class="countMinus">-</button>
-                    <input type="text" name="Count" class="itemCount" value="1" min="1" />
-                    <button class="countPlus">+</button>
-                </div>
-            </div>
+                    @foreach (var i in Model.cart)
+                    {
+                        if (i.sellerID == sellerID)
+                        {
+                            string imgSrc = "";
+                            try
+                            {
+                                string base64 = Convert.ToBase64String(i.productDetail.Pic);
+                                imgSrc = $"data:image/gif;base64,{base64}";
+                            }
+                            catch
+                            {
+                                imgSrc = Url.Content("~/img/imageNotFound.png");
+                            }
+                            <div class="itemLayout d-flex justify-content-between align-items-center my-2">
+                                <div class="d-flex justify-content-start align-items-center w-75">
+                                    <input class="selectItem form-check-input " type="checkbox" value="" id="product1" checked>
+                                    <div class="mx-3">
+                                        <div class="itemImgDiv">
+                                            <img src="@imgSrc" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-check-label" for="product1">@i.productName</label>
+                                        <div class="text-black-50">@i.productDetail.Style</div>
+                                        <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
+                                    </div>
+                                </div>
+                                <div class="choseCount d-flex justify-content-end align-items-center w-25">
+                                    <div class="w-75">
+                                        <div class="d-flex justify-content-center">
+                                            <button class="countMinus btnCount fw-bold">-</button>
+                                            <input type="number" name="Count" class="itemCount" value="@i.orderDetail.Quantity" min="1" max="@i.productDetail.Quantity" />
+                                            <button class="countPlus btnCount fw-bold">+</button>
+                                        </div>
+                                        <div class="text-center mt-1 d-none" style="font-size:0.5em">庫存僅剩<span class="mx-2">@i.productDetail.Quantity</span>件</div>
+                                    </div>
+                                    <div class="w-25 text-center">
+                                        <button class="btnDelete btn btn-sm" id="@i.orderDetail.OrderDetailId"><i class="fa-solid fa-trash-can text-danger"></i></button>
+                                    </div>
+                                </div>
 
-            <div class="ship border-top d-flex align-items-center pt-3">
-                <div>
-                    <img src="~/img/truck.png" />
+                            </div>
+                        }
+                    }
+                    <div class="ship border-top d-flex align-items-center pt-3">
+                        <div>
+                            <img src="~/img/truck.png" />
+                        </div>
+                        <div class="mx-2">
+                            7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
+                        </div>
+                    </div>
                 </div>
-                <div class="mx-2">
-                    7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
-                </div>
-            </div>
-        </div>
+            }
+        }
     </div>
     <div class="col-3">
         <div class="showCalTotalPriceVC w-100">
@@ -106,4 +99,19 @@
     <script src="~/js/Delivery/DeliveryShowCart.js"></script>
     <script src="~/js/Delivery/DeliveryCheckout.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
+    <script>
+        $(".btnDelete").click(async function () {
+            confirm("確定要刪除嗎?");
+            const orderDetailID = $(this).attr("id");
+            let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
+            let data = await response.text();
+            console.log(data);
+            if (data == 0) {
+                $(this).closest(".sellerLayout").remove();
+            }
+            if (data == 1) {
+                $(this).closest(".itemLayout").remove();
+            }
+        });
+    </script>
 }

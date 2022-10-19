@@ -22,16 +22,32 @@
             <div class="addItemLike">加入按讚好物</div>
             <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
             @{
-                string base64 = Convert.ToBase64String(Model.productPics[0].Pic);
-                string imgSrc1  = $"data:image/gif;base64,{base64}";
+                string imgSrc1 = "";
+                try
+                {
+                    string base64 = Convert.ToBase64String(Model.productPics[0]);
+                    imgSrc1 = $"data:image/gif;base64,{base64}";
+                }
+                catch
+                {
+                    imgSrc1 = Url.Content("~/img/imageNotFound.png");
+                }
                 <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
             @foreach (var i in Model.productPics)
             {
-                string base65 = Convert.ToBase64String(i.Pic);
-                string imgSrc2 = $"data:image/gif;base64,{base65}";
+                string imgSrc2 = "";
+                try
+                {
+                    string base65 = Convert.ToBase64String(i);
+                    imgSrc2 = $"data:image/gif;base64,{base65}";
+                }
+                catch
+                {
+                    imgSrc2 = Url.Content("~/img/imageNotFound.png");
+                }
                 <div><img src="@imgSrc2" /></div>
             }
         </div>
@@ -108,9 +124,17 @@
                         @{
                             foreach (var i in Model.productDetails)
                             {
+                                string imgSrc = "";
+                                try
+                                {
+                                    string base65 = Convert.ToBase64String(i.Pic);
+                                    imgSrc = $"data:imgae/gif;base64,{base65}";
+                                }
+                                catch
+                                {
+                                    imgSrc = Url.Content("~/img/imageNotFound.png");
+                                }
                                 string style = i.Style;
-                                string base65 = Convert.ToBase64String(i.Pic);
-                                string imgSrc = $"data:imgae/gif;base64,{base65}";
                                 int productDetailID = i.ProductDetailId;
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
@@ -310,7 +334,7 @@
                 const quantity = $("#itemCount").val();
                 const requestUrl = "@Url.Content("~/Delivery/AddItemToCart")" + `?productDetailID=${productDetailID}&quantity=${quantity}`;
                 const response = await fetch(requestUrl);
-                const data = await response.text();
+                const data = await response.json();
 
                 $(".dollarIcon").children().html(quantity);
                 $(".dollarIcon").animate({
@@ -324,15 +348,16 @@
                     top: "+=80",
                     zIndex:"-1"
                 });
-                $(".itemRemainingQty").html("還剩" + data + "件");
-                $("input[name='purchaseCount']").attr("max", Number(data))
-                if ($("input[name='purchaseCount']").val() > Number(data)) {
-                    $("input[name='purchaseCount']").val(Number(data));
+                $(".itemRemainingQty").html("還剩" + data[1] + "件");
+                $("input[name='purchaseCount']").attr("max", Number(data[1]))
+                if ($("input[name='purchaseCount']").val() > Number(data[1])) {
+                    $("input[name='purchaseCount']").val(Number(data[1]));
                 }
-                if (Number(data) <= 0) {
+                if (Number(data[1]) <= 0) {
                     $("input:checked").attr("disabled", true);
-                    $("input[name='purchaseCount']").val(Number(data));
+                    $("input[name='purchaseCount']").val(Number(data[1]));
                 }
+                $("#itemCountInCart").html(data[0]);
             }
         });
         $(".purchaseStyle").click(async function () {
