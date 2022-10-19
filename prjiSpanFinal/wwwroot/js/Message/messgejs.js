@@ -2,8 +2,9 @@
 let isconnectionstart = false;
 let memacc = $("#msgmemid").val();
 let truememacc = $("#msgmemacc").val();
-let activec = "0";
+let activec = "99999";
 let mempic = $("#header1mempic").attr("src");
+let histmultichat = "";
 
 async function connectionstart() {
     try {
@@ -74,26 +75,34 @@ $(".msgemoji").click(function () {
 })
 
 function loadactivemsg(scid) {
-
-    $.getJSON(`/Msgapi/Getchat/`, { scid : scid , sid : memacc}, function (data) {
+    if (scid == 99999) {
         $("#messagebody").html("");
         activec = scid;
-        for (let i = 0; i < data.length; i++) {
-            msgheader = data[i].msg.substr(0, 4);
-            msgtimestamp = data[i].msg.substr(4, 17);
-            msgbody = data[i].msg.substr(21);
-            if (data[i].sendFrom == memacc) {
-                $("#messagebody").append(MyMessagePack(msgheader, msgbody, msgtimestamp));
-            }
-            else {
-                $("#messagebody").append(CMessagePack(msgheader, msgbody, msgtimestamp));
-            }
-        }
+        $("#messagebody").append(histmultichat);
         $(`.msgcid[value="${activec}"]`).siblings("a").children().eq(1).children("span").remove();
         refreshtimestamp();
         $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
-    });
-    $("#msgenter").attr("disabled", true);
+    }
+    else {
+        $.getJSON(`/Msgapi/Getchat/`, { scid: scid, sid: memacc }, function (data) {
+            $("#messagebody").html("");
+            activec = scid;
+            for (let i = 0; i < data.length; i++) {
+                msgheader = data[i].msg.substr(0, 4);
+                msgtimestamp = data[i].msg.substr(4, 17);
+                msgbody = data[i].msg.substr(21);
+                if (data[i].sendFrom == memacc) {
+                    $("#messagebody").append(MyMessagePack(msgheader, msgbody, msgtimestamp));
+                }
+                else {
+                    $("#messagebody").append(CMessagePack(msgheader, msgbody, msgtimestamp));
+                }
+            }
+            $(`.msgcid[value="${activec}"]`).siblings("a").children().eq(1).children("span").remove();
+            refreshtimestamp();
+            $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+        });
+    }
 }
 
 $(document).on('click', ".msgopendialog", function () {
@@ -106,7 +115,7 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
     if (message == "") {
         return;
     }
-    if (memacc != sendTo && memacc != sendFrom) {
+    if (memacc != sendTo && memacc != sendFrom && sendTo != 99999) {
         return;
     }
     let msgheader = message.substr(0, 4);
@@ -129,9 +138,39 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
         else {
             shortbody = msgbody;
         }
-    }
 
-    if (sendFrom == memacc) {
+    }
+    if (sendTo == 99999)
+    {
+        if (activec == 99999) {
+            if (sendFrom == memacc) {
+                $("#messagebody").append(MyMessagePack(msgheader, msgbody, msgtimestamp));
+                histmultichat = histmultichat + MyMessagePack(msgheader, msgbody, msgtimestamp);
+            }
+            else {
+                $("#messagebody").append(CMessagePack(msgheader, msgbody, msgtimestamp, multiid = sendFrom));
+                histmultichat = histmultichat + CMessagePack(msgheader, msgbody, msgtimestamp, multiid = sendFrom);
+            }
+            $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
+            $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
+            $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(shortbody);
+            
+        }
+        else {
+            let t = $(`.msgcid[value="99999"]`).siblings("a").children().eq(1).children("span");
+            if (t.html() != null) {
+                let v = parseInt(t.html()) + 1;
+                t.html(v);
+            }
+            else {
+                $(`.msgcid[value="99999"]`).siblings("a").children().eq(1).append(`<span class="badge bg-danger rounded-pill float-end">1</span>`);
+            }
+            $(`.msgcid[value="99999"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
+            $(`.msgcid[value="99999"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(shortbody);
+            histmultichat = histmultichat + CMessagePack(msgheader, msgbody, msgtimestamp, multiid = sendFrom);
+        }
+    }
+    else if (sendFrom == memacc) {
         $("#messagebody").append(MyMessagePack(msgheader, msgbody, msgtimestamp));
 
         $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
@@ -176,9 +215,13 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
         dialogsort(activec);
     }
     else {
-        dialogsort(sendFrom);
+        if (sendTo == 99999) {
+            dialogsort(sendTo);
+        }
+        else {
+            dialogsort(sendFrom);
+        }
     }
-    $("#msgenter").attr("disabled", true);
 });
 
 
@@ -273,7 +316,7 @@ function MyMessagePack(head, msg, time) {
 
 
 }
-function CMessagePack(head, msg, time) {
+function CMessagePack(head, msg, time, multiid = "0") {
     if (head == "asdf") {
         let src = "/img/emoji/emoji" + msg + ".jpg";
         msg = `<img src="` + src + `" />`;
@@ -307,8 +350,21 @@ function CMessagePack(head, msg, time) {
     }
     else {
     }
-    let t = $(`.msgcid[value="${activec}"]`).siblings("a").children(0).children(0).children("img");
-    let path = t.attr("src");
+
+    let path = "";
+    if (multiid == "0") {
+        let t = $(`.msgcid[value="${activec}"]`).siblings("a").children(0).children(0).children("img");
+        path = t.attr("src");
+    }
+    else {
+        $.getJSON(`/Msgapi/GetmembyId`, { id: multiid }, function (data) {
+            if (data == undefined) {
+                return;
+            }
+            path = `data:image;base64,${data.memPic}`;
+        });
+    }
+
     let str = `<div class="d-flex flex-row justify-content-start">
                <img src="${path}" alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
                  <div>
@@ -367,7 +423,6 @@ $("#msgtextinput").on("keypress", function (e) {
 
 function pageload() {
     if ($("#msgopendialogbody").html == "") {
-        $("#msgenter").attr("disabled", true);
     }
     else {
         loadactivemsg($(".msgcid").val());
