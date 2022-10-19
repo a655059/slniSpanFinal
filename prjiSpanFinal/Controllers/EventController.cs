@@ -14,5 +14,10 @@ namespace prjiSpanFinal.Controllers
             //查USER
             return View();
         }
+        public IActionResult AD(int? id)
+        {
+            //查USER
+            return View();
+        }
     }
 }

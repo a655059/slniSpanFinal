@@ -9,8 +9,11 @@ namespace prjiSpanFinal.ViewModels.Category
 {
     public class CCategoryIndex
     {
+        
         public List<SmallType> lSmallType { get; set; }
-        public List<BigType> lBigType { get; set; }
+        public BigType SearchType { get; set; }
+        public SmallType SearchSmallType { get; set; }
         public List<CShowItem> cShowItem { get; set; }
+
     }
 }
