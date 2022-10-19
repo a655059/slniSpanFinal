@@ -36,22 +36,6 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Login(LoginViewModel model)
-        {
-            MemberAccount ACC = (new iSpanProjectContext()).MemberAccounts.FirstOrDefault(i => i.MemberAcc.Equals(model.txtAccount));
-            if (ACC != null)
-            {
-                if (ACC.MemberPw.Equals(model.txtPassword))
-                {
-                    string jsonUser = JsonSerializer.Serialize(ACC);
-                    HttpContext.Session.SetString(Dictionary.sk_登入key_User, jsonUser);
-
-                    return RedirectToAction("Index","Home");
-                }
-            }
-            return View();
-        }
         //public IActionResult Edit1()
         //{
         //   return View();    
@@ -94,7 +78,7 @@ namespace prjiSpanFinal.Controllers
                 }
             }
             return View();
-    }
+        }
         //public IActionResult Create()
         //{
         //    return View();
