@@ -46,6 +46,11 @@ function loadactivemsg(scid) {
     });
 }
 
+function opendia() {
+    let scid = $(event.currentTarget).siblings("input").val();
+    loadactivemsg(scid);
+}
+
 $(".msgopendialog").click(function () {
     let scid = $(this).siblings("input").val();
     loadactivemsg(scid);
@@ -77,12 +82,18 @@ connection.on("ReceiveMessage", function (sendFrom, message, sendTo, msgid) {
     else if (sendFrom == activec) {
         $("#messagebody").append(CMessagePack( msgheader,msgbody, msgtimestamp));
         $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
-        $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(msgbody);
+        $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(msgbody);
     }
     else {
-        if ($(`.msgcid[value="${sendFrom}"]`) == undefined) {
-            $.getJSON(`Msgapi/GetmempicbyId/`, { id: sendFrom }, function (data) {
-                console.log(data);
+        if ($(`.msgcid[value="${sendFrom}"]`).length == 0) {
+            $.getJSON(`Msgapi/GetmembyId/`, { id: sendFrom }, function (data) {
+                if (data == undefined) {
+                    return;
+                }
+                if (data.memberId == memacc || data.memberId == 1 || $(`.msgcid[value="${data.memberId}"]`).length != 0) {
+                    return;
+                }
+                $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, msgbody, msgtimestamp, data.memberAcc, 1));
             });
         }
         else {
@@ -95,11 +106,16 @@ connection.on("ReceiveMessage", function (sendFrom, message, sendTo, msgid) {
                 $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).append(`<span class="badge bg-danger rounded-pill float-end">1</span>`);
             }
             $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
+            $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(msgbody);
         }
     }
-
     refreshtimestamp();
-    dialogsort(activec);
+    if (sendFrom == memacc) {
+        dialogsort(activec);
+    }
+    else {
+        dialogsort(sendFrom);
+    }
 });
 
 
@@ -176,7 +192,7 @@ function CMessagePack(head, msg, time) {
 function CMessageDialog(id,img, msg, time, acc, read=1) {
     let str = `<li class="p-2 border-bottom msgopendialogli">
                 <input type="hidden" class="msgcid" value="${id}" />
-                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog">
+                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog" onclick="opendia()">
                     <div class="d-flex flex-row">
                         <div>
                             <img src="data:image;base64,${img}" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
@@ -243,8 +259,13 @@ $("#msgsearch").click(function () {
     let today = new Date();
     let timestamp = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
     $.getJSON(`Msgapi/GetmembyAcc/`, { acc: $("#msgautoComplete").val() }, function (data) {
-        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memberPic, "", timestamp, data.memberAcc,""));
-        console.log(data);
+        if (data == undefined) {
+            return;
+        }
+        if (data.memberId == memacc || data.memberId == 1 || $(`.msgcid[value="${data.memberId}"]`).length != 0){
+            return;
+        }
+        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, "", timestamp, data.memberAcc,""));
     });
 })
     //let time = new Date();
