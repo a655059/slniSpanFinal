@@ -146,9 +146,9 @@
         </tr>
     </tfoot>
 </table>
-<div style="align-content:center">
+<div style="align-content:center" class="paginations">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("MemberList", new { page }))
+        .Url(page => Url.Action("MemberList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3)
         .Build())
 </div>
 
@@ -190,6 +190,22 @@
                     $(this).closest("td").siblings().find(".statusname").val("已停權");
                 }
             })
+        }
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
         }
     </script>
     }
