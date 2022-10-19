@@ -45,7 +45,13 @@ namespace prjiSpanFinal.Controllers
             var mem = _context.MemberAccounts.FirstOrDefault(m => m.MemberAcc == txtAccount);
             if (mem != null)
             {
-                if (mem.MemberPw == txtPW)
+                if (mem.MemberPw == txtPW && txtAccount == "admin")
+                {
+                    string jsonUser = JsonSerializer.Serialize(mem);
+                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, jsonUser);
+                    return Content("2", "text/plain", Encoding.UTF8);
+                }
+                else if (mem.MemberPw == txtPW)
                 {
                     string jsonUser = JsonSerializer.Serialize(mem);
                     HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, jsonUser);
