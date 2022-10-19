@@ -30,14 +30,13 @@
                                 <div class="p-3">
                                     <div class="input-group rounded mb-3">
                                         <input type="search" class="form-control rounded" placeholder="開啟對話" aria-label="Search"
-                                               aria-describedby="search-addon" id="msgautoComplete" />
-                                        <div class="list-group mt-3" id="msgautoCompletebox">
-                                        </div>
+                                           aria-describedby="search-addon" id="msgautoComplete" autocomplete="off" />
                                         <a class="input-group-text border-0" id="msgsearch" style="text-decoration:none">
                                             <i class="fas fa-search"></i>
                                         </a>
                                     </div>
-
+                                    <div class="list-group" id="msgautoCompletebox" style="position: absolute;z-index:2;">
+                                    </div>
                                     <div style="position: relative; height: 400px;overflow-y: auto;">
                                         <ul class="list-unstyled mb-0" id="msgopendialogbody">
                                         @{
@@ -100,19 +99,19 @@
 </div>
 <div class="collapse rounded-2" id="collapseemoji" style="position:fixed; bottom:80px; right:80px; background-color:white;">
     <div>
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
     </div>
     <div>
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
     </div>
     <div>
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
     </div>
 </div>
 

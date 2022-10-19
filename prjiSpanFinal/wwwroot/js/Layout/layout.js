@@ -19,4 +19,7 @@ function sizeble() {
     h2.style.marginTop = (h1.height() + 16) + "px";
 }
 
-
+$("#header1logout").click(function(){
+    $.session.remove("SK_LOGINED_USER");
+    window.location = "/"
+})
