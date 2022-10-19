@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.seller.CSellerPaymentToViewViewModel
 @{
     ViewData["Title"] = "Shipper";
 }
@@ -57,58 +58,28 @@
             <div><h4>  付款設定</h4></div>
             <p>目前蝦到爆提供下列付款方式：</p>
         </div>
+
         <div class="線條陰影">
-            <div class="row py-2 m-3 border rounded-2">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    <label class="d-flex justify-content-start"><img src="~/img/歐付寶.jpg" width="40" height="40" class="mx-2" />歐付寶付款</label>
-                </div>
-                <div class="col-4">
-                    <div class="form-check form-switch 靠右">
-                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                    </div>
-                </div>
-            </div>
-            <div class="col-2"></div>
 
-            <div class="row py-2 m-3 border rounded-2">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    <label class="d-flex justify-content-start"><img src="~/img/信用卡.jpg" width="40" height="40" class="mx-2" />信用卡支付</label>
-                </div>
-                <div class="col-4">
-                    <div class="form-check form-switch 靠右">
-                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+            @{
+                string[] 照片路徑 = { "~/img/信用卡.jpg", "~/img/銀行轉帳.jpg", "~/img/金融簽帳.jpg", "~/img/歐付寶.jpg" };
+                for (int i = 0; i < 4; i++)
+                {
+                    <div class="row py-2 m-3 border rounded-2">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <input type="hidden" name="PaymentId" value="@(i + 1)" />
+                            <label class="d-flex justify-content-start"><img src="@Url.Content(照片路徑[i])" width="40" height="40" class="mx-2" />@Model.PaymentName[i]</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-check form-switch 靠右">
+                                <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-2"></div>
-
-            <div class="row py-2 m-3 border rounded-2">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    <label class="d-flex justify-content-start"><img src="~/img/銀行轉帳.jpg" width="40" height="40" class="mx-2" />銀行轉帳</label>
-                </div>
-                <div class="col-4">
-                    <div class="form-check form-switch 靠右">
-                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                    </div>
-                </div>
-            </div>
-            <div class="col-2"></div>
-
-            <div class="row py-2 m-3 border rounded-2">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    <label class="d-flex justify-content-start"><img src="~/img/金融簽帳.jpg" width="40" height="40" class="mx-2" />金融簽帳</label>
-                </div>
-                <div class="col-4">
-                    <div class="form-check form-switch 靠右">
-                        <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                    </div>
-                </div>
-            </div>
-            <div class="col-2"></div>
+                    <div class="col-2"></div>
+                }
+            }
 
             <p class="border-bottom my-4"></p>
 
@@ -117,142 +88,30 @@
                 <p>蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
             </div>
             <div class="線條陰影">
-                <div class="row py-2 m-3 border rounded-2">
-                    <div class="col-4">
-                        <label class="d-flex justify-content-start"><img src="~/img/7-11.png" width="40" height="40" class="mx-2" />7-ELEVEN</label>
-                    </div>
-                    <div class="col-2">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                @{
+                    string[] 物流照片路徑 = { "~/img/7-11.png", "~/img/全家.png", "~/img/萊爾富.png", "~/img/OK超商.png" };
+                    for (int i = 0; i < 4; i++)
+                    {
+                        <div class="row py-2 m-3 border rounded-2">
+                            <div class="col-4">
+                                <label class="d-flex justify-content-start"><img src="@Url.Content(物流照片路徑[i])" width="40" height="40" class="mx-2" />@Model.ShipperName[i]</label>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-check form-switch 靠右">
+                                    <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label class="灰體字 ">貨到付款</label>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-check form-switch 靠右">
+                                    <input class="form-check-input 按鈕大小" type="checkbox">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-3">
-                        <label class="灰體字 ">貨到付款</label>
-                    </div>
-                    <div class="col-3">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/全家.png" width="40" height="40" class="mx-2" />全家</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/OK超商.png" width="40" height="40" class="mx-2" />OK-Mart</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/萊爾富.png" width="40" height="40" class="mx-2" />萊爾富</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/大榮.png" width="40" height="40" class="mx-2" />大榮</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/黑貓.png" width="40" height="40" class="mx-2" />黑貓</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row py-2 m-3 border rounded-2 ">
-                    <div class="col">
-                        <label class=""><img src="~/img/蝦到爆.png" width="40" height="40" class="mx-2" />店到店</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label class="灰體字">貨到付款</label>
-                    </div>
-                    <div class="col">
-                        <div class="form-check form-switch 靠右">
-                            <input class="form-check-input 按鈕大小" type="checkbox">
-                        </div>
-                    </div>
-                </div>
-
-
-
-
+                    }
+                }
 
 
                 <div class="d-flex justify-content-around m-2">
@@ -261,8 +120,11 @@
                 </div>
 
             </div>
-            <div class="col-1"></div>
+
         </div>
-        @section Scripts
+    </div>
+    <div class="col-1"></div>
+</div>
+@section Scripts
 {
-        }
+}

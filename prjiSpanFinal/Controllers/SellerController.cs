@@ -59,15 +59,60 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+
+
+
+
+
         public IActionResult Shipper()
         {
-            return View();
+            var payname = _db.Payments.Select(n => n).ToList();
+            //var memberid = _db.PaymentToProducts.Select(n => n.ProductId);
+            //var productid = _db.PaymentToSellers.Select(n => n.MemberId);
+            var shipname = _db.Shippers.Select(n => n).ToList();
+
+            List<int> PaymentId = new List<int>();
+            List<string> PaymentName = new List<string>();
+            List<int> ShipperId = new List<int>();
+            List<string> ShipperName = new List<string>();
+
+            for (int i = 0; i < payname.Count; i++) //付款資料
+            {
+                PaymentName.Add(payname[i].PaymentName);
+                PaymentId.Add(payname[i].PaymentId);
+            }
+
+            for (int i = 0; i < shipname.Count; i++)//物流資料
+            {
+                ShipperName.Add(shipname[i].ShipperName);
+                ShipperId.Add(shipname[i].ShipperId);
+            }
+
+            CSellerPaymentToViewViewModel x = new CSellerPaymentToViewViewModel
+            {
+                PaymentId = PaymentId,
+                PaymentName = PaymentName,
+                ShipperId= ShipperId,
+                ShipperName= ShipperName,
+            };
+
+            return View(x);
         }
+
+
+
+
+
 
         public IActionResult Center()
         {
             return View();
         }
+
+
+
+
+
 
         public IActionResult NewIndex(int id)
         {
