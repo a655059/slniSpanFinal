@@ -203,6 +203,13 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+        public IActionResult MemberList2(int? id)
+        {
+            var Q = from u in new iSpanProjectContext().MemberAccounts
+                    where u.MemberId == id
+                    select u;
+            return View(Q);
+        }
         public IActionResult MemberDelete(int id)
         {
             var db = (new iSpanProjectContext());
@@ -233,6 +240,7 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content("1");
         }
+
 
     
 

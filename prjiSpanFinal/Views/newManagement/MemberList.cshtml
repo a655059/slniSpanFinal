@@ -15,7 +15,7 @@
         }
     </style>
 }
-    <h1>商品</h1>
+    <h1>會員</h1>
     <form>
         <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋" class="form-control" />
         <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
@@ -27,22 +27,34 @@
                     會員ID
                 </th>
                 <th>
-                  帳號
+                    帳號
                 </th>
                 <th>
                     密碼
                 </th>
                 <th>
-                    海外or國內
-                </th>
-                <th>
-                    賣家ID
-                </th>
-                <th>
                     地區
                 </th>
                 <th>
-                    商品狀態
+                    電話
+                </th>
+                <th>
+                    伊媚兒
+                </th>    
+                <th>
+                    地址
+                </th> 
+                <th>
+                    姓名
+                </th>
+                <th>
+                    會員相片
+                </th>
+                <th>
+                    會員狀態
+                </th>
+                <th>
+                    性別
                 </th>
                 <th></th>
             </tr>
@@ -60,15 +72,7 @@
                 <td>
                     <input value="@item.MemberAccount.MemberPw" readonly>
                 </td>
-                <td>
-                    @{
-                        string IsTWs = "海外";
-                        if ((bool)item.MemberAccount.IsTw){
-                            IsTWs = "國內";
-                        }
-                    }
-                    <input value="@IsTWs" readonly>
-                </td>
+                
                 <td>
                     <input value="@item.RegionName" readonly>
                 </td>
@@ -76,41 +80,42 @@
                     <input value="@item.MemberAccount.Phone" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.Email"  readonly>
+                    <input value="@item.MemberAccount.Email" readonly>
                 </td>
                 <td>
-                    <input value="@item.MemberAccount.BackUpEmail"  readonly>
-                </td>       
-                <td>
-                    <input value="@item.MemberAccount.Address"  readonly>
+                    <input value="@item.MemberAccount.Address" readonly>
                 </td>
-                <td>
-                    <input value="@item.MemberAccount.NickName"  readonly>
-                </td>  
                 <td>
                     <input value="@item.MemberAccount.Name" readonly>
-                </td> 
-                <td>
-                    <input value="@item.MemberAccount.Birthday" readonly>
-                </td> 
-                <td>
-                    @{
-                        var base64Image = Convert.ToBase64String(item.MemberAccount.MemPic);
-                        var source = String.Format("data:image/png;base64,{0}", base64Image);
-                    }
-                    <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
-                    <input value="@item.MemStatusName" class="msname" readonly>
+                    @{
+                        string source = "";
+                        string base64Image = "";
+                        if (item.MemberAccount.MemPic != null)
+                        {
+                            base64Image = Convert.ToBase64String(item.MemberAccount.MemPic);
+                            source = String.Format("data:image/png;base64,{0}", base64Image);
+                            <img src="@source" class="cardImg" alt="..." width="120" />
+                        }
+                        else
+                        {
+                            <img src="~/img/member/nopicmem.jpg" class="cardImg" alt="..." width="120" />
+                        }
+                    }
+                </td>
+                <td>
+                    <input value="@item.MemStatusName" class="statusname" readonly>
                 </td>
                 <td>
                     @{
                         var G = item.MemberAccount.Gender;
                         string gender = "";
-                        if(G==0){
+                        if (G == 0)
+                        {
                             gender = "其他";
                         }
-                       else if (G == 1)
+                        else if (G == 1)
                         {
                             gender = "男";
                         }
@@ -121,14 +126,12 @@
                     }
                     <input value="@gender" readonly>
                 </td>
+            
                 <td>
-                    <input value="@item.MemberAccount.Balance" readonly>
-                </td>
-                <td>
-                    <a asp-action="ProductDown" name="@item.MemberAccount.MemberId" class="ProdDown btn btn-outline-secondary">下架</a>
-                    <a asp-action="ProductUndo" name="@item.MemberAccount.MemberId" class="ProdUndo btn btn-outline-primary">復原</a>
-                    <a asp-action="ProductDelete" name="@item.MemberAccount.MemberId" class="ProdDele btn btn-outline-danger">刪除</a>
-                    @Html.ActionLink("查看更多", "memberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})
+                    <a name="@item.MemberAccount.MemberId" class="Down btn btn-outline-secondary">停權</a>
+                    <a name="@item.MemberAccount.MemberId" class="Undo btn btn-outline-primary">復原</a>
+                    <a name="@item.MemberAccount.MemberId" class="Dele btn btn-outline-danger">刪除</a>
+                    @Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})
                     @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
                 </td>
             </tr>
@@ -145,24 +148,24 @@
 </table>
 <div style="align-content:center">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("newProductList", new { page }))
+        .Url(page => Url.Action("MemberList", new { page }))
         .Build())
 </div>
 
 @section Scripts{
     <script>
-        let BTNdel = document.querySelectorAll(".ProdDele");
-        let BTNundo = document.querySelectorAll(".ProdUndo");
-        let BTNdown = document.querySelectorAll(".ProdDown");
-        let PSName = document.querySelectorAll(".psname");
+        let BTNdel = document.querySelectorAll(".Dele");
+        let BTNundo = document.querySelectorAll(".Undo");
+        let BTNdown = document.querySelectorAll(".Down");
+        let PSName = document.querySelectorAll(".statusname");
         for (var BTNdele of BTNdel) {
             BTNdele.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
-                let response = await fetch("@Url.Content("~/newManagement/ProductDelete")" + `?id=${event.currentTarget.name}`)
+                let response = await fetch("@Url.Content("~/newManagement/MemberDelete")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data == 1) {
-                    $(this).closest("td").siblings().find(".psname").val("已刪除");
+                    $(this).closest("td").siblings().find(".statusname").val("已刪除");
                 }
             })
         }
@@ -170,10 +173,10 @@
             BTNUnd.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
-                let response = await fetch("@Url.Content("~/newManagement/ProductUndo")" + `?id=${event.currentTarget.name}`)
+                let response = await fetch("@Url.Content("~/newManagement/MemberUndo")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data == 1) {
-                    $(this).closest("td").siblings().find(".psname").val("上架中");
+                    $(this).closest("td").siblings().find(".statusname").val("正式會員");
                 }
             })
         }
@@ -181,10 +184,10 @@
             BTNdow.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
-                let response = await fetch("@Url.Content("~/newManagement/ProductDown")" + `?id=${event.currentTarget.name}`)
+                let response = await fetch("@Url.Content("~/newManagement/MemberStop")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data == 1) {
-                    $(this).closest("td").siblings().find(".psname").val("已下架");
+                    $(this).closest("td").siblings().find(".statusname").val("已停權");
                 }
             })
         }
