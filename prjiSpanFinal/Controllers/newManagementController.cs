@@ -174,15 +174,17 @@ namespace prjiSpanFinal.Controllers
                     Where(i => i.Name.Contains(keyword) || i.Phone.Contains(keyword) || i.Email.Contains(keyword) || i.MemberAcc.Contains(keyword)).
                     Select(e => e); ;
             }
+            var MemStatuses = ( from i in db.MemStatuses select i).ToList();
+            var RegionLists = ( from i in db.RegionLists select i).ToList();
             foreach (var p in mems)
             {
                 CMemberListViewModel model = new()
                 {
                     MemberAccount = p,
-                    MemStatusName = (from i in db.MemStatuses
+                    MemStatusName = (from i in MemStatuses
                                      where i.MemStatusId == p.MemStatusId
                                      select i.MemStatusName).First(),
-                    RegionName = (from i in db.RegionLists
+                    RegionName = (from i in RegionLists
                                   where i.RegionId == p.RegionId
                                   select i.RegionName).First(),
                 };
