@@ -1,13 +1,13 @@
-﻿@model IEnumerable<prjiSpanFinal.ViewModel.CProductListViewModel>
+﻿@model IEnumerable<CProductListViewModel>
 @{
     ViewData["Title"] = "newProductList";
     var pagedList = (IPagedList)ViewBag.Prods;
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
-@using X.PagedList.Mvc.Core.Fluent
-@using X.PagedList.Web.Common
-
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels;
 @section Styles{
     <style>
         td input {
@@ -18,9 +18,9 @@
     <h1>商品</h1>
     <form>
         <input type="search" name="keyword" />
-        <input type="submit" value="搜尋"/>
+        <input type="submit" value="搜尋" />
     </form>
-    <table class="table" width="100%" style="table-layout:fixed">
+    <table class="table" width="120%" style="table-layout:auto">
         <thead>
             <tr>
                 <th>
@@ -31,6 +31,9 @@
                 </th>
                 <th>
                     商品類別
+                </th>
+                <th>
+                    使用者定義類別
                 </th>
                 <th>
                     賣家ID
@@ -58,18 +61,23 @@
                     <input value="@item.SmallTypeName" readonly>
                 </td>
                 <td>
+                    <input value="@item.CustomizedCategoryName" readonly>
+                </td>
+                <td>
                     <input value="@item.Product.MemberId" readonly>
                 </td>
                 <td>
                     <input value="@item.RegionName" readonly>
                 </td>
                 <td>
-                    <input value="@item.ProductStatusName" readonly>
+                    <input value="@item.ProductStatusName" class="psname" readonly>
                 </td>
                 <td>
-                    <a asp-action="ProductEdit" asp-route-id="@item.Product.ProductId">Edit</a> |
-                    <a asp-action="ProductDetails" asp-route-id="@item.Product.ProductId">Details</a> |
-                    <a asp-action="ProductDelete" asp-route-id="@item.Product.ProductId">Delete</a>
+                    <a asp-action="ProductDown" name="@item.Product.ProductId" class="ProdDown btn btn-outline-secondary">下架</a>
+                    <a asp-action="ProductUndo" name="@item.Product.ProductId" class="ProdUndo btn btn-outline-primary">復原</a>
+                    <a asp-action="ProductDelete" name="@item.Product.ProductId" class="ProdDele btn btn-outline-danger">刪除</a>
+                    @Html.ActionLink("查看更多", "newProductList2", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
+                    @Html.ActionLink("檢視產品細節", "ProductDetailList", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
                 </td>
             </tr>
         }
@@ -88,3 +96,45 @@
         .Url(page => Url.Action("newProductList", new { page }))
         .Build())
 </div>
+
+@section Scripts{
+    <script>
+        let BTNdel = document.querySelectorAll(".ProdDele");
+        let BTNundo = document.querySelectorAll(".ProdUndo");
+        let BTNdown = document.querySelectorAll(".ProdDown");
+        let PSName = document.querySelectorAll(".psname");
+        for (var BTNdele of BTNdel) {
+            BTNdele.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ProductDelete")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".psname").val("已刪除");
+                }
+            })
+        }
+        for (var BTNUnd of BTNundo) {
+            BTNUnd.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ProductUndo")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".psname").val("上架中");
+                }
+            })
+        }
+        for (var BTNdow of BTNdown) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ProductDown")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".psname").val("已下架");
+                }
+            })
+        }
+    </script>
+    }

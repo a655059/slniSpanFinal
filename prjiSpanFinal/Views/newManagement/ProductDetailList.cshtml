@@ -1,0 +1,66 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.ProductDetail>
+
+@{
+    ViewData["Title"] = "ProductDetailList";
+}
+
+<h1>商品細節</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDetailId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Style)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pic)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDetailId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Style)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @{
+                        var base64Image = Convert.ToBase64String(item.Pic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
+                </td>
+                <td>
+                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId  },new{onclick="return confirm('確定要刪除嗎?')"})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
