@@ -60,26 +60,45 @@
         </div>
 
         <div class="線條陰影">
-
-            @{
-                string[] 照片路徑 = { "~/img/信用卡.jpg", "~/img/銀行轉帳.jpg", "~/img/金融簽帳.jpg", "~/img/歐付寶.jpg" };
-                for (int i = 0; i < 4; i++)
-                {
-                    <div class="row py-2 m-3 border rounded-2">
-                        <div class="col-2"></div>
-                        <div class="col-4">
-                            <input type="hidden" name="PaymentId" value="@(i + 1)" />
-                            <label class="d-flex justify-content-start"><img src="@Url.Content(照片路徑[i])" width="40" height="40" class="mx-2" />@Model.PaymentName[i]</label>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-check form-switch 靠右">
-                                <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+            <div class="paymentLayout">
+                @{
+                    string[] 照片路徑 = { "~/img/信用卡.jpg", "~/img/銀行轉帳.jpg", "~/img/金融簽帳.jpg", "~/img/歐付寶.jpg" };
+                    for (int i = 0; i < 4; i++)
+                    {
+                        <div class="row py-2 m-3 border rounded-2">
+                            <div class="col-2"></div>
+                            <div class="col-4">
+                                <input type="hidden" name="PaymentId" value="@(i + 1)" />
+                                <label class="d-flex justify-content-start"><img src="@Url.Content(照片路徑[i])" width="40" height="40" class="mx-2" />@Model.PaymentName[i]</label>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check form-switch 靠右">
+                                    <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.PaymentId[i]" >
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-2"></div>
+                        <div class="col-2"></div>
+                    }
                 }
-            }
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <p class="border-bottom my-4"></p>
 
@@ -88,43 +107,91 @@
                 <p>蝦到爆購物提供物流整合服務，買家將會收到最新的商品貨態通知。</p>
             </div>
             <div class="線條陰影">
-                @{
-                    string[] 物流照片路徑 = { "~/img/7-11.png", "~/img/全家.png", "~/img/萊爾富.png", "~/img/OK超商.png" };
-                    for (int i = 0; i < 4; i++)
-                    {
-                        <div class="row py-2 m-3 border rounded-2">
-                            <div class="col-4">
-                                <label class="d-flex justify-content-start"><img src="@Url.Content(物流照片路徑[i])" width="40" height="40" class="mx-2" />@Model.ShipperName[i]</label>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-check form-switch 靠右">
-                                    <input class="form-check-input 按鈕大小" type="checkbox" checked="checked">
+                <div class="shiperLayout">
+                    @{
+                        string[] 物流照片路徑 = { "~/img/7-11.png", "~/img/全家.png", "~/img/萊爾富.png", "~/img/OK超商.png" };
+                        for (int i = 0; i < 4; i++)
+                        {
+                            <div class=" row py-2 m-3 border rounded-2">
+                                <div class="col-4">
+                                    <label class="d-flex justify-content-start"><img src="@Url.Content(物流照片路徑[i])" width="40" height="40" class="mx-2" />@Model.ShipperName[i]</label>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-check form-switch 靠右">
+                                        <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.ShipperId[i]">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <label class="灰體字 ">貨到付款</label>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-check form-switch 靠右">
+                                        <input class="form-check-input 按鈕大小" type="checkbox" id="@("shipdaobox"+i)">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <label class="灰體字 ">貨到付款</label>
-                            </div>
-                            <div class="col-3">
-                                <div class="form-check form-switch 靠右">
-                                    <input class="form-check-input 按鈕大小" type="checkbox">
-                                </div>
-                            </div>
-                        </div>
+                        }
                     }
-                }
+                </div>
 
+                    <div class="d-flex justify-content-around m-2">
+                        <button id="save" type="submit" class="btn btn-warning mb-3">確定</button>
+                        <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
+                    </div>
 
-                <div class="d-flex justify-content-around m-2">
-                    <button id="save" type="button" class="btn btn-warning mb-3">確定</button>
-                    <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
                 </div>
 
             </div>
-
-        </div>
     </div>
     <div class="col-1"></div>
 </div>
 @section Scripts
 {
+    <script>
+    //for (let i = 0; i < 4; i++)
+    //{
+    //    $(`#paybox${i}`).attr("checked")
+    //}
+        
+
+        //付款區
+        let paymentArray = [];  //存付款陣列
+        $(".paymentID").on("change", function () {  //on繫節事件
+            paymentArray.length = 0;  //清空
+            $(this).closest(".paymentLayout").find(".paymentID:checked").each(function () {  //closest 目前位置向上比對
+                let selectedPaymentID = $(this).attr("id");  //目前屬性ID
+                paymentArray.push(selectedPaymentID);//push 從陣列後面增加 ID
+            })
+        })
+
+        (function () {
+            $(".paymentID:checked").each(function () {
+                let x = $(this).attr("id");
+                paymentArray.push(x);
+            }())
+            
+        //物流區
+        //let shiperArray = [];
+        //$(".shiperID").on("change", function () {
+        //    shiperArray.length = 0;
+        //    $(this).closest(".shiperLayout").find(".shiperID:checked").each(function () {
+        //        let selectShipID = $(this).attr("id");
+        //        paymentArray.push(selectShipID);
+        //    })
+        //})
+        //送出按鈕
+        $("#save").click(async function () {
+            let jsonpay = JSON.stringify(paymentArray);  //資料轉成JSON
+            console.log(paymentArray)
+            let responsepay = await fetch("@Url.Content("~/Seller/Shipperrequest")",
+                { body: jsonpay, method: "post", headers: new Headers({ 'Context-Type': 'application/json' }) })  //把資料傳到後端
+
+            @*let jsonship = JSON.stringify(shiperArray);
+            let responseship = await fetch("@Url.Content("~/Seller/Shipperrequest")",
+                { body: jsonship, method: "post", headers: new Headers({ 'Context-Type': 'application/json' }) })*@
+        });
+
+
+
+    </script>
 }
