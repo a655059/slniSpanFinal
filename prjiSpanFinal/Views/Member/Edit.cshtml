@@ -1,5 +1,10 @@
 ﻿@addTagHelper *, prjiSpanFinal
-@model prjiSpanFinal.ViewModels.Member.MemberAccViewModel
+@model MemberAccViewModel
+@using prjiSpanFinal.ViewModels.Member
+@using prjiSpanFinal.ViewModels
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+@inject IHttpContextAccessor Accessor
 @{
     ViewData["Title"] = "Edit";
 }
@@ -66,11 +71,19 @@
 }
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">個人資料修改</h2>
-<div class="row ">
+<script>
+
+@{
+            //var memberIDsession = Accessor.HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            //var jsondata = JsonSerializer.Deserialize<MemberAccount>(memberIDsession);
+}
+
+</script>
+
+<div class="row " id="viewPage">
     <div class="col-1"></div>
     <div class="col-11 ">
-        <form action="#" method="post" asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form action="#" method="post" enctype="multipart/form-data">
             <div style="background-color:white">
                 <div class="container text-center">
                     <div class="row align-items-start">
@@ -81,15 +94,15 @@
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="st1">
                                         <label asp-for="MemberId" class="p1">會員編號</label>
-                                        <input asp-for="MemberId" class="form-control" type="text" id="" name="MemberId"/>
+                                        <input asp-for="MemberId" class="form-control" type="text" id="" name="MemberId" />
                                     </div>
                                     <div class="st1">
                                         <label asp-for="Name" class="p1">姓名</label>
-                                        <input asp-for="Name" class="form-control" type="text" id="acount" name="account" autofocus placeholder="名字" size="40" autocomplete="off" />
+                                        <input asp-for="Name" class="form-control" type="text" id="acount" name="Name" autofocus placeholder="名字" size="40" autocomplete="off" />
                                     </div>
                                     <div class="st1">
                                         <label asp-for="Birthday" class="p1">生日</label>
-                                        <input asp-for="Birthday" type="date" name="birthday" class="form-control" />
+                                        <input asp-for="Birthday" type="date" name="Birthday" class="form-control" />
                                     </div>
                                     <div class="st1">
                                         <label class="p1">性別</label>
@@ -114,15 +127,15 @@
                                 <legend>聯繫方式</legend>
                                 <div class="st1">
                                     <label asp-for="Phone" class="p1">手機</label>
-                                    <input asp-for="Phone" class="form-control" type="text" name="phone" size="40" />
+                                    <input asp-for="Phone" class="form-control" type="text" name="Phone" size="40" />
                                 </div>
                                 <div class="st1">
                                     <label asp-for="Email" class="p1">信箱</label>
-                                    <input asp-for="Email" class="form-control" type="text" name="email" size="40" />
+                                    <input asp-for="Email" class="form-control" type="text" name="Email" size="40" />
                                 </div>
                                 <div class="st1">
                                     <label asp-for="BackUpEmail" class="p1">備用信箱</label>
-                                    <input asp-for="BackUpEmail" class="form-control" type="text" name="backupemail" size="40" />
+                                    <input asp-for="BackUpEmail" class="form-control" type="text" name="BackUpEmail" size="40" />
                                 </div>
                                 <div class="st1">
                                     <label class="p1">國籍</label>
@@ -150,7 +163,7 @@
                                 </div>
                                 <div class="st1">
                                     <label asp-for="Address" class="p1">完整地址</label>
-                                    <input asp-for="Address" class="form-control" type="text" name="add2" size="40" />
+                                    <input asp-for="Address" class="form-control" type="text" name="Address" size="40" />
                                 </div>
                             </fieldset>
                         </div>
@@ -164,18 +177,128 @@
                 </div>
                 <div class="justify-content-around">
                     <div class="st2 justify-content-around">
-                        @Html.ActionLink("送出", "List", "Member", null, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("送出", "Edit", "Member", "", new { @class = "btn btn-primary" })
                         <button class="btn btn-secondary" id="clear">清除</button>
                     </div>
                 </div>
+
             </div>
         </form>
+
+
+        @*<div class="row display-2">@Model.MemberId</div>*@
     </div>
 </div>
 
 @section Scripts{
     <script>
         const clear = document.querySelector("#clear");
+        @*const View = document.querySelector("#viewPage")
+        var VuePage = new Vue({
+            el: '#viewPage'
+            , data: function () {
+                var data = {
+                    form: {}
+                };
+
+                // 設定表單初始值
+                data.form = {
+                    MemberId: ""
+                    , Name: ""
+
+                }
+                return data;
+            }
+            // Vue 實體與掛載完成
+            , mounted: function () {
+                var self = this;
+
+                // 當 Vue 掛載完成，取得個人資料
+                self.GetUserProfile();
+            }, GetUserProfile: function () {
+                var self = this;
+                var postData = {};
+                                    // 使用 jQuery Ajax 傳送至後端
+                    $.ajax({
+                        url:'@Url.Content("~/Member/Edit")',
+                        method:'POST',
+                        dataType:'json',
+                        data: { inModel: postData },
+                        success: function (datas) {
+                            if (datas.ErrMsg) {
+                                alert(datas.ErrMsg);
+                                return;
+                            }
+                            self.form.MemberId = datas.MemberId;
+                            self.form.Name = datas.Name;
+
+                        },
+                        error: function (err) {
+                            $('#ErrorMsg').html(err.responseText);
+                            $('#ErrorAlert').modal('toggle');
+                        },
+                    });
+                }
+                // 修改個人資料
+                , DoEditProfile: function () {
+                    var self = this;
+
+                    // 組合表單資料
+                    var postData = {};
+                    postData['UserName'] = self.form.UserName;
+                    postData['UserEmail'] = self.form.UserEmail;
+
+                    // 使用 jQuery Ajax 傳送至後端
+                    $.ajax({
+                        url:'@Url.Content("~/Member/DoEditProfile")',
+                        method:'POST',
+                        dataType:'json',
+                        data: { inModel: postData, __RequestVerificationToken: self.GetToken() },
+                        success: function (datas) {
+                            if (datas.ErrMsg) {
+                                alert(datas.ErrMsg);
+                                return;
+                            }
+                            alert(datas.ResultMsg);
+                        },
+                        error: function (err) {
+                            $('#ErrorMsg').html(err.responseText);
+                            $('#ErrorAlert').modal('toggle');
+                        },
+                    });
+                }
+                 // 修改密碼
+                , DoEditPwd: function () {
+                    var self = this;
+
+                    // 組合表單資料
+                    var postData = {};
+                    postData['NewUserPwd'] = self.form.NewUserPwd;
+                    postData['CheckUserPwd'] = self.form.CheckUserPwd;
+
+                    // 使用 jQuery Ajax 傳送至後端
+                    $.ajax({
+                        url:'@Url.Content("~/Member/DoEditPwd")',
+                        method:'POST',
+                        dataType:'json',
+                        data: { inModel: postData, __RequestVerificationToken: self.GetToken() },
+                        success: function (datas) {
+                            if (datas.ErrMsg) {
+                                alert(datas.ErrMsg);
+                                return;
+                            }
+                            alert(datas.ResultMsg);
+                        },
+                        error: function (err) {
+                            $('#ErrorMsg').html(err.responseText);
+                            $('#ErrorAlert').modal('toggle');
+                        },
+                    });
+                }
+
+
+        })*@
+
         clear.addEventListener("click", eve => {
             eve.preventDefault();
             clearData();
