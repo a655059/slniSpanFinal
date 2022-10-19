@@ -11,6 +11,5 @@ namespace prjiSpanFinal.ViewModels.Home
         public List<SmallType> lSmallType { get; set; }
         public List<BigType> lBigType { get; set; }
         public List<CShowItem> cShowItem { get; set; }
-        public List<MemberAccount> cMemberID { get; set; }
     }
 }
