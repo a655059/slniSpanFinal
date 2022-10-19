@@ -16,6 +16,7 @@ namespace prjiSpanFinal.Models
 
         public int PaymentId { get; set; }
         public string PaymentName { get; set; }
+        public int Fee { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentToProduct> PaymentToProducts { get; set; }
