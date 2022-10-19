@@ -1,0 +1,79 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.MemberAccount>
+
+@{
+    ViewData["Title"] = "MemberList2";
+}
+
+@*@section Styles{
+    <style>
+        table {
+            font-size: px;
+            height: 500px;
+        }
+
+        th {
+            text-align: center;
+        }
+    </style>
+}*@
+
+<table class="table" width="120%" style="table-layout:fixed">
+    <thead>
+        <tr>
+            <th>
+                儲值金
+            </th>
+            <th >
+                備用信箱
+            </th>
+            <th >
+                暱稱
+            </th>
+            <th >
+                自我介紹
+            </th>
+            <th >
+                海外or國內
+            </th>
+            <th >
+                生日
+            </th>
+            <th ></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input class="form-control-plaintext" value="@item.Balance" readonly>
+                </td>
+                <td>
+                    <input class="form-control-plaintext" value="@item.BackUpEmail" readonly>
+                </td>
+                <td>
+                    <input class="form-control-plaintext" value="@item.NickName" readonly>
+                </td>
+                <td >
+                    <input class="form-control-plaintext" value="@item.Description" readonly>
+                </td>
+                <td>
+                    @{
+                        string IsTWs = "海外";
+                        if ((bool)item.IsTw)
+                        {
+                            IsTWs = "國內";
+                        }
+                    }
+                    <input class="form-control-plaintext" value="@IsTWs" readonly>
+                </td>
+                <td>
+                    <input class="form-control-plaintext" value="@item.Birthday" readonly>
+                </td>
+                <td >
+                    @Html.ActionLink("回到會員列表", "MemberList","newManagement",null,new{@class="btn btn-primary"})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

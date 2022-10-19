@@ -17,8 +17,8 @@
 }
     <h1>商品</h1>
     <form>
-        <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋" class="form-control"  />
-        <input  type="submit" value="搜尋" class="btn btn-outline-secondary" />
+        <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋,或不輸入回到列表" class="form-control" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
@@ -52,25 +52,25 @@
         {
             <tr>
                 <td>
-                    <input value="@item.Product.ProductId" readonly>
+                    <input class="form-control-plaintext" value="@item.Product.ProductId" readonly>
                 </td>
                 <td>
-                    <input value="@item.Product.ProductName" readonly>
+                    <input class="form-control-plaintext" value="@item.Product.ProductName" readonly>
                 </td>
                 <td>
-                    <input value="@item.SmallTypeName" readonly>
+                    <input class="form-control-plaintext" value="@item.SmallTypeName" readonly>
                 </td>
                 <td>
-                    <input value="@item.CustomizedCategoryName" readonly>
+                    <input class="form-control-plaintext" value="@item.CustomizedCategoryName" readonly>
                 </td>
                 <td>
-                    <input value="@item.Product.MemberId" readonly>
+                    <input class="form-control-plaintext" value="@item.Product.MemberId" readonly>
                 </td>
                 <td>
-                    <input value="@item.RegionName" readonly>
+                    <input class="form-control-plaintext" value="@item.RegionName" readonly>
                 </td>
                 <td>
-                    <input value="@item.ProductStatusName" class="psname" readonly>
+                    <input value="@item.ProductStatusName" class="form-control-plaintext psname" readonly>
                 </td>
                 <td>
                     <a asp-action="ProductDown" name="@item.Product.ProductId" class="ProdDown btn btn-outline-secondary">下架</a>
@@ -91,13 +91,14 @@
         </tr>
     </tfoot>
 </table>
-<div style="align-content:center">
+<div style="align-content:center" class="paginations">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("newProductList", new { page }))
-        .Build())
+        .Url(page => Url.Action("newProductList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3).Build()
+        )
+
 </div>
 
-@section Scripts{
+    @section Scripts{
     <script>
         let BTNdel = document.querySelectorAll(".ProdDele");
         let BTNundo = document.querySelectorAll(".ProdUndo");
@@ -135,6 +136,22 @@
                     $(this).closest("td").siblings().find(".psname").val("已下架");
                 }
             })
+        }
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for(let a of page){
+            a.classList.add('page-link');
+        }      
+        for(let a of pagesss){
+            a.classList.add('page-link');
+        }
+        for(let a of pages){
+            a.classList.add('page-item')
+        } 
+        for (let a of pagess) {
+            a.classList.add('pagination');
         }
     </script>
     }

@@ -35,21 +35,25 @@ namespace prjiSpanFinal.Controllers
                     Where(i => i.ProductName.Contains(keyword)).
                     Select(e => e); ;
             }
+            var ProductStatusName = (from i in db.ProductStatuses select i).ToList();
+            var RegionName = (from i in db.RegionLists select i).ToList();
+            var SmallTypeName = (from i in db.SmallTypes select i).ToList();
+            var CustomizedCategoryName = (from i in db.CustomizedCategories select i).ToList();
             foreach (var p in Prods)
             {
                 CProductListViewModel model = new()
                 {
                     Product = p,
-                    ProductStatusName = (from i in db.ProductStatuses
+                    ProductStatusName = (from i in ProductStatusName
                                          where i.ProductStatusId == p.ProductStatusId
                                          select i.ProductStatusName).First(),
-                    RegionName = (from i in db.RegionLists
+                    RegionName = (from i in RegionName
                                   where i.RegionId == p.RegionId
                                   select i.RegionName).First(),
-                    SmallTypeName = (from i in db.SmallTypes
+                    SmallTypeName = (from i in SmallTypeName
                                      where i.SmallTypeId == p.SmallTypeId
                                      select i.SmallTypeName).First(),
-                    CustomizedCategoryName = (from i in db.CustomizedCategories
+                    CustomizedCategoryName = (from i in CustomizedCategoryName
                                               where i.CustomizedCategoryId == p.CustomizedCategoryId
                                               select i.CustomizedCategoryName).First(),
                 };
@@ -124,10 +128,17 @@ namespace prjiSpanFinal.Controllers
         public IActionResult ProductDetailList(int? id)
         {
             var db = new iSpanProjectContext();
-            var Q = (from i in db.ProductDetails
-                     where i.ProductId == id
-                     select i);
-            return View(Q);
+            if (id != null)
+            {
+                var Q = (from i in db.ProductDetails
+                         where i.ProductId == id
+                         select i);
+                return View(Q);
+            }
+            else
+            {
+                return RedirectToAction("newProductList");
+            }
         }
         public IActionResult ProductDetailDelete(int id)
         {
@@ -137,7 +148,7 @@ namespace prjiSpanFinal.Controllers
                     select d;
             db.ProductDetails.Remove(D.First());
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList");
+            return RedirectToAction("ProductDetailList",new { id =id});
         }
         #endregion
         #region MemberRegion
@@ -160,7 +171,7 @@ namespace prjiSpanFinal.Controllers
             else
             {
                 mems = db.MemberAccounts.
-                    Where(i => i.Name.Contains(keyword)||i.Phone.Contains(keyword)||i.Email.Contains(keyword)).
+                    Where(i => i.Name.Contains(keyword)||i.Phone.Contains(keyword)||i.Email.Contains(keyword)|| i.MemberAcc.Contains(keyword)).
                     Select(e => e); ;
             }
             foreach (var p in mems)
@@ -203,6 +214,13 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+        public IActionResult MemberList2(int? id)
+        {
+            var Q = from u in new iSpanProjectContext().MemberAccounts
+                    where u.MemberId == id
+                    select u;
+            return View(Q);
+        }
         public IActionResult MemberDelete(int id)
         {
             var db = (new iSpanProjectContext());
@@ -233,6 +251,7 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content("1");
         }
+
 
     
 
