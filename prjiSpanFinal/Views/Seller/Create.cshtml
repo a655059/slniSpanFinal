@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.seller.CSellerCreateToViewViewModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -133,7 +134,7 @@
             </div>
             <div class="modal-body">
                 <label>樣式:</label>
-                <input type="text" id="text1" class="form-control">
+                <input type="text" id="text1" class="form-control" required><div class="invalid-feedback">必填欄位</div>
                 <br />
                 <label>數量:</label>
                 <input type="text" id="text2" class="form-control">
@@ -153,130 +154,157 @@
     </div>
 </div>
 
-
-<div class="row ">
-    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
-    <div class="col-10">
-        <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
-        <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
-        <div class="row">
-            <div class="排版 mx-5">
-                <h4 class=" mb-4">商品資訊</h4>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="d-flex justify-content-start">
-                    <label class="名稱寬">名稱</label>
-                    <input class="form-control 名稱" />
-                    <span class="text-danger"></span>
-                </div>
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬 mt-2">類別</label>
-                    <select class="form-select w-25 m-3 " aria-label="Default select example ">
-                        <option value="1">女生衣著</option>
-                        <option value="2">書籍及雜誌期刊</option>
-                        <option value="3">男生衣著</option>
-                        <option value="4">居家生活</option>
-                        <option value="5">運動/健身</option>
-                        <option value="6">美食、伴手禮</option>
-                    </select>
-                    <select class="form-select w-25 m-3" aria-label="Default select example ">
-                        <option selected>T恤</option>
-                        <option value="1">長褲</option>
-                        <option value="2">內睡衣</option>
-                        <option value="3">外套</option>
-                        <option value="4">其他</option>
-                        <option value="5">針織/毛衣</option>
-                        <option value="6">多件式套裝</option>
-                    </select>
-                </div>
-
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬 mt-2">規格</label>
-                    @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
-                    <span class="text-danger"></span>
-                    <section class="section">
-                        <table class="table w-100 text-center">
-                            <thead>
-                                <tr>
-                                    <th class="col 規格列表">樣式</th>
-                                    <th class="col 規格列表">數量</th>
-                                    <th class="col 規格列表">售價</th>
-                                    <th class="col 規格列表">照片</th>
-                                    <th class="col 規格列表">功能</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <div class="text-center">
-                            <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="addStyle">
-                </div>
-                <div>
-                    <label class="名稱寬 mt-2">封面照片</label>
+@*<form action="@Url.Content("~/seller/Create")" method="post">*@
+    <div class="row ">
+        <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+        <div class="col-10">
+            <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
+            <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
+            <div class="row">
+                <div class="排版 mx-5">
+                    <h4 class=" mb-4">商品資訊</h4>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="d-flex justify-content-start">
-                        @*    大頭照相片1     *@
-                        <div>
-                            <label class="btn" for="commentPhoto1">
-                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                            </label>
-                            <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
-                        </div>
-                        @*    大頭照相片2     *@
-                        <div>
-                            <label class="btn" for="commentPhoto2">
-                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                            </label>
-                            <input type="file" id="commentPhoto2" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                        </div>
-                        @*    大頭照相片3     *@
-                        <div>
-                            <label class="btn" for="commentPhoto3">
-                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                            </label>
-                            <input type="file" id="commentPhoto3" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                        </div>
-                        @*    大頭照相片4     *@
-                        <div>
-                            <label class="btn" for="commentPhoto4">
-                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                            </label>
-                            <input type="file" id="commentPhoto4" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                        </div>
-                        @*    大頭照相片5     *@
-                        <div>
-                            <label class="btn" for="commentPhoto5">
-                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                            </label>
-                            <input type="file" id="commentPhoto5" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                        <label class="名稱寬">名稱</label>
+                        <input type="text" class="form-control 名稱" name="productName" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-start ">
+                        <label class="名稱寬 mt-2">類別</label>
+                        <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
+                            @{
+                                for (int i = 0; i < Model.bigType.Count; i++)
+                                {
+                                    <option value="@i">@Model.bigType[i]</option>
+                                }
+                            }
+                        </select>
+                        <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType" name="smallType">
+                            @{
+                                for (int i = 0; i < 17; i++)
+                                {
+                                    <option value="@i">@Model.smallType[i]</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-start ">
+                        <label class="名稱寬 mt-2">規格</label>
+                        @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
+                        <span class="text-danger"></span>
+                        <section class="section">
+                            <table class="table w-100 text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="col 規格列表">樣式</th>
+                                        <th class="col 規格列表">數量</th>
+                                        <th class="col 規格列表">售價</th>
+                                        <th class="col 規格列表">照片</th>
+                                        <th class="col 規格列表">功能</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="addStyle">
+                    </div>
+                    <div>
+                        <label class="名稱寬 mt-2">封面照片</label>
+                        <div class="d-flex justify-content-start">
+                            @*    大頭照相片1     *@
+                            <div>
+                                <label class="btn" for="commentPhoto1">
+                                    <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                </label>
+                                <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
+                            </div>
+                            @*    大頭照相片2     *@
+                            <div>
+                                <label class="btn" for="commentPhoto2">
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                </label>
+                                <input type="file" id="commentPhoto2" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                            </div>
+                            @*    大頭照相片3     *@
+                            <div>
+                                <label class="btn" for="commentPhoto3">
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                </label>
+                                <input type="file" id="commentPhoto3" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                            </div>
+                            @*    大頭照相片4     *@
+                            <div>
+                                <label class="btn" for="commentPhoto4">
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                </label>
+                                <input type="file" id="commentPhoto4" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                            </div>
+                            @*    大頭照相片5     *@
+                            <div>
+                                <label class="btn" for="commentPhoto5">
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                </label>
+                                <input type="file" id="commentPhoto5" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬 mt-2 ">描述</label>
-                    <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
-                </div>
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬 m-3">物流</label>
-                    <button class="btntype物流 m-4 ">新增規格</button>        @*    button  在這   *@
-                    <span class="text-danger"></span>
-                </div>
-                <div class="add物流 d-flex justify-content-center">
-                </div>
-            </div><br />
-            <div class="row ">
-                <div class="col-4"></div>
-                <div class="col-8">
-                    @Html.ActionLink("下一步", "AD", new { @*id = item.FId*@}, new { @class = "btn btn-warning m-3" })
+                    <div class="d-flex justify-content-start ">
+                        <label class="名稱寬 mt-2 ">描述</label>
+                        <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-start ">
+                        <label class="名稱寬 m-3">物流</label>
+                        <button class="btntype物流 m-4 ">新增規格</button>        @*    button  在這   *@
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="add物流 d-flex justify-content-center">
+                    </div>
+                </div><br />
+                <div class="row ">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <input type="submit" value="下一步" class = "btn btn-warning m-3"/>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@*</form>*@
 @section Scripts{
     <script>
+
+        /////////大類小類連接
+
+        const bigType = document.querySelector("#bigType")
+        const smallType = document.querySelector("#smallType")
+
+        bigType.addEventListener("change", async function() {
+            const bigTypeValue = bigType.options[bigType.selectedIndex].innerHTML;
+            let response = await fetch("@Url.Content("~/Seller/SmallType")" + `?bigtype=${bigTypeValue}`);
+            let smallTypes = await response.json();
+
+            renderSmallType(smallTypes);
+        })
+       
+        //
+
+        function renderSmallType(datas) {
+            smallType.options.length = 0;
+            datas.forEach(S => {
+                const opt = new Option(S, S);
+                smallType.options.add(opt);
+            })
+        }
+
+
+        ///////規格新增
+
         //資料暫存,後去把data變數傳入後端
         let data = [
             //['紅色', 7, 100, ''],
@@ -376,7 +404,7 @@
             if (photo) {
                 let src = URL.createObjectURL(photo[0]);
                 console.log(src);
-                $(this).siblings('label').children().css({ "background-image": `url('${src}')` });
+                $(this).siblings('label').Urlhildren().css({ "background-image": `url('${src}')` });
             }
         });
 
@@ -388,7 +416,7 @@
 
         物流按鈕.addEventListener("click", () => {
             新增物流.innerHTML =
-                `<div class="d-flex justify-content-around ">
+                `<div class="d-flex justify-content-start ">
                                         <table class="table">
                                             <thead>
                                                 <tr></tr>

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using prjiSpanFinal.Hubs;
 using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace prjiSpanFinal
                 options.UseSqlServer(Configuration.GetConnectionString("iSpanProjectConnection"));
             });
             services.AddControllersWithViews();
+            services.AddSession();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +48,7 @@ namespace prjiSpanFinal
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -57,6 +61,7 @@ namespace prjiSpanFinal
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
