@@ -75,20 +75,15 @@ namespace prjiSpanFinal.ViewComponents
             List<string> msglist = new List<string>();
             List<byte[]> bslist = new List<byte[]>();
             List<int> hrlist = new List<int>();
+            List<int> ProSendFrom = new List<int>();
+            List<int> ProSendTo = new List<int>();
             for (int i = 0; i < q.Count ; i++)
             {
-                idlist.Add(q[i].SendFrom);
-                acclist.Add(q[i].MemberAcc);
-                for(int j =0;j<q2.Count;j++)
+                if((ProSendFrom.Contains(q[i].SendFrom)||ProSendTo.Contains(q[i].SendTo)) && (q[i].SendFrom != b.MemID && q[i].SendTo != b.MemID))
                 {
-                    if(q[i].SendFrom == q2[j].SendTo)
-                    {
-                        msglist.Add(compareTime(q[i].Msg, q2[j].Msg));
-                        flag = true;
-                        break;
-                    }
+
                 }
-                hrlist.Add(q1[i].Count(c => c.HaveRead == false));
+
                 if (q[i].MemPic != null)
                 {
                     bslist.Add(q[i].MemPic);
