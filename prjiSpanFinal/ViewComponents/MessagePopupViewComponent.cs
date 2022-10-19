@@ -116,6 +116,10 @@ namespace prjiSpanFinal.ViewComponents
                     {
                         shortstr = q1[count1].Msg.Substring(0, 21) + "本站產品";
                     }
+                    else if (q1[count1].Msg.Substring(0, 4) == "ghjk")
+                    {
+                        shortstr = q1[count1].Msg.Substring(0, 21) + "YT影片";
+                    }
                     else
                     {
                         if (q1[count1].Msg.Length > 29)
@@ -166,6 +170,10 @@ namespace prjiSpanFinal.ViewComponents
                     else if (q2[count2].Msg.Substring(0, 4) == "tyui")
                     {
                         shortstr = q2[count2].Msg.Substring(0, 21) + "本站產品";
+                    }
+                    else if (q2[count2].Msg.Substring(0, 4) == "ghjk")
+                    {
+                        shortstr = q2[count2].Msg.Substring(0, 21) + "YT影片";
                     }
                     else
                     {

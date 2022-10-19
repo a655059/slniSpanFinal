@@ -23,7 +23,7 @@ $("#msgenter").click(function () {
     let today = new Date();
     let timestamp = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
     let message;
-    let indexofmsg = $("#msgtextinput").val().indexOf("/Item/Index?id=")
+    let indexofmsg = $("#msgtextinput").val().indexOf("/Item/Index?id=");
     let inputmsg = $("#msgtextinput").val();
     if (indexofmsg != -1) {
         message = "tyui" + timestamp;
@@ -36,6 +36,9 @@ $("#msgenter").click(function () {
                 message = message + inputmsg[i];
             }
         }
+    }
+    else if (inputmsg.includes("www.youtube.com")) {
+        message = "ghjk" + timestamp + inputmsg;
     }
     else {
         message = "qwer" + timestamp + inputmsg;
@@ -130,6 +133,9 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
     }
     else if (msgheader == "tyui") {
         shortbody = "本站產品";
+    }
+    else if (msgheader == "ghjk") {
+        shortbody = "YT影片";
     }
     else {
         if (msgbody.length > 8) {
@@ -302,6 +308,9 @@ function MyMessagePack(head, msg, time) {
             </a>`;
         });
     }
+    else if (head == "ghjk"){
+        msg = `<iframe width="420" height="315" src="${msg}"></iframe>`;
+    }
     else {
     }
     let str = `<div class="d-flex flex-row justify-content-end">
@@ -347,6 +356,9 @@ function CMessagePack(head, msg, time, multiid = "0") {
                 </div>
             </a>`;
         });
+    }
+    else if (head == "ghjk") {
+        msg = `<iframe width="420" height="315" src="${msg}"></iframe>`;
     }
     else {
     }
@@ -431,7 +443,10 @@ function pageload() {
 if (memacc != null) {
     connectionstart();
     isconnectionstart = true;
-    /*pageload();*/
+    let today = new Date();
+    let timestamp = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+    $("#msgopendialogbody").children().eq(0).children("a").children().eq(1).children("input").val(timestamp);
+    pageload();
 }
 
 $(".chatroom").click(function () {

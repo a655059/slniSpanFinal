@@ -35,7 +35,7 @@ namespace prjiSpanFinal
             services.AddSignalR(o =>
             {
                 o.EnableDetailedErrors = true;
-                o.MaximumReceiveMessageSize = 1024000;
+                o.MaximumReceiveMessageSize = 10240000;
             });
         }
 
