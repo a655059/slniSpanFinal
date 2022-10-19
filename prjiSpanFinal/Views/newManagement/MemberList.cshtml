@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CProductListViewModel>
+﻿@model IEnumerable<CMemberListViewModel>
 @{
     ViewData["Title"] = "newProductList";
     var pagedList = (IPagedList)ViewBag.Prods;
@@ -7,7 +7,7 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Core.Fluent;
 @using X.PagedList.Web.Common;
-@using prjiSpanFinal.ViewModels;
+@using prjiSpanFinal.ViewModels.newManagement
 @section Styles{
     <style>
         td input {
@@ -17,23 +17,23 @@
 }
     <h1>商品</h1>
     <form>
-        <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋" class="form-control"  />
-        <input  type="submit" value="搜尋" class="btn btn-outline-secondary" />
+        <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋" class="form-control" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
             <tr>
                 <th>
-                    商品ID
+                    會員ID
                 </th>
                 <th>
-                    商品名稱
+                  帳號
                 </th>
                 <th>
-                    商品類別
+                    密碼
                 </th>
                 <th>
-                    使用者定義類別
+                    海外or國內
                 </th>
                 <th>
                     賣家ID
@@ -52,32 +52,84 @@
         {
             <tr>
                 <td>
-                    <input value="@item.Product.ProductId" readonly>
+                    <input value="@item.MemberAccount.MemberId" readonly>
                 </td>
                 <td>
-                    <input value="@item.Product.ProductName" readonly>
+                    <input value="@item.MemberAccount.MemberAcc" readonly>
                 </td>
                 <td>
-                    <input value="@item.SmallTypeName" readonly>
+                    <input value="@item.MemberAccount.MemberPw" readonly>
                 </td>
                 <td>
-                    <input value="@item.CustomizedCategoryName" readonly>
-                </td>
-                <td>
-                    <input value="@item.Product.MemberId" readonly>
+                    @{
+                        string IsTWs = "海外";
+                        if ((bool)item.MemberAccount.IsTw){
+                            IsTWs = "國內";
+                        }
+                    }
+                    <input value="@IsTWs" readonly>
                 </td>
                 <td>
                     <input value="@item.RegionName" readonly>
                 </td>
                 <td>
-                    <input value="@item.ProductStatusName" class="psname" readonly>
+                    <input value="@item.MemberAccount.Phone" readonly>
                 </td>
                 <td>
-                    <a asp-action="ProductDown" name="@item.Product.ProductId" class="ProdDown btn btn-outline-secondary">下架</a>
-                    <a asp-action="ProductUndo" name="@item.Product.ProductId" class="ProdUndo btn btn-outline-primary">復原</a>
-                    <a asp-action="ProductDelete" name="@item.Product.ProductId" class="ProdDele btn btn-outline-danger">刪除</a>
-                    @Html.ActionLink("查看更多", "newProductList2", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
-                    @Html.ActionLink("檢視產品細節", "ProductDetailList", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
+                    <input value="@item.MemberAccount.Email"  readonly>
+                </td>
+                <td>
+                    <input value="@item.MemberAccount.BackUpEmail"  readonly>
+                </td>       
+                <td>
+                    <input value="@item.MemberAccount.Address"  readonly>
+                </td>
+                <td>
+                    <input value="@item.MemberAccount.NickName"  readonly>
+                </td>  
+                <td>
+                    <input value="@item.MemberAccount.Name" readonly>
+                </td> 
+                <td>
+                    <input value="@item.MemberAccount.Birthday" readonly>
+                </td> 
+                <td>
+                    @{
+                        var base64Image = Convert.ToBase64String(item.MemberAccount.MemPic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
+                </td>
+                <td>
+                    <input value="@item.MemStatusName" class="msname" readonly>
+                </td>
+                <td>
+                    @{
+                        var G = item.MemberAccount.Gender;
+                        string gender = "";
+                        if(G==0){
+                            gender = "其他";
+                        }
+                       else if (G == 1)
+                        {
+                            gender = "男";
+                        }
+                        else
+                        {
+                            gender = "女";
+                        }
+                    }
+                    <input value="@gender" readonly>
+                </td>
+                <td>
+                    <input value="@item.MemberAccount.Balance" readonly>
+                </td>
+                <td>
+                    <a asp-action="ProductDown" name="@item.MemberAccount.MemberId" class="ProdDown btn btn-outline-secondary">下架</a>
+                    <a asp-action="ProductUndo" name="@item.MemberAccount.MemberId" class="ProdUndo btn btn-outline-primary">復原</a>
+                    <a asp-action="ProductDelete" name="@item.MemberAccount.MemberId" class="ProdDele btn btn-outline-danger">刪除</a>
+                    @Html.ActionLink("查看更多", "memberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})
+                    @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
                 </td>
             </tr>
         }
