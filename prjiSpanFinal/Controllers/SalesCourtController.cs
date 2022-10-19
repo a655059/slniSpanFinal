@@ -27,7 +27,7 @@ namespace prjiSpanFinal.Controllers
             var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == 2).FirstOrDefault();
             var Product = dbContext.Products.Where(a => a.MemberId == Seller.MemberId).ToList();
             var CourtCategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Seller.MemberId).ToList();
-            
+            var MemPic = Seller.MemPic;
 
             var SellerNickName = Seller.NickName;
             var CourtDescription = Seller.Description;
@@ -66,6 +66,7 @@ namespace prjiSpanFinal.Controllers
                     //var star_oddt = dbContext.OrderDetails.Where()
                     //AddedTime = pd.EditTime,
                     //StarCount = star_count
+                    
                 };
                 CardContent.Add(outCardContent);
             }
@@ -86,7 +87,8 @@ namespace prjiSpanFinal.Controllers
                 CourtCategoryName = CategoryName,
                 CourtDescription = CourtDescription,
                 CardProduct = CardContent,
-                star = star_count
+                star = star_count,
+                Picture = MemPic
             };
 
             //return View(Seller);
@@ -108,25 +110,74 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 關於我(int id)
         {
             var PayingMethod = dbContext.PaymentToSellers.Where(a => a.Member.MemberId == id).ToList();
-
+            var Delivery = dbContext.ShipperToSellers.Where(a => a.Member.MemberId == id).ToList();
 
             return View();
         }
 
         public IActionResult 新增關於我()
         {
-            return View();
+            //這是list
+            var Payment = dbContext.Payments.Select(a => a.PaymentName).ToList();
+            var Delivery = dbContext.Shippers.Select(a => a.ShipperName).ToList();
+            var DeliveryFee = dbContext.Shippers.Select(a => a.Fee).ToList();
+            //服務時間   想說在show的時候寫在畫面上
+            //
+           
+            var NewMe = new C關於我ViewModel()
+            {
+                //PayingMethod = Payment,
+                DeliveryMethod = Delivery,
+                DeliveryFee = DeliveryFee
+            };
+           
+
+            return View(NewMe);
         }
 
         [HttpPost]
         public IActionResult 新增關於我(C關於我ViewModel me)
         {
-            var NewMe = new C關於我ViewModel()
+            for (int i = 0; i < me.DeliveryMethod.Count; i++)
             {
-                PayingMethod = me.PayingMethod,
-                // delivery = me.DeliveryMethod,
-            };
-            return View();
+                string AAA;
+               
+                AAA = me.DeliveryMethod[i];
+
+               
+            }
+
+            //foreach(var item in me.DeliveryMethod)
+            //{
+            //    string aaa;
+            //    foreach(var inp in item)
+            //    {
+            //        aaa = inp.ToString();
+            //    }
+            //}
+
+
+            //foreach (var item in me.DeliveryMethod)
+            //{
+            //    string AAA = item;
+            //}
+            //me.PayingMethod
+            //var P
+
+            //var NewMe = new C關於我ViewModel()
+            //{
+            //    PayingMethod = me.PayingMethod,
+            //    DeliveryMethod = me.DeliveryMethod,
+            //    SalesCourtServiceTime = me.SalesCourtServiceTime,
+            //    NewProductOnLoad = me.NewProductOnLoad,
+            //    NewProductCategory = me.NewProductCategory,
+            //    SellerCategory = me.SellerCategory,
+            //    ServiceAfterBuy = me.ServiceAfterBuy,
+            //    Caution = me.Caution
+            //};
+            //return View();
+
+            return RedirectToAction("關於我");
         }
 
         
@@ -138,7 +189,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult 修改關於我(C關於我ViewModel? me)
+        public IActionResult 修改關於我(C關於我ViewModel me)
         {
             if(me != null)
             {

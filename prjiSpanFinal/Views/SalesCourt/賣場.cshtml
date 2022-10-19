@@ -1,8 +1,5 @@
-﻿@*@model List<prjMvcDemo.Models.CCustomer>*@
+﻿@model prjiSpanFinal.ViewModels.SalesCourt.C賣場ViewModel
 
-@*@model List<prjiSpanFinal.Models.0賣場>*@
-@model prjiSpanFinal.ViewModels.SalesCourt.C賣場ViewModel
-@*@model prjiSpanFinal.Models.MemberAccount*@
 @{
     ViewData["Title"] = "賣場";
 }
@@ -31,7 +28,18 @@
                     <span data-feather="plus-circle" class="align-text-bottom"></span>
                 </a>
             </h6>
-            <img src="~/img/蘋果圖.jpg" width="150" />
+            <div class="row">
+
+                @{
+
+                    var base64Image = Convert.ToBase64String(Model.Picture);
+                    var source = String.Format("data:image/png;base64,{0}", base64Image);
+
+                }
+                <img src="@source" class="cardImg" alt="..." width="120" />
+            </div>
+
+            @*<img src="~/img/蘋果圖.jpg" width="150" />*@
             <div class="p-2">@Model.SellerName 的賣場</div>
 
             <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>

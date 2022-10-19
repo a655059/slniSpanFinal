@@ -16,5 +16,7 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
         public List<Card賣場ViewModel> CardProduct { get; set; }
 
         public double star;
+
+        public byte[] Picture { get; set; }
     }
 }
