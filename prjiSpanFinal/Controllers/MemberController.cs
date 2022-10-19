@@ -100,12 +100,12 @@ namespace prjiSpanFinal.Controllers
         //}
 
 
-        public IActionResult Create1()
+        public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create1(MemberAccViewModel mem, IFormFile File1)
+        public IActionResult Create(MemberAccViewModel mem, IFormFile File1)
         {
 
             iSpanProjectContext db = new iSpanProjectContext();
