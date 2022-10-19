@@ -1,22 +1,16 @@
-﻿
-@{
-    ViewData["Title"] = "ShowNoItemInCart";
-}
-
-@section Styles{ 
-<style>
-    .emptyBagDIv{
-        width:25%;
-        aspect-ratio:1/1;
+﻿<style>
+    .emptyBagDIv {
+        width: 25%;
+        aspect-ratio: 1/1;
     }
-    .emptyBagImg{
-        width:100%;
-        aspect-ratio:1/1;
-        object-fit:contain;
+
+    .emptyBagImg {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
     }
 </style>
-}
-<div class="text-center text-primary fs-1 fw-bold">購物車中尚無商品</div>
+<div class="text-center text-primary fs-3 fw-bold">購物車中尚無商品</div>
 <div class="emptyBagDIv m-auto">
     <img class="emptyBagImg" src="@Url.Content("~/img/emptyBag.jpg")" />
 </div>

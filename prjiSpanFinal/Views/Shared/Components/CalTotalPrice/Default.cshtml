@@ -39,7 +39,6 @@
             <div class="selectedCouponID">運費:</div>
             <div class="d-flex justify-content-end align-items-center">
                 <div class="text-danger">-$60</div>
-
             </div>
         </div>
     }
@@ -49,7 +48,7 @@
     </div>
     @if (Model == 1)
     {
-        <a href="@Url.Content("~/Delivery/Checkout")"><button class="btn btn-warning w-100">去結帳</button></a>
+        <a href="@Url.Content("~/Delivery/Checkout")"><button class="goCheckout btn btn-warning w-100">去結帳</button></a>
     }
     else
     {

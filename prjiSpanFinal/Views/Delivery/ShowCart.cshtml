@@ -20,9 +20,10 @@
     <link href="~/css/Delivery/ProgressBar.css" rel="stylesheet" />
     <link href="~/css/Delivery/DeliveryShowCar.css" rel="stylesheet" />
 }
-
-@await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
-<div class="w-100 row mt-3">
+<div class="progressBar">
+    @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 0 })
+</div>
+<div class="layout w-100 row mt-3">
     <div class="col-9">
         @{
             foreach (int sellerID in sellerIDList)
@@ -30,7 +31,7 @@
                 <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
                     <div class="form-check border-bottom pb-2 d-flex align-items-center">
                         <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                        <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label>
+                        <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label><span class="fs-5">的賣場</span>
                     </div>
                     @foreach (var i in Model.cart)
                     {
@@ -79,10 +80,23 @@
                     }
                     <div class="ship border-top d-flex align-items-center pt-3">
                         <div>
-                            <img src="~/img/truck.png" />
+                            <img src="~/img/truck.png" class="d-block"/>
                         </div>
                         <div class="mx-2">
-                            7-11取貨付款 $0 ; 7-11取貨 $0 ; 全家取貨付款 $0 ; 全家取貨 $0 ; 萊爾富取貨付款 $0 ; 萊爾富取貨 $0 ; 郵寄寄送 $0 ; 面交取貨付款 (面交時才付款) $0
+                            @foreach (var i in Model.shipperToSeller)
+                            {
+                                if (i.sellerID == sellerID)
+                                {
+                                    foreach (var j in i.shippers)
+                                    {
+                                        <span>@j.ShipperName</span><span>$@j.Fee;</span>
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
                         </div>
                     </div>
                 </div>
@@ -95,23 +109,49 @@
         </div>
     </div>
 </div>
+
+<div class="modal" tabindex="-1" id="showNoItemInCart">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>購物車中無商品了，將為您導向主頁面。</p>
+                <a href="@Url.Content("~/Home/Index")"><button type="button" class="btn btn-warning btn-sm">繼續選購</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
     <script src="~/js/Delivery/DeliveryShowCart.js"></script>
     <script src="~/js/Delivery/DeliveryCheckout.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
     <script>
         $(".btnDelete").click(async function () {
-            confirm("確定要刪除嗎?");
-            const orderDetailID = $(this).attr("id");
-            let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
-            let data = await response.text();
-            console.log(data);
-            if (data == 0) {
-                $(this).closest(".sellerLayout").remove();
+            const yes = confirm("確定要刪除嗎?");
+            if (yes) {
+                const orderDetailID = $(this).attr("id");
+                let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
+                let data = await response.text();
+                console.log(data);
+                if (data == 0) {
+                    $(this).closest(".sellerLayout").remove();
+                }
+                if (data == 1) {
+                    $(this).closest(".itemLayout").remove();
+                }
+                if ($(".sellerLayout").length < 1) {
+                    $(".progressBar").addClass("d-none");
+                    $(".layout").load("@Url.Action("ShowNoItemInCart", "Delivery")");
+                }
+                else {
+                    CalTotalPrice();
+                }
             }
-            if (data == 1) {
-                $(this).closest(".itemLayout").remove();
+            else {
+                return;
             }
+
         });
     </script>
 }
