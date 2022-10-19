@@ -102,7 +102,16 @@ namespace prjiSpanFinal.ViewComponents
                     acclist.Add(q1[count1].MemberAcc);
                     int id = q1[count1].SendTo;
                     idlist.Add(id);
-                    msglist.Add(q1[count1].Msg);
+                    string shortstr = "";
+                    if(q1[count1].Msg.Length >29)
+                    {
+                        shortstr = q1[count1].Msg.Substring(0, 29) + "...";
+                    }
+                    else
+                    {
+                        shortstr = q1[count1].Msg;
+                    }
+                    msglist.Add(shortstr);
                     hrlist.Add(0);
                     SendList.Add(q1[count1].SendTo);
                     count1++;
@@ -127,7 +136,16 @@ namespace prjiSpanFinal.ViewComponents
                     acclist.Add(q2[count2].MemberAcc);
                     int id = q2[count2].SendFrom;
                     idlist.Add(id);
-                    msglist.Add(q2[count2].Msg);
+                    string shortstr = "";
+                    if (q2[count2].Msg.Length > 29)
+                    {
+                        shortstr = q2[count2].Msg.Substring(0, 29) + "...";
+                    }
+                    else
+                    {
+                        shortstr = q2[count2].Msg;
+                    }
+                    msglist.Add(shortstr);
                     hrlist.Add(q2.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
                     SendList.Add(q2[count2].SendFrom);
                     count2++;
