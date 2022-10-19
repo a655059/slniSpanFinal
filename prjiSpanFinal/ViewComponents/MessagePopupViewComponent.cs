@@ -70,6 +70,7 @@ namespace prjiSpanFinal.ViewComponents
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             var q1 = dbcontext.ChatLogs.Where(c => c.SendFrom == b.MemID).Select(c => new { c.ChatLogId,c.SendTo,c.Msg,c.HaveRead,c.SendToNavigation.MemberAcc,c.SendToNavigation.MemPic}).OrderByDescending(c=>c.ChatLogId).DistinctBy(c => c.SendTo).ToList();
             var q2 = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.ChatLogId, c.SendFrom, c.Msg, c.HaveRead, c.SendFromNavigation.MemberAcc, c.SendFromNavigation.MemPic }).OrderByDescending(c => c.ChatLogId).DistinctBy(c => c.SendFrom).ToList();
+            var q3 = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.SendFrom, c.HaveRead }).ToList();
             List<int> idlist = new List<int>();
             List<string> acclist = new List<string>();
             List<string> msglist = new List<string>();
@@ -178,7 +179,7 @@ namespace prjiSpanFinal.ViewComponents
                         }
                     }
                     msglist.Add(shortstr);
-                    hrlist.Add(q2.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
+                    hrlist.Add(q3.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
                     SendList.Add(q2[count2].SendFrom);
                     count2++;
                 }

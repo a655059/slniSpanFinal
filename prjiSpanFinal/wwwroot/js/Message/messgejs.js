@@ -13,7 +13,7 @@ async function connectionstart() {
         console.log(err);
         setTimeout(start, 5000);
     }
-};
+}
 
 $("#msgenter").click(function () {
     if ($("#msgtextinput").val() == "") {
@@ -44,7 +44,7 @@ $("#msgenter").click(function () {
         return console.error(err.toString());
     });
     dialogsort(activec);
-});
+})
 
 $("#msgupload").on("change", function () {
     const reader = new FileReader();
@@ -60,7 +60,7 @@ $("#msgupload").on("change", function () {
         
     });
     reader.readAsDataURL(this.files[0]);
-});
+})
 
 $(".msgemoji").click(function () {
     let today = new Date();
@@ -93,14 +93,10 @@ function loadactivemsg(scid) {
         refreshtimestamp();
         $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
     });
+    $("#msgenter").attr("disabled", true);
 }
 
-function opendia() {
-    let scid = $(event.currentTarget).siblings("input").val();
-    loadactivemsg(scid);
-}
-
-$(".msgopendialog").click(function () {
+$(document).on('click', ".msgopendialog", function () {
     let scid = $(this).siblings("input").val();
     loadactivemsg(scid);
 });
@@ -182,6 +178,7 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
     else {
         dialogsort(sendFrom);
     }
+    $("#msgenter").attr("disabled", true);
 });
 
 
@@ -337,7 +334,7 @@ function CMessageDialog(id, img, msg, time, acc, read = 1, head="qwer") {
     }
     let str = `<li class="p-2 border-bottom msgopendialogli">
                 <input type="hidden" class="msgcid" value="${id}" />
-                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog" onclick="opendia()">
+                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog">
                     <div class="d-flex flex-row">
                         <div>
                             <img src="data:image;base64,${img}" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
@@ -370,7 +367,7 @@ $("#msgtextinput").on("keypress", function (e) {
 
 function pageload() {
     if ($("#msgopendialogbody").html == "") {
-        /*$("#msgenter").attr("disabled", true);*/
+        $("#msgenter").attr("disabled", true);
     }
     else {
         loadactivemsg($(".msgcid").val());
@@ -423,7 +420,8 @@ $("#msgsearch").click(function () {
         if (data.memberId == memacc || data.memberId == 1 || $(`.msgcid[value="${data.memberId}"]`).length != 0){
             return;
         }
-        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, "", timestamp, data.memberAcc,""));
+        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, "", timestamp, data.memberAcc, ""));
+        $("#msgopendialogbody").children().eq(0).children("a").trigger("click");
     });
 })
 

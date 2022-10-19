@@ -233,5 +233,10 @@ namespace prjiSpanFinal.Controllers
             var sites = _context.RegionLists.Where(a => a.CountryId == site).Select(a => a.RegionName).Distinct();
             return Json(sites);
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
