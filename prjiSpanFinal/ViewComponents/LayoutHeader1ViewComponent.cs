@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -16,6 +17,11 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class LayoutHeader1ViewComponent : ViewComponent
     {
+        private IWebHostEnvironment _enviro;
+        public LayoutHeader1ViewComponent(IWebHostEnvironment p)
+        {
+            _enviro = p;
+        }
         public IViewComponentResult Invoke()
         {
             string ctrlName = RouteData.Values["Controller"].ToString();
@@ -42,7 +48,9 @@ namespace prjiSpanFinal.ViewComponents
                     }
                     else
                     {
-                        b.Mempic = File.ReadAllBytes("~/img/Member/nopicmem.jpg");
+                        string pName = "/img/Member/nopicmem.jpg";
+                        string path = _enviro.WebRootPath + pName;
+                        b.Mempic = File.ReadAllBytes(path);
                     }
                     return View(b);
                 }
