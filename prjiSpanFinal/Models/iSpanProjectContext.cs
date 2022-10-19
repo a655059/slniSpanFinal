@@ -24,7 +24,6 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<ArgumentReason> ArgumentReasons { get; set; }
         public virtual DbSet<ArgumentType> ArgumentTypes { get; set; }
         public virtual DbSet<BigType> BigTypes { get; set; }
-        public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<CommentPic> CommentPics { get; set; }
         public virtual DbSet<CountryList> CountryLists { get; set; }
@@ -65,8 +64,7 @@ namespace prjiSpanFinal.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True;MultipleActiveResultSets=true");
-
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True");
             }
         }
 
@@ -203,27 +201,6 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('大類別1')");
-            });
-
-            modelBuilder.Entity<ChatLog>(entity =>
-            {
-                entity.ToTable("ChatLog");
-
-                entity.Property(e => e.ChatLogId).HasColumnName("ChatLogID");
-
-                entity.Property(e => e.Msg).IsRequired();
-
-                entity.HasOne(d => d.SendFromNavigation)
-                    .WithMany(p => p.ChatLogSendFromNavigations)
-                    .HasForeignKey(d => d.SendFrom)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChatLog_MemberAccount");
-
-                entity.HasOne(d => d.SendToNavigation)
-                    .WithMany(p => p.ChatLogSendToNavigations)
-                    .HasForeignKey(d => d.SendTo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ChatLog_MemberAccount1");
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -483,11 +460,6 @@ namespace prjiSpanFinal.Models
                 entity.Property(e => e.Birthday)
                     .HasColumnType("date")
                     .HasDefaultValueSql("('2000-01-01')");
-
-                entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
