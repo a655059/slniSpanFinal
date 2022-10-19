@@ -1,0 +1,229 @@
+﻿@model prjiSpanFinal.ViewModels.SalesCourt.C關於我ViewModel
+@{
+    ViewData["Title"] = "新增關於我";
+}
+
+
+
+
+<div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;background-color:burlywood">
+    <div>新增關於我</div>
+
+</div>
+
+<!--<div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
+    <div class="bg-warning">付款運送</div>
+    <div class="row">-->
+        @*@foreach(var a in Model){
+            <div class="col">@a.DeliveryMethod</div>
+        }*@
+
+      
+
+        @*@foreach (var a in Model.DeliveryFee)
+        {
+            <div class="col">@a</div>
+
+        }*@
+    <!--</div>
+</div>-->
+
+@*<div>
+        <a asp-action="關於我">去關於我</a>
+    </div>*@
+
+
+<div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
+        <div class="bg-warning rounded">付款/運送</div>
+
+        <div class="row">
+            
+            <div class="col">
+                <div class="text-danger">付款方式(必填)</div>
+            </div>
+            <div class="col">
+                <div class="text-danger">運送方式(必填)</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                @foreach(var item in Model.DeliveryMethod)
+                {
+                    <div class="row">
+                        @item
+                    </div>
+                }
+
+                @*for (int i = 0; i < Model.DeliveryMethod.Count; i++)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <input type="checkbox">
+                        </div>
+                        <div class="col">
+                            <span>@Model.DeliveryMethod[i]</span>
+                        </div>
+                        <div class="col">
+                            <span>@Model.DeliveryFee[i]</span>
+                        </div>
+                    </div>
+                }*@
+
+                @*<textarea class="form-control" style="height: 90px; width:570px;"></textarea>*@
+            </div>
+            <div class="col">
+                
+                    @for (int i = 0; i < Model.DeliveryMethod.Count; i++)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <input type="checkbox">
+                            </div>
+                            <div class="col">
+                                <span>@Model.DeliveryMethod[i]</span>
+                            </div>
+                            <div class="col">
+                                <span>@Model.DeliveryFee[i]</span>
+                            </div>
+                        </div>
+                    }
+               
+                
+                @*<textarea class="form-control" style="height: 90px; width:570px;"></textarea>*@
+        </div>
+
+    </div>
+
+    <div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
+        <div class="bg-warning rounded">賣場資訊</div>
+
+        <div class="row">
+            <div class="col">
+                <div class="text-danger">賣場服務時間(必填)</div>
+                <div class="row my-2">
+                    <div class="col-1">
+                        <input type="checkbox" id="FirstService">
+                    </div>
+                    星期
+                    <div class="col-2">
+                        <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                            @{
+                                for (int i = 0; i < 7; i++)
+                                {
+                                    <option value="@(i+1)">@(i+1)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    ~星期
+                    <div class="col-5">
+                        <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                            @{
+                                for (int i = 0; i < 7; i++)
+                                {
+                                    <option value="@(i+1)">@(i+1)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-1">
+                        <input type="checkbox" id="SecondService">
+                    </div>
+                    時間
+                    <div class="col-2">
+                        <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                            @{
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    <option value="@(i)">0@(i):00</option>
+                                }
+
+                                for (int i = 10; i < 24; i++)
+                                {
+                                    <option value="@(i)">@(i):00</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    點~
+                    <div class="col-2">
+                        <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                            @{
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    <option value="@(i)">0@(i):00</option>
+                                }
+
+                                for (int i = 10; i < 24; i++)
+                                {
+                                    <option value="@(i)">@(i):00</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    點
+                </div>
+                <p class="my-1">
+                    <div class="row">
+                        <div class="col-1">
+                            <input type="checkbox" id="ThirdService">
+                        </div>
+                        每週
+                        <div class="col-4">
+                            <input type="text" name="#" value="" style="width:180px">
+                        </div>
+                        公休
+                    </div>
+
+
+
+                </p>
+            </div>
+            <div class="col">
+                <div class="text-success">新品上架時間</div>
+@*<input type="text" name="#" value="">*@
+<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+<div class="text-success">商品類型</div>
+@*<input type="text" name="#" value="">*@
+<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+<div class="text-success">賣家類型</div>
+@*<input type="text" name="#" value="">*@
+<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col border  border-secondary rounded-3">
+        <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
+            <div class="bg-warning rounded-2">售後服務</div>
+@*<input type="text" name="#" value="">*@
+<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+    </div>
+</div>
+<div class="col border  border-secondary  rounded-3">
+    <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
+        <div class="bg-warning rounded-2">注意事項</div>
+@*<input type="text" name="#" value="">*@
+<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $("sub").click(
+            function () {
+
+                console.log($("a1").val);
+            }
+        )
+
+    </script>
+}
