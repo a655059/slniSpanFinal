@@ -1,41 +1,13 @@
 ﻿@model prjiSpanFinal.ViewModels.Category.CCategoryIndex
 @addTagHelper *, prjiSpanFinal
 @{
-    ViewData["Title"] = "Index";
-
 }
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
 }
 <div class="CategoryBody">
-    <div class="CategoryHeader">
-        @{
-            <div class="CategoryHeaderTitle">
-                <span class="CategoryHeaderTitleText">@Model.SearchType.BigTypeName</span>
-                <span class="CategoryHeaderStockText">(@Model.cShowItem.Count)</span>
-            </div>
-            <div class="CategoryHeaderBody">
-                @foreach (var item in Model.lSmallType)
-                {
-                    <a class="CategoryHeaderItem linknoline" href="@Url.Content("~/Category/SmallType"+"?id="+item.SmallTypeId)">@item.SmallTypeName</a>
-                }
-            </div>
-
-
-        }
-    </div>
-
-    <div class="cateAD">
-        <a href="">
-            <img src="~/img/Category/CateAD.png" />
-        </a>
-    </div>
     <div class="row">
         <div class="filter-body d-flex  flex-wrap align-content-start">
-            @*<a class="linknoline filter-alltype" href="@Url.Content("~/Category/Index")">
-                    <i class="fa fa-bars"></i>
-                    <span class="fatitle">全部分類</span>
-                </a>*@
             <div class="filter-types" id="filterTspace">
                 <ul id="filterT-ul">
                     <li>
@@ -68,31 +40,6 @@
                 </div>
                 <div class="ffsplits">
                     <div class="ff-typestitle w-100 p-1">
-                        分類
-                    </div>
-                    <div class="ff-typestitle-sel">
-                        @{
-
-                            foreach (var item in Model.lSmallType)
-                            {
-                                int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
-                                    <div class="w-100 p-1 ff-types-type">
-                                        <input type="checkbox" id="ffcb_@item.SmallTypeId" />
-                                        <label for="ffcb_@item.SmallTypeId">
-                                            <span class="ff-types-typeid">
-                                                @item.SmallTypeName
-                                            </span>
-                                            <span class="ff-types-typecount">
-                                                (@stock)
-                                            </span>
-                                        </label>
-                                    </div>
-                            }
-                        }
-                    </div>
-                </div>
-                <div class="ffsplits">
-                    <div class="ff-typestitle w-100 p-1">
                         價格區間
                     </div>
                     <div class="d-flex w-100 flex-row ff-types-prices">
@@ -115,29 +62,29 @@
                 <div class="itembody-filter1 "><span>篩選</span></div>
                 <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
                     @Html.ActionLink("綜合排序",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 1 },
+                 "SmallType", "Category",
+                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 1 },
                  new { @class = "itembody-filter2-btn linknoline" })
                     @Html.ActionLink("最新商品",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 2 },
+                 "SmallType", "Category",
+                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 2 },
                  new { @class = "itembody-filter2-btn linknoline" })
                     @Html.ActionLink("熱銷商品",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 3 },
+                 "SmallType", "Category",
+                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 3 },
                  new { @class = "itembody-filter2-btn linknoline" })
                     <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         價格排序
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=4")">
+                            <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=4")">
                                 <i class="fa fa-arrow-down"></i>
                                 價格：由高至低
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=5")">
+                            <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=5")">
                                 <i class="fa fa-arrow-up"></i>
                                 價格：由低至高
                             </a>

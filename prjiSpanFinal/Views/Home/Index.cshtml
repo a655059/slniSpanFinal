@@ -12,35 +12,36 @@
         <div class="HomepageIndex">
             <section class="rounded-3 ">
                 <div class="row justify-content-between">
+                    <!--類別列表-->
                     <div class="col-3 listview rounded-start">
                         <div class="listtype accordion" id="accordionTypeList">
                             @foreach (var Big in Model.lBigType)
                             {
-                            <div class="list-group listview-lg position-relative accordion-item">
-                                <div class="list-group-item d-flex align-items-center justify-content-between accordion-header linknoline firstLevel " id="heading_@Big.BigTypeId" data-bs-toggle="collapse" href="#collapse_@Big.BigTypeId" role="button" aria-expanded="false" aria-controls="collapse_@Big.BigTypeId">
-                                    <a class=" linknoline listtypeTitleLink " href="@Url.Content("~/Category/Index"+"?id=" + Big.BigTypeId)">
-                                        <span>@Big.BigTypeName</span>
-                                    </a>
-                                    <span class="text-end"><i class="fa fa-bars"></i></span>
-                                </div>
-                                <div class="accordion-collapse collapse secondLevel" id="collapse_@Big.BigTypeId" aria-labelledby="heading_@Big.BigTypeId" data-bs-parent="#accordionTypeList">
-                                    <div class="list-group ">
-                                        @foreach (var small in Model.lSmallType)
-                                        {
-                                            if (small.BigTypeId == Big.BigTypeId)
+                                <div class="list-group listview-lg position-relative accordion-item">
+                                    <div class="list-group-item d-flex align-items-center justify-content-between accordion-header linknoline firstLevel " id="heading_@Big.BigTypeId" data-bs-toggle="collapse" href="#collapse_@Big.BigTypeId" role="button" aria-expanded="false" aria-controls="collapse_@Big.BigTypeId">
+                                        <a class=" linknoline listtypeTitleLink " href="@Url.Content("~/Category/Index"+"?id=" + Big.BigTypeId)">
+                                            <span>@Big.BigTypeName</span>
+                                        </a>
+                                        <span class="text-end"><i class="fa fa-bars"></i></span>
+                                    </div>
+                                    <div class="accordion-collapse collapse secondLevel" id="collapse_@Big.BigTypeId" aria-labelledby="heading_@Big.BigTypeId" data-bs-parent="#accordionTypeList">
+                                        <div class="list-group ">
+                                            @foreach (var small in Model.lSmallType)
                                             {
-                                                <a class="list-group-item w-100 d-flex align-content-center linknoline listtypeSmalltype" href="@Url.Content("~/Category/SmallType"+"?id=" + small.SmallTypeId)">
-                                                    <span>@small.SmallTypeName</span>
-                                                </a>
+                                                if (small.BigTypeId == Big.BigTypeId)
+                                                {
+                                                    <a class="list-group-item w-100 d-flex align-content-center linknoline listtypeSmalltype" href="@Url.Content("~/Category/SmallType"+"?id=" + small.SmallTypeId)">
+                                                        <span>@small.SmallTypeName</span>
+                                                    </a>
+                                                }
                                             }
-                                        }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             }
                         </div>
                     </div>
-
+                    <!--/類別列表-->
                     <!--Carouset-->
                     <div class="col-9 align-items-center ">
                         <div class="row cateheader">

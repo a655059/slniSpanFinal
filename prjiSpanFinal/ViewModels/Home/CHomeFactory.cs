@@ -10,6 +10,8 @@ namespace prjiSpanFinal.ViewModels.Home
     {
         public List<Product> rdnProd(List<Product> list)
         {
+            if (list == null)
+                return list;
             var randowlist = list.OrderBy(p => Guid.NewGuid()).ToList();
             return randowlist;
         }
@@ -17,10 +19,19 @@ namespace prjiSpanFinal.ViewModels.Home
         {
             iSpanProjectContext db = new iSpanProjectContext();
             List<CShowItem> res = new List<CShowItem>();
-            foreach(var item in list)
+            if (list == null)
             {
-                decimal x = db.ProductDetails.Where(p => p.Quantity > 0&&p.ProductId==item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
+                return res;
+            }
+            foreach (var item in list)
+            {
+                if (item.ProductStatusId != 0)
+                {
+                    continue;
+                }
+                decimal x = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
                 decimal y = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderByDescending(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
+                byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
                 List<decimal> dlist = new List<decimal>();
                 if (x == y)
                     dlist.Add(x);
@@ -29,20 +40,25 @@ namespace prjiSpanFinal.ViewModels.Home
                     dlist.Add(x);
                     dlist.Add(y);
                 }
-                CShowItem a = new CShowItem
-                {
-                    Product=item,
-                    Price = dlist,
-                    Pic = db.ProductPics.Where(p=>p.ProductId==item.ProductId).Select(p => p.Pic).FirstOrDefault(),
-                };
+                CShowItem a = new CShowItem();
+                a.Product = item;
+                a.Price = dlist;
+                if (pic != null)
+                    a.Pic = pic;
                 res.Add(a);
             }
             return res;
         }
 
-        public List<CShowItem> toShowMore(List<CShowItem> list,int a,int b)
+        public List<CShowItem> toShowMore(List<CShowItem> list, int a, int b)
         {
             List<CShowItem> res = list.Skip(a).Take(b).ToList();
+            return res;
+        }
+        public List<SmallType> searchTypeSmall(BigType search)
+        {
+            iSpanProjectContext db = new iSpanProjectContext();
+            List<SmallType> res = db.SmallTypes.Where(t => t.BigTypeId == search.BigTypeId).ToList();
             return res;
         }
     }
