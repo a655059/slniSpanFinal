@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewComponents;
 using prjiSpanFinal.ViewModels.Member;
+using prjiSpanFinal.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
@@ -50,7 +54,7 @@ namespace prjiSpanFinal.Controllers
             }
             return Content("0", "text/plain", Encoding.UTF8); ;
         }
-
+        
         public IActionResult Edit(int? id)
         {
             if (id != null)
@@ -106,6 +110,8 @@ namespace prjiSpanFinal.Controllers
 
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
+
+
 
             byte[] imgByte = null;
             using (var memoryStream = new MemoryStream())

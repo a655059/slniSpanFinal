@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Header.CHeader1ViewModel
 
 <div class="p-2 layoutheader1bg text-white header1nav" id="header1">
     <div class="container-lg">
@@ -9,7 +9,7 @@
             <ul class="nav col-8 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">首頁</a></li>
                 <li><a href="@Url.Content("~/Management/PowerBi")" class="nav-link px-2 text-white navbody">後台</a></li>
-                <li><a href="@Url.Content("~/Seller/Index")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
+                <li><a href="@Url.Content("~/Seller/Center")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
                 <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">會員中心</a></li>
                 @*<li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
             <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
@@ -66,7 +66,7 @@
                 <!--帳號登入/創建-->
             </div>
             @{
-                if (Model == 0)
+                if (Model.Mempic == null)
                 {
                     <div class="text-end navlog col-2">
                         <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
@@ -81,7 +81,7 @@
                 {
                     <div class="text-end navlog col-2 dropdown">
                         <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white; ">
-                            <img src="~/img/Member/pekopeko.jpg" width="40" height="40" style="border-radius: 50%;" /><span style="font-size:80%; padding:3px;">pekopeko</span>
+                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="40" height="40" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="@Url.Content("~/Member/Edit")">會員資料</a></li>

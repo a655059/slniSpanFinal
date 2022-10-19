@@ -57,14 +57,14 @@
 
 
 @*原本的欄位*@
-<div class="d-flex justify-content-start ">
+<div class="d-flex justify-content-center ">
     @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
    
     <span class="text-danger"></span>
     <section class="section d-flex justify-content-center">
         <table class="table w-100 ">
             <thead>
-                <tr>
+                <tr class="d-flex justify-content-center">
                     <th class="col 規格列表">順序</th>
                     <th class="col 規格列表">商品數</th>
                     <th class="col 規格列表">類別</th>
@@ -72,7 +72,7 @@
                     <th class="col 規格列表">修改</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody class="d-flex justify-content-center"></tbody>
         </table>
     </section>
 </div>
@@ -119,14 +119,14 @@
 </div>
 
 
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">修改 modal</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body">-->
 
                 @*<label>順序:</label>
                 <input type="text" id="text1" class="form-control">
@@ -136,9 +136,9 @@
                 <input type="text" id="text2" class="form-control">
                 <br />*@
 
-                <label>類別名稱:</label>
+                <!--<label>類別名稱:</label>
                 <input type="text" id="text_alter" class="form-control">
-                <br />
+                <br />-->
 
                 @*<label>排序方式:</label>
                 <input type="text" id="text4" class="form-control">
@@ -148,14 +148,14 @@
                 <input type="text" id="text5" class="form-control">
                 <br />*@
 
-            </div>
+            <!--</div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button id="save_alter" type="button" class="btn btn-primary">新增</button>
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 
 @section Scripts{
@@ -165,14 +165,16 @@
        
 
         let save = document.getElementById("save");
-        let save_alter;
+        /*let save_alter = document.getElementById("save");*/
+        
+        
      
         //讀取text
         function clickValue() {
             //document.getElementById("text1").value = '';
             //document.getElementById("text2").value = '';
             document.getElementById("text3").value = '';
-            document.getElementById("text_alter").value = '';
+           // document.getElementById("text_alter").value = '';
         }
 
         /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
@@ -180,18 +182,44 @@
 
         let id;
         //下面要做黃色修改
-        
 
-        function sv_alter() {
-            /*let a = document.getElementById(this.s  id);*/
-            id = $(save_alter).prev("id");
-            if (id != '') {
-                console.log(id);
-                console.log(this);
-            }
+        //save_alter.addEventListener("click", function () {
+        //    /*let a = document.getElementById(this.s  id);*/
+        //    id = $(this).prev("id");
+        //    if (id != '') {
+        //        console.log(id);
+        //        console.log(this);
+        //    }
 
-            /*let now = document.*/
-        }
+        //    /*let now = document.*/
+        //})
+        //當我按下修改的按鈕要帶入目前row裡面新增的資料
+        //let alter;
+        //alter.addEventListener("click", function () {
+        //    /*$(alter).*/
+        //})
+
+        ////當我row的modal按下新增要把modal的畫面關掉
+        //let save_alter = document.getElementById("save_alter");
+
+        //save_alter.addEventListener("click", function () {
+        //    var myModalEl = document.getElementById('exampleModal2');
+        //    var modal = bootstrap.Modal.getInstance(myModalEl)
+        //    modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
+            
+        //})
+
+
+        //當modal畫面關掉的事件發生
+        //const mymodale = document.getElementById('exampleModal2')
+        //mymodale.addEventListener('hidden.bs.modal',function(event) {
+        //    id = $(this).prev(id);
+        //    if (id != '') {
+        //        console.log(id);
+        //        console.log(this);
+        //    }
+
+        //})
 
         save.addEventListener("click", function () {
             count++;
@@ -216,7 +244,7 @@
                 }
                 /*產生刪除按鈕在modal的畫面*/
                 let td = document.createElement('td');
-                td.innerHTML = `<button type="button" class="btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
+                td.innerHTML = `<button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
                 /*let a = td.children[0];*/
                 let a = td;
                 a.addEventListener('click', () => {
@@ -230,27 +258,17 @@
                 clickValue();
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
-                //modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
-                modal.toggle();
+                modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
+                //modal.toggle();
 
 
-                let td2 = document.createElement('td');
-                td2.innerHTML = `<button type="button" style="font-size:0.8rem" class="btn_alt btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">修改</button>`;
-
-                //let b = td2.children[0];
-                //b.addEventListener('click', () => {
-                //    let parent = b.parentNode.parentNode;
-                //    parent.children[2].setAttribute("value", "test");
-                //})
-                Tr.appendChild(td2);
-                tbody.insertBefore(Tr, tbody.children[0])
-                //clickValue();
-                //var myModal2 = document.getElementById('exampleModal2');
-                //var modal2 = bootstrap.Modal.getInstance(myModal2);
-                save_alter.addEventListener("click", sv_alt);
-                save_alter = document.getElementsByClassName("btn_alt");
-
-
+                //let td2 = document.createElement('td');
+                //td2.innerHTML = `<button type="button" style="font-size:0.8rem" class="btn_alt btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">修改</button>`;
+                //alter = document.getElementsByClassName("btn_alt");
+              
+                //Tr.appendChild(td2);
+                //tbody.insertBefore(Tr, tbody.children[0])
+           
             }
             else {
                 alert("項目,數量和價格不可為空值");
@@ -258,14 +276,6 @@
 
         })
 
-
-
-
-        //$("change").change(function () {
-        //    $("change").addClass("d-none");
-        //    //$("change").attr();
-        //    //$("change").prop();
-        //})
 
     </script>
 }

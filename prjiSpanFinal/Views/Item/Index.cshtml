@@ -82,35 +82,48 @@
                 <div class="d-flex justify-content-start align-items-center mb-1">
                     <div class="itemKey">直購價:</div>
                     @{
-                        string price = $"$499";
+                        string price = "";
+                        List<decimal> prices = new List<decimal>();
+                        foreach (var p in Model.productDetails)
+                        {
+                            prices.Add(p.UnitPrice);
+                        }
+                        decimal maxPrice = prices.Max();
+                        decimal minPrice = prices.Min();
+                        if (minPrice == maxPrice)
+                        {
+                            price = "$" + minPrice.ToString("0");
+                        }
+                        else
+                        {
+                            price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
+                        }
                         <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
                     <input type="hidden" name="purchaseProduct" value="2113" />
-                    @{
-
-                        <div class="itemKey">規格:</div>
-                        <div class="itemStyleContent d-flex flex-wrap ms-3">
-                            @{
-
-                                for (int i = 1; i <= 9; i++)
-                                {
-
-                                    string style = $"樣式{i}";
-                                    string imgSrc = $"~/img/product0{i}.png";
-                                    string idValue = $"id{i}";
-                                    <div class="ms-1 mb-1">
-                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@idValue" autocomplete="off" value="2113">
-                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@idValue">@style</label>
-                                        <div class="d-none price">499</div>
-                                        <div class="d-none qty">55</div>
-                                        <img class="d-none itemStyleImg" src="~/img/product05.png" />
-                                    </div>
-                                }
+                    <div class="itemKey">規格:</div>
+                    <div class="itemStyleContent d-flex flex-wrap ms-3">
+                        @{
+                            foreach (var i in Model.productDetails)
+                            {
+                                string style = i.Style;
+                                string base65 = Convert.ToBase64String(i.Pic);
+                                string imgSrc = $"data:imgae/gif;base64,{base65}";
+                                int productDetailID = i.ProductDetailId;
+                                string labelId = "style" + productDetailID;
+                                string unitPrice = i.UnitPrice.ToString("0");
+                                int quantity = i.Quantity;
+                                <div class="ms-1 mb-1">
+                                    <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                    <div class="d-none price">@unitPrice</div>
+                                    <img class="d-none itemStyleImg" src="@imgSrc" />
+                                </div>
                             }
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
                 <div class="d-flex justify-content-start align-items-center mb-3">
                     <label for="itemCount" class="itemKey">數量:</label>
@@ -286,6 +299,58 @@
             }
             console.log(data);
         })
+
+        $(".addToCart").click(async function () {
+            if ($("input[name='purchaseStyle']:checked").length != 1) {
+                alert("請選擇一個規格");
+                return false;
+            }
+            else {
+                const productDetailID = $("input:checked").val();
+                const quantity = $("#itemCount").val();
+                const requestUrl = "@Url.Content("~/Delivery/AddItemToCart")" + `?productDetailID=${productDetailID}&quantity=${quantity}`;
+                const response = await fetch(requestUrl);
+                const data = await response.text();
+
+                $(".dollarIcon").children().html(quantity);
+                $(".dollarIcon").animate({
+                    top: "-=50",
+                    opacity: "1",
+                    zIndex: "0"
+                }, 50).animate({
+                    top: "-=30",
+                    opacity: "0",
+                }, 500).animate({
+                    top: "+=80",
+                    zIndex:"-1"
+                });
+                $(".itemRemainingQty").html("還剩" + data + "件");
+                $("input[name='purchaseCount']").attr("max", Number(data))
+                if ($("input[name='purchaseCount']").val() > Number(data)) {
+                    $("input[name='purchaseCount']").val(Number(data));
+                }
+                if (Number(data) <= 0) {
+                    $("input:checked").attr("disabled", true);
+                    $("input[name='purchaseCount']").val(Number(data));
+                }
+            }
+        });
+        $(".purchaseStyle").click(async function () {
+            let price = $(this).siblings(".price").html();
+            $(".itemPrice").html(price);
+            $(this).removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-danger").closest("div").siblings().children("label").removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-outline-secondary");
+            const productDetailID = $(this).siblings("input").val();
+            const requestUrl = "@Url.Content("~/Delivery/ShowQtyToSpecificMember")" + `?productDetailID=${productDetailID}`;
+            const response = await fetch(requestUrl);
+            const data = await response.text();
+            $(".itemRemainingQty").html("還剩" + data + "件");
+            $("input[name='purchaseCount']").attr("max", Number(data))
+        });
+        
+
+
+
+
         $(function () {
             $(".partialView").load('@Url.Action("Description")');
         });

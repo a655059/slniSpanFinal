@@ -1,0 +1,46 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.Product>
+
+@{
+    ViewData["Title"] = "newProductList2";
+}
+
+@section Styles{
+    <style>
+        table{
+            font-size:54px;
+            height:500px;
+        }
+        th{
+            text-align:center;  
+        }
+    </style>
+}
+
+<table class="table" width="100%" style="table-layout:fixed">
+    <thead>
+        <tr>
+                <th align="center" >
+                產品描述
+            </th>
+                <th align="center" >
+                最後編輯時間
+            </th>
+                <th align="center" ></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <td align="center" valign="middle">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+                <td align="center" valign="middle">
+                @Html.DisplayFor(modelItem => item.EditTime)
+            </td>
+                <td align="center" valign="middle">
+                @Html.ActionLink("回到商品列表", "newProductList","newManagement",null,new{@class="btn btn-primary"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
