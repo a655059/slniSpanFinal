@@ -68,7 +68,7 @@
                     <input class="form-control-plaintext" value="@IsTWs" readonly>
                 </td>
                 <td>
-                    <input class="form-control-plaintext" value="@item.Birthday" readonly>
+                    <input class="form-control-plaintext" value="@item.Birthday.ToString("yyyy/MM/dd")" readonly>
                 </td>
                 <td >
                     @Html.ActionLink("回到會員列表", "MemberList","newManagement",null,new{@class="btn btn-primary"})
