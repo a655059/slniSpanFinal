@@ -140,42 +140,39 @@ namespace prjiSpanFinal.Controllers
                 int memberID = memberAccount.MemberId;
                 iSpanProjectContext dbContext = new iSpanProjectContext();
                 var allOrderDetail = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => i);
-
+                
                 if (allOrderDetail.Count() > 0)
                 {
                     List<CDeliveryOrderViewModel> cDeliveryOrderList = new List<CDeliveryOrderViewModel>();
-                    //var orders = dbContext.Orders.Where(i => i.MemberId == memberID && i.StatusId == 1).Select(i => i).ToList();
-                    foreach (var orderDetail in allOrderDetail)
+                    var allInfo = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => new {
+                        sellerID = i.ProductDetail.Product.MemberId,
+                        sellerName = i.ProductDetail.Product.Member.Name,
+                        productName = i.ProductDetail.Product.ProductName,
+                        orderDetail = i,
+                        productDetail = i.ProductDetail
+                    });
+
+                    foreach (var info in allInfo)
                     {
-                        int sellerID = orderDetail.ProductDetail.Product.Member.MemberId;
-                        string sellerName = orderDetail.ProductDetail.Product.Member.Name;
-                        byte[] productDetailPic = orderDetail.ProductDetail.Pic;
-                        string productName = orderDetail.ProductDetail.Product.ProductName;
-                        int purchaseQuantity = orderDetail.Quantity;
-                        int productQuantity = orderDetail.ProductDetail.Quantity;
-                        string style = orderDetail.ProductDetail.Style;
-                        int orderDetailID = orderDetail.OrderDetailId;
-                        decimal unitPrice = orderDetail.ProductDetail.UnitPrice;
+                        int sellerID = info.sellerID;
+                        string sellerName = info.sellerName;
+                        string productName = info.productName;
+                        OrderDetail orderDetail = info.orderDetail;
+                        ProductDetail productDetail = info.productDetail;
                         CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
                         {
                             sellerID = sellerID,
                             sellerName = sellerName,
-                            productDetailPic = productDetailPic,
                             productName = productName,
-                            purchaseQuantity = purchaseQuantity,
-                            productQuantity = productQuantity,
-                            style = style,
-                            orderDetailID = orderDetailID,
-                            unitPrice = unitPrice
+                            orderDetail = orderDetail,
+                            productDetail = productDetail
                         };
                         cDeliveryOrderList.Add(cDeliveryOrder);
-                        
                     }
                     CDeliveryShowCartViewModel cDeliveryShowCart = new CDeliveryShowCartViewModel
                     {
                         cart = cDeliveryOrderList
                     };
-
                     return View(cDeliveryShowCart);
                 }
                 else
@@ -188,6 +185,33 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Login", "Member");
             }
         }
+
+        public IActionResult DeleteOrderDetail(int orderDetailID)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var orderID = dbContext.OrderDetails.Where(i => i.OrderDetailId == orderDetailID).Select(i => i.OrderId).FirstOrDefault();
+            int orderDetailCount = dbContext.OrderDetails.Where(i => i.OrderId == orderID).Select(i => i).Count();
+            if (orderDetailCount == 1)
+            {
+                var orderDetail = dbContext.OrderDetails.Where(i => i.OrderDetailId == orderDetailID).Select(i => i).FirstOrDefault();
+                dbContext.OrderDetails.Remove(orderDetail);
+                dbContext.SaveChanges();
+                var order = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                dbContext.Orders.Remove(order);
+                dbContext.SaveChanges();
+                return Content("0");
+            }
+            else
+            {
+                var orderDetail = dbContext.OrderDetails.Where(i => i.OrderDetailId == orderDetailID).Select(i => i).FirstOrDefault();
+                dbContext.OrderDetails.Remove(orderDetail);
+                dbContext.SaveChanges();
+                return Content("1");
+            }
+            
+            
+        }
+
         public IActionResult ShowNoItemInCart()
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();

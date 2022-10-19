@@ -7,14 +7,20 @@
 
 
 <div class="border rounded-2 p-2 w-100">
-    <div class="d-flex justify-content-between mb-3 fw-bold">
-        <div>全站折扣</div>
-        <button class="selectCoupon border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">選擇折價券<span class="ms-2">></span></button>
-    </div>
+    @if (Model == 1)
+    {
 
+    }
+    else
+    {
+        <div class="d-flex justify-content-between mb-3 fw-bold">
+            <div>全站折扣</div>
+            <button class="selectCoupon border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">選擇折價券<span class="ms-2">></span></button>
+        </div>
+    }
     <div class="d-flex justify-content-between mb-3">
         <div>小計</div>
-        <div>$<span id="smallPrice">499</span></div>
+        <div>$<span id="smallPrice">0</span></div>
     </div>
     <div class="divDiscount d-flex justify-content-between mb-3 d-none">
         <div class="selectedCouponID">折扣碼:<span class="text-danger"></span></div>
@@ -47,7 +53,7 @@
     }
     else
     {
-        <a href="@Url.Content("~/Delivery/CheckoutConfirm")"><button class="btn btn-warning w-100">去結帳</button></a>
+        <a href="@Url.Content("~/Delivery/CheckoutConfirm")"><button class="btn btn-warning w-100">確認</button></a>
     }
 </div>
 
