@@ -362,6 +362,12 @@ $.ajaxSetup({
     async: false
 });
 
+$("#msgtextinput").on("keypress", function (e) {
+    if (e.which == 13) {
+        $("#msgenter").trigger("click");
+    }
+});
+
 function pageload() {
     if ($("#msgopendialogbody").html == "") {
         /*$("#msgenter").attr("disabled", true);*/
