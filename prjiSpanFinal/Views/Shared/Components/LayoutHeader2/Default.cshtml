@@ -15,7 +15,7 @@
             <!-- SEARCH BAR -->
             <div class="col-md-7 align-self-center loschbar">
                 <div class="input-group mb-1">
-                    <input type="text" id="SearchInputTxT" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" id="SearchInputTxT" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="SearchInputTxT" aria-describedby="basic-addon2">
                     <a id="SearchInputbtn" class="btn btn-outline-warning btn-lg" href="#"><i class="fa fa-search"></i></a>
                 </div>
                 @{ int x = 8;
@@ -55,16 +55,8 @@
     </div>
     <!-- container -->
 </div>
-@section Script{
+@section Scripts{
     <script>
-    let searchInput = document.querySelector("#SearchInputTxT");
-    let searchBtn = document.querySelector("#SearchInputbtn");
 
-        searchInput.addEventListener("change", event => {
-
-    let searchkeyword = document.querySelector("#SearchInputTxT").value;
-    @*let url = `@Url.Content("~/Category/SearchResult/?keyword="+ searchkeyword + ")"`;
-                searchBtn.setAttribute("href", url);*@
-            })
     </script>
 }

@@ -11,7 +11,7 @@
             <div class="filter-types" id="filterTspace">
                 <ul id="filterT-ul">
                     <li>
-                        <a href="@Url.Content("~/Category/Index"+"?id="+Model.SearchType.BigTypeId)" class="linknoline">
+                        <a href="@Url.Content("~/Category/Index" + "?id=" + Model.SearchType.BigTypeId)" class="linknoline">
                             <span class="fticon">
                                 <i class="fa-solid fa-circle-play"></i>
                             </span>
@@ -24,93 +24,101 @@
                             if (item.BigTypeId == Model.SearchType.BigTypeId)
                             {
                                 <li>
-                                    <a href="@Url.Content("~/Category/SmallType"+"?id="+item.SmallTypeId)" class="linknoline">
+                                    <a href="@Url.Content("~/Category/SmallType" + "?id=" + item.SmallTypeId)" class="linknoline">
                                         <span class="fttitle">@item.SmallTypeName</span>
                                     </a>
                                 </li>
                             }
                         }
+
+
                     }
                 </ul>
             </div>
-            <div class="filter-filter w-100">
-                <div class="ff-title d-flex justify-content-center w-100">
-                    <span><i class="fa fa-filter"></i></span>
-                    <span>條件篩選</span>
-                </div>
-                <div class="ffsplits">
-                    <div class="ff-typestitle w-100 p-1">
-                        價格區間
+            @{ if (Model.cShowItem.Count > 0)
+                {
+                    <div class="filter-filter w-100">
+                        <div class="ff-title d-flex justify-content-center w-100">
+                            <span><i class="fa fa-filter"></i></span>
+                            <span>條件篩選</span>
+                        </div>
+                        <div class="ffsplits">
+                            <div class="ff-typestitle w-100 p-1">
+                                價格區間
+                            </div>
+                            <div class="d-flex w-100 flex-row ff-types-prices">
+                                <div class="ff-types-prices-child2">
+                                    <input placeholder="＄最小值" />
+                                </div>
+                                <div class="ff-types-prices-child1 text-center opacity-50">
+                                    ─
+                                </div>
+                                <div class="ff-types-prices-child2">
+                                    <input placeholder="＄最大值" />
+                                </div>
+                            </div>
+                            <button class="w-100 text-center ff-types-prices-btn">搜尋</button>
+                        </div>
                     </div>
-                    <div class="d-flex w-100 flex-row ff-types-prices">
-                        <div class="ff-types-prices-child2">
-                            <input placeholder="＄最小值" />
-                        </div>
-                        <div class="ff-types-prices-child1 text-center opacity-50">
-                            ─
-                        </div>
-                        <div class="ff-types-prices-child2">
-                            <input placeholder="＄最大值" />
-                        </div>
-                    </div>
-                    <button class="w-100 text-center ff-types-prices-btn">搜尋</button>
-                </div>
-            </div>
+                } }
         </div>
         <div class="itembody">
-            <div class="itembody-filter d-flex align-items-center justify-content-between">
-                <div class="itembody-filter1 "><span>篩選</span></div>
-                <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                    @Html.ActionLink("綜合排序",
-                 "SmallType", "Category",
-                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 1 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    @Html.ActionLink("最新商品",
-                 "SmallType", "Category",
-                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 2 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    @Html.ActionLink("熱銷商品",
-                 "SmallType", "Category",
-                 new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 3 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        價格排序
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=4")">
-                                <i class="fa fa-arrow-down"></i>
-                                價格：由高至低
+            @{ if (Model.cShowItem.Count > 0)
+                {
+                    <div class="itembody-filter d-flex align-items-center justify-content-between">
+                        <div class="itembody-filter1 "><span>篩選</span></div>
+                        <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                            @Html.ActionLink("綜合排序",
+                         "SmallType", "Category",
+                         new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 1 },
+                         new { @class = "itembody-filter2-btn linknoline" })
+                            @Html.ActionLink("最新商品",
+                         "SmallType", "Category",
+                         new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 2 },
+                         new { @class = "itembody-filter2-btn linknoline" })
+                            @Html.ActionLink("熱銷商品",
+                         "SmallType", "Category",
+                         new { id = Model.SearchSmallType.SmallTypeId, sortOrder = 3 },
+                         new { @class = "itembody-filter2-btn linknoline" })
+                            <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                價格排序
                             </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=5")">
-                                <i class="fa fa-arrow-up"></i>
-                                價格：由低至高
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="itemcol">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=4")">
+                                        <i class="fa fa-arrow-down"></i>
+                                        價格：由高至低
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Content("~/Category/SmallType/"+Model.SearchSmallType.SmallTypeId+"?sortOrder=5")">
+                                        <i class="fa fa-arrow-up"></i>
+                                        價格：由低至高
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                } }
+                <div class="itemcol">
 
-                @{
-                    if (Model.cShowItem.Count > 0)
-                    {
-                        @foreach (var item in Model.cShowItem)
+                    @{
+                        if (Model.cShowItem.Count > 0)
                         {
-                            @await Component.InvokeAsync("CategoryShow", new { shopProduct = item });
+                            @foreach (var item in Model.cShowItem)
+                            {                                
+                                @await Component.InvokeAsync("CategoryShow", new { shopProduct = item });
+                            }
+                        }
+                        else
+                        {
+                            <div>
+                                暫待新增商品
+                            </div>
                         }
                     }
-                    else
-                    {
-                        <div>
-                            暫待新增商品
-                        </div>
-                    }
-                }
+                </div>
             </div>
-        </div>
     </div>
 </div>
 
