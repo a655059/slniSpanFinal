@@ -146,7 +146,7 @@ namespace prjiSpanFinal.Controllers
                     List<CDeliveryOrderViewModel> cDeliveryOrderList = new List<CDeliveryOrderViewModel>();
                     var allInfo = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => new {
                         sellerID = i.ProductDetail.Product.MemberId,
-                        sellerName = i.ProductDetail.Product.Member.Name,
+                        sellerAcc = i.ProductDetail.Product.Member.MemberAcc,
                         productName = i.ProductDetail.Product.ProductName,
                         orderDetail = i,
                         productDetail = i.ProductDetail,
@@ -156,14 +156,14 @@ namespace prjiSpanFinal.Controllers
                     foreach (var info in allInfo)
                     {
                         int sellerID = info.sellerID;
-                        string sellerName = info.sellerName;
+                        string sellerAcc = info.sellerAcc;
                         string productName = info.productName;
                         OrderDetail orderDetail = info.orderDetail;
                         ProductDetail productDetail = info.productDetail;
                         CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
                         {
                             sellerID = sellerID,
-                            sellerName = sellerName,
+                            sellerAcc = sellerAcc,
                             productName = productName,
                             orderDetail = orderDetail,
                             productDetail = productDetail
