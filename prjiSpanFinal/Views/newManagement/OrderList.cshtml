@@ -29,7 +29,7 @@
                     下訂日期
                 </th>
                 <th>
-                    到貨日期
+                    收貨地址
                 </th>
                 <th>
                     訂單完成日期
@@ -72,13 +72,13 @@
                     @Html.DisplayFor(modelItem => item.Order.MemberId)
                 </td>
                 <td >
-                    @Html.DisplayFor(modelItem => item.Order.OrderDatetime)
+                    <input value="@item.Order.OrderDatetime.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td >
                     @Html.DisplayFor(modelItem => item.Order.RecieveAdr)
                 </td>
                 <td >
-                    @Html.DisplayFor(modelItem => item.Order.FinishDate)
+                    <input value="@item.Order.FinishDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td >
                     @Html.DisplayFor(modelItem => item.CouponName)
@@ -90,13 +90,13 @@
                     @Html.DisplayFor(modelItem => item.ShipperName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Order.PaymentDate)
+                    <input value="@item.Order.PaymentDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Order.ShippingDate)
+                    <input value="@item.Order.ShippingDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Order.ReceiveDate)
+                    <input value="@item.Order.ReceiveDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td >
                     @Html.DisplayFor(modelItem => item.PaymentName)
@@ -149,6 +149,7 @@
                 let data = await response.text();
                 if (data == 1) {
                     $(this).closest("td").siblings().find(".statusname").val("已到貨");
+
                 }
             })
         }

@@ -5,9 +5,7 @@ using prjiSpanFinal.ViewModels.newManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using X.PagedList;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -376,6 +374,7 @@ namespace prjiSpanFinal.Controllers
                     where d.OrderId == id
                     select d;
             D.First().StatusId = 8;
+            D.First().FinishDate = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
