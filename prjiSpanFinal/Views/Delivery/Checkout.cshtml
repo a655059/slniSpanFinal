@@ -1,6 +1,21 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Delivery.CDeliveryCheckoutViewModel
+@using prjiSpanFinal.ViewModels.Delivery
 @{
     ViewData["Title"] = "Checkout";
+    List<int> sellerIDList = new List<int>();
+    List<string> sellerAccList = new List<string>();
+    foreach(var i in Model.sellerShipperPayments)
+    {
+        if (sellerIDList.Contains(i.seller.MemberId))
+        {
+            continue;
+        }
+        else
+        {
+            sellerIDList.Add(i.seller.MemberId);
+            sellerAccList.Add(i.seller.MemberAcc);
+        }
+    }
 }
 
 @section Styles{
@@ -11,14 +26,19 @@
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
 <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-    <label class="btn btn-outline-warning" for="btnradio1">林小偉的賣場</label>
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-    <label class="btn btn-outline-warning" for="btnradio2">林大偉的賣場</label>
+    <label class="btn btn-outline-warning" for="btnradio1">@sellerAccList[0]</label>
+    @{
+        for (int i = 1; i < sellerAccList.Count; i++)
+        {
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-warning" for="btnradio2">@sellerAccList[i]</label>
+        }
+    }
 </div>
 <div class="row">
     <div class="col-9">
         <div class="checkoutFormVC">
-            @await Component.InvokeAsync("DeliveryFillCheckoutForm", new {count=2 }) 
+            @await Component.InvokeAsync("DeliveryFillCheckoutForm", new { cDeliveryCheckout = Model, sellerID= sellerIDList[0]}) 
         </div>
         <div class="text-center">
             <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>

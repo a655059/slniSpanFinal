@@ -60,7 +60,7 @@
                                             string productLink = Url.Content("~/Item/Index") + "?id=" + i.product.ProductId;
                                         } 
                                         <a href="@productLink" class="productLink"><label class="productName form-check-label">@i.product.ProductName</label></a>
-                                        <div class="text-black-50">@i.productDetail.Style</div>
+                                        <div class="productStyle text-black-50">@i.productDetail.Style</div>
                                         <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
                                     </div>
                                 </div>
@@ -166,13 +166,15 @@
                     const productDetailID = Number($(this).siblings().find(".productDetailID").attr("id"));
                     const sellerAcc = $(this).closest(".sellerLayout").find(".sellerAcc").html();
                     const unitPrice = $(this).siblings().find(".itemPrice").html();
+                    const productStyle = $(this).siblings().find(".productStyle").html();
                     const object = {
                         "orderDetailID": orderDetailID,
                         "purchaseCount": purchaseCount,
                         "productName": productName,
                         "productDetailID": productDetailID,
                         "sellerAcc": sellerAcc,
-                        "unitPrice":unitPrice,
+                        "unitPrice": unitPrice,
+                        "productStyle": productStyle,
                     };
                     orderDetailIDInfo.push(object);
                 });

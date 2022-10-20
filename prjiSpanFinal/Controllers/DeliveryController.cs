@@ -262,10 +262,64 @@ namespace prjiSpanFinal.Controllers
         {
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASEITEMINFO))
             {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
                 string purchaseItemInfo = HttpContext.Session.GetString(CDictionary.SK_PURCHASEITEMINFO);
                 List<CPurchaseItemToSession> purchaseItems = JsonSerializer.Deserialize<List<CPurchaseItemToSession>>(purchaseItemInfo);
-                
-                return View();
+                var productDetails = dbContext.ProductDetails.Select(i => i);
+                var members = dbContext.MemberAccounts.Select(i => i);
+                var shipperToSellers = dbContext.ShipperToSellers.Select(i => i);
+                var paymentToSellers = dbContext.PaymentToSellers.Select(i => i);
+                List<CPurchaseItemInfo> cPurchaseItemList = new List<CPurchaseItemInfo>();
+                foreach (var a in purchaseItems)
+                {
+                    byte[] productDetailPic = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.Pic).FirstOrDefault();
+                    CPurchaseItemInfo cPurchaseItemInfo = new CPurchaseItemInfo
+                    {
+                        orderDetailID = a.orderDetailID,
+                        productName = a.productName,
+                        productDetailPic = productDetailPic,
+                        unitPrice = a.unitPrice,
+                        sellerAcc = a.sellerAcc,
+                        purchaseCount = a.purchaseCount,
+                        productStyle = a.productStyle,
+                    };
+                    cPurchaseItemList.Add(cPurchaseItemInfo);
+                }
+                List<int> sellerIDList = new List<int>();
+                foreach(var a in cPurchaseItemList)
+                {
+                    int sellerID = members.Where(i => i.MemberAcc == a.sellerAcc).Select(i => i.MemberId).FirstOrDefault();
+                    if (sellerIDList.Contains(sellerID))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        sellerIDList.Add(sellerID);
+                    }
+                }
+                List<CDeliverySellerShipperPayment> cDeliverySellerShipperPaymentList = new List<CDeliverySellerShipperPayment>();
+                foreach (var a in sellerIDList)
+                {
+                    MemberAccount seller = members.Where(i => i.MemberId == a).Select(i => i).FirstOrDefault();
+                    var shipperToSeller = shipperToSellers.Where(i => i.MemberId == a).Select(i => i).ToList();
+                    var paymentToSeller = paymentToSellers.Where(i => i.MemberId == a).Select(i => i).ToList();
+                    CDeliverySellerShipperPayment cDeliverySellerShipperPayment = new CDeliverySellerShipperPayment
+                    { 
+                        seller = seller,
+                        shipperToSellers = shipperToSeller,
+                        paymentToSellers = paymentToSeller
+                    };
+                    cDeliverySellerShipperPaymentList.Add(cDeliverySellerShipperPayment);
+
+
+                }
+                CDeliveryCheckoutViewModel cDeliveryCheckout = new CDeliveryCheckoutViewModel
+                {
+                    purchaseItemInfo = cPurchaseItemList,
+                    sellerShipperPayments = cDeliverySellerShipperPaymentList
+                };
+                return View(cDeliveryCheckout);
             }
             else
             {

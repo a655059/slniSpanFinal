@@ -1,21 +1,32 @@
-﻿@model int
+﻿@model prjiSpanFinal.ViewModels.Delivery.CDeliveryCheckoutViewModel
 
 
 <div class="border rounded-2">
     @{
-        for (int i = 1; i <= Model; i++)
+        foreach (var i in Model.purchaseItemInfo)
         {
-            <div class="d-flex justify-content-between align-items-center px-2 py-1">
+            string imgSrc = "";
+            try
+            {
+                string base64 = Convert.ToBase64String(i.productDetailPic);
+                imgSrc = $"data:image/gif;base64,{base64}";
+            }
+            catch
+            {
+                imgSrc = Url.Content("~/img/imageNotFound.png");
+            }
+            <div class="d-flex justify-content-between align-items-center ps-2 pe-5 py-1">
                 <div class="d-flex justify-content-center align-items-center">
-                    <div class="itemThumb">
-                        <img src="~/img/product01.png" />
+                    <div class="itemThumbnail mx-2">
+                        <img src="@imgSrc" />
                     </div>
                     <div>
-                        <div class="fs-5">108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</div>
-                        <div>$900</div>
+                        <div class="fs-5">@i.productName</div>
+                        <div>@i.productStyle</div>
+                        <div>$<span>@i.unitPrice</span></div>
                     </div>
                 </div>
-                <div class="fs-5 text-black-50">x1</div>
+                <div class="fs-5 text-black-50">x<span>@i.purchaseCount</span></div>
             </div>
         }
     }
@@ -34,6 +45,16 @@
         </div>
     </div>
     <div class="choseShip mt-2 px-2 border" style="display:none">
+        @{
+            foreach (var i in Model.sellerShipperPayments[0].shipperToSellers)
+            {
+                <div class="border-top mt-2">
+                    <div class="ship border-start border-danger border-3 bg-light fs-6 ps-2">郵寄寄送</div>
+                    <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
+                </div>
+            }
+        }
         <div class="border-top mt-2">
             <div class="ship border-start border-danger border-3 bg-light fs-6 ps-2">郵寄寄送</div>
             <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
