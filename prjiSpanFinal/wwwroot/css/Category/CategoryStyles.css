@@ -290,7 +290,7 @@
     width: 100%;
     aspect-ratio: 1/1;
     border-radius: 5px;
-    border-bottom: 1px solid #FF8040;
+    border-bottom: 1px solid black;
 }
 
 .cardTitle {
@@ -298,8 +298,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
     color: black;
+    text-overflow: ellipsis;
 }
 
 .cardPrice {
@@ -318,9 +320,11 @@
     aspect-ratio: 1/1;
     margin-right: 10px;
 }
+
     .starImg > img {
         width: 200%;
     }
+
 .buybtn {
     font-size: 12px;
     padding: 3px;

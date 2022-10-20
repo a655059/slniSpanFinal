@@ -63,16 +63,19 @@ namespace prjiSpanFinal.Controllers
                 list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
             return View(list);
         }
-        public IActionResult SearchResult(string keyword)
+        public IActionResult SearchResult(string keyword,int? sortOrder)
         {
             if(keyword == null) {
                 return RedirectToAction("Index", "Home");
             }
-            List<Product> listp = _db.Products.Where(p => p.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
+            listprod= _db.Products.Where(p => p.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
             list = new CCategoryIndex();
-            list.cShowItem = (new CHomeFactory()).toShowItem(listp);
+            if(listprod.Any())
+                list.cShowItem = (new CHomeFactory()).toShowItem(listprod); 
+                list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
+            list.SearchKeyword = keyword;
 
-            return View(listprod);
+            return View(list);
         }
         List<CShowItem> fSortOrder(int sortOrder,List<Product> listprod)
         {
