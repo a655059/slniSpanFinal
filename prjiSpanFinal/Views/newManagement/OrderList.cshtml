@@ -15,7 +15,7 @@
         }
     </style>
 }
-    <h1>OrderList</h1>
+    <h1>訂單</h1>
     <table class="table">
         <thead>
             <tr>
@@ -29,7 +29,7 @@
                     下訂日期
                 </th>
                 <th>
-                    到貨日期
+                    收貨地址
                 </th>
                 <th>
                     訂單完成日期
@@ -65,43 +65,43 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="form-control-plaintext">
+                <td >
                     @Html.DisplayFor(modelItem => item.Order.OrderId)
                 </td>
-                <td class="form-control-plaintext">
+                <td >
                     @Html.DisplayFor(modelItem => item.Order.MemberId)
                 </td>
-                <td class="form-control-plaintext">
-                    @Html.DisplayFor(modelItem => item.Order.OrderDatetime)
+                <td >
+                    <input value="@item.Order.OrderDatetime.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
-                <td class="form-control-plaintext">
+                <td >
                     @Html.DisplayFor(modelItem => item.Order.RecieveAdr)
                 </td>
-                <td class="form-control-plaintext">
-                    @Html.DisplayFor(modelItem => item.Order.FinishDate)
+                <td >
+                    <input value="@item.Order.FinishDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
-                <td class="form-control-plaintext">
+                <td >
                     @Html.DisplayFor(modelItem => item.CouponName)
                 </td>
-                <td class="form-control-plaintext">
+                <td>
                     <input class="form-control-plaintext statusname" value="@item.OrderStatusName" readonly>
                 </td>
-                <td class="form-control-plaintext">
+                <td>
                     @Html.DisplayFor(modelItem => item.ShipperName)
                 </td>
-                <td class="form-control-plaintext">
-                    @Html.DisplayFor(modelItem => item.Order.PaymentDate)
+                <td>
+                    <input value="@item.Order.PaymentDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
-                <td class="form-control-plaintext">
-                    @Html.DisplayFor(modelItem => item.Order.ShippingDate)
+                <td>
+                    <input value="@item.Order.ShippingDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
-                <td class="form-control-plaintext">
-                    @Html.DisplayFor(modelItem => item.Order.ReceiveDate)
+                <td>
+                    <input value="@item.Order.ReceiveDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
-                <td class="form-control-plaintext">
+                <td >
                     @Html.DisplayFor(modelItem => item.PaymentName)
                 </td>
-                <td class="form-control-plaintext">
+                <td>
                     @Html.DisplayFor(modelItem => item.Order.OrderMessage)
                 </td>
                 <td>
@@ -109,9 +109,9 @@
                     <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary">到貨</a>
                     <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger">完成</a>
                     <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger">爭議處理中</a>
-                    @Html.ActionLink("取消並作廢訂單", "OrderDelete","newManagement" ,new { id=item.Order.OrderId  },new{onclick="really()"})
-                        @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
-                        @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
+                    @Html.ActionLink("取消並作廢訂單", "OrderDelete","newManagement" ,new { id=item.Order.OrderId  },new{@class="btn btn-outline-danger",onclick="really()"})
+                    @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
+                    @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
                 </td>
             </tr>
         }
@@ -149,6 +149,7 @@
                 let data = await response.text();
                 if (data == 1) {
                     $(this).closest("td").siblings().find(".statusname").val("已到貨");
+
                 }
             })
         }

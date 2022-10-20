@@ -6,41 +6,41 @@
 
 @section Styles{
     <style>
-        table{
-            font-size:54px;
-            height:500px;
+        table {
+            font-size:40px;
+            height: 500px;
         }
-        th{
-            text-align:center;  
+
+        th {
+            text-align: center;
         }
     </style>
 }
 
-<table class="table" width="100%" style="table-layout:fixed">
-    <thead>
-        <tr>
-                <th align="center" >
-                產品描述
-            </th>
-                <th align="center" >
-                該商品最後編輯時間
-            </th>
-                <th align="center" ></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td align="center" valign="middle" class="form-control-plaintext">
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-                <td align="center" valign="middle" class="form-control-plaintext">
-                @Html.DisplayFor(modelItem => item.EditTime)
-            </td>
-                <td align="center" valign="middle"class="form-control-plaintext">
-                @Html.ActionLink("回到商品列表", "newProductList","newManagement",null,new{@class="btn btn-primary"})
-            </td>
-        </tr>
-}
+    <table class="table" width="100%" style="table-layout:fixed">
+        <thead>
+            <tr>
+                <th align="center">
+                    產品描述
+                </th>
+                <th align="center">
+                    該商品最後編輯時間
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td align="center" valign="middle">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td align="center" valign="middle" >
+                    @Html.DisplayFor(modelItem => item.EditTime)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@Html.ActionLink("回到商品列表", "newProductList","newManagement",null,new{@class="btn btn-primary",align="center",valign="middle" })
+

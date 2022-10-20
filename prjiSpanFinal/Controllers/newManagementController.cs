@@ -5,9 +5,7 @@ using prjiSpanFinal.ViewModels.newManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using X.PagedList;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -99,6 +97,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 2;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -109,6 +108,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 0;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -119,6 +119,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 1;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -146,13 +147,21 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.ProductDetails
                     where d.ProductDetailId == id
                     select d;
-            db.ProductDetails.Remove(D.First());
+            var G = from g in db.Products
+                    where g.ProductId == D.First().ProductId
+                    select g;
+            var K = from k in db.ProductDetails
+                    where k.ProductId == G.First().ProductId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.ProductDetails.Remove(D.First());
+            }
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList", new { id });
+            return RedirectToAction("ProductDetailList", new { id=id});
         }
         #endregion
         #region MemberRegion
-
         public List<CMemberListViewModel> GetMembersFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
@@ -365,6 +374,7 @@ namespace prjiSpanFinal.Controllers
                     where d.OrderId == id
                     select d;
             D.First().StatusId = 8;
+            D.First().FinishDate = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -384,7 +394,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
-            db.Orders.Remove(D.First());
+            D.First().StatusId = 10;
             db.SaveChanges();
             return RedirectToAction("OrderList", new { id });
         }
@@ -397,6 +407,43 @@ namespace prjiSpanFinal.Controllers
         //            select u;
         //    return View(Q);
         //}
+        #endregion
+        #region OrderDetailRegion
+        public IActionResult OrderDetailList(int? id)
+        {
+            var db = new iSpanProjectContext();
+            if (id != null)
+            {
+                var Q = (from i in db.OrderDetails
+                         where i.OrderId == id
+                         select i);
+                return View(Q);
+            }
+            else
+            {
+                return RedirectToAction("OrderList");
+            }
+        }
+        public IActionResult OrderDetailDelete(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.OrderDetails
+                    where d.OrderDetailId == id
+                    select d;
+            var G = from g in db.Orders
+                    where g.OrderId == D.First().OrderId
+                    select g;
+            var K = from k in db.OrderDetails
+                    where k.OrderId == G.First().OrderId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.OrderDetails.Remove(D.First());
+            }
+            db.SaveChanges();
+            return RedirectToAction("OrderDetailList", new { id = id });
+        }
+
         #endregion
     }
 }
