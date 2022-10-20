@@ -140,7 +140,6 @@ namespace prjiSpanFinal.Controllers
                 int memberID = memberAccount.MemberId;
                 iSpanProjectContext dbContext = new iSpanProjectContext();
                 var allOrderDetail = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => i);
-                
                 if (allOrderDetail.Count() > 0)
                 {
                     List<CDeliveryOrderViewModel> cDeliveryOrderList = new List<CDeliveryOrderViewModel>();
@@ -263,12 +262,16 @@ namespace prjiSpanFinal.Controllers
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASEITEMINFO))
             {
                 iSpanProjectContext dbContext = new iSpanProjectContext();
+                string buyerString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
                 string purchaseItemInfo = HttpContext.Session.GetString(CDictionary.SK_PURCHASEITEMINFO);
                 List<CPurchaseItemToSession> purchaseItems = JsonSerializer.Deserialize<List<CPurchaseItemToSession>>(purchaseItemInfo);
                 var productDetails = dbContext.ProductDetails.Select(i => i);
                 var members = dbContext.MemberAccounts.Select(i => i);
                 var shipperToSellers = dbContext.ShipperToSellers.Select(i => i);
                 var paymentToSellers = dbContext.PaymentToSellers.Select(i => i);
+                var shippers = dbContext.Shippers.Select(i => i);
+                var payments = dbContext.Payments.Select(i => i);
                 List<CPurchaseItemInfo> cPurchaseItemList = new List<CPurchaseItemInfo>();
                 foreach (var a in purchaseItems)
                 {
@@ -302,23 +305,37 @@ namespace prjiSpanFinal.Controllers
                 foreach (var a in sellerIDList)
                 {
                     MemberAccount seller = members.Where(i => i.MemberId == a).Select(i => i).FirstOrDefault();
-                    var shipperToSeller = shipperToSellers.Where(i => i.MemberId == a).Select(i => i).ToList();
-                    var paymentToSeller = paymentToSellers.Where(i => i.MemberId == a).Select(i => i).ToList();
+                    var shipperIDs = shipperToSellers.Where(i => i.MemberId == a).Select(i => i.ShipperId).ToList();
+                    var paymentIDs = paymentToSellers.Where(i => i.MemberId == a).Select(i => i.PaymentId).ToList();
+                    List<Shipper> shipperList = new List<Shipper>();
+                    foreach (var b in shipperIDs)
+                    {
+                        var shipper = shippers.Where(i => i.ShipperId == b).Select(i => i).FirstOrDefault();
+                        shipperList.Add(shipper);
+                    }
+                    List<Payment> paymentList = new List<Payment>();
+                    foreach (var b in paymentIDs)
+                    {
+                        var payment = payments.Where(i => i.PaymentId == b).Select(i => i).FirstOrDefault();
+                        paymentList.Add(payment);
+                    }
                     CDeliverySellerShipperPayment cDeliverySellerShipperPayment = new CDeliverySellerShipperPayment
                     { 
                         seller = seller,
-                        shipperToSellers = shipperToSeller,
-                        paymentToSellers = paymentToSeller
+                        shippers = shipperList,
+                        payments = paymentList
                     };
                     cDeliverySellerShipperPaymentList.Add(cDeliverySellerShipperPayment);
-
-
                 }
                 CDeliveryCheckoutViewModel cDeliveryCheckout = new CDeliveryCheckoutViewModel
                 {
+                    buyer = buyer,
                     purchaseItemInfo = cPurchaseItemList,
                     sellerShipperPayments = cDeliverySellerShipperPaymentList
                 };
+                string jsonString = JsonSerializer.Serialize(cDeliveryCheckout);
+                HttpContext.Session.SetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT, jsonString);
+
                 return View(cDeliveryCheckout);
             }
             else
@@ -336,9 +353,9 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        public IActionResult CheckoutForm(int? count)
+        public IActionResult CheckoutForm(int sellerIDIndex)
         {
-            return ViewComponent("DeliveryFillCheckoutForm", count);
+            return ViewComponent("DeliveryFillCheckoutForm", sellerIDIndex);
         }
         public IActionResult CheckoutConfirm()
         {

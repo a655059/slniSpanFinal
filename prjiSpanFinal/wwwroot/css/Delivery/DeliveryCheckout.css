@@ -37,9 +37,14 @@
     object-fit: contain;
 }
 
+.contact:focus {
+    border: #FFC78E;
+    
+}
+
 /*CalTotalPrice ViewComponent*/
 
 .modal {
     position: fixed;
-    top: 80px;
+    top: 60px;
 }

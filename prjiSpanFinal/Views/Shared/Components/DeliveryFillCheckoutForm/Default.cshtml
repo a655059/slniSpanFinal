@@ -32,54 +32,46 @@
     }
 </div>
 <div class="border rounded-2 my-2 px-2 py-1">
-    <div class="d-flex justify-content-start align-items-center">
+    <div class="d-flex justify-content-start align-items-center fs-5">
         <i class="fa-solid fa-truck-fast"></i>
-        <div class="ms-2">運送方式</div>
+        <div class="ms-2">聯絡及運送方式</div>
     </div>
     <div>
-        <div class="fw-bold" id="finalShip">郵寄寄送</div>
-        <div class="text-black-50" id="finalAddress">106台北市大安區復興南路一段390號2樓</div>
+        <div class="row my-1 align-items-center">
+            <label class="col-2 text-center" for="recipient">收件人</label>
+            <input class="contact col-5" type="text" name="recipient" placeholder="收件人真實姓名" id="recipient" value="@Model.buyer.Name" />
+        </div>
+        <div class="row my-1 align-items-center">
+            <label class="col-2 text-center" for="address">收貨地址</label>
+            <input class="contact col-5" type="text" name="address" placeholder="收件地址" id="address" value="@Model.buyer.Address" />
+        </div>
+        <div class="row my-1 align-items-center">
+            <label class="col-2 text-center" for="email">電子信箱</label>
+            <input class="contact col-5" type="email" name="email" placeholder="電子信箱" id="email" value="@Model.buyer.Email" />
+        </div>
+        <div class="row my-1 align-items-center">
+            <label class="col-2 text-center" for="phone">連絡電話</label>
+            <input class="contact col-5" type="text" name="phone" placeholder="連絡電話" id="phone" value="@Model.buyer.Phone" />
+        </div>
+        <button class="changeShip border-0 bg-transparent text-primary">選擇運送方式</button>
+        @*<div class="fw-bold" id="finalShip">郵寄寄送</div>
+        <div class="text-black-50" id="finalAddress">@Model.buyer.Address</div>
         <div class="d-flex justify-content-between">
             <div>運費:<span class="text-danger">$60</span></div>
-            <button class="changeShip border-0 bg-transparent fs-6 text-primary">變更</button>
-        </div>
+            <button class="changeShip border-0 bg-transparent fs-6 text-primary">選擇運送方式</button>
+        </div>*@
     </div>
     <div class="choseShip mt-2 px-2 border" style="display:none">
         @{
-            foreach (var i in Model.sellerShipperPayments[0].shipperToSellers)
+            foreach (var i in Model.sellerShipperPayments[0].shippers)
             {
-                <div class="border-top mt-2">
-                    <div class="ship border-start border-danger border-3 bg-light fs-6 ps-2">郵寄寄送</div>
-                    <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
-                    <button class="addAddress btn btn-outline-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
+                <div class="border-top my-2">
+                    <div class="ship border-start border-3 bg-light fs-6 ps-2">@i.ShipperName<span class="text-danger ms-2" style="font-size:12px">運費:$<span>@i.Fee</span></span></div>
+                    <div class="address fs-6 ps-2 text-black-50"></div>
+                    <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" style="font-size:12px" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
                 </div>
             }
         }
-        <div class="border-top mt-2">
-            <div class="ship border-start border-danger border-3 bg-light fs-6 ps-2">郵寄寄送</div>
-            <div class="address fs-6 ps-2 text-black-50">106台北市大安區復興南路一段390號2樓</div>
-            <button class="addAddress btn btn-outline-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
-        </div>
-        <div class="border-top mt-2">
-            <div class="ship border-start border-secondary border-3 bg-light fs-6 ps-2">7-ELEVEN</div>
-            <div class="address fs-6 ps-2 text-black-50 d-none"></div>
-            <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
-        </div>
-        <div class="border-top mt-2">
-            <div class="ship border-start border-secondary border-3 bg-light fs-6 ps-2">全家</div>
-            <div class="address fs-6 ps-2 text-black-50 d-none"></div>
-            <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
-        </div>
-        <div class="border-top mt-2">
-            <div class="ship border-start border-secondary border-3 bg-light fs-6 ps-2">萊爾富</div>
-            <div class="address fs-6 ps-2 text-black-50 d-none"></div>
-            <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
-        </div>
-        <div class="border-top mt-2">
-            <div class="ship border-start border-secondary border-3 bg-light fs-6 ps-2">蝦到爆店到店</div>
-            <div class="address fs-6 ps-2 text-black-50 d-none"></div>
-            <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
-        </div>
         <div class="text-end border-top mt-2 pt-2">
             <button class="bg-transparent border-0 text-primary fs-6" id="confirmedShip">確定</button>
         </div>
@@ -87,31 +79,19 @@
     </div>
 </div>
 <div class="border rounded-2 my-2 px-2 py-1">
-    <div class="d-flex justify-content-start align-items-center my-2">
+    <div class="d-flex justify-content-start align-items-center my-2 fs-5">
         <i class="fa-regular fa-credit-card"></i>
         <div class="ms-2">付款方式</div>
     </div>
     <div style="font-size:14px">
         <div class="my-2">
-            <div class="text-black-50">蝦到爆提供</div>
-            <input type="radio" name="payment" id="ATM" />
-            <label for="ATM">ATM轉帳</label>
-            <input type="radio" name="payment" id="cash" />
-            <label for="cash">貨到付款</label>
-            <input type="radio" name="payment" id="bank" />
-            <label for="bank">銀行支付</label>
-        </div>
-        <div class="my-2">
-            <div class="text-black-50">超商門市</div>
-            <input type="radio" name="payment" id="convenientCash" />
-            <label for="convenientCash">超商取貨付款</label>
-        </div>
-        <div class="my-2">
-            <div class="text-black-50">賣家自行提供</div>
-            <input type="radio" name="payment" id="bankID" />
-            <label for="bankID">銀行或郵局帳號</label>
-            <input type="radio" name="payment" id="bankID" />
-            <label for="bankID">郵局無摺存款</label>
+            @{
+                foreach (var i in Model.sellerShipperPayments[0].payments)
+                {
+                    <input type="radio" name="payment" id="ATM" />
+                    <label for="ATM">@i.PaymentName</label>
+                }
+            }
         </div>
     </div>
 </div>
@@ -131,7 +111,7 @@
             </div>
             <div class="modal-body">
                 <div class="googleMaps">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="500" height="375" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
             </div>

@@ -9,7 +9,7 @@ namespace prjiSpanFinal.ViewModels.Delivery
     public class CDeliverySellerShipperPayment
     {
         public MemberAccount seller { get; set; }
-        public List<ShipperToSeller> shipperToSellers { get; set; }
-        public List<PaymentToSeller> paymentToSellers { get; set; }
+        public List<Shipper> shippers { get; set; }
+        public List<Payment> payments { get; set; }
     }
 }

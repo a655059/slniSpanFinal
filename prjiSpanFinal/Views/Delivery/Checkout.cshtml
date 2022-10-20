@@ -16,6 +16,7 @@
             sellerAccList.Add(i.seller.MemberAcc);
         }
     }
+    int sellerIDIndex = 0;
 }
 
 @section Styles{
@@ -25,20 +26,22 @@
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
 <div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-    <label class="btn btn-outline-warning" for="btnradio1">@sellerAccList[0]</label>
+    <div class="sellerIDIndex d-none">0</div>
+    <div class="sellerIDCount d-none">@sellerIDList.Count</div>
+    <input type="radio" class="sellerID btn-check" name="btnradio" id="@sellerIDList[0]" autocomplete="off" checked>
+    <label class="btn btn-outline-warning" for="@sellerIDList[0]">@sellerAccList[0]</label>
     @{
         for (int i = 1; i < sellerAccList.Count; i++)
         {
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-            <label class="btn btn-outline-warning" for="btnradio2">@sellerAccList[i]</label>
+            <input type="radio" class="sellerID btn-check" name="btnradio" id="@sellerIDList[i]" autocomplete="off">
+            <label class="btn btn-outline-warning" for="@sellerIDList[i]">@sellerAccList[i]</label>
         }
     }
 </div>
 <div class="row">
     <div class="col-9">
         <div class="checkoutFormVC">
-            @await Component.InvokeAsync("DeliveryFillCheckoutForm", new { cDeliveryCheckout = Model, sellerID= sellerIDList[0]}) 
+            @await Component.InvokeAsync("DeliveryFillCheckoutForm", new { sellerIDIndex = 0}) 
         </div>
         <div class="text-center">
             <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>
@@ -57,12 +60,16 @@
 
 @section Scripts{
     <script>
+
         $("#nextStore").click(function () {
-            $(".checkoutFormVC").load("@Url.Action("CheckoutForm", "Delivery", new { count = 1 })")
-            let nowId = $("#choseStore").children("input:checked").attr("id");
-            let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) + 1);
-            $("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
-            $("#previousStore").removeClass("d-none");
+            const sellerIDIndex = Number($(".sellerIDIndex").html());
+            const nextSellerIDIndex = sellerIDIndex + 1;
+            const _url = "@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=${nextSellerIDIndex}`;
+            $(".checkoutFormVC").load(_url);
+            //let nowId = $("#choseStore").children("input:checked").attr("id");
+            //let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) + 1);
+            //$("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
+            //$("#previousStore").removeClass("d-none");
         });
         $("#previousStore").click(function () {
             $(".checkoutFormVC").load("@Url.Action("CheckoutForm", "Delivery", new { count = 2 })");
