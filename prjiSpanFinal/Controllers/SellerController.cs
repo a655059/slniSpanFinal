@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.seller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using prjiSpanFinal.Models.OrderReq;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -22,8 +26,35 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Order()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login","Member");
+            }
             return View();
         }
+        public IActionResult SortOrder(int sort, int tab)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new OrderSortReq().SortTab(sort, tab, id));
+
+        }
+        public IActionResult SearchOrder(string keyword, DateTime startdate, DateTime enddate)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new OrderSortReq().SearchOrder(keyword, startdate.AddDays(1), enddate.AddDays(1), id));
+
+        }
+
+
+
         public IActionResult Create()
         {
             var bigType = _db.BigTypes.Select(i => i.BigTypeName).ToList();
@@ -55,9 +86,13 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public IActionResult OrderDetail()
+        public IActionResult OrderDetail(int id)
         {
-            return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            return View(id);
         }
 
 

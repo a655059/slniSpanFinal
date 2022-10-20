@@ -11,11 +11,121 @@
 <vc:seller-ui></vc:seller-ui>
 <h2 class="d-flex justify-content-center">我的銷售</h2>
 <div id="orderdetaildiv">
-    <vc:order-list side="0"></vc:order-list>
+    <vc:seller-order-list></vc:seller-order-list>
 </div>
 
 
 @section Scripts
 {
     <script src="~/js/DataTable/datatable.js"></script>
+    <script>
+        function OrderListItem(data) {
+            item = `<tr>
+
+                        <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
+                            <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a></td>
+                        <td>${data.orderDatetime}</td>
+                        <td>`;
+            let total = data.paymentFee;
+            for (let i = 0; i < data.quantity.length; i++) {
+                item = item + `<img src="data:image;base64,${data.pic[i]}" width="60" height="60" />${data.productName[i]} ${data.style[i]} * ${data.quantity[i]} $${data.unitprice[i]}<br />`;
+                total = total + data.unitprice[i] * data.quantity[i];
+            }
+            if (data.isFreeDelivery == false) {
+                total = total + data.shipperFee;
+            }
+            item = item + `</td>
+                        <td class="ordertotalprice">$${total}</td>
+                        <td>${data.orderStatusName}</td>
+                        <td style="text-align:center">
+                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbuttonde">訂單詳情</a><br />
+                            <button type="button" class="btn btn-secondary orderbuttonco">待給評價</button>
+                            <div>
+                                <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                            </div>
+                        </td>
+                    </tr>`;
+            return item;
+        }
+
+        let sortmethod = 0;
+        let tabid = 0;
+        $("#ordertime").click(function () {
+            if ($("#ordertime").hasClass("sorting_desc")) {
+                sortmethod = 0;
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+            else {
+                sortmethod = 1;
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+        })
+        $("#ordersales").click(function () {
+            if ($("#ordersales").hasClass("sorting_desc")) {
+                sortmethod = 2;
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+            else {
+                sortmethod = 3;
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+        })
+        $(".ordernavtabs").click(function (event) {
+            tabid = $(event.currentTarget).siblings("input").val();
+            $(event.currentTarget).addClass("active");
+            $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+            $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        })
+        $("#btnDate").click(function (){
+            let keyword = $("#orderkeyword").val();
+            let startdate = $("#startDate").val();
+            let enddate = $("#endDate").val();
+            $.getJSON(`/Seller/SearchOrder`, { keyword: keyword, startdate: startdate, enddate : enddate }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        });
+        $("#flexCheckDefault").change(function () {
+            if ($(this).prop("checked")) {
+                $(".checkboxorder").prop("checked",true);
+            }
+            else {
+                $(".checkboxorder").prop("checked", false);
+            }
+        });
+        $(".orderbuttonde").click(function () {
+            let orderid = $(this).parent().siblings().children().eq(0).val();
+            console.log(orderid);
+            $.getJSON(`/Seller/OrderDetail`, { id: orderid }, function () {
+            });
+        });
+    </script>
 }

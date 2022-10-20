@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model int
 @{
     ViewData["Title"] = "OrderDetail";
 }
@@ -9,7 +10,7 @@
 }
 <vc:seller-ui></vc:seller-ui>
 <h2 class="d-flex justify-content-center">訂單明細</h2>
-<vc:order-detail></vc:order-detail>
+<vc:order-detail id="Model"></vc:order-detail>
 
 @section Scripts
 {

@@ -1,4 +1,5 @@
-﻿<div class="row ">
+﻿@model prjiSpanFinal.ViewModels.OrderListViewModel
+<div class="row ">
     <div class="col-1"></div>
     <div class="col-11">
         <div class="ordersearchbar">
@@ -8,16 +9,7 @@
             </span>
         </div>
         <div class="ordersearchbar">
-            @{
-                if (Model == 0)
-                {
-                    <button type="button" class="btn btn-success">一鍵出貨</button>
-                }
-                else
-                {
-                    <button type="button" class="btn btn-success">一鍵領收</button>
-                }
-            }
+            <button type="button" class="btn btn-success">一鍵領收</button>
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -26,20 +18,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">未結帳</a>
             </li>
-            @{
-                if (Model == 0)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">待出貨</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">已結帳</a>
-                    </li>
-                }
-            }
+            <li class="nav-item">
+                <a class="nav-link" href="#">已結帳</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">已出貨</a>
             </li>
@@ -78,16 +59,7 @@
                 @for (int i = 10; i >= 1; i--)
                 {
                 <tr>
-                    @{
-                        if (Model == 0)
-                        {
-                            <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">customer87</a></td>
-                        }
-                        else
-                        {
-                            <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">shop9487</a></td>
-                        }
-                    }
+                    <td>@i<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">shop9487</a></td>
                     <td>2022/10/10<br />10:10:10</td>
                     <td>
                         <img src="~/img/蘋果圖.jpg" width="60" height="60" /> 蘋果 紅色 *1 $30<br />
@@ -101,17 +73,8 @@
                             <input class="form-check-input" type="checkbox" id="checkboxorder" value="" aria-label="...">
                         </div>
                         <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbutton">訂單詳情</a><br />
-                        @{
-                            if (Model == 0)
-                            {
-                                <button type="button" class="btn btn-secondary orderbutton">待給評價</button>
-                            }
-                            else
-                            {
-                                <a href="@Url.Content("~/Delivery/AddComment")" role="button" type="button" class="btn btn-secondary orderbutton">待給評價</a><br />
-                                <a class="btn btn-warning orderbutton" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申請退貨</a>
-                            }
-                        }
+                        <a href="@Url.Content("~/Delivery/AddComment")" role="button" type="button" class="btn btn-secondary orderbutton">待給評價</a><br />
+                        <a class="btn btn-warning orderbutton" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申請退貨</a>
                     </td>
                 </tr>
                 }
