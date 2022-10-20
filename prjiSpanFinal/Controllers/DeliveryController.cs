@@ -149,9 +149,10 @@ namespace prjiSpanFinal.Controllers
                         sellerName = i.ProductDetail.Product.Member.Name,
                         productName = i.ProductDetail.Product.ProductName,
                         orderDetail = i,
-                        productDetail = i.ProductDetail
+                        productDetail = i.ProductDetail,
                     });
-
+                    var shippers = dbContext.Shippers.Select(i => i).ToList();
+                    var shipperToSellers = dbContext.ShipperToSellers.Select(i => i).ToList();
                     foreach (var info in allInfo)
                     {
                         int sellerID = info.sellerID;
@@ -169,9 +170,41 @@ namespace prjiSpanFinal.Controllers
                         };
                         cDeliveryOrderList.Add(cDeliveryOrder);
                     }
+                    List<int> sellerIDList = new List<int>();
+                    foreach (var a in cDeliveryOrderList)
+                    {
+                        if (sellerIDList.Contains(a.sellerID))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            sellerIDList.Add(a.sellerID);
+                        }
+                    }
+                    List<CShipperToSellerViewModel> cShipperToSellerList = new List<CShipperToSellerViewModel>();
+                    foreach (var sellerID in sellerIDList)
+                    {
+                        var shipperIDs = shipperToSellers.Where(i => i.MemberId == sellerID).Select(i=>i.ShipperId);
+                        List<Shipper> shipperList = new List<Shipper>();
+                        foreach (var shipperID in shipperIDs)
+                        {
+                            var shipper = shippers.Where(i => i.ShipperId == shipperID).Select(i => i).FirstOrDefault();
+                            shipperList.Add(shipper);
+                        }
+                       
+                        CShipperToSellerViewModel cShipperToSeller = new CShipperToSellerViewModel
+                        {
+                            sellerID = sellerID,
+                            shippers = shipperList,
+                        };
+                        cShipperToSellerList.Add(cShipperToSeller);
+
+                    }
                     CDeliveryShowCartViewModel cDeliveryShowCart = new CDeliveryShowCartViewModel
                     {
-                        cart = cDeliveryOrderList
+                        cart = cDeliveryOrderList,
+                        shipperToSeller= cShipperToSellerList
                     };
                     return View(cDeliveryShowCart);
                 }
@@ -211,13 +244,9 @@ namespace prjiSpanFinal.Controllers
             
             
         }
-
         public IActionResult ShowNoItemInCart()
         {
-            iSpanProjectContext dbContext = new iSpanProjectContext();
-            
-
-            return View();
+            return ViewComponent("ShowNoItemInCart");
         }
         public IActionResult Checkout()
         {

@@ -1,4 +1,19 @@
-﻿CalTotalPrice();
+﻿$(function () {
+    $(".itemCount").each(function (idx, ele) {
+        if ($(this).val() <= 1) {
+            $(this).siblings(".countMinus").attr("disabled", true).css("color", "#D0D0D0");
+            $(this).val(1);
+        }
+        const maxValue = Number($(this).attr("max"));
+        if ($(this).val() >= maxValue) {
+            $(this).siblings(".countPlus").attr("disabled", true).css("color", "D0D0D0");
+            $(this).val(maxValue);
+            $(this).closest("div").siblings().removeClass("d-none");
+        }
+    });
+    CalTotalPrice();
+});
+
 
 
 $(".selectAll").change(function () {
@@ -95,16 +110,7 @@ $(".itemCount").on("blur", function () {
     CalTotalPrice();
 });
 
-$(function () {
-    $(".itemCount").each(function (idx, ele) {
-        if ($(this).val() <= 1) {
-            $(this).siblings(".countMinus").attr("disabled", true).css("color", "#D0D0D0");
-        }
-        else {
-            $(this).siblings(".countMinus").attr("disabled", false).css("color", "#000000");
-        }
-    });
-});
+
 
 
 
