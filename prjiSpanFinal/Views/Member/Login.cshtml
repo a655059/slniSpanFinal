@@ -72,7 +72,11 @@
 
         $("#btnlogin").click(function () {
             $.post('@Url.Content("~/Member/LoginCheck")', { "txtAccount": txtAcc.val(), "txtPW": txtPW.val() }, function (data) {
-                if (data == "1") {
+                if (data == "2"){
+                    window.alert("管理員登入成功");
+                    window.location = "/newManagement/PowerBi";
+                }
+                else if (data == "1") {
                     window.alert("登入成功");
                     window.location = "/";
                 }

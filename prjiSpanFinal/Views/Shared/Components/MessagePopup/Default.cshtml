@@ -30,16 +30,34 @@
                                 <div class="p-3">
                                     <div class="input-group rounded mb-3">
                                         <input type="search" class="form-control rounded" placeholder="開啟對話" aria-label="Search"
-                                               aria-describedby="search-addon" id="msgautoComplete" />
-                                        <div class="list-group mt-3" id="msgautoCompletebox">
-                                        </div>
+                                           aria-describedby="search-addon" id="msgautoComplete" autocomplete="off" />
                                         <a class="input-group-text border-0" id="msgsearch" style="text-decoration:none">
                                             <i class="fas fa-search"></i>
                                         </a>
                                     </div>
-
+                                    <div class="list-group" id="msgautoCompletebox" style="position: absolute;z-index:2;">
+                                    </div>
                                     <div style="position: relative; height: 400px;overflow-y: auto;">
                                         <ul class="list-unstyled mb-0" id="msgopendialogbody">
+                                            <li class="p-2 border-bottom msgopendialogli">
+                                                <input type="hidden" class="msgcid" value="99999" />
+                                                <a href="#!" style="text-decoration:none" class="d-flex justify-content-between msgopendialog">
+                                                    <div class="d-flex flex-row">
+                                                        <div>
+                                                            <img src="@Url.Content("~/img/fans.png")" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
+                                                            <span class="badge bg-success badge-dot"></span>
+                                                        </div>
+                                                        <div class="pt-1">
+                                                            <p class="fw-bold mb-0">多人聊天群</p>
+                                                            <p class="small text-muted">  </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pt-1">
+                                                        <input type="hidden" class="msgbodytimestamp" value="10101055520221010" />
+                                                        <p class="small text-muted mb-1">無</p>
+                                                    </div>
+                                                </a>
+                                            </li>
                                         @{
                                             for (int i = 0; i < Model.CMemAcc.Count; i++)
                                             {
@@ -83,7 +101,7 @@
                                 <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
                                     <img src="data:image;base64,@System.Convert.ToBase64String(Model.MemPic)" alt="avatar 1" id="msgmempic" style="width: 45px; height: 45px; border-radius: 50%;" />
                                     <input type="text" class="form-control form-control-lg ms-2" id="msgtextinput" placeholder="說點話吧" />
-                                    <a class="ms-3" href="#!" id="msgsendimage"><input type="file" id="msgupload" style="opacity: 0; z-index: -1; position: absolute;" /><label for="msgupload"><i class="fa-solid fa-lg fa-image"></i></label></a>
+                                    <a class="ms-3" href="#!" id="msgsendimage"><input type="file" accept="image/*" id="msgupload" style="opacity: 0; z-index: -1; position: absolute;" /><label for="msgupload"><i class="fa-solid fa-lg fa-image"></i></label></a>
                                     <a class="ms-3 text-muted" data-bs-toggle="collapse" href="#collapseemoji" aria-expanded="false" aria-controls="collapseemoji">
                                         <i class="fas fa-lg fa-smile"></i>
                                     </a>
@@ -100,19 +118,19 @@
 </div>
 <div class="collapse rounded-2" id="collapseemoji" style="position:fixed; bottom:80px; right:80px; background-color:white;">
     <div>
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
-        <img src="~/img/sleepinpark.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
     </div>
     <div>
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
-        <img src="~/img/lapsleepinpark.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji2.jpg" class="m-1 msgemoji2 msgemoji" width="100" height="100" />
     </div>
     <div>
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
-        <img src="~/img/pien.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
+        <img src="~/img/emoji/emoji3.jpg" class="m-1 msgemoji3 msgemoji" width="100" height="100" />
     </div>
 </div>
 

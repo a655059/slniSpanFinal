@@ -70,6 +70,7 @@ namespace prjiSpanFinal.ViewComponents
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             var q1 = dbcontext.ChatLogs.Where(c => c.SendFrom == b.MemID).Select(c => new { c.ChatLogId,c.SendTo,c.Msg,c.HaveRead,c.SendToNavigation.MemberAcc,c.SendToNavigation.MemPic}).OrderByDescending(c=>c.ChatLogId).DistinctBy(c => c.SendTo).ToList();
             var q2 = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.ChatLogId, c.SendFrom, c.Msg, c.HaveRead, c.SendFromNavigation.MemberAcc, c.SendFromNavigation.MemPic }).OrderByDescending(c => c.ChatLogId).DistinctBy(c => c.SendFrom).ToList();
+            var q3 = dbcontext.ChatLogs.Where(c => c.SendTo == b.MemID).Select(c => new { c.SendFrom, c.HaveRead }).ToList();
             List<int> idlist = new List<int>();
             List<string> acclist = new List<string>();
             List<string> msglist = new List<string>();
@@ -103,14 +104,35 @@ namespace prjiSpanFinal.ViewComponents
                     int id = q1[count1].SendTo;
                     idlist.Add(id);
                     string shortstr = "";
-                    if(q1[count1].Msg.Length >29)
+                    if(q1[count1].Msg.Substring(0,4) == "asdf")
                     {
-                        shortstr = q1[count1].Msg.Substring(0, 29) + "...";
+                        shortstr = q1[count1].Msg.Substring(0, 21) + "貼圖";
+                    }
+                    else if(q1[count1].Msg.Substring(0,4) == "zxcv")
+                    {
+                        shortstr = q1[count1].Msg.Substring(0, 21) + "照片";
+                    }
+                    else if (q1[count1].Msg.Substring(0, 4) == "tyui")
+                    {
+                        shortstr = q1[count1].Msg.Substring(0, 21) + "本站產品";
+                    }
+                    else if (q1[count1].Msg.Substring(0, 4) == "ghjk")
+                    {
+                        shortstr = q1[count1].Msg.Substring(0, 21) + "YT影片";
                     }
                     else
                     {
-                        shortstr = q1[count1].Msg;
+                        if (q1[count1].Msg.Length > 29)
+                        {
+                            shortstr = q1[count1].Msg.Substring(0, 29) + "...";
+                        }
+                        else
+                        {
+                            shortstr = q1[count1].Msg;
+                        }
                     }
+
+                    
                     msglist.Add(shortstr);
                     hrlist.Add(0);
                     SendList.Add(q1[count1].SendTo);
@@ -137,16 +159,35 @@ namespace prjiSpanFinal.ViewComponents
                     int id = q2[count2].SendFrom;
                     idlist.Add(id);
                     string shortstr = "";
-                    if (q2[count2].Msg.Length > 29)
+                    if (q2[count2].Msg.Substring(0, 4) == "asdf")
                     {
-                        shortstr = q2[count2].Msg.Substring(0, 29) + "...";
+                        shortstr = q2[count2].Msg.Substring(0, 21) + "貼圖";
+                    }
+                    else if (q2[count2].Msg.Substring(0, 4) == "zxcv")
+                    {
+                        shortstr = q2[count2].Msg.Substring(0, 21) + "照片";
+                    }
+                    else if (q2[count2].Msg.Substring(0, 4) == "tyui")
+                    {
+                        shortstr = q2[count2].Msg.Substring(0, 21) + "本站產品";
+                    }
+                    else if (q2[count2].Msg.Substring(0, 4) == "ghjk")
+                    {
+                        shortstr = q2[count2].Msg.Substring(0, 21) + "YT影片";
                     }
                     else
                     {
-                        shortstr = q2[count2].Msg;
+                        if (q2[count2].Msg.Length > 29)
+                        {
+                            shortstr = q2[count2].Msg.Substring(0, 29) + "...";
+                        }
+                        else
+                        {
+                            shortstr = q2[count2].Msg;
+                        }
                     }
                     msglist.Add(shortstr);
-                    hrlist.Add(q2.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
+                    hrlist.Add(q3.Where(c => c.HaveRead == false && c.SendFrom == q2[count2].SendFrom).Count());
                     SendList.Add(q2[count2].SendFrom);
                     count2++;
                 }

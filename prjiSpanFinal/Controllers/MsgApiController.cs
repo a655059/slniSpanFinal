@@ -26,6 +26,13 @@ namespace prjiSpanFinal.Controllers
             var id = Convert.ToInt32(sid);
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             var cl = dbcontext.ChatLogs.Where(i => (i.SendFrom == cid && i.SendTo == id) || (i.SendFrom == id && i.SendTo == cid)).ToList();
+
+            var q = dbcontext.ChatLogs.Where(i => (i.SendFrom == cid && i.SendTo == id)).ToList();
+            foreach (var item in q)
+            {
+                item.HaveRead = true;
+            }
+            dbcontext.SaveChanges();
             return Json(cl);
         }
 
@@ -66,8 +73,32 @@ namespace prjiSpanFinal.Controllers
         public IActionResult AutoComplete(string keyword)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var memacc = dbcontext.MemberAccounts.Where(p => p.MemberAcc.Contains(keyword) && keyword != p.MemberAcc).Select(p => p.MemberAcc);
+            var memacc = dbcontext.MemberAccounts.Where(p => p.MemberAcc.Contains(keyword) && keyword != p.MemberAcc).Select(p => p.MemberAcc).Take(5);
             return Json(memacc);
+        }
+        [HttpGet]
+        public void HaveRead(int msgid)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var chat = dbcontext.ChatLogs.Where(p => p.ChatLogId == msgid).Select(p => p).FirstOrDefault();
+            chat.HaveRead = true;
+            dbcontext.SaveChanges();
+        }
+        public IActionResult GetProductbyId(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var prod = dbcontext.Products.Where(p => p.ProductId == id).Select(p => new { p.ProductPics.FirstOrDefault().Pic,p.ProductName, p.ProductDetails.FirstOrDefault().Style, p.ProductDetails.FirstOrDefault().Quantity, p.ProductDetails.FirstOrDefault().UnitPrice }).FirstOrDefault();
+            if (prod != null)
+            {
+                if (prod.Pic == null)
+                {
+                    string pName = "/img/imageNotFound.png";
+                    string path = _enviro.WebRootPath + pName;
+                    return Json(new { prod.ProductName, prod.UnitPrice, Pic = System.IO.File.ReadAllBytes(path),prod.Quantity,prod.Style });
+                }
+                return Json(prod);
+            }
+            return Json(null);
         }
     }
 }

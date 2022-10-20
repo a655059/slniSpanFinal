@@ -45,7 +45,13 @@ namespace prjiSpanFinal.Controllers
             var mem = _context.MemberAccounts.FirstOrDefault(m => m.MemberAcc == txtAccount);
             if (mem != null)
             {
-                if (mem.MemberPw == txtPW)
+                if (mem.MemberPw == txtPW && txtAccount == "admin")
+                {
+                    string jsonUser = JsonSerializer.Serialize(mem);
+                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, jsonUser);
+                    return Content("2", "text/plain", Encoding.UTF8);
+                }
+                else if (mem.MemberPw == txtPW)
                 {
                     string jsonUser = JsonSerializer.Serialize(mem);
                     HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, jsonUser);
@@ -232,6 +238,11 @@ namespace prjiSpanFinal.Controllers
         {
             var sites = _context.RegionLists.Where(a => a.CountryId == site).Select(a => a.RegionName).Distinct();
             return Json(sites);
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

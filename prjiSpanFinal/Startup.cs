@@ -32,7 +32,11 @@ namespace prjiSpanFinal
             });
             services.AddControllersWithViews();
             services.AddSession();
-            services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+                o.MaximumReceiveMessageSize = 10240000;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

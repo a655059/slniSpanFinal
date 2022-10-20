@@ -12,31 +12,19 @@ namespace prjiSpanFinal.Hubs
     {
         public async Task SendMessage(string sendFrom, string message, string sendTo)
         {
-            
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
-            ChatLog chat = new ChatLog() { SendFrom = Convert.ToInt32(sendFrom), Msg = message, SendTo = Convert.ToInt32(sendTo), HaveRead = false };
-            dbcontext.ChatLogs.Add(chat);
-            dbcontext.SaveChanges();
-            await Clients.All.SendAsync("ReceiveMessage", sendFrom, message, sendTo, chat.ChatLogId);
-        }
-        public async Task HaveReadMessage(string id)
-        {
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var q = dbcontext.ChatLogs.Where(i => i.ChatLogId == Convert.ToInt32(id)).FirstOrDefault();
-            q.HaveRead = true;
-            dbcontext.SaveChanges();
-        }
-        public async Task ReadMessage(string sid, string scid)
-        {
-            var cid = Convert.ToInt32(scid);
-            var id = Convert.ToInt32(sid);
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var q = dbcontext.ChatLogs.Where(i => (i.SendFrom == cid && i.SendTo == id)).ToList();
-            foreach(var item in q)
+            if(sendTo == "99999")
             {
-                item.HaveRead = true;
+                await Clients.All.SendAsync("ReceiveMessage", sendFrom, message, sendTo, 999999);
             }
-            dbcontext.SaveChanges();
+            else
+            {
+                iSpanProjectContext dbcontext = new iSpanProjectContext();
+                ChatLog chat = new ChatLog() { SendFrom = Convert.ToInt32(sendFrom), Msg = message, SendTo = Convert.ToInt32(sendTo), HaveRead = false };
+                dbcontext.ChatLogs.Add(chat);
+                dbcontext.SaveChanges();
+                await Clients.All.SendAsync("ReceiveMessage", sendFrom, message, sendTo, chat.ChatLogId);
+            }
+            
         }
     }
 }
