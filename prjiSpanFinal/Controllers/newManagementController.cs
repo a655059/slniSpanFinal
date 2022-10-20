@@ -408,5 +408,42 @@ namespace prjiSpanFinal.Controllers
         //    return View(Q);
         //}
         #endregion
+        #region OrderDetailRegion
+        public IActionResult OrderDetailList(int? id)
+        {
+            var db = new iSpanProjectContext();
+            if (id != null)
+            {
+                var Q = (from i in db.OrderDetails
+                         where i.OrderId == id
+                         select i);
+                return View(Q);
+            }
+            else
+            {
+                return RedirectToAction("OrderList");
+            }
+        }
+        public IActionResult OrderDetailDelete(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.OrderDetails
+                    where d.OrderDetailId == id
+                    select d;
+            var G = from g in db.Orders
+                    where g.OrderId == D.First().OrderId
+                    select g;
+            var K = from k in db.OrderDetails
+                    where k.OrderId == G.First().OrderId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.OrderDetails.Remove(D.First());
+            }
+            db.SaveChanges();
+            return RedirectToAction("OrderDetailList", new { id = id });
+        }
+
+        #endregion
     }
 }
