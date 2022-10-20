@@ -9,5 +9,7 @@ namespace prjiSpanFinal.ViewModels.seller
     {
         public List<string> bigType { get; set; }
         public List<string> smallType { get; set; }
+        public List<string> memship { get; set; }
+        public List<int> shipID { get; set; }
     }
 }

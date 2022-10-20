@@ -7,9 +7,7 @@ namespace prjiSpanFinal.ViewModels.seller
 {
     public class CSellerViewToPaymentViewModel
     {
-        public int MemberID { get; set; }
-        public List<bool> check{ get; set; }
-        public List<bool> paycheck { get; set; }
-        public List<bool> shipcheck { get; set; }
+        public string 金物流 {get;set;}
+        public List<string> 選取的 { get; set; }
     }
 }

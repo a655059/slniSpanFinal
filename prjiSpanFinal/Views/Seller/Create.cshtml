@@ -23,9 +23,7 @@
         }
 
         .名稱寬 {
-            width: 50px;
             float: left;
-            margin-right: 3px;
         }
 
         .btntype, .btntype物流 {
@@ -63,16 +61,6 @@
             border-radius: 10px;
         }
 
-        .貨運框線 {
-            border: 1px;
-            border-bottom: solid;
-            border-color: darkgray;
-            width: 500px;
-            height: 40px;
-            font-size: 20px;
-            align-content: center;
-        }
-
         .貨運無底框 {
             border: 1px;
             border-color: darkgray;
@@ -80,16 +68,6 @@
             height: 40px;
             font-size: 20px;
             align-content: center;
-        }
-
-        .貨運字 {
-            float: left;
-            width: 200px;
-        }
-
-        .貨運按鈕 {
-            float: right;
-            width: 10px;
         }
 
         .規格列表 {
@@ -120,6 +98,10 @@
 
         .寬度 {
             position: relative
+        }
+
+        .按鈕大小 {
+            font-size: 20px;
         }
     </style>
 }
@@ -155,131 +137,139 @@
 </div>
 
 @*<form action="@Url.Content("~/seller/Create")" method="post">*@
-    <div class="row ">
-        <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
-        <div class="col-10">
-            <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
-            <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
-            <div class="row">
-                <div class="排版 mx-5">
-                    <h4 class=" mb-4">商品資訊</h4>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row ">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-10">
+        <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
+        <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
+        <div class="row">
+            <div class="排版 mx-5">
+                <h4 class=" mb-4">商品資訊</h4>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="d-flex justify-content-start">
+                    <label class="名稱寬">名稱</label>
+                    <input type="text" class="form-control 名稱" name="productName" />
+                    <span class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2">類別</label>
+                    <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
+                        @{
+                            for (int i = 0; i < Model.bigType.Count; i++)
+                            {
+                                <option value="@i">@Model.bigType[i]</option>
+                            }
+                        }
+                    </select>
+                    <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType" name="smallType">
+                        @{
+                            for (int i = 0; i < 17; i++)
+                            {
+                                <option value="@i">@Model.smallType[i]</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2">規格</label>
+                    @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
+                    <span class="text-danger"></span>
+                    <section class="section">
+                        <table class="table w-100 text-center">
+                            <thead>
+                                <tr>
+                                    <th class="col 規格列表">樣式</th>
+                                    <th class="col 規格列表">數量</th>
+                                    <th class="col 規格列表">售價</th>
+                                    <th class="col 規格列表">照片</th>
+                                    <th class="col 規格列表">功能</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="text-center">
+                            <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="addStyle">
+                </div>
+                <div class="d-flex justify-content-start">
+                    <label class="名稱寬 mt-2">封面照片</label>
                     <div class="d-flex justify-content-start">
-                        <label class="名稱寬">名稱</label>
-                        <input type="text" class="form-control 名稱" name="productName" />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="d-flex justify-content-start ">
-                        <label class="名稱寬 mt-2">類別</label>
-                        <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
-                            @{
-                                for (int i = 0; i < Model.bigType.Count; i++)
-                                {
-                                    <option value="@i">@Model.bigType[i]</option>
-                                }
-                            }
-                        </select>
-                        <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType" name="smallType">
-                            @{
-                                for (int i = 0; i < 17; i++)
-                                {
-                                    <option value="@i">@Model.smallType[i]</option>
-                                }
-                            }
-                        </select>
-                    </div>
-
-                    <div class="d-flex justify-content-start ">
-                        <label class="名稱寬 mt-2">規格</label>
-                        @*<button class="btntype mt-3 ">新增規格</button>*@       @*    button  在這   *@
-                        <span class="text-danger"></span>
-                        <section class="section">
-                            <table class="table w-100 text-center">
-                                <thead>
-                                    <tr>
-                                        <th class="col 規格列表">樣式</th>
-                                        <th class="col 規格列表">數量</th>
-                                        <th class="col 規格列表">售價</th>
-                                        <th class="col 規格列表">照片</th>
-                                        <th class="col 規格列表">功能</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                            <div class="text-center">
-                                <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
-                            </div>
-                        </section>
-                    </div>
-
-                    <div class="addStyle">
-                    </div>
-                    <div>
-                        <label class="名稱寬 mt-2">封面照片</label>
-                        <div class="d-flex justify-content-start">
-                            @*    大頭照相片1     *@
-                            <div>
-                                <label class="btn" for="commentPhoto1">
-                                    <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                </label>
-                                <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
-                            </div>
-                            @*    大頭照相片2     *@
-                            <div>
-                                <label class="btn" for="commentPhoto2">
-                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                </label>
-                                <input type="file" id="commentPhoto2" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                            </div>
-                            @*    大頭照相片3     *@
-                            <div>
-                                <label class="btn" for="commentPhoto3">
-                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                </label>
-                                <input type="file" id="commentPhoto3" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                            </div>
-                            @*    大頭照相片4     *@
-                            <div>
-                                <label class="btn" for="commentPhoto4">
-                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                </label>
-                                <input type="file" id="commentPhoto4" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                            </div>
-                            @*    大頭照相片5     *@
-                            <div>
-                                <label class="btn" for="commentPhoto5">
-                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                </label>
-                                <input type="file" id="commentPhoto5" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
-                            </div>
+                        @*    大頭照相片1     *@
+                        <div>
+                            <label class="btn" for="commentPhoto1">
+                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" name="HeadPic"/>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-start ">
-                        <label class="名稱寬 mt-2 ">描述</label>
-                        <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea"></textarea>
+                    <label class="名稱寬 mt-2">其他照片</label>
+                    <div class="d-flex justify-content-start">
+                        @*    大頭照相片2     *@
+                        @{
+                            for (int i = 0; i < 4; i++)
+                            {
+                                <div>
+                                    <label class="btn" for="commentPhoto2">
+                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    </label>
+                                    @{
+                                        string id = $"commentPhoto{i + 2}";
+                                    }
+                                    <input type="file" id="@id" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
+                                </div>
+                            }
+                        }
+
                     </div>
-                    <div class="d-flex justify-content-start ">
-                        <label class="名稱寬 m-3">物流</label>
-                        <button class="btntype物流 m-4 ">新增規格</button>        @*    button  在這   *@
-                        <span class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2 ">描述</label>
+                    <textarea class="form-control  描述欄位 mt-3 " aria-label="With textarea" name="Description"></textarea>
+                </div>
+
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬">物流</label>
+                    <div class="col-1"></div>
+                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
+                        @{
+                            for (int i = 0; i < Model.memship.Count; i++)
+                            {
+                                <div class="col-6 my-1">
+                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" />@Model.memship[i]</label>
+                                </div>
+                                <div class="col-6 my-1">
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.shipID[i]">
+                                    </div>
+                                </div>
+                            }
+                        }
                     </div>
-                    <div class="add物流 d-flex justify-content-center">
-                    </div>
-                </div><br />
+                    <div class="col-2"></div><br />
+                </div>
+
+
                 <div class="row ">
                     <div class="col-4"></div>
                     <div class="col-8">
-                        <input type="submit" value="下一步" class = "btn btn-warning m-3"/>
+                        <input type="submit" value="下一步" class="btn btn-warning m-3" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @*</form>*@
 @section Scripts{
     <script>
 
-        /////////大類小類連接
+        /////////大類小類連接---------------------------------------------------------------------------------------------------------------
 
         const bigType = document.querySelector("#bigType")
         const smallType = document.querySelector("#smallType")
@@ -291,8 +281,8 @@
 
             renderSmallType(smallTypes);
         })
-       
-        //
+
+
 
         function renderSmallType(datas) {
             smallType.options.length = 0;
@@ -301,7 +291,7 @@
                 smallType.options.add(opt);
             })
         }
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------
 
         ///////規格新增
 
@@ -404,73 +394,12 @@
             if (photo) {
                 let src = URL.createObjectURL(photo[0]);
                 console.log(src);
-                $(this).siblings('label').Urlhildren().css({ "background-image": `url('${src}')` });
+                $(this).siblings('label').children().css( "background-image", `url('${src}')` );
             }
         });
 
         //物流新增
 
-        let 物流按鈕 = document.querySelector(".btntype物流");
-        let 新增物流 = document.querySelector(".add物流");
-        let 刪除物流 = document.querySelector("delete物流");
-
-        物流按鈕.addEventListener("click", () => {
-            新增物流.innerHTML =
-                `<div class="d-flex justify-content-start ">
-                                        <table class="table">
-                                            <thead>
-                                                <tr></tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="d-flex justify-content-around 貨運框線">
-                                                        <div class="貨運字">7-ELEVEN</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運框線">
-                                                        <div class="貨運字">全家便利商店</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運框線">
-                                                        <div class="貨運字">萊爾富</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運框線">
-                                                        <div class="貨運字">OK便利商店</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運框線">
-                                                        <div class="貨運字">大榮貨運</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運無底框">
-                                                        <div class="貨運字">黑貓宅急便</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                    <td class="d-flex justify-content-around 貨運無底框">
-                                                        <div class="貨運字">蝦到爆店到店</div>
-                                                        <div class="form-check form-switch 貨運按鈕">
-                                                            <input class="form-check-input " type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                     </div>`;
-            物流按鈕.style.visibility = "hidden";   //隱藏屬性
-        })
 
 
     </script>
