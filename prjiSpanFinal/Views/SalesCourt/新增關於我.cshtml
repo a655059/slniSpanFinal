@@ -11,89 +11,92 @@
 
 </div>
 
-<!--<div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
-    <div class="bg-warning">付款運送</div>
-    <div class="row">-->
-        @*@foreach(var a in Model){
-            <div class="col">@a.DeliveryMethod</div>
-        }*@
 
-      
-
-        @*@foreach (var a in Model.DeliveryFee)
-        {
-            <div class="col">@a</div>
-
-        }*@
-    <!--</div>
-</div>-->
-
-@*<div>
-        <a asp-action="關於我">去關於我</a>
-    </div>*@
+<form asp-action="新增關於我">
+    新增測試
+    @*<input asp-for="@Model.SalesCourtServiceTime" class="control-label" />*@
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
-<div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
-        <div class="bg-warning rounded">付款/運送</div>
+    <div class="row">
 
-        <div class="row">
-            
-            <div class="col">
-                <div class="text-danger">付款方式(必填)</div>
-            </div>
-            <div class="col">
-                <div class="text-danger">運送方式(必填)</div>
-            </div>
+        <div class="col">
+            <div class="text-danger">付款方式(必填)</div>
         </div>
+        <div class="col">
+            <div class="text-danger">運送方式(必填)</div>
+        </div>
+    </div>
 
-        <div class="row">
-            <div class="col">
-                @foreach(var item in Model.DeliveryMethod)
+    @*付款方式*@
+    <div class="row">
+        <div class="col  form-group">
+            @{
+                @for(int j = 0; j < Model.PayingMethod.Count; j++)
                 {
                     <div class="row">
-                        @item
+                        <div class="col">
+                            @*<input type="checkbox" asp-for="@Model.PayingMethodCheck[j]"/>*@
+                            <input type="checkbox" id="@Model.PayingMethod[j]" asp-for="@Model.PayingMethodCheck[j]" value="@Model.PayingMethodCheck[j]" checked="@Model.PayingMethodCheck[j]">
+                        </div>
+                        <div class="col">
+                            @Model.PayingMethod[j]
+                        </div>
                     </div>
                 }
 
-                @*for (int i = 0; i < Model.DeliveryMethod.Count; i++)
+                @*int j = 0;
+                @foreach (var item in Model.PayingMethod)
                 {
                     <div class="row">
                         <div class="col">
-                            <input type="checkbox">
-                        </div>
-                        <div class="col">
-                            <span>@Model.DeliveryMethod[i]</span>
-                        </div>
-                        <div class="col">
-                            <span>@Model.DeliveryFee[i]</span>
-                        </div>
-                    </div>
-                }*@
+                            <input type="checkbox" class="form-check-input" id="@item" asp-for="">
 
-                @*<textarea class="form-control" style="height: 90px; width:570px;"></textarea>*@
-            </div>
-            <div class="col">
-                
-                    @for (int i = 0; i < Model.DeliveryMethod.Count; i++)
-                    {
-                        <div class="row">
-                            <div class="col">
-                                <input type="checkbox">
-                            </div>
-                            <div class="col">
-                                <span>@Model.DeliveryMethod[i]</span>
-                            </div>
-                            <div class="col">
-                                <span>@Model.DeliveryFee[i]</span>
-                            </div>
+                            
                         </div>
-                    }
-               
-                
-                @*<textarea class="form-control" style="height: 90px; width:570px;"></textarea>*@
+                        <div class="col">
+                            @item
+                        </div>
+
+                    </div>
+                    j++;
+                }*@
+            }
+
+
+
+        </div>
+        <div class="col">
+
+            @for (int i = 0; i < Model.DeliveryMethod.Count; i++)
+            {
+                <div class="row">
+                    <div class="col">
+                        @*<input type="checkbox" asp-for="DeliveryMethod" class="form-control" value="@i">*@
+                    </div>
+                    <div class="col">
+                        <span>@Model.DeliveryMethod[i]</span>
+                    </div>
+                    @*<div class="col">
+                        <span>@Model.DeliveryFee[i]</span>
+                    </div>*@
+                </div>
+            }
+
+
+            @*<textarea class="form-control" style="height: 90px; width:570px;"></textarea>*@
         </div>
 
     </div>
+
+
+    <input type="submit" value="確認並新增" class="btn btn-primary" />
+</form>
+
+<!--<div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
+    <div class="bg-warning rounded">付款/運送</div>
+
+   
 
     <div class="row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
         <div class="bg-warning rounded">賣場資訊</div>
@@ -183,47 +186,47 @@
                 </p>
             </div>
             <div class="col">
-                <div class="text-success">新品上架時間</div>
-@*<input type="text" name="#" value="">*@
-<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
-<div class="text-success">商品類型</div>
-@*<input type="text" name="#" value="">*@
-<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
-<div class="text-success">賣家類型</div>
-@*<input type="text" name="#" value="">*@
-<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+                <div class="text-success">新品上架時間</div>-->
+                @*<input type="text" name="#" value="">*@
+<!--<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+                <div class="text-success">商品類型</div>-->
+                @*<input type="text" name="#" value="">*@
+<!--<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+                <div class="text-success">賣家類型</div>-->
+                @*<input type="text" name="#" value="">*@
+<!--<textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col border  border-secondary rounded-3">
+            <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
+                <div class="bg-warning rounded-2">售後服務</div>-->
+                @*<input type="text" name="#" value="">*@
+<!--<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+            </div>
+        </div>
+        <div class="col border  border-secondary  rounded-3">
+            <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
+                <div class="bg-warning rounded-2">注意事項</div>-->
+                @*<input type="text" name="#" value="">*@
+<!--<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+            </div>
         </div>
     </div>
 
-</div>
 
-<div class="row">
-    <div class="col border  border-secondary rounded-3">
-        <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
-            <div class="bg-warning rounded-2">售後服務</div>
-@*<input type="text" name="#" value="">*@
-<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
-    </div>
-</div>
-<div class="col border  border-secondary  rounded-3">
-    <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
-        <div class="bg-warning rounded-2">注意事項</div>
-@*<input type="text" name="#" value="">*@
-<textarea class="form-control" style="height: 184px; width:630px;"></textarea>
-        </div>
-    </div>
-</div>
+    @section Scripts{
+        <script>
 
+            $("sub").click(
+                function () {
 
-@section Scripts{
-    <script>
+                    console.log($("a1").val);
+                }
+            )
 
-        $("sub").click(
-            function () {
-
-                console.log($("a1").val);
-            }
-        )
-
-    </script>
-}
+        </script>
+    }-->
