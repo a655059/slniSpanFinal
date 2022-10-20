@@ -99,6 +99,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 2;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -109,6 +110,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 0;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -119,6 +121,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 1;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -146,13 +149,21 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.ProductDetails
                     where d.ProductDetailId == id
                     select d;
-            db.ProductDetails.Remove(D.First());
+            var G = from g in db.Products
+                    where g.ProductId == D.First().ProductId
+                    select g;
+            var K = from k in db.ProductDetails
+                    where k.ProductId == G.First().ProductId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.ProductDetails.Remove(D.First());
+            }
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList", new { id });
+            return RedirectToAction("ProductDetailList", new { id=id});
         }
         #endregion
         #region MemberRegion
-
         public List<CMemberListViewModel> GetMembersFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
@@ -384,7 +395,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
-            db.Orders.Remove(D.First());
+            D.First().StatusId = 10;
             db.SaveChanges();
             return RedirectToAction("OrderList", new { id });
         }

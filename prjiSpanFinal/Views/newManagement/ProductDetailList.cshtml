@@ -6,7 +6,7 @@
 
 <h1>商品細節</h1>
 
-@Html.ActionLink("回到列表","newProductList")
+@Html.ActionLink("回到列表","newProductList","newManagement",null,new{@class="btn btn-primary"})
 
 <table class="table">
     <thead>
@@ -35,7 +35,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="rowsss">
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductDetailId)
                 </td>
@@ -59,7 +59,7 @@
                     <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
-                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId  },new{onclick="really()"})
+                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId},new{onclick="really()",@class="btn btn-primary deles"})
                 </td>
             </tr>
         }
@@ -68,11 +68,14 @@
 <script>
     function really() {
         var yes = confirm('你確定要刪除嗎？');
-        return yes;
-        if (yes) {
-            return confirm("真的會從資料庫刪除喔?確定嗎?");
-        } else {
-            return;
+    }
+    let trs = document.querySelectorAll(".rowsss");
+    let dels = document.querySelectorAll(".deles");
+    if(trs.length-1<=0){
+        for(let e of dels){
+            e.addEventListener("click",()=>{
+                return alert("商品細項不可少於一項");
+            })
         }
     }
 </script>
