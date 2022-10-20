@@ -87,7 +87,7 @@ function loadactivemsg(scid) {
         $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
     }
     else {
-        $.getJSON(`/Msgapi/Getchat/`, { scid: scid, sid: memacc }, function (data) {
+        $.getJSON(`/Msgapi/Getchat`, { scid: scid, sid: memacc }, function (data) {
             $("#messagebody").html("");
             activec = scid;
             for (let i = 0; i < data.length; i++) {
@@ -189,11 +189,11 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
         $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
         $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
         $(`.msgcid[value="${sendFrom}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(shortbody);
-        $.getJSON(`/Msgapi/HaveRead/`, { msgid: msgid }, function () {});
+        $.getJSON(`/Msgapi/HaveRead`, { msgid: msgid }, function () {});
     }
     else {
         if ($(`.msgcid[value="${sendFrom}"]`).length == 0) {
-            $.getJSON(`/Msgapi/GetmembyId/`, { id: sendFrom }, function (data) {
+            $.getJSON(`/Msgapi/GetmembyId`, { id: sendFrom }, function (data) {
                 if (data == undefined) {
                     return;
                 }
@@ -459,7 +459,7 @@ $(".chatroom").click(function () {
 $("#msgautoComplete").on("input",async () => {
     $("#msgautoCompletebox").css("display", "block");
     let htmlDatas;
-    $.getJSON(`/Msgapi/AutoComplete/`, { keyword: $("#msgautoComplete").val() }, function (data) {
+    $.getJSON(`/Msgapi/AutoComplete`, { keyword: $("#msgautoComplete").val() }, function (data) {
         htmlDatas = data.map(data => {
             if (data != "admin" && data != truememacc) {
                 return (
@@ -481,17 +481,25 @@ $("#msgsearch").click(function () {
     if ($("#msgautoComplete").val() == "") {
         return;
     }
+    opencertaindialog($("#msgautoComplete").val());
+})
+
+function opencertaindialog(acc) {
     let today = new Date();
     let timestamp = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
-    $.getJSON(`/Msgapi/GetmembyAcc/`, { acc: $("#msgautoComplete").val() }, function (data) {
+    $.getJSON(`/Msgapi/GetmembyAcc`, { acc: acc }, function (data) {
         if (data == undefined) {
             return;
         }
-        if (data.memberId == memacc || data.memberId == 1 || $(`.msgcid[value="${data.memberId}"]`).length != 0){
+        if (data.memberId == memacc || data.memberId == 1) {
             return;
         }
-        $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, "", timestamp, data.memberAcc, ""));
-        $("#msgopendialogbody").children().eq(0).children("a").trigger("click");
+        else if ($(`.msgcid[value="${data.memberId}"]`).length != 0) {
+            $(`.msgcid[value="${data.memberId}"]`).siblings().trigger("click");
+        }
+        else {
+            $("#msgopendialogbody").prepend(CMessageDialog(data.memberId, data.memPic, "", timestamp, data.memberAcc, ""));
+            $("#msgopendialogbody").children().eq(0).children("a").trigger("click");
+        }
     });
-})
-
+}
