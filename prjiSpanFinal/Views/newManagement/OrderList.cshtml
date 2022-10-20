@@ -1,0 +1,203 @@
+﻿@model IEnumerable<COrderListViewModel>
+@{
+    ViewData["Title"] = "OrderList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels.newManagement
+@section Styles{
+    <style>
+        td input {
+            width: 160px;
+        }
+    </style>
+}
+    <h1>OrderList</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    訂單ID
+                </th>
+                <th>
+                    買家ID
+                </th>
+                <th>
+                    下訂日期
+                </th>
+                <th>
+                    到貨日期
+                </th>
+                <th>
+                    訂單完成日期
+                </th>
+                <th>
+                    使用優惠券
+                </th>
+                <th>
+                    訂單狀態
+                </th>
+                <th>
+                    物流
+                </th>
+                <th>
+                    付款日期
+                </th>
+                <th>
+                    出貨日期
+                </th>
+                <th>
+                    領收日期
+                </th>
+                <th>
+                    付款方式
+                </th>
+                <th>
+                    給賣家的話
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.OrderId)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.MemberId)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.OrderDatetime)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.RecieveAdr)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.FinishDate)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.CouponName)
+                </td>
+                <td class="form-control-plaintext">
+                    <input class="form-control-plaintext statusname" value="@item.OrderStatusName" readonly>
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.ShipperName)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.PaymentDate)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.ShippingDate)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.ReceiveDate)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.PaymentName)
+                </td>
+                <td class="form-control-plaintext">
+                    @Html.DisplayFor(modelItem => item.Order.OrderMessage)
+                </td>
+                <td>
+                    <a name="@item.Order.OrderId" class="Out btn btn-outline-secondary">出貨</a>
+                    <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary">到貨</a>
+                    <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger">完成</a>
+                    <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger">爭議處理中</a>
+                    @Html.ActionLink("取消並作廢訂單", "OrderDelete","newManagement" ,new { id=item.Order.OrderId  },new{onclick="really()"})
+                        @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
+                        @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="align-content:center" class="paginations">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("OrderList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3)
+        .Build())
+</div>
+
+@section Scripts{
+    <script>
+        let Out = document.querySelectorAll(".Out");
+        let Delivered = document.querySelectorAll(".Delivered");
+        let Fin = document.querySelectorAll(".Fin");
+        let Stop = document.querySelectorAll(".Stop");
+        let PSName = document.querySelectorAll(".statusname");
+        for (var BTNdele of Out) {
+            BTNdele.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/OrderOut")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("已出貨");
+                }
+            })
+        }
+        for (var BTNUnd of Delivered) {
+            BTNUnd.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/OrderDeliver")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("已到貨");
+                }
+            })
+        }
+        for (var BTNdow of Fin) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/OrderFin")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("已完成");
+                }
+            })
+        }
+        for (var BTNdow of Stop) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/OrderStop")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("爭議處理中");
+                }
+            })
+        }
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+        function really() {
+            var yes = confirm('你確定要刪除嗎？');
+            return yes;
+            if (yes) {
+                return confirm("真的會從資料庫刪除喔?確定嗎?");
+            } else {
+                return;
+            }
+        }
+    </script>
+    }
