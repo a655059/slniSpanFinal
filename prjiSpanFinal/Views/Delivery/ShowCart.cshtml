@@ -31,7 +31,7 @@
                 <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
                     <div class="form-check border-bottom pb-2 d-flex align-items-center">
                         <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                        <label class="form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label><span class="fs-5">的賣場</span>
+                        <label class="sellerAcc form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label><span class="fs-5">的賣場</span>
                     </div>
                     @foreach (var i in Model.cart)
                     {
@@ -49,14 +49,17 @@
                             }
                             <div class="itemLayout d-flex justify-content-between align-items-center my-2">
                                 <div class="d-flex justify-content-start align-items-center w-75">
-                                    <input class="selectItem form-check-input " type="checkbox" value="" id="product1" checked>
+                                    <input class="selectItem form-check-input " type="checkbox" value="" checked>
                                     <div class="mx-3">
                                         <div class="itemImgDiv">
-                                            <img src="@imgSrc" />
+                                            <img src="@imgSrc" class="productDetailID" id="@i.productDetail.ProductDetailId"/>
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="form-check-label" for="product1">@i.productName</label>
+                                        @{ 
+                                            string productLink = Url.Content("~/Item/Index") + "?id=" + i.product.ProductId;
+                                        } 
+                                        <a href="@productLink" class="productLink"><label class="productName form-check-label">@i.product.ProductName</label></a>
                                         <div class="text-black-50">@i.productDetail.Style</div>
                                         <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
                                     </div>
@@ -152,6 +155,43 @@
                 return;
             }
 
+        });
+        $("#goCheckout").click(async function () {
+            if ($(".selectItem:checked").length >= 1) {
+                let orderDetailIDInfo = [];
+                $(".selectItem:checked").each(function () {
+                    const orderDetailID = Number($(this).closest(".itemLayout").find(".btnDelete").attr("id"));
+                    const purchaseCount = Number($(this).closest(".itemLayout").find(".itemCount").val());
+                    const productName = $(this).closest(".itemLayout").find(".productName").html();
+                    const productDetailID = Number($(this).siblings().find(".productDetailID").attr("id"));
+                    const sellerAcc = $(this).closest(".sellerLayout").find(".sellerAcc").html();
+                    const unitPrice = $(this).siblings().find(".itemPrice").html();
+                    const object = {
+                        "orderDetailID": orderDetailID,
+                        "purchaseCount": purchaseCount,
+                        "productName": productName,
+                        "productDetailID": productDetailID,
+                        "sellerAcc": sellerAcc,
+                        "unitPrice":unitPrice,
+                    };
+                    orderDetailIDInfo.push(object);
+                });
+                const data = JSON.stringify(orderDetailIDInfo);
+                const response = await fetch("@Url.Content("~/Delivery/SetItemToCheckoutSession")" + `?purchaseItemInfo=${data}`);
+                const result = await response.text();
+                if (result == 0) {
+                    alert("請再點一次去結帳");
+                    return;
+                }
+                else {
+                    window.location.href = "@Url.Content("~/Delivery/Checkout")"
+                }
+            }
+            else {
+                alert("請選取至少一個商品");
+                return;
+            }
+            
         });
     </script>
 }

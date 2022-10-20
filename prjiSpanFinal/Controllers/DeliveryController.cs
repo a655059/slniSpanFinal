@@ -147,7 +147,7 @@ namespace prjiSpanFinal.Controllers
                     var allInfo = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => new {
                         sellerID = i.ProductDetail.Product.MemberId,
                         sellerAcc = i.ProductDetail.Product.Member.MemberAcc,
-                        productName = i.ProductDetail.Product.ProductName,
+                        product = i.ProductDetail.Product,
                         orderDetail = i,
                         productDetail = i.ProductDetail,
                     });
@@ -157,14 +157,14 @@ namespace prjiSpanFinal.Controllers
                     {
                         int sellerID = info.sellerID;
                         string sellerAcc = info.sellerAcc;
-                        string productName = info.productName;
+                        Product product = info.product;
                         OrderDetail orderDetail = info.orderDetail;
                         ProductDetail productDetail = info.productDetail;
                         CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
                         {
                             sellerID = sellerID,
                             sellerAcc = sellerAcc,
-                            productName = productName,
+                            product = product,
                             orderDetail = orderDetail,
                             productDetail = productDetail
                         };
@@ -241,17 +241,37 @@ namespace prjiSpanFinal.Controllers
                 dbContext.SaveChanges();
                 return Content("1");
             }
-            
-            
         }
         public IActionResult ShowNoItemInCart()
         {
             return ViewComponent("ShowNoItemInCart");
         }
+        public IActionResult SetItemToCheckoutSession(string purchaseItemInfo)
+        {
+            try
+            {
+                HttpContext.Session.SetString(CDictionary.SK_PURCHASEITEMINFO, purchaseItemInfo);
+                return Content("1");
+            }
+            catch
+            {
+                return Content("0");
+            }
+        }
         public IActionResult Checkout()
         {
-
-            return View();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASEITEMINFO))
+            {
+                string purchaseItemInfo = HttpContext.Session.GetString(CDictionary.SK_PURCHASEITEMINFO);
+                List<CPurchaseItemToSession> purchaseItems = JsonSerializer.Deserialize<List<CPurchaseItemToSession>>(purchaseItemInfo);
+                
+                return View();
+            }
+            else
+            {
+                return View();
+            }
+            
         }
         public IActionResult AddComment()
         {

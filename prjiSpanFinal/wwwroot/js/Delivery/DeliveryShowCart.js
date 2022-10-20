@@ -110,12 +110,7 @@ $(".itemCount").on("blur", function () {
     CalTotalPrice();
 });
 
-$("#goCheckout").click(function () {
-    if ($(".selectItem:checked").length < 1) {
-        alert("請選取至少一個商品");
-        return false;
-    }
-});
+
 
 
 

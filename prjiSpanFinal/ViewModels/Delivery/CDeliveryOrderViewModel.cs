@@ -10,7 +10,7 @@ namespace prjiSpanFinal.ViewModels.Delivery
     {
         public int sellerID { get; set; }
         public string sellerAcc { get; set; }
-        public string productName { get; set; }
+        public Product product { get; set; }
         public OrderDetail orderDetail { get; set; }
         public ProductDetail productDetail { get; set; } 
         public string shipperName { get; set; }
