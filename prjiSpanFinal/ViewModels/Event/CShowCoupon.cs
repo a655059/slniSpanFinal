@@ -47,7 +47,7 @@ namespace prjiSpanFinal.ViewModels.Event
         {
             get
             {
-                iSpanProjectContext _db = new iSpanProjectContext();
+                iSpanProjectContext _db = new iSpanProjectContext();                
                 return _db.MemberAccounts.Where(a => a.MemberId == coupon.MemberId).FirstOrDefault();
             }
         }
@@ -65,6 +65,26 @@ namespace prjiSpanFinal.ViewModels.Event
                 return coupon.MinimumOrder;
             }
         }
+        public MemberAccount loggeduser { get; set; }
+        public bool isLoggedHasCoupon
+        {
+            get
+            {
+                iSpanProjectContext _db = new iSpanProjectContext();
+                if (loggeduser != null)
+                {
+                    if (_db.CouponWallets.Where(w => w.MemberId == loggeduser.MemberId && w.CouponId == coupon.CouponId).Any())
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+                
+            }
+            set { }
+        }
+        
 
         private string discountformat(float discount)
         {
@@ -72,6 +92,6 @@ namespace prjiSpanFinal.ViewModels.Event
             res = res.Substring(2);
             return res;
         }
-
+        
     }
 }
