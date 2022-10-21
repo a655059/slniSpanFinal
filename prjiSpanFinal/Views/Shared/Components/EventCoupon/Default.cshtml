@@ -5,7 +5,7 @@
     bool isForFreeDelievery = Model.isFreeDelivery;
 }
 @{ 
-    if(isOutofDate)
+    if (isOutofDate)
     {
         <div class="coupon coupon-enable d-flex  ">
             <div class="coupon-start" style="color:RED">
@@ -40,13 +40,26 @@
                 </div>
                 <div div class="coupon-end-end">
                     <div>
-                        <a class="linknoline coupon-enable-btn coupon-tag">
-                            
-                            <div class="coupon-btn coupon-Active">
-                                領券
-                                <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
-                            </div>
-                        </a>
+
+                        @if (Model.isLoggedHasCoupon == false)
+                        {
+                            <a class="linknoline coupon-enable-btn coupon-tag">
+                                <div class="coupon-btn coupon-Active">
+                                    領券
+                                    <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="linknoline coupon-disable-btn">
+                                <div class="coupon-btn">
+                                    已領取
+                                    <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
+                                </div>
+                            </a>
+                        }
+
                     </div>
                 </div>
             </div>
