@@ -132,16 +132,16 @@ namespace prjiSpanFinal.Controllers
         }
 
 
-        public void CreateToDB(string jsonString, CSellerCreateToViewViewModel VM)
-        {
-            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+        //public void CreateToDB(string jsonString, CSellerCreateToViewViewModel VM)
+        //{
+        //    string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+        //    int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
-            var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
-            var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
+        //    var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
+        //    var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
 
-            return View();
-        }
+        //    return View();
+        //}
 
 
 
@@ -153,7 +153,7 @@ namespace prjiSpanFinal.Controllers
             return Json(smalltype);
         }
 
-        public IActionResult Shipper()  //傳資料進去view
+        public IActionResult OrderDetail(int id)  //傳資料進去view
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
