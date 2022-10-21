@@ -26,6 +26,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<CommentForCustomer> CommentForCustomers { get; set; }
         public virtual DbSet<CommentPic> CommentPics { get; set; }
         public virtual DbSet<CountryList> CountryLists { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
@@ -241,8 +242,6 @@ namespace prjiSpanFinal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(((2000)-(1))-(1))");
 
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
-
                 entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
                 entity.HasOne(d => d.OrderDetail)
@@ -250,6 +249,27 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.OrderDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_OrderDetails");
+            });
+
+            modelBuilder.Entity<CommentForCustomer>(entity =>
+            {
+                entity.ToTable("CommentForCustomer");
+
+                entity.Property(e => e.CommentForCustomerId).HasColumnName("CommentForCustomerID");
+
+                entity.Property(e => e.Comment)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.CommentTime).HasColumnType("datetime");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.CommentForCustomers)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CommentForCustomer_Orders");
             });
 
             modelBuilder.Entity<CommentPic>(entity =>
