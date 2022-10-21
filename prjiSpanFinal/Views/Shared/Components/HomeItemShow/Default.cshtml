@@ -1,5 +1,6 @@
 ﻿@model prjiSpanFinal.ViewModels.Home.CShowItem
 @{ 
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     string productLink = Url.Content("~/Item/Index") + "?id=" + Model.Product.ProductId;
 }
 <div class="sellsitem">
@@ -16,7 +17,9 @@
         }
     </a>
     <div class="px-1 d-flex flex-column justify-content-between">
-        <div class="cardTitle">@Model.Product.ProductName</div>        
+        <div class="cardTitleBox">
+            <div class="cardTitle">@Model.Product.ProductName</div>
+        </div>
         @{ if (Model.Price.Count == 1)
             {
                 <div class="cardPrice">$@decimal.Round(Model.Price[0])</div>
@@ -26,19 +29,19 @@
                 <div class="cardPrice">$@decimal.Round(Model.Price[0]) - $@decimal.Round(Model.Price[1])</div>
             }
         }
-        <div class="cardInfo d-flex justify-content-between align-items-end">
-            <div class="d-flex justify-content-start flex-column mt-1">
-                <div class="d-flex justify-content-start">
-                    <div class="starImg">
-                        <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                    </div>
-                    <div class="text-black">@Model.starCount.ToString("0.0")</div>
+    <div class="cardInfo d-flex justify-content-between flex-row">
+        <div class="starBox mt-1">
+            <div class="d-flex justify-content-start">
+                <div class="starImg">
+                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                 </div>
-                <div class="text-black-50">銷售<span>@Model.salesVolume</span></div>
-            </div>
-            <div>
-                <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                <div class="text-black">@Model.starCount.ToString("0.0")</div>
             </div>
         </div>
+        <div class="text-end text-black-50 sells">已賣出<span>@Model.salesVolume</span></div>
+        @*<div>
+            <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+        </div>*@
+    </div>
     </div>
 </div>

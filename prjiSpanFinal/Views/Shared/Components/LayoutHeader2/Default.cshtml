@@ -1,4 +1,12 @@
-﻿<div class="layoutheader2" id="header2">
+﻿@model prjiSpanFinal.ViewModels.Header.CHeader2ViewModel
+@{
+    int getCarts = 0;
+    if (Model.loggedMember != null) {
+        getCarts = Model.Carts;
+    }
+}
+
+<div class="layoutheader2" id="header2">
     <!-- container -->
     <div class="container">
         <!-- row -->
@@ -29,21 +37,44 @@
             </div>
             <!-- /SEARCH BAR -->
             <!-- Searchcart -->
-            <div class="col-md-2">
-                <div class="searchcart d-flex flex-row justify-content-center align-items-center">
-                    <!-- Wishlist -->
-                    <div class="searchcart-Heart">
-                        <a href="@Url.Content("~/Member/Like")" class="linknoline">
-                            <i class="fa fa-heart"></i>
-                            <div class="qty">2</div>
+            <div class="col-md-3 d-flex align-self-center justify-content-center align-items-center">
+                <div class="searchcart d-flex flex-row ">
+                    <!-- SellerCenter -->
+                    <div class="searchcart-Cart">
+                        <a href="@Url.Content("~/Seller/Center")" class="linknoline">
+                            <i class="fa fa-shop searchcart-Cart-icon"></i>
+                            <div class="text-center">
+                                <span>賣家中心</span>
+                            </div>
                         </a>
                     </div>
-                    <!-- /Wishlist -->
-                    <!-- Cart -->
+                    <!-- /SellerCenter -->
+                    <!-- MemberCenter -->
                     <div class="searchcart-Cart">
-                        <a href="@Url.Content("~/delivery/showcart")" class="linknoline">
-                            <i class="fa fa-shopping-cart"></i>
-                            <div class="qty" id="itemCountInCart">3</div>
+                        <a href="@Url.Content("~/Member/Order")" class="linknoline">
+                            <i class="fa fa-user searchcart-Cart-icon"></i>
+                            <div class="text-center">
+                                <span>會員中心</span>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- /MemberCenter -->
+                    <!-- Cart -->
+                    <div class="searchcart-Cart ">
+                        <a href="@Url.Content("~/Delivery/Showcart")" class="linknoline">
+                            <i class="fa fa-shopping-cart searchcart-Cart-icon">
+                                @if (getCarts > 0)
+                                {
+                                    <span class="qty" id="itemCountInCart">@getCarts</span>
+                                }
+                                else
+                                {
+                                    <span class="qty" id="itemCountInCart">0</span>
+                                }
+                            </i>
+                            <div class="text-center">
+                                <span>購物車</span>
+                            </div>
                         </a>
                     </div>
                     <!-- /Cart -->

@@ -5,7 +5,7 @@
     bool isForFreeDelievery = Model.isFreeDelivery;
 }
 @{ 
-    if (isOutofDate)
+    if (isOKtoRecieve)
     {
         <div class="coupon coupon-enable d-flex  ">
             <div class="coupon-start" style="color:RED">
@@ -65,7 +65,7 @@
             </div>
         </div>
     }
-    else if (!isOutofDate)
+    else if (!isOKtoRecieve)
     {
         <div class="coupon coupon-disable d-flex  ">
             <div class="coupon-start" style="color:RED">
@@ -101,7 +101,7 @@
                 <div div class="coupon-end-end">
                     <div>
                         <a class="linknoline coupon-disable-btn">
-                            <div class="coupon-btn">已失效</div>
+                            <div class="coupon-btn">已逾期</div>
                         </a>
                     </div>
                 </div>
