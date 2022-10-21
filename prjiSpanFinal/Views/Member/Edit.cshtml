@@ -4,7 +4,8 @@
 @using prjiSpanFinal.ViewModels
 @using Microsoft.AspNetCore.Http
 @using System.Text.Json
-@inject IHttpContextAccessor Accessor
+@using System.Linq;
+
 @{
     ViewData["Title"] = "Edit";
 }
@@ -72,7 +73,30 @@
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">個人資料修改</h2>
 
+@{
 
+    List<string> regionNameList = new List<string>();
+    List<string> countryNameList = new List<string>();
+    List<int> regionIdList = new List<int>();
+    int MyregionID = 0;
+    int MycountryID = 0;
+    //string countryName = "";
+    //int countryID = 0;
+    //count
+
+    if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+    {
+        string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+        MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
+        iSpanProjectContext db = new iSpanProjectContext();
+        MyregionID = loginMember.RegionId;
+        MycountryID = db.RegionLists.OrderByDescending(o=>o.RegionId).Where(r => r.RegionId == MyregionID).FirstOrDefault().CountryId;
+        regionNameList = db.RegionLists.OrderByDescending(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionName).ToList();
+        regionIdList = db.RegionLists.OrderByDescending(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionId).ToList();
+        countryNameList = db.CountryLists.OrderBy(o => o.CountryId).Select(r => r.CountryName).ToList();
+
+    }
+}
 <div class="row " id="viewPage">
     <div class="col-1"></div>
     <div class="col-11 ">
@@ -97,23 +121,7 @@
                                         <label asp-for="Birthday" class="p1">生日</label>
                                         <input asp-for="Birthday" type="date" name="Birthday" class="form-control" />
                                     </div>
-                                    <div class="st1">
-                                        <label class="p1">性別</label>
-                                        <div class="container text-center">
-                                            <div class="row align-items-start">
-                                                <label class="col">
-                                                    <input asp-for="Gender" type="radio" name="gender" value="male" />男生
-                                                </label>
-                                                <label class="col">
-                                                    <input asp-for="Gender" type="radio" name="gender" value="female" />女生
-                                                </label>
-                                                <label class="col">
-                                                    <input asp-for="Gender" type="radio" name="gender" value="other" />其他
-                                                </label>
-                                                <label class="col"></label>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </fieldset>
                             <fieldset>
@@ -130,26 +138,46 @@
                                     <label asp-for="BackUpEmail" class="p1">備用信箱</label>
                                     <input asp-for="BackUpEmail" class="form-control" type="text" name="BackUpEmail" size="40" />
                                 </div>
-                                <div class="st1">
-                                    <label class="p1">國籍</label>
-                                    <div class="container text-center">
-                                        <div class="row align-items-start">
-                                            <label class="col">
-                                                <input asp-for="IsTw" type="radio" name="TW" value="tw" />台灣
-                                            </label>
-                                            <label class="col">
-                                                <input asp-for="IsTw" type="radio" name="TW" value="foreign" />外國
-                                            </label>
-                                            <label class="col"></label>
-                                            <label class="col"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="st1">
-                                    <label class="p1">居住地</label>
-                                    <select name="City" size="1" class="form-select form-select-sm" style="width:200px;">
+
+                                <div class="st1" id="optioncity">
+                                    <label class="p1">縣市</label>
+                                    <select class="form-select form-select-sm" style="width:200px;" id="country" name="countryName">
+                                        @for (int i = 0; i < countryNameList.Count(); i++)
+                                        {
+                                            if (i + 1 == MycountryID)
+                                            {
+                                                <option selected="selected" value="@countryNameList[i]">@countryNameList[i]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@countryNameList[i]">@countryNameList[i]</option>
+                                            }
+
+                                        }
                                     </select>
                                 </div>
+                                <div class="st1" id="optionregion">
+                                    <label asp-for="RegionId" class="p1">區</label>
+                                    <select asp-for="RegionId" class="form-select form-select-sm" style="width:200px;" id="region" name="regionName">
+                                        @for (int i = regionIdList.FirstOrDefault(); i < regionIdList.FirstOrDefault() + regionIdList.Count(); i++)
+                                        {
+                                            if (i == MyregionID)
+                                            {
+                                                <option selected="selected" value="@regionNameList[i - regionIdList.FirstOrDefault()]">@regionNameList[i - regionIdList.FirstOrDefault()]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@regionNameList[i - regionIdList.FirstOrDefault()]">@regionNameList[i - regionIdList.FirstOrDefault()]</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="state" style="display:none;">
+                                    </select>
+                                </div>
+
                                 <div class="st1">
                                     <label asp-for="Address" class="p1">完整地址</label>
                                     <input asp-for="Address" class="form-control" type="text" name="Address" size="40" />
@@ -157,7 +185,8 @@
                             </fieldset>
                         </div>
                         <div class="col">
-                            <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" class="img-thumbnail w-25" />                            <br /><br />
+                            <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" class="img-thumbnail w-100" />
+                            <br /><br />
                             <label class="p1" for="formFile">上傳照片</label>
                             <input class="form-control" type="file" name="file1" multiple />
                         </div>
@@ -169,7 +198,8 @@
 
                 <div class="justify-content-around">
                     <div class="st2 justify-content-around">
-                        @Html.ActionLink("送出", "Edit", "Member", "", new { @class = "btn btn-primary" })
+                        <a role="button" class="btn btn-primary" id="submit" href="/">送出</a>
+                        @*@Html.ActionLink("送出", "Edit", "Member", "", new { @class = "btn btn-primary" })*@
                         <button class="btn btn-secondary" id="clear">清除</button>
                     </div>
                 </div>
@@ -184,16 +214,25 @@
 
 @section Scripts{
     <script>
-        const clear = document.querySelector("#clear");
-
-        clear.addEventListener("click", eve => {
-            eve.preventDefault();
-            clearData();
+        $("#country").on("change", function () {
+            const selCity = document.querySelector("#country")
+            const selSite = document.querySelector("#region")
+            const city = selCity.options[selCity.selectedIndex].value
+            $.getJSON("/Member/getCityID", { city: city }, function (datas) {
+                $.getJSON("/Member/Site", { site: datas[0] }, function (datas) {
+                    selSite.options.length = 0
+                    datas.forEach(city => {
+                        const opt = new Option(city, city)
+                        selSite.options.add(opt)
+                    })
+                })
+            })
         })
-        function clearData() {
-            $('input').val("")
-            $('textarea').val("")
-        }
+        $("#submit").click(function () {
+            $.postJSON("/Member/Edit", { city: city }, function () {
+                /*八個欄位變數取代city與control的傳進來變數一致*/
+            })
+        })
     </script>
 }
 
