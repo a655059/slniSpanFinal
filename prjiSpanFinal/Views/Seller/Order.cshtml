@@ -6,27 +6,225 @@
 {
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
+    <style>
+        .modal-dialog {
+            top: 7rem !important;
+        }
+    </style>
 }
 
 <vc:seller-ui></vc:seller-ui>
 <h2 class="d-flex justify-content-center">我的銷售</h2>
 <div id="orderdetaildiv">
-    <vc:seller-order-list></vc:seller-order-list>
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div class="ordersearchbar">
+                <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
+                <span>
+                    <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                </span>
+            </div>
+            <div class="ordersearchbar">
+                <button type="button" class="btn btn-success">一鍵出貨</button>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
+                    <input type="hidden" class="ordershipperstatus" value="0" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">訂單成立</a>
+                    <input type="hidden" class="ordershipperstatus" value="2" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已付款</a>
+                    <input type="hidden" class="ordershipperstatus" value="3" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已出貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="4" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已到貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="5" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
+                    <input type="hidden" class="ordershipperstatus" value="8" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">待評價</a>
+                    <input type="hidden" class="ordershipperstatus" value="6" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已完成</a>
+                    <input type="hidden" class="ordershipperstatus" value="7" />
+                </li>
+            </ul>
+            <table id="ordertable" class="table table-hover dataTable">
+                <thead>
+                    <tr>
+                        <td>訂單資料</td>
+                        <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
+                        <td>商品詳情</td>
+                        <td class="th-sm sorting" id="ordersales">訂單金額</td>
+                        <td>訂單狀態</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    操作
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="orderlistbody">
+                    @foreach (var item in Model)
+                    {
+                        int total = item.PaymentFee;
+                        @if (item.IsFreeDelivery != true)
+                        {
+                            total += item.ShipperFee;
+                        }
+                        <tr>
+
+                            <td>
+                                <input type="hidden" class="orderorderid" value="@item.OrderId" />
+                                <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
+                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a>
+                            </td>
+                            <td>@item.OrderDatetime</td>
+                            <td>
+                                @for (int j = 0; j < item.Quantity.Count; j++)
+                                {
+                                    total += Decimal.ToInt32(item.Unitprice[j]) * item.Quantity[j];
+                                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Pic[j])" width="60" height="60" />@item.ProductName[j] @item.Style[j] @:* @item.Quantity[j] $@Decimal.ToInt32(item.Unitprice[j]) <br />
+                                }
+                            </td>
+                            <td class="ordertotalprice">$@total</td>
+                            <td>@item.OrderStatusName</td>
+                            <td style="text-align:center">
+                                <a href="/Seller/OrderDetail?id=@item.OrderId" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />
+                                @{
+                                    if (item.ShipperStatusId == 6)
+                                    {
+                                        <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>
+                                    }
+                                }
+                                <div>
+                                    <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                </div>
+                            </td>
+                        </tr>
+                                    }
+                </tbody>
+            </table>
+            <div class="row ">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">評價買家</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請選擇評價星數: </div>
+                <div>
+                    @{
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="star itemQualityStar fa-regular fa-star me-1"></i>
+                        }
+                    }
+                </div>
+                <div id="commentResult" class="text-black-50"></div>
+                <input type="hidden" id="orderhiddenstar" name="itemStar" value="" />
+                <div>請輸入補充資訊: </div>
+                <div class="mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="ordercommentsubmit" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">您的評價已送出</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>感謝您的評價。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
+        $(".star").click(function () {
+            $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end()
+                .nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
+            let resultDiv = $(this).parent().siblings(".commentResult");
+            let starCount = $(this).prevAll().length + 1;
+            if (starCount == 1) {
+                resultDiv.html("很差");
+            } else if (starCount == 2) {
+                resultDiv.html("差");
+            } else if (starCount == 3) {
+                resultDiv.html("普通");
+            } else if (starCount == 4) {
+                resultDiv.html("不錯");
+            } else {
+                resultDiv.html("超棒");
+            }
+            $(this).closest("div").siblings("input").val(starCount);
+        });
+    </script>
+    <script>
         function OrderListItem(data) {
             item = `<tr>
 
-                        <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
-                            <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a></td>
-                        <td>${data.orderDatetime}</td>
-                        <td>`;
+                                <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
+                                    <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                                    <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a></td>
+                                <td>${data.orderDatetime}</td>
+                                <td>`;
             let total = data.paymentFee;
             for (let i = 0; i < data.quantity.length; i++) {
                 item = item + `<img src="data:image;base64,${data.pic[i]}" width="60" height="60" />${data.productName[i]} ${data.style[i]} * ${data.quantity[i]} $${data.unitprice[i]}<br />`;
@@ -36,16 +234,18 @@
                 total = total + data.shipperFee;
             }
             item = item + `</td>
-                        <td class="ordertotalprice">$${total}</td>
-                        <td>${data.orderStatusName}</td>
-                        <td style="text-align:center">
-                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbuttonde">訂單詳情</a><br />
-                            <button type="button" class="btn btn-secondary orderbuttonco">待給評價</button>
-                            <div>
-                                <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
-                            </div>
-                        </td>
-                    </tr>`;
+                                <td class="ordertotalprice">$${total}</td>
+                                <td>${data.orderStatusName}</td>
+                                <td style="text-align:center">
+                                    <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
+            if (data.shipperStatusId == 6) {
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>`;
+            }
+            item = item + `<div>
+                                        <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                    </div>
+                                </td>
+                            </tr>`;
             return item;
         }
 
@@ -102,11 +302,11 @@
                 }
             });
         })
-        $("#btnDate").click(function (){
+        $("#btnDate").click(function () {
             let keyword = $("#orderkeyword").val();
             let startdate = $("#startDate").val();
             let enddate = $("#endDate").val();
-            $.getJSON(`/Seller/SearchOrder`, { keyword: keyword, startdate: startdate, enddate : enddate }, function (data) {
+            $.getJSON(`/Seller/SearchOrder`, { keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
                 $("#orderlistbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     $("#orderlistbody").append(OrderListItem(data[i]));
@@ -115,17 +315,37 @@
         });
         $("#flexCheckDefault").change(function () {
             if ($(this).prop("checked")) {
-                $(".checkboxorder").prop("checked",true);
+                $(".checkboxorder").prop("checked", true);
             }
             else {
                 $(".checkboxorder").prop("checked", false);
             }
         });
-        $(".orderbuttonde").click(function () {
-            let orderid = $(this).parent().siblings().children().eq(0).val();
-            console.log(orderid);
-            $.getJSON(`/Seller/OrderDetail`, { id: orderid }, function () {
+        let commentorderid;
+        let commentitem;
+        $(document).on("click", ".orderbuttonco", function () {
+            commentorderid = $(this).parent().siblings().children().val();
+            $(".star").removeClass("fa-regular fa-solid text-warning").addClass("fa-regular fa-solid text-warning");
+            $("#commentResult").html("超棒");
+            $("#exampleFormControlTextarea1").val("");
+            $("#orderhiddenstar").val(5);
+            $("#staticBackdropLabel2").html("您的評價已送出");
+            commentitem = $(this);
+        })
+
+        $("#ordercommentsubmit").click(function () {
+            $.getJSON(`/Seller/WriteComment`, { id: commentorderid, star: $("#orderhiddenstar").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
+            }).then(function () {
+                $("#staticBackdropLabel2").html("您的評價已送出");
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }).catch(function () {
+                $("#staticBackdropLabel2").html("您的評價沒有送出");
             });
-        });
+        })
     </script>
 }

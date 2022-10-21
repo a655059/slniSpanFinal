@@ -100,6 +100,7 @@ namespace prjiSpanFinal.ViewModels.Member
         public string RenewProduct { get; set; }
         public string SellerType { get; set; }
         public string regionName { get; set; }
+        public string countryName { get; set; }
         public string gender { get; set; }
         public string TW { get; set; }
         public string PhoneMail { get; set; }

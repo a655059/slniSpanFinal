@@ -30,7 +30,44 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login","Member");
             }
-            return View();
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1).
+                Select(o => new OrderListViewModel()
+                {
+                    OrderId = o.OrderId,
+                    SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
+                    SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                    BuyerId = o.MemberId,
+                    BuyerAcc = o.Member.MemberAcc,
+                    OrderDatetime = o.OrderDatetime,
+                    //RecieveAdr = o.RecieveAdr,
+                    //FinishDate = o.FinishDate,
+                    //CouponName = o.Coupon.CouponName,
+                    //Discount = o.Coupon.Discount,
+                    IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                    OrderStatusName = o.Status.OrderStatusName,
+                    ShipperStatusId = o.StatusId,
+                    //ShipperName = o.Shipper.ShipperName,
+                    ShipperFee = o.Shipper.Fee,
+                    //ShipperPhone = o.Shipper.Phone,
+                    //PaymentDate = o.PaymentDate,
+                    //ShippingDate = o.ShippingDate,
+                    //ReceiveDate = o.ReceiveDate,
+                    //PaymentName = o.Payment.PaymentName,
+                    PaymentFee = o.Payment.Fee,
+                    //OrderMessage = o.OrderMessage,
+                    //OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
+                    //ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
+                    Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                    //OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
+                    //ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                    Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                    ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
+                    Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                    Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                    ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+                }).OrderByDescending(o => o.OrderDatetime).ToList());
         }
         public IActionResult SortOrder(int sort, int tab)
         {
@@ -52,13 +89,29 @@ namespace prjiSpanFinal.Controllers
             return Json(new OrderSortReq().SearchOrder(keyword, startdate.AddDays(1), enddate.AddDays(1), id));
 
         }
+        public IActionResult WriteComment(int id, byte star, string keyword)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
 
-
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
+            dbcontext.CommentForCustomers.Add(a);
+            Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+            b.StatusId = 7;
+            dbcontext.SaveChanges();
+            return Json("1");
+        }
 
         public IActionResult Create()
         {
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
+                return RedirectToAction("Login", "Member");
+            }
+            
                 string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
                 int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
@@ -76,17 +129,20 @@ namespace prjiSpanFinal.Controllers
                     shipID = shiperlist,
                 };
                 return View(x);
-            }
-            else
-            {
-                return RedirectToAction("Center");
-            }
         }
-        [HttpPost]
-        //public IActionResult Create(string json, CSellerViewToCreateViewModel VM)
+
+
+        //public void CreateToDB(string jsonString, CSellerCreateToViewViewModel VM)
         //{
-        //   // return 
+        //    string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+        //    int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+
+        //    var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
+        //    var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
+
+        //    return View();
         //}
+
 
 
         //連結小類別選項
@@ -97,14 +153,48 @@ namespace prjiSpanFinal.Controllers
             return Json(smalltype);
         }
 
-
-        public IActionResult OrderDetail(int id)
+        public IActionResult OrderDetail(int id)  //傳資料進去view
         {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 return RedirectToAction("Login", "Member");
             }
-            return View(id);
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new OrderDetailViewModel()
+            {
+                OrderId = o.OrderId,
+                SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                SellerEmail = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Email,
+                SellerName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Name,
+                SellerPhone = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Phone,
+                BuyerAcc = o.Member.MemberAcc,
+                BuyerEmail = o.Member.Email,
+                BuyerName = o.Member.Name,
+                BuyerPhone = o.Member.Phone,
+                OrderDatetime = o.OrderDatetime,
+                RecieveAdr = o.RecieveAdr,
+                CouponName = o.Coupon.CouponName,
+                IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                OrderStatusName = o.Status.OrderStatusName,
+                ShipperStatusId = o.StatusId,
+                ShipperName = o.Shipper.ShipperName,
+                ShipperFee = o.Shipper.Fee,
+                ShipperPhone = o.Shipper.Phone,
+                PaymentDate = o.PaymentDate,
+                ShippingDate = o.ShippingDate,
+                ReceiveDate = o.ReceiveDate,
+                PaymentName = o.Payment.PaymentName,
+                PaymentFee = o.Payment.Fee,
+                OrderMessage = o.OrderMessage,
+                Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
+                ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+            }).FirstOrDefault();
+            return View(vm);
         }
 
 
@@ -214,6 +304,10 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult NewIndex()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
 
@@ -265,44 +359,27 @@ namespace prjiSpanFinal.Controllers
         }
 
 
-        public IActionResult Coupon()
+        public IActionResult Coupon(string jsonString)
         {
             int id = 1;
             var x = _db.Coupons.Where(n => n.MemberId == id).Select(n => n).ToList();
 
-            //List<int> CouponId = new List<int>();
-            //List<string> CouponName = new List<string>();
-            //List<DateTime> StartDate = new List<DateTime>();
-            //List<DateTime> ExpiredDate = new List<DateTime>();
-            //List<float> Discount = new List<float>();
-            //List<string> CouponCode = new List<string>();
-
-            //for (int i = 0; i < x.Count; i++)
-            //{
-            //    CouponId.Add(x[i].CouponId);
-            //    CouponName.Add(x[i].CouponName);
-            //    StartDate.Add(x[i].StartDate);
-            //    ExpiredDate.Add(x[i].ExpiredDate);
-            //    Discount.Add(x[i].Discount);
-            //    CouponCode.Add(x[i].CouponCode);
-            //}
-            //CSellerCouponToViewViewModel y = new CSellerCouponToViewViewModel
-            //{
-            //    CouponId= CouponId,
-            //    CouponName= CouponName,
-            //    StartDate= StartDate,
-            //    ExpiredDate= ExpiredDate,
-            //    Discount= Discount,
-            //    CouponCode= CouponCode
-            //};
-
             return View(x);
+        }
+
+        public void Couponresponse(string jsonString)
+        {
+
+
         }
 
 
 
         public IActionResult AD()
         {
+
+
+
             return View();
         }
 
