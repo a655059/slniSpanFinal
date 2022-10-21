@@ -83,10 +83,10 @@ namespace prjiSpanFinal.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Create(string json, CSellerViewToCreateViewModel VM)
-        {
-            return 
-        }
+        //public IActionResult Create(string json, CSellerViewToCreateViewModel VM)
+        //{
+        //   // return 
+        //}
 
 
         //連結小類別選項
