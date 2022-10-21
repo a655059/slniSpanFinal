@@ -14,7 +14,6 @@ namespace prjiSpanFinal.Models
 
         public int CommentId { get; set; }
         public int OrderDetailId { get; set; }
-        public int MemberId { get; set; }
         public string Comment1 { get; set; }
         public byte CommentStar { get; set; }
         public DateTime CommentTime { get; set; }
