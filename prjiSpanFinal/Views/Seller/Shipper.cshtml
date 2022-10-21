@@ -59,8 +59,8 @@
             <p>目前蝦到爆提供下列付款方式：</p>
         </div>
 
-        <div class="線條陰影">
-            <div class="paymentLayout">
+        <div class="layout 線條陰影">
+            <div class="">
                 @{
                     string[] 照片路徑 = { "~/img/信用卡.jpg", "~/img/銀行轉帳.jpg", "~/img/金融簽帳.jpg", "~/img/歐付寶.jpg" };
                     for (int i = 0; i < 4; i++)
@@ -88,18 +88,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
             <p class="border-bottom my-4"></p>
 
             <div class="m-2">
@@ -109,7 +97,7 @@
             <div class="線條陰影">
                 <div class="shiperLayout">
                     @{
-                        string[] 物流照片路徑 = { "~/img/7-11.png", "~/img/全家.png", "~/img/萊爾富.png", "~/img/OK超商.png" };
+                        string[] 物流照片路徑 = { "~/img/payment5.png", "~/img/payment6.png", "~/img/payment7.png", "~/img/payment8.png" };
                         for (int i = 0; i < 4; i++)
                         {
                             <div class=" row py-2 m-3 border rounded-2">
@@ -126,7 +114,7 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="form-check form-switch 靠右">
-                                        <input class="form-check-input 按鈕大小" type="checkbox" id="@("shipdaobox"+i)">
+                                        <input class="paymentID form-check-input 按鈕大小" type="checkbox" id="@Model.PaymentId[i+4]">
                                     </div>
                                 </div>
                             </div>
@@ -148,48 +136,63 @@
 @section Scripts
 {
     <script>
-    //for (let i = 0; i < 4; i++)
-    //{
-    //    $(`#paybox${i}`).attr("checked")
-    //}
         
-
+        let 金物流 = [];
         //付款區
         let paymentArray = [];  //存付款陣列
         $(".paymentID").on("change", function () {  //on繫節事件
             paymentArray.length = 0;  //清空
-            $(this).closest(".paymentLayout").find(".paymentID:checked").each(function () {  //closest 目前位置向上比對
+            $(this).closest(".layout").find(".paymentID:checked").each(function () {  //closest 目前位置向上比對
                 let selectedPaymentID = $(this).attr("id");  //目前屬性ID
                 paymentArray.push(selectedPaymentID);//push 從陣列後面增加 ID
             })
         })
-
-        (function () {
-            $(".paymentID:checked").each(function () {
-                let x = $(this).attr("id");
-                paymentArray.push(x);
-            }())
-            
+        
         //物流區
-        //let shiperArray = [];
-        //$(".shiperID").on("change", function () {
-        //    shiperArray.length = 0;
-        //    $(this).closest(".shiperLayout").find(".shiperID:checked").each(function () {
-        //        let selectShipID = $(this).attr("id");
-        //        paymentArray.push(selectShipID);
-        //    })
-        //})
+        let shiperArray = [];
+        $(".shiperID").on("change", function () {
+            shiperArray.length = 0;
+            $(this).closest(".shiperLayout").find(".shiperID:checked").each(function () {
+                let selectShipID = $(this).attr("id");
+                shiperArray.push(selectShipID);
+            })
+        })
+       
+         
         //送出按鈕
         $("#save").click(async function () {
-            let jsonpay = JSON.stringify(paymentArray);  //資料轉成JSON
-            console.log(paymentArray)
-            let responsepay = await fetch("@Url.Content("~/Seller/Shipperrequest")",
-                { body: jsonpay, method: "post", headers: new Headers({ 'Context-Type': 'application/json' }) })  //把資料傳到後端
+            let payobject = { "金物流": "金流", "選取的": paymentArray };
+            let shipobject = { "金物流": "物流", "選取的": shiperArray };
+            console.log(payobject)
+            console.log(shipobject)
+            let alljson = [];
+            alljson.push(payobject);
+            alljson.push(shipobject);
+            let jsonall = JSON.stringify(alljson);
 
-            @*let jsonship = JSON.stringify(shiperArray);
-            let responseship = await fetch("@Url.Content("~/Seller/Shipperrequest")",
-                { body: jsonship, method: "post", headers: new Headers({ 'Context-Type': 'application/json' }) })*@
-        });
+            let response = await fetch("@Url.Content("~/Seller/Shipperrequest")" + `?jsonString=${jsonall}`);
+            let data = await response.text();
+            if (data == 1) {
+                alert("修改成功");
+            }
+            else {
+                alert("請先登入");
+            }
+            console.log(data);
+        })
+        //`?json=${alljson}`把資料傳到後端
+        //{
+        //    body: jsonall, method: "post", headers: new Headers({ 'Context-Type': 'application/json' })//把資料傳到後端
+        //});
+        @* let response = await fetch("@Url.Content("~/Seller/Shipperrequest")", {
+            body: jsonall,
+            method: "post",
+            headers: { 'Context-Type': 'application/json' }
+        }) *@
+            
+
+            
+            
 
 
 
