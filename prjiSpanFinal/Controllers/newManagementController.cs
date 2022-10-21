@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Crypto.Engines;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.newManagement;
@@ -134,6 +135,7 @@ namespace prjiSpanFinal.Controllers
                 var Q = (from i in db.ProductDetails
                          where i.ProductId == id
                          select i);
+
                 return View(Q);
             }
             else
@@ -147,6 +149,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.ProductDetails
                     where d.ProductDetailId == id
                     select d;
+            var X=D.First();
             var G = from g in db.Products
                     where g.ProductId == D.First().ProductId
                     select g;
@@ -156,9 +159,9 @@ namespace prjiSpanFinal.Controllers
             if (K.Count() - 1 > 0)
             {
                 db.ProductDetails.Remove(D.First());
-            }
+            }    
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList", new { id=id});
+            return RedirectToAction("ProductDetailList", new { id=X.ProductId });
         }
         #endregion
         #region MemberRegion
@@ -414,10 +417,33 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             if (id != null)
             {
-                var Q = (from i in db.OrderDetails
+                var Qs = (from i in db.OrderDetails
                          where i.OrderId == id
                          select i);
-                return View(Q);
+                var PDName = (from u in db.ProductDetails select u).ToList();
+                var PName = (from x in db.Products select x).ToList();
+                var SSName = (from s in db.ShippingStatuses select s).ToList();
+                List<COrderDetailViewModel> A = new();
+                foreach (var Q in Qs)
+                {
+                    var a = new COrderDetailViewModel()
+                    {
+                        OrderDetail = Q,
+                        ProductDetailName = (from w in PDName
+                                             where w.ProductDetailId == Q.ProductDetailId
+                                             select w.Style).First(),
+                        ShippingStatusName = (from ss in SSName
+                                              where ss.ShippingStatusId == Q.ShippingStatusId
+                                              select ss.ShipStatusName).First(),
+                        ProductName = (from x in PName
+                                      join xs in PDName on x.ProductId equals xs.ProductId
+                                      where xs.ProductDetailId == Q.ProductDetailId
+                                      select x.ProductName).First(),
+                    };
+                    A.Add(a);
+                }
+                
+                return View(A);
             }
             else
             {
@@ -443,7 +469,74 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("OrderDetailList", new { id = id });
         }
-
         #endregion
+        #region ReportRegion
+        public List<CReportListViewModel> GetReportsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<CReportListViewModel> list = new();
+            IQueryable<Report> Reps = null;
+            if (keyword == null)
+            {
+                Reps = db.Reports.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Reps = db.Reports.
+                     Where(i => i.ReportId == key||i.ReporterId==key).
+                     Select(e => e);
+            }
+            else
+            {
+                Reps = db.Reports.
+                    Where(i => i.Reason.Contains(keyword)).
+                    Select(e => e); ;
+            }
+            var ProductName = (from i in db.Products select i).ToList();
+            
+            var ReportTypeName = (from i in db.ReportTypes select i).ToList();
+            foreach (var p in Reps)
+            {
+                CReportListViewModel model = new()
+                {
+                    Report=p,
+
+                    ProductName = (from i in ProductName
+                                   where i.ProductId == p.ProductId
+                                   select i.ProductName).First(),
+                   ReportTypeName = (from i in ReportTypeName
+                                     where i.ReportTypeId == p.ReportTypeId
+                                     select i.ReportTypeName).First(),
+                };
+                list.Add(model);
+            }
+
+            return list;
+        }
+        protected IPagedList<CReportListViewModel> GetReportPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetReportsFromDatabase(keyword);
+            IPagedList<CReportListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult ReportList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetReportPagedProcess(page, pageSize, keyword);
+            var PList = GetReportPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        #endregion
+
     }
 }

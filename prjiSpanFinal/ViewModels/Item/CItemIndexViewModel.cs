@@ -14,5 +14,8 @@ namespace prjiSpanFinal.ViewModels.Item
         public List<ProductDetail> productDetails { get; set; }
         public List<byte[]> productPics { get; set; }
         public List<CItemIndexSellerProductViewModel> sellerProducts { get; set; }
+        public List<ReportType> ReportType { get; set; }
+        public bool IsLogin { get; set; }
+        public MemberAccount user { get; set; }
     }
 }

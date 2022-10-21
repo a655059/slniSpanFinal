@@ -1,0 +1,93 @@
+﻿@model IEnumerable<CReportListViewModel>
+
+@{
+    ViewData["Title"] = "ReportList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels;
+@section Styles{
+    <style>
+        td input {
+            width: 160px;
+        }
+    </style>
+}
+    <form>
+        <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋,或不輸入回到列表" class="form-control" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    檢舉人ID
+                </th>
+                <th>
+                    商品ID
+                </th>
+                <th>
+                    商品名稱
+                </th>
+                <th>
+                    檢舉理由
+                </th>
+                <th>
+                    圖片
+                </th>
+
+                <th>
+                    檢舉類型
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.First().Report.ReportId)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.First().Report.ReporterId)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.First().Report.ProductId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.First().Report.Reason)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.First().Report.ReportPic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReportTypeName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="align-content:center" class="paginations">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("ReportList", new { page })).
+        DisplayEllipsesWhenNotShowingAllPageNumbers().
+        MaximumPageNumbersToDisplay(3).
+        Build()
+        )
+
+</div>
