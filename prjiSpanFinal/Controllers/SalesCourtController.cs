@@ -1,11 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using MailKit.Net.Smtp;
+using MimeKit;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels.SalesCourt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using prjiSpanFinal.ViewModels.Member;
+using prjiSpanFinal.ViewModels;
+//using System.Data.Object.EntityFunctions;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -30,8 +37,8 @@ namespace prjiSpanFinal.Controllers
             var CourtCategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Seller.MemberId).ToList();
             var MemPic = Seller.MemPic;
 
-            var SellerNickName = Seller.NickName;
-            var CourtDescription = Seller.Description;
+            var SellerNickName = dbContext.MemberAccounts.Where(a => a.MemberId == 2).Select(a => a.NickName).FirstOrDefault();
+            var CourtDescription = dbContext.MemberAccounts.Where(a => a.MemberId == 2).Select(a => a.Description).FirstOrDefault();
 
             List<string> CategoryName = new List<string>();
 
@@ -101,29 +108,43 @@ namespace prjiSpanFinal.Controllers
 
 
         public IActionResult 評價()
-            {//針對某特定賣家評價
-            var Comment = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == 2).ToList();
-            var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == 2).FirstOrDefault();
+        {//針對某特定賣家評價
+
+
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId; //字串轉物件
+
+
+            var Comment = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id);
+            var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
             var BestComment = Comment.Where(a => a.CommentStar == 5).ToList();
             var MediumComment = Comment.Where(a => (a.CommentStar == 3 || a.CommentStar == 4)).ToList();
             var WorstComment = Comment.Where(a => (a.CommentStar == 1 || a.CommentStar == 2)).ToList();
             //計算有購買的買家數量  
-            var ordtail = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == 2)
+            var ordtail = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id)
                 .Select(a => a.Order.MemberId).Distinct();
 
             //order shipping date- receive date
 
             //平均出貨天數
-            //var avgShippingDate1 = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == 2).Select(a => a).FirstOrDefault();
-            ///*.Select(a => ((int)a.Order.ShippingDate - (int)a.Order.OrderDatetime)).Sum()*/
+            var a = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(a => a.Order.ShippingDate).ToList();
+            var b = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(a => a.Order.OrderDatetime).ToList();
 
-            ////int a = avgShippingDate1.Order.ShippingDate - avgShippingDate1.Order.OrderDatetime;
+            List<double> DateSum = new List<double>();
+            double Sum = 0;
 
-            //System.TimeSpan ts = avgShippingDate1.Order.ShippingDate - avgShippingDate1.Order.OrderDatetime;
-            //int days = ts.Days;
+            for (int i = 0; i < a.Count; i++)
+            {
+                TimeSpan TS = new TimeSpan(a[i].Ticks - b[i].Ticks);
+                double diff = Convert.ToDouble(TS.TotalDays);
+                Sum += diff;
+            }
 
 
-            var Follow = dbContext.Follows.Where(a => a.MemberId == 2);
+
+            //string timee = tim.ToString();
+
+            var Follow = dbContext.Follows.Where(a => a.MemberId == id);
 
 
 
@@ -135,7 +156,7 @@ namespace prjiSpanFinal.Controllers
             {
                 bstcmt.Add(cmt.Comment1);
             }
-            foreach(var cmt in MediumComment)
+            foreach (var cmt in MediumComment)
             {
                 mdncmt.Add(cmt.Comment1);
             }
@@ -144,25 +165,29 @@ namespace prjiSpanFinal.Controllers
                 wrtcmt.Add(cmt.Comment1);
             }
 
-            var ss = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.Product.MemberId == 2)
+            var ss = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.Product.MemberId == id)
                    .Select(a => (double)a.CommentStar).Sum();
             //這邊是要計算對應到的星星數量
-            var ss1 = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.Product.MemberId == 2)
+            var ss1 = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.Product.MemberId == id)
                 .Select(a => (double)a.CommentStar);
 
             double star_count = ss / ss1.Count();
 
+            var CmtBName = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id)
+                .Select(a => a.OrderDetail.Order.Member.MemberAcc).ToList();
+            var CmtPdName = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id)
+                .Select(a => a.OrderDetail.ProductDetail.Product.ProductName).ToList();
+            var Cmt = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id).Select(a => a.Comment1).ToList();
+
             List<Card評價內容ViewModel> ct = new List<Card評價內容ViewModel>();
-            foreach (var comm in Comment) {
-                var byname = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.ProductId == 2).ToList();
+            for (int i = 0; i < CmtBName.Count(); i++)
+            {
+
                 Card評價內容ViewModel Content = new Card評價內容ViewModel
                 {
-
-                    //CommentBuyer = 
-                    //抓評價的買家姓名
-                    //CommentBuyer = comm.OrderDetail.Order.Member.MemberAcc,
-                    //ProductName = comm.OrderDetail.ProductDetail.Product.ProductName,
-                    CommentContent = comm.Comment1
+                    CommentBuyer = CmtBName[i],
+                    ProductName = CmtPdName[i],
+                    CommentContent = Cmt[i]
                 };
 
                 ct.Add(Content);
@@ -171,12 +196,12 @@ namespace prjiSpanFinal.Controllers
             C評價ViewModel outcomment = new C評價ViewModel
             {
                 StarCount = star_count,
-                BestComments = bstcmt,
+                BestCommentsCount = BestComment.Count(),
                 MediumComments = mdncmt,
                 WorstComments = wrtcmt,
                 SellerPhoto = Seller.MemPic,
                 //卡在計算日期差距
-                //AvgShippingDate = days,
+                AvgShippingDate = Sum / a.Count(),
                 BuyerCount = ordtail.Count(),
                 AddLoveCount = Follow.Count(),
                 //刪資料  等資料表
@@ -212,7 +237,7 @@ namespace prjiSpanFinal.Controllers
             //服務時間   想說在show的時候寫在畫面上
             //
             List<bool> uncheck = new List<bool>();
-            foreach(var a in Payment)
+            foreach (var a in Payment)
             {
                 uncheck.Add(false);
             }

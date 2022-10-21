@@ -89,6 +89,7 @@ namespace prjiSpanFinal.Controllers
         }
 
 
+
         //連結小類別選項
 
         public IActionResult SmallType(string bigtype)
