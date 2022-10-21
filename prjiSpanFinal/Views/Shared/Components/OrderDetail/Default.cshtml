@@ -1,4 +1,5 @@
-﻿<div class="row">
+﻿@model prjiSpanFinal.ViewModels.OrderDetailViewModel
+<div class="row">
     <div class="col-1"></div>
     <div class="col-11 ">
         <a href="Order">回訂單列表</a>
@@ -6,131 +7,70 @@
             <div class="card border-light">
                 <article class="card-header">
                     <div class="card-body row">
-                        <div class="col"> <strong>預定到貨日:</strong> <br>2022 10月10日 </div>
-                        <div class="col"> <strong>貨運:</strong> <br> 黑狗貨運<br /><i class="fa fa-phone"></i> (02)2221-12212 </div>
-                        <div class="col"> <strong>狀態:</strong> <br> 已集貨 </div>
-                        <div class="col"> <strong>追蹤號碼 #:</strong> <br> BD045903594059 </div>
+                        <div class="col"> <strong>付款成功日:</strong> <br>@Model.PaymentDate </div>
+                        <div class="col"> <strong>貨運:</strong> <br> @Model.ShipperName<br /><i class="fa fa-phone"></i> @Model.ShipperPhone </div>
+                        <div class="col"> <strong>狀態:</strong> <br> @Model.OrderStatusName </div>
+                        <div class="col"> <strong>付款方式:</strong> <br> @Model.PaymentName </div>
                     </div>
                 </article>
                 <div class="track">
-                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立</span> </div>
-                    <div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">集貨中</span> </div>
+                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">付款成功</span> </div>
+                    <div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">已出貨</span> </div>
                     <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">運送中</span> </div>
                     <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已送達</span> </div>
                 </div>
                 <div class="card-body">
                     <div class="row justify-content-between mb-3">
                         <div class="col-auto"> <h6 class="color-1 mb-0 change-color">訂單</h6> </div>
-                        <div class="col-auto  "> <small>訂單編號 : 123456789</small> </div>
+                        <div class="col-auto  "> <small>訂單編號 : @Model.OrderId</small> </div>
                     </div>
 
-                    <div class="row my-4">
-                        <div class="col">
-                            <div class="card card-2">
-                                <div class="card-body">
-
-                                    <div class="media">
-                                        <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="~/img/蘋果圖.jpg" width="135" height="135" /> </div>
-                                        <div class="media-body my-auto text-right">
-                                            <div class="my-auto"> <h6 class="mb-0">蘋果</h6></div>
-                                            <div class="row  my-auto flex-column flex-md-row">
-                                                <div class="col my-auto"> <small>規格 : 紅色</small></div>
-                                                <div class="col my-auto"> <small>數量 : 1</small></div>
-                                                <div class="col my-auto"><h6 class="mb-0">$30</h6></div>
+                    @for (int i = 0; i < Model.Quantity.Count; i++)
+                    {
+                        <div class="row my-4">
+                            <div class="col">
+                                <div class="card card-2">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="~/img/蘋果圖.jpg" width="135" height="135" /> </div>
+                                            <div class="media-body my-auto text-right">
+                                                <div class="my-auto"> <h6 class="mb-0">@Model.ProductName[i]</h6></div>
+                                                <div class="row  my-auto flex-column flex-md-row">
+                                                    <div class="col my-auto"> <small>規格 : @Model.Style[i]</small></div>
+                                                    <div class="col my-auto"> <small>數量 : @Model.Quantity[i]</small></div>
+                                                    <div class="col my-auto"><h6 class="mb-0">$@Convert.ToInt32(Model.Unitprice[i])</h6></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <hr class="my-3 ">
+                                        <hr class="my-3 ">
+                                        @{string procbar = "0%";
+                                            @if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
+                                            {
+                                                procbar = "66%";
+                                            }
+                                            else if(Model.ShipStatusName[i] == "已到貨" || Model.ShipStatusName[i] == "已完成取貨")
+                                            {
+                                                procbar = "100%";
+                                            }
 
-                                    <div class="row">
-                                        <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
-                                        <div class="col mt-auto">
-                                            <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: 66%" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
-                                            <div class="media row justify-content-between ">
-                                                <div class="col"><span> <small class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">送貨中</small><i class="fa fa-circle active"></i></span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle"></i></span></div>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
+                                                <div class="col mt-auto">
+                                                    <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: @procbar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
+                                                    <div class="media row justify-content-between ">
+                                                        <div class="col"><span> <small class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
+                                                        <div class="col"><span> <small class="text-right mr-sm-2">運送中</small><i class="fa fa-circle active"></i></span></div>
+                                                        <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle"></i></span></div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row my-4">
-                        <div class="col">
-                            <div class="card card-2">
-                                <div class="card-body">
-
-                                    <div class="media">
-                                        <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="~/img/banana.jpg" width="135" height="135" /> </div>
-                                        <div class="media-body my-auto text-right">
-                                            <div class="my-auto"> <h6 class="mb-0">香蕉</h6></div>
-                                            <div class="row  my-auto flex-column flex-md-row">
-                                                <div class="col my-auto"> <small>規格 : 金黃色</small></div>
-                                                <div class="col my-auto"> <small>數量 : 1</small></div>
-                                                <div class="col my-auto"><h6 class="mb-0">$60</h6></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <hr class="my-3 ">
-
-                                    <div class="row">
-                                        <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
-                                        <div class="col mt-auto">
-                                            <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: 33%" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
-                                            <div class="media row justify-content-between ">
-                                                <div class="col"><span> <small class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">送貨中</small><i class="fa fa-circle"></i></span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle"></i></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row my-4">
-                        <div class="col">
-                            <div class="card card-2">
-                                <div class="card-body">
-
-                                    <div class="media">
-                                        <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="~/img/蘋果圖.jpg" width="135" height="135" /> </div>
-                                        <div class="media-body my-auto text-right">
-                                            <div class="my-auto"> <h6 class="mb-0">蘋果</h6></div>
-                                            <div class="row  my-auto flex-column flex-md-row">
-                                                <div class="col my-auto"> <small>規格 : 尊爵不凡美麗鮮紅色</small></div>
-                                                <div class="col my-auto"> <small>數量 : 1</small></div>
-                                                <div class="col my-auto"><h6 class="mb-0">$120</h6></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <hr class="my-3 ">
-
-                                    <div class="row">
-                                        <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
-                                        <div class="col mt-auto">
-                                            <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: 100%" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
-                                            <div class="media row justify-content-between ">
-                                                <div class="col"><span> <small class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">送貨中</small><i class="fa fa-circle active"></i></span></div>
-                                                <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle active"></i></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
 
                     <div class="row mt-4">
                         <div class="col">
@@ -165,10 +105,10 @@
                             <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">$270元</h1></div>
                         </div>
                         @*<div class="row mb-3 mt-3 mt-md-0">
-                            <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
-                            <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
-                            <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
-                        </div>*@
+                                <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
+                                <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
+                                <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
+                            </div>*@
                     </div>
                 </div>
             </div>

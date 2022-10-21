@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace prjiSpanFinal.Views.Shared.Components.OrderList
+namespace prjiSpanFinal.Views.Shared.Components.SellerOrderList
 {
     public class DefaultModel : PageModel
     {
