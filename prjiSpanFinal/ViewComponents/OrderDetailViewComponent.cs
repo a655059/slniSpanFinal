@@ -15,9 +15,9 @@ namespace prjiSpanFinal.ViewComponents
     public class OrderDetailViewComponent : ViewComponent
     {
         
-        public IViewComponentResult Invoke(int id)
+        public IViewComponentResult Invoke(OrderDetailViewModel vm)
         {
-            return View();
+            return View(vm);
         }
     }
 }

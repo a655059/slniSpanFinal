@@ -39,8 +39,8 @@
                         <td class="ordertotalprice">$${total}</td>
                         <td>${data.orderStatusName}</td>
                         <td style="text-align:center">
-                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbuttonde">訂單詳情</a><br />
-                            <button type="button" class="btn btn-secondary orderbuttonco">待給評價</button>
+                            <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" type="button" class="btn btn-primary orderbuttonde">詳情</a><br />
+                            <button type="button" class="btn btn-secondary orderbuttonco">評價</button>
                             <div>
                                 <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
                             </div>
@@ -120,12 +120,6 @@
             else {
                 $(".checkboxorder").prop("checked", false);
             }
-        });
-        $(".orderbuttonde").click(function () {
-            let orderid = $(this).parent().siblings().children().eq(0).val();
-            console.log(orderid);
-            $.getJSON(`/Seller/OrderDetail`, { id: orderid }, function () {
-            });
         });
     </script>
 }

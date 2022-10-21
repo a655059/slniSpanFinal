@@ -255,7 +255,10 @@ function refreshtimestamp() {
         timeval = $(hiddens[i]).val();
         indate = timestamptodatetime(timeval);
         diff = today - indate;
-        if (diff > 86400000 && diff < 864000000) {
+        if (diff > 864000000) {
+            $(hiddens[i]).siblings("p").text(`${indate.getMonth()+1}/${indate.getDate()}`);
+        }
+        else if (diff > 86400000) {
             $(hiddens[i]).siblings("p").text(Math.floor(diff / 86400000) + "天前");
         }
         else if (diff > 3600000) {
@@ -308,8 +311,8 @@ function MyMessagePack(head, msg, time) {
             </a>`;
         });
     }
-    else if (head == "ghjk"){
-        msg = `<iframe width="420" height="315" src="${msg}"></iframe>`;
+    else if (head == "ghjk") {
+        msg = `<iframe width="352" height="198" src="${msg}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
     else {
     }
@@ -358,7 +361,7 @@ function CMessagePack(head, msg, time, multiid = "0") {
         });
     }
     else if (head == "ghjk") {
-        msg = `<iframe width="420" height="315" src="${msg}"></iframe>`;
+        msg = `<iframe width="352" height="198" src="${msg}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
     else {
     }
@@ -397,6 +400,9 @@ function CMessageDialog(id, img, msg, time, acc, read = 1, head="qwer") {
     }
     else if (head == "tyui") {
         msg = "本站產品";
+    }
+    else if (head == "ghjk") {
+        msg = "YT影片";
     }
     else {
     }
