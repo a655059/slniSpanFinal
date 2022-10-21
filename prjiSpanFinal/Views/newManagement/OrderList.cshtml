@@ -111,7 +111,7 @@
                     <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger">爭議處理中</a>
                     @Html.ActionLink("取消並作廢訂單", "OrderDelete","newManagement" ,new { id=item.Order.OrderId  },new{@class="btn btn-outline-danger",onclick="really()"})
                     @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
-                    @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
+                    @Html.ActionLink("檢視細節", "OrderDetailList", new { id=item.Order.OrderId },new{@class="btn btn-primary"})
                 </td>
             </tr>
         }

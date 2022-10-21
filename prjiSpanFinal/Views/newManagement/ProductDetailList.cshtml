@@ -59,23 +59,31 @@
                     <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
-                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId},new{onclick="really()",@class="btn btn-primary deles"})
+                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId},new{onclick="return confirm('確定要刪除嗎?若商品細項少於一項則無法刪除')",@class="btn btn-primary deles"})
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <script>
-    function really() {
-        var yes = confirm('你確定要刪除嗎？');
-    }
-    let trs = document.querySelectorAll(".rowsss");
-    let dels = document.querySelectorAll(".deles");
-    if(trs.length-1<=0){
-        for(let e of dels){
-            e.addEventListener("click",()=>{
-                return alert("商品細項不可少於一項");
-            })
-        }
-    }
+    //function really() {
+    //    let trs = document.querySelectorAll(".rowsss");
+    //    let dels = document.querySelectorAll(".deles");
+        
+    //    var yes = confirm('你確定要刪除嗎？');
+    //    if (yes){
+    //        return;
+    //    }
+    //    else{
+    //        alert("商品細項不可少於一項");
+    //        return;
+    //    }
+        //if(trs.length-1<=0){
+        //    for(let e of dels){
+        //        e.addEventListener("click",()=>{
+        //            alert("商品細項不可少於一項");
+        //            return;
+        //        })
+        //    }
+     }
 </script>

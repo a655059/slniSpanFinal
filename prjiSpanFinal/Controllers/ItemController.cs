@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Item;
 using System;
 using System.Collections.Generic;
@@ -27,6 +30,7 @@ namespace prjiSpanFinal.Controllers
                 var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
                 var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
                 var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i.Pic).ToList();
+                var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i).ToList();
                 List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
                 foreach (var p in sellerProducts)
@@ -66,7 +70,7 @@ namespace prjiSpanFinal.Controllers
                     {
                         salesVolume = salesVolumes.Sum(i => i);
                     }
-                    CItemIndexSellerProductViewModel sellerProduct = new CItemIndexSellerProductViewModel
+                    CItemIndexSellerProductViewModel sellerProduct = new()
                     {
                         productID = productID,
                         productName = productName,
@@ -78,13 +82,26 @@ namespace prjiSpanFinal.Controllers
                     sellerProductList.Add(sellerProduct);
                 }
                 sellerProductList = sellerProductList.OrderByDescending(i => i.starCount).ToList();
-                CItemIndexViewModel itemIndex = new CItemIndexViewModel
+                CItemIndexViewModel itemIndex = new();
+                itemIndex.product = product;
+                itemIndex.productDetails = productDetails;
+                itemIndex.productPics = productPics;
+                itemIndex.sellerProducts = sellerProductList;
+                itemIndex.ReportType = ReportType;
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
-                    product = product,
-                    productDetails = productDetails,
-                    productPics = productPics,
-                    sellerProducts = sellerProductList
-                };
+                    string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                    //JsonSerializer serializer = new JsonSerializer();
+                    //MemberAccount user = serializer.Deserialize<MemberAccount>(memberString);
+                    MemberAccount user = System.Text.Json.JsonSerializer.Deserialize<MemberAccount>(memberString);
+                    itemIndex.IsLogin = true;
+                    itemIndex.user = user;
+                }
+                else
+                {
+                    itemIndex.IsLogin = false;
+                    itemIndex.user = null;
+                }
                 return View(itemIndex);
             }
             else
@@ -93,6 +110,25 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
+        public IActionResult ReportCreate(Report d)
+        {
+            var db = (new iSpanProjectContext());
+            if (d != null)
+            {
+                Report report = new()
+                {
+                    ReporterId = d.ReportId,
+                    ProductId = d.ProductId,
+                    ReportTypeId = d.ReportTypeId,
+                    Reason = d.Reason,
+                    ReportPic = d.ReportPic,
+                };
+                db.Reports.Add(report);
+                db.SaveChanges();
+                return Json(new { Res = true, Msg = "成功" });
+            }
+            return Json(new { Res = false, Msg = "失敗" });
+        }
 
         public IActionResult Description()
         {
