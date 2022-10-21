@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjiSpanFinal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
         public double StarCount { get; set; }
 
         //根據條件產生的優良 普通 評價
+
+        public BestCommentCount BestCommentCountMethod { get; set; }
+        public MediumCommentCount MediumCommentCountMethod { get; set; }
+        public WorstCommentCount WorstCommentCountMethod { get; set; }
+
 
         //public Table評價ViewModel Comment;
         public List<string> BestComments { get; set; }

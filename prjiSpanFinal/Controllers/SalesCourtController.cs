@@ -26,7 +26,7 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
 
-        public IActionResult 賣場(int id)
+        public IActionResult 賣場(int id ,int? page = 1)
         {
 
             //return View();
@@ -55,10 +55,17 @@ namespace prjiSpanFinal.Controllers
             {
                 var pddt = dbContext.ProductDetails.Where(a => a.ProductId == pd.ProductId).FirstOrDefault();
                 var oddt = dbContext.OrderDetails.Where(a => a.ProductDetailId == pddt.ProductDetailId).Select(a => a.Comments.Select(c => c.CommentStar)).ToList();
+                var soldct = dbContext.ProductDetails.Where(a => a.Product.ProductId == pd.ProductId).ToList();
+                var uptime = dbContext.Products.FirstOrDefault(a => a.ProductId == pd.ProductId).EditTime;
+                var starctsum = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.ProductId == pd.ProductId).Select(a => (double)a.CommentStar).Sum();
+                var starct = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.ProductId == pd.ProductId).Select(a => (double)a.CommentStar);
+                var staravg = starctsum / starct.Count();
+                //var prodpic = dbContext.Products.FirstOrDefault(a => a.ProductId == pd.ProductId).ProductPics;
 
-
-
-
+                var prodpic = dbContext.ProductPics.Where(a => a.ProductId == pd.ProductId).FirstOrDefault().Pic; 
+                
+                
+             //   var prodpic = pd.ProductPics.Select(a => a.Pic).FirstOrDefault();
                 //foreach(var star in ss)
                 //{
                 //    star.CommentStar
@@ -68,7 +75,10 @@ namespace prjiSpanFinal.Controllers
                 {
                     ProductName = pd.ProductName,
                     ProductPrice = pddt.UnitPrice.ToString(),
-
+                    SoldQuantity = soldct.Count(),
+                    AddedTime = uptime,
+                    StarCount = staravg,
+                    Producpic =  prodpic,
                     //星星數演算法
 
                     //var star_oddt = dbContext.OrderDetails.Where()
@@ -112,14 +122,12 @@ namespace prjiSpanFinal.Controllers
 
 
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            
             int id = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId; //字串轉物件
 
 
             var Comment = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id);
             var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
-            var BestComment = Comment.Where(a => a.CommentStar == 5).ToList();
-            var MediumComment = Comment.Where(a => (a.CommentStar == 3 || a.CommentStar == 4)).ToList();
-            var WorstComment = Comment.Where(a => (a.CommentStar == 1 || a.CommentStar == 2)).ToList();
             //計算有購買的買家數量  
             var ordtail = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id)
                 .Select(a => a.Order.MemberId).Distinct();
@@ -145,25 +153,44 @@ namespace prjiSpanFinal.Controllers
             //string timee = tim.ToString();
 
             var Follow = dbContext.Follows.Where(a => a.MemberId == id);
+            var weekBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now-a.CommentTime).Days <= 7);
+            var monthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
+            var halfmonthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var allBestComment = Comment.ToList().Where(a => a.CommentStar == 5);
+
+            var weekMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 7);
+            var monthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
+            var halfmonthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var allMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4));
 
 
+            var weekWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 7);
+            var monthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
+            var halfmonthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var allWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2));
 
-            List<string> bstcmt = new List<string>();
-            List<string> mdncmt = new List<string>();
-            List<string> wrtcmt = new List<string>();
 
-            foreach (var cmt in BestComment)
-            {
-                bstcmt.Add(cmt.Comment1);
-            }
-            foreach (var cmt in MediumComment)
-            {
-                mdncmt.Add(cmt.Comment1);
-            }
-            foreach (var cmt in WorstComment)
-            {
-                wrtcmt.Add(cmt.Comment1);
-            }
+            #region
+            BestCommentCount bstcmt = new BestCommentCount();
+            MediumCommentCount mdncmt = new MediumCommentCount();
+            WorstCommentCount wrtcmt = new WorstCommentCount();
+
+           
+            bstcmt.WeekCount = weekBestComment.Count();
+            bstcmt.MonthCount = monthBestComment.Count();
+            bstcmt.HalfYearCount = halfmonthBestComment.Count();
+            bstcmt.AllCount = allBestComment.Count();
+
+            mdncmt.WeekCount = weekMediumComment.Count();
+            mdncmt.MonthCount = monthMediumComment.Count();
+            mdncmt.HalfYearCount = halfmonthMediumComment.Count();
+            mdncmt.AllCount = allMediumComment.Count();
+
+            wrtcmt.WeekCount = weekWorstComment.Count();
+            wrtcmt.MonthCount = monthWorstComment.Count();
+            wrtcmt.HalfYearCount = halfmonthWorstComment.Count();
+            wrtcmt.AllCount = allWorstComment.Count();
+            #endregion
 
             var ss = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.Product.MemberId == id)
                    .Select(a => (double)a.CommentStar).Sum();
@@ -196,9 +223,13 @@ namespace prjiSpanFinal.Controllers
             C評價ViewModel outcomment = new C評價ViewModel
             {
                 StarCount = star_count,
-                BestCommentsCount = BestComment.Count(),
-                MediumComments = mdncmt,
-                WorstComments = wrtcmt,
+                //BestCommentsCount = BestComment.Count(),
+                //MediumComments = mdncmt,
+                //WorstComments = wrtcmt,
+                BestCommentCountMethod = bstcmt,
+                MediumCommentCountMethod = mdncmt,
+                WorstCommentCountMethod = wrtcmt,
+
                 SellerPhoto = Seller.MemPic,
                 //卡在計算日期差距
                 AvgShippingDate = Sum / a.Count(),
