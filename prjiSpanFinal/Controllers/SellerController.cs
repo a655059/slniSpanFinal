@@ -106,13 +106,19 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Login", "Member");
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            return View(dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new OrderDetailViewModel()
+            var vm = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new OrderDetailViewModel()
             {
                 OrderId = o.OrderId,
                 SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
                 SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                SellerEmail = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Email,
+                SellerName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Name,
+                SellerPhone = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Phone,
                 BuyerId = o.MemberId,
                 BuyerAcc = o.Member.MemberAcc,
+                BuyerEmail = o.Member.Email,
+                BuyerName = o.Member.Name,
+                BuyerPhone = o.Member.Phone,
                 OrderDatetime = o.OrderDatetime,
                 RecieveAdr = o.RecieveAdr,
                 FinishDate = o.FinishDate,
@@ -140,7 +146,8 @@ namespace prjiSpanFinal.Controllers
                 Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
                 Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
                 ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
-            }).ToList());
+            }).FirstOrDefault();
+            return View(vm);
         }
 
 

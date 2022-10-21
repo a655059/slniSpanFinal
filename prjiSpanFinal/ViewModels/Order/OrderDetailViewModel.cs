@@ -11,6 +11,12 @@ namespace prjiSpanFinal.ViewModels
         public int SellerId { get; set; }
         public string SellerAcc { get; set; }
         public int BuyerId { get; set; }
+        public string SellerPhone { get; set; }
+        public string SellerEmail { get; set; }
+        public string SellerName { get; set; }
+        public string BuyerPhone { get; set; }
+        public string BuyerEmail { get; set; }
+        public string BuyerName { get; set; }
         public string BuyerAcc { get; set; }
         public DateTime OrderDatetime { get; set; }
         public string RecieveAdr { get; set; }

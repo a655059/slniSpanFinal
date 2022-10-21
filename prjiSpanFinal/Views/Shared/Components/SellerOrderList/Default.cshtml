@@ -67,11 +67,17 @@
                 @foreach (var item in Model)
                 {
                     int total = item.PaymentFee;
+                    @if (item.IsFreeDelivery != true)
+                    {
+                        total += item.ShipperFee;
+                    }
                     <tr>
-                        
-                        <td><input type="hidden" class="orderorderid" value="@item.OrderId" />
+
+                        <td>
+                            <input type="hidden" class="orderorderid" value="@item.OrderId" />
                             <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
-                            <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a></td>
+                            <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a>
+                        </td>
                         <td>@item.OrderDatetime</td>
                         <td>
                             @for (int j = 0; j < item.Quantity.Count; j++)
@@ -80,15 +86,11 @@
                                 <img src="data:image;base64,@System.Convert.ToBase64String(item.Pic[j])" width="60" height="60" />@item.ProductName[j] @item.Style[j] @:* @item.Quantity[j] $@Decimal.ToInt32(item.Unitprice[j]) <br />
                             }
                         </td>
-                        @if(item.IsFreeDelivery != true)
-                        {
-                            total += item.ShipperFee;
-                        }
                         <td class="ordertotalprice">$@total</td>
                         <td>@item.OrderStatusName</td>
                         <td style="text-align:center">
-                            <a href="OrderDetail" role="button" type="button" class="btn btn-primary orderbuttonde">訂單詳情</a><br />
-                            <button type="button" class="btn btn-secondary orderbuttonco">待給評價</button>
+                            <a href="/Seller/OrderDetail?id=@item.OrderId" role="button" type="button" class="btn btn-primary orderbuttonde">詳情</a><br />
+                            <button type="button" class="btn btn-secondary orderbuttonco">評價</button>
                             <div>
                                 <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
                             </div>
