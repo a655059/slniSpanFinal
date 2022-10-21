@@ -8,10 +8,12 @@
         </a>*@
             <ul class="nav col-8 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">首頁</a></li>
-                <li><a href="@Url.Content("~/newManagement/PowerBi")" class="nav-link px-2 text-white navbody">後台</a></li>
-                <li><a href="@Url.Content("~/Seller/Center")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
+                @if (Model.MemberAcc == "admin") { 
+                <li><a href="@Url.Content("~/newManagement/PowerBi")" class="nav-link px-2 text-white navbody" id="backstage" >後台</a></li>
+                }
+                @*<li><a href="@Url.Content("~/Seller/Center")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
                 <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">會員中心</a></li>
-                @*<li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
             <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
             </ul>
             <div class="header-cart col-2 d-flex flex-row">
@@ -97,4 +99,6 @@
         <!--/帳號登入/創建-->
     </div>
 </div>
-
+@section Scripts{ 
+    
+}

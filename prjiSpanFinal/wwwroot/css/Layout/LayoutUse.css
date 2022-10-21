@@ -263,43 +263,50 @@
     }
     /*搜尋右側功能*/
 .searchcart {
-    width: 100%;
     padding-right: 30px;
     padding-left: 30px;
 }
-    .searchcart > div {
-        display: inline-block;
-        flex:1;
+:root {
+    --SCwidth: 90px;
+    --SCAwidth: 70px;
+}
+.searchcart-Cart {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    width: var(--SCwidth);
+}
+
+    .searchcart-Cart > a {
+        display: block;
+        color: white;
+        width: var(--SCAwidth);
     }
-        .searchcart > div > a {
-            display: block;
-            position: relative;
-            width: 100%;
-            text-align: center;
-            color: #FFF;
-            
+        .searchcart-Cart > a:hover {
+            opacity: 80%;
+            color: red;
         }
-            .searchcart > div > a > .qty {
-                position: relative;
-                left:45px;
-                bottom:50px;
+        .searchcart-Cart-icon {
+            position: relative;
+            display: flex;
+            justify-content:center;
+            font-size: 1.5em;
+            color: white;
+        }
+            .searchcart-Cart-icon > .qty {
+                position: absolute;
+                left: calc(var(--SCAwidth)*0.55);
+                bottom: 18px;
                 width: 20px;
                 height: 20px;
                 line-height: 20px;
                 text-align: center;
                 border-radius: 50%;
-                font-size: 15px;
+                font-size: 10px;
                 color: #FFF;
                 background-color: #FF2D2D;
             }
-            .searchcart > div > a > i {
-                display: block;
-                font-size: 2em;
-                margin-top:20px;
-            }
-                .searchcart > div > a > i:hover{
-                    opacity:80%;
-                }
+            
 /* /Header2 */
 /* BODY */
 body {

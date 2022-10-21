@@ -19,10 +19,10 @@ function sizeble() {
     h2.style.marginTop = (h1.height() + 16) + "px";
 }
 
+
+//搜尋
 let searchInput = document.querySelector("#SearchInputTxT");
 let searchBtn = document.querySelector("#SearchInputbtn");
-
-
 
 searchInput.addEventListener("input", () => {
     let searchkeyword = searchInput.value;
@@ -36,3 +36,4 @@ searchInput.addEventListener("keypress", event => {
         searchBtn.click();
     }
 })
+

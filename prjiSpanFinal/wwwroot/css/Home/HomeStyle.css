@@ -29,7 +29,7 @@
     height: 588px;
     /*overflow: hidden;*/
     overflow-y: auto;
-    border-left: 1px solid #F75000;
+    border: 1px solid #F75000;
     border-radius: 5px;
     /*background-color: #FF5809;*/
 }
@@ -55,8 +55,8 @@
 
         .listtype > .listview-lg > .list-group-item {
             font-weight: bold;
-            background-color: #FF5809;
-            color: white;
+            background-color: white;
+            color: #FF5809;
         }
 
             .listtype > .listview-lg > .list-group-item:hover {
@@ -65,7 +65,8 @@
             }
 
             .listtype > .listview-lg > .list-group-item > a > span {
-                color: white;
+                color: #FF5809;
+                font-weight: bold;
             }
 
             .listtype > .listview-lg > .list-group-item:hover > a > span {
@@ -92,7 +93,7 @@
     /*-webkit-border-radius: 6px 0 6px 6px;*/
     /*-moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;*/
-    background-color: #AE57A4;
+    /*background-color: #AE57A4;*/
 }
 
 .listtypeTitleLink {
@@ -105,8 +106,9 @@
     border: 0;
     height: 25px;
     font-size: 16px;
-    background-color: #DAB1D5;
-    color: white;
+    /*background-color: #DAB1D5;*/
+    color: #B766AD;
+    font-weight: bold;
 }
 
     .listtypeSmalltype:hover {
@@ -213,80 +215,6 @@
     justify-content: flex-start
 }
 
-.sellsitem {
-    width: 200px;
-    height: 320px;
-    margin: 4px 5px 4px 5px;
-    display: inline;
-    padding: 0;
-    margin-bottom: 10px;
-    border: 1px solid #FF8040;
-    border-radius: 5px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
-    transition: all .5s
-}
-
-    .sellsitem:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 6px rgba(255, 102, 0, 1);
-        top: 0px;
-    }
-
-
-.cardImg {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 5px;
-    border-bottom: 1px solid black;
-}
-
-.cardTitle {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    font-size: 1em;
-    font-weight: bold;
-    color: black;
-    text-overflow: ellipsis;
-}
-
-.cardPrice {
-    color: red;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-.cardInfo {
-    font-size: 1em;
-    flex-wrap: nowrap;
-}
-
-.starImg {
-    width: 10%;
-    aspect-ratio: 1/1;
-    margin-right: 10px;
-}
-
-    .starImg > img {
-        width: 200%;
-    }
-
-.buybtn {
-    font-size: 12px;
-    padding: 3px;
-    text-align: center;
-    width: 100px;
-    color: black;
-    font-weight: bold;
-}
-
-    .buybtn:hover {
-        color: red;
-        --bs-btn-hover-color: red;
-        opacity: 80%;
-    }
 
 .showmoreitem {
     color: red;
