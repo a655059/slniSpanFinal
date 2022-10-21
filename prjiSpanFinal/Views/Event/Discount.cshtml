@@ -19,8 +19,8 @@
 
                 @foreach (var item in Model.cListShowCoupon)
                 {
-                    @await Component.InvokeAsync("EventCoupon", new { cs = item });
-                }
+            @await Component.InvokeAsync("EventCoupon", new { showCoupon = item });
+        }
 
             </div>
         </div>
@@ -32,26 +32,27 @@
 
         let btn = document.querySelectorAll(".coupon-tag");
         btn.forEach(t => t.addEventListener("click", function (event) {
-            //console.log(event.target);
-            //console.log(event.target.querySelector('input').value);
             let couponid = event.target.querySelector('input').value;
             GetCoupon(event, couponid);
+
         }))
         function GetCoupon(event, couponid) {
             $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
         if (data == "1") {
             window.alert("已經領取過此券！");
-            window.location = "/";
         }
         else if (data == "2") {
             window.alert("成功領券！");
-            window.location = "/";
+            location.reload();
         }
         else {
             window.alert("尚未登入");
             window.location = "/Member/Login";
+                }
+            })
         }
-    })
-}
+        function btnColorChange(event) {
+
+        }
     </script>
 }

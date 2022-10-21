@@ -2,113 +2,178 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-11 ">
-        <a href="Order">回訂單列表</a>
+        <a href="Order" style="text-decoration:none" class="mx-2"><i class="fa-solid fa-arrow-rotate-left"></i>回訂單列表</a><a href="Order" style="text-decoration:none" class="mx-2"><i class="fa-solid fa-print"></i>列印</a>
         <div class="container-fluid">
             <div class="card border-light">
                 <article class="card-header">
                     <div class="card-body row">
                         <div class="col"> <strong>付款成功日:</strong> <br>@Model.PaymentDate </div>
+                        <div class="col"> <strong>付款方式:</strong> <br> @Model.PaymentName </div>
                         <div class="col"> <strong>貨運:</strong> <br> @Model.ShipperName<br /><i class="fa fa-phone"></i> @Model.ShipperPhone </div>
                         <div class="col"> <strong>狀態:</strong> <br> @Model.OrderStatusName </div>
-                        <div class="col"> <strong>付款方式:</strong> <br> @Model.PaymentName </div>
                     </div>
                 </article>
-                <div class="track">
-                    <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">付款成功</span> </div>
-                    <div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">已出貨</span> </div>
-                    <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">運送中</span> </div>
-                    <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已送達</span> </div>
-                </div>
-                <div class="card-body">
-                    <div class="row justify-content-between mb-3">
-                        <div class="col-auto"> <h6 class="color-1 mb-0 change-color">訂單</h6> </div>
-                        <div class="col-auto  "> <small>訂單編號 : @Model.OrderId</small> </div>
+                @{
+                    int total = 0;
+                    string pay = "";
+                    string ship = "";
+                    string shipping = "";
+                    string arrived = "";
+                    if (Model.ShipperStatusId < 8)
+                    {
+                        if (Model.ShipperStatusId >= 3)
+                        {
+                            pay = "active";
+                        }
+                        if (Model.ShipperStatusId >= 4)
+                        {
+                            ship = "active";
+                            shipping = "active";
+                        }
+                        if (Model.ShipperStatusId >= 5)
+                        {
+                            arrived = "active";
+                        }
+                    }
+                    <div class="track">
+                        <div class="step @pay"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立<br />@Model.OrderDatetime</span> </div>
+                        <div class="step @ship"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">完成付款<br />@Model.PaymentDate</span> </div>
+                        <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">已出貨<br />@Model.ShippingDate</span> </div>
+                        <div class="step @arrived"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已領收<br />@Model.ReceiveDate</span> </div>
                     </div>
 
-                    @for (int i = 0; i < Model.Quantity.Count; i++)
-                    {
-                        <div class="row my-4">
-                            <div class="col">
-                                <div class="card card-2">
-                                    <div class="card-body">
-                                        <div class="media">
-                                            <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="~/img/蘋果圖.jpg" width="135" height="135" /> </div>
-                                            <div class="media-body my-auto text-right">
-                                                <div class="my-auto"> <h6 class="mb-0">@Model.ProductName[i]</h6></div>
-                                                <div class="row  my-auto flex-column flex-md-row">
-                                                    <div class="col my-auto"> <small>規格 : @Model.Style[i]</small></div>
-                                                    <div class="col my-auto"> <small>數量 : @Model.Quantity[i]</small></div>
-                                                    <div class="col my-auto"><h6 class="mb-0">$@Convert.ToInt32(Model.Unitprice[i])</h6></div>
+
+                }
+            <div class="card-body mt-3">
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">訂單</h6> </div>
+                    <div class="col-auto  "> <small>訂單編號 : @Model.OrderId</small> </div>
+                </div>
+
+                @for (int i = 0; i < Model.Quantity.Count; i++)
+                {
+                    <div class="row my-4">
+                        <div class="col">
+                            <div class="card card-2">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 mb-2" src="data:image;base64,@System.Convert.ToBase64String(Model.Pic[i])" width="135" height="135" /> </div>
+                                        <div class="media-body my-auto text-right">
+                                            <div class="my-auto"> <h6 class="mb-0">@Model.ProductName[i]</h6></div>
+                                            <div class="row  my-auto flex-column flex-md-row">
+                                                <div class="col my-auto"> <small>規格 : @Model.Style[i]</small></div>
+                                                <div class="col my-auto"> <small>數量 : @Model.Quantity[i]</small></div>
+                                                <div class="col my-auto"><h6 class="mb-0">$@Convert.ToInt32(Model.Unitprice[i])</h6></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-3 ">
+                                    @{string procbar = "0%";
+                                        string ship2 = "";
+                                        string receive = "";
+
+                                        if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
+                                        {
+                                            procbar = "66%";
+                                            ship2 = "active";
+                                        }
+                                        else if (Model.ShipStatusName[i] == "已到貨" || Model.ShipStatusName[i] == "已完成取貨")
+                                        {
+                                            procbar = "100%";
+                                            receive = "active";
+                                        }
+
+                                        <div class="row">
+                                            <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
+                                            <div class="col mt-auto">
+                                                <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: @procbar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
+                                                <div class="media row justify-content-between ">
+                                                    <div class="col"><span> <small class="text-right mr-sm-2">已付款</small> <i class="fa fa-circle @ship"></i> </span></div>
+                                                    <div class="col"><span> <small class="text-right mr-sm-2">運送中</small><i class="fa fa-circle @ship2"></i></span></div>
+                                                    <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle @receive"></i></span></div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <hr class="my-3 ">
-                                        @{string procbar = "0%";
-                                            @if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
-                                            {
-                                                procbar = "66%";
-                                            }
-                                            else if(Model.ShipStatusName[i] == "已到貨" || Model.ShipStatusName[i] == "已完成取貨")
-                                            {
-                                                procbar = "100%";
-                                            }
-
-                                            <div class="row">
-                                                <div class="col-md-3 mb-3"> <small> 更新進度 <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
-                                                <div class="col mt-auto">
-                                                    <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: @procbar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
-                                                    <div class="media row justify-content-between ">
-                                                        <div class="col"><span> <small class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
-                                                        <div class="col"><span> <small class="text-right mr-sm-2">運送中</small><i class="fa fa-circle active"></i></span></div>
-                                                        <div class="col"><span> <small class="text-right mr-sm-2">已送達</small><i class="fa fa-circle"></i></span></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>
-                    }
-
+                    </div>
+                    total += Decimal.ToInt32(Model.Unitprice[i]) * Model.Quantity[i];
+                }
                     <div class="row mt-4">
                         <div class="col">
                             <div class="col-auto"><p class="mb-1 text-dark"><b>訂單明細</b></p></div>
                             <div class="row justify-content-between">
                                 <div class="flex-sm-col text-right col"> <p class="mb-1"><b>小計</b></p> </div>
-                                <div class="flex-sm-col col-auto"> <p class="mb-1">$210</p> </div>
+                                <div class="flex-sm-col col-auto"> <p class="mb-1">$@total</p> </div>
                             </div>
                             <div class="row justify-content-between">
                                 <div class="flex-sm-col text-right col"><p class="mb-1"> <b>折扣</b></p> </div>
-                                <div class="flex-sm-col col-auto"><p class="mb-1">$0</p></div>
+                                <div class="flex-sm-col col-auto"><p class="mb-1">@Model.CouponName</p></div>
                             </div>
                             <div class="row justify-content-between">
-                                <div class="flex-sm-col text-right col"><p class="mb-1"><b>稅金</b></p></div>
-                                <div class="flex-sm-col col-auto"><p class="mb-1">$0</p></div>
+                                <div class="flex-sm-col text-right col"><p class="mb-1"><b>支付費用</b></p></div>
+                                <div class="flex-sm-col col-auto"><p class="mb-1">$@Model.PaymentFee</p></div>
                             </div>
                             <div class="row justify-content-between">
                                 <div class="flex-sm-col text-right col"><p class="mb-1"><b>運費</b></p></div>
-                                <div class="flex-sm-col col-auto"><p class="mb-1">$60</p></div>
+                                <div class="flex-sm-col col-auto"><p class="mb-1">$@Model.ShipperFee</p></div>
                             </div>
                         </div>
                     </div>
-                    <div class="row invoice ">
-                        <div class="col"><p style="font-size:60%" class="mb-1">飛鴿傳書付款</p></div>
+                    <div class="row my-3">
+                        <div class="col">
+                            <h5 class="my-2">賣家資訊:</h5>
+                            <div>
+                                <div class="row">
+                                    <div class="col-4">帳號: @Model.SellerAcc</div>
+                                    <div class="col-8">電話: @Model.SellerPhone</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">名字: @Model.SellerName</div>
+                                    <div class="col-8">Email: @Model.SellerEmail</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h5 class="my-2">買家資訊:</h5>
+                            <div>
+                                <div class="row">
+                                    <div class="col-4">帳號: @Model.BuyerAcc</div>
+                                    <div class="col-8">電話: @Model.BuyerPhone</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">名字: @Model.BuyerName</div>
+                                    <div class="col-8">Email: @Model.BuyerEmail</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="my-3">
+                        <h5>給賣家的話:</h5>
+                        <div class="m-2">
+                            @Model.OrderMessage
+                        </div>
                     </div>
                 </div>
+                @{
+                    total += Model.PaymentFee;
+                    if (Model.IsFreeDelivery != true)
+                    {
+                        total += Model.ShipperFee;
+                    }
+                }
                 <div class="card-footer">
                     <div class="jumbotron-fluid">
                         <div class="row justify-content-between ">
                             <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="~/img/Layout/LOGO_Long2.png"></div>
                             <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">總金額</h2></div>
-                            <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">$270元</h1></div>
+                            <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">$@total</h1></div>
                         </div>
-                        @*<div class="row mb-3 mt-3 mt-md-0">
-                                <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
-                                <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
-                                <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
-                            </div>*@
                     </div>
                 </div>
             </div>

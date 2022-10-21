@@ -110,52 +110,9 @@ namespace prjiSpanFinal.Controllers
             var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
             var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
 
-            
-
-            //Product product = new Product()
-            //{
-            //    ProductName = VM.ProductName,
-            //    SmallTypeId =smtypeID,
-            //    MemberId = id,
-            //    RegionId =regionId,
-            //    Description = VM.Description,
-            //    ProductStatusId = 0,  //商品新增等同上架
-            //    EditTime = DateTime.Now,
-            //    CustomizedCategoryId = 1
-            //};
-            //_db.Products.Add(product);
-            //_db.SaveChanges();  //先存Products才有辦法連接ProductDetail
-
-            //var productID = _db.Products.Where(n => n.MemberId == id).Select(n => n.ProductId).LastOrDefault(); //找最後一筆新增的資料
-            ////foreach()
-            //ProductDetail productDetail = new ProductDetail()
-            //{
-            //    ProductId=productID,
-            //    //Style=
-            //    //Quantity=
-            //    //UnitPrice=
-            //    //Pic=
-            //};
-
-            //ProductPic productPic = new ProductPic()
-            //{
-            //    ProductId = productID,
-            //    //Pic=
-            //};
-
-            //PaymentToProduct paymentToProduct = new PaymentToProduct()
-            //{
-            //    ProductId = productID,
-            //    //PaymentID=
-            //};
-
-            //ShipperToProduct shipperToProduct = new ShipperToProduct()
-            //{
-            //    ProductId = productID,
-            //    //ShipperID=
-            //};
-
+            return View();
         }
+
 
 
         //連結小類別選項
@@ -172,6 +129,54 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new OrderDetailViewModel()
+            {
+                OrderId = o.OrderId,
+                SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
+                SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                SellerEmail = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Email,
+                SellerName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Name,
+                SellerPhone = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Phone,
+                BuyerId = o.MemberId,
+                BuyerAcc = o.Member.MemberAcc,
+                BuyerEmail = o.Member.Email,
+                BuyerName = o.Member.Name,
+                BuyerPhone = o.Member.Phone,
+                OrderDatetime = o.OrderDatetime,
+                RecieveAdr = o.RecieveAdr,
+                FinishDate = o.FinishDate,
+                CouponName = o.Coupon.CouponName,
+                Discount = o.Coupon.Discount,
+                IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                OrderStatusName = o.Status.OrderStatusName,
+                ShipperStatusId = o.StatusId,
+                ShipperName = o.Shipper.ShipperName,
+                ShipperFee = o.Shipper.Fee,
+                ShipperPhone = o.Shipper.Phone,
+                PaymentDate = o.PaymentDate,
+                ShippingDate = o.ShippingDate,
+                ReceiveDate = o.ReceiveDate,
+                PaymentName = o.Payment.PaymentName,
+                PaymentFee = o.Payment.Fee,
+                OrderMessage = o.OrderMessage,
+                OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
+                ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
+                Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
+                ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+            }).FirstOrDefault();
+            return View(vm);
+        }
+
+
+        public IActionResult Shipper()  //傳資料進去view
+        {
             var payname = _db.Payments.Select(n => n).ToList();
             //var memberid = _db.PaymentToProducts.Select(n => n.ProductId);
             //var productid = _db.PaymentToSellers.Select(n => n.MemberId);

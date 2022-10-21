@@ -17,42 +17,46 @@ namespace prjiSpanFinal.Controllers
         iSpanProjectContext _db = new iSpanProjectContext();
         public IActionResult Discount()
         {
-            List<Coupon> lc= (new EventFactory()).listTheCoupons(1);
-            List<CShowCoupon> ls = new List<CShowCoupon>();
-            foreach(Coupon c in lc)
+            List<Coupon> listCoupon = (new EventFactory()).listTheCoupons(1);
+            List<CShowCoupon> listShowCoupon = new List<CShowCoupon>();
+            CouponViewModel CouponVM = new CouponViewModel();
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                CouponVM.Member = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+
+            foreach (Coupon coupons in listCoupon)
             {
-                CShowCoupon sc = new CShowCoupon
+                CShowCoupon showCoupon = new CShowCoupon
                 {
-                    coupon = c,
+                    coupon = coupons,
                     couponEventTitle = "優惠券",
                 };
-                ls.Add(sc);
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                    showCoupon.loggeduser = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+                listShowCoupon.Add(showCoupon);
             }
-            CouponViewModel cv = new CouponViewModel();
-            cv.cListShowCoupon = ls;
-            if(HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-                cv.Member= JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            CouponVM.cListShowCoupon = listShowCoupon;           
             
-            return View(cv);
+            return View(CouponVM);
         }
         public IActionResult GetCoupon(int couponid)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                return Content("0", "text/plain", Encoding.UTF8);   //如果沒有登入則要求登入
+                return Content("0", "text/plain", Encoding.UTF8);
             }
             MemberAccount loggedmem  = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
             if (_db.CouponWallets.Where(w => w.MemberId == loggedmem.MemberId && w.CouponId == couponid).Any()) {
                 return Content("1", "text/plain", Encoding.UTF8);
             }
             else { 
-            CouponWallet cw = new CouponWallet()
+            CouponWallet CW = new CouponWallet()
             {
                 CouponId = couponid,
                 MemberId = loggedmem.MemberId,
                 IsExpired = false
             };
-            _db.CouponWallets.Add(cw);
+            _db.CouponWallets.Add(CW);
             _db.SaveChanges();
 
             return Content("2", "text/plain", Encoding.UTF8);

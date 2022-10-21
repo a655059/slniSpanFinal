@@ -6,9 +6,9 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class EventCouponViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(CShowCoupon cs)
+        public async Task<IViewComponentResult> InvokeAsync(CShowCoupon showCoupon)
         {
-            return View(cs);
+            return View(showCoupon);
         }
     }
 }
