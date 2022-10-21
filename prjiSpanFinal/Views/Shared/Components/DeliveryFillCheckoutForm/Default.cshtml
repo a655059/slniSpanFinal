@@ -36,15 +36,12 @@
         <i class="fa-solid fa-truck-fast"></i>
         <div class="ms-2">聯絡及運送方式</div>
     </div>
-    <div>
+    <div class="contactInfo">
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="recipient">收件人</label>
             <input class="contact col-5" type="text" name="recipient" placeholder="收件人真實姓名" id="recipient" value="@Model.buyer.Name" />
         </div>
-        <div class="row my-1 align-items-center">
-            <label class="col-2 text-center" for="address">收貨地址</label>
-            <input class="contact col-5" type="text" name="address" placeholder="收件地址" id="address" value="@Model.buyer.Address" />
-        </div>
+
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="email">電子信箱</label>
             <input class="contact col-5" type="email" name="email" placeholder="電子信箱" id="email" value="@Model.buyer.Email" />
@@ -53,13 +50,18 @@
             <label class="col-2 text-center" for="phone">連絡電話</label>
             <input class="contact col-5" type="text" name="phone" placeholder="連絡電話" id="phone" value="@Model.buyer.Phone" />
         </div>
+        <div class="finalShipInfo d-none">
+            <div class="fw-bold" id="finalShipper"></div>
+            @*<div class="text-black-50" id="finalAddress"></div>*@
+            <div>運費:<span class="text-danger">$<sapn class="finalShipFee"></sapn></span></div>
+        </div>
+        <div class="row my-1 align-items-center">
+            <label class="col-2 text-center" for="address">收貨地址</label>
+            <input class="contact col-5" type="text" name="address" placeholder="收貨地址" id="address" value="@Model.buyer.Address" />
+        </div>
         <button class="changeShip border-0 bg-transparent text-primary">選擇運送方式</button>
-        @*<div class="fw-bold" id="finalShip">郵寄寄送</div>
-        <div class="text-black-50" id="finalAddress">@Model.buyer.Address</div>
-        <div class="d-flex justify-content-between">
-            <div>運費:<span class="text-danger">$60</span></div>
-            <button class="changeShip border-0 bg-transparent fs-6 text-primary">選擇運送方式</button>
-        </div>*@
+
+
     </div>
     <div class="choseShip mt-2 px-2 border" style="display:none">
         @{
@@ -88,8 +90,8 @@
             @{
                 foreach (var i in Model.sellerShipperPayments[0].payments)
                 {
-                    <input type="radio" name="payment" id="ATM" />
-                    <label for="ATM">@i.PaymentName</label>
+                    <input type="radio" name="payment" id="@i.PaymentId" />
+                    <label for="@i.PaymentId">@i.PaymentName</label>
                 }
             }
         </div>
@@ -100,7 +102,6 @@
     <div>備註</div>
     <input type="text" placeholder="給賣家的話" />
 </div>
-
 
 <div class="modal showMap" tabindex="-1" id="showMap">
     <div class="modal-dialog">
@@ -113,7 +114,7 @@
                 <div class="googleMaps">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2018.2521397387186!2d121.54310351753554!3d25.033935572481887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1665075875772!5m2!1szh-TW!2stw" width="500" height="375" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-                <input value="" id="inputAddress" class="rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
+                <input value="" class="inputAddress rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -123,4 +124,4 @@
     </div>
 </div>
 
-
+<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>

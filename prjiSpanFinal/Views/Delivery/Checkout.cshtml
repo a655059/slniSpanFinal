@@ -16,7 +16,6 @@
             sellerAccList.Add(i.seller.MemberAcc);
         }
     }
-    int sellerIDIndex = 0;
 }
 
 @section Styles{
@@ -29,12 +28,12 @@
     <div class="sellerIDIndex d-none">0</div>
     <div class="sellerIDCount d-none">@sellerIDList.Count</div>
     <input type="radio" class="sellerID btn-check" name="btnradio" id="@sellerIDList[0]" autocomplete="off" checked>
-    <label class="btn btn-outline-warning" for="@sellerIDList[0]">@sellerAccList[0]</label>
+    <label class="sellers btn btn-outline-warning" for="@sellerIDList[0]">@sellerAccList[0]</label>
     @{
         for (int i = 1; i < sellerAccList.Count; i++)
         {
             <input type="radio" class="sellerID btn-check" name="btnradio" id="@sellerIDList[i]" autocomplete="off">
-            <label class="btn btn-outline-warning" for="@sellerIDList[i]">@sellerAccList[i]</label>
+            <label class="sellers btn btn-outline-warning" for="@sellerIDList[i]">@sellerAccList[i]</label>
         }
     }
 </div>
@@ -48,9 +47,6 @@
             <button class="btn btn-primary" id="nextStore">確認並前往下一筆</button>
         </div>
     </div>
-
-
-
     <div class="col-3">
         <div class="showCalTotalPriceVC">
             @await Component.InvokeAsync("CalTotalPrice", new { id = 2 })
@@ -60,26 +56,48 @@
 
 @section Scripts{
     <script>
-
-        $("#nextStore").click(function () {
+        function changePage(NextOrPrevOrIndex) {
+            const sellerCount = Number($(".sellerIDCount").html());
             const sellerIDIndex = Number($(".sellerIDIndex").html());
-            const nextSellerIDIndex = sellerIDIndex + 1;
+            let nextSellerIDIndex;
+            if (NextOrPrevOrIndex == "Next") {
+                nextSellerIDIndex = sellerIDIndex + 1;
+            }
+            else if (NextOrPrevOrIndex == "Prev") {
+                nextSellerIDIndex = sellerIDIndex - 1;
+            }
+            else {
+                nextSellerIDIndex = NextOrPrevOrIndex;
+            }
+
             const _url = "@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=${nextSellerIDIndex}`;
             $(".checkoutFormVC").load(_url);
-            //let nowId = $("#choseStore").children("input:checked").attr("id");
-            //let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) + 1);
-            //$("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
-            //$("#previousStore").removeClass("d-none");
+            $(".sellerIDIndex").html(nextSellerIDIndex);
+            if (nextSellerIDIndex >= sellerCount - 1) {
+                $("#nextStore").removeClass("d-none").addClass("d-none");
+            }
+            else {
+                $("#nextStore").removeClass("d-none");
+            }
+            if (nextSellerIDIndex <= 0) {
+                $("#previousStore").removeClass("d-none").addClass("d-none");
+            }
+            else {
+                $("#previousStore").removeClass("d-none");
+            }
+            $("#choseStore").find(".sellerID").eq(nextSellerIDIndex).prop("checked", true);
+        };
+        $("#nextStore").click(function () {
+            changePage("Next");
         });
         $("#previousStore").click(function () {
-            $(".checkoutFormVC").load("@Url.Action("CheckoutForm", "Delivery", new { count = 2 })");
-            let nowId = $("#choseStore").children("input:checked").attr("id");
-            let nextId = nowId.substring(0, 8) + (Number(nowId.substring(8)) - 1);
-            $("#choseStore").children(`input[id='${nextId}']`).prop("checked", true);
-            $("#previousStore").addClass("d-none");
+            changePage("Prev");
         })
-        
+        $(".sellers").click(function () {
+            changePage($(this).index("label"))
+        });
     </script>
     <script src="~/js/Delivery/DeliveryCheckout.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
+    <script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>
 }
