@@ -248,6 +248,8 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 設定分類()
         {
+            //var
+
             return View();
         }
 
