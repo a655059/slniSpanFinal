@@ -54,13 +54,11 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Center");
             }
         }
-        //[HttpPost]
-        //public IActionResult create(CSellerCreateViewModel product)
-        //{
-        //    _db.productdetails.add(product);
-        //    _db.savechanges();
-        //    var q = 
-        //}
+        [HttpPost]
+        public IActionResult Create(string json, CSellerViewToCreateViewModel VM)
+        {
+            return 
+        }
 
 
         //連結小類別選項
@@ -74,10 +72,17 @@ namespace prjiSpanFinal.Controllers
 
 
 
+
+
+
         public IActionResult OrderDetail()
         {
             return View();
         }
+
+
+
+
 
 
 
