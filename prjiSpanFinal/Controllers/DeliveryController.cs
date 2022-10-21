@@ -1,4 +1,5 @@
 ﻿using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
@@ -7,6 +8,7 @@ using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Delivery;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,6 +17,11 @@ namespace prjiSpanFinal.Controllers
 {
     public class DeliveryController : Controller
     {
+        private IWebHostEnvironment _enviro;
+        public DeliveryController(IWebHostEnvironment enviro)
+        {
+            _enviro = enviro;
+        }
         public IActionResult Index()
         {
             return View();
@@ -342,8 +349,30 @@ namespace prjiSpanFinal.Controllers
             {
                 return View();
             }
-            
         }
+
+        public IActionResult GetShipperLocation(string shipperName)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(_enviro.WebRootPath + "/ShipperLocation/" + shipperName, "*.json");
+                string store = "[";
+                foreach (var i in files)
+                {
+                    string jsonString = System.IO.File.ReadAllText(i).Split('[')[1].Split(']')[0].Trim()+",";
+                    store += jsonString;
+                }
+                store = store.Substring(0, store.Length - 1) + "]";
+
+                return Json(store);
+            }
+            catch
+            {
+                return Content("0");
+            }
+        }
+
+
         public IActionResult AddComment()
         {
             return View();

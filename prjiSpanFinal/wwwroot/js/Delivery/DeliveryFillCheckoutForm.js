@@ -27,3 +27,15 @@ $("#confirmedShip").click(function () {
         $(".choseShip").slideToggle();
     }
 });
+
+
+//以下 Google Maps
+
+$(".addAddress").click(async function () {
+    const shipperName = $(this).siblings().find(".shipperName").html();
+    const _url = `GetShipperLocation?shipperName=${shipperName}`;
+    let response = await fetch(_url);
+    let data = await response.json();
+    
+    console.log(JSON.parse(data));
+});
