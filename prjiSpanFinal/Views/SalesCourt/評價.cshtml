@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.SalesCourt.C評價ViewModel
 @{
     ViewData["Title"] = "評價";
 }
@@ -9,50 +9,55 @@
             height: 1px;
             border-top: 1px dashed #dcdcdc;
         }
-
-
     </style>
 }
 
 
-    <div class="container">
-        <div class="ps-2">
-            <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-                <a href="~/SalesCourt/賣場"> 回賣場</a>
-            </button>
-            <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-                <a href="~/SalesCourt/關於我"> 關於我</a>
-            </button>
-            @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2" href="~/SalesCourt/關於我">
-                關於我
-            </button>*@
-            @*<span class="mx-2 display-6"><a href="" class="text-primary">回賣場</a></span>
-        <span class="mx-2 display-6"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></span>*@
-        </div>
-        @*<div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>*@
+<div class="container">
+    <div class="ps-2">
+        <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+            <a href="~/SalesCourt/賣場"> 回賣場</a>
+        </button>
+        <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
+            <a href="~/SalesCourt/關於我"> 關於我</a>
+        </button>
+
         <div class="row">
 
-            <div class="col-6 rounded-2" @*style="background-color:#e1d02c"*@>
+            <div class="col-6 rounded-2">
 
                 <div class="row">
 
                     <div class="col-4">
-                        <img src="~/img/member.png" width="150" class="m-3" />
-                        @*<div class="text-dark rounded-5  text-center m-4" style="background-color:#fb00ff">最愛賣家</div>*@
+                        @*<img src="~/img/member.png" width="150" class="m-3" />*@
+                        @{
+
+                            var base64Image = Convert.ToBase64String(Model.SellerPhoto);
+                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+
+                        }
+                        <img src="@source" class="cardImg" alt="..." width="120" />
+
+
+
                         <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
                             最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                         </button>
                     </div>
                     <div class="col-8">
                         <div>
-                            <span><img src="~/img/YellowStar.png" width="80" /></span>
-                            <span><img src="~/img/YellowStar.png" width="80" /></span>
-                            <span><img src="~/img/YellowStar.png" width="80" /></span>
+                            @for (int i = 0; i < Model.StarCount; i++)
+                            {
+                                <span><img src="~/img/YellowStar.png" width="80" /></span>
+                            }
+
+                        
                         </div>
                         <div class="dashed-divider"></div>
                         <div class="ps-2 w-auto">
                             <span class="text-dark" style="font-size:2em">優良交易評價:</span>
-                            <span class="text-danger" style="font-size:3em">37595</span>
+                            @*<span class="text-danger" style="font-size:3em">37595</span>*@
+                            <span class="text-danger" style="font-size:3em">@Model.BestComments</span>
                             <span class="text-dark" style="font-size:2em">則</span>
                         </div>
                         <div class="ps-2">
@@ -63,12 +68,14 @@
                         <div class="ps-2">
                             <img src="~/img/follow.png" width="30">
                             <a href="#" class="text-primary" style="font-size:1.5em">交關過會員數:</a>
-                            <span class="text-dark" style="font-size:1.5em">15044次</span>
+                            @*<span class="text-dark" style="font-size:1.5em">15044次</span>*@
+                            <span class="text-dark" style="font-size:1.5em">@Model.BuyerCount 次</span>
                         </div>
                         <div class="ps-2">
                             <img src="~/img/fans.png" width="30">
                             <a href="#" class="text-primary" style="font-size:1.5em">被加入最愛賣家次數:</a>
-                            <span class="text-dark" style="font-size:1.5em">737次</span>
+                            @*<span class="text-dark" style="font-size:1.5em">737次</span>*@
+                            <span class="text-dark" style="font-size:1.5em">@Model.AddLoveCount</span>
                         </div>
                         <div class="ps-2">
                             <img src="~/img/trashcan.png" width="30">
@@ -165,16 +172,10 @@
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">收到他人的評價</a>
+                    <a class="nav-link active" aria-current="page" href="#">賣場評價</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">來自買家的評價</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">來自賣家的評價</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">給他人的評價</a>
+                    <a class="nav-link" href="#">買家評價</a>
                 </li>
 
             </ul>
@@ -201,18 +202,19 @@
         @{
             @for (int i = 0; i < 20; i++)
             {
-                <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                    @*<i class="fa-regular fa-circle"></i>*@
-                    <div>
-                        <img src="~/img/greencircle.png" width="20" />
-                        <span class="text-dark" style="font-size:1.5em">買家:31987</span>
-                    </div>
+    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+        @*<i class="fa-regular fa-circle"></i>*@
+        <div>
+            <img src="~/img/greencircle.png" width="20" />
+            <span class="text-dark" style="font-size:1.5em">買家:31987</span>
+        </div>
 
-                    <div class="dashed-divider"></div>
-                    <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">【24H出貨】(袋裝) 4米5噸 拖車繩 拉車繩 牽引繩 拖車繩 拖車索 拖車勾 拖車線 汽機車用品</a></div>
+        <div class="dashed-divider"></div>
+        <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">【24H出貨】(袋裝) 4米5噸 拖車繩 拉車繩 牽引繩 拖車繩 拖車索 拖車勾 拖車線 汽機車用品</a></div>
 
-                    <div class="my-2 text-dark" style="font-size:1.5em">意見：	東西真的不錯耶...我好喜歡，謝謝啊~~ (2022-10-10 08:52:04)</div>
-                </div>
+        @*<div class="my-2 text-dark" style="font-size:1.5em">意見：	東西真的不錯耶...我好喜歡，謝謝啊~~ (2022-10-10 08:52:04)</div>*@
+        <div class="my-2 text-dark" style="font-size:1.5em">@Model.CardContent.Select(a => a.CommentContent)</div>
+    </div>
             }
 
         }

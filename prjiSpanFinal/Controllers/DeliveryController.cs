@@ -140,14 +140,13 @@ namespace prjiSpanFinal.Controllers
                 int memberID = memberAccount.MemberId;
                 iSpanProjectContext dbContext = new iSpanProjectContext();
                 var allOrderDetail = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => i);
-                
                 if (allOrderDetail.Count() > 0)
                 {
                     List<CDeliveryOrderViewModel> cDeliveryOrderList = new List<CDeliveryOrderViewModel>();
                     var allInfo = dbContext.OrderDetails.Where(i => i.Order.MemberId == memberID && i.Order.StatusId == 1).Select(i => new {
                         sellerID = i.ProductDetail.Product.MemberId,
-                        sellerName = i.ProductDetail.Product.Member.Name,
-                        productName = i.ProductDetail.Product.ProductName,
+                        sellerAcc = i.ProductDetail.Product.Member.MemberAcc,
+                        product = i.ProductDetail.Product,
                         orderDetail = i,
                         productDetail = i.ProductDetail,
                     });
@@ -156,15 +155,15 @@ namespace prjiSpanFinal.Controllers
                     foreach (var info in allInfo)
                     {
                         int sellerID = info.sellerID;
-                        string sellerName = info.sellerName;
-                        string productName = info.productName;
+                        string sellerAcc = info.sellerAcc;
+                        Product product = info.product;
                         OrderDetail orderDetail = info.orderDetail;
                         ProductDetail productDetail = info.productDetail;
                         CDeliveryOrderViewModel cDeliveryOrder = new CDeliveryOrderViewModel
                         {
                             sellerID = sellerID,
-                            sellerName = sellerName,
-                            productName = productName,
+                            sellerAcc = sellerAcc,
+                            product = product,
                             orderDetail = orderDetail,
                             productDetail = productDetail
                         };
@@ -241,17 +240,109 @@ namespace prjiSpanFinal.Controllers
                 dbContext.SaveChanges();
                 return Content("1");
             }
-            
-            
         }
         public IActionResult ShowNoItemInCart()
         {
             return ViewComponent("ShowNoItemInCart");
         }
+        public IActionResult SetItemToCheckoutSession(string purchaseItemInfo)
+        {
+            try
+            {
+                HttpContext.Session.SetString(CDictionary.SK_PURCHASEITEMINFO, purchaseItemInfo);
+                return Content("1");
+            }
+            catch
+            {
+                return Content("0");
+            }
+        }
         public IActionResult Checkout()
         {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PURCHASEITEMINFO))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string buyerString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
+                string purchaseItemInfo = HttpContext.Session.GetString(CDictionary.SK_PURCHASEITEMINFO);
+                List<CPurchaseItemToSession> purchaseItems = JsonSerializer.Deserialize<List<CPurchaseItemToSession>>(purchaseItemInfo);
+                var productDetails = dbContext.ProductDetails.Select(i => i);
+                var members = dbContext.MemberAccounts.Select(i => i);
+                var shipperToSellers = dbContext.ShipperToSellers.Select(i => i);
+                var paymentToSellers = dbContext.PaymentToSellers.Select(i => i);
+                var shippers = dbContext.Shippers.Select(i => i);
+                var payments = dbContext.Payments.Select(i => i);
+                List<CPurchaseItemInfo> cPurchaseItemList = new List<CPurchaseItemInfo>();
+                foreach (var a in purchaseItems)
+                {
+                    byte[] productDetailPic = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.Pic).FirstOrDefault();
+                    CPurchaseItemInfo cPurchaseItemInfo = new CPurchaseItemInfo
+                    {
+                        orderDetailID = a.orderDetailID,
+                        productName = a.productName,
+                        productDetailPic = productDetailPic,
+                        unitPrice = a.unitPrice,
+                        sellerAcc = a.sellerAcc,
+                        purchaseCount = a.purchaseCount,
+                        productStyle = a.productStyle,
+                    };
+                    cPurchaseItemList.Add(cPurchaseItemInfo);
+                }
+                List<int> sellerIDList = new List<int>();
+                foreach(var a in cPurchaseItemList)
+                {
+                    int sellerID = members.Where(i => i.MemberAcc == a.sellerAcc).Select(i => i.MemberId).FirstOrDefault();
+                    if (sellerIDList.Contains(sellerID))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        sellerIDList.Add(sellerID);
+                    }
+                }
+                List<CDeliverySellerShipperPayment> cDeliverySellerShipperPaymentList = new List<CDeliverySellerShipperPayment>();
+                foreach (var a in sellerIDList)
+                {
+                    MemberAccount seller = members.Where(i => i.MemberId == a).Select(i => i).FirstOrDefault();
+                    var shipperIDs = shipperToSellers.Where(i => i.MemberId == a).Select(i => i.ShipperId).ToList();
+                    var paymentIDs = paymentToSellers.Where(i => i.MemberId == a).Select(i => i.PaymentId).ToList();
+                    List<Shipper> shipperList = new List<Shipper>();
+                    foreach (var b in shipperIDs)
+                    {
+                        var shipper = shippers.Where(i => i.ShipperId == b).Select(i => i).FirstOrDefault();
+                        shipperList.Add(shipper);
+                    }
+                    List<Payment> paymentList = new List<Payment>();
+                    foreach (var b in paymentIDs)
+                    {
+                        var payment = payments.Where(i => i.PaymentId == b).Select(i => i).FirstOrDefault();
+                        paymentList.Add(payment);
+                    }
+                    CDeliverySellerShipperPayment cDeliverySellerShipperPayment = new CDeliverySellerShipperPayment
+                    { 
+                        seller = seller,
+                        shippers = shipperList,
+                        payments = paymentList
+                    };
+                    cDeliverySellerShipperPaymentList.Add(cDeliverySellerShipperPayment);
+                }
+                CDeliveryCheckoutViewModel cDeliveryCheckout = new CDeliveryCheckoutViewModel
+                {
+                    buyer = buyer,
+                    purchaseItemInfo = cPurchaseItemList,
+                    sellerShipperPayments = cDeliverySellerShipperPaymentList
+                };
+                string jsonString = JsonSerializer.Serialize(cDeliveryCheckout);
+                HttpContext.Session.SetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT, jsonString);
 
-            return View();
+                return View(cDeliveryCheckout);
+            }
+            else
+            {
+                return View();
+            }
+            
         }
         public IActionResult AddComment()
         {
@@ -262,9 +353,9 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        public IActionResult CheckoutForm(int? count)
+        public IActionResult CheckoutForm(int sellerIDIndex)
         {
-            return ViewComponent("DeliveryFillCheckoutForm", count);
+            return ViewComponent("DeliveryFillCheckoutForm", sellerIDIndex);
         }
         public IActionResult CheckoutConfirm()
         {

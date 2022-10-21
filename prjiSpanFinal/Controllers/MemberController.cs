@@ -80,30 +80,69 @@ namespace prjiSpanFinal.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Edit(MemberAccViewModel mem)
+        public IActionResult Edit(MemberAccViewModel mem, IFormFile File1)
         {
-            if (mem != null)
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                iSpanProjectContext db = new iSpanProjectContext();
-                MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            else
+            { 
+            iSpanProjectContext db = new iSpanProjectContext();
+            MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 if (acc != null)
                 {
+                    if (mem.MemPic != null)
+                    {
+                        byte[] imgByte = null;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            imgByte = memoryStream.ToArray();
+                        }
+                        acc.MemPic = imgByte;
+                    }
+                    acc = mem.memACC;
+                    acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
+                    if (mem.gender == "female")
+                    {
+                        acc.Gender = 2;
+                    }
+                    else if (mem.gender == "male")
+                    {
+                        acc.Gender = 1;
+                    }
+                    else
+                    {
+                        acc.Gender = 0;
+                    }
+                    if (mem.TW == "tw")
+                    {
+                        acc.IsTw = true;
+                    }
+                    else
+                    {
+                        acc.IsTw = false;
+                    }
                     acc.Name = mem.Name;
                     acc.MemberAcc = mem.MemberAcc;
                     acc.Address = mem.Address;
                     acc.Phone = mem.Phone;
-                    acc.RegionId = mem.RegionId;
+                     
                     acc.BackUpEmail = mem.BackUpEmail;
                     acc.Birthday = mem.Birthday;
                     acc.Email = mem.Email;
-                    acc.Gender = mem.Gender;
+                    
                     acc.IsTw = mem.IsTw;
-                    acc.MemPic = mem.MemPic;
                     acc.NickName = mem.NickName;
-
+                    db.SaveChanges();
+                    acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
+                    string json= JsonSerializer.Serialize(mem);
+                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json); //塞新資料到session
+                    
                 }
+                return View(mem);
             }
-            return View();
+            
         }
         //public IActionResult Create()
         //{
@@ -156,6 +195,12 @@ namespace prjiSpanFinal.Controllers
             db.MemberAccounts.Add(memberac);
             db.SaveChanges();
             return RedirectToAction("Login");
+        }
+        public FileResult ShowPhoto(int id)
+        {
+            MemberAccount member = _context.MemberAccounts.Find(id);
+            byte[] content = member.MemPic;
+            return File(content, "image/jpeg");
         }
         public IActionResult Like()
         {

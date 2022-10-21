@@ -18,3 +18,21 @@ addEventListener('resize', async () =>
 function sizeble() {
     h2.style.marginTop = (h1.height() + 16) + "px";
 }
+
+let searchInput = document.querySelector("#SearchInputTxT");
+let searchBtn = document.querySelector("#SearchInputbtn");
+
+
+
+searchInput.addEventListener("input", () => {
+    let searchkeyword = searchInput.value;
+    let url = `/Category/SearchResult/?keyword=${searchkeyword}`;
+    searchBtn.setAttribute("href", url);
+})
+
+searchInput.addEventListener("keypress", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        searchBtn.click();
+    }
+})

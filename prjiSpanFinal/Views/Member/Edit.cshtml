@@ -71,14 +71,7 @@
 }
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">個人資料修改</h2>
-<script>
 
-@{
-            //var memberIDsession = Accessor.HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-            //var jsondata = JsonSerializer.Deserialize<MemberAccount>(memberIDsession);
-}
-
-</script>
 
 <div class="row " id="viewPage">
     <div class="col-1"></div>
@@ -155,10 +148,6 @@
                                 <div class="st1">
                                     <label class="p1">居住地</label>
                                     <select name="City" size="1" class="form-select form-select-sm" style="width:200px;">
-                                        <option value="TPE">台北市</option>
-                                        <option value="TPH">新北市</option>
-                                        <option value="TYU">桃園市</option>
-                                        <option value="HSC">新竹市</option>
                                     </select>
                                 </div>
                                 <div class="st1">
@@ -168,13 +157,16 @@
                             </fieldset>
                         </div>
                         <div class="col">
-                            <img src="~/img/Member/pekopeko.jpg" style="width: 300px; height: 300px; border-radius: 50%;" alt="無法顯示" class="img-thumbnail" />
-                            <br /><br />
+                            <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" class="img-thumbnail w-25" />                            <br /><br />
                             <label class="p1" for="formFile">上傳照片</label>
                             <input class="form-control" type="file" name="file1" multiple />
                         </div>
                     </div>
                 </div>
+
+
+
+
                 <div class="justify-content-around">
                     <div class="st2 justify-content-around">
                         @Html.ActionLink("送出", "Edit", "Member", "", new { @class = "btn btn-primary" })
@@ -193,111 +185,6 @@
 @section Scripts{
     <script>
         const clear = document.querySelector("#clear");
-        @*const View = document.querySelector("#viewPage")
-        var VuePage = new Vue({
-            el: '#viewPage'
-            , data: function () {
-                var data = {
-                    form: {}
-                };
-
-                // 設定表單初始值
-                data.form = {
-                    MemberId: ""
-                    , Name: ""
-
-                }
-                return data;
-            }
-            // Vue 實體與掛載完成
-            , mounted: function () {
-                var self = this;
-
-                // 當 Vue 掛載完成，取得個人資料
-                self.GetUserProfile();
-            }, GetUserProfile: function () {
-                var self = this;
-                var postData = {};
-                                    // 使用 jQuery Ajax 傳送至後端
-                    $.ajax({
-                        url:'@Url.Content("~/Member/Edit")',
-                        method:'POST',
-                        dataType:'json',
-                        data: { inModel: postData },
-                        success: function (datas) {
-                            if (datas.ErrMsg) {
-                                alert(datas.ErrMsg);
-                                return;
-                            }
-                            self.form.MemberId = datas.MemberId;
-                            self.form.Name = datas.Name;
-
-                        },
-                        error: function (err) {
-                            $('#ErrorMsg').html(err.responseText);
-                            $('#ErrorAlert').modal('toggle');
-                        },
-                    });
-                }
-                // 修改個人資料
-                , DoEditProfile: function () {
-                    var self = this;
-
-                    // 組合表單資料
-                    var postData = {};
-                    postData['UserName'] = self.form.UserName;
-                    postData['UserEmail'] = self.form.UserEmail;
-
-                    // 使用 jQuery Ajax 傳送至後端
-                    $.ajax({
-                        url:'@Url.Content("~/Member/DoEditProfile")',
-                        method:'POST',
-                        dataType:'json',
-                        data: { inModel: postData, __RequestVerificationToken: self.GetToken() },
-                        success: function (datas) {
-                            if (datas.ErrMsg) {
-                                alert(datas.ErrMsg);
-                                return;
-                            }
-                            alert(datas.ResultMsg);
-                        },
-                        error: function (err) {
-                            $('#ErrorMsg').html(err.responseText);
-                            $('#ErrorAlert').modal('toggle');
-                        },
-                    });
-                }
-                 // 修改密碼
-                , DoEditPwd: function () {
-                    var self = this;
-
-                    // 組合表單資料
-                    var postData = {};
-                    postData['NewUserPwd'] = self.form.NewUserPwd;
-                    postData['CheckUserPwd'] = self.form.CheckUserPwd;
-
-                    // 使用 jQuery Ajax 傳送至後端
-                    $.ajax({
-                        url:'@Url.Content("~/Member/DoEditPwd")',
-                        method:'POST',
-                        dataType:'json',
-                        data: { inModel: postData, __RequestVerificationToken: self.GetToken() },
-                        success: function (datas) {
-                            if (datas.ErrMsg) {
-                                alert(datas.ErrMsg);
-                                return;
-                            }
-                            alert(datas.ResultMsg);
-                        },
-                        error: function (err) {
-                            $('#ErrorMsg').html(err.responseText);
-                            $('#ErrorAlert').modal('toggle');
-                        },
-                    });
-                }
-
-
-        })*@
 
         clear.addEventListener("click", eve => {
             eve.preventDefault();

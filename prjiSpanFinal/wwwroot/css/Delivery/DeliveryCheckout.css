@@ -9,16 +9,14 @@
     position: fixed;
     top: 80px;
 }
-
-
 /*DeliveryFillCheckoutForm ViewComponent*/
 
-.itemThumb {
-    width: 200px;
+.itemThumbnail {
+    width: 100px;
     aspect-ratio: 1/1;
 }
 
-.itemThumb img {
+.itemThumbnail img {
     width: 100%;
     aspect-ratio: 1/1;
     object-fit: contain;
@@ -39,9 +37,14 @@
     object-fit: contain;
 }
 
+.contact:focus {
+    border: #FFC78E;
+    
+}
+
 /*CalTotalPrice ViewComponent*/
 
 .modal {
     position: fixed;
-    top: 80px;
+    top: 60px;
 }

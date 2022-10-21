@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Event.CouponViewModel
 @{
     ViewData["Title"] = "Discount";
 }
@@ -13,61 +13,45 @@
         <div class="split">
         </div>
         <div>
-            @*<div style="background-color:red">
-                必逛
-            </div>*@
         </div>
         <div>
             <div class="coupongroup">
-                <div class="coupon coupon-enable d-flex  ">
-                    <div class="coupon-start" style="color:RED">
-                        <div class="coupon-start-head">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
-                        </div>
-                        <span class="coupon-start-title">開站慶<br />單筆訂單八折</span>
-                    </div>
-                    <div div class="coupon-end">
-                        <div div class="coupon-end-start">
-                            <div class="ces-title">訂單 8 折</div>
-                            <div class="ces-content">沒有限制</div>
-                            <div class="ces-expdate">有效期限 永久</div>
-                        </div>
-                        <div div class="coupon-end-end">
-                            <div>
-                                <a class="linknoline coupon-enable-btn" id="coupon-btn">
-                                    <div class="coupon-btn" id="coupon-btn-text">領券</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="coupon coupon-disable d-flex  ">
-                    <div class="coupon-start" style="color:RED">
-                        <div class="coupon-start-head">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
-                        </div>
-                        <span class="coupon-start-title">國慶日<br />單筆訂單八折</span>
-                    </div>
-                    <div div class="coupon-end">
-                        <div div class="coupon-end-start">
-                            <div class="ces-title">訂單 8 折</div>
-                            <div class="ces-content">沒有限制</div>
-                            <div class="ces-expdate">有效期限 10/10</div>
-                        </div>
-                        <div div class="coupon-end-end">
-                            <div>
-                                <a class="linknoline coupon-disable-btn">
-                                    <div class="coupon-btn">已失效</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @foreach (var item in Model.cListShowCoupon)
+                {
+                    @await Component.InvokeAsync("EventCoupon", new { cs = item });
+                }
+
             </div>
         </div>
     </div>
 </body>
 @section Scripts{
     <script src="~/js/Event/Coupon.js"></script>
+    <script>
+
+        let btn = document.querySelectorAll(".coupon-tag");
+        btn.forEach(t => t.addEventListener("click", function (event) {
+            //console.log(event.target);
+            //console.log(event.target.querySelector('input').value);
+            let couponid = event.target.querySelector('input').value;
+            GetCoupon(event, couponid);
+        }))
+        function GetCoupon(event, couponid) {
+            $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
+        if (data == "1") {
+            window.alert("已經領取過此券！");
+            window.location = "/";
+        }
+        else if (data == "2") {
+            window.alert("成功領券！");
+            window.location = "/";
+        }
+        else {
+            window.alert("尚未登入");
+            window.location = "/Member/Login";
+        }
+    })
+}
+    </script>
 }

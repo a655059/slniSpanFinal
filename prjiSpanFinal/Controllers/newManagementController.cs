@@ -5,9 +5,7 @@ using prjiSpanFinal.ViewModels.newManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using X.PagedList;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -99,6 +97,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 2;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -109,6 +108,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 0;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -119,6 +119,7 @@ namespace prjiSpanFinal.Controllers
                     where d.ProductId == id
                     select d;
             D.First().ProductStatusId = 1;
+            D.First().EditTime = DateTime.Now;
             db.SaveChanges();
             return Content("1");
         }
@@ -146,13 +147,21 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.ProductDetails
                     where d.ProductDetailId == id
                     select d;
-            db.ProductDetails.Remove(D.First());
+            var G = from g in db.Products
+                    where g.ProductId == D.First().ProductId
+                    select g;
+            var K = from k in db.ProductDetails
+                    where k.ProductId == G.First().ProductId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.ProductDetails.Remove(D.First());
+            }
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList", new { id = id });
+            return RedirectToAction("ProductDetailList", new { id=id});
         }
         #endregion
         #region MemberRegion
-
         public List<CMemberListViewModel> GetMembersFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
@@ -174,8 +183,8 @@ namespace prjiSpanFinal.Controllers
                     Where(i => i.Name.Contains(keyword) || i.Phone.Contains(keyword) || i.Email.Contains(keyword) || i.MemberAcc.Contains(keyword)).
                     Select(e => e); ;
             }
-            var MemStatuses = ( from i in db.MemStatuses select i).ToList();
-            var RegionLists = ( from i in db.RegionLists select i).ToList();
+            var MemStatuses = (from i in db.MemStatuses select i).ToList();
+            var RegionLists = (from i in db.RegionLists select i).ToList();
             foreach (var p in mems)
             {
                 CMemberListViewModel model = new()
@@ -259,6 +268,182 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
+        #endregion
+        #region OrderRegion
+        public List<COrderListViewModel> GetOrdersFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<COrderListViewModel> list = new();
+            IQueryable<Order> Orders = null;
+            if (keyword == null)
+            {
+                Orders = db.Orders.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Orders = db.Orders.
+                     Where(i => i.OrderId == key || i.MemberId == key).
+                     Select(e => e);
+            }
+            else if (DateTime.TryParse(keyword, out DateTime key2))
+            {
+                Orders = db.Orders.
+                     Where(i => i.OrderDatetime == key2).
+                     Select(e => e);
+            }
+            else
+            {
+                Orders = db.Orders.
+                    Where(i => i.OrderMessage.Contains(keyword)).
+                    Select(e => e); ;
+            }
+            var OrderStatusName = (from i in db.OrderStatuses select i).ToList();
+            var ShipperName = (from i in db.Shippers select i).ToList();
+            var SmallTypeName = (from i in db.SmallTypes select i).ToList();
+            var PaymentName = (from i in db.Payments select i).ToList();
+            var CouponName = (from i in db.Coupons select i).ToList();
+            foreach (var p in Orders)
+            {
+                COrderListViewModel model = new()
+                {
+                    Order = p,
+                    OrderStatusName = (from i in OrderStatusName
+                                       where i.OrderStatusId == p.StatusId
+                                       select i.OrderStatusName).First(),
+                    ShipperName = (from i in ShipperName
+                                   where i.ShipperId == p.ShipperId
+                                   select i.ShipperName).First(),
+                    PaymentName = (from i in PaymentName
+                                   where i.PaymentId == p.PaymentId
+                                   select i.PaymentName).First(),
+                    CouponName = (from i in CouponName
+                                  where i.CouponId == p.CouponId
+                                  select i.CouponName).First(),
+                };
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<COrderListViewModel> GetOrdersPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetOrdersFromDatabase(keyword);
+            IPagedList<COrderListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult OrderList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetOrdersPagedProcess(page, pageSize, keyword);
+            var PList = GetOrdersPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult OrderOut(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult OrderDeliver(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 6;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult OrderFin(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 8;
+            D.First().FinishDate = DateTime.Now;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult OrderStop(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 9;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult OrderDelete(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 10;
+            db.SaveChanges();
+            return RedirectToAction("OrderList", new { id });
+        }
+
+        //視情形決定要不要用第二張List
+        //public IActionResult OrderList2(int? id)
+        //{
+        //    var Q = from u in new iSpanProjectContext().Orders
+        //            where u.OrderId == id
+        //            select u;
+        //    return View(Q);
+        //}
+        #endregion
+        #region OrderDetailRegion
+        public IActionResult OrderDetailList(int? id)
+        {
+            var db = new iSpanProjectContext();
+            if (id != null)
+            {
+                var Q = (from i in db.OrderDetails
+                         where i.OrderId == id
+                         select i);
+                return View(Q);
+            }
+            else
+            {
+                return RedirectToAction("OrderList");
+            }
+        }
+        public IActionResult OrderDetailDelete(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.OrderDetails
+                    where d.OrderDetailId == id
+                    select d;
+            var G = from g in db.Orders
+                    where g.OrderId == D.First().OrderId
+                    select g;
+            var K = from k in db.OrderDetails
+                    where k.OrderId == G.First().OrderId
+                    select k;
+            if (K.Count() - 1 > 0)
+            {
+                db.OrderDetails.Remove(D.First());
+            }
+            db.SaveChanges();
+            return RedirectToAction("OrderDetailList", new { id = id });
+        }
+
         #endregion
     }
 }

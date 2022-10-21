@@ -1,0 +1,71 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "OrderDetailList";
+}
+
+<h1>OrderDetailList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                訂單ID
+            </th>
+            <th>
+                品項ID
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceiveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingStatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unitprice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDetailId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDetailId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiveDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingStatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unitprice)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

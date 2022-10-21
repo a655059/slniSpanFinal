@@ -9,6 +9,7 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
     public class C關於我ViewModel
     {
         public List<string> PayingMethod { get; set; }
+        public List<bool> PayingMethodCheck { get; set; }
         public List<string> DeliveryMethod { get; set; }
         public List<int> DeliveryFee { get; set; }
         public string SalesCourtServiceTime { get; set; }
