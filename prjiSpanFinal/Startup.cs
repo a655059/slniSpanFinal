@@ -32,6 +32,8 @@ namespace prjiSpanFinal
             });
             services.AddControllersWithViews();
             services.AddSession();
+            services.AddMvc();
+            services.AddHttpContextAccessor();
             services.AddSignalR(o =>
             {
                 o.EnableDetailedErrors = true;
