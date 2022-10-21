@@ -61,13 +61,18 @@
                     <th class="col 規格列表">商品數</th>
                     <th class="col 規格列表">類別</th>
                     <th class="col 規格列表">刪除</th>
-                   
+
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
+
     </section>
+    
 </div>
+
+<button type="submit" class="btn btn-secondary">確定新增</button>
+
 
 @*這邊應該的是按下修改選項    會多出來的畫面*@
 <!-- Modal -->
@@ -134,6 +139,7 @@
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
                     td.setAttribute("id", count);
+                    /*td.setAttribute("asp-for", CustomizedCategoryName);*/
                     td.innerHTML = dataNew[i];
                     Tr.appendChild(td);
                 }
@@ -149,7 +155,7 @@
                     parent.remove();
                 })
                 Tr.appendChild(td);
-                tbody.insertBefore(Tr, tbody.children[0])
+                tbody.appendChild(Tr);
                 clickValue();
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
