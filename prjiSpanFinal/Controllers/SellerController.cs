@@ -52,13 +52,36 @@ namespace prjiSpanFinal.Controllers
             return Json(new OrderSortReq().SearchOrder(keyword, startdate.AddDays(1), enddate.AddDays(1), id));
 
         }
+        public IActionResult OrderDetail(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            return View(id);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         public IActionResult Create()
         {
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
+                return RedirectToAction("Login", "Member");
+            }
+            
                 string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
                 int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
@@ -76,15 +99,17 @@ namespace prjiSpanFinal.Controllers
                     shipID = shiperlist,
                 };
                 return View(x);
-            }
-            else
-            {
-                return RedirectToAction("Center");
-            }
         }
-        [HttpPost]
-        public IActionResult Create(string json, CSellerViewToCreateViewModel VM)
+
+
+        public void CreateToDB(string jsonString, CSellerCreateToViewViewModel VM)
         {
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+
+            var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
+            var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
+
             return View();
         }
 
@@ -98,10 +123,9 @@ namespace prjiSpanFinal.Controllers
             return Json(smalltype);
         }
 
-
-        public IActionResult OrderDetail(int id)
+        public IActionResult Shipper()  //傳資料進去view
         {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 return RedirectToAction("Login", "Member");
             }
@@ -257,6 +281,10 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult NewIndex()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
 
@@ -308,44 +336,27 @@ namespace prjiSpanFinal.Controllers
         }
 
 
-        public IActionResult Coupon()
+        public IActionResult Coupon(string jsonString)
         {
             int id = 1;
             var x = _db.Coupons.Where(n => n.MemberId == id).Select(n => n).ToList();
 
-            //List<int> CouponId = new List<int>();
-            //List<string> CouponName = new List<string>();
-            //List<DateTime> StartDate = new List<DateTime>();
-            //List<DateTime> ExpiredDate = new List<DateTime>();
-            //List<float> Discount = new List<float>();
-            //List<string> CouponCode = new List<string>();
-
-            //for (int i = 0; i < x.Count; i++)
-            //{
-            //    CouponId.Add(x[i].CouponId);
-            //    CouponName.Add(x[i].CouponName);
-            //    StartDate.Add(x[i].StartDate);
-            //    ExpiredDate.Add(x[i].ExpiredDate);
-            //    Discount.Add(x[i].Discount);
-            //    CouponCode.Add(x[i].CouponCode);
-            //}
-            //CSellerCouponToViewViewModel y = new CSellerCouponToViewViewModel
-            //{
-            //    CouponId= CouponId,
-            //    CouponName= CouponName,
-            //    StartDate= StartDate,
-            //    ExpiredDate= ExpiredDate,
-            //    Discount= Discount,
-            //    CouponCode= CouponCode
-            //};
-
             return View(x);
+        }
+
+        public void Couponresponse(string jsonString)
+        {
+
+
         }
 
 
 
         public IActionResult AD()
         {
+
+
+
             return View();
         }
 

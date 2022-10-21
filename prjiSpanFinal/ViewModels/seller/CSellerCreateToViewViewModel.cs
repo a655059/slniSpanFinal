@@ -11,5 +11,19 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<string> smallType { get; set; }
         public List<string> memship { get; set; }
         public List<int> shipID { get; set; }
+
+        //傳出去的屬性
+        public int MemberID { get; set; }
+        public string ProductName { get; set; }
+        public string smalltype { get; set; }
+        public List<string> Style { get; set; }
+        public List<int> Quantity { get; set; }
+        public List<decimal> UnitPrice { get; set; }
+        public byte HeadPic { get; set; }
+        public List<byte> BodyPic { get; set; }
+        public string Description { get; set; }
+        public List<int> ShiperID { get; set; }
+        public int ProductID { get; set; }
+        public int PaymentID { get; set; }
     }
 }
