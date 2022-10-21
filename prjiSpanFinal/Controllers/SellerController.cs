@@ -32,7 +32,7 @@ namespace prjiSpanFinal.Controllers
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1).
+            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1 && o.StatusId != 9).
                 Select(o => new OrderListViewModel()
                 {
                     OrderId = o.OrderId,

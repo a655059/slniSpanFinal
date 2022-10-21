@@ -16,6 +16,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
+using prjiSpanFinal.Models.OrderReq2;
+
 namespace prjiSpanFinal.Controllers
 {
     public class MemberController : Controller
@@ -223,10 +225,70 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Order()
         {
-
-
-            return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return View(dbcontext.Orders.Where(o => o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).
+                Select(o => new OrderListViewModel()
+                {
+                    OrderId = o.OrderId,
+                    SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
+                    SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                    BuyerId = o.MemberId,
+                    BuyerAcc = o.Member.MemberAcc,
+                    OrderDatetime = o.OrderDatetime,
+                    //RecieveAdr = o.RecieveAdr,
+                    //FinishDate = o.FinishDate,
+                    //CouponName = o.Coupon.CouponName,
+                    //Discount = o.Coupon.Discount,
+                    IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                    OrderStatusName = o.Status.OrderStatusName,
+                    ShipperStatusId = o.StatusId,
+                    //ShipperName = o.Shipper.ShipperName,
+                    ShipperFee = o.Shipper.Fee,
+                    //ShipperPhone = o.Shipper.Phone,
+                    //PaymentDate = o.PaymentDate,
+                    //ShippingDate = o.ShippingDate,
+                    //ReceiveDate = o.ReceiveDate,
+                    //PaymentName = o.Payment.PaymentName,
+                    PaymentFee = o.Payment.Fee,
+                    //OrderMessage = o.OrderMessage,
+                    //OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
+                    //ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
+                    Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                    //OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
+                    //ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                    Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                    ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
+                    Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                    Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                    ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+                }).OrderByDescending(o => o.OrderDatetime).ToList());
         }
+        public IActionResult SortOrder(int sort, int tab)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new OrderSortReq().SortTab(sort, tab, id));
+
+        }
+        public IActionResult SearchOrder(string keyword, DateTime startdate, DateTime enddate)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new OrderSortReq().SearchOrder(keyword, startdate.AddDays(1), enddate.AddDays(1), id));
+
+        }
+
         public IActionResult OrderDetail()
         {
 
