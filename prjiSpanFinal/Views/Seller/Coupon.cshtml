@@ -20,10 +20,15 @@
             vertical-align: middle;
         }
 
+        .modal{
+            position:fixed;
+            top:100px;
+        }
+
     </style>
 }
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -34,8 +39,11 @@
                 <label>優惠劵名稱:</label>
                 <input type="text" id="text1" class="form-control my-1">
                 <br />
-                <label>折扣額度:</label>
+                <label>優惠劵序號:</label>
                 <input type="text" id="text2" class="form-control my-1">
+                <br />
+                <label>折扣額度:</label>
+                <input type="text" id="text3" class="form-control my-1">
                 <br />
                 <label>優惠券可使用期間:</label>
                 <span>
@@ -71,6 +79,7 @@
                     <tr class="text-bg-light p-3">
                         <td scope="col"></td>
                         <td scope="col">優惠券名稱</td>
+                        <td scope="col">優惠券序號</td>
                         <td scope="col">折扣額度</td>
                         <td scope="col">優惠券領取期間</td>
                         <td scope="col">是否有效</td>
@@ -79,22 +88,23 @@
                     @{
                         for (var i = 0; i < Model.Count; i++)
                         {
-                            <tr>
-                                <td scope="row"><img src="~/img/seller coupon.png" /></td>
-                                <td class="置中">@Model[i].CouponName</td>
-                                <td class="置中">@Model[i].Discount</td>
-                                <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
-                                <td class="置中">有效</td>
-                                <td class="置中">
-                                    <div>
-                                        @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
-                                    </div>
-                                    <div>
-                                        @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
-                                    new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
-                                    </div>
-                                </td>
-                            </tr>
+                                        <tr>
+                                            <td scope="row"><img src="~/img/seller coupon.png" /></td>
+                                            <td class="置中">@Model[i].CouponName</td>
+                                            <td class="置中">@Model[i].CouponCode</td>
+                                            <td class="置中">@Model[i].Discount</td>
+                                            <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
+                                            <td class="置中">有效</td>
+                                            <td class="置中">
+                                                <div>
+                                                    @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
+                                                </div>
+                                                <div>
+                                                    @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
+                                                                                new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
+                                                </div>
+                                            </td>
+                                        </tr>
                         }
                     }
                 </table>
@@ -104,5 +114,27 @@
     <div class="col-1"></div>
 </div>
 @section Scripts
-{
+{<script>
+
+    let couponlist = [];
+
+    $("#save").addEventListener("click", async function () {
+
+        let name = document.getElementById("text1").value;
+        let core = document.getElementById("text2").value;
+        let sale = document.getElementById("text3").value;
+        let startdate = document.getElementById("startDate").value;
+        let enddate = document.getElementById("endDate").value;
+        let coupon = { "CouponName": name, "CouponCode": core, "Discount": sale, "StartDate": startdate, "ExpiredDate": enddate };
+        couponlist.push(coupon);
+        let json = JSON.stringify(data);
+        let response = await fetch("@Url.Content("~/Seller/Couponresponse")" + `?jsonString=${json}`);
+
+
+
+    })
+
+
+
+</script>
 }
