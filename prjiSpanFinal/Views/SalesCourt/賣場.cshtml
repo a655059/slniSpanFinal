@@ -1,7 +1,13 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C賣場ViewModel
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
 
+@addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "賣場";
+    var pagedList = (IPagedList)ViewBag.Prods;
 }
 @section Styles{
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
@@ -94,12 +100,12 @@
                         <div class="board-text">
                             @Model.CourtDescription
                             @*👉過年期間出貨公告👈
-                                1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨.標題【24H出貨】保證有現貨，不用私訊問有沒有貨，
-                                直接下單即可周一~周五、AM10~PM5，周末及國定假日不出貨『耐嘉官方正式授權網路經銷商+授權碼A20122108』.
-                                1.本賣場販售之所有商品，皆由台灣發貨。
-                                2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
-                                3.買家們，收到商品發現有問題或是瑕疵，請【蝦蝦通】私訊聯絡我們。
-                                4.單筆訂單未滿88$一律不出貨，直接取消。*@
+                1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨.標題【24H出貨】保證有現貨，不用私訊問有沒有貨，
+                直接下單即可周一~周五、AM10~PM5，周末及國定假日不出貨『耐嘉官方正式授權網路經銷商+授權碼A20122108』.
+                1.本賣場販售之所有商品，皆由台灣發貨。
+                2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
+                3.買家們，收到商品發現有問題或是瑕疵，請【蝦蝦通】私訊聯絡我們。
+                4.單筆訂單未滿88$一律不出貨，直接取消。*@
                         </div>
 
                     </div>
@@ -118,7 +124,14 @@
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
-                                        <img src="~/img/product04.png" width="150" />
+                                        @*<img src="~/img/product04.png" width="150" />*@
+                                        @{
+
+                                            var base64Image1 = Convert.ToBase64String(item.Producpic);
+                                            var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
+
+                                        }
+                                        <img src="@source1" class="cardImg" alt="..." width="150" />
                                     </div>
                                     <div class="col">
                                         <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
@@ -136,25 +149,25 @@
                         }
 
                         @*@{
-                                @for (int i = 0; i < 2; i++)
-                                {
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img src="~/img/product04.png" width="150" />
-                                            </div>
-                                            <div class="col">
-                                                <div class="ps-2"><a href="#" class="text-primary">@Model.CardProduct.Select(a => a.ProductName)</a></div>
-                                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
-                                                <p>
-                                                    已賣數量：227
-                                                    上架時間： 2017-09-28 02:41:04
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }*@
+                @for (int i = 0; i < 2; i++)
+                {
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <img src="~/img/product04.png" width="150" />
+                            </div>
+                            <div class="col">
+                                <div class="ps-2"><a href="#" class="text-primary">@Model.CardProduct.Select(a => a.ProductName)</a></div>
+                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
+                                <p>
+                                    已賣數量：227
+                                    上架時間： 2017-09-28 02:41:04
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }*@
 
 
                     </div>
@@ -221,11 +234,37 @@
                         </li>
                     </ul>
 
+
                     <div class="display-2 text-bg-danger">@Model.star </div>
                     @*<div class="display-2 text-bg-danger">@Model.CardProduct.Select(a => a.) </div>*@
+                    @*圖片大小怪*@
+
+                    @{
+                        if (Model.CardProduct.Count > 0)
+                        {
+                            @foreach (var item in Model.CardProduct)
+                            {
+                                @await Component.InvokeAsync("SalesCourtCard", new { shopProduct = item });
+                            }
+                        }
+                        else
+                        {
+                            <div>
+                                暫待新增商品
+                            </div>
+                        }
+                    }
 
 
 
+                    @*<table>
+            <tr>
+                <td class="text-muted" colspan="5">
+                    第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                    每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+                </td>
+            </tr>
+        </table>*@
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">
                         <ul class="pagination">
                             <li class="page-item">

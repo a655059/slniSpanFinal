@@ -1,4 +1,6 @@
-﻿
+﻿@model prjiSpanFinal.Models.CustomizedCategory
+@addTagHelper *, prjiSpanFinal
+
 @{
     ViewData["Title"] = "設定分類";
 }
@@ -40,26 +42,16 @@
 
 
 
-
-
-
-
-
-
 @*最上面的新增規格欄位  叫出modal的按鈕  按下還不是確定新增*@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     新增類別輸入框
 </button>
 
-@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-    修改類別輸入框
-</button>*@
-
 
 @*原本的欄位*@
 <div class="d-flex justify-content-center ">
     @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
-   
+
     <span class="text-danger"></span>
     <section class="section d-flex justify-content-center">
         <table class="table w-100 ">
@@ -88,26 +80,9 @@
             </div>
             <div class="modal-body">
 
-                @*<label>順序:</label>
-                <input type="text" id="text1" class="form-control">
-                <br />
-
-                <label>商品數:</label>
-                <input type="text" id="text2" class="form-control">
-                <br />*@
-
-
                 <label>類別名稱:</label>
                 <input type="text" id="text3" class="form-control">
                 <br />
-
-                @*<label>排序方式:</label>
-                <input type="text" id="text4" class="form-control">
-                <br />
-
-                <label>管理:</label>
-                <input type="text" id="text5" class="form-control">
-                <br />*@
 
             </div>
             <div class="modal-footer">
@@ -119,107 +94,25 @@
 </div>
 
 
-<!--<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">修改 modal</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">-->
-
-                @*<label>順序:</label>
-                <input type="text" id="text1" class="form-control">
-                <br />
-
-                <label>商品數:</label>
-                <input type="text" id="text2" class="form-control">
-                <br />*@
-
-                <!--<label>類別名稱:</label>
-                <input type="text" id="text_alter" class="form-control">
-                <br />-->
-
-                @*<label>排序方式:</label>
-                <input type="text" id="text4" class="form-control">
-                <br />
-
-                <label>管理:</label>
-                <input type="text" id="text5" class="form-control">
-                <br />*@
-
-            <!--</div>
-            <div class="modal-footer">
-                <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button id="save_alter" type="button" class="btn btn-primary">新增</button>
-            </div>
-        </div>
-    </div>
-</div>-->
-
 
 @section Scripts{
     <script>
         let count = 0;
 
-       
-
         let save = document.getElementById("save");
         /*let save_alter = document.getElementById("save");*/
-        
-        
-     
+
+
+
         //讀取text
         function clickValue() {
-            //document.getElementById("text1").value = '';
-            //document.getElementById("text2").value = '';
             document.getElementById("text3").value = '';
-           // document.getElementById("text_alter").value = '';
         }
 
         /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
         /* $("select").children("option[value='1      ']")   */
 
         let id;
-        //下面要做黃色修改
-
-        //save_alter.addEventListener("click", function () {
-        //    /*let a = document.getElementById(this.s  id);*/
-        //    id = $(this).prev("id");
-        //    if (id != '') {
-        //        console.log(id);
-        //        console.log(this);
-        //    }
-
-        //    /*let now = document.*/
-        //})
-        //當我按下修改的按鈕要帶入目前row裡面新增的資料
-        //let alter;
-        //alter.addEventListener("click", function () {
-        //    /*$(alter).*/
-        //})
-
-        ////當我row的modal按下新增要把modal的畫面關掉
-        //let save_alter = document.getElementById("save_alter");
-
-        //save_alter.addEventListener("click", function () {
-        //    var myModalEl = document.getElementById('exampleModal2');
-        //    var modal = bootstrap.Modal.getInstance(myModalEl)
-        //    modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
-            
-        //})
-
-
-        //當modal畫面關掉的事件發生
-        //const mymodale = document.getElementById('exampleModal2')
-        //mymodale.addEventListener('hidden.bs.modal',function(event) {
-        //    id = $(this).prev(id);
-        //    if (id != '') {
-        //        console.log(id);
-        //        console.log(this);
-        //    }
-
-        //})
 
         save.addEventListener("click", function () {
             count++;
@@ -259,16 +152,8 @@
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
-                //modal.toggle();
 
 
-                //let td2 = document.createElement('td');
-                //td2.innerHTML = `<button type="button" style="font-size:0.8rem" class="btn_alt btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">修改</button>`;
-                //alter = document.getElementsByClassName("btn_alt");
-              
-                //Tr.appendChild(td2);
-                //tbody.insertBefore(Tr, tbody.children[0])
-           
             }
             else {
                 alert("項目,數量和價格不可為空值");
