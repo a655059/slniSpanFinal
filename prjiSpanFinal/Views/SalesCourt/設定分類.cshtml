@@ -56,18 +56,23 @@
     <section class="section d-flex justify-content-center">
         <table class="table w-100 ">
             <thead>
-                <tr class="d-flex justify-content-center">
+                <tr>
                     <th class="col 規格列表">順序</th>
                     <th class="col 規格列表">商品數</th>
                     <th class="col 規格列表">類別</th>
-                    <th class="col 規格列表">排序方式</th>
-                    <th class="col 規格列表">修改</th>
+                    <th class="col 規格列表">刪除</th>
+
                 </tr>
             </thead>
-            <tbody class="d-flex justify-content-center"></tbody>
+            <tbody></tbody>
         </table>
+
     </section>
+    
 </div>
+
+<button type="submit" class="btn btn-secondary">確定新增</button>
+
 
 @*這邊應該的是按下修改選項    會多出來的畫面*@
 <!-- Modal -->
@@ -126,12 +131,15 @@
                 let tbody = document.querySelector('tbody')
                 let Tr = document.createElement('tr');
                 let td0 = document.createElement('td');
+                td0.textContent = count;
                 Tr.appendChild(td0);
                 let td1 = document.createElement('td');
+                td1.textContent = 0;
                 Tr.appendChild(td1);
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
                     td.setAttribute("id", count);
+                    /*td.setAttribute("asp-for", CustomizedCategoryName);*/
                     td.innerHTML = dataNew[i];
                     Tr.appendChild(td);
                 }
@@ -147,7 +155,7 @@
                     parent.remove();
                 })
                 Tr.appendChild(td);
-                tbody.insertBefore(Tr, tbody.children[0])
+                tbody.appendChild(Tr);
                 clickValue();
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
