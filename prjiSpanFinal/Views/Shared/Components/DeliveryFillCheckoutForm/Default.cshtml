@@ -60,15 +60,13 @@
             <input class="contact col-5" type="text" name="address" placeholder="收貨地址" id="address" value="@Model.buyer.Address" />
         </div>
         <button class="changeShip border-0 bg-transparent text-primary">選擇運送方式</button>
-
-
     </div>
     <div class="choseShip mt-2 px-2 border" style="display:none">
         @{
             foreach (var i in Model.sellerShipperPayments[0].shippers)
             {
                 <div class="border-top my-2">
-                    <div class="ship border-start border-3 bg-light fs-6 ps-2" id="@i.ShipperId" ><span class="shipperName">@i.ShipperName</span><span class="text-danger ms-2" style="font-size:12px">運費:$<span>@i.Fee</span></span></div>
+                    <div class="ship border-start border-3 bg-light fs-6 ps-2" id="@i.ShipperId"><span class="shipperName">@i.ShipperName</span><span class="text-danger ms-2" style="font-size:12px">運費:$<span>@i.Fee</span></span></div>
                     <div class="address fs-6 ps-2 text-black-50"></div>
                     <button class="addAddress btn btn-outline-danger btn-sm ms-2 d-none" style="font-size:12px" data-bs-toggle="modal" data-bs-target="#showMap">+新增地址</button>
                 </div>
@@ -110,8 +108,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="googleMaps">
-                    
+                <div class="googleMaps w-100" id="map">
+
                 </div>
                 <input value="" class="inputAddress rounded-2 w-100" placeholder="輸入地址或由地圖上選擇門市" />
             </div>
@@ -123,5 +121,9 @@
     </div>
 </div>
 
-<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>
 
+
+<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6qDNf57C75-7sdC-Gxx4NoV_Y5wOLgmU&callback=initMap">
+</script>

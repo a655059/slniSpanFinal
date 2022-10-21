@@ -1,9 +1,11 @@
-﻿$(".ship").click(function () {
-    $(this).removeClass("border-secondary border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-secondary border-danger").addClass("border-secondary");
-});
-$(".changeShip").click(function () {
+﻿$(".changeShip").click(function () {
     $(".choseShip").slideToggle();
 });
+
+$(".ship").click(function () {
+    $(this).removeClass("border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-danger");
+});
+
 $(".saveAddress").click(function () {
     let address = $(".inputAddress").val();
     if (address == "") {
@@ -30,12 +32,44 @@ $("#confirmedShip").click(function () {
 
 
 //以下 Google Maps
-
+let storeLocations;
+let map;
+let shipperName;
 $(".addAddress").click(async function () {
-    const shipperName = $(this).siblings().find(".shipperName").html();
+    shipperName = $(this).siblings().find(".shipperName").html();
     const _url = `GetShipperLocation?shipperName=${shipperName}`;
     let response = await fetch(_url);
     let data = await response.json();
+    storeLocations = JSON.parse(data);
     
-    console.log(JSON.parse(data));
 });
+
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 24.137519, lng: 120.686687 },
+        zoom:12,
+    });
+    console.log(shipperName);
+    if (shipperName == "7-11取貨") {
+        let marker_config = storeLocations.map(function (value, index) {
+            let newObject = { position: { lat: value.X, lng: value.Y }, map: map, title: value.POIName };
+            return newObject;
+        });
+        //let marker_configs = "[" + marker_config.join(",") + "]";
+        storeLocations = marker_config;
+        console.log(marker_config);
+    }
+    
+    //let markers = [];
+    //storeLocations.forEach(function (e,i) {
+    //    markers[i] = new google.maps.Marker(e);
+    //    markers[i].setMap(map);
+    //});
+
+    //let marker = new google.maps.Marker({
+    //    position: { lat: 24.137519, lng: 120.686687 },
+    //    map: map,
+    //});
+};
+window.initMap = initMap;

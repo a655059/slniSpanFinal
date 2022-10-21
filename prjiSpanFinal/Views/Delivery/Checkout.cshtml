@@ -56,6 +56,10 @@
 
 @section Scripts{
     <script>
+        $(function () {
+                $(".checkoutFormVC").load("@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=0`);
+        });
+
         function changePage(NextOrPrevOrIndex) {
             const sellerCount = Number($(".sellerIDCount").html());
             const sellerIDIndex = Number($(".sellerIDIndex").html());
@@ -96,8 +100,10 @@
         $(".sellers").click(function () {
             changePage($(this).index("label"))
         });
+
     </script>
+    @*<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>*@
     <script src="~/js/Delivery/DeliveryCheckout.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
-    <script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>
+    
 }
