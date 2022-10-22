@@ -318,6 +318,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
             b.StatusId = 6;
+            b.ReceiveDate = DateTime.Now;
             var q = dbcontext.OrderDetails.Where(o => o.OrderId == id);
             foreach(var item in q)
             {

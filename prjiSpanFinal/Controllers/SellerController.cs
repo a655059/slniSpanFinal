@@ -118,6 +118,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
             b.StatusId = 4;
+            b.ShippingDate = DateTime.Now;
             var q = dbcontext.OrderDetails.Where(o => o.OrderId == id);
             foreach (var item in q)
             {
@@ -126,7 +127,6 @@ namespace prjiSpanFinal.Controllers
             dbcontext.SaveChanges();
             return Json("1");
         }
-
 
         public IActionResult Create()
         {
