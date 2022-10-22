@@ -5,6 +5,27 @@ let truememacc = $("#msgmemacc").val();
 let activec = "99999";
 let mempic = $("#header1mempic").attr("src");
 let histmultichat = "";
+const chatbotid = "8";
+
+
+//給想要加入跳出聊天框功能的人用的，傳入想開啟對話的帳號就好
+function happy_popup(acc) {
+    if (!$("#collapseExample").hasClass("show")) {
+        $(".chatroom").trigger("click");
+    }
+    opencertaindialog(acc);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 async function connectionstart() {
     try {
@@ -182,6 +203,9 @@ connection.on("ReceiveMessage", async function (sendFrom, message, sendTo, msgid
         $("#messagebody").animate({ scrollTop: $("#messagebody").prop("scrollHeight") }, 1000);
         $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(1).children("input").val(msgtimestamp);
         $(`.msgcid[value="${sendTo}"]`).siblings("a").children().eq(0).children().eq(1).children().eq(1).html(shortbody);
+        if (sendTo == chatbotid) {
+            chatbotreply(msgheader, msgbody);
+        }
     }
 
     else if (sendFrom == activec) {
@@ -283,10 +307,10 @@ function dialogsort(id) {
 function MyMessagePack(head, msg, time) {
     if (head == "asdf") {
         let src = "/img/emoji/emoji" + msg + ".jpg";
-        msg = `<img src="` + src + `" />`;
+        msg = `<img class="msgdisplayemoji" src="` + src + `" />`;
     }
     else if (head == "zxcv") {
-        msg = `<img src="` + msg + `" id="msgdisplayimg" style="max-width: 380px;max-height: 500px;border: 1px solid black;">`;
+        msg = `<img src="` + msg + `" class="msgdisplayimg" style="max-width: 380px;max-height: 500px;border: 1px solid black;">`;
     }
     else if (head == "tyui") {
         getid = msg;
@@ -316,7 +340,7 @@ function MyMessagePack(head, msg, time) {
     }
     else {
     }
-    let str = `<div class="d-flex flex-row justify-content-end">
+    let str = `<div class="d-flex flex-row justify-content-end messageboxes">
                 <div>
                     <input type="hidden" class="msgbodytimestamp" value="${time}" />
                     <div class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary" style="max-width:400px;">${msg}</div>
@@ -331,10 +355,10 @@ function MyMessagePack(head, msg, time) {
 function CMessagePack(head, msg, time, multiid = "0") {
     if (head == "asdf") {
         let src = "/img/emoji/emoji" + msg + ".jpg";
-        msg = `<img src="` + src + `" />`;
+        msg = `<img class="msgdisplayemoji" src="` + src + `" />`;
     }
     else if (head == "zxcv") {
-        msg = `<img src="` + msg + `" id="msgdisplayimg" style="max-width: 380px;max-height: 500px;border: 1px solid black;">`;
+        msg = `<img src="` + msg + `" class="msgdisplayimg" style="max-width: 380px;max-height: 500px;border: 1px solid black;">`;
         
     }
     else if (head == "tyui") {
@@ -380,7 +404,7 @@ function CMessagePack(head, msg, time, multiid = "0") {
         });
     }
 
-    let str = `<div class="d-flex flex-row justify-content-start">
+    let str = `<div class="d-flex flex-row justify-content-start messageboxes">
                <img src="${path}" alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
                  <div>
                     <input type="hidden" class="msgbodytimestamp" value="${time}" />
@@ -390,6 +414,22 @@ function CMessagePack(head, msg, time, multiid = "0") {
                </div>`
     return str;
 }
+
+//$(document).on("load", ".messageboxes", function () {
+//    $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+//})
+
+$(document).on("load", ".msgdisplayimg", function () {
+    $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+})
+
+$(document).on("load", ".msgdisplayemoji", function () {
+    $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+})
+
+//$(document).on("change", ".msgdisplayemoji", function () {
+//    $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
+//})
 
 function CMessageDialog(id, img, msg, time, acc, read = 1, head="qwer") {
     if (head == "asdf") {
@@ -497,10 +537,16 @@ function opencertaindialog(acc) {
         if (data == undefined) {
             return;
         }
-        if (data.memberId == memacc || data.memberId == 1) {
+        if (data.memberId == memacc) {
             return;
         }
-        else if ($(`.msgcid[value="${data.memberId}"]`).length != 0) {
+        if (data.memberId == 1) {
+            data.memberAcc = "線上客服";
+        }
+        else if (data.memberId == 8) {
+            data.memberAcc = "智慧客服";
+        }
+        if ($(`.msgcid[value="${data.memberId}"]`).length != 0) {
             $(`.msgcid[value="${data.memberId}"]`).siblings().trigger("click");
         }
         else {
@@ -508,4 +554,40 @@ function opencertaindialog(acc) {
             $("#msgopendialogbody").children().eq(0).children("a").trigger("click");
         }
     });
+}
+
+function chatbotreply(header, msgbody) {
+    let bothead = "qwer";
+    let today = new Date();
+    let bottime = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+    let botmsg;
+    if (header == "asdf") {
+        bothead = "asdf";
+        botmsg = msgbody;
+    }
+    else if (header == "zxcv") {
+        botmsg = "很酷的照片哦";
+    }
+    else if (header == "tyui") {
+        botmsg = "我上次買過，很棒哦快點買"
+    }
+    else if (header == "ghjk") {
+        botmsg = "很酷的影片哦";
+    }
+    else {
+        if (msgbody.includes("退貨")) {
+            botmsg = `您可以在<a href="/Member/Order">會員中心</a>的購買清單中點擊「申請退貨」，</br > 來進行退貨流程。`;
+        }
+        else {
+            botmsg = "我看不懂你在說甚麼，請換個說法試試看。";
+        }
+    }
+    let message = bothead + bottime + botmsg;
+    setTimeout(function () {
+        connection.invoke("SendMessage", chatbotid, message, memacc).catch(function (err) {
+            return console.error(err.toString());
+        });
+        dialogsort(activec);
+    },1500);
+    
 }

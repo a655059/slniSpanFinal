@@ -32,7 +32,7 @@ namespace prjiSpanFinal.ViewModels
         public int PaymentFee { get; set; }
         public string OrderMessage { get; set; }
         public List<int> Quantity { get; set; }
-        public List<DateTime> OrderDetailReceiveDate { get; set; }
+        public List<int> OrderDetailId { get; set; }
         public List<string> ShipStatusName { get; set; }
         public List<decimal> Unitprice { get; set; }
         public List<string> Style { get; set; }

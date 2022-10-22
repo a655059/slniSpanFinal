@@ -209,6 +209,7 @@ namespace prjiSpanFinal.Controllers
                 PaymentName = o.Payment.PaymentName,
                 PaymentFee = o.Payment.Fee,
                 OrderMessage = o.OrderMessage,
+                OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
                 Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
                 ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
                 Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
