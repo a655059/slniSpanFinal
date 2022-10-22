@@ -428,7 +428,7 @@
             for (let i = 0; i < statses.length; i++) {
                 count1++;
                 if (statses[i] == 5 || statses[i] == 4) {
-                    $.getJSON(`/Seller/WriteShipping`, { id: orderids[i] }, function (data) {
+                    $.getJSON(`/Seller/WriteShippingAll`, { id: orderids[i] }, function (data) {
                         $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                             $("#orderlistbody").html("");
                             for (let i = 0; i < data.length; i++) {

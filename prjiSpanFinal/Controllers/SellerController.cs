@@ -108,6 +108,26 @@ namespace prjiSpanFinal.Controllers
             return Json("1");
         }
 
+        public IActionResult WriteShipping(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+            b.StatusId = 4;
+            var q = dbcontext.OrderDetails.Where(o => o.OrderId == id);
+            foreach (var item in q)
+            {
+                item.ShippingStatusId = 2;
+            }
+            dbcontext.SaveChanges();
+            return Json("1");
+        }
+
+
         public IActionResult Create()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
