@@ -56,7 +56,6 @@ namespace prjiSpanFinal.Controllers
                         OrderId = newOrderID,
                         ProductDetailId = productDetailID,
                         Quantity = quantity,
-                        ReceiveDate = DateTime.Now,
                         ShippingStatusId = 1,
                         Unitprice = unitPrice,
                     };
@@ -80,7 +79,6 @@ namespace prjiSpanFinal.Controllers
                             OrderId = existingOrderID,
                             ProductDetailId = productDetailID,
                             Quantity = quantity,
-                            ReceiveDate = DateTime.Now,
                             ShippingStatusId = 1,
                             Unitprice = unitPrice,
                         };
