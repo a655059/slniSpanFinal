@@ -16,7 +16,6 @@ namespace prjiSpanFinal.Models
         public int OrderId { get; set; }
         public int ProductDetailId { get; set; }
         public int Quantity { get; set; }
-        public DateTime ReceiveDate { get; set; }
         public int ShippingStatusId { get; set; }
         public decimal Unitprice { get; set; }
 

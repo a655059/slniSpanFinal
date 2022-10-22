@@ -100,7 +100,18 @@ namespace prjiSpanFinal.ViewComponents
                         string path = _enviro.WebRootPath + pName;
                         bslist.Add(File.ReadAllBytes(path));
                     }
-                    acclist.Add(q1[count1].MemberAcc);
+                    if(q1[count1].MemberAcc == "admin")
+                    {
+                        acclist.Add("線上客服");
+                    }
+                    else if(q1[count1].MemberAcc == "chatbot")
+                    {
+                        acclist.Add("客服機器人");
+                    }
+                    else
+                    {
+                        acclist.Add(q1[count1].MemberAcc);
+                    }
                     int id = q1[count1].SendTo;
                     idlist.Add(id);
                     string shortstr = "";
@@ -155,7 +166,18 @@ namespace prjiSpanFinal.ViewComponents
                         string path = _enviro.WebRootPath + pName;
                         bslist.Add(File.ReadAllBytes(path));
                     }
-                    acclist.Add(q2[count2].MemberAcc);
+                    if (q2[count2].MemberAcc == "admin")
+                    {
+                        acclist.Add("線上客服");
+                    }
+                    else if (q2[count2].MemberAcc == "chatbot")
+                    {
+                        acclist.Add("客服機器人");
+                    }
+                    else
+                    {
+                        acclist.Add(q2[count2].MemberAcc);
+                    }
                     int id = q2[count2].SendFrom;
                     idlist.Add(id);
                     string shortstr = "";
