@@ -157,7 +157,7 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(MemberAccViewModel mem, IFormFile File1)//八個欄位變數
+        public IActionResult Create(MemberAccViewModel mem, IFormFile File1)
         {
 
             iSpanProjectContext db = new iSpanProjectContext();
@@ -215,6 +215,22 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Like()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            else
+            {
+                string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+                var mylike = _context.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
+                {
+                    ProductID = p.ProductId,
+                    memberID = p.MemberId,
+
+                });
+            }
+
             return View();
         }
         public IActionResult Coupon()
