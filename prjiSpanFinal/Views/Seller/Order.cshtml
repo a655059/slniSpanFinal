@@ -26,7 +26,7 @@
                 </span>
             </div>
             <div class="ordersearchbar">
-                <button type="button" class="btn btn-success">一鍵出貨</button>
+                <button type="button" id="orderrecallsubmit" class="btn btn-success">一鍵出貨</button>
             </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -205,7 +205,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>出貨後別忘記聯繫賣。</div>
+                <div>請確定寄出商品後再做出貨確認。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="orderrecsubmit" data-bs-target="#staticBackdrop4" data-bs-toggle="modal">送出</button>
@@ -218,11 +218,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel4">您已領收商品</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel4">您已出貨商品</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>收到商品後別忘記幫我們做評價哦。</div>
+                <div>出貨完成後系統會自動發確認信給買家。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -277,6 +277,9 @@
                                     <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
             if (data.shipperStatusId == 6) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>`;
+            }
+            if (data.shipperStatusId == 3) {
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop3" class="btn btn-secondary orderbuttonfi my-1">出貨</a>`;
             }
             item = item + `<div>
                                         <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
@@ -385,5 +388,57 @@
             });
         })
 
+        let recorderid;
+        let recitem;
+        $(document).on("click", ".orderbuttonfi", function () {
+            recorderid = $(this).parent().siblings().children().val();
+            recitem = $(this);
+        })
+
+        $("#orderarguesubmit").click(function () {
+            $.getJSON(`/Seller/WriteShipping`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            });
+        })
+
+        $("#orderrecsubmit").click(function () {
+            $.getJSON(`/Seller/WriteShipping`, { id: recorderid }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            });
+        })
+
+        $("#orderrecallsubmit").click(function () {
+            let count1 = 0;
+            let orderids = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".orderorderid"), function (item, index) {
+                return item.value;
+            });
+            let statses = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".ordershipperstatus"), function (item, index) {
+                return item.value;
+            });
+            for (let i = 0; i < statses.length; i++) {
+                count1++;
+                if (statses[i] == 5 || statses[i] == 4) {
+                    $.getJSON(`/Seller/WriteShipping`, { id: orderids[i] }, function (data) {
+                        $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                            $("#orderlistbody").html("");
+                            for (let i = 0; i < data.length; i++) {
+                                $("#orderlistbody").append(OrderListItem(data[i]));
+                            }
+                        });
+                    });
+                }
+            }
+            $("#reccount").html(count1);
+        })
     </script>
 }
