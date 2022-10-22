@@ -92,7 +92,7 @@ namespace prjiSpanFinal.Controllers
             {
                 iSpanProjectContext db = new iSpanProjectContext();
                 MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
-                acc = mem.memACC;
+                //acc = mem.memACC;
                 if (mem.File1!=null) //如果有上傳照片
                 { 
                     byte[] imgByte = null;
@@ -137,9 +137,6 @@ namespace prjiSpanFinal.Controllers
 
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
-
-
-
             byte[] imgByte = null;
             using (var memoryStream = new MemoryStream())
             {
