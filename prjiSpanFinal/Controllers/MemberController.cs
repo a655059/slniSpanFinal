@@ -187,7 +187,23 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Like()
         {
-            return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            else
+            {
+                string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+                var mylike = _context.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
+                {
+                    ProductID = p.ProductId,
+                    memberID = p.MemberId,
+                });
+                return View(mylike);
+            }
+
+            
         }
         public IActionResult Coupon()
         {
