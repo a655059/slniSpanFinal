@@ -1,10 +1,9 @@
 ﻿@addTagHelper *, prjiSpanFinal
-
 @{
     ViewData["Title"] = "Order";
 }
 @section Styles
-{
+    {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
     <style>
@@ -12,45 +11,193 @@
             top: 7rem !important;
         }
     </style>
-
 }
-<vc:member-ui></vc:member-ui>
-<h2 class="d-flex justify-content-center">購買清單</h2>
-<vc:buyer-order-list></vc:buyer-order-list>
+    <vc:member-ui></vc:member-ui>
+    <h2 class="d-flex justify-content-center">購買清單</h2>
+    <div id="orderdetaildiv">
+        <div class="row ">
+            <div class="col-1"></div>
+            <div class="col-11">
+                <div class="ordersearchbar">
+                    <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
+                    <span>
+                        <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                    </span>
+                </div>
+                <div class="ordersearchbar">
+                    <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵領收</button>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
+                        <input type="hidden" class="ordershipperstatus" value="0" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">訂單成立</a>
+                        <input type="hidden" class="ordershipperstatus" value="2" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">已付款</a>
+                        <input type="hidden" class="ordershipperstatus" value="3" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">已出貨</a>
+                        <input type="hidden" class="ordershipperstatus" value="4" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">已到貨</a>
+                        <input type="hidden" class="ordershipperstatus" value="5" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
+                        <input type="hidden" class="ordershipperstatus" value="8" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">待評價</a>
+                        <input type="hidden" class="ordershipperstatus" value="6" />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ordernavtabs" href="#">已完成</a>
+                        <input type="hidden" class="ordershipperstatus" value="7" />
+                    </li>
+                </ul>
+                <table id="ordertable" class="table table-hover dataTable">
+                    <thead>
+                        <tr>
+                            <td>訂單資料</td>
+                            <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
+                            <td>商品詳情</td>
+                            <td class="th-sm sorting" id="ordersales">訂單金額</td>
+                            <td>訂單狀態</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        操作
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="orderlistbody">
+                    @foreach (var item in Model)
+                    {
+                        int total = item.PaymentFee;
+                        @if (item.IsFreeDelivery != true)
+                        {
+                            total += item.ShipperFee;
+                        }
+                        <tr>
+
+                            <td>
+                                <input type="hidden" class="orderorderid" value="@item.OrderId" />
+                                <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
+                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">@item.SellerAcc</a>
+                            </td>
+                            <td>@item.OrderDatetime</td>
+                            <td>
+                                @for (int j = 0; j < item.Quantity.Count; j++)
+                                {
+                                    total += Decimal.ToInt32(item.Unitprice[j]) * item.Quantity[j];
+                                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Pic[j])" width="60" height="60" />
+
+                                    @item.ProductName[j] @item.Style[j] @:* @item.Quantity[j] $@Decimal.ToInt32(item.Unitprice[j]) <br />
+                                }
+                            </td>
+                            <td class="ordertotalprice">$@total</td>
+                            <td>@item.OrderStatusName</td>
+                            <td style="text-align:center">
+                                <a href="/Member/OrderDetail?id=@item.OrderId" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />
+                                @{
+                                    if (item.ShipperStatusId == 6)
+                                    {
+                                                                                                                                            <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
+                                                                                                                                            <br />
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                    }
+                                    else if(item.ShipperStatusId == 4 || item.ShipperStatusId == 5)
+                                    {
+                                                                                                                                            <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
+                                                                                                                                            <br />
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                    }
+                                    else if (item.ShipperStatusId == 2 || item.ShipperStatusId == 3)
+                                    {
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                            //<a class="btn btn-warning orderbuttonce my-1" data-bs-toggle="modal" href="#staticBackdrop5" role="button">取消</a>
+                                    }
+                                }
+                                <div>
+                                    <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row ">
+                <div class="col-4"></div>
+                <div class="col-8">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">退貨申請</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel1">退貨申請</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div>請選擇退貨理由: </div>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                    <option selected>選擇退貨理由</option>
-                    <option value="1">我沒收到商品</option>
+                <select class="form-select form-select-lg mb-3" id="argueselect" aria-label=".form-select-lg example">
+                    <option selected value="1">我沒收到商品</option>
                     <option value="2">商品與期待不符</option>
                     <option value="3">商品有損壞</option>
-                    <option value="3">其他</option>
+                    <option value="4">太慢</option>
+                    <option value="5">服務態度太差</option>
+                    <option value="6">其他</option>
                 </select>
                 <div>請輸入補充資訊: </div>
                 <div class="mb-3">
                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </div>
+                <div id="previewCommentPhoto" class="d-flex"></div>
+                <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                    <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                </label>
+                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/*" multiple />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-primary" id="orderarguesubmit" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">送出</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">您的退貨申請已送出</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">您的退貨申請已送出</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -62,7 +209,289 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel3">確定要領收嗎</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>送出之後不能更改狀態，請再次確定商品數量與狀態。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="orderrecsubmit" data-bs-target="#staticBackdrop4" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop4" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel4">您已領收商品</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>收到商品後別忘記幫我們做評價哦。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel5" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel5">確定要全部領收嗎</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>送出之後不能更改狀態，請再次確定商品數量與狀態。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="orderrecallsubmit" data-bs-target="#staticBackdrop6" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop6" tabindex="-1" aria-labelledby="staticBackdropLabel6" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="staticBackdropLabel4">您已領收全部<span id="reccount"></span>件商品</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>收到商品後別忘記幫我們做評價哦。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts
-{
+    {
     <script src="~/js/DataTable/datatable.js"></script>
+    <script>
+        function OrderListItem(data) {
+            item = `<tr>
+
+                                        <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
+                                            <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a></td>
+                                        <td>${data.orderDatetime}</td>
+                                        <td>`;
+            let total = data.paymentFee;
+            for (let i = 0; i < data.quantity.length; i++) {
+                item = item + `<img src="data:image;base64,${data.pic[i]}" width="60" height="60" />${data.productName[i]} ${data.style[i]} * ${data.quantity[i]} $${data.unitprice[i]}<br />`;
+                total = total + data.unitprice[i] * data.quantity[i];
+            }
+            if (data.isFreeDelivery == false) {
+                total = total + data.shipperFee;
+            }
+            item = item + `</td>
+                                        <td class="ordertotalprice">$${total}</td>
+                                        <td>${data.orderStatusName}</td>
+                                        <td style="text-align:center">
+                                            <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
+            if (data.shipperStatusId == 6) {
+                item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+            }
+            else if(data.shipperStatusId == 5 || data.shipperStatusId == 4){
+                item = item + `<a href="#staticBackdrop3" data-bs-toggle="modal" role="button" class="btn btn-success orderbuttonfi my-1">領收</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+            }
+            else if (data.shipperStatusId == 3 || data.shipperStatusId == 2) {
+                item = item + `<a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+            }
+            item = item + `<div>
+                                                <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                            </div>
+                                        </td>
+                                    </tr>`;
+            return item;
+        }
+
+        let sortmethod = 0;
+        let tabid = 0;
+        $("#ordertime").click(function () {
+            if ($("#ordertime").hasClass("sorting_desc")) {
+                sortmethod = 0;
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+            else {
+                sortmethod = 1;
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+        })
+        $("#ordersales").click(function () {
+            if ($("#ordersales").hasClass("sorting_desc")) {
+                sortmethod = 2;
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+            else {
+                sortmethod = 3;
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            }
+        })
+        $(".ordernavtabs").click(function (event) {
+            tabid = $(event.currentTarget).siblings("input").val();
+            $(event.currentTarget).addClass("active");
+            $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+            $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        })
+        $("#btnDate").click(function () {
+            let keyword = $("#orderkeyword").val();
+            let startdate = $("#startDate").val();
+            let enddate = $("#endDate").val();
+            $.getJSON(`/Member/SearchOrder`, { keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        });
+        $("#flexCheckDefault").change(function () {
+            if ($(this).prop("checked")) {
+                $(".checkboxorder").prop("checked", true);
+            }
+            else {
+                $(".checkboxorder").prop("checked", false);
+            }
+        });
+        let argueorderid;
+        let argueitem;
+        $(document).on("click", ".orderbuttonre", function () {
+            argueorderid = $(this).parent().siblings().children().val();
+            $("#argueselect").children().eq(0).prop("selected","selected");
+            $("#exampleFormControlTextarea1").val("");
+            argueitem = $(this);
+            $("#previewCommentPhoto").html("");
+        })
+
+        let recorderid;
+        let recitem;
+        $(document).on("click", ".orderbuttonfi", function () {
+            recorderid = $(this).parent().siblings().children().val();
+            recitem = $(this);
+        })
+
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+
+        $("#orderarguesubmit").click(function () {
+            let pics = $.map($("#previewCommentPhoto").find("img"),function(item,index){
+                return (item.src).split(',')[1];
+            });
+            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics:pics }, function (data) {
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            });
+        })
+
+        $("#orderrecsubmit").click(function () {
+            $.getJSON(`/Member/WriteReceive`, { id: recorderid }, function (data) {
+                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            });
+        })
+        $("#orderrecallsubmit").click(function(){
+            let count1 = 0;
+            let orderids = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".orderorderid"), function (item, index) {
+                return item.value;
+            });
+            let statses = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".ordershipperstatus"), function (item, index) {
+                return item.value;
+            });
+            for(let i = 0;i < statses.length;i++)
+            {
+                if (statses[i] == 5 || statses[i] == 4)
+                {
+                    count1++;
+                    $.getJSON(`/Member/WriteReceive`, { id: orderids[i] }, function (data) {
+                        $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                            $("#orderlistbody").html("");
+                            for (let i = 0; i < data.length; i++) {
+                                $("#orderlistbody").append(OrderListItem(data[i]));
+                            }
+                        });
+                    });
+                }
+                
+            }
+            $("#reccount").html(count1);
+        })
+
+        $("#commentPhoto").change(function () {
+            const photos = document.getElementById("commentPhoto").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(photo); 
+                    reader.onloadend = function() {
+                        let src = reader.result;
+                        $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img style="max-width:100px" src="${src}" /></div>`);
+                    }
+                });
+            }
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0.3");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0");
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "pointer");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "none");
+        });
+        $("#previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+            $(this).closest(".deleteCommentPhoto").remove();
+        });
+    </script>
 }

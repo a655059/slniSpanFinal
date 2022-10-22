@@ -1,10 +1,11 @@
-﻿
+﻿@addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "ChangePw";
 }
 
 @section Styles
 {
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <style>
         .bg-image-vertical {
             position: relative;
@@ -15,37 +16,38 @@
         }
     </style>
 }
-
+<vc:member-ui></vc:member-ui>
+<h2 class="d-flex justify-content-center mb-5">修改密碼</h2>
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6 row">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <div class="mb-4 ms-4">
-                <a href="@Url.Content("~/Home/Index")">
-                    <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
-                </a>
-            </div>
-            <div style="text-align:center">
-                <form style="width: 23rem;">
-
-                    <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">修改密碼</h3>
-
-
-                    <div class="form-outline mb-4">
-                        <input type="email" id="form2Example18" class="form-control form-control-lg" />
-                        <label class="form-label mt-3" for="form2Example18">新密碼</label>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6 row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div class="mb-4 ms-4">
+                        <a href="@Url.Content("~/Home/Index")">
+                            <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
+                        </a>
                     </div>
+                    <div style="text-align:center">
+                        <form style="width: 23rem;">
+                            <div class="form-outline mb-4">
+                                <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                                <label class="form-label mt-3" for="form2Example18">新密碼</label>
+                            </div>
 
-                    <div class="form-outline mb-4">
-                        <input type="email" id="form2Example18" class="form-control form-control-lg" />
-                        <label class="form-label mt-3" for="form2Example18">再次確認新密碼</label>
+                            <div class="form-outline mb-4">
+                                <input type="email" id="form2Example18" class="form-control form-control-lg" />
+                                <label class="form-label mt-3" for="form2Example18">再次確認新密碼</label>
+                            </div>
+                            <p><a href="@Url.Content("~/Member/Login")" class="link-info">確認</a></p>
+                        </form>
                     </div>
-
-                    <p> <a href="@Url.Content("~/Member/Login")" class="link-info">確認</a></p>
-                </form>
+                </div>
             </div>
+            <div class="col-3"></div>
         </div>
     </div>
-    <div class="col-3"></div>
 </div>
+

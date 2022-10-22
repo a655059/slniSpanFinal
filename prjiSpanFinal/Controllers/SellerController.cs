@@ -32,7 +32,7 @@ namespace prjiSpanFinal.Controllers
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1).
+            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1 && o.StatusId != 9).
                 Select(o => new OrderListViewModel()
                 {
                     OrderId = o.OrderId,
@@ -95,12 +95,35 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-
+            if(keyword == null)
+            {
+                keyword = "";
+            }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
             Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
             b.StatusId = 7;
+            dbcontext.SaveChanges();
+            return Json("1");
+        }
+
+        public IActionResult WriteShipping(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+            b.StatusId = 4;
+            b.ShippingDate = DateTime.Now;
+            var q = dbcontext.OrderDetails.Where(o => o.OrderId == id);
+            foreach (var item in q)
+            {
+                item.ShippingStatusId = 2;
+            }
             dbcontext.SaveChanges();
             return Json("1");
         }
@@ -153,7 +176,7 @@ namespace prjiSpanFinal.Controllers
             return Json(smalltype);
         }
 
-        public IActionResult OrderDetail(int id)  //傳資料進去view
+        public IActionResult OrderDetail(int id)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {

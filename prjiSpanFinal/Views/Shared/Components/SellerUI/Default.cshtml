@@ -1,11 +1,18 @@
-﻿<div class="sidemenu">
+﻿@model prjiSpanFinal.ViewModels.Header.CHeader1ViewModel
+<div class="sidemenu">
     <div style="width: 180px;">
         <a href="@Url.Content("~/Seller/Center")" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
             <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#"></use></svg>
             <span class="賣家中心" >賣家中心</span>
         </a>
         <ul class="list-unstyled ps-0">
-            <li class="mb-1">
+            <li class="mb-4">
+                <div>
+                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">@Model.MemberAcc</span><br /><a asp-action="Edit">編輯我的資料</a>
+                </div>
+            </li>
+            <li class="mb-1" style="clear: left; ">
+                <div class="border-bottom my-3"></div>
                 <i class="fa-solid fa-xl fa-box"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
                     商品管理
                 </button>

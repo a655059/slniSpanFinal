@@ -1,4 +1,5 @@
-﻿<div class="sidemenu">
+﻿@model prjiSpanFinal.ViewModels.Header.CHeader1ViewModel
+<div class="sidemenu">
     <div style="width: 180px;">
         <a href="@Url.Content("~/Member/Order")" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
             <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
@@ -9,7 +10,7 @@
         <ul class="list-unstyled ps-0">
             <li class="mb-4">
                 <div>
-                    <img src="~/img/Member/pekopeko.jpg" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">pekopeko</span><br /><a asp-action="Edit">編輯我的資料</a>
+                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">@Model.MemberAcc</span><br /><a asp-action="Edit">編輯我的資料</a>
                 </div>
             </li>
             <li class="mb-1" style="clear: left; ">
