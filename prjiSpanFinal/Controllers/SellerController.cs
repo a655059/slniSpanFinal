@@ -210,7 +210,6 @@ namespace prjiSpanFinal.Controllers
                 PaymentFee = o.Payment.Fee,
                 OrderMessage = o.OrderMessage,
                 Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
-                OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
                 ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
                 Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
                 Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
