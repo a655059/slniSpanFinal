@@ -9,10 +9,16 @@ namespace prjiSpanFinal.ViewModels.Member
     public class MylikeViewModel
     {
         public Product _product;
+        public ProductDetail _productDetail;
         public Product product
         {
             get { return _product; }
             set { _product = value; }
+        }
+        public ProductDetail productDetail
+        {
+            get { return _productDetail; }
+            set { _productDetail = value; }
         }
         public MylikeViewModel()
         {

@@ -227,11 +227,11 @@ namespace prjiSpanFinal.Controllers
                 {
                     ProductID = p.ProductId,
                     memberID = p.MemberId,
-
                 });
+                return View(mylike);
             }
 
-            return View();
+            
         }
         public IActionResult Coupon()
         {

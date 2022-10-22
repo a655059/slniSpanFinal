@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model IEnumerable<prjiSpanFinal.ViewModels.Member.MylikeViewModel>
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
@@ -62,37 +63,45 @@
             </li>
         </ul>
         <figure style="background-color:#FCFCFC">
-            <figcaption style="font-size:15px; color: #8E8E8E; ">30件商品</figcaption>
-            <div class="aaa d-flex flex-wrap">
-                @for (int i = 15; i >= 1; i--)
+            @{
+                var count = 0;
+                foreach (var pd in Model)
                 {
-                    <div class="sellsitem">
-                        <div>
-                            <a href="/Item/Index/2113">
-                                <img src="~/img/product01.png" class="cardImg" />
-                            </a>
-                        </div>
-                        <div class="px-1 d-flex flex-column justify-content-between">
-                            <div class="cardTitle">商品:筆電</div>
-                            <div class="cardPrice">價格:$25000</div>
-                            <div class="cardInfo d-flex justify-content-between align-items-end">
-                                <div class="d-flex justify-content-start flex-column mt-1">
-                                    <div class="d-flex justify-content-start">
-                                        <div class="starImg">
-                                            <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                                        </div>
-                                        <div class="text-black">4.5</div>
-                                    </div>
-                                    <div class="text-black-50">銷售<span>100</span></div>
-                                </div>
+                    count++;
+                    <figcaption style="font-size:15px; color: #8E8E8E; "><a>@count</a>件商品</figcaption>
+                    <div class="aaa d-flex flex-wrap">
+                        @for (int i = 0; i<=count; i++)
+                        {
+                            <div class="sellsitem">
                                 <div>
-                                    <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                    <a href="/Item/Index/2113">
+                                        <img src="~/img/product01.png" class="cardImg" />
+                                    </a>
+                                </div>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle">商品:筆電</div>
+                                    <div class="cardPrice">價格:$25000</div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black">4.5</div>
+                                            </div>
+                                            <div class="text-black-50">銷售<span>100</span></div>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 }
-            </div>
+            }
+
         </figure>
     </div>
 </div>
