@@ -14,7 +14,7 @@
                 <span class="CategoryHeaderTitleText">@Model.SearchType.BigTypeName</span>
                 <span class="CategoryHeaderStockText">(@Model.cShowItem.Count)</span>
             </div>
-            <div class="CategoryHeaderBody">
+            <div class="CategoryHeaderBody justify-content-start">
                 @foreach (var item in Model.lSmallType)
                 {
                     <a class="CategoryHeaderItem linknoline" href="@Url.Content("~/Category/SmallType"+"?id="+item.SmallTypeId)">@item.SmallTypeName</a>
@@ -72,8 +72,13 @@
                             foreach (var item in Model.lSmallType)
                             {
                                 int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
-                                    <div class="w-100 p-1 ff-types-type">
-                                        <input type="checkbox" id="ffcb_@item.SmallTypeId" />
+                                <div class="w-100 p-1 ff-types-type">
+                                        @if (stock > 0) { 
+                                            <input type="checkbox" id="ffcb_@item.SmallTypeId" />
+                                        }
+                                        else { 
+                                            <input type="checkbox" id="ffcb_@item.SmallTypeId" disabled/>
+                                        }
                                         <label for="ffcb_@item.SmallTypeId">
                                             <span class="ff-types-typeid">
                                                 @item.SmallTypeName
@@ -93,13 +98,13 @@
                     </div>
                     <div class="d-flex w-100 flex-row ff-types-prices">
                         <div class="ff-types-prices-child2">
-                            <input placeholder="＄最小值" />
+                            <input placeholder="＄最小值" id="ff-pricemin"/>
                         </div>
                         <div class="ff-types-prices-child1 text-center opacity-50">
                             ─
                         </div>
                         <div class="ff-types-prices-child2">
-                            <input placeholder="＄最大值" />
+                            <input placeholder="＄最大值" id="ff-pricemax"/>
                         </div>
                     </div>
                     <button class="w-100 text-center ff-types-prices-btn">搜尋</button>
@@ -107,59 +112,64 @@
             </div>
         </div>
         <div class="itembody">
-            <div class="itembody-filter d-flex align-items-center justify-content-between">
-                <div class="itembody-filter1 "><span>篩選</span></div>
-                <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                    @Html.ActionLink("綜合排序",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 1 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    @Html.ActionLink("最新商品",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 2 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    @Html.ActionLink("熱銷商品",
-                 "Index", "Category",
-                 new { id = Model.SearchType.BigTypeId, sortOrder = 3 },
-                 new { @class = "itembody-filter2-btn linknoline" })
-                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        價格排序
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=4")">
-                                <i class="fa fa-arrow-down"></i>
-                                價格：由高至低
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=5")">
-                                <i class="fa fa-arrow-up"></i>
-                                價格：由低至高
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="itemcol">
+            @if (Model.cShowItem.Count > 0)
+            {
+                <div class="itembody-filter d-flex align-items-center justify-content-between">
 
-                @{
-                    if (Model.cShowItem.Count > 0)
-                    {
-                        @foreach (var item in Model.cShowItem)
+                    <div class="itembody-filter1 "><span>篩選</span></div>
+                    <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                        @Html.ActionLink("綜合排序",
+                     "Index", "Category",
+                     new { id = Model.SearchType.BigTypeId, sortOrder = 1 },
+                     new { @class = "itembody-filter2-btn linknoline" })
+                        @Html.ActionLink("最新商品",
+                     "Index", "Category",
+                     new { id = Model.SearchType.BigTypeId, sortOrder = 2 },
+                     new { @class = "itembody-filter2-btn linknoline" })
+                        @Html.ActionLink("熱銷商品",
+                     "Index", "Category",
+                     new { id = Model.SearchType.BigTypeId, sortOrder = 3 },
+                     new { @class = "itembody-filter2-btn linknoline" })
+                        <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            價格排序
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=4")">
+                                    <i class="fa fa-arrow-down"></i>
+                                    價格：由高至低
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Content("~/Category/Index/"+Model.SearchType.BigTypeId+"?sortOrder=5")">
+                                    <i class="fa fa-arrow-up"></i>
+                                    價格：由低至高
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            }
+                <div class="itemcol">
+
+                    @{
+                        if (Model.cShowItem.Count > 0)
                         {
-                            @await Component.InvokeAsync("CategoryShow", new { shopProduct = item });
+                            @foreach (var item in Model.cShowItem)
+                            {
+                                @await Component.InvokeAsync("CategoryShow", new { shopProduct = item });
+                            }
+                        }
+                        else
+                        {
+                            <div>
+                                暫待新增商品
+                            </div>
                         }
                     }
-                    else
-                    {
-                        <div>
-                            暫待新增商品
-                        </div>
-                    }
-                }
+                </div>
             </div>
-        </div>
     </div>
 </div>
 

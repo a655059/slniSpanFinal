@@ -44,7 +44,9 @@ namespace prjiSpanFinal.Controllers
 
             //if sort
                 list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
-            
+
+            //if checkedtypes
+
             //if pages
 
             return View(list);
@@ -58,9 +60,14 @@ namespace prjiSpanFinal.Controllers
             list.SearchType = _db.SmallTypes.Where(t => t.SmallTypeId == id).Select(t => t.BigType).FirstOrDefault();
             list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
             list.SearchSmallType = _db.SmallTypes.Where(t => t.SmallTypeId == id).FirstOrDefault();
-            //if sort
 
-                list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
+            //if sort
+            list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
+            //if checkedtypes
+
+            //if pages
+
+
             return View(list);
         }
         public IActionResult SearchResult(string keyword,int? sortOrder)
@@ -70,44 +77,48 @@ namespace prjiSpanFinal.Controllers
             }
             listprod= _db.Products.Where(p => p.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
             list = new CCategoryIndex();
-            if(listprod.Any())
-                list.cShowItem = (new CHomeFactory()).toShowItem(listprod); 
+            if (listprod.Any()) { 
+                list.cShowItem = (new CHomeFactory()).toShowItem(listprod);
+                //if sort
                 list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
+                //if checkedtypes
+
+                //if pages
+            }
             list.SearchKeyword = keyword;
+
 
             return View(list);
         }
         List<CShowItem> fSortOrder(int sortOrder,List<Product> listprod)
         {
+            List<Product> Ordered=new List<Product>();
+            List<CShowItem> SIlist = new List<CShowItem>();
             switch (sortOrder)
             {
                 case 1:
-                    slist = (new CHomeFactory()).toShowItem(listprod);
-                    return slist;
+                    //一般排序      
+                    SIlist= (new CHomeFactory()).toShowItem(listprod);
+                    return SIlist;
                 case 2:
-                    slist = (new CHomeFactory()).toShowItem(listprod);
-                    return slist.OrderByDescending(p => p.Product.ProductId).ToList();
+                    //最新排序
+                    SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductDetails).ToList());
+                    return SIlist;
                 case 3:
-                //todo#1
-                //var s = _db.OrderDetails.GroupBy(o => o.ProductDetail.Product.ProductId);
-
-                //foreach(var group in s)
-                //{
-
-                //}
-                //var ss = _db.Products.Where(p=>p.ProductId==s.Select(s=>s.Key).FirstOrDefault())
-                //slist = (new CHomeFactory()).toShowItem(listprod);
-                //list.cShowItem = slist.OrderByDescending(p => p.Product.);
-                //break;
+                    //熱銷排序
+                    SIlist = ((new CHomeFactory()).toShowItem(listprod)).OrderBy(s=>s.salesVolume).ToList();
+                    return SIlist;
                 case 4:
-                    slist = (new CHomeFactory()).toShowItem(listprod);
-                    return slist.OrderByDescending(p => p.Price.Max()).ToList();
+                    //價高排序
+                    SIlist = (new CHomeFactory()).toShowItem(listprod);
+                    return SIlist.OrderByDescending(p => p.Price.Max()).ToList();
                 case 5:
-                    slist = (new CHomeFactory()).toShowItem(listprod);
-                    return slist.OrderBy(p => p.Price.Min()).ToList();
+                    //價低排序
+                    SIlist = (new CHomeFactory()).toShowItem(listprod);
+                    return SIlist.OrderBy(p => p.Price.Min()).ToList();
                 default:
-                    slist = (new CHomeFactory()).toShowItem(listprod);
-                    return slist;
+                    SIlist = (new CHomeFactory()).toShowItem(listprod);
+                    return SIlist;
             }
         }
     }

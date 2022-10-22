@@ -2,6 +2,10 @@
 @addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "SearchResult";
+    int ShowitemCount = 0;
+    if (Model.cShowItem != null){
+        ShowitemCount = Model.cShowItem.Count;
+            }
 }
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
@@ -11,7 +15,7 @@
         <div class="filter-body d-flex  flex-wrap align-content-start">
             <div class="filter-filter w-100">
                 @{
-                    @if (Model.cShowItem.Count > 0)
+                    @if (ShowitemCount > 0)
                     {
                         <div class="ff-title d-flex justify-content-center w-100">
                             <span><i class="fa fa-filter"></i></span>
@@ -42,7 +46,7 @@
         <div class="itembody">
             <div class="Searchresult">
                 @{
-                    @if (Model.cShowItem.Count > 0)
+                    @if (ShowitemCount > 0)
                     {
                         <div class="Searchresult-ADTitle">
                             <span>你或許會想知道...</span>
@@ -59,7 +63,7 @@
                         </div>
                     </div>
             @{
-                @if (Model.cShowItem.Count > 0)
+                @if (ShowitemCount > 0)
                 {
                     <div class="itembody-filter d-flex align-items-center justify-content-between">
                         <div class="itembody-filter1 "><span>篩選</span></div>
