@@ -684,10 +684,6 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ProductDetailId).HasColumnName("ProductDetailID");
 
-                entity.Property(e => e.ReceiveDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("('2000-01-01')");
-
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
 
                 entity.Property(e => e.Unitprice).HasColumnType("money");

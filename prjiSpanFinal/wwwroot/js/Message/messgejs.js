@@ -467,7 +467,7 @@ $("#msgautoComplete").on("input",async () => {
     let htmlDatas;
     $.getJSON(`/Msgapi/AutoComplete`, { keyword: $("#msgautoComplete").val() }, function (data) {
         htmlDatas = data.map(data => {
-            if (data != "admin" && data != truememacc) {
+            if (data != "admin" && data != truememacc && data != "chatbot") {
                 return (
                     `<button type="button" onclick="read(event)" class="list-group-item list-group-item-action">${data}</button>`
                 );
