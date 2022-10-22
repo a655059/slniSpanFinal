@@ -92,8 +92,8 @@ namespace prjiSpanFinal.Controllers
             {
                 iSpanProjectContext db = new iSpanProjectContext();
                 MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
-
-                if (mem.MemPic!=null) //如果有上傳照片
+                acc = mem.memACC;
+                if (mem.File1!=null) //如果有上傳照片
                 { 
                     byte[] imgByte = null;
                     using (var memoryStream = new MemoryStream())
@@ -102,7 +102,7 @@ namespace prjiSpanFinal.Controllers
                     }
                     acc.MemPic = imgByte;
                 }
-                    acc = mem.memACC;
+                    
                     acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
                     acc.Name = mem.Name;
                     acc.Address = mem.Address;
@@ -110,7 +110,7 @@ namespace prjiSpanFinal.Controllers
                     acc.BackUpEmail = mem.BackUpEmail;
                     acc.Birthday = mem.Birthday;
                     acc.Email = mem.Email;
-                    db.SaveChanges();
+                db.SaveChanges();
 
                 acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 string json = JsonSerializer.Serialize(mem);

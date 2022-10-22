@@ -1,4 +1,5 @@
-﻿using prjiSpanFinal.Models;
+﻿using Microsoft.AspNetCore.Http;
+using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +105,7 @@ namespace prjiSpanFinal.ViewModels.Member
         public string gender { get; set; }
         public string TW { get; set; }
         public string PhoneMail { get; set; }
-
+        public IFormFile File1 { get; set; }
     }
 
 }
