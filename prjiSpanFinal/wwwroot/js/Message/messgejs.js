@@ -6,6 +6,27 @@ let activec = "99999";
 let mempic = $("#header1mempic").attr("src");
 let histmultichat = "";
 
+
+
+//給想要加入跳出聊天框功能的人用的，傳入想開啟對話的帳號就好
+function happy_popup(acc) {
+    if (!$("#collapseExample").hasClass("show")) {
+        $(".chatroom").trigger("click");
+    }
+    opencertaindialog(acc);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 async function connectionstart() {
     try {
         await connection.start();
@@ -497,10 +518,16 @@ function opencertaindialog(acc) {
         if (data == undefined) {
             return;
         }
-        if (data.memberId == memacc || data.memberId == 1) {
+        if (data.memberId == memacc) {
             return;
         }
-        else if ($(`.msgcid[value="${data.memberId}"]`).length != 0) {
+        if (data.memberId == 1) {
+            data.memberAcc = "線上客服";
+        }
+        else if (data.memberId == 8) {
+            data.memberAcc = "智慧客服";
+        }
+        if ($(`.msgcid[value="${data.memberId}"]`).length != 0) {
             $(`.msgcid[value="${data.memberId}"]`).siblings().trigger("click");
         }
         else {

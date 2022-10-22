@@ -131,34 +131,23 @@
     <div class="col-8">
         <p>
             <span class="fw-bold">
-                還有問題嗎?可以填表詢問或用蝦蝦通線上機器人客服。
+                還有問題嗎?可以用蝦蝦通真人線上客服，或機器人客服。
             </span>
         </p>
-        <form action="" method="POST" class="faq-contact-form">
-
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-                <input type="email" id="form4Example2" class="form-control" name="email" required="">
-                <label class="form-label" for="form4Example2" style="margin-left: 0px;">Email地址</label>
-                <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 88.8px;"></div><div class="form-notch-trailing"></div></div>
-            </div>
-
-            <!-- Message input -->
-            <div class="form-outline mb-4">
-                <textarea class="form-control" id="form4Example3" rows="4" name="message" required=""></textarea>
-                <label class="form-label" for="form4Example3" style="margin-left: 0px;">您的問題</label>
-                <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 60px;"></div><div class="form-notch-trailing"></div></div>
-            </div>
-
-            <!-- Checkbox -->
-            <!-- Submit button -->
-            <input type="submit" class="btn btn-primary btn-block mb-4 faq-contact-form-submit" value="送出">
-            <input type="hidden" name="recaptcha-response" id="recaptchaFaqForm">
-            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8EQQR9-2C2lHo9Xju9_Bm-bMuFXcSCeriaZNoPaJyFQ1bdqruK5ct9VVlT0ank0kYWuAjX_Fh936suCeAQxgi74kagcaozz-5VrbDOBGcUrc69dnRGfWP5eCrxJYlYrcO7-UQQj9Dt4Gbki491er00k">
-        </form>
+        <div class="d-flex justify-content-evenly">
+            <a id="openonlineservice" href="#"><img src="~/img/help/onlineservice.jpg" /></a>
+            <a id="openAIservice" href="#"><img src="~/img/help/AIservice.jpg" /></a>
+        </div>
     </div>
     <div class="col-2"></div>
 </div>
 @section Scripts{
-
+    <script>
+        $("#openonlineservice").click(function(){
+            happy_popup("admin");
+        })
+        $("#openAIservice").click(function () {
+            happy_popup("chatbot");
+        })
+    </script>
 } 
