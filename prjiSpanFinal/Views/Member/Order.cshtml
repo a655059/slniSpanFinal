@@ -111,19 +111,19 @@
                                 @{
                                     if (item.ShipperStatusId == 6)
                                     {
-                                                                                                        <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
-                                                                                                        <br />
-                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                                                                                                                            <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
+                                                                                                                                            <br />
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
                                     }
                                     else if(item.ShipperStatusId == 4 || item.ShipperStatusId == 5)
                                     {
-                                                                                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
-                                                                                                        <br />
-                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                                                                                                                            <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
+                                                                                                                                            <br />
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
                                     }
                                     else if (item.ShipperStatusId == 2 || item.ShipperStatusId == 3)
                                     {
-                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                                                                                                                            <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
                                             //<a class="btn btn-warning orderbuttonce my-1" data-bs-toggle="modal" href="#staticBackdrop5" role="button">取消</a>
                                     }
                                 }
@@ -180,6 +180,11 @@
                 <div class="mb-3">
                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </div>
+                <div id="previewCommentPhoto" class="d-flex"></div>
+                <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                    <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                </label>
+                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/*" multiple />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="orderarguesubmit" data-bs-target="#staticBackdrop2" data-bs-toggle="modal">送出</button>
@@ -395,6 +400,7 @@
             $("#argueselect").children().eq(0).prop("selected","selected");
             $("#exampleFormControlTextarea1").val("");
             argueitem = $(this);
+            $("#previewCommentPhoto").html("");
         })
 
         let recorderid;
@@ -404,8 +410,15 @@
             recitem = $(this);
         })
 
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+
         $("#orderarguesubmit").click(function () {
-            $.getJSON(`/Member/WriteArgue`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
+            let pics = $.map($("#previewCommentPhoto").find("img"),function(item,index){
+                return (item.src).split(',')[1];
+            });
+            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics:pics }, function (data) {
                 $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
@@ -451,5 +464,34 @@
             }
             $("#reccount").html(count1);
         })
+
+        $("#commentPhoto").change(function () {
+            const photos = document.getElementById("commentPhoto").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(photo); 
+                    reader.onloadend = function() {
+                        let src = reader.result;
+                        $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img style="max-width:100px" src="${src}" /></div>`);
+                    }
+                });
+            }
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0.3");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0");
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "pointer");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "none");
+        });
+        $("#previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+            $(this).closest(".deleteCommentPhoto").remove();
+        });
     </script>
 }

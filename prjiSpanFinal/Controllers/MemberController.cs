@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
 using prjiSpanFinal.Models.OrderReq2;
+using Org.BouncyCastle.Utilities;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -289,7 +290,7 @@ namespace prjiSpanFinal.Controllers
 
         }
 
-        public IActionResult WriteArgue(int id, int type,int reason, string keyword)
+        public IActionResult WriteArgue(int id, int type,int reason, string keyword, List<byte[]> pics)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
             {
@@ -302,8 +303,17 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             Argument a = new Argument() { OrderId = id,ArgumentTypeId = type, ArgumentReasonId = reason, ReasonText = keyword };
             dbcontext.Arguments.Add(a);
+            dbcontext.SaveChanges();
+
             Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
             b.StatusId = 8;
+
+            foreach(var item in pics)
+            {
+                ArguePic p = new ArguePic() { ArguePic1 = item, ArguementId = a.ArgumentId };
+                dbcontext.ArguePics.Add(p);
+            }
+
             dbcontext.SaveChanges();
             return Json("1");
         }
