@@ -73,7 +73,7 @@
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">個人資料修改</h2>
 
-@{
+    @{
 
     List<string> regionNameList = new List<string>();
     List<string> countryNameList = new List<string>();
@@ -89,10 +89,10 @@
         string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
         MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
         iSpanProjectContext db = new iSpanProjectContext();
-        MyregionID = loginMember.RegionId;
-        MycountryID = db.RegionLists.OrderByDescending(o=>o.RegionId).Where(r => r.RegionId == MyregionID).FirstOrDefault().CountryId;
-        regionNameList = db.RegionLists.OrderByDescending(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionName).ToList();
-        regionIdList = db.RegionLists.OrderByDescending(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionId).ToList();
+        MyregionID = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).RegionId;
+        MycountryID = db.RegionLists.OrderBy(o=>o.RegionId).Where(r => r.RegionId == MyregionID).FirstOrDefault().CountryId;
+        regionNameList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionName).ToList();
+        regionIdList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionId).ToList();
         countryNameList = db.CountryLists.OrderBy(o => o.CountryId).Select(r => r.CountryName).ToList();
 
     }
