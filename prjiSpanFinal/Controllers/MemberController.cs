@@ -101,7 +101,8 @@ namespace prjiSpanFinal.Controllers
                     byte[] imgByte = null;
                     using (var memoryStream = new MemoryStream())
                     {
-                       imgByte = memoryStream.ToArray();
+                        File1.CopyTo(memoryStream);
+                        imgByte = memoryStream.ToArray();
                     }
                     acc.MemPic = imgByte;
                 }
@@ -135,19 +136,20 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(MemberAccViewModel mem, IFormFile File1)
+        public IActionResult Create(MemberAccViewModel mem , IFormFile File1)
         {
 
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
+            memberac = mem.memACC;//將物件memberac指向mem.memACC才可以透過viewmodel的地區string抓到id
+            //將檔案轉成二進位
             byte[] imgByte = null;
             using (var memoryStream = new MemoryStream())
             {
-                //File1.CopyTo(memoryStream);
+                File1.CopyTo(memoryStream);
                 imgByte = memoryStream.ToArray();
             }
             mem.MemPic = imgByte;
-            memberac = mem.memACC;
             memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
             if (mem.gender == "female")
             {
