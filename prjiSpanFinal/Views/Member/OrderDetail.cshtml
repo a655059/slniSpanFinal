@@ -13,4 +13,38 @@
 
 @section Scripts
 {
+    <script>
+        $(".odshipping").click(function() {
+            $.getJSON(`/Orderapi/SettoShipping`, { id: $(event.currentTarget).siblings("input").val() }, function (data) {
+            });
+        });
+        $(".odarrived").click(function () {
+            $.getJSON(`/Orderapi/SettoArrived`, { id: $(event.currentTarget).siblings("input").val() }, function (data) {
+            });
+        });
+
+        $(".odrefresh").click(function() {
+            let thisicon = $(event.currentTarget);
+            $.getJSON(`/Orderapi/RefreshOD`, { id: thisicon.find("input").val() }, function (data) {
+                if(data == 1){
+                    thisicon.parent().find(".progress-bar").css("width","0%");
+                    thisicon.parent().find(".fa-circle").removeClass("active");
+                    thisicon.parent().find(".fa-circle").eq(0).addClass("active");
+                }
+                else if(data == 2 || data == 3){
+                    thisicon.parent().find(".progress-bar").css("width","66%");
+                    thisicon.parent().find(".fa-circle").removeClass("active");
+                    thisicon.parent().find(".fa-circle").eq(0).addClass("active");
+                    thisicon.parent().find(".fa-circle").eq(1).addClass("active");
+                }
+                else if (data == 4 || data == 5) {
+                    thisicon.parent().find(".progress-bar").css("width", "100%");
+                    thisicon.parent().find(".fa-circle").removeClass("active");
+                    thisicon.parent().find(".fa-circle").eq(0).addClass("active");
+                    thisicon.parent().find(".fa-circle").eq(1).addClass("active");
+                    thisicon.parent().find(".fa-circle").eq(2).addClass("active");
+                }
+            });
+        });
+    </script>
 }

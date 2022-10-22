@@ -14,9 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace prjiSpanFinal.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrderApiController : ControllerBase
+    public class OrderApiController : Controller
     {
         iSpanProjectContext dbcontext = new iSpanProjectContext();
         private IWebHostEnvironment _enviro;
@@ -24,47 +22,42 @@ namespace prjiSpanFinal.Controllers
         {
             _enviro = p;
         }
+        public void SettoShipping(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            OrderDetail a = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
+            a.ShippingStatusId = 2;
+            int thisorderid = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id).OrderId;
+            int countofods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid).Count();
+            int countof45ods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid && (o.ShippingStatusId == 4 || o.ShippingStatusId == 5)).Count();
+            if (countof45ods != countofods)
+            {
+                Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == thisorderid);
+                b.StatusId = 4;
+            }
+            dbcontext.SaveChanges();
+        }
+        public void SettoArrived(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            OrderDetail a = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
+            a.ShippingStatusId = 4;
+            int thisorderid = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id).OrderId;
+            int countofods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid).Count();
+            int countof45ods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid && (o.ShippingStatusId == 4 || o.ShippingStatusId == 5)).Count();
+            if(countof45ods == countofods)
+            {
+                Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == thisorderid);
+                b.StatusId = 5;
+            }
+            dbcontext.SaveChanges();
+        }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<OrderListViewModel>>> Get(int id)
-        //{
-        //    return await dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id || o.MemberId == id).
-        //        Select(o => new OrderListViewModel()
-        //        {
-        //            OrderId = o.OrderId,
-        //            SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
-        //            SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
-        //            BuyerId = o.MemberId,
-        //            BuyerAcc = o.Member.MemberAcc,
-        //            OrderDatetime = o.OrderDatetime,
-        //            RecieveAdr = o.RecieveAdr,
-        //            FinishDate = o.FinishDate,
-        //            CouponName = o.Coupon.CouponName,
-        //            Discount = o.Coupon.Discount,
-        //            IsFreeDelivery = o.Coupon.IsFreeDelivery,
-        //            OrderStatusName = o.Status.OrderStatusName,
-        //            ShipperName = o.Shipper.ShipperName,
-        //            ShipperFee = o.Shipper.Fee,
-        //            ShipperPhone = o.Shipper.Phone,
-        //            PaymentDate = o.PaymentDate,
-        //            ShippingDate = o.ShippingDate,
-        //            ReceiveDate = o.ReceiveDate,
-        //            PaymentName = o.Payment.PaymentName,
-        //            PaymentFee = o.Payment.Fee,
-        //            OrderMessage = o.OrderMessage,
-        //            OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
-        //            ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
-        //            Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
-        //            OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
-        //            ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
-        //            Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
-        //            ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
-        //            Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
-        //            Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
-        //            ProductName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.ProductName,
-        //        }).ToListAsync();
-        //}
-
-        
+        public IActionResult RefreshOD(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            OrderDetail a = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
+            return Json(a.ShippingStatusId);
+        }
     }
 }
