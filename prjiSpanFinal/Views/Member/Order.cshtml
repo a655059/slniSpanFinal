@@ -435,9 +435,9 @@
             });
             for(let i = 0;i < statses.length;i++)
             {
-                count1++;
                 if (statses[i] == 5 || statses[i] == 4)
                 {
+                    count1++;
                     $.getJSON(`/Member/WriteReceive`, { id: orderids[i] }, function (data) {
                         $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                             $("#orderlistbody").html("");

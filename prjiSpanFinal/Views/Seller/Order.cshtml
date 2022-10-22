@@ -26,7 +26,7 @@
                 </span>
             </div>
             <div class="ordersearchbar">
-                <button type="button" id="orderrecallsubmit" class="btn btn-success">一鍵出貨</button>
+                    <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵出貨</button>
             </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -219,6 +219,40 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel4">您已出貨商品</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>出貨完成後系統會自動發確認信給買家。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel5" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel5">確定要全部出貨嗎</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請確定寄出商品後再做出貨確認。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="orderrecallsubmit" data-bs-target="#staticBackdrop6" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop6" tabindex="-1" aria-labelledby="staticBackdropLabel6" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="staticBackdropLabel4">您已出貨全部<span id="reccount"></span>件商品</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -426,9 +460,9 @@
                 return item.value;
             });
             for (let i = 0; i < statses.length; i++) {
-                count1++;
-                if (statses[i] == 5 || statses[i] == 4) {
-                    $.getJSON(`/Seller/WriteShippingAll`, { id: orderids[i] }, function (data) {
+                if (statses[i] == 3) {
+                    count1++;
+                    $.getJSON(`/Seller/WriteShipping`, { id: orderids[i] }, function (data) {
                         $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                             $("#orderlistbody").html("");
                             for (let i = 0; i < data.length; i++) {
