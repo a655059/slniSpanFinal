@@ -112,6 +112,10 @@
                                     {
                                         <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>
                                     }
+                                    if (item.ShipperStatusId == 3)
+                                    {
+                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">出貨</a>
+                                    }
                                 }
                                 <div>
                                     <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
@@ -193,6 +197,39 @@
     </div>
 </div>
 
+<div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel3">確定要出貨嗎</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>出貨後別忘記聯繫賣。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="orderrecsubmit" data-bs-target="#staticBackdrop4" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop4" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel4">您已領收商品</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>收到商品後別忘記幫我們做評價哦。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
 {
     <script src="~/js/DataTable/datatable.js"></script>
@@ -347,5 +384,6 @@
                 $("#staticBackdropLabel2").html("您的評價沒有送出");
             });
         })
+
     </script>
 }

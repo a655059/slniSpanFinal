@@ -144,7 +144,7 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ArgumentTypeId).HasColumnName("ArgumentTypeID");
 
-                entity.Property(e => e.OrderdetailId).HasColumnName("OrderdetailID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ReasonText)
                     .IsRequired()
@@ -163,11 +163,11 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Argument_ArgumentType");
 
-                entity.HasOne(d => d.Orderdetail)
+                entity.HasOne(d => d.Order)
                     .WithMany(p => p.Arguments)
-                    .HasForeignKey(d => d.OrderdetailId)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Argument_OrderDetails");
+                    .HasConstraintName("FK_Argument_Orders");
             });
 
             modelBuilder.Entity<ArgumentReason>(entity =>

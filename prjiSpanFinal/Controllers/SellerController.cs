@@ -95,7 +95,10 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-
+            if(keyword == null)
+            {
+                keyword = "";
+            }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
@@ -153,7 +156,7 @@ namespace prjiSpanFinal.Controllers
             return Json(smalltype);
         }
 
-        public IActionResult OrderDetail(int id)  //傳資料進去view
+        public IActionResult OrderDetail(int id)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
