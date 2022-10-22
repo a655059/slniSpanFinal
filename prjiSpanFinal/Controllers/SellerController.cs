@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using prjiSpanFinal.Models.OrderReq;
+using prjiSpanFinal.ViewModels.Order;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -127,6 +129,66 @@ namespace prjiSpanFinal.Controllers
             dbcontext.SaveChanges();
             return Json("1");
         }
+
+        public IActionResult GetReturn(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            return Json(dbcontext.Arguments.Where(a => a.OrderId == id).OrderBy(o => o.ArgumentId).Select(o => new OrderReturnViewModel(){
+                ReasonName = o.ArgumentReason.ArgumentReasonName,
+                ReasonText = o.ReasonText,
+                TypeName = o.ArgumentType.ArgumentTypeName,
+                pics = o.ArguePics.Select(o=>o.ArguePic1).ToList(),
+                TypeID = o.ArgumentTypeId,
+            }).LastOrDefault());
+        }
+
+        public IActionResult AcceptReturn(int id,int type)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            if(type == 1)
+            {
+                Order a = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                int thisorderid = id;
+                int countofods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid).Count();
+                int countof45ods = dbcontext.OrderDetails.Where(o => o.OrderId == thisorderid && (o.ShippingStatusId == 4 || o.ShippingStatusId == 5)).Count();
+                Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == thisorderid);
+                if (countof45ods == countofods)
+                {
+                    b.StatusId = 5;
+                }
+                else
+                {
+                    b.StatusId = 4;
+                }
+            }
+            //o => o.PaymentFee + o.ShipperFee + o.Quantity.Select((Value, index) => Value * Convert.ToInt32(o.Unitprice[index])).Sum()
+            else if(type == 2)
+            {
+                Order a = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                a.StatusId = 7;
+                MemberAccount b = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => o.Member).FirstOrDefault();
+                b.Balance += dbcontext.Orders.Where(o => o.OrderId == id).Select(o => o.Payment.Fee + o.Shipper.Fee + o.OrderDetails.Select(o => Convert.ToInt32(o.Unitprice) * o.Quantity).Sum()).FirstOrDefault();
+                if (dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().Coupon.IsFreeDelivery == true)
+                {
+                    b.Balance -= dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().Shipper.Fee;
+                }
+            }
+            
+            dbcontext.SaveChanges();
+            return Json("1");
+        }
+
+
 
         public IActionResult Create()
         {

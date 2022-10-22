@@ -92,7 +92,7 @@
                             <td>
                                 <input type="hidden" class="orderorderid" value="@item.OrderId" />
                                 <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
-                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">@item.SellerAcc</a>
+                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">@item.SellerAcc</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a>
                             </td>
                             <td>@item.OrderDatetime.ToString("yyyy-MM-dd")<br />@item.OrderDatetime.ToString("HH:mm:dd")</td>
                             <td>
@@ -111,19 +111,19 @@
                                 @{
                                     if (item.ShipperStatusId == 6)
                                     {
-                                                                                                                                                        <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
-                                                                                                                                                        <br />
-                                                                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                        <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
+                                        <br />
+                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
                                     }
                                     else if(item.ShipperStatusId == 4 || item.ShipperStatusId == 5)
                                     {
-                                                                                                                                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
-                                                                                                                                                        <br />
-                                                                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
+                                        <br />
+                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
                                     }
                                     else if (item.ShipperStatusId == 2 || item.ShipperStatusId == 3)
                                     {
-                                                                                                                                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>
+                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
                                             //<a class="btn btn-warning orderbuttonce my-1" data-bs-toggle="modal" href="#staticBackdrop5" role="button">取消</a>
                                     }
                                 }
@@ -163,11 +163,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel1">退貨申請</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel1">申訴申請</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>請選擇退貨理由: </div>
+                <div>請選擇申訴種類: </div>
+                <select class="form-select form-select-lg mb-3" id="arguetypeselect" aria-label=".form-select-lg example">
+                    <option selected value="1">退貨</option>
+                    <option value="2">退款</option>
+                    <option value="5">棄標投訴</option>
+                </select>
+                <div>請選擇申訴理由: </div>
                 <select class="form-select form-select-lg mb-3" id="argueselect" aria-label=".form-select-lg example">
                     <option selected value="1">我沒收到商品</option>
                     <option value="2">商品與期待不符</option>
@@ -197,11 +203,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel2">您的退貨申請已送出</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">您的申訴申請已送出</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div>您可以與賣家聯繫詢問退貨相關問題，或是從網頁上方幫助中心與客服聯絡以獲得更多資訊。</div>
+                <div>您可以與賣家聯繫詢問申訴相關問題，或是從網頁上方幫助中心與客服聯絡以獲得更多資訊。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -287,8 +293,8 @@
             item = `<tr>
 
                                         <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
-                                            <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                                             <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a></td>
+                                        <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                                                        <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
                                         <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
                                         <td>`;
             let total = data.paymentFee;
@@ -305,13 +311,13 @@
                                         <td style="text-align:center">
                                             <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
             if (data.shipperStatusId == 6) {
-                item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+                item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
             else if(data.shipperStatusId == 5 || data.shipperStatusId == 4){
-                item = item + `<a href="#staticBackdrop3" data-bs-toggle="modal" role="button" class="btn btn-success orderbuttonfi my-1">領收</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+                item = item + `<a href="#staticBackdrop3" data-bs-toggle="modal" role="button" class="btn btn-success orderbuttonfi my-1">領收</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
             else if (data.shipperStatusId == 3 || data.shipperStatusId == 2) {
-                item = item + `<a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">退貨</a>`;
+                item = item + `<a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
             item = item + `<div>
                                                 <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
@@ -418,7 +424,7 @@
             let pics = $.map($("#previewCommentPhoto").find("img"),function(item,index){
                 return (item.src).split(',')[1];
             });
-            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics:pics }, function (data) {
+            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
                 $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
@@ -498,5 +504,9 @@
             let tempt = dtime.getFullYear().toString() + "-" + (dtime.getMonth() + 1).toString().padStart(2, '0') + "-" + dtime.getDate().toString().padStart(2, '0') + "<br />" + dtime.getHours().toString().padStart(2, '0') + ":" + dtime.getMinutes().toString().padStart(2, '0') + ":" + dtime.getSeconds().toString().padStart(2, '0');
             return tempt;
         }
+
+        $(document).on("click", ".orderopenmsg", function () {
+            happy_popup($(this).siblings("a").html());
+        });
     </script>
 }

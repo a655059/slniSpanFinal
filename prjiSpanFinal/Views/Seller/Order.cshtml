@@ -93,7 +93,7 @@
                             <td>
                                 <input type="hidden" class="orderorderid" value="@item.OrderId" />
                                 <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
-                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a>
+                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a>
                             </td>
                             <td>@item.OrderDatetime.ToString("yyyy-MM-dd")<br />@item.OrderDatetime.ToString("HH:mm:dd")</td>
                             <td>
@@ -110,11 +110,15 @@
                                 @{
                                     if (item.ShipperStatusId == 6)
                                     {
-                                        <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>
+                                                                                                                                                                    <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>
                                     }
                                     if (item.ShipperStatusId == 3)
                                     {
-                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">出貨</a>
+                                                                                                                                                                    <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">出貨</a>
+                                    }
+                                    if (item.ShipperStatusId == 8)
+                                    {
+                                                                                                                                                                    <a data-bs-toggle="modal" href="#staticBackdrop7" role="button" class="btn btn-info orderbuttonret my-1">處理</a>
                                     }
                                 }
                                 <div>
@@ -162,7 +166,7 @@
                     @{
                         for (int i = 1; i <= 5; i++)
                         {
-                            <i class="star itemQualityStar fa-regular fa-star me-1"></i>
+                                                                                                                                                        <i class="star itemQualityStar fa-regular fa-star me-1"></i>
                         }
                     }
                 </div>
@@ -252,7 +256,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-6" id="staticBackdropLabel4">您已出貨全部<span id="reccount"></span>件商品</h1>
+                <h1 class="modal-title fs-6" id="staticBackdropLabel6">您已出貨全部<span id="reccount"></span>件商品</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -264,6 +268,46 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="staticBackdrop7" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel7" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel7">申請</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 id="returnreason">原因:</h3>
+                <div id="returnreasonname"></div>
+                <h4>補充資訊:</h4>
+                <div id="returnreasontext"></div>
+                <h4>補充圖片:</h4>
+                <div id="returnreasonpics"></div>
+            </div>
+            <div class="modal-footer" id="returnfooter">
+                <button type="button" class="btn btn-primary" id="orderreturnsubmit" data-bs-target="#staticBackdrop8" data-bs-toggle="modal">同意</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop8" tabindex="-1" aria-labelledby="staticBackdropLabel6" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="staticBackdropLabel8">您已同意本次申訴</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請確認申訴內容已經處理完成，如果沒有妥善處理可能被重複申訴，若情況嚴重則可能被禁權。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="~/js/DataTable/datatable.js"></script>
@@ -293,7 +337,7 @@
 
                                 <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
                                     <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                                    <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a></td>
+                                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
                                         <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
                                 <td>`;
             let total = data.paymentFee;
@@ -314,6 +358,9 @@
             }
             if (data.shipperStatusId == 3) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop3" class="btn btn-secondary orderbuttonfi my-1">出貨</a>`;
+            }
+            if (data.shipperStatusId == 8) {
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop7" class="btn btn-info orderbuttonret my-1">處理</a>`;
             }
             item = item + `<div>
                                         <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
@@ -478,5 +525,57 @@
             let tempt = dtime.getFullYear().toString() + "-" + (dtime.getMonth() + 1).toString().padStart(2, '0') + "-" + dtime.getDate().toString().padStart(2, '0') + "<br />" + dtime.getHours().toString().padStart(2, '0') + ":" + dtime.getMinutes().toString().padStart(2, '0') + ":" + dtime.getSeconds().toString().padStart(2, '0');
             return tempt;
         }
+
+        //$.ajaxSetup({
+        //    async: false
+        //});
+
+        let returnorderid;
+        let returnitem;
+        let returntype;
+        $(document).on("click", ".orderbuttonret", function () {
+            returnorderid = $(this).parent().siblings().children().val();
+            commentitem = $(this);
+            
+            $.getJSON(`/Seller/GetReturn`, { id: returnorderid }, function (data) {
+                returntype = data.typeID;
+                console.log(returntype)
+                $("#staticBackdropLabel7").html(`${data.typeName}申請`);
+                $("#returnreason").html(`${data.typeName}原因`);
+                $("#returnreasonname").html(`${data.reasonName}`);
+                $("#returnreasontext").html(`${data.reasonText}`);
+                $("#returnreasonpics").html("");
+                if (data.pics != undefined) {
+                    for (let i = 0; i < data.pics.length; i++) {
+                        $("#returnreasonpics").append(`<div class="deleteCommentPhoto"><img style="max-width:150px" src="data:image;base64,${data.pics[i]}" /></div>`);
+                    }
+                }
+            });
+            if(returntype != 5){
+                $("#returnfooter").html = `<button type="button" class="btn btn-primary" id="orderreturnsubmit" data-bs-target="#staticBackdrop8" data-bs-toggle="modal">同意</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`;
+            }
+            else{
+                $("#returnfooter").html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`;
+            }
+            
+
+        })
+
+        $("#orderreturnsubmit").click(function () {
+            console.log(returntype)
+            $.getJSON(`/Seller/AcceptReturn`, { id: returnorderid, type: returntype }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+                    $("#orderlistbody").html("");
+                    for (let i = 0; i < data.length; i++) {
+                        $("#orderlistbody").append(OrderListItem(data[i]));
+                    }
+                });
+            });
+        })
+
+        $(document).on("click", ".orderopenmsg", function () {
+            happy_popup($(this).siblings("a").html());
+        });
     </script>
 }
