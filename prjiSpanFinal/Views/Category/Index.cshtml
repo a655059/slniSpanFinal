@@ -68,28 +68,36 @@
                     </div>
                     <div class="ff-typestitle-sel">
                         @{
-
-                            foreach (var item in Model.lSmallType)
+                            @using (Html.BeginForm("Index", "Category", FormMethod.Post))
                             {
-                                int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
-                                <div class="w-100 p-1 ff-types-type">
-                                        @if (stock > 0) { 
-                                            <input type="checkbox" id="ffcb_@item.SmallTypeId" />
-                                        }
-                                        else { 
-                                            <input type="checkbox" id="ffcb_@item.SmallTypeId" disabled/>
-                                        }
-                                        <label for="ffcb_@item.SmallTypeId">
-                                            <span class="ff-types-typeid">
-                                                @item.SmallTypeName
-                                            </span>
-                                            <span class="ff-types-typecount">
-                                                (@stock)
-                                            </span>
-                                        </label>
-                                    </div>
+                                foreach (var item in Model.lSmallType)
+                                {
+                                    int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
+                        <div class="w-100 p-1 ff-types-type">
+                            @*<input type="hidden" name="data.Index" value="" />
+                            @if (stock > 0)
+        {*@
+
+                            <input type="checkbox" name="ffcb_smalltypeid" @*name="data.SmallTypeID"*@ id="ffcb_@item.SmallTypeId" />
+                            @*}
+                            else
+                            {
+            <input type="checkbox" name="data.SmallTypeID" id="ffcb_@item.SmallTypeId" disabled/>
+        }
+                            <input class="ff-types-typeid" type="text" name="data.SmallTypeName" for="ffcb_@item.SmallTypeId" value="@item.SmallTypeName" />
+        <input class="ff-types-typecount" type="text" name="data.SmallTypeName" for="ffcb_@item.SmallTypeId" value="(@stock)" />*@
+                            <label for="ffcb_@item.SmallTypeId">
+                                <span @*name="data.SmallTypeID"*@ class="ff-types-typeid">
+                                    @item.SmallTypeName
+                                </span>
+                                <span class="ff-types-typecount">
+                                    (@stock)
+                                </span>
+                            </label>
+                        </div>
+                                    }
                             }
-                        }
+                            }
                     </div>
                 </div>
                 <div class="ffsplits">
@@ -175,4 +183,49 @@
 
 @section Scripts{
     <script src="~/js/Category/Index.js"></script>
+    <script>
+        var facet=[];
+    $("input[name='ffcb_smalltypeid']").each(function () {
+        $(this).click(() => {
+            //console.log($(this).prop('checked'));
+            let thisid = $(this).attr("id");
+            let ischecked = $(this).prop('checked');
+            if (ischecked) {
+                facet.push(thisid);
+            }
+            else {
+                const index = facet.indexOf(thisid);
+                if (index > -1) { // only splice array when item is found
+                    facet.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            //console.log(arr)
+            let url ="?facet=";
+            for (let i = 0; i < facet.length; i++) {
+                url = url + facet[i] + ",";
+            }
+            if (facet.length > 0){
+                url = url.substring(0, url.length - 1);
+            }
+            console.log(url);
+            $.ajax({
+                url: `@Url.Content("~/Category/Index"+"?id="+Model.SearchType.BigTypeId)${url}` ,
+                type:"get",
+                data:{
+                    "facet": facet,
+                },
+                success: function () {
+                    alert("成功");
+                },
+                error: function () {
+                    alert("失敗");
+                }
+            })
+        })
+    })
+
+
+
+
+    </script>
 }

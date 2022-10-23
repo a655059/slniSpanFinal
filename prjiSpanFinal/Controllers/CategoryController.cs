@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels.Category;
 using prjiSpanFinal.ViewModels.Home;
@@ -34,25 +35,34 @@ namespace prjiSpanFinal.Controllers
             return View(list);
         }
         [HttpGet]
-        public IActionResult Index(int? id,int? sortOrder)
+        public IActionResult Index(int? id, List<string> facet, int? sortOrder,int page)
         {
+            if (id == 0 || id == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             listprod = _db.Products.Where(p => p.SmallType.BigTypeId == id && p.ProductStatusId == 0).ToList();
             slist = (new CHomeFactory()).toShowItem(listprod);
             list = new CCategoryIndex();
             list.SearchType = _db.BigTypes.Where(t => t.BigTypeId == id).FirstOrDefault();
             list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
-
-            //if sort
-                list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
-
             //if checkedtypes
-
+            if (facet.Count > 0)
+            {
+                listprod = fFacetOrder(facet, listprod);
+            }
+            //if sort
+            list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
             //if pages
 
             return View(list);
         }
-        public IActionResult SmallType(int id,int? sortOrder)
+        public IActionResult SmallType(int? id,int? sortOrder)
         {
+            if (id == 0 || id == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             listprod = _db.Products.Where(p => p.SmallTypeId == id && p.ProductStatusId == 0).ToList();
             List<CShowItem> slist = (new CHomeFactory()).toShowItem(listprod);
             CCategoryIndex list = new CCategoryIndex();
@@ -102,7 +112,7 @@ namespace prjiSpanFinal.Controllers
                     return SIlist;
                 case 2:
                     //最新排序
-                    SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductDetails).ToList());
+                    SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductId).ToList());
                     return SIlist;
                 case 3:
                     //熱銷排序
@@ -121,5 +131,16 @@ namespace prjiSpanFinal.Controllers
                     return SIlist;
             }
         }
+        List<Product> fFacetOrder(List<string> keyword, List<Product> listprod)
+        {
+            List<int> tempSmallTypeIDs = new List<int>();
+            foreach(var Idstring in keyword)
+            {
+                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Remove(0, 4)));
+            }
+            return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
+        }
+
+
     }
 }
