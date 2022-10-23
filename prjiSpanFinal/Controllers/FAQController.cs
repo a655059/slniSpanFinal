@@ -30,6 +30,4 @@ namespace prjiSpanFinal.Controllers
             return Json(dbcontext.Faqs.Where(o => o.Faqtype.FaqtypeName == t).Select(o=>o.Question).ToList());
         }
     }
-
-
 }
