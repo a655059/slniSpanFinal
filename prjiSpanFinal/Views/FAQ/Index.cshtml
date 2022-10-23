@@ -19,24 +19,24 @@
     var faqlist1 = dbcontext.Faqs.Where(o => o.FaqtypeId == faqtypelist.FirstOrDefault().FaqtypeId).ToList();
     var faqlistans = dbcontext.Faqs.Where(o => o.FaqtypeId == faqtypelist.FirstOrDefault().FaqtypeId).FirstOrDefault().Answer;
     <div class="row">
-                                            <div class="col-3">
-                                                <div class="list-group">
-                                                    <a href="#" class="list-group-item list-group-item-action active faqtypelist" value="1" aria-current="true">@faqtypelist[0].FaqtypeName</a>
-                                                        @for(int i = 1 ; i < faqtypelist.Count;i++)
+        <div class="col-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active faqtypelist" value="1" aria-current="true">@faqtypelist[0].FaqtypeName</a>
+                    @for(int i = 1 ; i < faqtypelist.Count;i++)
 {   
-                                                        <a href="#" class="list-group-item list-group-item-action faqtypelist" value="@(i+1)">@faqtypelist[i].FaqtypeName</a>
+                    <a href="#" class="list-group-item list-group-item-action faqtypelist" value="@(i+1)">@faqtypelist[i].FaqtypeName</a>
 }
-                                                </div>
-                                            </div>
-                                            <div class="col-9">
-                                                <div class="list-group queslist">
-                                                    <a href="#" class="list-group-item list-group-item-action active faqqueslist" value="1" aria-current="true">@faqlist1[0].Question</a>
-                                                    @for (int i = 1; i < faqlist1.Count; i++)
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="list-group queslist">
+                <a href="#" class="list-group-item list-group-item-action active faqqueslist" value="1" aria-current="true">@faqlist1[0].Question</a>
+                @for (int i = 1; i < faqlist1.Count; i++)
 {
-                                                        <a href="#" class="list-group-item list-group-item-action faqqueslist" value="@(i+1)">@faqlist1[i].Question</a>
+                    <a href="#" class="list-group-item list-group-item-action faqqueslist" value="@(i+1)">@faqlist1[i].Question</a>
 }
-                                                </div>
-                                            </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -157,7 +157,7 @@
     <div class="col-8">
         <p>
             <span class="fw-bold">
-                還有問題嗎?可以用蝦蝦通真人線上客服，或機器人客服。
+                還有問題嗎? 可以用蝦蝦通(使用蝦蝦通需登入)真人線上客服、機器人客服，或撥打客服電話。
             </span>
         </p>
         <div class="d-flex justify-content-evenly">
