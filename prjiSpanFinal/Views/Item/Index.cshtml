@@ -33,7 +33,7 @@
                 {
                     imgSrc1 = Url.Content("~/img/imageNotFound.png");
                 }
-                                                        <img src="@imgSrc1" />
+                    <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
@@ -55,7 +55,16 @@
         <div style="font-size:14px">
             <div class="d-flex justify-content-between border-top border-bottom py-2">
                 <div>商品編號:<span class="ms-2">@Model.product.ProductId</span></div>
-                <a href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
+                @{
+                    if (Model.user == null)
+                    {
+                            <label class="text-primary">登入後方可使用檢舉功能</label>
+                    }
+                    else
+                    {
+                            <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
+                    }
+                }
             </div>
             <div>
                 <div class="fs-6 fw-b">商品備註</div>
@@ -77,21 +86,21 @@
                 {
                     if (i <= starCount)
                     {
-                                                                <div class="starBox"><img src="~/img/YellowStar.png" /></div>
+                            <div class="starBox"><img src="~/img/YellowStar.png" /></div>
                     }
                     else
                     {
-                                                                <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
+                            <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
                     }
                 }
-                                                        <div class="ms-3">
-                                                            4.2
-                                                        </div>
-                                                        <div class="ms-1">
-                                                            <span>(</span><a href="#">10</a><span>)</span>
-                                                        </div>
-                                                        <div class="ms-3">|</div>
-                                                        <div class="ms-3">已售出: 15</div>
+                    <div class="ms-3">
+                        4.2
+                    </div>
+                    <div class="ms-1">
+                        <span>(</span><a href="#">10</a><span>)</span>
+                    </div>
+                    <div class="ms-3">|</div>
+                    <div class="ms-3">已售出: 15</div>
             }
         </div>
         <div class="itemDetails">
@@ -115,7 +124,7 @@
                         {
                             price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
                         }
-                                                                <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                            <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
@@ -140,12 +149,12 @@
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
                                 int quantity = i.Quantity;
-                                                                        <div class="ms-1 mb-1">
-                                                                            <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
-                                                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
-                                                                            <div class="d-none price">@unitPrice</div>
-                                                                            <img class="d-none itemStyleImg" src="@imgSrc" />
-                                                                        </div>
+                                    <div class="ms-1 mb-1">
+                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                        <div class="d-none price">@unitPrice</div>
+                                        <img class="d-none itemStyleImg" src="@imgSrc" />
+                                    </div>
                             }
                         }
                     </div>
@@ -251,7 +260,8 @@
             @{
                 foreach (var product in Model.sellerProducts)
                 {
-                           @await Component.InvokeAsync("ProductCard", new { sellerProduct = product });
+                        @await Component.InvokeAsync("ProductCard", new { sellerProduct = product })
+                    ;
                 }
             }
         </div>
@@ -284,15 +294,21 @@
             <div class="modal-body">
                 <div>
                     <label>產品名稱</label>
-                        <input class="form-control" placeholder="@Model.product.ProductName" readonly>
+                    <input class="form-control" placeholder="@Model.product.ProductName" readonly>
                     <input id="ProductId" type="hidden" value="@Model.product.ProductId">
+                    @{
+                        if(Model.user==null){
+                            Model.user = new MemberAccount();
+                            Model.user.MemberId = 1;
+                        }
+                    }
                     <input id="ReporterID" type="hidden" value="@Model.user.MemberId">
                     <label>檢舉理由</label>
                     <select id="ReportTypeId" class="form-select ReportTypeId" name="ReportTypeId">
                         @{
                             foreach (var i in Model.ReportType)
                             {
-                                       <option value="@i.ReportTypeId">@i.ReportTypeName</option>
+                                    <option value="@i.ReportTypeId">@i.ReportTypeName</option>
                             }
                         }
                     </select>
@@ -306,14 +322,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                    <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
             </div>
         </div>
     </div>
 </div>
 <!--Modal End-->
-
 @section Scripts{
     <script src="~/js/Item/ItemIndex.js"></script>
     <script>
@@ -409,13 +424,14 @@
         //檢舉功能
         let ProductId = document.getElementById("ProductId");
         let ReporterID = document.getElementById("ReporterID");
-        let ReportTypeID = $(".ReportTypeID");
+        let ReportTypeID = $("#ReportTypeId");
         let Reason = document.getElementById("Reason");
         let Report;
-        let ReportPic = $('#Preview')[0].src;
-        let Save=document.getElementById("save");
-        Save.addEventListener("click",()=>{
-            Report={
+        let ReportPic = $('#Preview').attr('src');
+        let Save = document.getElementById("save");
+        
+        Save.addEventListener("click", () => {
+            Report = {
                 ProductId: ProductId.value,
                 ReporterID: ReporterID.value,
                 ReportTypeID: ReportTypeID.value,
@@ -425,14 +441,14 @@
             }
             $.ajax({
                 url: '@Url.Action("ReportCreate","Item")',
-                method:"Post",
-                dataType:'Json',
-                data: {d: Report },
-                success:function(datas){
-                    if(!datas.res){
+                method: "Post",
+                dataType: 'Json',
+                data: { d: Report },
+                success: function (datas) {
+                    if (!datas.res) {
                         alert("請重新操作一次")
                     }
-                    else{
+                    else {
                         alert('檢舉成功!')
                     }
                 }
