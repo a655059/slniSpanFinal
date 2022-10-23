@@ -74,14 +74,14 @@ namespace prjiSpanFinal.Controllers
             else
             {
                 string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-                int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId; //字串轉物件
+                int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
                 var mem = db.MemberAccounts.FirstOrDefault(m => m.MemberId==memID);
-                MemberAccViewModel qq = new MemberAccViewModel();
-                qq.memACC = mem;
-                qq.regionName = db.RegionLists.FirstOrDefault(p => p.RegionId == mem.RegionId).RegionName;
-                var countryID = db.RegionLists.FirstOrDefault(p => p.RegionId == mem.RegionId).CountryId;
-                qq.countryName = db.CountryLists.FirstOrDefault(p => p.CountryId == countryID).CountryName;
-                return View(qq);
+                //MemberAccViewModel qq = new MemberAccViewModel();
+                //qq.memACC = mem;
+                //qq.regionName = db.RegionLists.FirstOrDefault(p => p.RegionId == mem.RegionId).RegionName;
+                //var countryID = db.RegionLists.FirstOrDefault(p => p.RegionId == mem.RegionId).CountryId;
+                //qq.countryName = db.CountryLists.FirstOrDefault(p => p.CountryId == countryID).CountryName;
+                return View(mem);
             }
         }
         [HttpPost]
@@ -96,8 +96,28 @@ namespace prjiSpanFinal.Controllers
                 iSpanProjectContext db = new iSpanProjectContext();
                 MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 //acc = mem.memACC;
-                if (mem.File1!=null) //如果有上傳照片
-                { 
+                if (mem.gender == "female")
+                {
+                    acc.Gender = 2;
+                }
+                else if (mem.gender == "male")
+                {
+                    acc.Gender = 1;
+                }
+                else
+                {
+                    acc.Gender = 0;
+                }
+                if (mem.TW == "tw")
+                {
+                    acc.IsTw = true;
+                }
+                else
+                {
+                    acc.IsTw = false;
+                }
+                if (mem.File1 != null) //如果有上傳照片
+                {
                     byte[] imgByte = null;
                     using (var memoryStream = new MemoryStream())
                     {
@@ -106,22 +126,30 @@ namespace prjiSpanFinal.Controllers
                     }
                     acc.MemPic = imgByte;
                 }
-                    
+                else if (mem.regionName != null)
+                {
                     acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
-                    acc.Name = mem.Name;
-                    acc.Address = mem.Address;
-                    acc.Phone = mem.Phone;
-                    acc.BackUpEmail = mem.BackUpEmail;
+                }
+                else if (mem.Name != null) { acc.Name = mem.Name; }
+                else if (mem.Address != null) { acc.Address = mem.Address; }
+                else if (mem.Phone != null) { acc.Phone = mem.Phone; }
+                else if (mem.BackUpEmail != null) { acc.BackUpEmail = mem.BackUpEmail; } 
+                else if (mem.Email != null) { acc.Email = mem.Email; }
+                else 
+                {
+                    acc.Name = "";
+                    acc.Address = "";
+                    acc.Phone = "";
+                    acc.BackUpEmail = "";
+                    acc.Email = "";
                     acc.Birthday = mem.Birthday;
-                    acc.Email = mem.Email;
+                }
                 db.SaveChanges();
-
-                acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
+                //刷新
+                acc = _context.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 string json = JsonSerializer.Serialize(mem);
                 HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json); //塞新資料到session
-
-
-                return RedirectToAction("Login");
+                return View(acc);
             }
 
         }
@@ -138,11 +166,15 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult Create(MemberAccViewModel mem , IFormFile File1)
         {
+            //城市country要傳遞進來才能找到正確region
+
 
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
             memberac = mem.memACC;//將物件memberac指向mem.memACC才可以透過viewmodel的地區string抓到id
-            //將檔案轉成二進位
+                                  //將檔案轉成二進位
+            if (mem.File1 != null) 
+            {                
             byte[] imgByte = null;
             using (var memoryStream = new MemoryStream())
             {
@@ -150,6 +182,8 @@ namespace prjiSpanFinal.Controllers
                 imgByte = memoryStream.ToArray();
             }
             mem.MemPic = imgByte;
+            }
+
             memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
             if (mem.gender == "female")
             {
@@ -180,14 +214,6 @@ namespace prjiSpanFinal.Controllers
             MemberAccount member = _context.MemberAccounts.Find(id);
             byte[] content = member.MemPic;
             return File(content, "image/jpeg");
-        }
-        public IActionResult showRegin(int? id)
-        {
-            iSpanProjectContext db = new iSpanProjectContext();
-            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-            int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId;
-            var reginName = db.RegionLists.FirstOrDefault(m => m.RegionId == id).RegionName;
-            return Content(reginName, "text/plain", System.Text.Encoding.UTF8);
         }
 
         public IActionResult Like()

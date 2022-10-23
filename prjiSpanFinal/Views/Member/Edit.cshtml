@@ -1,5 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
-@model MemberAccViewModel
+@model MemberAccount
 @using prjiSpanFinal.ViewModels.Member
 @using prjiSpanFinal.ViewModels
 @using Microsoft.AspNetCore.Http
@@ -75,29 +75,57 @@
 
     @{
 
-    List<string> regionNameList = new List<string>();
-    List<string> countryNameList = new List<string>();
-    List<int> regionIdList = new List<int>();
-    int MyregionID = 0;
-    int MycountryID = 0;
-    //string countryName = "";
-    //int countryID = 0;
-    //count
+        List<string> regionNameList = new List<string>();
+        List<string> countryNameList = new List<string>();
+        List<int> regionIdList = new List<int>();
+        int MyregionID = 0;
+        int MycountryID = 0;
+        int Mygender = 0;
+        bool gender_male=false;
+        bool gender_female = false;
+        bool gender_other = false;
+        bool? MYTW=false;
+        bool? MYFORIEN = false;
+        //string countryName = "";
+        //int countryID = 0;
+        //count
 
-    if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-    {
-        string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
-        MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
-        iSpanProjectContext db = new iSpanProjectContext();
-        MyregionID = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).RegionId;
-        MycountryID = db.RegionLists.OrderBy(o=>o.RegionId).Where(r => r.RegionId == MyregionID).FirstOrDefault().CountryId;
-        regionNameList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionName).ToList();
-        regionIdList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionId).ToList();
-        countryNameList = db.CountryLists.OrderBy(o => o.CountryId).Select(r => r.CountryName).ToList();
-
-    }
+        if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+        {
+            string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+            MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
+            iSpanProjectContext db = new iSpanProjectContext();
+            MyregionID = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).RegionId;
+            MycountryID = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.RegionId == MyregionID).FirstOrDefault().CountryId;
+            regionNameList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionName).ToList();
+            regionIdList = db.RegionLists.OrderBy(o => o.RegionId).Where(r => r.CountryId == MycountryID).Select(r => r.RegionId).ToList();
+            countryNameList = db.CountryLists.OrderBy(o => o.CountryId).Select(r => r.CountryName).ToList();
+            Mygender = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).Gender;
+            MYTW = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).IsTw;
+            if (Mygender == 2)
+            {
+                gender_female = true;
+            }
+            else if (Mygender == 1)
+            {
+                gender_male = true;
+            }
+            else
+            {
+                gender_other = true;
+            }
+            if (MYTW == true)
+            {
+                MYFORIEN = false;
+            }
+            else
+            {
+                MYFORIEN = true;
+            }
+        }
 }
 <div class="row " id="viewPage">
+    
     <div class="col-1"></div>
     <div class="col-11 ">
         <form method="post" enctype="multipart/form-data">
@@ -109,18 +137,50 @@
                                 <legend>基本資料</legend>
                                 <div>
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                    <input asp-for="MemberId" class="form-control" type="text" id="acount" name="MemberId" style="display:none;"/>
-                                    
+                                    <input asp-for="MemberId" class="form-control" type="text" id="acount" name="MemberId" style="display:none;" />
+
 
                                     <div class="st1">
                                         <label asp-for="Name" class="p1">姓名</label>
                                         <input asp-for="Name" class="form-control" type="text" id="acount" name="Name" autofocus placeholder="名字" size="40" autocomplete="off" />
                                     </div>
+
+                                    <div class="st1">
+                                        <label asp-for="NickName" class="p1">暱稱</label>
+                                        <input asp-for="NickName" class="form-control" />
+                                    </div>
+                                  
                                     <div class="st1">
                                         <label asp-for="Birthday" class="p1">生日</label>
                                         <input asp-for="Birthday" type="date" name="Birthday" class="form-control" />
                                     </div>
 
+                                    <div class="st1">
+                                        <label class="p1">性別</label><br /><br />
+                                        <div class="input-group has-validation">
+                                            <label class="p1">
+                                                <input  asp-for="Gender" type="radio" name="gender" value="male" checked="@gender_male" />男生
+                                            </label>
+                                            <label class="p1">
+                                                <input  asp-for="Gender" type="radio" name="gender" value="female" checked="@gender_female" />女生
+                                            </label>
+                                            <label class="p1">
+                                                <input  asp-for="Gender" type="radio" name="gender" value="other" checked="@gender_other"/>其他
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="st1">
+                                        <label class="p1">國籍</label><br /><br />
+                                        <div class="input-group has-validation">
+                                            <label class="p1">
+                                                <input  asp-for="IsTw" type="radio" name="TW" value="tw" checked="@MYTW"/>台灣
+                                            </label>
+                                            <label class="p1">
+                                                <input  asp-for="IsTw" type="radio" name="TW" value="foreign" checked="@MYFORIEN"/>外國
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </fieldset>
                             <fieldset>
