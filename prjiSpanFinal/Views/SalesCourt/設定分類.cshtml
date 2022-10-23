@@ -1,82 +1,34 @@
-﻿@model prjiSpanFinal.Models.CustomizedCategory
-@addTagHelper *, prjiSpanFinal
-
-@{
+﻿@{
     ViewData["Title"] = "設定分類";
 }
 
-@section Styles{
-    @*<link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />*@
-    <style>
-        .modal-dialog {
-            top: 7rem !important;
-        }
 
-        .modal-content {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            color: var(--bs-modal-color);
-            pointer-events: auto;
-            background-color: var(--bs-modal-bg);
-            background-clip: padding-box;
-            border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-            border-radius: var(--bs-modal-border-radius);
-            outline: 0;
-        }
+@*註解-------------------------------------------------------------------------------------------------------*@
 
-
-        .名稱寬 {
-            width: 50px;
-            float: left;
-        }
-
-        .規格列表 {
-            width: 150px;
-            font-size: 18px;
-        }
-    </style>
-
-}
-
-
-
-@*最上面的新增規格欄位  叫出modal的按鈕  按下還不是確定新增*@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+    <i class="fas fa-plus-square"></i>
     新增類別輸入框
 </button>
 
+<table id="customizecategory" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>順序id</th>
+            <th>賣家id</th>
+            <th>類別名稱</th>
+            <th>排序方式</th>
+            <th>刪除</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-@*原本的欄位*@
-<div class="d-flex justify-content-center ">
-    @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
-
-    <span class="text-danger"></span>
-    <section class="section d-flex justify-content-center">
-        <table class="table w-100 ">
-            <thead>
-                <tr>
-                    <th class="col 規格列表">順序</th>
-                    <th class="col 規格列表">商品數</th>
-                    <th class="col 規格列表">類別</th>
-                    <th class="col 規格列表">刪除</th>
-
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-    </section>
-    
-</div>
-
-<button type="submit" class="btn btn-secondary">確定新增</button>
+@*<button type="submit" class="btn btn-secondary">確定新增</button>*@
 
 
 @*這邊應該的是按下修改選項    會多出來的畫面*@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -84,15 +36,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-                <label>類別名稱:</label>
-                <input type="text" id="text3" class="form-control">
-                <br />
-
+                <form id="addForm">
+                    <input type="hidden" name="CustomizedCategoryID" id="CustomizedCategoryID">
+                    <div class="form-group">
+                        <label for="MemberID">MemberID</label>
+                        <input type="text" class="form-control" id="MemberID" name="MemberID"
+                               placeholder="賣家帳號">
+                    </div>
+                    <div class="form-group">
+                        <label for="CustomizedCategoryName">CustomizedCategoryName</label>
+                        <input type="text" class="form-control" id="CustomizedCategoryName" name="CustomizedCategoryName"
+                               placeholder="類別名稱">
+                    </div>
+                    <div class="form-group">
+                        <label for="SortNumber">SortNumber</label>
+                        <input type="text" class="form-control" id="SortNumber" name="SortNumber" placeholder="排序方式">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button id="save" type="button" class="btn btn-primary">新增</button>
+                <button id="buttonSend" type="button" class="btn btn-primary">送出</button>
             </div>
         </div>
     </div>
@@ -100,78 +64,107 @@
 
 
 
+
 @section Scripts{
     <script>
-        let count = 0;
+        const url = "https://localhost:44373/api/CustomizedCategories"
+            load()
 
-        let save = document.getElementById("save");
-        /*let save_alter = document.getElementById("save");*/
+            //讀取資料
+            function load() {
+                const tbCustomizecategory = $('#customizecategory>tbody')
+                $.getJSON(url, function (datas) {
+                    const docFrag = $(document.createDocumentFragment())
+                    $.each(datas, function (index, Customizecategory) {
+                        const cell1 = $('<td></td>').text(Customizecategory.customizedcategoryId);
+                        const cell2 = $('<td></td>').text(Customizecategory.memberId);
+                        const cell3 = $('<td></td>').text(Customizecategory.customizedcategoryName);
+                        const cell4 = $('<td></td>').text(Customizecategory.sortNumber);
+                        const cell5 = $('<td></td>').html('<button class="btn btn-secondary mr-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-pen-nib"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>')
 
-
-
-        //讀取text
-        function clickValue() {
-            document.getElementById("text3").value = '';
-        }
-
-        /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
-        /* $("select").children("option[value='1      ']")   */
-
-        let id;
-
-        save.addEventListener("click", function () {
-            count++;
-            let dataNew = [];
-            let price = document.getElementById("text3").value;
-
-
-            if (price != '') {
-                dataNew.push(price);
-
-                let tbody = document.querySelector('tbody')
-                let Tr = document.createElement('tr');
-                let td0 = document.createElement('td');
-                td0.textContent = count;
-                Tr.appendChild(td0);
-                let td1 = document.createElement('td');
-                td1.textContent = 0;
-                Tr.appendChild(td1);
-                for (let i = 0; i < dataNew.length; i++) {
-                    let td = document.createElement('td');
-                    td.setAttribute("id", count);
-                    /*td.setAttribute("asp-for", CustomizedCategoryName);*/
-                    td.innerHTML = dataNew[i];
-                    Tr.appendChild(td);
-                }
-                /*產生刪除按鈕在modal的畫面*/
-                let td = document.createElement('td');
-                td.innerHTML = `<button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
-                /*let a = td.children[0];*/
-                let a = td;
-                a.addEventListener('click', () => {
-
-                    /*let parent = a.parentNode.parentNode;*/
-                    let parent = a.parentNode;
-                    parent.remove();
+                        const row = $('<tr></tr>').append([cell1, cell2, cell3, cell4, cell5])
+                        docFrag.append(row)
+                    })
+                    tbCustomizecategory.html(docFrag)
                 })
-                Tr.appendChild(td);
-                tbody.appendChild(Tr);
-                clickValue();
-                var myModalEl = document.getElementById('exampleModal');
-                var modal = bootstrap.Modal.getInstance(myModalEl)
-                modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
-
-
-            }
-            else {
-                alert("項目,數量和價格不可為空值");
             }
 
-        })
+            $('#buttonSend').click(function () {
+                //隱藏欄位中有shipperID 的資料我們就是要做修改
+                const id = $('#CustomizedCategoryID').val()
+                if (id) {
+                    //資料修改
+                    const jsonData = JSON.stringify({ CustomizedCategoryID: id, MemberID: $('#MemberID').val() ,CustomizedCategoryName: $('#CustomizedCategoryName').val(), SortNumber: $('#SortNumber').val() })
+                    // console.log(jsonData)
+                    $.ajax({
+                        url: url + "/" + id,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: jsonData
+                    }).done(function (data) {
+                        alert("修改成功，編號為 " + id)
+                        load()
+                        clearData()
+                    })
+
+                } else {
+                    //資料新增
+                    const jsonData = JSON.stringify({ MemberID: $('#MemberID').val(),CustomizedCategoryName: $('#CustomizedCategoryName').val(), SortNumber: $('#SortNumber').val() })
+                    // console.log(jsonData)
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: jsonData
+                    }).done(function (data) {
+                        alert("新增成功，編號為 " + data.customizedcategoryId)
+                        load()
+                        clearData()
+                    })
+
+                }
 
 
-    </script>
+
+                $('#addModal').modal('hide')
+            })
+
+            ////編輯
+            ////先將要修改的資料寫到Modal中
+            $('#customizecategory>tbody').on('click', 'button:nth-child(1)', function () {
+                // alert('編輯')
+                const customizedcategoryId = $(this).parents('tr').find('td:nth-child(1)').text()
+                const memberId = $(this).parents('tr').find('td:nth-child(2)').text()
+                const customizedcategoryName = $(this).parents('tr').find('td:nth-child(3)').text()
+                const sortNumber = $(this).parents('tr').find('td:nth-child(4)').text()
+
+                $('#CustomizedCategoryID').val(customizedcategoryId)
+                $('#MemberID').val(memberId)
+                $('#CustomizedCategoryName').val(customizedcategoryName)
+                $('#SortNumber').val(sortNumber)
+
+
+            })
+
+            //刪除
+            $('#customizecategory>tbody').on('click', 'button:nth-child(2)', function () {
+
+                const id = $(this).parents('tr').find('td:first-child').text()
+
+                $.ajax({
+                    url: url + "/" + id,
+                    type: 'DELETE'
+                }).done(function (data) {
+                    alert("刪除成功，編號為 " + id)
+                    load()
+                })
+            })
+
+
+            function clearData() {
+                $('input').val("")
+            }
+
+        </script>
+
 }
-
-
-

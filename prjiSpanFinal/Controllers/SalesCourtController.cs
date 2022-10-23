@@ -246,10 +246,15 @@ namespace prjiSpanFinal.Controllers
             return View(outcomment);
         }
 
-        public IActionResult 設定分類()
+        public IActionResult 設定分類(/*string jsonString*/)
         {
-            //var
+            //int id = 2;
+            //var x = dbContext.CustomizedCategories.Where(a => a.MemberId == id).ToList();
+            return View(/*x*/);
+        }
 
+        public IActionResult ShiperCors()
+        {
             return View();
         }
 
