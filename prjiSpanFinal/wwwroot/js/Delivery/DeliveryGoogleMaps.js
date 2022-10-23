@@ -1,38 +1,4 @@
-﻿$(".changeShip").click(function () {
-    $(".choseShip").slideToggle();
-});
-
-$(".ship").click(function () {
-    $(this).removeClass("border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-danger");
-});
-
-$(".saveAddress").click(function () {
-    let address = $(".inputAddress").val();
-    if (address == "") {
-        alert("請輸入地址或門市");
-        return false;
-    }
-    else {
-        console.log($(".inputAddress").val());
-        $(".choseShip").find("div[class*='border-danger']").siblings(".address").html(address).removeClass("d-none");
-    }
-});
-$("#confirmedShip").click(function () {
-    let address = $(".choseShip").find("div[class*='border-danger']").siblings(".address").html();
-    if (address == "") {
-        alert("請輸入地址或門市");
-    }
-    else {
-        let ship = $(".choseShip").find("div[class*='border-danger']").find(".shipperName").html();
-        let shipFee = $(".choseShip").find("div[class*='border-danger']").find(".shipperFee").html();
-        $("#finalShipper").html(ship);
-        $("#finalShipperFee").html(shipFee);
-        $("#address").val(address);
-        $(".choseShip").slideToggle();
-        $(".finalShipInfo").removeClass("d-none");
-    }
-});
-
+﻿
 //ispan: 25.036266945607213, 121.5441415608662
 //以下 Google Maps
 
@@ -172,7 +138,7 @@ $(".addAddress").click(async function () {
             let storeAddressIndex = infoContent.indexOf("storeAddress");
             let storeAddress = infoContent.substring(storeAddressIndex).split('<')[0].split('>')[1];
             $(".inputAddress").val(storeName + "    " + storeAddress);
-            $(".ship[class*='border-danger']").siblings(".address").html(storeName + "    " + storeAddress);
+            /*$(".ship[class*='border-danger']").siblings(".address").html(storeName + "    " + storeAddress);*/
         });
     });
     
@@ -188,9 +154,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
-
-
-function initMap() {
+//function initMap() {
     
-};
-window.initMap = initMap;
+//};
+//window.initMap = initMap;

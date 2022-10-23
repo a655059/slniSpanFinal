@@ -1,5 +1,31 @@
 ﻿@model prjiSpanFinal.ViewModels.Delivery.CDeliveryCheckoutViewModel
+@{
+    string recipient = Model.buyer.Name;
+    string email = Model.buyer.Email;
+    string phone = Model.buyer.Phone;
+    string address = Model.buyer.Address;
+    string shipperID = "";
+    string shipperName = "";
+    string shipperFee = "";
+    string wordToSeller = "";
+    string selectedPaymentID = "";
+    string IsSession = "session0";
+    if (Model.sellerShipperPayments[0].savedShipperPaymentCoupon != null)
+    {
+        recipient = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.recipient;
+        email = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.email;
+        phone = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.phone;
+        address = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.address;
+        shipperID = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperID.ToString();
+        shipperName = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperName;
+        shipperFee = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperFee.ToString();
+        wordToSeller = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.wordToSeller;
+        selectedPaymentID = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.paymentID.ToString();
+        IsSession = "session1";
+    }
 
+
+}
 
 <div class="border rounded-2">
     @{
@@ -23,10 +49,10 @@
                     <div>
                         <div class="fs-5">@i.productName</div>
                         <div>@i.productStyle</div>
-                        <div>$<span>@i.unitPrice</span></div>
+                        <div>$<span class="unitPrice">@i.unitPrice</span></div>
                     </div>
                 </div>
-                <div class="fs-5 text-black-50">x<span>@i.purchaseCount</span></div>
+                <div class="fs-5 text-black-50">x<span class="purchaseCount">@i.purchaseCount</span></div>
             </div>
         }
     }
@@ -35,30 +61,32 @@
     <div class="d-flex justify-content-start align-items-center fs-5">
         <i class="fa-solid fa-truck-fast"></i>
         <div class="ms-2">聯絡及運送方式</div>
+        <input type="checkbox" value="" id="sameShipper" />
     </div>
     <div class="contactInfo">
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="recipient">收件人</label>
-            <input class="contact col-5" type="text" name="recipient" placeholder="收件人真實姓名" id="recipient" value="@Model.buyer.Name" />
+            <input class="contact col-5" type="text" name="recipient" placeholder="收件人真實姓名" id="recipient" value="@recipient" />
         </div>
 
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="email">電子信箱</label>
-            <input class="contact col-5" type="email" name="email" placeholder="電子信箱" id="email" value="@Model.buyer.Email" />
+            <input class="contact col-5" type="email" name="email" placeholder="電子信箱" id="email" value="@email" />
         </div>
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="phone">連絡電話</label>
-            <input class="contact col-5" type="text" name="phone" placeholder="連絡電話" id="phone" value="@Model.buyer.Phone" />
+            <input class="contact col-5" type="text" name="phone" placeholder="連絡電話" id="phone" value="@phone" />
         </div>
-        <div class="finalShipInfo d-none">
+        <div class="finalShipInfo d-none" id="@IsSession">
             <div class="d-flex justify-content-start align-items-end">
-                <div class="fw-bold ms-4" id="finalShipper"></div>
-                <div class="text-danger ms-2" style="font-size:12px">運費:$<span id="finalShipperFee"></span></div>
+                <div class="fw-bold ms-4" id="finalShipper">@shipperName</div>
+                <div class="d-none" id="finalShipperID">@shipperID</div>
+                <div class="text-danger ms-2" style="font-size:12px">運費:$<span class="finalShipperFee">@shipperFee</span></div>
             </div>
         </div>
         <div class="row my-1 align-items-center">
             <label class="col-2 text-center" for="address">收貨地址</label>
-            <input class="contact col-5" type="text" name="address" placeholder="收貨地址" id="address" value="@Model.buyer.Address" />
+            <input class="contact col-5" type="text" name="address" placeholder="收貨地址" id="address" value="@address" />
         </div>
         <button class="changeShip border-0 bg-transparent text-primary">選擇運送方式</button>
     </div>
@@ -66,10 +94,12 @@
         @{
             foreach (var i in Model.sellerShipperPayments[0].shippers)
             {
+                string shipperId = "shipper" + i.ShipperId;
                 <div class="border-top my-2">
-                    <div class="ship border-start border-3 bg-light fs-6 ps-2" id="@i.ShipperId">
+                    <div class="ship border-start border-3 bg-light fs-6 ps-2" id="@shipperId">
                         <span class="shipperName">@i.ShipperName</span>
-                        <span class="text-danger ms-2" style="font-size:12px">運費:$
+                        <span class="text-danger ms-2" style="font-size:12px">
+                            運費:$
                             <span class="shipperFee">@i.Fee</span>
                         </span>
                     </div>
@@ -89,12 +119,15 @@
         <div class="ms-2">付款方式</div>
     </div>
     <div style="font-size:14px">
+        <div class="d-none" id="selectedPaymentID">@selectedPaymentID</div>
         <div class="my-2">
             @{
                 foreach (var i in Model.sellerShipperPayments[0].payments)
                 {
-                    <input type="radio" name="payment" id="@i.PaymentId" />
-                    <label for="@i.PaymentId">@i.PaymentName</label>
+                    string paymentID = "payment" + i.PaymentId;
+                    <input type="radio" name="payment" id="@paymentID" class="payment" />
+                    <label for="@paymentID">@i.PaymentName</label>
+                    
                 }
             }
         </div>
@@ -103,7 +136,7 @@
 
 <div class="border rounded-2 my-2 px-2 py-1">
     <div>備註</div>
-    <input type="text" placeholder="給賣家的話" />
+    <input type="text" placeholder="給賣家的話" id="wordToSeller" value="@wordToSeller" />
 </div>
 
 <div class="modal showMap" tabindex="-1" id="showMap">
@@ -126,10 +159,19 @@
         </div>
     </div>
 </div>
-
-
-
-<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>
+<script src="~/js/Delivery/DeliveryCheckout.js"></script>
+<script src="~/js/Delivery/DeliveryGoogleMaps.js"></script>
 <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6qDNf57C75-7sdC-Gxx4NoV_Y5wOLgmU&libraries=places&callback=initMap">
+</script>
+<script>
+    $(function () {
+        if ($(".finalShipInfo").attr("id") == "session1") {
+            $(".finalShipInfo").removeClass("d-none");
+            let paymentID = $("#selectedPaymentID").html();
+            paymentID = `payment${paymentID}`;
+            $(`#${paymentID}`).prop("checked", true);
+        }
+
+    });
 </script>

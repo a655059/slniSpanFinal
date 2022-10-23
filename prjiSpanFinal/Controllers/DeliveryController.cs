@@ -371,7 +371,53 @@ namespace prjiSpanFinal.Controllers
                 return Content("0");
             }
         }
-
+        public IActionResult SaveShipperPaymentCoupon(string x)
+        {
+            List<CSaveShipperPaymentCoupon> newPurchaseInfo = JsonSerializer.Deserialize<List<CSaveShipperPaymentCoupon>>(x);
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON))
+            {
+                string purchaseInfoString = HttpContext.Session.GetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON);
+                List<CSaveShipperPaymentCoupon> purchaseInfo = JsonSerializer.Deserialize<List<CSaveShipperPaymentCoupon>>(purchaseInfoString);
+                List<int> sellerIDList = new List<int>();
+                foreach (var a in purchaseInfo)
+                {
+                    sellerIDList.Add(a.sellerID);
+                }
+                if (sellerIDList.Contains(newPurchaseInfo[0].sellerID))
+                {
+                    foreach (var a in purchaseInfo)
+                    {
+                        if (a.sellerID == newPurchaseInfo[0].sellerID)
+                        {
+                            a.sellerID = newPurchaseInfo[0].sellerID;
+                            a.recipient = newPurchaseInfo[0].recipient;
+                            a.email = newPurchaseInfo[0].email;
+                            a.phone = newPurchaseInfo[0].phone;
+                            a.address = newPurchaseInfo[0].address;
+                            a.shipperID = newPurchaseInfo[0].shipperID;
+                            a.shipperName = newPurchaseInfo[0].shipperName;
+                            a.shipperFee = newPurchaseInfo[0].shipperFee;
+                            a.paymentID = newPurchaseInfo[0].paymentID;
+                            a.paymentName = newPurchaseInfo[0].paymentName;
+                            a.couponID = newPurchaseInfo[0].couponID;
+                            a.couponName = newPurchaseInfo[0].couponName;
+                            a.wordToSeller = newPurchaseInfo[0].wordToSeller;
+                        }
+                    }
+                }
+                else
+                {
+                    purchaseInfo.Add(newPurchaseInfo[0]);
+                }
+                string updatedPurchaseInfo = JsonSerializer.Serialize(purchaseInfo);
+                HttpContext.Session.SetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON, updatedPurchaseInfo);
+            }
+            else
+            {
+                HttpContext.Session.SetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON, x);
+            }
+            return Json(HttpContext.Session.GetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON));
+        }
 
         public IActionResult AddComment()
         {

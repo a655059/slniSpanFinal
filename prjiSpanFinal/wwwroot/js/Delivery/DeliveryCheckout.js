@@ -1,4 +1,7 @@
-﻿$(".coupon").click(function () {
+﻿$(function () {
+    CalTotalPriceIncludeDiscountAndFee()
+});
+$(".coupon").click(function () {
     let discount = $(this).children().eq(0).children().html();
     $(".discount").children().html(`-$${discount}`);
 });
@@ -41,4 +44,56 @@ $("#exampleModal").on("hidden.bs.modal", function () {
     $(".showCalTotalPriceVC").css("position", "sticky").css("top", "80px");
 });
 
+function CalTotalPriceIncludeDiscountAndFee() {
+    let smallPrice = 0;
+    $(".purchaseCount").each(function () {
+        let purchaseCount = Number($(this).html());
+        let unitPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
+        smallPrice += purchaseCount * unitPrice;
+    })
 
+    $("#smallPrice").html(smallPrice);
+    const fee = Number($("#finalShipperFee").html());
+    const totalPrice = smallPrice + fee;
+    $("#totalPrice").html(totalPrice);
+};
+
+//DeliveryFillCheckoutForm.js
+
+$(".changeShip").click(function () {
+    $(".choseShip").slideToggle();
+});
+
+$(".ship").click(function () {
+    $(this).removeClass("border-danger").addClass("border-danger").siblings(".addAddress").removeClass("d-none").closest("div").siblings().children(".addAddress").removeClass("d-none").addClass("d-none").end().children(".ship").removeClass("border-danger");
+});
+
+$(".saveAddress").click(function () {
+    let address = $(".inputAddress").val();
+    if (address == "") {
+        alert("請輸入地址或門市");
+        return false;
+    }
+    else {
+        $(".choseShip").find("div[class*='border-danger']").siblings(".address").html(address);
+    }
+});
+$("#confirmedShip").click(function () {
+    let address = $(".choseShip").find("div[class*='border-danger']").siblings(".address").html();
+    if (address == "") {
+        alert("請輸入地址或門市");
+    }
+    else {
+        let ship = $(".choseShip").find("div[class*='border-danger']").find(".shipperName").html();
+        let shipperID = $(".choseShip").find("div[class*='border-danger']").attr("id").substring(7);
+        let shipFee = $(".choseShip").find("div[class*='border-danger']").find(".shipperFee").html();
+        $("#finalShipper").html(ship);
+        $("#finalShipperID").html(shipperID);
+        $(".finalShipperFee").html(shipFee);
+        $("#address").val(address);
+        $(".choseShip").slideToggle();
+        $(".finalShipInfo").removeClass("d-none");
+        $(".calFeePrice").removeClass("d-none");
+        CalTotalPriceIncludeDiscountAndFee();
+    }
+});
