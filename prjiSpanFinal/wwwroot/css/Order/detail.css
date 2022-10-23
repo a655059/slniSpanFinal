@@ -1,4 +1,18 @@
-﻿.small {
+﻿.printArea {
+    display: none;
+}
+
+@media print {
+    .printArea {
+        display: block;
+    }
+
+    .noprintArea {
+        display: none;
+    }
+}
+
+.small {
     letter-spacing: 0.5px !important;
 }
 

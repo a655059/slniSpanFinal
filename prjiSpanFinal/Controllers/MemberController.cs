@@ -328,24 +328,10 @@ namespace prjiSpanFinal.Controllers
             return Json("1");
         }
 
-        //public IActionResult WriteReceiveAll(List<int> id)
-        //{
-        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
-        //    {
-        //        return RedirectToAction("Login", "Member");
-        //    }
-
-        //    iSpanProjectContext dbcontext = new iSpanProjectContext();
-        //    Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
-        //    b.StatusId = 6;
-        //    var q = dbcontext.OrderDetails.Where(o => o.OrderId == id);
-        //    foreach (var item in q)
-        //    {
-        //        item.ShippingStatusId = 5;
-        //    }
-        //    dbcontext.SaveChanges();
-        //    return Json("1");
-        //}
+        public IActionResult Print()
+        {
+            return View();
+        }
 
         public IActionResult OrderDetail(int id)
         {
