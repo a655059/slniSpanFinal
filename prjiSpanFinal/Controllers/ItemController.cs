@@ -117,7 +117,7 @@ namespace prjiSpanFinal.Controllers
             {
                 Report report = new()
                 {
-                    ReporterId = d.ReportId,
+                    ReporterId = d.ReporterId,
                     ProductId = d.ProductId,
                     ReportTypeId = d.ReportTypeId,
                     Reason = d.Reason,
