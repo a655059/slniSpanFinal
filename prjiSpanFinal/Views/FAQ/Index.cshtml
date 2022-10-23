@@ -11,118 +11,144 @@
     幫助中心
 </h3>
 <p class="text-center mb-5">
-    一個FAQ樣板我想應該沒有人會在意我在這邊打什麼東西
+    解決你所有的問題
 </p>
+@{
+    iSpanProjectContext dbcontext = new iSpanProjectContext();
+    var faqtypelist = dbcontext.Faqtypes.Select(o=>o).ToList();
+    var faqlist1 = dbcontext.Faqs.Where(o => o.FaqtypeId == faqtypelist.FirstOrDefault().FaqtypeId).ToList();
+    var faqlistans = dbcontext.Faqs.Where(o => o.FaqtypeId == faqtypelist.FirstOrDefault().FaqtypeId).FirstOrDefault().Answer;
+    <div class="row">
+                                            <div class="col-3">
+                                                <div class="list-group">
+                                                    <a href="#" class="list-group-item list-group-item-action active faqtypelist" value="1" aria-current="true">@faqtypelist[0].FaqtypeName</a>
+                                                        @for(int i = 1 ; i < faqtypelist.Count;i++)
+{   
+                                                        <a href="#" class="list-group-item list-group-item-action faqtypelist" value="@(i+1)">@faqtypelist[i].FaqtypeName</a>
+}
+                                                </div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="list-group queslist">
+                                                    <a href="#" class="list-group-item list-group-item-action active faqqueslist" value="1" aria-current="true">@faqlist1[0].Question</a>
+                                                    @for (int i = 1; i < faqlist1.Count; i++)
+{
+                                                        <a href="#" class="list-group-item list-group-item-action faqqueslist" value="@(i+1)">@faqlist1[i].Question</a>
+}
+                                                </div>
+                                            </div>
+    </div>
+}
 
-<div class="row">
+<div class="rounded-2 border border-1 my-5">
+    <h3 class="m-2">問題解答:</h3>
+    <p class="m-2 mt-3 mb-5 faqanswer">@faqlistans</p>
+</div>
+
+<div class="row my-5">
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="far fa-paper-plane text-primary pe-2"></i> [新手上路] 為什麼同一商品頁面上的庫存數量不同？
+            <i class="far fa-paper-plane text-primary pe-2"></i> 我要如何建立帳號?
         </h6>
         <p>
-            如果同一商品參與正在進行的促銷，您可能會看到不同的庫存數量，具體取決於促銷價格下該商品的購買限額。
-            商品數量 - 在正在進行的促銷活動中可供購買的最高數量(購物者可以添加到購物車的最高數量)。
-            活動價庫存 - 當前促銷價格的可購買數量。例如限時特賣商品的活動價庫存
-            其他庫存 - 來自較低級別促銷的剩餘總數量。 如果您想購買超過購買限額，您可能會看到不同的價格。
+            若是未曾註冊過的會員，請先點擊頁面上方的"註冊會員"，並填寫完整會員資料即可成為蝦到爆的會員。
         </p>
     </div>
 
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="fas fa-pen-alt text-primary pe-2"></i> [購物安全] 覺得自己買到假貨了怎麼辦?
+            <i class="fas fa-pen-alt text-primary pe-2"></i> 我要如何修改會員資料?
         </h6>
         <p>
-            <strong><u>請買家協助提供資料：</u></strong> 
-            買家認為商品可能是假貨的原因，或對商品疑慮之處商品比對圖、有疑慮或認為可能是假貨的細節圖
+            點選修改會員資料進入修改頁面，填入欲修改的項目後送出，即可更新會員資料。
         </p>
     </div>
 
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="fas fa-user text-primary pe-2"></i> [關注] 如何關注店家？
+            <i class="fas fa-user text-primary pe-2"></i> 我要如何購買商品?
         </h6>
         <p>
-            您可以透過以下頁面來關注商店您可以透過以下頁面來關注商店您可以透過以下頁面來關注商店您可以透過以下頁面來關注商店您可以透過以下頁面來關注商店
+            瀏覽商品頁面後點擊加入購物車，並在購物車頁面確認無誤後按下結帳即可。
         </p>
     </div>
 
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="fas fa-rocket text-primary pe-2"></i> [付款狀態] 已付款但訂單未更新，該如何處理？
+            <i class="fas fa-rocket text-primary pe-2"></i> 如何認證帳號
         </h6>
         <p>
-            若您已付款完成(如下圖)，但訂單狀態仍顯示『未付款』，請參考以下說明：完成轉帳付款後，依據銀行入帳時間不同，將於24小時內更新為已付款狀態。
+            當您註冊完成後，先別心急∼為了確保站上每位會員的交易安全，需請您通過email的認證才能賣東西哦
         </p>
     </div>
 
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="fas fa-home text-primary pe-2"></i> [包裹配送] 超商取件門市選錯或宅配地址填錯，可以改嗎？
+            <i class="fas fa-home text-primary pe-2"></i> 忘記密碼
         </h6>
         <p>
-            <strong><u>您的訂單需在以下3個條件下，您才能在下單後更改地址：</u>.</strong> 提醒您：當收件地址旁可以點選【更改或編輯】時，就可以修改超商取件門市或是宅配地址，若賣家已進入出貨程序，就無法修改收件資訊。
-            例1：原本選擇的是7-11門市，收件資訊就只能修改為另一間7-11門市
+            當您忘記帳號密碼時，可透過登入頁下方的「忘記帳號密碼功能」找回您的帳號密碼唷。
         </p>
     </div>
 
     <div class="col-md-6 col-lg-4 mb-4">
         <h6 class="mb-3 text-primary">
-            <i class="fas fa-book-open text-primary pe-2"></i> [商品評價] 我可以編輯我的評價嗎？
+            <i class="fas fa-book-open text-primary pe-2"></i> 如何進行退貨
         </h6>
         <p>
-            買家可以針對給予賣場評價進行修改，請於訂單完成當日算起30日內送出評價。之後您可以在留下第一次評價的30天內編輯該評價一次。
+            您可以在會員中心的購買清單中點擊「申請退貨」，來進行退貨流程。
         </p>
     </div>
 </div>
 
-<h2>
+<h2 class="my-3">
     熱門問題:
 </h2>
 
-<div class="list-group w-100">
+<div class="list-group w-100 my-3">
     <a href="#shortExampleAnswer1collapse" data-bs-toggle="collapse" aria-expanded="false" aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">[訂單追蹤] 如何查詢包裹配送進度？</h5>
+            <h5 class="mb-1">我要如何建立帳號?</h5>
         </div>
         <p class="mb-1">
-            用手查
+            若是未曾註冊過的會員...
         </p>
         <small class="text-muted"><u>了解更多</u></small>
         <div class="collapse mt-3" id="shortExampleAnswer1collapse">
-            要查看您訂單的包裹查詢號碼
-
-            ● App ：我的 ➜ 待收貨 ➜ 點選訂單運送狀態 ➜ 點選複製
-
-            買賣家可複製查詢號碼，至對應之物流網頁中進行包裹查詢確認，此畫面亦會更新顯示包裹配送進度。
+            若是未曾註冊過的會員，請先點擊頁面上方的"註冊會員"，
+            
+            並填寫完整會員資料即可成為蝦到爆的會員。
         </div>
     </a>
     
     <a href="#shortExampleAnswer2collapse" data-bs-toggle="collapse" aria-expanded="false"
        aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">[新手上路] 註冊帳號時，我的手機號碼已被註冊</h5>
+            <h5 class="mb-1">我要如何修改會員資料?</h5>
         </div>
         <p class="mb-1">
-            辦新手機
+            點選修改會員資料進...
         </p>
         <small class="text-muted"><u>了解更多</u></small>
         <!-- Collapsed content -->
         <div class="collapse mt-3" id="shortExampleAnswer2collapse">
-            如果您不確定手機是綁定於舊帳號，或是門號曾經持有者註冊過帳號，只要輸入正確發送至手機的驗證碼並完成驗證，系統會自動將舊帳號解綁，將您的手機號碼綁定至本次設定的帳號。
+            點選修改會員資料進入修改頁面，填入欲修改的項目後送出，
+            
+            即可更新會員資料。
         </div>
     </a>
     <a href="#shortExampleAnswer3collapse" data-bs-toggle="collapse" aria-expanded="false"
        aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">[訂單發票] 如何查詢發票資訊</h5>
+            <h5 class="mb-1">我要如何購買商品?</h5>
         </div>
         <p class="mb-1">
-            不要買就沒發票
+            瀏覽商品頁...
         </p>
         <small class="text-muted"><u>了解更多</u></small>
         <!-- Collapsed content -->
         <div class="collapse mt-3" id="shortExampleAnswer3collapse">
-            若賣場為賣家自行開立發票，或賣場未達開立發票標準(含跨境賣場)：如有發票需求或相關問題，請直接與賣家聯繫確認。
+            瀏覽商品頁面後點擊加入購物車，並在購物車頁面確認無誤後按下結帳即可。
         </div>
     </a>
 </div>
@@ -148,6 +174,28 @@
         })
         $("#openAIservice").click(function () {
             happy_popup("chatbot");
+        })
+
+        $(document).on("click", ".faqqueslist",function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            $.getJSON("/FAQ/GetA",{q:$(this).html()},function(data){
+                $(".faqanswer").html(data);
+            })
+        })
+
+        $(document).on("click", ".faqtypelist", function () {
+            $(this).addClass("active").siblings().removeClass("active");
+            $.getJSON("/FAQ/GetQ", { t: $(this).html() }, function (data) {
+                $(".queslist").html("");
+                for(let i = 0;i < data.length;i++)
+                {
+                    $(".queslist").append(`<a href="#" class="list-group-item list-group-item-action faqqueslist">${data[i]}</a>`);
+                }
+                $(".queslist").children().eq(0).addClass("active");
+            })
+            $.getJSON("/FAQ/GetA", { q: $(".queslist").children().eq(0).html() }, function (data) {
+                $(".faqanswer").html(data);
+            })
         })
     </script>
 } 
