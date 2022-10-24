@@ -375,7 +375,7 @@
         $("#ordertime").click(function () {
             if ($("#ordertime").hasClass("sorting_desc")) {
                 sortmethod = 0;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
                         $("#orderlistbody").append(OrderListItem(data[i]));
@@ -384,7 +384,7 @@
             }
             else {
                 sortmethod = 1;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
                         $("#orderlistbody").append(OrderListItem(data[i]));
@@ -395,7 +395,7 @@
         $("#ordersales").click(function () {
             if ($("#ordersales").hasClass("sorting_desc")) {
                 sortmethod = 2;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
                         $("#orderlistbody").append(OrderListItem(data[i]));
@@ -404,7 +404,7 @@
             }
             else {
                 sortmethod = 3;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
+                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
                     $("#orderlistbody").html("");
                     for (let i = 0; i < data.length; i++) {
                         $("#orderlistbody").append(OrderListItem(data[i]));

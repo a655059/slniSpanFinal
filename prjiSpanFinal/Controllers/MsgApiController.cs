@@ -100,5 +100,20 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(null);
         }
+        public IActionResult GetNotificationbyID(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time }).Take(5)); 
+        }
+        public void HaveReadAllNoti(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var a = dbcontext.Notifications.Where(n => n.MemberId == id).Select(n => n).ToList();
+            foreach(var item in a)
+            {
+                item.HaveRead = true;
+            }
+            dbcontext.SaveChanges();
+        }
     }
 }
