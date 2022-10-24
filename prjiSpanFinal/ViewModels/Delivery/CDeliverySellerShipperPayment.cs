@@ -11,5 +11,6 @@ namespace prjiSpanFinal.ViewModels.Delivery
         public MemberAccount seller { get; set; }
         public List<Shipper> shippers { get; set; }
         public List<Payment> payments { get; set; }
+        public CSaveShipperPaymentCoupon savedShipperPaymentCoupon { get; set; }
     }
 }
