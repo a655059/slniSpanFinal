@@ -23,12 +23,17 @@ namespace prjiSpanFinal.ViewModels.Member
         public MylikeViewModel()
         {
             _product = new Product();
+            _productDetail = new ProductDetail();
         }
-        public int Mylike { get; set; }
+        public int MylikeID { get; set; }
         public int memberID { get; set; }
         public int ProductID { get; set; }
-        public int ProductDetail { get; set; }
+        public int ProductDetailID { get; set; }
         public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public List<decimal> Unitprice { get; set; }
+        public List<string> Style { get; set; }
+        public byte[] Pic { get; set; }
 
     }
 }

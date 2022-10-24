@@ -18,6 +18,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using prjiSpanFinal.Models.OrderReq2;
 using Org.BouncyCastle.Utilities;
+using prjiSpanFinal.Models.LikeReq;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -234,16 +235,31 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
+                iSpanProjectContext dbcontext = new iSpanProjectContext();
                 string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-                var mylike = _context.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
+                var mylike = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
                 {
+
+                    ProductName = p.Product.ProductName,
                     ProductID = p.ProductId,
                     memberID = p.MemberId,
-                });
+                    MylikeID = p.LikeId,
+                    Quantity = p.Product.ProductDetails.Select(q => q.Quantity).FirstOrDefault(),
+                    ProductDetailID = p.Product.ProductDetails.Select(q => q.ProductDetailId).FirstOrDefault(),
+                    Unitprice = p.Product.ProductDetails.Select(q => q.UnitPrice).ToList(),
+                }) ;
                 return View(mylike);
             }
-
+        }
+        public IActionResult AllLike(int sort, int tab)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new LikeSortReq().SortTab(sort, tab, id));
             
         }
         public IActionResult Coupon()
