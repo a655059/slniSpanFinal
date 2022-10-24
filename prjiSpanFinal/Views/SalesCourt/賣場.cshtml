@@ -1,13 +1,9 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C賣場ViewModel
-@using X.PagedList.Mvc.Core;
-@using X.PagedList;
-@using X.PagedList.Mvc.Core.Fluent;
-@using X.PagedList.Web.Common;
+
 
 @addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "賣場";
-    var pagedList = (IPagedList)ViewBag.Prods;
 }
 @section Styles{
     <link href="~/css/HomeStyle.css" rel="stylesheet" />
@@ -45,7 +41,7 @@
                 <img src="@source" class="cardImg" alt="..." width="120" />
             </div>
 
-            @*<img src="~/img/蘋果圖.jpg" width="150" />*@
+           
             <div class="p-2">@Model.SellerName 的賣場</div>
 
             <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
@@ -53,13 +49,13 @@
 
             <div class="row">
                 <div class="col">
-                    @*<div class="text-dark rounded-5  text-center" style="background-color:#fb00ff">最愛賣家</div>*@
+                    
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#f30959">
                         最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                     </button>
                 </div>
                 <div class="col">
-                    @*<div class="text-dark rounded-5  text-center" style="background-color:#e36b3a">蝦蝦通</div>*@
+                   
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#fe6502">
                         蝦蝦通<i class="fa-solid fa-shrimp"></i>
                     </button>
@@ -99,13 +95,7 @@
 
                         <div class="board-text">
                             @Model.CourtDescription
-                            @*👉過年期間出貨公告👈
-                1/30~2/6暫停所有出貨，2/7依照下單順序陸續出貨.標題【24H出貨】保證有現貨，不用私訊問有沒有貨，
-                直接下單即可周一~周五、AM10~PM5，周末及國定假日不出貨『耐嘉官方正式授權網路經銷商+授權碼A20122108』.
-                1.本賣場販售之所有商品，皆由台灣發貨。
-                2.本賣場所有商品皆無試用期，一經拆封使用，無法退換。
-                3.買家們，收到商品發現有問題或是瑕疵，請【蝦蝦通】私訊聯絡我們。
-                4.單筆訂單未滿88$一律不出貨，直接取消。*@
+                           
                         </div>
 
                     </div>
@@ -236,8 +226,7 @@
 
 
                     <div class="display-2 text-bg-danger">@Model.star </div>
-                    @*<div class="display-2 text-bg-danger">@Model.CardProduct.Select(a => a.) </div>*@
-                    @*圖片大小怪*@
+                 
 
                     @{
                         if (Model.CardProduct.Count > 0)
@@ -256,15 +245,6 @@
                     }
 
 
-
-                    @*<table>
-            <tr>
-                <td class="text-muted" colspan="5">
-                    第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
-                    每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
-                </td>
-            </tr>
-        </table>*@
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">
                         <ul class="pagination">
                             <li class="page-item">

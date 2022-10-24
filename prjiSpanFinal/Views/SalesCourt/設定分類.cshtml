@@ -46,33 +46,38 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     新增類別輸入框
 </button>
+<form class="" method="post" enctype="multipart/form-data" name="setcat" id="setcat">
+    <input type="hidden" name="Memberid" value="@Model.MemberId" id="@Model.MemberId">
+    @*原本的欄位*@
+    <div class="d-flex justify-content-center ">
+        @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
 
 
-@*原本的欄位*@
-<div class="d-flex justify-content-center ">
-    @*<div><label class="名稱寬 mt-2 collapse">自訂賣場類別管理</label></div>*@
+        <span class="text-danger"></span>
+        <section class=" form-group section d-flex justify-content-center">
+            <table class="table w-100 ">
+                <thead>
+                    <tr>
+                        <th class="col 規格列表">順序</th>
+                        <th class="col 規格列表">商品數</th>
+                        <th class="col 規格列表">類別</th>
+                        <th class="col 規格列表">刪除</th>
 
-    <span class="text-danger"></span>
-    <section class="section d-flex justify-content-center">
-        <table class="table w-100 ">
-            <thead>
-                <tr>
-                    <th class="col 規格列表">順序</th>
-                    <th class="col 規格列表">商品數</th>
-                    <th class="col 規格列表">類別</th>
-                    <th class="col 規格列表">刪除</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
 
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        </section>
 
-    </section>
-    
-</div>
 
-<button type="submit" class="btn btn-secondary">確定新增</button>
 
+    </div>
+
+    <button type="submit" class="btn btn-secondary">確定新增</button>
+
+
+</form>
 
 @*這邊應該的是按下修改選項    會多出來的畫面*@
 <!-- Modal -->
@@ -107,8 +112,32 @@
         let save = document.getElementById("save");
         /*let save_alter = document.getElementById("save");*/
 
+        load();
+
+        function load() {
 
 
+        }
+
+
+
+
+        //function load() {
+        //    const tbShipper = $('#shippers>tbody')
+        //    $.getJSON(url, function (datas) {
+        //        const docFrag = $(document.createDocumentFragment())
+        //        $.each(datas, function (index, shipper) {
+        //            const cell1 = $('<td></td>').text(shipper.shipperId);
+        //            const cell2 = $('<td></td>').text(shipper.companyName);
+        //            const cell3 = $('<td></td>').text(shipper.phone);
+        //            const cell4 = $('<td></td>').html('<button class="btn btn-secondary mr-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-pen-nib"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>')
+
+        //            const row = $('<tr></tr>').append([cell1, cell2, cell3, cell4])
+        //            docFrag.append(row)
+        //        })
+        //        tbShipper.html(docFrag)
+        //    })
+        //}
         //讀取text
         function clickValue() {
             document.getElementById("text3").value = '';
@@ -138,10 +167,14 @@
                 Tr.appendChild(td1);
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
+                    let inp = document.createElement('input');
                     td.setAttribute("id", count);
-                    /*td.setAttribute("asp-for", CustomizedCategoryName);*/
+                    inp.setAttribute("type", "hidden");
+                    inp.setAttribute("name", "CustomizedCategoryName[]");
+                    inp.setAttribute("value", dataNew[i]);
                     td.innerHTML = dataNew[i];
                     Tr.appendChild(td);
+                    Tr.appendChild(inp);
                 }
                 /*產生刪除按鈕在modal的畫面*/
                 let td = document.createElement('td');

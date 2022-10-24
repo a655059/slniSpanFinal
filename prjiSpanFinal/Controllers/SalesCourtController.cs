@@ -20,25 +20,33 @@ namespace prjiSpanFinal.Controllers
     {
         iSpanProjectContext dbContext = new iSpanProjectContext();
         public static List<C關於我ViewModel> abme = new List<C關於我ViewModel>();
+        public int id;
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult 賣場(int id ,int? page = 1)
+        public void getid() {
+            id = 2; //備用帳號
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                id = (JsonSerializer.Deserialize<MemberAccount>(json)).MemberId;
+            }
+        }
+
+        public IActionResult 賣場()
         {
 
-            //return View();
-
-
-            var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == 2).FirstOrDefault();
+            getid();
+            var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
             var Product = dbContext.Products.Where(a => a.MemberId == Seller.MemberId).ToList();
             var CourtCategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Seller.MemberId).ToList();
             var MemPic = Seller.MemPic;
 
-            var SellerNickName = dbContext.MemberAccounts.Where(a => a.MemberId == 2).Select(a => a.NickName).FirstOrDefault();
-            var CourtDescription = dbContext.MemberAccounts.Where(a => a.MemberId == 2).Select(a => a.Description).FirstOrDefault();
+            var SellerNickName = dbContext.MemberAccounts.Where(a => a.MemberId == id).Select(a => a.NickName).FirstOrDefault();
+            var CourtDescription = dbContext.MemberAccounts.Where(a => a.MemberId == id).Select(a => a.Description).FirstOrDefault();
 
             List<string> CategoryName = new List<string>();
 
@@ -63,13 +71,7 @@ namespace prjiSpanFinal.Controllers
                 //var prodpic = dbContext.Products.FirstOrDefault(a => a.ProductId == pd.ProductId).ProductPics;
 
                 var prodpic = dbContext.ProductPics.Where(a => a.ProductId == pd.ProductId).FirstOrDefault().Pic; 
-                
-                
-             //   var prodpic = pd.ProductPics.Select(a => a.Pic).FirstOrDefault();
-                //foreach(var star in ss)
-                //{
-                //    star.CommentStar
-                //}
+           
 
                 Card賣場ViewModel outCardContent = new Card賣場ViewModel
                 {
@@ -91,10 +93,10 @@ namespace prjiSpanFinal.Controllers
 
 
             //把對應到同一個商品的評價星星加總
-            var ss = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == 2)
+            var ss = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == id)
                     .Select(a => (double)a.CommentStar).Sum();
             //這邊是要計算對應到的星星數量
-            var ss1 = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == 2)
+            var ss1 = dbContext.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == id)
                 .Select(a => (double)a.CommentStar);
 
 
@@ -110,7 +112,7 @@ namespace prjiSpanFinal.Controllers
                 Picture = MemPic
             };
 
-            //return View(Seller);
+            
             return View(showsalescourt);
         }
 
@@ -120,11 +122,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 評價()
         {//針對某特定賣家評價
 
-
-            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-            
-            int id = JsonSerializer.Deserialize<MemberAccViewModel>(jsonstring).MemberId; //字串轉物件
-
+            getid();
 
             var Comment = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id);
             var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
@@ -248,97 +246,124 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 設定分類()
         {
-            //var
+            getid();
 
-            return View();
+            CustomizedCategory csct = new CustomizedCategory {
+                MemberId = id
+            };
+            return View(csct);
         }
 
-        public IActionResult 關於我(int id)
+        [HttpPost]
+        public IActionResult 設定分類(int Memberid, string[] CustomizedCategoryName)
         {
-            //var PayingMethod = dbContext.PaymentToSellers.Where(a => a.Member.MemberId == id).ToList();
-            //var Delivery = dbContext.ShipperToSellers.Where(a => a.Member.MemberId == id).ToList();
+            //CustomizedCategory newcust = new CustomizedCategory();
+            //newcust.CustomizedCategoryId = custcate.CustomizedCategoryId;
 
-            return View(abme);
+            //custmizcatery.CustomizedCategory
+
+            foreach(var ccn in CustomizedCategoryName)
+            {
+                CustomizedCategory newcust = new CustomizedCategory();
+                newcust.MemberId = Memberid;
+                newcust.CustomizedCategoryName = ccn;
+                newcust.SortNumber = 0;
+
+                dbContext.CustomizedCategories.Add(newcust);
+            }
+
+            dbContext.SaveChanges();
+
+            return RedirectToAction("賣場");
+        }
+
+        public IActionResult 關於我()
+        {
+            getid();
+            MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+
+            //if (x != null) return RedirectToAction("修改關於我");
+
+            C關於我ViewModel outp = new C關於我ViewModel
+            {
+                Memberid = x.MemberId
+            };
+
+            return View(outp);
         }
 
         public IActionResult 新增關於我()
         {
-            //這是list
-            var Payment = dbContext.Payments.Select(a => a.PaymentName).ToList();
-            var Delivery = dbContext.Shippers.Select(a => a.ShipperName).ToList();
-            var DeliveryFee = dbContext.Shippers.Select(a => a.Fee).ToList();
-            //服務時間   想說在show的時候寫在畫面上
-            //
-            List<bool> uncheck = new List<bool>();
-            foreach (var a in Payment)
-            {
-                uncheck.Add(false);
-            }
+            getid();
+            MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
-            //這邊要抓關於我的選項方式方式
-            var NewMe = new C關於我ViewModel()
-            {
-                PayingMethod = Payment,
-                PayingMethodCheck = uncheck,
-                DeliveryMethod = Delivery,
-                DeliveryFee = DeliveryFee
+            //if (x != null) return RedirectToAction("修改關於我");
+
+           C關於我ViewModel outp = new C關於我ViewModel {
+               Memberid = x.MemberId
             };
 
-
-            return View(NewMe);
+            return View(outp);
         }
 
         [HttpPost]
-        public IActionResult 新增關於我(C關於我ViewModel me)
+        public IActionResult 新增關於我(C關於我ViewModel me,string[] ServiceTime)
         {
-            //for (int i = 0; i < me.DeliveryMethod.Count; i++)
-            //{
-            //    string AAA;
-
-            //    AAA = me.DeliveryMethod[i];
-
-
-            //}
-
-            //foreach(var item in me.DeliveryMethod)
-            //{
-            //    string aaa;
-            //    foreach(var inp in item)
-            //    {
-            //        aaa = inp.ToString();
-            //    }
-            //}
-
-
-            //foreach (var item in me.DeliveryMethod)
-            //{
-            //    string AAA = item;
-            //}
-            //me.PayingMethod
-            //var P
-
+            var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == me.Memberid);
+           
             var NewMe = new C關於我ViewModel()
             {
-                PayingMethod = me.PayingMethod,
-                DeliveryMethod = me.DeliveryMethod,
                 SalesCourtServiceTime = me.SalesCourtServiceTime,
                 NewProductOnLoad = me.NewProductOnLoad,
-                NewProductCategory = me.NewProductCategory,
                 SellerCategory = me.SellerCategory,
                 ServiceAfterBuy = me.ServiceAfterBuy,
                 Caution = me.Caution
             };
-            abme.Add(NewMe);
-            //return View();
 
+            if(ServiceTime[0] == "on")
+            {
+                add.ServiceTime += "0";
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[0];
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[1];
+                add.ServiceTime += "/";
+            }
+            if(ServiceTime[1] == "on")
+            {
+                add.ServiceTime += "1";
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[2];
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[3];
+                add.ServiceTime += "/";
+            }
+            if(ServiceTime[2] == "on")
+            {
+                add.ServiceTime += "2";
+                add.ServiceTime += ",";
+                add.ServiceTime += ServiceTime[3];
+                add.ServiceTime += "/";
+            }
+
+            add.RenewProduct = NewMe.NewProductOnLoad;
+            add.SellerType = NewMe.SellerCategory;
+            add.AfterSales = NewMe.ServiceAfterBuy;
+            add.SellerCaution = NewMe.Caution;
+
+            //dbContext.MemberAccounts.Add(add);
+            //return View();
+            dbContext.SaveChanges();
             return RedirectToAction("關於我");
+            //return Content("Success", "text/plain");
         }
 
 
-
-
-        public IActionResult 修改關於我(int id)
+        public IActionResult 修改關於我()
         {
+            getid();
+
+
             return View();
         }
 
