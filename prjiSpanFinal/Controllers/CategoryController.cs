@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using prjiSpanFinal.Models;
+using prjiSpanFinal.Models.CategoryItemSort;
 using prjiSpanFinal.ViewModels.Category;
 using prjiSpanFinal.ViewModels.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace prjiSpanFinal.Controllers
@@ -25,6 +27,10 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Index(int? id)
         {
+            if (id == 0 || id == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             listprod = _db.Products.Where(p => p.SmallType.BigTypeId == id&&p.ProductStatusId==0).ToList();
             slist = (new CHomeFactory()).toShowItem(listprod);
             list = new CCategoryIndex();
@@ -34,30 +40,22 @@ namespace prjiSpanFinal.Controllers
 
             return View(list);
         }
-        [HttpGet]
-        public IActionResult Index(int? id, List<string> facet, int? sortOrder,int page)
+        public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         {
-            if (id == 0 || id == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            listprod = _db.Products.Where(p => p.SmallType.BigTypeId == id && p.ProductStatusId == 0).ToList();
-            slist = (new CHomeFactory()).toShowItem(listprod);
-            list = new CCategoryIndex();
-            list.SearchType = _db.BigTypes.Where(t => t.BigTypeId == id).FirstOrDefault();
-            list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
-            //if checkedtypes
-            if (facet.Count > 0)
-            {
-                listprod = fFacetOrder(facet, listprod);
-            }
-            //if sort
-            list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
-            //if pages
-
-            return View(list);
+            
+            return Json(new SortRequest().SortItems(BigTypeId,filter.Select(o=>Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
         }
-        public IActionResult SmallType(int? id,int? sortOrder)
+        public IActionResult SearchSort(string keyword, int priceMin, int priceMax, int SortOrder, int pages)
+        {
+
+            return Json(new SortRequest().SearchSortItem(keyword, priceMin, priceMax, SortOrder, pages));
+        }
+        public IActionResult SmallTypeSort(int id, int priceMin, int priceMax, int SortOrder, int pages)
+        {
+
+            return Json(new SortRequest().SmalltypeSortItem(id, priceMin, priceMax, SortOrder, pages));
+        }
+        public IActionResult SmallType(int? id)
         {
             if (id == 0 || id == null)
             {
@@ -71,29 +69,23 @@ namespace prjiSpanFinal.Controllers
             list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
             list.SearchSmallType = _db.SmallTypes.Where(t => t.SmallTypeId == id).FirstOrDefault();
 
-            //if sort
-            list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
-            //if checkedtypes
-
-            //if pages
-
-
+            
             return View(list);
         }
-        public IActionResult SearchResult(string keyword,int? sortOrder)
+        public IActionResult SearchResult(string keyword)
         {
             if(keyword == null) {
                 return RedirectToAction("Index", "Home");
             }
-            listprod= _db.Products.Where(p => p.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
+            keyword.Trim();
+            string[] keys = keyword.Split(" ");
+            for (int i = 0; i < keys.Length; i++)
+            {
+                listprod.AddRange(_db.Products.Where(p => p.ProductName.Contains(keys[i]) || p.Description.Contains(keys[i])&&p.ProductStatusId==0).Select(p => p).ToList());
+            }
             list = new CCategoryIndex();
             if (listprod.Any()) { 
                 list.cShowItem = (new CHomeFactory()).toShowItem(listprod);
-                //if sort
-                list.cShowItem = fSortOrder(Convert.ToInt32(sortOrder), listprod);
-                //if checkedtypes
-
-                //if pages
             }
             list.SearchKeyword = keyword;
 
@@ -131,16 +123,44 @@ namespace prjiSpanFinal.Controllers
                     return SIlist;
             }
         }
-        List<Product> fFacetOrder(List<string> keyword, List<Product> listprod)
+        List<Product> fFacetOrder(string keyword, List<Product> listprod)
         {
+            string[] temp= keyword.Split(',');
             List<int> tempSmallTypeIDs = new List<int>();
-            foreach(var Idstring in keyword)
+            foreach(var Idstring in temp)
             {
-                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Remove(0, 4)));
+                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
             }
             return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
         }
+        public IActionResult CBselected(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return null;
+            }
+            List<string> temp = JsonSerializer.Deserialize<List<string>>(keyword);
+            List<int> tempSmallTypeIDs = new List<int>();
+            List<CShowItem> SIlist = new List<CShowItem>();
+            listprod = _db.Products.ToList();
+            //string[] temp = keyword.Split(',');
+            foreach (var Idstring in temp)
+            {
+                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
+            }
+            
+            listprod = listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
+            SIlist = (new CHomeFactory()).toShowItem(listprod);
+            string jsonString = JsonSerializer.Serialize(SIlist);
 
+            return Json(jsonString);
+        }
+        public IActionResult FilterShowItem(List<CShowItem> data)
+        {
+            //List<CShowItem> model = JsonSerializer.Deserialize<List<CShowItem>>(Json);
+            //List <CShowItem> items= JsonSerializer.Deserialize<List<string>>(Json);
+            return ViewComponent("CategoryShow", data);
+        }
 
     }
 }

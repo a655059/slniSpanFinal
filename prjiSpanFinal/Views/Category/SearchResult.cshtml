@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "SearchResult";
     int ShowitemCount = 0;
-    if (Model.cShowItem != null){
+    if (Model.cShowItem != null)
+    {
         ShowitemCount = Model.cShowItem.Count;
-            }
+    }
 }
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
 }
 <div class="CategoryBody">
     <div class="row">
@@ -28,16 +30,16 @@
                             </div>
                             <div class="d-flex w-100 flex-row ff-types-prices">
                                 <div class="ff-types-prices-child2">
-                                    <input placeholder="＄最小值" />
+                                    <input placeholder="＄最小值" name="priceMin" id="ff-pricemin" />
                                 </div>
                                 <div class="ff-types-prices-child1 text-center opacity-50">
                                     ─
                                 </div>
                                 <div class="ff-types-prices-child2">
-                                    <input placeholder="＄最大值" />
+                                    <input placeholder="＄最大值" name="priceMax" id="ff-pricemax" />
                                 </div>
                             </div>
-                            <button class="w-100 text-center ff-types-prices-btn">搜尋</button>
+                            <button class="w-100 text-center ff-types-prices-btn" id="ff-types-prices-btn">搜尋</button>
                         </div>
                     }
                 }
@@ -56,57 +58,54 @@
                                 <img src="~/img/Category/CateAD2.png" />
                             </a>
                         </div>
-                        } }
-                        <div class="Searchresult-ResultTitle">
-                            <i class="fa fa-search "></i>
-                            <span>@Model.SearchKeyword 的搜尋結果：</span>
-                        </div>
-                    </div>
+                    } }
+                <div class="Searchresult-ResultTitle">
+                    <i class="fa fa-search "></i>
+                    <span>@Model.SearchKeyword 的搜尋結果：</span>
+                </div>
+            </div>
             @{
                 @if (ShowitemCount > 0)
                 {
                     <div class="itembody-filter d-flex align-items-center justify-content-between">
                         <div class="itembody-filter1 "><span>篩選</span></div>
                         <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                            @Html.ActionLink("綜合排序",
-                           "SearchResult", "Category",
-                           new { keyword = Model.SearchKeyword, sortOrder = 1 },
-                           new { @class = "itembody-filter2-btn linknoline" })
-                            @Html.ActionLink("最新商品",
-                           "SearchResult", "Category",
-                         new { keyword = Model.SearchKeyword, sortOrder = 2 },
-                         new { @class = "itembody-filter2-btn linknoline" })
-                            @Html.ActionLink("熱銷商品",
-                         "SearchResult", "Category",
-                         new { keyword = Model.SearchKeyword, sortOrder = 3 },
-                         new { @class = "itembody-filter2-btn linknoline" })
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder1">
+                                綜合排序
+                                <input type="hidden" value="1" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder2">
+                                最新商品
+                                <input type="hidden" value="2" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
+                                熱銷商品
+                                <input type="hidden" value="3" />
+                            </a>
                             <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                 價格排序
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li>
-                                    <a class="dropdown-item" href="@Url.Content("~/Category/SearchResult/?keyword="+Model.SearchKeyword+"&sortOrder=4")">
-                                        <i class="fa fa-arrow-up"></i>
+                                    <a class="dropdown-item SortOrder" id="SortOrder4">
+                                        <i class="fa fa-arrow-down"></i>
                                         價格：由高至低
+                                        <input type="hidden" value="4" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="@Url.Content("~/Category/SearchResult/?keyword="+Model.SearchKeyword+"&sortOrder=5")">
-                                        <i class="fa fa-arrow-down"></i>
+                                    <a class="dropdown-item SortOrder" id="SortOrder5">
+                                        <i class="fa fa-arrow-up"></i>
                                         價格：由低至高
+                                        <input type="hidden" value="5" />
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="itemcol">
-
-
-                        @foreach (var item in Model.cShowItem)
-                        {
-                            @await Component.InvokeAsync("CategoryShow", new { shopProduct = item });
-                        }
+                    <div class="itemcol" id="OriginShowItem">
+                        @await Component.InvokeAsync("CategoryShow", new { shopProduct = Model.cShowItem });
                     </div>
                 }
                 else
@@ -122,5 +121,101 @@
 
 @section Scripts{
     <script src="~/js/Category/Index.js"></script>
-    <script src="~/js/Category/SearchResult.js"></script>
+    <script>
+
+        let priceMin = 0;
+        let priceMax = 9999999;
+
+        let SortOrder = 1;
+        let pages = 0;
+        let keyword = '@Html.Raw(Model.SearchKeyword)';
+
+
+        $(".SortOrder").click(function (event) {
+            let target = $(event.target);
+            SortOrder = target.find("input").val();
+            CallgetJSON();
+        });
+
+        $("#ff-types-prices-btn").click(function (event) {
+            let minval=0
+            if (parseInt($('#ff-pricemin').val()) > 0); {
+                minval = $('#ff-pricemin').val();
+            }
+            let maxval = 9999999;
+            if (parseInt($('#ff-pricemax').val()) > 0) {
+                maxval = $('#ff-pricemax').val();
+            }
+            if (parseInt(minval) > parseInt(maxval)) {
+                //todo#2
+                alert("數值設定錯誤！");
+            }
+            if (minval <= maxval) {
+                priceMin = parseInt(minval);
+                priceMax = parseInt(maxval);
+                CallgetJSON();
+            }
+        })
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+        function CallgetJSON() {
+            $.postJSON(`/Category/SearchSort`, { keyword: keyword, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+                $("#OriginShowItem").html("") ;
+                if (data.length > 0) {
+                    $("#OriginShowItem").append(Items(data));
+                }
+                else {
+                    $("#OriginShowItem").html(`<div>
+                        找無此商品...你的想像力比賣家們更豐富！
+                    </div>`) ;
+                }
+            })
+        }
+
+        function Items(data) {
+            let item = "";
+            for (let i = 0; i < data.length; i++) {
+                let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
+                item = item+  `<div class="sellsitem">
+                           <a class="linknoline" href="${productLink}">`;
+                if (data[i].pic != null)
+                {
+
+                    item = item + `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
+                }
+                else
+                {
+                    item = item +` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
+                }
+                item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
+<div class="cardTitleBox">
+                        <div class="cardTitle"> ${ data[i].product.productName}</div></div>`
+                    if (data[i].price.Count == 1)
+                    {
+                        item = item + `<div class="cardPrice">${Math.round(data[i].price[0])}</div>`
+                    }
+                    else
+                    {
+                        item = item + `<div class="cardPrice">$`+`${Math.round(data[i].price[0])} - $`+`${Math.round(data[i].price[1])}</div>`
+                    }
+
+            item = item +
+                `<div class="cardInfo d-flex justify-content-between flex-row">
+                    <div class="starBox mt-1">
+                        <div class="d-flex justify-content-start">
+                            <div class="starImg">
+                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                            </div>
+                            <div class="text-black">${data[i].starCount.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="text-end text-black-50 sells">已賣出<span>${data[i].salesVolume}</span></div>
+                </div>
+            </div>
+        </div>
+    `}
+            return item;
+        }
+    </script>
 }
