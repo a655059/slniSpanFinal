@@ -32,6 +32,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 decimal x = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
                 decimal y = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderByDescending(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
                 byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
+                int sales = db.OrderDetails.Where(o => o.Order.StatusId == 7 && o.ProductDetail.ProductId == item.ProductId).GroupBy(o => o.ProductDetailId).Select(o => o.Count()).Sum(o=>o);
                 List<decimal> dlist = new List<decimal>();
                 if (x == y)
                     dlist.Add(x);
@@ -45,6 +46,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 a.Price = dlist;
                 if (pic != null)
                     a.Pic = pic;
+                a.salesVolume = sales;
                 res.Add(a);
             }
             return res;
