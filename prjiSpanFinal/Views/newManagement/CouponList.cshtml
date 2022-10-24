@@ -1,0 +1,144 @@
+﻿@using X.PagedList.Mvc.Core.Fluent
+@model IEnumerable<prjiSpanFinal.Models.Coupon>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels;
+@{
+    ViewData["Title"] = "CouponList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+<h1>優惠券</h1>
+
+<p>
+    <a asp-action="CouponCreate" class="btn btn-light">新增優惠券</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                優惠券名稱
+            </th>
+            <th>
+                開始日期
+            </th>
+            <th>
+                失效日期
+            </th>
+            <th>
+                折扣
+            </th>
+            <th>
+                優惠券代碼
+            </th>
+            <th>
+                發放會員ID
+            </th>
+            <th>
+                可以領取日期
+            </th>
+            <th>
+                結束領取日期
+            </th>
+            <th>
+                是否為免運券
+            </th>
+            <th>
+                最低消費金額
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponName)
+                </td>
+                <td>
+                    <input value="@item.StartDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                </td>
+                <td>
+                    <input value="@item.ExpiredDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouponCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberId)
+                </td>
+                <td>
+                    <input value="@item.ReceiveStartDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                </td>
+                <td>
+                    <input value="@item.ReceiveEndDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsFreeDelivery)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinimumOrder)
+                </td>
+                <td>
+                    @{
+                        if (item.MemberId == 1)
+                        {
+                                    @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
+                            @class="btn btn-outline-primary mb-2"})
+                                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
+                            @class="btn btn-outline-primary mb-2"})
+                        }
+                        else
+                        {
+                                   @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
+                @class="btn btn-outline-primary disabled"})
+                                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
+                @class="btn btn-outline-primary disabled"})
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="align-content:center" class="paginations">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("ReportList", new { page })).
+        DisplayEllipsesWhenNotShowingAllPageNumbers().
+        MaximumPageNumbersToDisplay(3).
+        Build()
+        )
+
+</div>
+
+@section Scripts{
+    <script>
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+    </script>
+}

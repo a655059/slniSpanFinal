@@ -599,5 +599,76 @@ namespace prjiSpanFinal.Controllers
             return Content("1");
         }
         #endregion
+        #region CouponRegion
+        public List<Coupon> GetCouponsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<Coupon> list = new();
+            IQueryable<Coupon> Coupons = null;
+            if (keyword == null)
+            {
+                Coupons = db.Coupons.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.CouponId == key || i.MemberId == key).
+                     Select(e => e);
+            }
+            else if (DateTime.TryParse(keyword, out DateTime key2))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.StartDate == key2||i.ExpiredDate==key2||i.ReceiveStartDate==key2||i.ReceiveEndDate==key2).
+                     Select(e => e);
+            }
+            else
+            {
+                Coupons = db.Coupons.
+                    Where(i => i.CouponCode.Contains(keyword)||i.CouponName.Contains(keyword)).
+                    Select(e => e); ;
+            }
+        
+            foreach(var coupon in Coupons)
+            {
+                list.Add(coupon);
+            }
+            return list;
+        }
+        protected IPagedList<Coupon> GetCouponsPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetCouponsFromDatabase(keyword);
+            IPagedList<Coupon> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult CouponList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetCouponsPagedProcess(page, pageSize, keyword);
+            var PList = GetCouponsPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult CouponCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CouponCreate(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("CouponList");
+        }
+        #endregion
     }
 }
