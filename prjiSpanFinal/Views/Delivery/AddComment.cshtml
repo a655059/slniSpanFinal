@@ -1,44 +1,50 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Delivery.CAddCommentViewModel
 @{
     ViewData["Title"] = "AddComment";
 }
 
-@section Styles{ 
+@section Styles{
     <style>
-        .itemImgDiv{
-            width:100px;
-            height:100px;
+        .itemImgDiv {
+            width: 100px;
+            height: 100px;
         }
-        .itemImgDiv img{
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: contain;
-            display: block;
+
+            .itemImgDiv img {
+                width: 100%;
+                aspect-ratio: 1/1;
+                object-fit: contain;
+                display: block;
+            }
+
+        .star:hover {
+            cursor: pointer;
         }
-        
-        .star:hover{
-            cursor:pointer;
-        }
+
         .commentLabel {
             width: 15%;
         }
-        .textareaInput{
-            width:100%
+
+        .textareaInput {
+            width: 100%
         }
-        #previewCommentPhoto > div{
-            width:100px;
-            height:100px;
-            position:relative;
-            margin-right:10px;
+
+        .previewCommentPhoto > div {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin-right: 10px;
         }
-        #previewCommentPhoto i{
-            position:absolute;
-            right:-5px;
-            top:-5px;
-            opacity:0;
-            color:red;
+
+        .previewCommentPhoto i {
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            opacity: 0;
+            color: red;
         }
-        #previewCommentPhoto > div > img {
+
+        .previewCommentPhoto > div > img {
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: contain;
@@ -47,147 +53,183 @@
 }
 
 
-<h4>評價此商品</h4>
+<h4>評價商品</h4>
+
 <div class="w-75 m-auto">
-    <div class="d-flex justify-content-start align-items-center">
-        <div class="itemImgDiv me-3">
-            <img src="~/img/product01.png" />
-        </div>
-        <div class="d-flex flex-column justify-content-around">
-            <div>108樂購 魔飛Morph RGB光 影音耳機 電競藍芽 耳罩耳機 運動耳機 跑步耳機 保固一個月 【3C6801】</div>
-            <div class="text-black-50">規格:白色，附32g千首歌</div>
-        </div>
-    </div>
-    <div class="fs-5 fw-bold mt-3">關於商品</div>
-    <div class="d-flex justify-content-start align-items-center">
-        <div class="fs-5">商品品質</div>
-        <div class="d-flex ms-5 me-3">
-            @{
-                for (int i = 1; i <= 5; i++)
-                {
-                    <i class="star itemQualityStar fa-regular fa-star me-1"></i>
-                }
-            }
-        </div>
-        <input type="hidden" name="itemStar" value="" />
-        <div class="commentResult text-black-50"></div>
-    </div>
 
-    <div class="commentLayout bg-warning p-3 bg-opacity-10 mt-2" style="display:none">
-        <div class="border p-3 bg-white">
-            <div class="border-bottom">
-                <div class="input-group mb-3">
-                    <span class="commentLabel input-group-text" id="quality">品質</span>
-                    <input type="text" class="form-control" placeholder="請提供相關的評價">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="commentLabel input-group-text">色差</span>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="commentLabel input-group-text">和圖片相符</span>
-                    <input type="text" class="form-control">
-                </div>
-            </div>
-            <div class="input-group mb-3">
-                <textarea class="textareaInput border-0 px-2 py-1" placeholder="分享更多有關於此商品的評價以幫助其他買家"></textarea>
-            </div>
-            <div class="mb-3">
-                <div id="previewCommentPhoto" class="d-flex">
-                    
-                </div>
-                <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">  
-                    <i class="fa-solid fa-camera-retro me-2">新增照片</i>
-                </label>
-                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/*" multiple/>
-            </div>
-
-        </div>
-    </div>
-    <div class="fs-5 fw-bold mt-3">關於服務</div>
-    <div class="d-flex justify-content-start align-items-center">
-        <div class="fs-5">物流服務</div>
-        <div class="d-flex ms-5 me-3">
-            @{
-                for (int i = 1; i <= 5; i++)
-                {
-                    <i class="star fa-regular fa-star me-1"></i>
+    @foreach (var p in Model.cAddComments)
+    {
+        <div class="orderDetailLayout border p-2 mb-2 rounded-2">
+            <form action="@Url.Content("~/Delivery/SubmitComment")" method="post" enctype="multipart/form-data">
+                @{
+                    string base64 = Convert.ToBase64String(p.productDetailPic);
+                    string imgSrc = $"data:image/gif;base64,{base64}";
                 }
-            }
+                <div class="d-flex justify-content-start align-items-center">
+                    <div class="itemImgDiv me-3">
+                        <img src="@imgSrc" />
+                    </div>
+                    <div class="d-flex flex-column justify-content-around">
+                        <div class="productName">@p.productName</div>
+                        <div class="text-black-50">規格:<span>@p.style</span></div>
+                        <input type="hidden" name="orderDetailID" value="@p.orderDetailID" />
+                    </div>
+                </div>
+                <div class="fs-5 fw-bold mt-3">關於商品</div>
+                <div class="d-flex justify-content-start align-items-center">
+                    <div class="fs-5">商品品質</div>
+                    <div class="d-flex ms-5 me-3">
+                        @{
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="star itemQualityStar fa-regular fa-star me-1"></i>
+                            }
+                        }
+                    </div>
+                    <input type="hidden" name="commentStar" value="0" class="commentStar" />
+                    <div class="commentResult text-black-50"></div>
+                </div>
+
+                <div class="commentLayout bg-warning p-3 bg-opacity-10 mt-2" style="display:none">
+                    <div class="border p-3 bg-white">
+                        <div class="border-bottom">
+                            <div class="input-group mb-3">
+                                <span class="commentLabel input-group-text" id="quality">品質</span>
+                                <input type="text" name="quality" class="form-control" placeholder="請提供相關的評價">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="commentLabel input-group-text">色差</span>
+                                <input type="text" name="colorDifference" class="form-control">
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="commentLabel input-group-text">和圖片相符</span>
+                                <input type="text" name="picMatch" class="form-control">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <textarea class="textareaInput border-0 px-2 py-1" name="other" placeholder="分享更多有關於此商品的評價以幫助其他買家"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            @{ 
+                                string id = "photo" + p.orderDetailID;
+                            }
+                            <div class="previewCommentPhoto d-flex" id="@id">
+
+                            </div>
+                            <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                                <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                            </label>
+                            <input type="file" name="photos" value="" id="commentPhoto" class="commentPhoto" style="opacity:0" accept="image/*" multiple />
+                        </div>
+                    </div>
+                </div>
+                <div class="fs-5 fw-bold mt-3">關於服務</div>
+                <div class="d-flex justify-content-start align-items-center">
+                    <div class="fs-5">物流服務</div>
+                    <div class="d-flex ms-5 me-3">
+                        @{
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="star fa-regular fa-star me-1"></i>
+                            }
+                        }
+                    </div>
+                    <input type="hidden" name="shipperStar" value="0" class="shipperStar"/>
+                    <div class="commentResult text-black-50"></div>
+                </div>
+                <div class="mt-3 text-end">
+                    <button class="cancel border-0 bg-transparent w-25" id="cancel" onclick="history.back()">取消</button>
+                    <input type="submit" class="submit btn btn-warning w-25" value="完成" id="submit">
+                </div>
+            </form>
         </div>
-        <input type="hidden" name="shipperStar" value="" />
-        <div class="commentResult text-black-50"></div>
-    </div>
-    <div class="mt-3 text-end">
-        <button class="border-0 bg-transparent w-25" id="cancel" onclick="history.back()">取消</button>
-        <a href="@Url.Content("~/member/order")"><input type="submit" class="btn btn-warning w-25" value="完成" id="submit"></a>
-    </div>
+    }
 </div>
 
-@section Scripts{ 
-    <script>
-        
-
-        $(".star").click(function () {
-            $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end().nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
-            let resultDiv = $(this).parent().siblings(".commentResult");
-            let starCount = $(this).prevAll().length + 1;
-            if (starCount == 1) {
-                resultDiv.html("很差");
-            } else if (starCount == 2) {
-                resultDiv.html("差");
-            } else if (starCount == 3) {
-                resultDiv.html("普通");
-            } else if (starCount == 4) {
-                resultDiv.html("不錯");
-            } else {
-                resultDiv.html("超棒");
-            }
-            $(this).closest("div").siblings("input").val(starCount);
-        });
-        $(".itemQualityStar").click(function () {
-            $(".commentLayout").slideDown();
-
-        });
-        $("#submit").click(function () {
-            let arr = [];
-            $("input").not("input[type='submit']").each(function () {
-                if ($(this).val() != "") {
-                    arr.push($(this).val());
-                }
-            });
-            if (arr.length != 0) {
-                alert("新增評論成功，繼續下一筆評論");
-            }
-            else {
-                alert("請輸入評論");
-                return false;
-            }
-        });
-        $("#commentPhoto").change(function () {
-            const photos = document.getElementById("commentPhoto").files;
-            if (photos) {
-                $.each(photos, function (idx, photo) {
-                    let src = URL.createObjectURL(photo);
-                    $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img src="${src}" /></div>`);
+        @section Scripts{
+            <script>
+                $(".star").click(function () {
+                    $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end().nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
+                    let resultDiv = $(this).parent().siblings(".commentResult");
+                    let starCount = $(this).prevAll().length + 1;
+                    if (starCount == 1) {
+                        resultDiv.html("很差");
+                    } else if (starCount == 2) {
+                        resultDiv.html("差");
+                    } else if (starCount == 3) {
+                        resultDiv.html("普通");
+                    } else if (starCount == 4) {
+                        resultDiv.html("不錯");
+                    } else {
+                        resultDiv.html("超棒");
+                    }
+                    $(this).closest("div").siblings("input").val(starCount);
                 });
-            }
-        });
-
-        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
-            $(this).children("i").css("opacity", "0.3");
-        });
-        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
-            $(this).children("i").css("opacity", "0");
-        });
-        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
-            $(this).css("cursor", "pointer");
-        });
-        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
-            $(this).css("cursor", "none");
-        });
-        $("#previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
-            $(this).closest(".deleteCommentPhoto").remove();
-        });
-    </script>
-}
+                $(".itemQualityStar").click(function () {
+                    $(this).closest(".orderDetailLayout").find(".commentLayout").slideDown();
+                });
+                $(".submit").click(async function (event) {
+                    event.preventDefault();
+                    let arr = [];
+                    const productName = $(this).closest(".orderDetailLayout").find(".productName").html();
+                    $(this).closest(".orderDetailLayout").find("input").not("input[type='submit']").each(function () {
+                        if ($(this).val() != "") {
+                            arr.push($(this).val());
+                        }
+                    });
+                    const commentStar = $(this).closest(".orderDetailLayout").find(".commentStar").val();
+                    const shipperStar = $(this).closest(".orderDetailLayout").find(".shipperStar").val();
+                    if (commentStar == "0") {
+                        alert("請給此商品評分");
+                        return false;
+                    }
+                    else if (shipperStar == "0") {
+                        alert("請給此物流服務評分");
+                        return false;
+                    }
+                    else {
+                        const form = $(this).closest(".orderDetailLayout").find("form");
+                        const formData = new FormData(form[0]);
+                        const response = await fetch(form[0].action, {
+                            method: "POST",
+                            body: formData,
+                        });
+                        const data = await response.text();
+                        console.log(data);
+                        if (data == "1") {
+                            alert(`為  ${productName}  新增評論成功，繼續下一筆評論`);
+                            $(this).attr("disabled", true);
+                            $(this).siblings(".cancel").attr("disabled", true);
+                        }
+                        else {
+                            alert("您已評論過此商品");
+                        }
+                    }
+                });
+                $(".commentPhoto").change(function () {
+                    const photos = $(this)[0].files;
+                    const div = $(this).closest(".orderDetailLayout").find(".previewCommentPhoto").attr("id");
+                    if (photos) {
+                        $.each(photos, function (idx, photo) {
+                            let src = URL.createObjectURL(photo);
+                            $(`#${div}`).append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img src="${src}" /></div>`);
+                        });
+                    }
+                });
+                $(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+                    $(this).children("i").css("opacity", "0.3");
+                });
+                $(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+                    $(this).children("i").css("opacity", "0");
+                });
+                $(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+                    $(this).css("cursor", "pointer");
+                });
+                $(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+                    $(this).css("cursor", "none");
+                });
+                $(".previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+                    $(this).closest(".deleteCommentPhoto").remove();
+                });
+            </script>
+        }

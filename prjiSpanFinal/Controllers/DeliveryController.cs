@@ -395,14 +395,43 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
-        public IActionResult AddComment()
+        public IActionResult AddComment(int id)
         {
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
                 string jsonString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(jsonString);
+                int memberID = member.MemberId;
+                Order order = dbContext.Orders.Where(i => i.OrderId == id && i.MemberId == memberID && i.StatusId == 6).Select(i => i).FirstOrDefault();
+                if (order != null)
+                {
+                    var orderDetails = dbContext.OrderDetails.Where(i => i.OrderId == order.OrderId).Select(i => new {
+                        orderDetailID = i.OrderDetailId, 
+                        productDetailPic = i.ProductDetail.Pic, 
+                        style = i.ProductDetail.Style, 
+                        productName = i.ProductDetail.Product.ProductName});
+                    List<CAddCommentViewModel> cAddCommentList = new List<CAddCommentViewModel>();
+                    foreach (var i in orderDetails)
+                    {
+                        CAddCommentViewModel cAddComment = new CAddCommentViewModel
+                        {
+                            orderDetailID = i.orderDetailID,
+                            productDetailPic = i.productDetailPic,
+                            style = i.style,
+                            productName = i.productName
+                        };
+                        cAddCommentList.Add(cAddComment);
+                    }
+                    CAddCommentViewModel addCommentViewModel = new CAddCommentViewModel();
+                    addCommentViewModel.cAddComments = cAddCommentList;
 
-                return View();
+                    return View(addCommentViewModel);
+                }
+                else
+                {
+                    return RedirectToAction("Order", "Member");
+                }
             }
             else
             {
@@ -410,10 +439,59 @@ namespace prjiSpanFinal.Controllers
             }
             
         }
-        [HttpPost]
-        public IActionResult AddComment(CSubmitCommentViewModel cSubmitComment)
+        
+        public IActionResult SubmitComment(CSubmitCommentViewModel cSubmitComment, List<IFormFile> photos)
         {
-            return View();
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(memberString);
+            int memberID = member.MemberId;
+            int orderDetailID = cSubmitComment.orderDetailID;
+            var comments = dbContext.Comments.Where(i => i.OrderDetailId == orderDetailID).Select(i => i).ToList();
+            if (comments.Count > 0)
+            {
+                return Content("0");
+            }
+            else
+            {
+                string commentString = $"品質: {cSubmitComment.quality}, 色差: {cSubmitComment.colorDifference}, 和圖片相符: {cSubmitComment.picMatch}, 更多評論: {cSubmitComment.other}";
+                Comment comment = new Comment
+                {
+                    OrderDetailId = cSubmitComment.orderDetailID,
+                    Comment1 = commentString,
+                    CommentStar = (byte)cSubmitComment.commentStar,
+                    CommentTime = DateTime.Now,
+                    ShipperStar = cSubmitComment.shipperStar
+                };
+                dbContext.Comments.Add(comment);
+                dbContext.SaveChanges();
+                int commentID = dbContext.Comments.Where(i => i.OrderDetailId == orderDetailID && i.OrderDetail.Order.MemberId == memberID).Select(i => i.CommentId).FirstOrDefault();
+                string photo = $"{photos[0].FileName}    {photos[0].Length}     {photos[0].ContentType}";
+                if (photos.Count > 0)
+                {
+                    foreach(var i in photos)
+                    {
+                        if (i.Length > 0)
+                        {
+                            byte[] fileBytes;
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                i.CopyTo(ms);
+                                fileBytes = ms.GetBuffer();
+                            }
+                            CommentPic commentPic = new CommentPic
+                            {
+                                CommentId = commentID,
+                                CommentPic1 = fileBytes,
+                            };
+                            dbContext.CommentPics.Add(commentPic);
+                        }
+                    }
+                    dbContext.SaveChanges();
+                }
+                return Content("1");
+            }
+            
         }
         public IActionResult CheckoutForm(int sellerIDIndex)
         {
