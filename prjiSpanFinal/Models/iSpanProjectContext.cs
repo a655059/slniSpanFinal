@@ -26,7 +26,6 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<CommentForCustomer> CommentForCustomers { get; set; }
         public virtual DbSet<CommentPic> CommentPics { get; set; }
         public virtual DbSet<CountryList> CountryLists { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
@@ -52,6 +51,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual DbSet<RegionList> RegionLists { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<ReportStatus> ReportStatuses { get; set; }
         public virtual DbSet<ReportType> ReportTypes { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<ShipperToProduct> ShipperToProducts { get; set; }
@@ -144,7 +144,7 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ArgumentTypeId).HasColumnName("ArgumentTypeID");
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.Property(e => e.OrderdetailId).HasColumnName("OrderdetailID");
 
                 entity.Property(e => e.ReasonText)
                     .IsRequired()
@@ -163,11 +163,11 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Argument_ArgumentType");
 
-                entity.HasOne(d => d.Order)
+                entity.HasOne(d => d.Orderdetail)
                     .WithMany(p => p.Arguments)
-                    .HasForeignKey(d => d.OrderId)
+                    .HasForeignKey(d => d.OrderdetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Argument_Orders");
+                    .HasConstraintName("FK_Argument_OrderDetails");
             });
 
             modelBuilder.Entity<ArgumentReason>(entity =>
@@ -242,6 +242,8 @@ namespace prjiSpanFinal.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(((2000)-(1))-(1))");
 
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
                 entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
                 entity.HasOne(d => d.OrderDetail)
@@ -249,27 +251,6 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.OrderDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_OrderDetails");
-            });
-
-            modelBuilder.Entity<CommentForCustomer>(entity =>
-            {
-                entity.ToTable("CommentForCustomer");
-
-                entity.Property(e => e.CommentForCustomerId).HasColumnName("CommentForCustomerID");
-
-                entity.Property(e => e.Comment)
-                    .IsRequired()
-                    .HasMaxLength(500);
-
-                entity.Property(e => e.CommentTime).HasColumnType("datetime");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.CommentForCustomers)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CommentForCustomer_Orders");
             });
 
             modelBuilder.Entity<CommentPic>(entity =>
@@ -684,6 +665,10 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.ProductDetailId).HasColumnName("ProductDetailID");
 
+                entity.Property(e => e.ReceiveDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("('2000-01-01')");
+
                 entity.Property(e => e.ShippingStatusId).HasColumnName("ShippingStatusID");
 
                 entity.Property(e => e.Unitprice).HasColumnType("money");
@@ -942,6 +927,8 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
                 entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
 
                 entity.Property(e => e.ReporterId).HasColumnName("ReporterID");
@@ -951,6 +938,11 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_Product");
+
+                entity.HasOne(d => d.ReportStatus)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReportStatusId)
+                    .HasConstraintName("FK_Report_ReportStatus");
 
                 entity.HasOne(d => d.ReportType)
                     .WithMany(p => p.Reports)
@@ -963,6 +955,17 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ReporterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_MemberAccount");
+            });
+
+            modelBuilder.Entity<ReportStatus>(entity =>
+            {
+                entity.ToTable("ReportStatus");
+
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
+                entity.Property(e => e.ReportStatusName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<ReportType>(entity =>

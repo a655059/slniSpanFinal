@@ -68,15 +68,19 @@
                     @Html.DisplayFor(model => model.First().Report.Reason)
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.First().Report.ReportPic)
+                    @{
+                        var base64Image = Convert.ToBase64String(Model.First().Report.ReportPic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ReportTypeName)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("審核中", "ReportProcess", new { id=item.Report.ReportId}) |
+                    @Html.ActionLink("未處理", "ReportUndo", new { id=item.Report.ReportId }) |
+                    @Html.ActionLink("未違反規定", "ReportDelete", new {  id=item.Report.ReportId })
                 </td>
             </tr>
         }

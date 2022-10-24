@@ -476,7 +476,7 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             List<CReportListViewModel> list = new();
             IQueryable<Report> Reps = null;
-            if (keyword == null)
+            if (keyword== null)
             {
                 Reps = db.Reports.Select(i => i);
             }
@@ -536,6 +536,33 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+        //public IActionResult ReportApprove(int? id)
+        //{
+        //    var db=new iSpanProjectContext();
+        //    var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+        //    Q.ReportStatus = "已結案";
+        //    return RedirectToAction("ReportList");
+        //}
+        //public IActionResult ReportDelete(int? id)
+        //{
+        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+        //    Q.ReportStatus = "不成立";
+        //    return RedirectToAction("ReportList");
+        //}
+        //public IActionResult ReportUndo(int? id)
+        //{
+        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+        //    Q.ReportStatus = "未處理";
+        //    return RedirectToAction("ReportList");
+        //}
+        //public IActionResult ReportProcess(int? id)
+        //{
+        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
+        //    Q.ReportStatus = "審核中";
+        //    return RedirectToAction("ReportList");
+        //}
+
+
         #endregion
 
     }

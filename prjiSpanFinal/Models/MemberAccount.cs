@@ -46,6 +46,7 @@ namespace prjiSpanFinal.Models
         public string AfterSales { get; set; }
         public string RenewProduct { get; set; }
         public string SellerType { get; set; }
+        public int ReportedTime { get; set; }
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
