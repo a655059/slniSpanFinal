@@ -7,6 +7,7 @@ let currentInfoWindow = "";
 $(".addAddress").click(async function () {
     let shipperName = $(this).siblings().find(".shipperName").html();
     const _url = `GetShipperLocation?shipperName=${shipperName}`;
+    console.log(shipperName);
     let response = await fetch(_url);
     let data = await response.json();
     let storeLocations = JSON.parse(data);
@@ -45,14 +46,17 @@ $(".addAddress").click(async function () {
             handleLocationError(false, infoWindow, map.getCenter());
         }
     });
+    const imgSrc = "https://localhost:44330/img/";
     if (shipperName == "7-11取貨") {
         let marker_config = storeLocations.map(function (value, index) {
             let newObject = { position: { lat: value.Y, lng: value.X }, map: map, title: value.POIName };
             return newObject;
         });
         let info_config = storeLocations.map(function (value, index) {
-            let contentString = `<div class="d-flex align-items-baseline">
-                                    <img src="../wwwroot/img/7-11.png" alt="7-11" />
+            let contentString = `<div style="display:flex">
+                                    <div style="width:100px;height:100px;">
+                                        <img src="${imgSrc}payment5.png" alt="7-11" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+                                    </div>
                                     <div>
                                         <h4>${value.POIName}門市</h4>
                                         <h6>${value.Telno}</h6>
@@ -70,8 +74,10 @@ $(".addAddress").click(async function () {
             return newObject;
         });
         let info_config = storeLocations.map(function (value, index) {
-            let contentString = `<div class="d-flex align-items-baseline">
-                                    <img src="../wwwroot/img/OK超商.png" alt="OK" />
+            let contentString = `<div style="display:flex">
+                                    <div style="width:100px;height:100px;">
+                                        <img src="${imgSrc}payment8.png" alt="OK便利店" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+                                    </div>
                                     <div>
                                         <h4>${value.name}</h4>
                                         <h6 class="storeAddress">${value.address}</h6>
@@ -88,8 +94,10 @@ $(".addAddress").click(async function () {
             return newObject;
         });
         let info_config = storeLocations.map(function (value, index) {
-            let contentString = `<div class="d-flex align-items-baseline">
-                                    <img src="~/img/7-11.png" alt="Family mart" />
+            let contentString = `<div style="display:flex">
+                                    <div style="width:100px;height:100px;">
+                                        <img src="${imgSrc}payment6.png" alt="全家" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+                                    </div>
                                     <div>
                                         <h4>${value.NAME}</h4>
                                         <h6>${value.TEL}</h6>
@@ -107,8 +115,10 @@ $(".addAddress").click(async function () {
             return newObject;
         });
         let info_config = storeLocations.map(function (value, index) {
-            let contentString = `<div class="d-flex align-items-baseline">
-                                    <img src="~/img/7-11.png" alt="HiLife" />
+            let contentString = `<div style="display:flex">
+                                    <div style="width:100px;height:100px;">
+                                        <img src="${imgSrc}payment7.png" alt="萊爾富" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+                                    </div>
                                     <div>
                                         <h4>${value.name}</h4>
                                         <h6>${value.phone}</h6>
@@ -138,7 +148,6 @@ $(".addAddress").click(async function () {
             let storeAddressIndex = infoContent.indexOf("storeAddress");
             let storeAddress = infoContent.substring(storeAddressIndex).split('<')[0].split('>')[1];
             $(".inputAddress").val(storeName + "    " + storeAddress);
-            /*$(".ship[class*='border-danger']").siblings(".address").html(storeName + "    " + storeAddress);*/
         });
     });
     
