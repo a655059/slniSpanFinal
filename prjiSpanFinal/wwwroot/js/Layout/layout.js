@@ -59,6 +59,13 @@ if (mymemid == null) {
     $(".notification").css("display", "none");
 }
 else {
+    function happy_sendnoti(type, sendtomemberid ,text, link) {
+        $.getJSON("/MsgApi/SendNoti", { type: type, id: sendtomemberid, text:text,link:link }, function (data) {
+
+        })
+    }
+
+
     $("#notificationlistbox").html("");
     $.getJSON("/MsgApi/GetNotificationbyID", { id: mymemid }, function (data) {
         let hrcount = 0;
@@ -86,7 +93,7 @@ else {
                                     </li>`);
         }
         if (hrcount != 0) {
-            $(".linknoline").append(`<div class="qty notificationqty">${$(".notificationqty").html(hrcount)}</div>`);
+            $(".notificationbell").append(`<div class="qty notificationqty">${hrcount}</div>`);
         }
         else {
             
@@ -95,9 +102,9 @@ else {
         refreshtimestamp();
     });
 
-    $(".notification").click(function () {
+    $(".notificationbell").click(function () {
         $.getJSON("/MsgApi/HaveReadAllNoti", { id: mymemid }, function (data) {
         });
-        $(".notificationqty").html("");
+        $(".notificationqty").remove();
     })
 }

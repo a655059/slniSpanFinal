@@ -28,6 +28,9 @@ namespace prjiSpanFinal.ViewModels
         //public DateTime ReceiveDate { get; set; }
         //public string PaymentName { get; set; }
         public int PaymentFee { get; set; }
+
+        public List<int> BuyerCommentId { get; set; }
+        public int SellerCommentId { get; set; }
         //public string OrderMessage { get; set; }
         //public List<int> OrderDetailId { get; set; }
         //public List<int> ProductDetailId { get; set; }

@@ -81,52 +81,6 @@
                     </tr>
                 </thead>
                 <tbody id="orderlistbody">
-                    @foreach (var item in Model)
-                    {
-                        int total = item.PaymentFee;
-                        @if (item.IsFreeDelivery != true)
-                        {
-                            total += item.ShipperFee;
-                        }
-                        <tr>
-
-                            <td>
-                                <input type="hidden" class="orderorderid" value="@item.OrderId" />
-                                <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
-                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/評價")">@item.BuyerAcc</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a>
-                            </td>
-                            <td>@item.OrderDatetime.ToString("yyyy-MM-dd")<br />@item.OrderDatetime.ToString("HH:mm:dd")</td>
-                            <td>
-                                @for (int j = 0; j < item.Quantity.Count; j++)
-                                {
-                                    total += Decimal.ToInt32(item.Unitprice[j]) * item.Quantity[j];
-                                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Pic[j])" width="60" height="60" />@item.ProductName[j] @item.Style[j] @:* @item.Quantity[j] $@Decimal.ToInt32(item.Unitprice[j]) <br />
-                                }
-                            </td>
-                            <td class="ordertotalprice">$@total</td>
-                            <td>@item.OrderStatusName</td>
-                            <td style="text-align:center">
-                                <a href="/Seller/OrderDetail?id=@item.OrderId" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />
-                                @{
-                                    if (item.ShipperStatusId == 6)
-                                    {
-                                                                                                                                                                    <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>
-                                    }
-                                    if (item.ShipperStatusId == 3)
-                                    {
-                                                                                                                                                                    <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">出貨</a>
-                                    }
-                                    if (item.ShipperStatusId == 8)
-                                    {
-                                                                                                                                                                    <a data-bs-toggle="modal" href="#staticBackdrop7" role="button" class="btn btn-info orderbuttonret my-1">處理</a>
-                                    }
-                                }
-                                <div>
-                                    <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
-                                </div>
-                            </td>
-                        </tr>
-                                    }
                 </tbody>
             </table>
             <div class="row ">
@@ -166,7 +120,7 @@
                     @{
                         for (int i = 1; i <= 5; i++)
                         {
-                                                                                                                                                        <i class="star itemQualityStar fa-regular fa-star me-1"></i>
+                            <i class="star itemQualityStar fa-regular fa-star me-1"></i>
                         }
                     }
                 </div>
@@ -312,6 +266,16 @@
 {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
+        function reloaditem(sm, id) {
+            $.getJSON(`/Seller/SortOrder`, { sort: sm, tab: id }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        }
+        reloaditem(0, 0);
+
         $(".star").click(function () {
             $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end()
                 .nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
@@ -330,8 +294,7 @@
             }
             $(this).closest("div").siblings("input").val(starCount);
         });
-    </script>
-    <script>
+
         function OrderListItem(data) {
             item = `<tr>
 
@@ -353,7 +316,7 @@
                                 <td>${data.orderStatusName}</td>
                                 <td style="text-align:center">
                                     <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
-            if (data.shipperStatusId == 6) {
+            if (data.shipperStatusId == 6 && data.sellerCommentId == 0) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>`;
             }
             if (data.shipperStatusId == 3) {
@@ -365,6 +328,7 @@
             item = item + `<div>
                                         <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
                                     </div>
+                                    <input type="hidden" class="orderbuyerid" value="${data.buyerId}" />
                                 </td>
                             </tr>`;
             return item;
@@ -375,53 +339,28 @@
         $("#ordertime").click(function () {
             if ($("#ordertime").hasClass("sorting_desc")) {
                 sortmethod = 0;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
             else {
                 sortmethod = 1;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
         })
         $("#ordersales").click(function () {
             if ($("#ordersales").hasClass("sorting_desc")) {
                 sortmethod = 2;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
             else {
                 sortmethod = 3;
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
         })
         $(".ordernavtabs").click(function (event) {
             tabid = $(event.currentTarget).siblings("input").val();
             $(event.currentTarget).addClass("active");
             $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-            $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                $("#orderlistbody").html("");
-                for (let i = 0; i < data.length; i++) {
-                    $("#orderlistbody").append(OrderListItem(data[i]));
-                }
-            });
+            reloaditem(sortmethod, tabid);
         })
         $("#btnDate").click(function () {
             let keyword = $("#orderkeyword").val();
@@ -459,12 +398,7 @@
             $.getJSON(`/Seller/WriteComment`, { id: commentorderid, star: $("#orderhiddenstar").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
             }).then(function () {
                 $("#staticBackdropLabel2").html("您的評價已送出");
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }).catch(function () {
                 $("#staticBackdropLabel2").html("您的評價沒有送出");
             });
@@ -472,30 +406,23 @@
 
         let recorderid;
         let recitem;
+        let recbuyerid;
         $(document).on("click", ".orderbuttonfi", function () {
+            recbuyerid = $(this).siblings(".orderbuyerid").eq(0).val();
             recorderid = $(this).parent().siblings().children().val();
             recitem = $(this);
         })
 
-        $("#orderarguesubmit").click(function () {
-            $.getJSON(`/Seller/WriteShipping`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
-            });
-        })
+        //$("#orderarguesubmit").click(function () {
+        //    $.getJSON(`/Seller/WriteShipping`, { id: argueorderid, type: 1, reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val() }, function (data) {
+        //        reloaditem(sortmethod, tabid);
+        //    });
+        //})
 
         $("#orderrecsubmit").click(function () {
+            happy_sendnoti(2, recbuyerid,"賣家已經出貨囉，點擊獲得更多資訊","/Member/Order?sort=0&tab=4")
             $.getJSON(`/Seller/WriteShipping`, { id: recorderid }, function (data) {
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             });
         })
 
@@ -511,12 +438,7 @@
                 if (statses[i] == 3) {
                     count1++;
                     $.getJSON(`/Seller/WriteShipping`, { id: orderids[i] }, function (data) {
-                        $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                            $("#orderlistbody").html("");
-                            for (let i = 0; i < data.length; i++) {
-                                $("#orderlistbody").append(OrderListItem(data[i]));
-                            }
-                        });
+                        reloaditem(sortmethod, tabid);
                     });
                 }
             }
@@ -566,12 +488,7 @@
         $("#orderreturnsubmit").click(function () {
             console.log(returntype)
             $.getJSON(`/Seller/AcceptReturn`, { id: returnorderid, type: returntype }, function (data) {
-                $.getJSON(`/Seller/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             });
         })
 
