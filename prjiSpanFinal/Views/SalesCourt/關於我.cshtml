@@ -1,7 +1,24 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.SalesCourt.C關於我ViewModel
 
 @{
     ViewData["Title"] = "關於我";
+    iSpanProjectContext dbContext = new iSpanProjectContext();
+    var me = dbContext.MemberAccounts.Where(a => a.MemberId == Model.Memberid).FirstOrDefault();
+    var productcount = dbContext.Products.Where(a => a.MemberId == Model.Memberid).Count();
+    var followcount = dbContext.Follows.Where(a => a.MemberId == Model.Memberid).Count();
+
+    var allstar = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == Model.Memberid).Select(a => (double)a.CommentStar).Sum();
+    var allstarcount = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == Model.Memberid).Count();
+
+    var avgstar = allstar / allstarcount;
+
+    var custcategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Model.Memberid).ToList();
+
+    var shippingmethod = dbContext.ShipperToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Shipper.ShipperName).ToList();
+
+    var payingName = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.PaymentName).ToList();
+    var payingFee = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.Fee).ToList();
 }
 
 @section Styles{
@@ -24,22 +41,21 @@
     <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
         <a href="~/SalesCourt/評價"> 評價</a>
     </button>
-    @*<span class="mx-2 display-6"><a href="~/SalesCourt/賣場" class="text-primary">回賣場</a></span>
-        <span class="mx-2 display-6"><a href="~/SalesCourt/評價" class="text-primary">評價</a></span>*@
+   
 </div>
 
 <div class="container">
     <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:#ccd7b4">
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">賣場資訊</h1>
+            <h1 class="display-4 fst-italic">@me.NickName 賣場資訊</h1>
         </div>
 
         <div class="row m-5">
-            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品:42 &nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品數:@productcount &nbsp;</div>
             @*<div class="col"><i class="fa-solid fa-box-taped" style="width:15px"></i> 商品:&nbsp;</div>*@
-           
-            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:3000&nbsp;</div>
-            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:4.4&nbsp;</div>
+
+            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:@followcount&nbsp;</div>
+            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:@avgstar.ToString("0.00")&nbsp;</div>
         </div>
 
         <div class="row m-5" style="font-size:1.4em">
@@ -54,22 +70,28 @@
             <div class="col">
                 <div class="bg-secondary">新品上架時間</div>
                 <p>
-                    每週
+                    @Model.NewProductOnLoad
                 </p>
             </div>
             <div class="col">
                 <div class="bg-secondary">商品類型</div>
-                <p>
-                    公司貨/平行輸入/水貨/現貨
-                </p>
+
+
+                @{
+                    foreach (var item in custcategory)
+                    {
+                        <p>
+                            @item.CustomizedCategoryName
+                        </p>
+
+                    }
+
+                }
             </div>
             <div class="col">
                 <div class="bg-secondary">賣家類型</div>
                 <p>
-                    公司行號 (統一編號 72640981)
-                    有實體店面 ( 不可刷卡 )
-                    經銷商
-                    代理商
+                    @Model.SellerCategory
                 </p>
             </div>
         </div>
@@ -89,22 +111,37 @@
                 <div class="text-secondary" style="font-size:1.5em">付款方式</div>
 
                 @*<div class="col"><img src="~/img/fans.png" width="20" />粉絲:&nbsp;</div>*@
-                <div><img src="~/img/familymart.png" width="35" />全家取貨付款</div>
+                @*<div><img src="~/img/familymart.png" width="35" />全家取貨付款</div>
                 <div><img src="~/img/pchomepay.png" width="35" /><img src="~/img/7-11.png" width="35" />7-11取貨付款</div>
                 <div><img src="~/img/pchomepay.png" width="35" />PChomePay支付連 現金(ATM、餘額)</div>
                 <div><img src="~/img/pchomepay.png" width="35" />PChomePay支付連 信用卡(一次付清)</div>
                 <div>貨到付款</div>
-                <div>面交取貨付款(面交時才付款)</div>
+                <div>面交取貨付款(面交時才付款)</div>*@
+
+                @{ 
+                    foreach (var item in shippingmethod)
+                    {
+                                <div>@item</div>
+                    }
+                }
+
             </div>
             <div class="col-6">
                 <div class="text-secondary" style="font-size:1.5em">運送方式</div>
-                <div><img src="~/img/familymart.png" width="35" />全家取貨付款 運費<span class="text-primary">60</span>元</div>
+                @*<div><img src="~/img/familymart.png" width="35" />全家取貨付款 運費<span class="text-primary">60</span>元</div>
                 <div><img src="~/img/pchomepay.png" width="35" /><img src="~/img/7-11.png" width="35" />7-11取貨付款 運費<span class="text-primary">60</span>元</div>
                 <div>郵寄寄送 運費<span class="text-primary">130</span>元</div>
                 <div>宅配/快遞 運費<span class="text-primary">75</span>元</div>
                 <div>離島寄送 運費<span class="text-primary">100</span>元</div>
                 <div>貨到付款 運費<span class="text-primary">150</span>元</div>
-                <div>面交貨到付款(面交時才付款)</div>
+                <div>面交貨到付款(面交時才付款)</div>*@
+
+                @{ 
+                    for (int i = 0; i < payingName.Count(); i++) { 
+                        <span>@payingName[i]</span>
+                        <span>@payingFee[i]</span>
+                    }
+                }
             </div>
         </div>
 
@@ -117,14 +154,7 @@
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">注意事項</h1>
             <p class="lead my-3" style="font-size:1.4em">
-                請記得完成"結帳"動作才算是完整訂單
-                結帳二筆以上商品，請記得"合併結帳"避免"運費"重複計算
-                結帳前請先"問與答"詢問是否有 現貨、顏色、尺寸
-                結帳後，請於露露通提供 ( 產品名稱或編號  款式、顏色  數量  規格尺寸 )
-                如遇商品缺貨，買家可 無條件取消訂單  退款
-                由於物流量大，結帳後視同購買，不接受任何理由棄單
-                請於2天內完成"結帳"動作
-                因電腦螢幕的解析度不同，商品實品和顏色可能會有些許差距，完美主義者請勿購買
+                @Model.Caution
             </p>
             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
