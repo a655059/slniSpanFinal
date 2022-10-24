@@ -73,7 +73,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-check form-switch 靠右">
-                                    <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.PaymentId[i]" >
+                                    <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.PaymentId[i]">
                                 </div>
                             </div>
                         </div>
@@ -106,7 +106,12 @@
                                 </div>
                                 <div class="col-2">
                                     <div class="form-check form-switch 靠右">
-                                        <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.ShipperId[i]">
+                                        @{if (@Model.x[i].CheckedOX == 1)
+                                            {
+                                                <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.x[i].ShipperIdToShip">
+                                            }
+                                            else
+                                            { <input class="shiperID form-check-input 按鈕大小" type="checkbox" id="@Model.x[i].ShipperIdToShip">} }
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -122,21 +127,21 @@
                     }
                 </div>
 
-                    <div class="d-flex justify-content-around m-2">
-                        <button id="save" type="submit" class="btn btn-warning mb-3">確定</button>
-                        <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
-                    </div>
-
+                <div class="d-flex justify-content-around m-2">
+                    <button id="save" type="submit" class="btn btn-warning mb-3">確定</button>
+                    <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
                 </div>
 
             </div>
+
+        </div>
     </div>
     <div class="col-1"></div>
 </div>
 @section Scripts
 {
     <script>
-        
+
         let 金物流 = [];
         //付款區
         let paymentArray = [];  //存付款陣列
@@ -147,7 +152,7 @@
                 paymentArray.push(selectedPaymentID);//push 從陣列後面增加 ID
             })
         })
-        
+
         //物流區
         let shiperArray = [];
         $(".shiperID").on("change", function () {
@@ -157,29 +162,26 @@
                 shiperArray.push(selectShipID);
             })
         })
-       
-         
-        //送出按鈕
-        $("#save").click(async function () {
-            let payobject = { "金物流": "金流", "選取的": paymentArray };
-            let shipobject = { "金物流": "物流", "選取的": shiperArray };
-            console.log(payobject)
-            console.log(shipobject)
-            let alljson = [];
-            alljson.push(payobject);
-            alljson.push(shipobject);
-            let jsonall = JSON.stringify(alljson);
 
-            let response = await fetch("@Url.Content("~/Seller/Shipperrequest")" + `?jsonString=${jsonall}`);
-            let data = await response.text();
-            if (data == 1) {
-                alert("修改成功");
-            }
-            else {
-                alert("請先登入");
-            }
-            console.log(data);
-        })
+
+            //送出按鈕
+            $("#save").click(async function () {
+                let payobject = { "金物流": "金流", "選取的": paymentArray };
+                let shipobject = { "金物流": "物流", "選取的": shiperArray };
+                let alljson = [];
+                alljson.push(payobject);
+                alljson.push(shipobject);
+                let jsonall = JSON.stringify(alljson);
+
+                let response = await fetch("@Url.Content("~/Seller/Shipperrequest")" + `?jsonString=${jsonall}`);
+                let data = await response.text();
+                if (data == 1) {
+                    alert("修改成功");
+                }
+                else {
+                    alert("請先登入");
+                }
+            });
         //`?json=${alljson}`把資料傳到後端
         //{
         //    body: jsonall, method: "post", headers: new Headers({ 'Context-Type': 'application/json' })//把資料傳到後端
@@ -189,10 +191,10 @@
             method: "post",
             headers: { 'Context-Type': 'application/json' }
         }) *@
-            
 
-            
-            
+
+
+
 
 
 
