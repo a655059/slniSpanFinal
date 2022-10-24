@@ -26,7 +26,7 @@ namespace prjiSpanFinal.Controllers
         {
             if (id != null)
             {
-                iSpanProjectContext dbContext = new iSpanProjectContext();
+                iSpanProjectContext dbContext = new();
                 var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
                 var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
                 var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i.Pic).ToList();
@@ -44,11 +44,11 @@ namespace prjiSpanFinal.Controllers
                     string price = "1";
                     if (maxPrice == minPrice)
                     {
-                        price = $"${minPrice.ToString("0")}";
+                        price = $"${minPrice:0}";
                     }
                     else
                     {
-                        price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
+                        price = $"${minPrice:0} - ${maxPrice:0}";
                     }
                     var starCounts = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.ProductId == p.ProductId).Select(i => i.CommentStar);
                     double starCount = 0;
@@ -109,7 +109,6 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
         public IActionResult ReportCreate(Report d)
         {
             var db = (new iSpanProjectContext());
@@ -122,6 +121,7 @@ namespace prjiSpanFinal.Controllers
                     ReportTypeId = d.ReportTypeId,
                     Reason = d.Reason,
                     ReportPic = d.ReportPic,
+                    ReportStatusId=1,
                 };
                 db.Reports.Add(report);
                 db.SaveChanges();

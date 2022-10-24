@@ -54,6 +54,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual DbSet<RegionList> RegionLists { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<ReportStatus> ReportStatuses { get; set; }
         public virtual DbSet<ReportType> ReportTypes { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<ShipperToProduct> ShipperToProducts { get; set; }
@@ -990,6 +991,8 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
                 entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
 
                 entity.Property(e => e.ReporterId).HasColumnName("ReporterID");
@@ -999,6 +1002,12 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_Product");
+
+                entity.HasOne(d => d.ReportStatus)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReportStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_ReportStatus");
 
                 entity.HasOne(d => d.ReportType)
                     .WithMany(p => p.Reports)
@@ -1011,6 +1020,17 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ReporterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_MemberAccount");
+            });
+
+            modelBuilder.Entity<ReportStatus>(entity =>
+            {
+                entity.ToTable("ReportStatus");
+
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
+                entity.Property(e => e.ReportStatusName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<ReportType>(entity =>
