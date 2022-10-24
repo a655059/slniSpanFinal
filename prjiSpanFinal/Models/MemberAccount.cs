@@ -16,6 +16,7 @@ namespace prjiSpanFinal.Models
             FollowFollowedMems = new HashSet<Follow>();
             FollowMembers = new HashSet<Follow>();
             Likes = new HashSet<Like>();
+            Notifications = new HashSet<Notification>();
             Orders = new HashSet<Order>();
             PaymentToSellers = new HashSet<PaymentToSeller>();
             Products = new HashSet<Product>();
@@ -46,7 +47,6 @@ namespace prjiSpanFinal.Models
         public string AfterSales { get; set; }
         public string RenewProduct { get; set; }
         public string SellerType { get; set; }
-        public int ReportedTime { get; set; }
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
@@ -57,6 +57,7 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Follow> FollowFollowedMems { get; set; }
         public virtual ICollection<Follow> FollowMembers { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentToSeller> PaymentToSellers { get; set; }
         public virtual ICollection<Product> Products { get; set; }

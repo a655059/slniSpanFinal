@@ -13,14 +13,14 @@ namespace prjiSpanFinal.Models
         }
 
         public int ArgumentId { get; set; }
-        public int OrderdetailId { get; set; }
+        public int OrderId { get; set; }
         public int ArgumentTypeId { get; set; }
         public int ArgumentReasonId { get; set; }
         public string ReasonText { get; set; }
 
         public virtual ArgumentReason ArgumentReason { get; set; }
         public virtual ArgumentType ArgumentType { get; set; }
-        public virtual OrderDetail Orderdetail { get; set; }
+        public virtual Order Order { get; set; }
         public virtual ICollection<ArguePic> ArguePics { get; set; }
     }
 }

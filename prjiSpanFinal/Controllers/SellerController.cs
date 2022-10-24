@@ -103,7 +103,7 @@ namespace prjiSpanFinal.Controllers
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
-            dbcontext.CommentForCustomers.Add(a);
+            //dbcontext.CommentForCustomers.Add(a);
             Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
             b.StatusId = 7;
             dbcontext.SaveChanges();
