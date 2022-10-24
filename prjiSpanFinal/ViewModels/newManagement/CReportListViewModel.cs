@@ -7,5 +7,6 @@ namespace prjiSpanFinal.ViewModels
         public Report Report { get; set; }
         public string ProductName { get; set; }
         public string ReportTypeName { get; set; }
+        public string ReportStatusName { get; set; }
     }
 }

@@ -493,8 +493,8 @@ namespace prjiSpanFinal.Controllers
                     Select(e => e); ;
             }
             var ProductName = (from i in db.Products select i).ToList();
-            
             var ReportTypeName = (from i in db.ReportTypes select i).ToList();
+            var ReportStatusName = (from i in db.ReportStatuses select i).ToList();
             foreach (var p in Reps)
             {
                 CReportListViewModel model = new()
@@ -504,13 +504,15 @@ namespace prjiSpanFinal.Controllers
                     ProductName = (from i in ProductName
                                    where i.ProductId == p.ProductId
                                    select i.ProductName).First(),
-                   ReportTypeName = (from i in ReportTypeName
+                    ReportTypeName = (from i in ReportTypeName
                                      where i.ReportTypeId == p.ReportTypeId
                                      select i.ReportTypeName).First(),
+                    ReportStatusName = (from i in ReportStatusName
+                                        where i.ReportStatusId == p.ReportStatusId
+                                        select i.ReportStatusName).First(),
                 };
                 list.Add(model);
             }
-
             return list;
         }
         protected IPagedList<CReportListViewModel> GetReportPagedProcess(int? page, int pageSize, string keyword)
@@ -536,34 +538,66 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
-        //public IActionResult ReportApprove(int? id)
-        //{
-        //    var db=new iSpanProjectContext();
-        //    var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
-        //    Q.ReportStatus = "已結案";
-        //    return RedirectToAction("ReportList");
-        //}
-        //public IActionResult ReportDelete(int? id)
-        //{
-        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
-        //    Q.ReportStatus = "不成立";
-        //    return RedirectToAction("ReportList");
-        //}
-        //public IActionResult ReportUndo(int? id)
-        //{
-        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
-        //    Q.ReportStatus = "未處理";
-        //    return RedirectToAction("ReportList");
-        //}
-        //public IActionResult ReportProcess(int? id)
-        //{
-        //    var Q = Reports.FirstOrDefault(i => i.ReportId == id);
-        //    Q.ReportStatus = "審核中";
-        //    return RedirectToAction("ReportList");
-        //}
-
-
+        public IActionResult ReportProcess(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId =1 ;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportDelete(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId =2;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportUndo(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId = 6;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportWarning(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId = 3;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportServere(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            var prod = from p in db.Products
+                       where p.ProductId ==Q.ProductId
+                       select p.ProductId;
+            var G = db.Products.FirstOrDefault(i => i.ProductId == prod.First());
+            G.ProductStatusId =1 ;
+            Q.ReportStatusId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportStop(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            var prod = from p in db.Products
+                       join x in db.Reports on p.ProductId equals x.ProductId
+                       where p.ProductId == Q.ProductId
+                       select p.MemberId;
+            var K = prod.First();
+            var G = db.MemberAccounts.FirstOrDefault(i => i.MemberId == K);
+            G.MemStatusId = 4;
+            Q.ReportStatusId = 5;
+            db.SaveChanges();
+            return Content("1");
+        }
         #endregion
-
     }
 }
