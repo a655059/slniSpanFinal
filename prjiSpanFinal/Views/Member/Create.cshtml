@@ -259,6 +259,14 @@
                 sel.options.add(opt)
             })
         }
+        //傳城市名字回controler
+        $("#submit").click(function () {
+            console.log("test")
+            $.postJSON("@Url.Content("~/Member/Create")", { countryName: `${countryName}` })
+          })
+
+
+
 
         clear.addEventListener("click", eve => {
             eve.preventDefault();

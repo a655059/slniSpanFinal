@@ -63,7 +63,12 @@ namespace prjiSpanFinal.Controllers
             }
             return Content("0", "text/plain", Encoding.UTF8); ;
         }
-        
+        public IActionResult LoginSuccess()
+        {
+            return View();
+        }
+
+
         public IActionResult Edit()
         {
             iSpanProjectContext db = new iSpanProjectContext();
@@ -85,7 +90,7 @@ namespace prjiSpanFinal.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Edit(MemberAccViewModel mem, IFormFile File1)
+        public IActionResult Edit(MemberAccViewModel mem, IFormFile File1,string countryName)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -128,7 +133,8 @@ namespace prjiSpanFinal.Controllers
                 }
                 else if (mem.regionName != null)
                 {
-                    acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
+                    int countryid = db.CountryLists.FirstOrDefault(p => p.CountryName == countryName).CountryId;
+                    acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName && p.CountryId== countryid).RegionId;
                 }
                 else if (mem.Name != null) { acc.Name = mem.Name; }
                 else if (mem.Address != null) { acc.Address = mem.Address; }
@@ -164,7 +170,7 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(MemberAccViewModel mem , IFormFile File1)
+        public IActionResult Create(MemberAccViewModel mem , IFormFile File1, string countryName)
         {
             //城市country要傳遞進來才能找到正確region
 
@@ -183,8 +189,12 @@ namespace prjiSpanFinal.Controllers
             }
             mem.MemPic = imgByte;
             }
+            if (mem.regionName!=null)
+            {
+                int countryid = db.CountryLists.FirstOrDefault(p => p.CountryName == countryName).CountryId;
+                memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName &&p.CountryId== countryid).RegionId;
+            }
 
-            memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
             if (mem.gender == "female")
             {
                 memberac.Gender = 2;
@@ -207,7 +217,7 @@ namespace prjiSpanFinal.Controllers
             }
             db.MemberAccounts.Add(memberac);
             db.SaveChanges();
-            return RedirectToAction("Login");
+            return RedirectToAction("LoginSuccess");
         }
         public FileResult ShowPhoto(int id)
         {

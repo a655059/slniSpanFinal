@@ -241,10 +241,10 @@
                             </fieldset>
                         </div>
                         <div class="col">
-                            <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" class="img-thumbnail w-100" />
+                            <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" id="memphoto" class="img-thumbnail w-100" />
                             <br /><br />
-                            <label class="p1" for="formFile">上傳照片</label>
-                            <input class="form-control" type="file" name="File1" multiple />
+                            <label class="p1" for="formFile" id="labfile">上傳照片</label>
+                            <input class="form-control" type="file" name="File1" id="photofile" multiple />
                         </div>
                     </div>
                 </div>
@@ -285,11 +285,20 @@
                 })
             })
         })
-        //$("#submit").click(function () {
-        //    $.postJSON("/Member/Edit", { Name: Name, Birthday: Birthday, Phone: Phone, Email: Email, BackUpEmail: BackUpEmail, regionName: regionName, Address: Address }, function () {
-        //        /*八個欄位變數取代city與control的傳進來變數一致*/
-        //    })
-        //})
+        //更新圖片
+        $("#photofile").change(function () {
+            let file = this.files[0];
+            let reader = new FileReader();
+            reader.onload = function (eve) {
+                $("#memphoto").attr("src", eve.target.result);
+            }
+            reader.readAsDataURL(file);
+            $("#labfile").text(file.name);
+        })
+        //傳城市名字回controler
+        $("#submit").click(function () {
+            $.postJSON("/Member/Edit", { countryName: countryName })
+        })
     </script>
 }
 
