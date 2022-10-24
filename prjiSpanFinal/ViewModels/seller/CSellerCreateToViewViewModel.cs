@@ -22,8 +22,18 @@ namespace prjiSpanFinal.ViewModels.seller
         public byte HeadPic { get; set; }
         public List<byte> BodyPic { get; set; }
         public string Description { get; set; }
-        public List<int> ShiperID { get; set; }
+        public List<string> ShiperID { get; set; }
         public int ProductID { get; set; }
         public int PaymentID { get; set; }
+        public List<CSellerCreateToViewViewModel> 暫存規格 { get; set; }
+        public List<int> SaveCount { get; set; }
+
+
+
+        public string StyleStr { get; set; }
+        public string QuantityStr { get; set; }
+        public string UnitPriceStr { get; set; }
+        public string BodyPicStr { get; set; }
+
     }
 }

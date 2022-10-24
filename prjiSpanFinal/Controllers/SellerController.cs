@@ -30,7 +30,7 @@ namespace prjiSpanFinal.Controllers
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                return RedirectToAction("Login","Member");
+                return RedirectToAction("Login", "Member");
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
@@ -97,7 +97,7 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-            if(keyword == null)
+            if (keyword == null)
             {
                 keyword = "";
             }
@@ -138,16 +138,17 @@ namespace prjiSpanFinal.Controllers
             }
 
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            return Json(dbcontext.Arguments.Where(a => a.OrderId == id).OrderBy(o => o.ArgumentId).Select(o => new OrderReturnViewModel(){
+            return Json(dbcontext.Arguments.Where(a => a.OrderId == id).OrderBy(o => o.ArgumentId).Select(o => new OrderReturnViewModel()
+            {
                 ReasonName = o.ArgumentReason.ArgumentReasonName,
                 ReasonText = o.ReasonText,
                 TypeName = o.ArgumentType.ArgumentTypeName,
-                pics = o.ArguePics.Select(o=>o.ArguePic1).ToList(),
+                pics = o.ArguePics.Select(o => o.ArguePic1).ToList(),
                 TypeID = o.ArgumentTypeId,
             }).LastOrDefault());
         }
 
-        public IActionResult AcceptReturn(int id,int type)
+        public IActionResult AcceptReturn(int id, int type)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
             {
@@ -155,7 +156,7 @@ namespace prjiSpanFinal.Controllers
             }
 
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            if(type == 1)
+            if (type == 1)
             {
                 Order a = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
                 int thisorderid = id;
@@ -172,7 +173,7 @@ namespace prjiSpanFinal.Controllers
                 }
             }
             //o => o.PaymentFee + o.ShipperFee + o.Quantity.Select((Value, index) => Value * Convert.ToInt32(o.Unitprice[index])).Sum()
-            else if(type == 2)
+            else if (type == 2)
             {
                 Order a = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
                 a.StatusId = 7;
@@ -183,7 +184,7 @@ namespace prjiSpanFinal.Controllers
                     b.Balance -= dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().Shipper.Fee;
                 }
             }
-            
+
             dbcontext.SaveChanges();
             return Json("1");
         }
@@ -196,36 +197,45 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-            
-                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-                int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
-                var bigType = _db.BigTypes.Select(i => i.BigTypeName).ToList();
-                var smallType = _db.SmallTypes.Select(i => i.SmallTypeName).ToList();
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
-                var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
-                var memship = _db.Shippers.Where(n => shiperlist.Contains(n.ShipperId)).Select(s => s.ShipperName).ToList();
+            var bigType = _db.BigTypes.Select(i => i.BigTypeName).ToList();
+            var smallType = _db.SmallTypes.Select(i => i.SmallTypeName).ToList();
 
-                CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
-                {
-                    bigType = bigType,
-                    smallType = smallType,
-                    memship = memship,
-                    shipID = shiperlist,
-                };
-                return View(x);
+            var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
+            var memship = _db.Shippers.Where(n => shiperlist.Contains(n.ShipperId)).Select(s => s.ShipperName).ToList();
+
+            CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
+            {
+                bigType = bigType,
+                smallType = smallType,
+                memship = memship,
+                shipID = shiperlist,
+            };
+            return View(x);
         }
 
 
-        //public void CreateToDB(string jsonString, CSellerCreateToViewViewModel VM)
+        public void SetSessionProductData(string jsonString) {
+            HttpContext.Session.Remove(CSellerSessionViewModel.PRODUCT_ALL_DATA);
+            HttpContext.Session.SetString(CSellerSessionViewModel.PRODUCT_ALL_DATA, jsonString);
+            string jsonSstring = HttpContext.Session.GetString(CSellerSessionViewModel.PRODUCT_ALL_DATA); //拿出session登入字串
+            var result = JsonSerializer.Deserialize<CSellerCreateToViewViewModel>(jsonSstring);
+
+        }
+
+        //public void CreateToDB(string jsonString,CSellerCreateToViewViewModel VM)
         //{
         //    string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
         //    int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
-        //    var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
-        //    var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
 
-        //    return View();
+        //    //var smtypeID = _db.SmallTypes.Where(n => n.SmallTypeName == VM.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
+        //    //var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
+
+        //    //return View();
         //}
 
 
@@ -285,6 +295,14 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Shipper()  //傳資料進去view
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+
             var payname = _db.Payments.Select(n => n).ToList();
             //var memberid = _db.PaymentToProducts.Select(n => n.ProductId);
             //var productid = _db.PaymentToSellers.Select(n => n.MemberId);
@@ -294,6 +312,7 @@ namespace prjiSpanFinal.Controllers
             List<string> PaymentName = new List<string>();
             List<int> ShipperId = new List<int>();
             List<string> ShipperName = new List<string>();
+            List<CSellerPaymentToViewViewModel> SellerPaymentToView = new List<CSellerPaymentToViewViewModel>();
 
             for (int i = 0; i < payname.Count; i++) //付款資料
             {
@@ -301,10 +320,30 @@ namespace prjiSpanFinal.Controllers
                 PaymentId.Add(payname[i].PaymentId);
             }
 
+            var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
+
             for (int i = 0; i < shipname.Count; i++)//物流資料
             {
+                CSellerPaymentToViewViewModel SellerPayment1 = new CSellerPaymentToViewViewModel();
+
                 ShipperName.Add(shipname[i].ShipperName);
                 ShipperId.Add(shipname[i].ShipperId);
+
+                //如果ShipperToSellers有資料
+                if (shiperlist.Count > 0)
+                {
+                    SellerPayment1.ShipperIdToShip = shipname[i].ShipperId;//把ShipperToSellers ID資料帶入
+
+                    if (shiperlist.Any(n => n == shipname[i].ShipperId))//有資料的話Checked給1 沒有給0
+                    {
+                        SellerPayment1.CheckedOX = 1;// 有資料的話Checked打開
+                    }
+                    else
+                    {
+                        SellerPayment1.CheckedOX = 0;// 有資料的話Checked關閉
+                    }
+                }
+                SellerPaymentToView.Add(SellerPayment1);
             }
 
             CSellerPaymentToViewViewModel x = new CSellerPaymentToViewViewModel
@@ -313,6 +352,7 @@ namespace prjiSpanFinal.Controllers
                 PaymentName = PaymentName,
                 ShipperId = ShipperId,
                 ShipperName = ShipperName,
+                x= SellerPaymentToView //對應到客戶的shipID
             };
 
             return View(x);
@@ -332,7 +372,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     foreach (var p in PID)
                     {
-                        _db.PaymentToSellers.Remove(p);                         
+                        _db.PaymentToSellers.Remove(p);
                     }
 
                     List<string> 金流 = list[0].選取的;  //list[0] 是金流ID
@@ -344,7 +384,7 @@ namespace prjiSpanFinal.Controllers
                             PaymentId = Convert.ToInt32(i)
                         };
                         _db.PaymentToSellers.Add(paymentToSeller);
-                    }                   
+                    }
                 }
 
                 var MID = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n);//找出登入者ShipperToSellers的所有資料
@@ -370,7 +410,7 @@ namespace prjiSpanFinal.Controllers
                 _db.SaveChanges();
                 return Content("1");  //1=true
             }
-            else 
+            else
                 return Content("0");   //0=false
         }
 
