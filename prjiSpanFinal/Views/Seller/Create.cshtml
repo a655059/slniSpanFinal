@@ -142,8 +142,10 @@
 @*<form action="@Url.Content("~/seller/CreateToDB")" method="post">*@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
-    <div class="col-10">
-        <div class="mt-3 mb-3">@await Component.InvokeAsync("seller跑條", new { page = 0 })</div>
+    <div class="col-10" id="change1">
+        <div class="mt-3 mb-3">
+            <img src="~/img/跑條1.png" />
+        </div>
         <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
         <div class="row">
             <div class="排版 mx-5">
@@ -160,15 +162,15 @@
                         @{
                             for (int i = 0; i < Model.bigType.Count; i++)
                             {
-                                <option value="@i">@Model.bigType[i]</option>
+                                <option value="@(i+1)">@Model.bigType[i]</option>
                             }
                         }
                     </select>
-                    <select  class="form-select w-25 m-3" aria-label="Default select example" id="smallType">
+                    <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType">
                         @{
                             for (int i = 0; i < 17; i++)
                             {
-                                <option value="@i">@Model.smallType[i]</option>
+                                <option value="@(i+1)">@Model.smallType[i]</option>
                             }
                         }
                     </select>
@@ -207,7 +209,7 @@
                             <label class="btn" for="commentPhoto1">
                                 <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                             </label>
-                            <input type="file" id="commentPhoto1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
+                            <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
                         </div>
                     </div>
                     <label class="名稱寬 mt-2">其他照片</label>
@@ -243,14 +245,16 @@
                         @{
                             for (int i = 0; i < Model.memship.Count; i++)
                             {
+                                <div class="col-3"></div>
                                 <div class="col-6 my-1">
-                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]"/>@Model.memship[i]</label>
-                                </div>
+                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
+                                </div><br />
+                                <div class="col-3"></div>
                                 @*<div class="col-6 my-1">
-                                    <div class="form-check form-switch d-flex justify-content-center">
-                                        <input id="@Model.ShiperID[i]" class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.shipID[i]">
-                                    </div>
-                                </div>*@
+                                        <div class="form-check form-switch d-flex justify-content-center">
+                                            <input id="@Model.ShiperID[i]" class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.shipID[i]">
+                                        </div>
+                                    </div>*@
                             }
                         }
                     </div>
@@ -267,6 +271,72 @@
             </div>
         </div>
     </div>
+
+
+
+    <div class="col-10 " id="change2" style="display:none">
+        <div class="mt-3">
+            <img src="~/img/跑條2.png" />
+        </div>
+        <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
+        <div>
+            <div class="">
+                <table class="">
+                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
+                    <tr class="row bg-light py-3 border-bottom">
+                        <td class="col-1 置中"><input type="checkbox" /></td>
+                        <td class="col-2 置中"><h5>優先曝光</h5></td>
+                        <td class="col-6 pt-3">
+                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
+                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
+                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
+                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
+                        </td>
+                        <td class="col-3">
+                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
+                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
+                        </td>
+                    </tr>
+                    <tr class="row py-3 border-bottom 背色">
+                        <td class="col-1 置中"><input type="checkbox" /></td>
+                        <td class="col-2 置中"><h5>重點標題</h5></td>
+                        <td class="col-6 pt-3">
+                            <input class="form-check-input mx-3" type="radio" />50  元 /  10天
+                            <input class="form-check-input mx-3" type="radio" />70  元 /  20天
+                            <input class="form-check-input mx-3" type="radio" />100  元 /  30天
+                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以粗體方式突顯效果。購買後5分鐘內生效。</p>
+                        </td>
+                        <td class="col-3">
+                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
+                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
+                        </td>
+                    </tr>
+                    <tr class="row bg-light py-3 border-bottom">
+                        <td class="col-1 置中"><input type="checkbox" /></td>
+                        <td class="col-2 置中"><h5>亮眼底色</h5></td>
+                        <td class="col-6 pt-3">
+                            <input class="form-check-input mx-3" type="radio" />150  元 /  10天
+                            <input class="form-check-input mx-3" type="radio" />250  元 /  20天
+                            <input class="form-check-input mx-3" type="radio" />350  元 /  30天
+                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以顯著底色突顯效果。購買後5分鐘內生效。</p>
+                        </td>
+                        <td class="col-3">
+                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
+                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
+                        </td>
+                    </tr>
+                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
+                </table>
+                <div class="row">
+                    <div class="col-5"></div>
+                    <div class="col-7">
+                        <input type="submit" value="下一步" class="btn btn-warning m-4" id="final"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @section Scripts{
     <script>
@@ -299,13 +369,6 @@
 
         let alldata = [];
 
-        //
-
-
-
-
-        ///////規格新增
-
         //資料暫存,後去把data變數傳入後端
         let data = [
             //['紅色', 7, 100, ''],
@@ -321,20 +384,7 @@
                 td.innerHTML = data[i][j];
                 tr.appendChild(td);
             }
-            //let td = document.createElement('td');
-            //刪除按紐
-            //td.innerHTML = `<a href='javascript:;'>刪除</a>`;
-            //let a = td.children[0];
-            //a.addEventListener('click', () => {
-            //    let parent = a.parentNode.parentNode;
-            //    parent.remove();
-            //})
-            /*tr.appendChild(td);*/
         }
-
-        //let infoModal = document.getElementById("infoModal");
-        //let close = document.getElementById("close");
-        //let save = document.getElementById("save");
 
         //show 出 model 可新增拍賣物品
         let btn = document.querySelector(".btnnew")
@@ -378,9 +428,6 @@
                 };
                 alldata.push(styleName);
 
-                @*let json = JSON.stringify(data);  //轉json
-                let response = await fetch("@Url.Content("~/Seller/CreateToDB")" + `?jsonString=${json}`);*@
-
                 let tr = document.createElement('tr');
                 for (let i = 0; i < dataNew.length; i++) {
                     let td = document.createElement('td');
@@ -422,49 +469,75 @@
             }
         });
 
-        //物流新增
-
-
-        $(".nextwork").click(function () {
-            let textVal = document.querySelector(".textval").value;
-            let pname = { "ProductName": textVal };
-            alldata.push(pname);
-        })
-
-
-        //下一步
+        //create下一步 按鈕
         next.addEventListener("click", function () {
+
+            $("#change1").css("display", "none");
+            $("#change2").css("display", "block");
+
+        });
+
+
+        final.addEventListener("click", function () {
+
             let dataphoto = [];
-            for (let i = 0; i < 4; i++){
-                dataphoto.push(document.querySelector(`.commentPhoto${i + 2}`).value);
+            let photos = [];
+            let appleclass = document.getElementsByClassName("commentphotoclass");
+            for (let i = 0; i < appleclass.length; i++) {
+                if (appleclass[i].files.length != 0) {
+                    photos.push(appleclass[i].files);
+                }
+                
             }
+            
+            console.log(photos)
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    console.log(photo[0])
+                    reader.readAsDataURL(photo[0]);
+                    reader.onload = function () {
+                        let src = reader.result;
+                        console.log(src)
+                        dataphoto.push(src.split(",")[1]);
+                    };
+                });
+            }
+            console.log(dataphoto)
+            //for (let i = 0; i < 4; i++){
+            //    dataphoto.push(document.querySelector(`.commentPhoto${i + 2}`).value);
+            //}
+
+            //畫面的物流
             let shiper = [];
             @foreach (var item in  Model.shipID) {
                         <text>
                     shiper.push("@item");
                     </text>
                 }
-
-
-
-
+              //要存入的金流
+             let payment = [];
+            @foreach (var item in Model.PaymentID){
+                <text>
+                    payment.push("@item");
+                    </text>
+            }
 
             let pushData = {
                 暫存規格:alldata,
                 ProductName: document.getElementById("ProductName").value,
-                smalltype: document.getElementById("smallType").value,
-                //HeadPic: document.getElementById("commentPhoto1").value,
+                smalltype: $("#smallType").children("option:selected").val(),
                 Description: document.getElementById("Description").value,
-                //BodyPic: dataphoto,
-                ShiperID: shiper
-
+                BodyPic: dataphoto,
+                ShiperID: shiper,
+                PaymentID: payment
             }
-            console.log(pushData);
+            console.log(dataphoto)
+            $.post("/Seller/CreateSuccess", { jsonString: pushData });
 
-            let jsonall = JSON.stringify(pushData);
-            fetch("@Url.Content("~/Seller/SetSessionProductData")" + `?jsonString=${jsonall}`);
-        });
-        
-
+            //轉json格式
+            @*let jsonall = JSON.stringify(pushData);
+            fetch("@Url.Content("~/Seller/CreateSuccess")" + `?jsonString=${jsonall}`);*@
+        })
     </script>
 }
