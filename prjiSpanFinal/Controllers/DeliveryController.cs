@@ -397,7 +397,18 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult AddComment()
         {
-            return View();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string jsonString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(jsonString);
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            
         }
         [HttpPost]
         public IActionResult AddComment(CSubmitCommentViewModel cSubmitComment)
