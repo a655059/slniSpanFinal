@@ -116,15 +116,14 @@
                             <span class="fs-6 text-muted">有著你想要的東西...</span>
                         </div>
                         <div class="itembody  ">
-                            @{
                                 <div class="itemcol d-flex justify-content-center" id="itemcol">
                                     <input type="hidden" id="itemCount" value="@Model.cShowItem.Count" />
-                                    @foreach (var item in Model.cShowItem.Take(48))
-                                    {
-                                        @await Component.InvokeAsync("HomeItemShow", new { shopProduct = item });
+
+                                    @{
+
+                                        await Component.InvokeAsync("HomeItemShow", new { shopProduct = Model.cShowItem });
                                     }
                                 </div>
-                            }
                         </div>
                         @if (Model.cShowItem.Count > 6)
                         {
