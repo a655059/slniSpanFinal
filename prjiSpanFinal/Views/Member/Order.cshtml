@@ -80,60 +80,7 @@
                         </tr>
                     </thead>
                     <tbody id="orderlistbody">
-                    @foreach (var item in Model)
-                    {
-                        int total = item.PaymentFee;
-                        @if (item.IsFreeDelivery != true)
-                        {
-                            total += item.ShipperFee;
-                        }
-                        <tr>
-
-                            <td>
-                                <input type="hidden" class="orderorderid" value="@item.OrderId" />
-                                <input type="hidden" class="ordershipperstatus" value="@item.ShipperStatusId" />
-                                <input type="hidden" class="orderorderdate" value="@item.OrderDatetime.Ticks" />@item.OrderId<br /><a class="namenounderline" href="@Url.Content("~/SalesCourt/賣場")">@item.SellerAcc</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a>
-                            </td>
-                            <td>@item.OrderDatetime.ToString("yyyy-MM-dd")<br />@item.OrderDatetime.ToString("HH:mm:dd")</td>
-                            <td>
-                                @for (int j = 0; j < item.Quantity.Count; j++)
-                                {
-                                    total += Decimal.ToInt32(item.Unitprice[j]) * item.Quantity[j];
-                                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Pic[j])" width="60" height="60" />
-
-                                    @item.ProductName[j] @item.Style[j] @:* @item.Quantity[j] $@Decimal.ToInt32(item.Unitprice[j]) <br />
-                                }
-                            </td>
-                            <td class="ordertotalprice">$@total</td>
-                            <td>@item.OrderStatusName</td>
-                            <td style="text-align:center">
-                                <a href="/Member/OrderDetail?id=@item.OrderId" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />
-                                @{
-                                    if (item.ShipperStatusId == 6)
-                                    {
-                                        <a href="@Url.Content("~/Delivery/AddComment?id=" + item.OrderId)" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a>
-                                        <br />
-                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
-                                    }
-                                    else if(item.ShipperStatusId == 4 || item.ShipperStatusId == 5)
-                                    {
-                                        <a data-bs-toggle="modal" href="#staticBackdrop3" role="button" class="btn btn-success orderbuttonfi my-1">領收</a>
-                                        <br />
-                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
-                                    }
-                                    else if (item.ShipperStatusId == 2 || item.ShipperStatusId == 3)
-                                    {
-                                        <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>
-                                            //<a class="btn btn-warning orderbuttonce my-1" data-bs-toggle="modal" href="#staticBackdrop5" role="button">取消</a>
-                                    }
-                                }
-                                <div>
-                                    <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                    </tbody>
             </table>
             <div class="row ">
                 <div class="col-4"></div>
@@ -289,6 +236,16 @@
     {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
+        function reloaditem(sm, id) {
+            $.getJSON(`/Member/SortOrder`, { sort: sm, tab: id }, function (data) {
+                $("#orderlistbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+            });
+        }
+        reloaditem(0, 0);
+
         function OrderListItem(data) {
             item = `<tr>
 
@@ -310,7 +267,7 @@
                                         <td>${data.orderStatusName}</td>
                                         <td style="text-align:center">
                                             <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
-            if (data.shipperStatusId == 6) {
+            if (data.shipperStatusId == 6 && data.buyerCommentId.includes(0)) {
                 item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
             else if(data.shipperStatusId == 5 || data.shipperStatusId == 4){
@@ -322,6 +279,7 @@
             item = item + `<div>
                                                 <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
                                             </div>
+                                            <input type="hidden" class="ordersellerid" value="${data.sellerId}" />
                                         </td>
                                     </tr>`;
             return item;
@@ -332,53 +290,28 @@
         $("#ordertime").click(function () {
             if ($("#ordertime").hasClass("sorting_desc")) {
                 sortmethod = 0;
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
             else {
                 sortmethod = 1;
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
         })
         $("#ordersales").click(function () {
             if ($("#ordersales").hasClass("sorting_desc")) {
                 sortmethod = 2;
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
             else {
                 sortmethod = 3;
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: 0 }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             }
         })
         $(".ordernavtabs").click(function (event) {
             tabid = $(event.currentTarget).siblings("input").val();
             $(event.currentTarget).addClass("active");
             $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-            $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                $("#orderlistbody").html("");
-                for (let i = 0; i < data.length; i++) {
-                    $("#orderlistbody").append(OrderListItem(data[i]));
-                }
-            });
+            reloaditem(sortmethod, tabid);
         })
         $("#btnDate").click(function () {
             let keyword = $("#orderkeyword").val();
@@ -402,7 +335,9 @@
         });
         let argueorderid;
         let argueitem;
+        let arguesellerid;
         $(document).on("click", ".orderbuttonre", function () {
+            arguesellerid = $(this).siblings(".ordersellerid").eq(0).val();
             argueorderid = $(this).parent().siblings().children().val();
             $("#argueselect").children().eq(0).prop("selected","selected");
             $("#exampleFormControlTextarea1").val("");
@@ -425,24 +360,15 @@
             let pics = $.map($("#previewCommentPhoto").find("img"),function(item,index){
                 return (item.src).split(',')[1];
             });
+            happy_sendnoti(4, arguesellerid,"你的訂單被買家投訴了，請點擊確認","/Seller/Order?sort=0&tab=8")
             $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             });
         })
 
         $("#orderrecsubmit").click(function () {
             $.getJSON(`/Member/WriteReceive`, { id: recorderid }, function (data) {
-                $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                    $("#orderlistbody").html("");
-                    for (let i = 0; i < data.length; i++) {
-                        $("#orderlistbody").append(OrderListItem(data[i]));
-                    }
-                });
+                reloaditem(sortmethod, tabid);
             });
         })
         $("#orderrecallsubmit").click(function(){
@@ -459,12 +385,7 @@
                 {
                     count1++;
                     $.getJSON(`/Member/WriteReceive`, { id: orderids[i] }, function (data) {
-                        $.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-                            $("#orderlistbody").html("");
-                            for (let i = 0; i < data.length; i++) {
-                                $("#orderlistbody").append(OrderListItem(data[i]));
-                            }
-                        });
+                        reloaditem(sortmethod, tabid);
                     });
                 }
                 

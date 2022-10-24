@@ -33,7 +33,7 @@
                 {
                     imgSrc1 = Url.Content("~/img/imageNotFound.png");
                 }
-                    <img src="@imgSrc1" />
+                                <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
@@ -58,11 +58,11 @@
                 @{
                     if (Model.user == null)
                     {
-                            <label class="text-primary">登入後方可使用檢舉功能</label>
+                                        <label class="text-primary">登入後方可使用檢舉功能</label>
                     }
                     else
                     {
-                            <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
+                                        <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
                     }
                 }
             </div>
@@ -86,21 +86,21 @@
                 {
                     if (i <= starCount)
                     {
-                            <div class="starBox"><img src="~/img/YellowStar.png" /></div>
+                                        <div class="starBox"><img src="~/img/YellowStar.png" /></div>
                     }
                     else
                     {
-                            <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
+                                        <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
                     }
                 }
-                    <div class="ms-3">
-                        4.2
-                    </div>
-                    <div class="ms-1">
-                        <span>(</span><a href="#">10</a><span>)</span>
-                    </div>
-                    <div class="ms-3">|</div>
-                    <div class="ms-3">已售出: 15</div>
+                                <div class="ms-3">
+                                    4.2
+                                </div>
+                                <div class="ms-1">
+                                    <span>(</span><a href="#">10</a><span>)</span>
+                                </div>
+                                <div class="ms-3">|</div>
+                                <div class="ms-3">已售出: 15</div>
             }
         </div>
         <div class="itemDetails">
@@ -124,7 +124,7 @@
                         {
                             price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
                         }
-                            <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                                        <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
@@ -149,12 +149,12 @@
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
                                 int quantity = i.Quantity;
-                                    <div class="ms-1 mb-1">
-                                        <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
-                                        <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
-                                        <div class="d-none price">@unitPrice</div>
-                                        <img class="d-none itemStyleImg" src="@imgSrc" />
-                                    </div>
+                                                <div class="ms-1 mb-1">
+                                                    <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                                    <div class="d-none price">@unitPrice</div>
+                                                    <img class="d-none itemStyleImg" src="@imgSrc" />
+                                                </div>
                             }
                         }
                     </div>
@@ -295,7 +295,8 @@
                     <input class="form-control" placeholder="@Model.product.ProductName" readonly>
                     <input id="ProductId" type="hidden" value="@Model.product.ProductId">
                     @{
-                        if(Model.user==null){
+                        if (Model.user == null)
+                        {
                             Model.user = new MemberAccount();
                             Model.user.MemberId = 1;
                         }
@@ -306,7 +307,7 @@
                         @{
                             foreach (var i in Model.ReportType)
                             {
-                                    <option value="@i.ReportTypeId">@i.ReportTypeName</option>
+                                                <option value="@i.ReportTypeId">@i.ReportTypeName</option>
                             }
                         }
                     </select>
@@ -422,36 +423,47 @@
         //檢舉功能
         let ProductId = document.getElementById("ProductId");
         let ReporterID = document.getElementById("ReporterID");
-        let ReportTypeID = $("#ReportTypeId");
+        let ReportTypeID = document.getElementById("ReportTypeId");
         let Reason = document.getElementById("Reason");
         let Report;
-        let ReportPic = $('#Preview').attr('src');
+        let ReportPic;
         let Save = document.getElementById("save");
-        
-        Save.addEventListener("click", () => {
-            Report = {
-                ProductId: ProductId.value,
-                ReporterID: ReporterID.value,
-                ReportTypeID: ReportTypeID.value,
-                ReporterID: ReporterID.value,
-                Reason: Reason.value,
-                ReportPic: ReportPic,
+
+        $("#ReportPic").change(function () {
+            const photos = document.getElementById("ReportPic").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(photo);
+                    reader.onloadend = function () {
+                        ReportPic = reader.result;
+                    }
+                });
             }
-            $.ajax({
-                url: '@Url.Action("ReportCreate","Item")',
-                method: "Post",
-                dataType: 'Json',
-                data: { d: Report },
-                success: function (datas) {
-                    if (!datas.res) {
-                        alert("請重新操作一次")
-                    }
-                    else {
-                        alert('檢舉成功!')
-                    }
+        });
+
+
+        Save.addEventListener("click", () => {
+            if (!Reason.value|| ReportPic == null) {
+                alert("所有欄位皆是必填!");
+            }
+            else {
+                Report = {
+                    ProductId: ProductId.value,
+                    ReporterID: ReporterID.value,
+                    ReportTypeID: ReportTypeID.options[ReportTypeID.selectedIndex].value,
+                    Reason: Reason.value,
+                    ReportPic: ReportPic.split(',')[1]
                 }
-            })
-        })
+                jQuery.postJSON = function (url, data, callback) {
+                jQuery.post(url, data, callback, "json");};
+            console.log(Report);
+            $.postJSON("/Item/ReportCreate", { d: Report }, function () { });
+            alert("檢舉成功");
+            $("#reportmodal").modal('hide');
+        }
+         })
+
 
     </script>
 }

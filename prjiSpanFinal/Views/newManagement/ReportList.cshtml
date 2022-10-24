@@ -39,9 +39,11 @@
                     檢舉理由
                 </th>
                 <th>
+                    處理狀態
+                </th>
+                <th>
                     圖片
                 </th>
-
                 <th>
                     檢舉類型
                 </th>
@@ -68,15 +70,30 @@
                     @Html.DisplayFor(model => model.First().Report.Reason)
                 </td>
                 <td>
-                    @Html.DisplayFor(model => model.First().Report.ReportPic)
+                    <input readonly value="@Model.First().ReportStatusName" class="statusname form-control-plaintext">
+                </td>
+                <td>
+                    @{
+                        var base64Image = Convert.ToBase64String(Model.First().Report.ReportPic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ReportTypeName)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("未處理", "ReportUndo", "newManagement",new { id=item.Report.ReportId},new{name=item.Report.ReportId,@class="btn btn-outline-warning Undo"})
+                    @Html.ActionLink("審核中", "ReportProcess","newManagement", new { id=item.Report.ReportId},
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Process"})
+                    @Html.ActionLink("未違反規定", "ReportDelete", "newManagement",new {  id=item.Report.ReportId},
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Delete"})
+                    @Html.ActionLink("給予賣家警告", "ReportWarning", "newManagement",new {  id=item.Report.ReportId},
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Warning"})
+                    @Html.ActionLink("下架該產品", "ReportServere", "newManagement",new {  id=item.Report.ReportId},
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Servere"})
+                    @Html.ActionLink("停權該賣家帳戶", "ReporStop", "newManagement",new {  id=item.Report.ReportId},
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Stop"})
                 </td>
             </tr>
         }
@@ -91,3 +108,100 @@
         )
 
 </div>
+
+@section Scripts{
+    <script>
+        let Undo = document.querySelectorAll(".Undo");
+        let Process = document.querySelectorAll(".Process");
+        let Delete = document.querySelectorAll(".Delete");
+        let Warning = document.querySelectorAll(".Warning"); 
+        let Servere = document.querySelectorAll(".Servere"); 
+        let Stop = document.querySelectorAll(".Stop"); 
+        let PSName = document.querySelectorAll(".statusname");
+        for (var BTNdele of Undo) {
+            BTNdele.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportUndo")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("未處理");
+                }
+            })
+        }
+        for (var BTNUnd of Process) {
+            BTNUnd.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportProcess")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("審核中");
+
+                }
+            })
+        }
+        for (var BTNdow of Delete) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportDelete")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("未違反規定");
+                }
+            })
+        }
+        for (var BTNdow of Warning) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportWarning")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("給予賣家警告");
+                }
+            })
+        }
+        for (var BTNdow of Servere) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportServere")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    confirm("確定要下架該產品嗎?")
+                    $(this).closest("td").siblings().find(".statusname").val("情節嚴重，下架該產品");
+                }
+            })
+        }
+        for (var BTNdow of Stop) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ReportStop")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    confirm("確定要停權該賣家嗎?")
+                    $(this).closest("td").siblings().find(".statusname").val("屢次違反，停權該賣家帳戶");
+                }
+            })
+        }
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+    </script>
+    }

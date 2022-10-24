@@ -35,9 +35,11 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<Faq> Faqs { get; set; }
         public virtual DbSet<Faqtype> Faqtypes { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
+        public virtual DbSet<IconType> IconTypes { get; set; }
         public virtual DbSet<Like> Likes { get; set; }
         public virtual DbSet<MemStatus> MemStatuses { get; set; }
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -52,6 +54,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual DbSet<RegionList> RegionLists { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<ReportStatus> ReportStatuses { get; set; }
         public virtual DbSet<ReportType> ReportTypes { get; set; }
         public virtual DbSet<Shipper> Shippers { get; set; }
         public virtual DbSet<ShipperToProduct> ShipperToProducts { get; set; }
@@ -432,6 +435,19 @@ namespace prjiSpanFinal.Models
                     .HasConstraintName("FK_Follows_MemberAccount");
             });
 
+            modelBuilder.Entity<IconType>(entity =>
+            {
+                entity.ToTable("IconType");
+
+                entity.Property(e => e.IconTypeId).HasColumnName("IconTypeID");
+
+                entity.Property(e => e.IconPic).IsRequired();
+
+                entity.Property(e => e.IconTypeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Like>(entity =>
             {
                 entity.Property(e => e.LikeId).HasColumnName("LikeID");
@@ -578,6 +594,39 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.RegionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MemberAccount_RegionList");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("Notification");
+
+                entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
+
+                entity.Property(e => e.IconTypeId).HasColumnName("IconTypeID");
+
+                entity.Property(e => e.Link)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Time).HasColumnType("datetime");
+
+                entity.HasOne(d => d.IconType)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.IconTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Notification_IconType");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Notification_MemberAccount");
             });
 
             modelBuilder.Entity<OfficialEventList>(entity =>
@@ -942,6 +991,8 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
                 entity.Property(e => e.ReportTypeId).HasColumnName("ReportTypeID");
 
                 entity.Property(e => e.ReporterId).HasColumnName("ReporterID");
@@ -951,6 +1002,12 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_Product");
+
+                entity.HasOne(d => d.ReportStatus)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(d => d.ReportStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Report_ReportStatus");
 
                 entity.HasOne(d => d.ReportType)
                     .WithMany(p => p.Reports)
@@ -963,6 +1020,17 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ReporterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Report_MemberAccount");
+            });
+
+            modelBuilder.Entity<ReportStatus>(entity =>
+            {
+                entity.ToTable("ReportStatus");
+
+                entity.Property(e => e.ReportStatusId).HasColumnName("ReportStatusID");
+
+                entity.Property(e => e.ReportStatusName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<ReportType>(entity =>

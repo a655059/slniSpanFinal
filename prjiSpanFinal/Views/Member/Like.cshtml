@@ -3,7 +3,7 @@
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
-    <link href="~/css/HomeStyle.css" rel="stylesheet" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/Item/ItemIndex.css" />
 }
 <style>
@@ -50,16 +50,20 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item" id="PDall">
-                <a class="nav-link active" aria-current="page" href="#">所有商品</a>
+                <a class="nav-link active ordernavtabs" aria-current="page" href="#">所有商品</a>
+                <input type="hidden" class="ordershipperstatus" value="0" />
             </li>
             <li class="nav-item" id="PDstage">
-                <a class="nav-link" href="#">狀態</a>
+                <a class="nav-link ordernavtabs" href="#">狀態</a>
+                <input type="hidden" class="ordershipperstatus" value="2" />
             </li>
             <li class="nav-item" id="PDdiscount">
-                <a class="nav-link" href="#">折扣中</a>
+                <a class="nav-link ordernavtabs" href="#">折扣中</a>
+                <input type="hidden" class="ordershipperstatus" value="3" />
             </li>
             <li class="nav-item" id="PDclass">
-                <a class="nav-link" href="#">類別</a>
+                <a class="nav-link ordernavtabs" href="#">類別</a>
+                <input type="hidden" class="ordershipperstatus" value="4" />
             </li>
         </ul>
         <figure style="background-color:#FCFCFC">
@@ -70,7 +74,7 @@
                     count++;
                     <figcaption style="font-size:15px; color: #8E8E8E; "><a>@count</a>件商品</figcaption>
                     <div class="aaa d-flex flex-wrap">
-                        @for (int i = 0; i<=count; i++)
+                        @for (int i = 0; i < count; i++)
                         {
                             <div class="sellsitem">
                                 <div>
@@ -79,21 +83,33 @@
                                     </a>
                                 </div>
                                 <div class="px-1 d-flex flex-column justify-content-between">
-                                    <div class="cardTitle">商品:筆電</div>
-                                    <div class="cardPrice">價格:$25000</div>
+                                    <div class="cardTitleBox">
+                                        <div class="cardTitle">@pd.ProductName</div>
+                                    </div>
+                                    @{ if (pd.Unitprice.Count == 1)
+                                        {
+                                            <div class="cardPrice">$@decimal.Round(pd.Unitprice[0])</div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="cardPrice">$@decimal.Round(pd.Unitprice[0])-$@decimal.Round(pd.Unitprice[1])</div>
+
+                                        }
+                                    }
                                     <div class="cardInfo d-flex justify-content-between align-items-end">
-                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                        <div class="starBox mt-1">
                                             <div class="d-flex justify-content-start">
                                                 <div class="starImg">
                                                     <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                                                 </div>
                                                 <div class="text-black">4.5</div>
                                             </div>
-                                            <div class="text-black-50">銷售<span>100</span></div>
+                                            <div class="text-black-50">已賣出<span>100</span></div>
                                         </div>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
-                                        </div>
+                                        @*<div>
+                <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+            </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +127,8 @@
     <script>
     const pd狀態 = document.querySelector("#PDstage")
     const pd折扣 = document.querySelector("#PDdiscount")
-    const pd類別 = document.querySelector("#PDclass")
+        const pd類別 = document.querySelector("#PDclass")
+        let tabid = 0;
 
     pd狀態.addEventListener("click", () => {
         $("#PDstage").children().addClass("active")
@@ -136,5 +153,18 @@
         }
         $(".aaa").html(str);
     });
+
+        $(".ordernavtabs").click(function (event) {
+            tabid = $(event.currentTarget).siblings("input").val();
+            $(event.currentTarget).addClass("active");
+            $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+            //$.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
+            //    $("#orderlistbody").html("");
+            //    for (let i = 0; i < data.length; i++) {
+            //        $("#orderlistbody").append(OrderListItem(data[i]));
+            //    }
+            //});
+        })
+
     </script>
 }

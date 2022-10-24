@@ -476,7 +476,7 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             List<CReportListViewModel> list = new();
             IQueryable<Report> Reps = null;
-            if (keyword == null)
+            if (keyword== null)
             {
                 Reps = db.Reports.Select(i => i);
             }
@@ -493,8 +493,8 @@ namespace prjiSpanFinal.Controllers
                     Select(e => e); ;
             }
             var ProductName = (from i in db.Products select i).ToList();
-            
             var ReportTypeName = (from i in db.ReportTypes select i).ToList();
+            var ReportStatusName = (from i in db.ReportStatuses select i).ToList();
             foreach (var p in Reps)
             {
                 CReportListViewModel model = new()
@@ -504,13 +504,15 @@ namespace prjiSpanFinal.Controllers
                     ProductName = (from i in ProductName
                                    where i.ProductId == p.ProductId
                                    select i.ProductName).First(),
-                   ReportTypeName = (from i in ReportTypeName
+                    ReportTypeName = (from i in ReportTypeName
                                      where i.ReportTypeId == p.ReportTypeId
                                      select i.ReportTypeName).First(),
+                    ReportStatusName = (from i in ReportStatusName
+                                        where i.ReportStatusId == p.ReportStatusId
+                                        select i.ReportStatusName).First(),
                 };
                 list.Add(model);
             }
-
             return list;
         }
         protected IPagedList<CReportListViewModel> GetReportPagedProcess(int? page, int pageSize, string keyword)
@@ -536,7 +538,137 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+        public IActionResult ReportProcess(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId =1 ;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportDelete(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId =2;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportUndo(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId = 6;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportWarning(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            Q.ReportStatusId = 3;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportServere(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            var prod = from p in db.Products
+                       where p.ProductId ==Q.ProductId
+                       select p.ProductId;
+            var G = db.Products.FirstOrDefault(i => i.ProductId == prod.First());
+            G.ProductStatusId =1 ;
+            Q.ReportStatusId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ReportStop(int? id)
+        {
+            var db = new iSpanProjectContext();
+            var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
+            var prod = from p in db.Products
+                       join x in db.Reports on p.ProductId equals x.ProductId
+                       where p.ProductId == Q.ProductId
+                       select p.MemberId;
+            var K = prod.First();
+            var G = db.MemberAccounts.FirstOrDefault(i => i.MemberId == K);
+            G.MemStatusId = 4;
+            Q.ReportStatusId = 5;
+            db.SaveChanges();
+            return Content("1");
+        }
         #endregion
-
+        #region CouponRegion
+        public List<Coupon> GetCouponsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<Coupon> list = new();
+            IQueryable<Coupon> Coupons = null;
+            if (keyword == null)
+            {
+                Coupons = db.Coupons.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.CouponId == key || i.MemberId == key).
+                     Select(e => e);
+            }
+            else if (DateTime.TryParse(keyword, out DateTime key2))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.StartDate == key2||i.ExpiredDate==key2||i.ReceiveStartDate==key2||i.ReceiveEndDate==key2).
+                     Select(e => e);
+            }
+            else
+            {
+                Coupons = db.Coupons.
+                    Where(i => i.CouponCode.Contains(keyword)||i.CouponName.Contains(keyword)).
+                    Select(e => e); ;
+            }
+        
+            foreach(var coupon in Coupons)
+            {
+                list.Add(coupon);
+            }
+            return list;
+        }
+        protected IPagedList<Coupon> GetCouponsPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetCouponsFromDatabase(keyword);
+            IPagedList<Coupon> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult CouponList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetCouponsPagedProcess(page, pageSize, keyword);
+            var PList = GetCouponsPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult CouponCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CouponCreate(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("CouponList");
+        }
+        #endregion
     }
 }

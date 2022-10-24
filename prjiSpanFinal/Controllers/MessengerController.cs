@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,12 @@ namespace prjiSpanFinal.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public void NewIcon(byte[] pic)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            dbcontext.IconTypes.Add(new IconType() {IconPic = pic,IconTypeName = "123" });
+            dbcontext.SaveChanges();
         }
     }
 }

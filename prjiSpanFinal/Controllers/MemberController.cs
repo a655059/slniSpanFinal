@@ -18,6 +18,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using prjiSpanFinal.Models.OrderReq2;
 using Org.BouncyCastle.Utilities;
+using prjiSpanFinal.Models.LikeReq;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -63,7 +64,12 @@ namespace prjiSpanFinal.Controllers
             }
             return Content("0", "text/plain", Encoding.UTF8); ;
         }
-        
+        public IActionResult LoginSuccess()
+        {
+            return View();
+        }
+
+
         public IActionResult Edit()
         {
             iSpanProjectContext db = new iSpanProjectContext();
@@ -85,7 +91,7 @@ namespace prjiSpanFinal.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Edit(MemberAccViewModel mem, IFormFile File1)
+        public IActionResult Edit(MemberAccViewModel mem, IFormFile File1,string countryName)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -128,7 +134,8 @@ namespace prjiSpanFinal.Controllers
                 }
                 else if (mem.regionName != null)
                 {
-                    acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
+                    int countryid = db.CountryLists.FirstOrDefault(p => p.CountryName == countryName).CountryId;
+                    acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName && p.CountryId== countryid).RegionId;
                 }
                 else if (mem.Name != null) { acc.Name = mem.Name; }
                 else if (mem.Address != null) { acc.Address = mem.Address; }
@@ -164,7 +171,7 @@ namespace prjiSpanFinal.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(MemberAccViewModel mem , IFormFile File1)
+        public IActionResult Create(MemberAccViewModel mem , IFormFile File1, string countryName)
         {
             //城市country要傳遞進來才能找到正確region
 
@@ -183,8 +190,12 @@ namespace prjiSpanFinal.Controllers
             }
             mem.MemPic = imgByte;
             }
+            if (mem.regionName!=null)
+            {
+                int countryid = db.CountryLists.FirstOrDefault(p => p.CountryName == countryName).CountryId;
+                memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName &&p.CountryId== countryid).RegionId;
+            }
 
-            memberac.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName).RegionId;
             if (mem.gender == "female")
             {
                 memberac.Gender = 2;
@@ -207,7 +218,7 @@ namespace prjiSpanFinal.Controllers
             }
             db.MemberAccounts.Add(memberac);
             db.SaveChanges();
-            return RedirectToAction("Login");
+            return RedirectToAction("LoginSuccess");
         }
         public FileResult ShowPhoto(int id)
         {
@@ -224,16 +235,31 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
+                iSpanProjectContext dbcontext = new iSpanProjectContext();
                 string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-                var mylike = _context.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
+                var mylike = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
                 {
+
+                    ProductName = p.Product.ProductName,
                     ProductID = p.ProductId,
                     memberID = p.MemberId,
-                });
+                    MylikeID = p.LikeId,
+                    Quantity = p.Product.ProductDetails.Select(q => q.Quantity).FirstOrDefault(),
+                    ProductDetailID = p.Product.ProductDetails.Select(q => q.ProductDetailId).FirstOrDefault(),
+                    Unitprice = p.Product.ProductDetails.Select(q => q.UnitPrice).ToList(),
+                }) ;
                 return View(mylike);
             }
-
+        }
+        public IActionResult AllLike(int sort, int tab)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(new LikeSortReq().SortTab(sort, tab, id));
             
         }
         public IActionResult Coupon()
@@ -246,44 +272,7 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
-            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return View(dbcontext.Orders.Where(o => o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).
-                Select(o => new OrderListViewModel()
-                {
-                    OrderId = o.OrderId,
-                    SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
-                    SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
-                    BuyerId = o.MemberId,
-                    BuyerAcc = o.Member.MemberAcc,
-                    OrderDatetime = o.OrderDatetime,
-                    //RecieveAdr = o.RecieveAdr,
-                    //FinishDate = o.FinishDate,
-                    //CouponName = o.Coupon.CouponName,
-                    //Discount = o.Coupon.Discount,
-                    IsFreeDelivery = o.Coupon.IsFreeDelivery,
-                    OrderStatusName = o.Status.OrderStatusName,
-                    ShipperStatusId = o.StatusId,
-                    //ShipperName = o.Shipper.ShipperName,
-                    ShipperFee = o.Shipper.Fee,
-                    //ShipperPhone = o.Shipper.Phone,
-                    //PaymentDate = o.PaymentDate,
-                    //ShippingDate = o.ShippingDate,
-                    //ReceiveDate = o.ReceiveDate,
-                    //PaymentName = o.Payment.PaymentName,
-                    PaymentFee = o.Payment.Fee,
-                    //OrderMessage = o.OrderMessage,
-                    //OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
-                    //ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
-                    Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
-                    //OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
-                    //ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
-                    Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
-                    ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
-                    Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
-                    Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
-                    ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
-                }).OrderByDescending(o => o.OrderDatetime).ToList());
+            return View();
         }
         public IActionResult SortOrder(int sort, int tab)
         {
