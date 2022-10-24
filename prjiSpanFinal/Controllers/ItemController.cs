@@ -109,7 +109,6 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
         public IActionResult ReportCreate(Report d)
         {
             var db = (new iSpanProjectContext());
