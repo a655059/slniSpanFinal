@@ -36,6 +36,8 @@ namespace prjiSpanFinal.Models.OrderReq2
                 //ReceiveDate = o.ReceiveDate,
                 //PaymentName = o.Payment.PaymentName,
                 PaymentFee = o.Payment.Fee,
+                BuyerCommentId = o.OrderDetails.Select(o => o.Comments.Count).ToList(),
+                SellerCommentId = o.CommentForCustomers.Count,
                 //OrderMessage = o.OrderMessage,
                 //OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
                 //ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),

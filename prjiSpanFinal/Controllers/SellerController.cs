@@ -33,44 +33,7 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
-            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return View(dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1 && o.StatusId != 9).
-                Select(o => new OrderListViewModel()
-                {
-                    OrderId = o.OrderId,
-                    SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
-                    SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
-                    BuyerId = o.MemberId,
-                    BuyerAcc = o.Member.MemberAcc,
-                    OrderDatetime = o.OrderDatetime,
-                    //RecieveAdr = o.RecieveAdr,
-                    //FinishDate = o.FinishDate,
-                    //CouponName = o.Coupon.CouponName,
-                    //Discount = o.Coupon.Discount,
-                    IsFreeDelivery = o.Coupon.IsFreeDelivery,
-                    OrderStatusName = o.Status.OrderStatusName,
-                    ShipperStatusId = o.StatusId,
-                    //ShipperName = o.Shipper.ShipperName,
-                    ShipperFee = o.Shipper.Fee,
-                    //ShipperPhone = o.Shipper.Phone,
-                    //PaymentDate = o.PaymentDate,
-                    //ShippingDate = o.ShippingDate,
-                    //ReceiveDate = o.ReceiveDate,
-                    //PaymentName = o.Payment.PaymentName,
-                    PaymentFee = o.Payment.Fee,
-                    //OrderMessage = o.OrderMessage,
-                    //OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
-                    //ProductDetailId = o.OrderDetails.Select(o => o.ProductDetailId).ToList(),
-                    Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
-                    //OrderDetailReceiveDate = o.OrderDetails.Select(o => o.ReceiveDate).ToList(),
-                    //ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
-                    Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
-                    ProductId = o.OrderDetails.FirstOrDefault().ProductDetail.ProductId,
-                    Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
-                    Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
-                    ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
-                }).OrderByDescending(o => o.OrderDatetime).ToList());
+            return View();
         }
         public IActionResult SortOrder(int sort, int tab)
         {
@@ -105,8 +68,11 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
-            Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
-            b.StatusId = 7;
+            if(!dbcontext.Orders.Where(o=>o.OrderId==id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList().Contains(0))
+            {
+                Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                b.StatusId = 7;
+            }
             dbcontext.SaveChanges();
             return Json("1");
         }
