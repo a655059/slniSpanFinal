@@ -7,6 +7,5 @@ namespace prjiSpanFinal.ViewModels
         public static readonly string ChatId = "ChatId";
         public static readonly string SK_PURCHASEITEMINFO = "SK_PURCHASEITEMINFO";
         public static readonly string SK_ALL_INFO_TO_SHOW_CHECKOUT = "SK_ALL_INFO_TO_SHOW_CHECKOUT";
-        public static readonly string SK_SAVE_SHIPPER_PAYMENT_COUPON = "SK_SAVE_SHIPPER_PAYMENT_COUPON";
     }
 }

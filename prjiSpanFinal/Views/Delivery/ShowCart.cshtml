@@ -30,6 +30,7 @@
             {
                 <div class="sellerLayout mb-2 border rounded-2 px-2 py-3">
                     <div class="form-check border-bottom pb-2 d-flex align-items-center">
+                        <div class="sellerID d-none">@sellerID</div>
                         <input class="selectAll form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
                         <label class="sellerAcc form-check-label mx-2 fw-bold fs-3" for="flexCheckDefault">@sellerDic[sellerID]</label><span class="fs-5">的賣場</span>
                     </div>
@@ -127,7 +128,6 @@
 
 @section Scripts{
     <script src="~/js/Delivery/DeliveryShowCart.js"></script>
-    <script src="~/js/Delivery/DeliveryCheckout.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
     <script>
         $(".btnDelete").click(async function () {
@@ -165,15 +165,17 @@
                     const productName = $(this).closest(".itemLayout").find(".productName").html();
                     const productDetailID = Number($(this).siblings().find(".productDetailID").attr("id"));
                     const sellerAcc = $(this).closest(".sellerLayout").find(".sellerAcc").html();
+                    const sellerID = Number($(this).closest(".sellerLayout").find(".sellerID").html());
                     const unitPrice = $(this).siblings().find(".itemPrice").html();
                     const productStyle = $(this).siblings().find(".productStyle").html();
                     const object = {
                         "orderDetailID": orderDetailID,
-                        "purchaseCount": purchaseCount,
                         "productName": productName,
                         "productDetailID": productDetailID,
-                        "sellerAcc": sellerAcc,
                         "unitPrice": unitPrice,
+                        "sellerAcc": sellerAcc,
+                        "sellerID": sellerID,
+                        "purchaseCount": purchaseCount,
                         "productStyle": productStyle,
                     };
                     orderDetailIDInfo.push(object);
@@ -193,7 +195,6 @@
                 alert("請選取至少一個商品");
                 return;
             }
-            
         });
     </script>
 }

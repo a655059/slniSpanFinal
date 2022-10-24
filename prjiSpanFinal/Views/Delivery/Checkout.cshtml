@@ -47,10 +47,6 @@
         <div class="checkoutFormVC">
             @await Component.InvokeAsync("DeliveryFillCheckoutForm", new { sellerIDIndex = 0 })
         </div>
-        <div class="text-center">
-            <button class="btn btn-warning d-none" id="previousStore">回上一筆</button>
-            <button class="btn btn-primary" id="nextStore">確認並前往下一筆</button>
-        </div>
     </div>
     <div class="col-3">
         <div class="showCalTotalPriceVC">
@@ -62,9 +58,14 @@
 @section Scripts{
     <script>
         $(function () {
-                $(".checkoutFormVC").load("@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=0`);
+            $(".checkoutFormVC").load("@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=0`);
+            if ($(".sellerIDCount").html() == "1") {
+                $("#nextStore").html("確認並前往下單");
+            }
+            else {
+                $("#nextStore").html("確認並前往下一筆");
+            }
         });
-
         function changePage(NextOrPrevOrIndex) {
             const sellerCount = Number($(".sellerIDCount").html());
             const sellerIDIndex = Number($(".sellerIDIndex").html());
@@ -78,15 +79,15 @@
             else {
                 nextSellerIDIndex = NextOrPrevOrIndex;
             }
-
             const _url = "@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=${nextSellerIDIndex}`;
             $(".checkoutFormVC").load(_url);
             $(".sellerIDIndex").html(nextSellerIDIndex);
             if (nextSellerIDIndex >= sellerCount - 1) {
-                $("#nextStore").removeClass("d-none").addClass("d-none");
+                $("#nextStore").html("確認並前往下單");
+
             }
             else {
-                $("#nextStore").removeClass("d-none");
+                $("#nextStore").html("確認並前往下一筆");
             }
             if (nextSellerIDIndex <= 0) {
                 $("#previousStore").removeClass("d-none").addClass("d-none");
@@ -117,7 +118,7 @@
                 const couponID = Number($(".selectedCouponID").attr("id").substring(8));
                 const couponName = $(".selectedCouponID").html();
                 const wordToSeller = $("#wordToSeller").val();
-                let jsonObject = [{
+                let jsonObject = {
                     "sellerID": sellerID,
                     "recipient": recipient,
                     "email": email,
@@ -131,14 +132,17 @@
                     "couponID": couponID,
                     "couponName": couponName,
                     "wordToSeller": wordToSeller
-                }];
+                };
                 let jsonString = JSON.stringify(jsonObject);
                 let respons = await fetch("@Url.Content("~/Delivery/SaveShipperPaymentCoupon")" + `?x=${jsonString}`);
                 let data = await respons.text();
-                console.log(data);
-                changePage("Next");
+                if ($(this).html() == "確認並前往下一筆") {
+                    changePage("Next");
+                }
+                else {
+                     window.location.href = "@Url.Content("~/Delivery/CheckoutConfirm")"
+                }
             }
-
         });
         $("#previousStore").click(function () {
             changePage("Prev");

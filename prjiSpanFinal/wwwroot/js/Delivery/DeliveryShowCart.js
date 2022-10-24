@@ -1,4 +1,15 @@
-﻿$(function () {
+﻿function CalTotalPrice() {
+    let smallPrice = 0;
+    $(".selectItem:checked").closest("div").siblings().find(".itemCount").each(function () {
+        let itemCount = $(this).val();
+        let itemPrice = $(this).closest(".choseCount").siblings().find(".itemPrice").html();
+        smallPrice += Number(itemCount) * Number(itemPrice);
+    });
+    document.getElementById("smallPrice").innerHTML = smallPrice;
+    document.getElementById("totalPrice").innerHTML = smallPrice;
+}
+
+$(function () {
     $(".itemCount").each(function (idx, ele) {
         if ($(this).val() <= 1) {
             $(this).siblings(".countMinus").attr("disabled", true).css("color", "#D0D0D0");
@@ -51,25 +62,10 @@ $(".itemCount").change(function () {
         $(this).closest("div").siblings().removeClass("d-none");
         $(this).val(maxValue);
     }
-    CalTotalPrice();
+    
 });
 
-function CalTotalPrice() {
-    let smallPrice = 0;
-    $(".selectItem:checked").closest("div").siblings().find(".itemCount").each(function () {
-        let itemCount = $(this).val();
-        let itemPrice = $(this).closest(".choseCount").siblings().find(".itemPrice").html();
-        smallPrice += Number(itemCount) * Number(itemPrice);
-    });
-    document.getElementById("smallPrice").innerHTML = smallPrice;
-    let discount = 0;
-    let discountPriceElement = document.getElementById("discountPrice");
-    if (discountPriceElement.innerHTML != null) {
-        discount = Number(discountPriceElement.innerHTML);
-    }
-    let totalPrice = smallPrice - Number(discount);
-    document.getElementById("totalPrice").innerHTML = totalPrice;
-}
+
 
 
 $(".countMinus").click(function () {

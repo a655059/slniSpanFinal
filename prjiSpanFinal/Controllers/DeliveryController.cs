@@ -288,6 +288,7 @@ namespace prjiSpanFinal.Controllers
                         productDetailPic = productDetailPic,
                         unitPrice = a.unitPrice,
                         sellerAcc = a.sellerAcc,
+                        sellerID = a.sellerID,
                         purchaseCount = a.purchaseCount,
                         productStyle = a.productStyle,
                     };
@@ -357,8 +358,9 @@ namespace prjiSpanFinal.Controllers
                 string store = "[";
                 foreach (var i in files)
                 {
-                    string jsonString = System.IO.File.ReadAllText(i).Split('[')[1].Split(']')[0].Trim()+",";
-                    store += jsonString;
+
+                string jsonString = System.IO.File.ReadAllText(i).Split('[')[1].Split(']')[0] + ",";
+                store += jsonString;
                 }
                 store = store.Substring(0, store.Length - 1) + "]";
 
@@ -371,50 +373,26 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult SaveShipperPaymentCoupon(string x)
         {
-            List<CSaveShipperPaymentCoupon> newPurchaseInfo = JsonSerializer.Deserialize<List<CSaveShipperPaymentCoupon>>(x);
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON))
+            CSaveShipperPaymentCoupon newPurchaseInfo = JsonSerializer.Deserialize<CSaveShipperPaymentCoupon>(x);
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT))
             {
-                string purchaseInfoString = HttpContext.Session.GetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON);
-                List<CSaveShipperPaymentCoupon> purchaseInfo = JsonSerializer.Deserialize<List<CSaveShipperPaymentCoupon>>(purchaseInfoString);
-                List<int> sellerIDList = new List<int>();
-                foreach (var a in purchaseInfo)
+                string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);
+                CDeliveryCheckoutViewModel cDeliveryCheckout = JsonSerializer.Deserialize<CDeliveryCheckoutViewModel>(jsonString);
+                foreach (var a in cDeliveryCheckout.sellerShipperPayments)
                 {
-                    sellerIDList.Add(a.sellerID);
-                }
-                if (sellerIDList.Contains(newPurchaseInfo[0].sellerID))
-                {
-                    foreach (var a in purchaseInfo)
+                    if (a.seller.MemberId == newPurchaseInfo.sellerID)
                     {
-                        if (a.sellerID == newPurchaseInfo[0].sellerID)
-                        {
-                            a.sellerID = newPurchaseInfo[0].sellerID;
-                            a.recipient = newPurchaseInfo[0].recipient;
-                            a.email = newPurchaseInfo[0].email;
-                            a.phone = newPurchaseInfo[0].phone;
-                            a.address = newPurchaseInfo[0].address;
-                            a.shipperID = newPurchaseInfo[0].shipperID;
-                            a.shipperName = newPurchaseInfo[0].shipperName;
-                            a.shipperFee = newPurchaseInfo[0].shipperFee;
-                            a.paymentID = newPurchaseInfo[0].paymentID;
-                            a.paymentName = newPurchaseInfo[0].paymentName;
-                            a.couponID = newPurchaseInfo[0].couponID;
-                            a.couponName = newPurchaseInfo[0].couponName;
-                            a.wordToSeller = newPurchaseInfo[0].wordToSeller;
-                        }
+                        a.savedShipperPaymentCoupon = newPurchaseInfo;
                     }
                 }
-                else
-                {
-                    purchaseInfo.Add(newPurchaseInfo[0]);
-                }
-                string updatedPurchaseInfo = JsonSerializer.Serialize(purchaseInfo);
-                HttpContext.Session.SetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON, updatedPurchaseInfo);
+                string newJsonString = JsonSerializer.Serialize(cDeliveryCheckout);
+                HttpContext.Session.SetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT, newJsonString);
+                return Content("1");
             }
             else
             {
-                HttpContext.Session.SetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON, x);
+                return Content("0");
             }
-            return Json(HttpContext.Session.GetString(CDictionary.SK_SAVE_SHIPPER_PAYMENT_COUPON));
         }
 
         public IActionResult AddComment()
@@ -432,7 +410,9 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult CheckoutConfirm()
         {
-            return View();
+            string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);
+            CDeliveryCheckoutViewModel cDeliveryCheckout = JsonSerializer.Deserialize<CDeliveryCheckoutViewModel>(jsonString);
+            return View(cDeliveryCheckout);
         }
         public IActionResult OrderSuccess()
         {
