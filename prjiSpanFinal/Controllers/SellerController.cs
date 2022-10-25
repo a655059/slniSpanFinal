@@ -156,12 +156,6 @@ namespace prjiSpanFinal.Controllers
             return Json("1");
         }
 
-
-
-
-
-
-
         public IActionResult Create()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))

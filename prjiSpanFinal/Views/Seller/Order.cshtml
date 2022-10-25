@@ -485,8 +485,8 @@
 
         })
 
-        $("#orderreturnsubmit").click(function () {
-            console.log(returntype)
+        $(document).on("click", "#orderreturnsubmit",function () {
+            console.log(returntype);
             $.getJSON(`/Seller/AcceptReturn`, { id: returnorderid, type: returntype }, function (data) {
                 reloaditem(sortmethod, tabid);
             });
