@@ -121,17 +121,27 @@
                             @{
                                 for (int j = 0; j < Model.Pic[i].Count; j++)
                                 {
-                                    <div class="row align-content-center justify-content-center 置中 內容文字大小"><img src="data:image;base64,@System.Convert.ToBase64String(Model.Pic[i][j])" height="55"/></div>
+                                    if (Model.Pic[i][j] != null)     /*如果有照片的話*/
+                                    {
+                                        <div class="row align-content-center justify-content-center 置中 內容文字大小"><img src="data:image;base64,@System.Convert.ToBase64String(Model.Pic[i][j])" height="55" /></div>
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
                                 }
                             }
                         </div>
                         <div class=" row align-content-center col-1 justify-content-center mx-2">
-                            @Html.ActionLink("編輯", "Edit", new { @*id = item.FId*@}, new { @class = "btn btn-primary " })<br />
-                            @Html.ActionLink("刪除", "Delete", "Product", new { @*id = item.FId*@},
-                                                        new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger mt-2" })
+                            @Html.ActionLink("編輯", "EditProduct", new { id = Model.productId[i] }, new { @class = "btn btn-primary mt-2" })<br />
+                            @*@Html.ActionLink("下架", "TakeDownProduct", "Seller", new { id = Model.productId[i] },
+                                                    new { onclick = "takedown_confirm()", @class = "btn btn-info mt-2 takedown", style = "display:block" })<br />
+                            @Html.ActionLink("上架", "TakeUpProduct", "Seller", new { id = Model.productId[i] },
+                                                    new { onclick = "return confirm('確定要上架嗎?')", @class = "btn btn-success mt-2 takeup", style = "display:none" })<br />*@
+                            @Html.ActionLink("刪除", "DeleteProduct", "Seller", new { id = Model.productId[i] },
+                                                        new { onclick = "return confirm('確定要刪除嗎?')", @class = "btn btn-danger my-2" })
                         </div>
                     </div>
-
                 }
             }
         </div>
@@ -164,4 +174,15 @@
 </div>
 @section Scripts
 {
+<script>
+    //function takedown_confirm() {
+    //  return  confirm('確定要下架嗎?');
+        //var r = confirm("Press a button")
+        //if (r == true) {
+        //    $(".takedown").css("display", "none");
+        //    $(".takeup").css("display", "block");
+
+              
+        //}
+</script>
 }
