@@ -403,29 +403,33 @@ namespace prjiSpanFinal.Controllers
                 string jsonString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(jsonString);
                 int memberID = member.MemberId;
-                Order order = dbContext.Orders.Where(i => i.OrderId == id && i.MemberId == memberID && i.StatusId == 6).Select(i => i).FirstOrDefault();
-                if (order != null)
+                var orderDetails = dbContext.OrderDetails.Where(i => i.OrderId == id).Select(i=>new { 
+                    orderDetailID = i.OrderDetailId,
+                    productDetailPic = i.ProductDetail.Pic,
+                    style = i.ProductDetail.Style,
+                    productName = i.ProductDetail.Product.ProductName
+                }).ToList();
+                var comments = dbContext.Comments.Select(i => i).ToList();
+                List<CAddCommentViewModel> cAddCommentList = new List<CAddCommentViewModel>();
+                foreach (var a in orderDetails)
                 {
-                    var orderDetails = dbContext.OrderDetails.Where(i => i.OrderId == order.OrderId).Select(i => new {
-                        orderDetailID = i.OrderDetailId, 
-                        productDetailPic = i.ProductDetail.Pic, 
-                        style = i.ProductDetail.Style, 
-                        productName = i.ProductDetail.Product.ProductName});
-                    List<CAddCommentViewModel> cAddCommentList = new List<CAddCommentViewModel>();
-                    foreach (var i in orderDetails)
+                    var comment = comments.Where(i => i.OrderDetailId == a.orderDetailID).Select(i => i).FirstOrDefault();
+                    if (comment == null)
                     {
                         CAddCommentViewModel cAddComment = new CAddCommentViewModel
                         {
-                            orderDetailID = i.orderDetailID,
-                            productDetailPic = i.productDetailPic,
-                            style = i.style,
-                            productName = i.productName
+                            orderDetailID = a.orderDetailID,
+                            productDetailPic = a.productDetailPic,
+                            style = a.style,
+                            productName = a.productName
                         };
                         cAddCommentList.Add(cAddComment);
                     }
+                }
+                if (cAddCommentList.Count > 0)
+                {
                     CAddCommentViewModel addCommentViewModel = new CAddCommentViewModel();
                     addCommentViewModel.cAddComments = cAddCommentList;
-
                     return View(addCommentViewModel);
                 }
                 else
@@ -437,7 +441,6 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
-            
         }
         
         public IActionResult SubmitComment(CSubmitCommentViewModel cSubmitComment, List<IFormFile> photos)
@@ -466,7 +469,6 @@ namespace prjiSpanFinal.Controllers
                 dbContext.Comments.Add(comment);
                 dbContext.SaveChanges();
                 int commentID = dbContext.Comments.Where(i => i.OrderDetailId == orderDetailID && i.OrderDetail.Order.MemberId == memberID).Select(i => i.CommentId).FirstOrDefault();
-                string photo = $"{photos[0].FileName}    {photos[0].Length}     {photos[0].ContentType}";
                 if (photos.Count > 0)
                 {
                     foreach(var i in photos)
@@ -489,9 +491,28 @@ namespace prjiSpanFinal.Controllers
                     }
                     dbContext.SaveChanges();
                 }
+
+                int orderID = dbContext.OrderDetails.Where(i => i.OrderDetailId == orderDetailID).Select(i => i.OrderId).FirstOrDefault();
+                List<int> orderDetailIDList = dbContext.OrderDetails.Where(i => i.OrderId == orderID).Select(i => i.OrderDetailId).ToList();
+                List<Comment> commentList = new List<Comment>();
+                var newComments = dbContext.Comments.Select(i => i).ToList();
+                foreach (var a in orderDetailIDList)
+                {
+                    var comment1 = newComments.Where(i => i.OrderDetailId == a).Select(i => i).FirstOrDefault();
+                    if (comment1 != null)
+                    {
+                        commentList.Add(comment1);
+                    }
+                }
+                var commentForCustomer = dbContext.CommentForCustomers.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                if (commentList.Count >= orderDetailIDList.Count && commentForCustomer != null)
+                {
+                    var q = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                    q.StatusId = 7;
+                    dbContext.SaveChanges();
+                }
                 return Content("1");
             }
-            
         }
         public IActionResult CheckoutForm(int sellerIDIndex)
         {
