@@ -381,31 +381,35 @@ namespace prjiSpanFinal.Controllers
                 string[] onerow = word.Split(',');
                 //onerow 一次可能帶出  只有  星期   時間    休息
                 if (onerow[0] != null) {
+                    
                     if (onerow[0] == "0") {     //星期
+                        
                         if (onerow[1] != null)
                         {
-                             //= onerow[1];
+                            me.weekDown = onerow[1];
                         }
                         if (onerow[2] != null)
                         {
-                            me.week[1] = onerow[2];
+                            me.weekUp = onerow[2];
                         }
 
                     }
-                    if (onerow[0] == "1") {     //時間
+                    if (onerow[0] == "1")
+                    {     //時間
                         if (onerow[1] != null)
                         {
-                            me.time[0] = onerow[1];
+                            me.timeDown = onerow[1];
                         }
                         if (onerow[2] != null)
                         {
-                            me.time[0] = onerow[2];
+                            me.timeUp = onerow[2];
                         }
                     }
-                    if (onerow[0] == "2") {     //每週
+                    if (onerow[0] == "2")
+                    {     //每週
                         if (onerow[1] != null)
                         {
-                            //me.takebreak = onerow[1]; 
+                            me.takebreak = onerow[1]; 
                         }
                     }
                 }
