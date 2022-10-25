@@ -72,7 +72,7 @@
                     <div class="d-flex flex-column justify-content-around">
                         <div class="productName">@p.productName</div>
                         <div class="text-black-50">規格:<span>@p.style</span></div>
-                        <input type="hidden" name="orderDetailID" value="@p.orderDetailID" />
+                        <input type="hidden" name="orderDetailID" class="orderDetailID" value="@p.orderDetailID" />
                     </div>
                 </div>
                 <div class="fs-5 fw-bold mt-3">關於商品</div>
@@ -116,10 +116,13 @@
                             <div class="previewCommentPhoto d-flex" id="@id">
 
                             </div>
-                            <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                            @{ 
+                                string commentPhotoId = "commentPhoto" + p.orderDetailID;
+                            }
+                            <label class="addPhoto btn btn-outline-warning btn-sm" for="@commentPhotoId">
                                 <i class="fa-solid fa-camera-retro me-2">新增照片</i>
                             </label>
-                            <input type="file" name="photos" value="" id="commentPhoto" class="commentPhoto" style="opacity:0" accept="image/*" multiple />
+                            <input type="file" name="photos" value="" id="@commentPhotoId" class="commentPhoto" style="opacity:0" accept="image/*" multiple />
                         </div>
                     </div>
                 </div>
@@ -138,7 +141,7 @@
                     <div class="commentResult text-black-50"></div>
                 </div>
                 <div class="mt-3 text-end">
-                    <button class="cancel border-0 bg-transparent w-25" id="cancel" onclick="history.back()">取消</button>
+                    <button class="cancel border-0 bg-transparent w-25" id="cancel" type="button">清除</button>
                     <input type="submit" class="submit btn btn-warning w-25" value="完成" id="submit">
                 </div>
             </form>
@@ -195,17 +198,33 @@
                             body: formData,
                         });
                         const data = await response.text();
-                        console.log(data);
                         if (data == "1") {
-                            alert(`為  ${productName}  新增評論成功，繼續下一筆評論`);
-                            $(this).attr("disabled", true);
+                            $(this).closest(".orderDetailLayout").find("input").attr("disabled", true);
                             $(this).siblings(".cancel").attr("disabled", true);
+                            const count = @Model.cAddComments.Count;
+                            console.log(count);
+                            if ($(".submit:disabled").length >= count) {
+                                alert(`為  ${productName}  新增評論成功，已無商品需要評論`);
+                                window.location.href = "@Url.Content("~/Member/Order")";
+                            }
+                            else {
+                                alert(`為  ${productName}  新增評論成功，繼續下一筆評論`);
+                            }
                         }
                         else {
                             alert("您已評論過此商品");
                         }
                     }
                 });
+                $(".cancel").click(function () {
+                    $(this).closest(".orderDetailLayout").find("input").not(".submit").not(".orderDetailID").val("");
+                    $(this).closest(".orderDetailLayout").find(".star").removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
+                    $(this).closest(".orderDetailLayout").find(".previewCommentPhoto").empty();
+                    $(this).closest(".orderDetailLayout").find("textarea").val("");
+                    $(this).closest(".orderDetailLayout").find(".commentResult").html("");
+                    
+                });
+
                 $(".commentPhoto").change(function () {
                     const photos = $(this)[0].files;
                     const div = $(this).closest(".orderDetailLayout").find(".previewCommentPhoto").attr("id");
