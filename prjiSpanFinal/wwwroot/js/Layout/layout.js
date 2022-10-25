@@ -28,12 +28,10 @@ if (header2exist) {
     }
 }
 
-
-
 //搜尋
 let searchInput = document.querySelector("#SearchInputTxT");
 let searchBtn = document.querySelector("#SearchInputbtn");
-
+let searchkeyword = "";
 if (header2exist) {
     searchInput.addEventListener("input", () => {
         let searchkeyword = searchInput.value;
@@ -47,16 +45,16 @@ if (header2exist) {
             searchBtn.click();
         }
     })
+    searchBtn.addEventListener("click", () => {
+        searchkeyword=searchInput.value;
+        GetSearchDetail();
+    })
 }
-
-//快速熱搜
-
-let reqQty = 5;
-TakePopItem();
-
-function TakePopItem() {
-    $.post(`/Home/TakePopItem`, { reqQty: reqQty }, function (data) {
-        console.log(data);
+        //搜尋紀錄
+GetSearchDetail();
+function GetSearchDetail() {
+    console.log("123");
+    $.post(`/Home/GetSearchDetail`, { key: searchkeyword }, function (data) {
         $("#searchkeyspace").html("");
         if (data.length > 0) {
             $("#searchkeyspace").append(SearchKeyWord(data))
@@ -67,7 +65,7 @@ function SearchKeyWord(data) {
     res = "";
     if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
-            res += `<a class="linknoline searchkeyword" href="/Category/SearchResult/?keyword=${data[i].productName}">${data[i].productName}</a>`
+            res += `<div class="searchkeywordbox" ><a class="linknoline searchkeyword" href="/Category/SearchResult/?keyword=${data[i]}">${data[i]}</a></div>`;
         }
     }
     return res;

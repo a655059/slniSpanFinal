@@ -62,5 +62,9 @@ namespace prjiSpanFinal.Controllers
             return Content("2", "text/plain", Encoding.UTF8);
             }
         }
+        public IActionResult Event(int? Eventid)
+        {
+            
+        }
     }
 }
