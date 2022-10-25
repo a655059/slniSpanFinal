@@ -103,7 +103,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult GetNotificationbyID(int id)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time }).ToList()); 
+            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).OrderByDescending(o=>o.Time).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time }).ToList()); 
         }
         public void HaveReadAllNoti(int id)
         {
