@@ -560,6 +560,7 @@ namespace prjiSpanFinal.Controllers
                     Order newOrder = new Order
                     {
                         MemberId = oldOrder.MemberId,
+                        OrderDatetime = DateTime.Now,
                         RecieveAdr = address,
                         CouponId = 1,
                         StatusId = 2,
@@ -584,7 +585,7 @@ namespace prjiSpanFinal.Controllers
                             Unitprice = unitPrice
                         };
                         dbContext.OrderDetails.Add(newOrderDetail);
-                        var oldOrderDetail =  dbContext.OrderDetails.Where(i => i.OrderDetailId == b).Select(i => i).FirstOrDefault();
+                        var oldOrderDetail = dbContext.OrderDetails.Where(i => i.OrderDetailId == b).Select(i => i).FirstOrDefault();
                         dbContext.OrderDetails.Remove(oldOrderDetail);
                     }
                     dbContext.SaveChanges();
@@ -592,6 +593,7 @@ namespace prjiSpanFinal.Controllers
                 else
                 {
                     var order = dbContext.Orders.Where(i => i.OrderId == a).Select(i => i).FirstOrDefault();
+                    order.OrderDatetime = DateTime.Now;
                     order.RecieveAdr = address;
                     order.CouponId = 1;
                     order.StatusId = 2;
