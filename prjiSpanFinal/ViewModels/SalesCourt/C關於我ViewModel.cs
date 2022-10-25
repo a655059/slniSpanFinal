@@ -10,7 +10,11 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
     {
         
         public int Memberid { get; set; }
-        public string[] SalesCourtServiceTime { get; set; }
+        public string SalesCourtServiceTime { get; set; }
+        public List<string> week { get; set; }
+        public List<string> time { get; set; }
+        public List<string> takebreak { get; set; }
+
         public string NewProductOnLoad { get; set; }
         public string NewProductCategory { get; set; }
         public string SellerCategory { get; set; }
