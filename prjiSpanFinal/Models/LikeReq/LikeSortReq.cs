@@ -14,12 +14,12 @@ namespace prjiSpanFinal.Models.LikeReq
             List<MylikeViewModel> q = dbcontext.Likes.Select(p=> new MylikeViewModel()
             {
 
-                ProductName = p.Product.ProductName,
-                ProductID = p.ProductId,
-                memberID = p.MemberId,
-                MylikeID = p.LikeId,
-                Quantity = p.Product.ProductDetails.Select(q => q.Quantity).FirstOrDefault(),
-                ProductDetailID = p.Product.ProductDetails.Select(q => q.ProductDetailId).FirstOrDefault(),
+                //ProductName = p.Product.ProductName,
+                //ProductID = p.ProductId,
+                //memberID = p.MemberId,
+                //MylikeID = p.LikeId,
+                //Quantity = p.Product.ProductDetails.Select(q => q.Quantity).FirstOrDefault(),
+                //ProductDetailID = p.Product.ProductDetails.Select(q => q.ProductDetailId).FirstOrDefault(),
             }).ToList();
             return q;
         }

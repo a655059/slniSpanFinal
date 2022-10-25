@@ -66,7 +66,7 @@
         <div class="row g-5">
             <h1 class="hh">會員註冊</h1>
             <div class="col-md-7 col-lg-8">
-                <h4 class="mb-3">基本資料</h4>
+                <h4 class="mb-3">基本資料</h4><button id="Demo" class="btn btn-info" type="button">DEMO</button>
                 <form name="userInfo" class="needs-validation" method="post" enctype="multipart/form-data">
                     <div class="row g-3">
                         <div asp-validation-summary="ModelOnly" class="text-danger col-12"></div>
@@ -81,7 +81,7 @@
                         <div class="form-group col-12">
                             <label asp-for="MemberAcc" class="form-label"><span style="color:red;">*</span>帳號</label>
                             <div class="input-group has-validation">
-                                <input asp-for="MemberAcc" type="text" class="form-control" required />
+                                <input asp-for="MemberAcc" type="text" class="form-control" id="MemAc" required />
                                 <div class="invalid-feedback">
                                     必填欄位
                                 </div>
@@ -91,23 +91,31 @@
                         </div>
                         <div class="form-group col-12">
                             <label asp-for="MemberPw" class="form-label"><span style="color:red;">*</span>密碼</label>
-                            <input asp-for="MemberPw" class="form-control" required />
+                            <input asp-for="MemberPw" class="form-control" id="MemPw" required />
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
                         </div>
                         <div class="form-group col-12">
                             <label asp-for="Email" class="control-label"><span style="color:red;">*</span>信箱</label>
-                            <input asp-for="Email" class="form-control" required />
+                            <input asp-for="Email" class="form-control" id="MemEmail" required />
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label asp-for="Phone" class="control-label"><span style="color:red;">*</span>手機</label>
+                            <input asp-for="Phone" class="form-control" id="MemPhone" required />
+                            <div class="invalid-feedback">
+                                必填欄位
+                            </div>
+                        </div>
+
                         <div class="col-md-5">
                             <label for="country" class="form-label">縣市</label>
                             <select class="form-select" id="country" name="countryName">
-                                <option value="" >Choose...</option>
-                                <option>台北市</option>
+                                <option value="">Choose...</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -123,13 +131,13 @@
                         </div>
 
                         @*<div class="form-group">
-            <label asp-for="RegionId" class="control-label">居住地</label>
-            <input asp-for="RegionId" class="form-control" />
-            <span asp-validation-for="RegionId" class="text-danger"></span>
-        </div>*@
+                <label asp-for="RegionId" class="control-label">居住地</label>
+                <input asp-for="RegionId" class="form-control" />
+                <span asp-validation-for="RegionId" class="text-danger"></span>
+            </div>*@
                         <div class="form-group col-12">
-                            <label asp-for="Address" class="control-label"></label>
-                            <input asp-for="Address" class="form-control"  />
+                            <label asp-for="Address" class="control-label">地址</label>
+                            <input asp-for="Address" id="Memadd" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="form-label">國籍</label>
@@ -143,15 +151,6 @@
                             </div>
                         </div>
 
-
-
-                        <div class="form-group">
-                            <label asp-for="Phone" class="control-label"><span style="color:red;">*</span>手機</label>
-                            <input asp-for="Phone" class="form-control" required />
-                            <div class="invalid-feedback">
-                                必填欄位
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label asp-for="BackUpEmail" class="control-label">備用信箱</label>
                             <input asp-for="BackUpEmail" class="form-control" />
@@ -199,8 +198,9 @@
                         </label>
                     </div>
                     <hr class="my-4">
-                    <button class="btn btn-primary" type="submit" >註冊</button>
+                    <button class="btn btn-primary" type="submit">註冊</button>
                     <button class="btn btn-secondary" id="clear">清除</button>
+                    
                 </form>
             </div>
         </div>
@@ -217,13 +217,27 @@
         const selCity = document.querySelector("#country")
         const selSite = document.querySelector("#state")
         const selregion = document.querySelector("#region")
+        const Demo = document.querySelector("#Demo")
+
+
+
+        Demo.addEventListener("click", function () {
+            $("#Name").val("王曉明")
+            $("#MemAc").val("Ming900103")
+            $("#MemPw").val("Wang900103")
+            $("#MemEmail").val("Wang@@gmail.com")
+            $("#MemPhone").val("0966076245")
+            $("#Memadd").val("復興南路一段390號3樓")
+
+        })
+
 
         selCity.addEventListener("change", async () => {
             //載入鄉鎮區
             //載入路名
             await loadSite()
             await loadregion()
-            
+
         })
 
         async function ajaxCall(url, sel, cb) {

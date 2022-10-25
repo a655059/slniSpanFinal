@@ -3,17 +3,29 @@
     ViewData["Title"] = "LoginSuccess";
 }
 
-    <div class="row align-items-center">
-        <div class="col"></div>
-        <div class="col">
-            <figure class="text-center">
-                <blockquote class="blockquote">
-                    <h1 style="color:#FF8040">恭喜您註冊成功</h1>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    <p class="mb-5 pb-lg-2"> <a href="@Url.Content("~/HOME/Index")" class="link-info">回首頁</a><br /><a class="text-muted" href="https://localhost:44330/Member/Login">登入</a></p>
-                </figcaption>
-            </figure>
-        </div>
-        <div class="col"><img src="~/img/Member/loginsuccess.png" width="100" height="100" /></div>
+<div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col">
+        <figure class="text-center">
+            <div class="mb-4 ms-4">
+                <a href="@Url.Content("~/Home/Index")">
+                    <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
+                </a>
+            </div>
+            <blockquote class="blockquote">
+                <h1 style="color:#FF8040">恭喜您註冊成功</h1>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                <p class="mb-5 pb-lg-2"> <a href="@Url.Content("~/HOME/Index")" class="link-info">回首頁</a><br /><a class="text-muted" href="https://localhost:44330/Member/Login">登入</a></p>
+            </figcaption>
+        </figure>
     </div>
+    <div class="col">
+        <img src="~/img/Member/checkOK.png" />
+    </div>
+</div>
+@section Scripts{ 
+<script>
+    setTimeout("location.href='@Url.Content("~/HOME/Index")'", 3000);
+</script>
+}
