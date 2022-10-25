@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MailKit.Search;
+using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Crypto.Engines;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
@@ -669,6 +670,72 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }
+        #endregion
+        #region ArgumentRegion
+        public List<CArgumentViewModel> GetArgumentsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<CArgumentViewModel> list = new();
+            IQueryable<Argument> Arguments = null;
+            if (keyword == null)
+            {
+                Arguments = db.Arguments.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Arguments = db.Arguments.
+                     Where(i => i.ArgumentId == key || i.OrderId == key).
+                     Select(e => e);
+            }
+            else
+            {
+                Arguments = db.Arguments.
+                    Where(i => i.ReasonText.Contains(keyword)).
+                    Select(e => e); ;
+            }
+            var ArgumentTypeName = (from i in db.ArgumentTypes select i).ToList();
+           
+            var ArgumentReasonName = (from i in db.ArgumentReasons select i).ToList();
+            foreach (var p in Arguments)
+            {
+                CArgumentViewModel model = new()
+                {
+                 Argument=p,
+                 ArgumentReasonName=(from i in ArgumentReasonName 
+                                    where i.ArgumentReasonId==p.ArgumentReasonId 
+                                    select i.ArgumentReasonName).First(),
+                 ArgumentTypeName= (from i in ArgumentTypeName
+                                    where i.ArgumentTypeId == p.ArgumentTypeId
+                                    select i.ArgumentTypeName).First(),
+                };
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<CArgumentViewModel> GetArgumentsPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetArgumentsFromDatabase(keyword);
+            IPagedList<CArgumentViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult ArgumentList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetArgumentsPagedProcess(page, pageSize, keyword);
+            var PList = GetArgumentsPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+
         #endregion
     }
 }
