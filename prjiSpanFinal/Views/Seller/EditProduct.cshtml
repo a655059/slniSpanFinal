@@ -1,0 +1,292 @@
+﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.seller.CSellerCreateToViewViewModel
+@using prjiSpanFinal.ViewModels.seller;
+@{
+    ViewData["Title"] = "編輯商品";
+}
+@section Styles
+{
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+
+        .描述欄位 {
+            width: 680px;
+            height: 200px;
+            resize: none;
+            border: solid;
+            border-color: lightslategray;
+        }
+
+        label {
+            font-size: 20px;
+            font-weight: 600;
+            padding-block: 3px;
+        }
+
+        .名稱寬 {
+            float: left;
+        }
+
+        .btntype, .btntype物流 {
+            height: 40px;
+            width: 700px;
+            border: dashed;
+            border-radius: 7px;
+            border-color: skyblue;
+            background-color: white;
+        }
+
+        .delete, .add {
+            height: 50px;
+            border-radius: 25px;
+            width: 50px;
+            font-size: 10px;
+        }
+
+        .物流 {
+            width: 880px;
+        }
+
+        .框線 {
+            border-color: lightslategray;
+            width: 270px;
+        }
+
+        .名稱 {
+            border-color: lightslategray;
+            width: 500px;
+        }
+
+        .表格寬度 {
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        .貨運無底框 {
+            border: 1px;
+            border-color: darkgray;
+            width: 500px;
+            height: 40px;
+            font-size: 20px;
+            align-content: center;
+        }
+
+        .規格列表 {
+            width: 150px;
+            font-size: 18px;
+        }
+
+        .規格按鈕 {
+            font-size: 10px;
+            width: 35px;
+            height: 25px;
+            border-radius: 25px;
+            margin: 0 auto;
+        }
+
+        td {
+            margin-left: 1.5px;
+        }
+
+        .btntype物流 {
+            width: 550px;
+            margin-left: 2px;
+        }
+
+        .modal-dialog {
+            top: 7rem !important;
+        }
+
+        .寬度 {
+            position: relative
+        }
+
+        .按鈕大小 {
+            font-size: 20px;
+        }
+    </style>
+}
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">新增規格</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <label>樣式:</label>
+                <input type="text" id="text1" class="form-control" required><div class="invalid-feedback">必填欄位</div>
+                <br />
+                <label>數量:</label>
+                <input type="text" id="text2" class="form-control">
+                <br />
+                <label>售價:</label>
+                <input type="text" id="text3" class="form-control">
+                <br />
+                <label>照片:</label>
+                <input type="file" id="text4" class="form-group" accept="image/*">
+                <img id="blah" src="#" alt="your image" />
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<form action="@Url.Content("~/seller/CreateToDB")" method="post">*@
+<div class="row ">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-10" id="change1">
+        <h2 class="d-flex justify-content-center mb-2 ">編輯商品</h2>
+        <div class="row">
+            <div class="排版 mx-5">
+                <h4 class=" mb-4">商品資訊</h4>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="d-flex justify-content-start">
+                    <label class="名稱寬">名稱</label>
+                    <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" value="@Model.ProductName"/>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2">類別</label>
+                    <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
+                        @{
+                            for (int i = 0; i < Model.bigType.Count; i++)
+                            {
+                                <option value="@(i+1)">@Model.bigType[i]</option>
+                            }
+                        }
+                    </select>
+                    <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType">
+                        @{
+                            for (int i = 0; i < 17; i++)
+                            {
+                                <option value="@(i+1)">@Model.smallType[i]</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2">規格</label>
+                    <span class="text-danger"></span>
+                    <section class="section">
+                        <table class="table w-100 text-center">
+                            <thead>
+                                <tr>
+                                    <th class="col 規格列表">樣式</th>
+                                    <th class="col 規格列表">數量</th>
+                                    <th class="col 規格列表">售價</th>
+                                    <th class="col 規格列表">照片</th>
+                                    <th class="col 規格列表">功能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ 
+                                    for(int i = 0; i < Model.Style.Count;i++) 
+                                    { 
+                                        <tr>
+                                            <td class="col 規格列表">@Model.Style[i]</td>
+                                            <td class="col 規格列表">@Model.Quantity[i]</td>
+                                            <td class="col 規格列表">@Model.UnitPrice[i].ToString("0")</td>
+                                            <td class="col 規格列表">@*@Model.BodyPic[i]*@</td>
+                                            <td class="col 規格列表"><p><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></p></td>
+                                        </tr>
+                                    }
+                                    
+                                }
+                                
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="addStyle">
+                </div>
+                <div class="d-flex justify-content-start">
+                    <label class="名稱寬 mt-2">封面照片</label>
+                    <div class="d-flex justify-content-start">
+                        @*    大頭照相片1     *@
+                        <div>
+                            <label class="btn" for="commentPhoto1">
+                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                            </label>
+                            <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
+                        </div>
+                    </div>
+                    <label class="名稱寬 mt-2">其他照片</label>
+                    <div class="d-flex justify-content-start">
+                        @*    大頭照相片2     *@
+                        @{
+                            for (int i = 0; i < 4; i++)
+                            {
+                                <div>
+                                    @{
+                                        string id = $"commentPhoto{i + 2}";
+                                    }
+                                    <label class="btn" for="@id">
+                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    </label>
+                                    <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-2 ">描述</label>
+                    <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea">@Model.Description</textarea>
+                </div>
+
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬">物流</label>
+                    <div class="col-1"></div>
+                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
+                        @{
+                            for (int i = 0; i < Model.memship.Count; i++)
+                            {
+                                <div class="col-3"></div>
+                                <div class="col-6 my-1">
+                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
+                                </div><br />
+                                <div class="col-3"></div>
+                            }
+                        }
+                    </div>
+                    <div class="col-2"></div><br />
+                </div>
+
+                <div class="row ">
+                    <div class="col-3"></div>
+                    <div class="col-9">
+                        <input type="button" value="確定" id="next" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="取消" id="cancle" class="btn btn-secondary m-3 nextwork" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    <script>
+
+
+
+        /////////大類小類連接---------------------------------------------------------------------------------------------------------------
+
+
+    </script>
+
+}
+

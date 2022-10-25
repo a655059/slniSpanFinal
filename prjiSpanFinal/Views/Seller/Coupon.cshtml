@@ -88,23 +88,23 @@
                     @{
                         for (var i = 0; i < Model.Count; i++)
                         {
-                                        <tr>
-                                            <td scope="row"><img src="~/img/seller coupon.png" /></td>
-                                            <td class="置中">@Model[i].CouponName</td>
-                                            <td class="置中">@Model[i].CouponCode</td>
-                                            <td class="置中">@Model[i].Discount</td>
-                                            <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
-                                            <td class="置中">有效</td>
-                                            <td class="置中">
-                                                <div>
-                                                    @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
-                                                </div>
-                                                <div> 
-                                                    @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
-                                                                                new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
-                                                </div>
-                                            </td>
-                                        </tr>
+                            <tr>
+                                <td scope="row"><img src="~/img/seller coupon.png" /></td>
+                                <td class="置中">@Model[i].CouponName</td>
+                                <td class="置中">@Model[i].CouponCode</td>
+                                <td class="置中">@Model[i].Discount</td>
+                                <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
+                                <td class="置中">有效</td>
+                                <td class="置中">
+                                    <div>
+                                        @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
+                                    </div>
+                                    <div> 
+                                        @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
+                                                                    new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
+                                    </div>
+                                </td>
+                            </tr>
                         }
                     }
                 </table>
