@@ -184,7 +184,6 @@
 .ff-types-type > label{
 }
 .ff-types-type > label > .ff-types-typeid {
-    white-space: nowrap;
 }
     .ff-types-type > label > .ff-types-typecount {
         white-space: nowrap;
@@ -192,6 +191,19 @@
     }
 .ff-typestitle-sel{
     padding-left:10px;
+}
+.filterCheckBox {
+    margin-right:10px;
+}
+.ff-types-type-label{
+    white-space:normal;
+    width:145px;
+}
+.ff-types-typeid {
+    width: 145px;
+    overflow-wrap:break-word;
+    white-space: inherit;
+    overflow: auto;
 }
 .ff-types-prices {
     margin-bottom: 5px;

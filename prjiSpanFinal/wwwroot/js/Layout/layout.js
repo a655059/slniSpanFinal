@@ -1,6 +1,8 @@
 ﻿let mymemid = $("#msgmemid").val();
 let header2exist = $("#header2").length != 0;
 
+
+//回到頂端
 $(function () {
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -13,6 +15,8 @@ $(function () {
         $('html,body').animate({ scrollTop: 0 }, 333);
     });
 });
+
+//H2自動符合高度
 if (header2exist) {
     const h1 = $("#header1");
     const h2 = document.getElementById("header2");
@@ -43,6 +47,30 @@ if (header2exist) {
             searchBtn.click();
         }
     })
+}
+
+//快速熱搜
+
+let reqQty = 5;
+TakePopItem();
+
+function TakePopItem() {
+    $.post(`/Home/TakePopItem`, { reqQty: reqQty }, function (data) {
+        console.log(data);
+        $("#searchkeyspace").html("");
+        if (data.length > 0) {
+            $("#searchkeyspace").append(SearchKeyWord(data))
+        }
+    })
+}
+function SearchKeyWord(data) {
+    res = "";
+    if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+            res += `<a class="linknoline searchkeyword" href="/Category/SearchResult/?keyword=${data[i].productName}">${data[i].productName}</a>`
+        }
+    }
+    return res;
 }
 
 

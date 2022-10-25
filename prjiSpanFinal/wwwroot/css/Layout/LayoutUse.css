@@ -226,11 +226,7 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-.searchkeyspace {
-    margin-top: 5px;
-    max-height: 24px;
-    overflow: hidden;
-}
+
 .loschbar{
     /*padding-left:70px;*/
 }
@@ -252,14 +248,24 @@
         
         border: 0px;
     }
-.searchkeyword {
-    padding-left: 2px;
-    color: #844200;
-    font-size: 1rem;
-    font-weight:bold;
+.searchkeyspace {
+    margin-top: 5px;
+    max-height: 24px;
+    overflow: hidden;
 }
-    .searchkeyword:hover{
-        color:white;
+.searchkeyword {
+    max-width: 15%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: 10px;
+    color: #FFF8D7;
+    font-size: 1rem;
+    font-weight: bold;
+}
+    .searchkeyword:hover {
+        color: #FF2D2D;
+        opacity:80%;
     }
     /*搜尋右側功能*/
 .searchcart {

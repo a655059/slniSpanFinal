@@ -73,19 +73,30 @@
                             foreach (var item in Model.lSmallType)
                             {
                                 int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
-                                <div class="w-100 p-1 ff-types-type">
 
-                                    <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" />
-                                    <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
-                                    <label for="ffcb_@item.SmallTypeId">
-                                        <span class="ff-types-typeid">
-                                            @item.SmallTypeName
-                                        </span>
-                                        <span class="ff-types-typecount">
-                                            (@stock)
-                                        </span>
-                                    </label>
-                                </div>
+
+                                                <div class="w-100 p-1 ff-types-type d-flex ">
+                                                    @{
+                                                        if (stock > 0)
+                                                        {
+                                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" />
+                                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" disabled />
+                                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
+                                                        }
+                                                    }
+                                                    <label class="ff-types-type-label" for="ffcb_@item.SmallTypeId">
+                                                        <span class="ff-types-typeid">
+                                                            @item.SmallTypeName
+                                                        </span>
+                                                        <span class="ff-types-typecount">
+                                                            (@stock)
+                                                        </span>
+                                                    </label>
+                                                </div>
                             }
 
                         }
@@ -168,9 +179,7 @@
                     </div>
                 }
             }
-            @*<div class="itemcol" id="FilterShowItem">
 
-        </div>*@
         </div>
         </div>
     </div>

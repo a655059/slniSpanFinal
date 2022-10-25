@@ -5,6 +5,7 @@
 }
 @section Styles{
     <link href="~/css/Home/HomeStyle.css" rel="stylesheet" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
 }
 <body>
     <div class="container">
@@ -116,14 +117,24 @@
                             <span class="fs-6 text-muted">有著你想要的東西...</span>
                         </div>
                         <div class="itembody  ">
-                                <div class="itemcol d-flex justify-content-center" id="itemcol">
-                                    <input type="hidden" id="itemCount" value="@Model.cShowItem.Count" />
+                            <div class="itemcol d-flex justify-content-center" id="itemcol">
+                                <input type="hidden" id="itemCount" value="@Model.cShowItem.Count" />
 
-                                    @{
+                                @{
+                                    if (Model.cShowItem.Count > 0)
+                                    {
 
-                                        await Component.InvokeAsync("HomeItemShow", new { shopProduct = Model.cShowItem });
+                                        @await Component.InvokeAsync("HomeItemShow", new { shopProduct = Model.cShowItem });
+
                                     }
-                                </div>
+                                    else
+                                    {
+                                        <div>
+                                            暫待新增商品
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
                         @if (Model.cShowItem.Count > 6)
                         {
