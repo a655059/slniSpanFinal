@@ -24,49 +24,73 @@
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 2 })
 
-<div class="layout border rounded-2">
-    @{
-        foreach (var sellerID in sellerIDList)
-        {
-            <div class="sellerLayout">
-                <div class="fs-3 fw-bold mx-2">@sellerDic[sellerID]<span class="fs-5">的賣場</span></div>
-            </div>
-            foreach (var i in Model.purchaseItemInfo)
-            {
-                if (i.sellerID == sellerID)
-                {
-                    string imgSrc = "";
-                    try
-                    {
-                        string base64 = Convert.ToBase64String(i.productDetailPic);
-                        imgSrc = $"data:image/gif;base64,{base64}";
-                    }
-                    catch
-                    {
-                        imgSrc = Url.Content("~/img/imageNotFound.png");
-                    }
-                    <div class="itemLayout d-flex justify-content-between align-items-center border-bottom ">
-                        <div class="d-flex justify-content-start align-items-center w-75">
-                            <div class="imgDiv">
-                                <img src="@imgSrc" class="productDetailImg"/>
-                            </div>
-                            <div>
-                                <div>@i.productName</div>
-                                <div>@i.productStyle</div>
-                                <div>$<span>@i.unitPrice</span></div>
 
+@{
+    foreach (var sellerID in sellerIDList)
+    {
+    <div class="layout border rounded-2 p-3 mb-3">
+        <div class="sellerLayout border-bottom pb-2">
+            <div class="fs-3 fw-bold">@sellerDic[sellerID]<span class="fs-5">的賣場</span></div>
+        </div>
+        @{
+            <div class="border-bottom pt-2">
+                @foreach (var i in Model.purchaseItemInfo)
+                {
+                    if (i.sellerID == sellerID)
+                    {
+                        string imgSrc = "";
+                        try
+                        {
+                            string base64 = Convert.ToBase64String(i.productDetailPic);
+                            imgSrc = $"data:image/gif;base64,{base64}";
+                        }
+                        catch
+                        {
+                            imgSrc = Url.Content("~/img/imageNotFound.png");
+                        }
+                        <div class="itemLayout d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex justify-content-start align-items-center w-75">
+                                <div class="imgDiv">
+                                    <img src="@imgSrc" class="productDetailImg" />
+                                </div>
+                                <div class="mx-3">
+                                    <div>@i.productName</div>
+                                    <div>@i.productStyle</div>
+                                    <div>$<span>@i.unitPrice</span></div>
+                                </div>
+                            </div>
+                            <div class="w-25">
+                                <div>X<span>@i.purchaseCount</span></div>
                             </div>
                         </div>
-                        <div class="w-25">
-                            <div>@i.purchaseCount</div>
+
+                    }
+                }
+            </div>
+            foreach (var i in Model.sellerShipperPayments)
+            {
+                if (i.seller.MemberId == sellerID)
+                {
+                    <div class="pt-2">
+                        <div class="d-flex align-items-end">
+                            <div>物流方式:<span class="mx-2">@i.savedShipperPaymentCoupon.shipperName</span></div>
+                            <div class="text-danger mx-2" style="font-size:12px">運費:<span class="mx-2"><spna>$</spna>@i.savedShipperPaymentCoupon.shipperFee</span></div>
                         </div>
+                        <div class="d-flex align-items-end">
+                            <div>付款方式:<span>@i.savedShipperPaymentCoupon.shipperName</span></div>
+                            <div class="text-danger mx-2" style="font-size:12px"></div>
+                        </div>
+                        <div>給賣家的話:@i.savedShipperPaymentCoupon.wordToSeller</div>
                     </div>
                 }
             }
         }
+    </div>
     }
+}
 
-    <a href="@Url.Content("~/Delivery/OrderSuccess")"><button class="btn btn-warning">確認</button></a>
+<div class="text-center">
+    <a href="@Url.Content("~/Delivery/OrderSuccess")"><button class="btn btn-warning" style="width:100px">確認</button></a>
 </div>
 
 @section Scripts{
