@@ -491,9 +491,28 @@ namespace prjiSpanFinal.Controllers
                     }
                     dbContext.SaveChanges();
                 }
+
+                int orderID = dbContext.OrderDetails.Where(i => i.OrderDetailId == orderDetailID).Select(i => i.OrderId).FirstOrDefault();
+                List<int> orderDetailIDList = dbContext.OrderDetails.Where(i => i.OrderId == orderID).Select(i => i.OrderDetailId).ToList();
+                List<Comment> commentList = new List<Comment>();
+                var newComments = dbContext.Comments.Select(i => i).ToList();
+                foreach (var a in orderDetailIDList)
+                {
+                    var comment1 = newComments.Where(i => i.OrderDetailId == a).Select(i => i).FirstOrDefault();
+                    if (comment1 != null)
+                    {
+                        commentList.Add(comment1);
+                    }
+                }
+                var commentForCustomer = dbContext.CommentForCustomers.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                if (commentList.Count >= orderDetailIDList.Count && commentForCustomer != null)
+                {
+                    var q = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                    q.StatusId = 7;
+                    dbContext.SaveChanges();
+                }
                 return Content("1");
             }
-            
         }
         public IActionResult CheckoutForm(int sellerIDIndex)
         {
