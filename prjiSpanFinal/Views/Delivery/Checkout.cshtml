@@ -115,6 +115,7 @@
                 const shipperFee = Number($(".finalShipperFee").html());
                 const paymentID = Number($(".payment:checked").attr("id").substring(7));
                 const paymentName = $(".payment:checked").siblings("label").html();
+                const paymentFee = Number($(".payment:checked").siblings("label").find(".paymentFee").html());
                 const couponID = Number($(".selectedCouponID").attr("id").substring(8));
                 const couponName = $(".selectedCouponID").html();
                 const wordToSeller = $("#wordToSeller").val();
@@ -129,6 +130,7 @@
                     "shipperFee": shipperFee,
                     "paymentID": paymentID,
                     "paymentName": paymentName,
+                    "paymentFee":paymentFee,
                     "couponID": couponID,
                     "couponName": couponName,
                     "wordToSeller": wordToSeller

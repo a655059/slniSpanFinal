@@ -53,8 +53,9 @@ function CalTotalPriceIncludeDiscountAndFee() {
     })
 
     $("#smallPrice").html(smallPrice);
-    const fee = Number($("#finalShipperFee").html());
-    const totalPrice = smallPrice + fee;
+    const shipperFee = Number($("#finalShipperFee").html());
+    const paymentFee = Number($("#finalPaymentFee").html());
+    const totalPrice = smallPrice + shipperFee + paymentFee;
     $("#totalPrice").html(totalPrice);
 };
 
@@ -96,4 +97,10 @@ $("#confirmedShip").click(function () {
         $(".calFeePrice").removeClass("d-none");
         CalTotalPriceIncludeDiscountAndFee();
     }
+});
+$(".payment").change(function () {
+    const paymentFee = $(".payment:checked").siblings("label").find(".paymentFee").html();
+    $("#finalPaymentFee").html(paymentFee);
+    $(".calPaymentFeePrice").removeClass("d-none");
+    CalTotalPriceIncludeDiscountAndFee();
 });

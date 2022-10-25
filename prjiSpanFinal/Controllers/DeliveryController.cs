@@ -524,7 +524,8 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbContext = new iSpanProjectContext();
             string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);
             CDeliveryCheckoutViewModel cDeliveryCheckout = JsonSerializer.Deserialize<CDeliveryCheckoutViewModel>(jsonString);
-            int buyerID = cDeliveryCheckout.buyer.MemberId;
+            string buyerAcc = cDeliveryCheckout.buyer.MemberAcc;
+            string buyerEmail = cDeliveryCheckout.buyer.Email;
             var allOrderOrderDetail = dbContext.OrderDetails.Select(i => new {
                 orders = i.Order,
                 orderDetails = i,
@@ -626,7 +627,7 @@ namespace prjiSpanFinal.Controllers
                 client.Send(message);
                 client.Disconnect(true);
             }
-            return View();
+            return View(cDeliveryCheckout.buyer);
         }
     }
 }

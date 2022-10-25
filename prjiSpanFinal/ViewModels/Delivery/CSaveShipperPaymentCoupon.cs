@@ -17,6 +17,7 @@ namespace prjiSpanFinal.ViewModels.Delivery
         public int shipperFee { get; set; }
         public int paymentID { get; set; }
         public string paymentName { get; set; }
+        public int paymentFee { get; set; }
         public int couponID { get; set; }
         public string couponName { get; set; }
         public string wordToSeller { get; set; }
