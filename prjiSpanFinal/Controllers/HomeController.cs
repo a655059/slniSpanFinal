@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Home;
+using prjiSpanFinal.Models.LayOutReq;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -36,6 +37,11 @@ namespace prjiSpanFinal.Controllers
                 cShowItem = listItem,
             };
             return View(home);
+        }
+
+        public IActionResult TakePopItem(int reqQty)
+        {
+            return Json(new SearchBar().PopItem5(reqQty));
         }
 
         public IActionResult Privacy()

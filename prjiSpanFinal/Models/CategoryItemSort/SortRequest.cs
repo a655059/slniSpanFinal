@@ -40,7 +40,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
                     break;
                 case 3:
                     //熱銷排序
-                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderBy(s => s.salesVolume).ToList();
+                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderByDescending(s => s.salesVolume).ToList();
                     break;
                 case 4:
                     //價高排序
@@ -100,7 +100,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
                     break;
                 case 3:
                     //熱銷排序
-                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderBy(s => s.salesVolume).ToList();
+                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderByDescending(s => s.salesVolume).ToList();
                     break;
                 case 4:
                     //價高排序
@@ -153,7 +153,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
                     break;
                 case 3:
                     //熱銷排序
-                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderBy(s => s.salesVolume).ToList();
+                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderByDescending(s => s.salesVolume).ToList();
                     break;
                 case 4:
                     //價高排序

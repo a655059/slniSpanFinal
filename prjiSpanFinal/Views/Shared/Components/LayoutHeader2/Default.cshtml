@@ -26,14 +26,12 @@
                     <input type="text" id="SearchInputTxT" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="SearchInputTxT" aria-describedby="basic-addon2">
                     <a id="SearchInputbtn" class="btn btn-outline-warning btn-lg" href="#"><i class="fa fa-search"></i></a>
                 </div>
-                @{ int x = 8;
-                    <div class="searchkeyspace">
-                        @for (int i = 0; i < x; i++)
+                    <div class="searchkeyspace" id="searchkeyspace">
+                        @*@for (int i = 0; i < 8; i++)
                         {
                             <a class="linknoline searchkeyword" href="@Url.Content("~/Category/SearchResult")">水果</a>
-                        }
+                        }*@
                     </div>
-                }
             </div>
             <!-- /SEARCH BAR -->
             <!-- Searchcart -->
@@ -88,6 +86,5 @@
 </div>
 @section Scripts{
     <script>
-
     </script>
 }
