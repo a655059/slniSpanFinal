@@ -252,13 +252,17 @@
     margin-top: 5px;
     max-height: 24px;
     overflow: hidden;
+    width:100%;
+}
+.searchkeywordbox {
+    width: 80px;
+    margin-left: 8px;
 }
 .searchkeyword {
-    max-width: 15%;
+    display:block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-left: 10px;
     color: #FFF8D7;
     font-size: 1rem;
     font-weight: bold;

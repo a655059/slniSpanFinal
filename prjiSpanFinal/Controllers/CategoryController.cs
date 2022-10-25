@@ -77,11 +77,12 @@ namespace prjiSpanFinal.Controllers
             if(keyword == null) {
                 return RedirectToAction("Index", "Home");
             }
+            listprod = _db.Products.ToList();
             keyword.Trim();
             string[] keys = keyword.Split(" ");
             for (int i = 0; i < keys.Length; i++)
             {
-                listprod.AddRange(_db.Products.Where(p => p.ProductName.Contains(keys[i]) || p.Description.Contains(keys[i])&&p.ProductStatusId==0).Select(p => p).ToList());
+                listprod=listprod.Where(p => p.ProductName.Contains(keys[i]) || p.Description.Contains(keys[i])&&p.ProductStatusId==0).Select(p => p).ToList();
             }
             list = new CCategoryIndex();
             if (listprod.Any()) { 
