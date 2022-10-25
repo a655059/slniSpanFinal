@@ -86,7 +86,7 @@
                             }
                         }
                     </div>
-                    <input type="hidden" name="commentStar" value="0" class="commentStar" />
+                    <input type="hidden" name="commentStar" value="" class="commentStar" />
                     <div class="commentResult text-black-50"></div>
                 </div>
 
@@ -137,7 +137,7 @@
                             }
                         }
                     </div>
-                    <input type="hidden" name="shipperStar" value="0" class="shipperStar"/>
+                    <input type="hidden" name="shipperStar" value="" class="shipperStar"/>
                     <div class="commentResult text-black-50"></div>
                 </div>
                 <div class="mt-3 text-end">
@@ -182,11 +182,11 @@
                     });
                     const commentStar = $(this).closest(".orderDetailLayout").find(".commentStar").val();
                     const shipperStar = $(this).closest(".orderDetailLayout").find(".shipperStar").val();
-                    if (commentStar == "0") {
+                    if (commentStar == "") {
                         alert("請給此商品評分");
                         return false;
                     }
-                    else if (shipperStar == "0") {
+                    else if (shipperStar == "") {
                         alert("請給此物流服務評分");
                         return false;
                     }
