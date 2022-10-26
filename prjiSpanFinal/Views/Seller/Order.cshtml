@@ -279,7 +279,7 @@
         $(".star").click(function () {
             $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end()
                 .nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
-            let resultDiv = $(this).parent().siblings(".commentResult");
+            let resultDiv = $(this).parent().siblings("#commentResult");
             let starCount = $(this).prevAll().length + 1;
             if (starCount == 1) {
                 resultDiv.html("很差");
