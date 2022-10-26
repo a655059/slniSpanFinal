@@ -201,9 +201,6 @@ namespace prjiSpanFinal.Controllers
             return View(x);
         }
 
-
-
-
         public IActionResult AD(string jsonString)
         {
             return PartialView(jsonString);
@@ -254,6 +251,7 @@ namespace prjiSpanFinal.Controllers
                     Quantity = Convert.ToInt32(result.暫存規格[i].QuantityStr),
                     UnitPrice = Convert.ToInt32(result.暫存規格[i].UnitPriceStr),
                     Pic = result.暫存規格[i].BodyPicStr     //照片todo
+
                 };
                 _db.ProductDetails.Add(productDetail);
             }
@@ -734,13 +732,7 @@ namespace prjiSpanFinal.Controllers
             };
             _db.Coupons.Add(coupon);
             _db.SaveChanges();
-
-
         }
-
-
-
-
 
         public IActionResult seller跑條(int page)
         {
@@ -749,7 +741,26 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Event()
         {
-            return View();
+            var E = _db.SubOfficialEventLists.Select(i => i).ToList();
+            var P = _db.Products.Select(i => i).ToList();
+           
+            var OE = _db.OfficialEventLists.Select(i => i).ToList();
+            List<CSubEventToProductViewModel> list = new();
+            foreach (var e in E)
+            {
+                var A = from a in OE
+                        where a.OfficialEventListId == e.OfficialEventListId
+                        select a;
+                CSubEventToProductViewModel C = new()
+                {
+                    Products = P,
+                    SubOfficialEventID = e,
+                    OfficialEventList = A.First(),
+                };
+                list.Add(C);
+            }
+
+            return View(list);
         }
     }
 }

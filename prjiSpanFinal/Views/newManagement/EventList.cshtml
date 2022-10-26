@@ -1,0 +1,147 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.OfficialEventList>
+
+@{
+    ViewData["Title"] = "EventList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels;
+
+<h1>官方活動</h1>
+
+<p>
+    <a asp-action="EventCreate" class="btn btn-outline-primary">新增活動</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                活動ID
+            </th>
+            <th>
+                活動名稱
+            </th>
+            <th>
+                開始日期
+            </th>
+            <th>
+                結束日期
+            </th>
+            <th>
+                可參加日期
+            </th>
+            <th>
+                參加截止日期
+            </th>
+            <th>
+                活動圖
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OfficialEventListId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventName)
+                </td>
+                <td>
+                    <input value="@item.StartDate.ToString("yyyy-MM-dd")" readonly class="form-control-plaintext">
+                </td>
+                <td>
+                    <input value="@item.EndDate.ToString("yyyy-MM-dd")" readonly class="form-control-plaintext enddate">
+                    @*@Html.DisplayFor(modelItem => item.EndDate)*@
+                </td>
+                <td>
+                    <input value="@item.JoinStartDate.ToString("yyyy-MM-dd")" readonly class="form-control-plaintext">
+                </td>
+                <td>
+                    <input value="@item.JoinEndDate.ToString("yyyy-MM-dd")" readonly class="form-control-plaintext">
+                </td>
+                <td>
+                    @{
+                        var base64Image = Convert.ToBase64String(item.EventPic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
+                </td>
+                <td>
+                    <button class="btn btn-primary Edit" name="@item.StartDate~@item.OfficialEventListId">編輯</button>
+                    @Html.ActionLink("檢視子活動", "subEventList","newManagement", new { id=item.OfficialEventListId },new{@class="btn btn-primary mb-1 mt-1"})
+                    <a class="btn btn-outline-danger Dele" name="@item.OfficialEventListId">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="align-content:center" class="paginations">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("EventList", new { page })).
+        DisplayEllipsesWhenNotShowingAllPageNumbers().
+        MaximumPageNumbersToDisplay(3).
+        Build()
+        )
+</div>
+@section Scripts{
+    <script>
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+
+        //刪除
+        let Dele=document.querySelectorAll(".Dele");
+        for (var BTNdow of Dele) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let response = await fetch("@Url.Content("~/newManagement/EventDelete")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data) 
+                 {
+                    confirm("確定要刪除嗎?");
+                    if(!confirm){
+                    $(this).closest("td").siblings().find(".enddate").val(data);
+                    alert("已經將活動結束");}
+                }
+            })
+        }
+        let Edit=document.querySelectorAll(".Edit");
+        for (var BTNdow of Edit) {
+            BTNdow.addEventListener("click",function c (event) {
+               let now=new Date();
+              now=now.getFullYear+now.getMonth+now.getDate
+               if(event.currentTarget.name.split("/")[0]<now){
+                   let aaa= confirm("活動已經開始，確認要修改嗎?");
+                   if(!aaa)
+                   {
+                       location.href = "#";
+                   }
+                   else{
+                       let c=event.currentTarget.name.split("~")[1]
+                       location.href="@Url.Content("~/newManagement/EventEdit")"+`?id=${c}`
+                   }
+               }
+            })
+        }
+    </script>
+
+}

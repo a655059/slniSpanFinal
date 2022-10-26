@@ -1,0 +1,129 @@
+﻿@model IEnumerable<CArgumentViewModel>
+@{
+    ViewData["Title"] = "ArgumentList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+}
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels.newManagement
+@section Styles{
+    <style>
+        td input {
+            width: 160px;
+        }
+    </style>
+}
+    <h1>訂單</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Argument.ArgumentId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Argument.OrderId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ArgumentTypeName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ArgumentReasonName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Argument.ReasonText)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Argument.ArgumentId)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Argument.OrderId)
+                </td>
+                <td>
+                    <input value="@item.ArgumentTypeName" class="statusname form-control-plaintext">
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.ArgumentReasonName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Argument.ReasonText)
+                </td>
+                <td>
+                    @{
+                        if (item.Argument.ArgumentTypeId == 5)
+                        {
+                              <a name="@item.Argument.ArgumentId" class="Delete btn btn-outline-secondary">未成案</a>
+                              <a name="@item.Argument.ArgumentId" class="Approve btn btn-outline-primary">停權買家帳號</a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="align-content:center" class="paginations">
+    @(Html.Pager(pagedList)
+        .Url(page => Url.Action("ArgumentList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3)
+        .Build())
+</div>
+
+@section Scripts{
+    <script>
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+        let Delete = document.querySelectorAll(".Delete");
+        let Approve = document.querySelectorAll(".Approve");
+        let PSName = document.querySelectorAll(".statusname");
+        for (var BTNdele of Delete) {
+            BTNdele.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ArgumentDelete")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("td").siblings().find(".statusname").val("取消");
+                }
+            })
+        }
+        for (var BTNUnd of Approve) {
+            BTNUnd.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data !=null) {
+                    $(this).closest("td").siblings().find(".statusname").val("處理完成");
+                    confirm("確認要停權買家帳戶嗎?");
+                    if(confirm){
+                    alert("已停權買家帳戶");
+                    $(this).siblings("a").remove();
+                    $(this).remove();
+                    happy_sendnoti(4,parseInt(data) , "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權", "/Member/Order");
+                    }
+                }
+            })
+        }
+    </script>
+    }
