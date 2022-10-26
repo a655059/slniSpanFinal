@@ -459,16 +459,16 @@ namespace prjiSpanFinal.Controllers
             if (!String.IsNullOrEmpty(mempass)) { 
             MimeMessage message = new MimeMessage();
             BodyBuilder builder = new BodyBuilder();
-            var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+            //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
             //==>這裡可以放入圖片路徑
 
             builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            //builder.HtmlBody = "您的密碼為:"+mempass+"\n"+ $"當前時間:{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
-            //=>內容
+            builder.HtmlBody = "您的新密碼為:" + mempass + "\n" + $"當前時間:{DateTime.Now:yyyy-MM-dd HH:mm:ss}"+"請使用新密碼重新登入";
+                //=>內容
 
-            message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
+                message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
             message.To.Add(new MailboxAddress("詹勳棋", "harry80011@gmail.com"));
-            message.Subject = "忘記密碼"; //==>標題
+            message.Subject = "[C#蝦到爆商城(ShopDaoBao)]忘記密碼通知信"; //==>標題
             message.Body = builder.ToMessageBody();
 
 
