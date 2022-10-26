@@ -50,24 +50,24 @@
                                     <div class="carousel-indicators">
                                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                        @*<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>*@
                                     </div>
                                     <div class="carousel-inner d-flex">
                                         <div class="carousel-item active">
-                                            <a>
-                                                <img src="~/img/Homepage/DM1.png" />
+                                            <a href="@Url.Content("~/FAQ/Index")">
+                                                <img src="~/img/Homepage/DM-1HP_Mention.png" />
                                             </a>
                                         </div>
                                         <div class="carousel-item">
                                             <a href="@Url.Content("~/Event/Discount")">
-                                                <img src="~/img/Homepage/DM3.png" />
+                                                <img src="~/img/Homepage/DM-1HP_COUPOIN.png" />
                                             </a>
                                         </div>
-                                        <div class="carousel-item">
+                                        @*<div class="carousel-item">
                                             <a>
                                                 <img src="~/img/Homepage/DM1.png" />
                                             </a>
-                                        </div>
+                                        </div>*@
                                     </div>
                                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -83,13 +83,13 @@
                             <div class="cateheader-2">
                                 <div class="row justify-content-between dm">
                                     <div class="col-6">
-                                        <a>
-                                            <img src="~/img/Homepage/DM2.png" class="img-fluid d-block w-100 rounded-2" />
+                                        <a >
+                                            <img src="~/img/Homepage/DM-2HP.png" class="img-fluid d-block w-100 rounded-2"/>
                                         </a>
                                     </div>
                                     <div class="col-6 ">
-                                        <a>
-                                            <img src="~/img/Homepage/DM2.png" class="img-fluid d-block w-100 rounded-2" />
+                                        <a class="img-fluid d-block w-100 rounded-2">
+                                            <img src="~/img/Homepage/DM-2HP2.png" />
                                         </a>
                                     </div>
                                 </div>
