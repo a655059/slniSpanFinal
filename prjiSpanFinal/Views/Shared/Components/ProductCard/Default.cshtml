@@ -1,5 +1,5 @@
 ﻿@model prjiSpanFinal.ViewModels.Item.CItemIndexSellerProductViewModel
-<link href="~/css/ProductCard.css" rel="stylesheet"/>
+@*<link href="~/css/ProductCard.css" rel="stylesheet"/>*@
 @{            
     string imgUrl = "";
     try
@@ -30,7 +30,7 @@
             <div class="productCardPrice my-2">@Model.price</div>
             <div class="productCardInfo">
                 <div>
-                    <img src="/img/YellowStar.png" alt="star" class="productCardInfoImg" />
+                    <i class="text-warning me-2 fa-solid fa-star"></i>
                     <div>@Model.starCount.ToString("0.0")</div>
                     <div class="mx-2">|</div>
                     <div class="productCardSalesVolume">銷售<span>@Model.salesVolume</span></div>
@@ -39,7 +39,6 @@
 
                 </div>
             </div>
-
         </div>
     </div>
 </a>

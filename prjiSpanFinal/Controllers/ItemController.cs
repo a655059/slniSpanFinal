@@ -27,73 +27,53 @@ namespace prjiSpanFinal.Controllers
             if (id != null)
             {
                 iSpanProjectContext dbContext = new();
-                var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => i).FirstOrDefault();
+                var product = dbContext.Products.Where(i => i.ProductId == id).Select(i => new
+                {
+                    product = i,
+                    smallType = i.SmallType,
+                    bigType = i.SmallType.BigType,
+                    seller = i.Member,
+                    sellerRegion = i.Member.Region.Country.CountryName + i.Member.Region.RegionName,
+                }).FirstOrDefault();
                 var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
                 var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i.Pic).ToList();
-                var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
-                var sellerProducts = dbContext.Products.Where(i => i.MemberId == product.MemberId && i.ProductId != product.ProductId).Select(i => i).ToList();
-                List<CItemIndexSellerProductViewModel> sellerProductList = new List<CItemIndexSellerProductViewModel>();
-                foreach (var p in sellerProducts)
+                var sellerProductIDList = dbContext.Products.Where(i => i.MemberId == product.product.MemberId).Select(i => i.ProductId).ToList();
+                List<CSellerShipperViewModel> sellerShipper = dbContext.ShipperToSellers.Where(i => i.MemberId == product.product.MemberId).Select(i => new CSellerShipperViewModel
                 {
-                    int productID = p.ProductId;
-                    string productName = p.ProductName;
-                    byte[] productPic = dbContext.ProductPics.Where(i => i.ProductId == p.ProductId).Select(i => i.Pic).FirstOrDefault();
-                    var prices = dbContext.ProductDetails.Where(i => i.ProductId == p.ProductId).Select(i => i.UnitPrice).ToList();
-                    decimal maxPrice = prices.Max();
-                    decimal minPrice = prices.Min();
-                    string price = "1";
-                    if (maxPrice == minPrice)
-                    {
-                        price = $"${minPrice:0}";
-                    }
-                    else
-                    {
-                        price = $"${minPrice:0} - ${maxPrice:0}";
-                    }
-                    var starCounts = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.ProductId == p.ProductId).Select(i => i.CommentStar);
-                    double starCount = 0;
-                    if (starCounts.Count() == 0)
-                    {
-                        starCount = 0;
-                    }
-                    else
-                    {
-                        starCount = starCounts.Average(i => i);
-                    }
-                    var salesVolumes = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == p.ProductId && i.Order.StatusId == 7).Select(i => i.Quantity);
-                    int salesVolume = 0;
-                    if (salesVolumes.Count() == 0)
-                    {
-                        salesVolume = 0;
-                    }
-                    else
-                    {
-                        salesVolume = salesVolumes.Sum(i => i);
-                    }
-                    CItemIndexSellerProductViewModel sellerProduct = new()
-                    {
-                        productID = productID,
-                        productName = productName,
-                        productPic = productPic,
-                        price = price,
-                        starCount = starCount,
-                        salesVolume = salesVolume
-                    };
-                    sellerProductList.Add(sellerProduct);
-                }
-                sellerProductList = sellerProductList.OrderByDescending(i => i.starCount).ToList();
+                    shipper = i.Shipper.ShipperName,
+                    fee = i.Shipper.Fee,
+                }).ToList();
+                List<CSellerPaymentViewModel> sellerPayment = dbContext.PaymentToSellers.Where(i => i.MemberId == product.product.MemberId).Select(i => new CSellerPaymentViewModel
+                {
+                    payment = i.Payment.PaymentName,
+                    fee = i.Payment.Fee,
+                }).ToList();
+                var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 CItemIndexViewModel itemIndex = new();
-                itemIndex.product = product;
+                itemIndex.product = product.product;
+                itemIndex.bigType = product.bigType;
+                itemIndex.smallType = product.smallType;
                 itemIndex.productDetails = productDetails;
                 itemIndex.productPics = productPics;
-                itemIndex.sellerProducts = sellerProductList;
+                itemIndex.sellerProductIDs = sellerProductIDList;
                 itemIndex.ReportType = ReportType;
+                itemIndex.seller = product.seller;
+                itemIndex.sellerRegion = product.sellerRegion;
+                itemIndex.sellerShipper = sellerShipper;
+                itemIndex.sellerPayment = sellerPayment;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-                    //JsonSerializer serializer = new JsonSerializer();
-                    //MemberAccount user = serializer.Deserialize<MemberAccount>(memberString);
                     MemberAccount user = System.Text.Json.JsonSerializer.Deserialize<MemberAccount>(memberString);
+                    var like = dbContext.Likes.Where(i => i.MemberId == user.MemberId && i.ProductId == id).Select(i => i).FirstOrDefault();
+                    if (like != null)
+                    {
+                        itemIndex.Islike = true;
+                    }
+                    else
+                    {
+                        itemIndex.Islike = false;
+                    }
                     itemIndex.IsLogin = true;
                     itemIndex.user = user;
                 }
@@ -101,6 +81,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     itemIndex.IsLogin = false;
                     itemIndex.user = null;
+                    itemIndex.Islike = false;
                 }
                 return View(itemIndex);
             }
@@ -109,6 +90,38 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        public IActionResult AddItemLike(int? memberID, int productID)
+        {
+            if (memberID <= 0)
+            {
+                return Content("0");
+            }
+            else
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                var like = dbContext.Likes.Where(i => i.MemberId == memberID && i.ProductId == productID).Select(i => i).FirstOrDefault();
+                if (like != null)
+                {
+                    dbContext.Likes.Remove(like);
+                    dbContext.SaveChanges();
+                    return Content("2");
+                }
+                else
+                {
+                    Like newLike = new Like
+                    {
+                        MemberId = (int)memberID,
+                        ProductId =productID,
+                    };
+                    dbContext.Likes.Add(newLike);
+                    dbContext.SaveChanges();
+                    return Content("1");
+                }
+            }
+            
+        }
+
         public IActionResult ReportCreate(Report d)
         {
             var db = (new iSpanProjectContext());

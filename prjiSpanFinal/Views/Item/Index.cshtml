@@ -2,25 +2,37 @@
 @model prjiSpanFinal.ViewModels.Item.CItemIndexViewModel
 @{
     ViewData["Title"] = "Index";
+    int memberID = 0;
+    if (Model.user != null)
+    {
+        memberID = Model.user.MemberId;
+    }
 }
 @section Styles{
     <link rel="stylesheet" href="~/css/Item/ItemIndex.css" />
     <link href="~/css/ProductCard.css" rel="stylesheet" />
 }
-
-    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
-            <li class="breadcrumb-item"><a href="#">@Model.bigType</a></li>
-            <li class="breadcrumb-item active" aria-current="page">@Model.smallType</li>
-        </ol>
-    </nav>
-    <div class="d-flex justify-content-between">
-        <div class="productPhoto">
-            <div class="bigPhoto position-relative">
-                <div class="addItemLike">加入按讚好物</div>
-                <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
-                @{
+<div class="memberID d-none">@memberID</div>
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
+        <li class="breadcrumb-item"><a href="#">@Model.bigType.BigTypeName</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.smallType.SmallTypeName</li>
+    </ol>
+</nav>
+<div class="d-flex justify-content-between">
+    <div class="productPhoto">
+        <div class="bigPhoto position-relative">
+            <div class="addItemLike">加入按讚好物</div>
+            @{
+                if (Model.Islike)
+                {
+                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50 text-danger"></i>
+                }
+                else
+                {
+                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
+                }
                 string imgSrc1 = "";
                 try
                 {
@@ -31,7 +43,7 @@
                 {
                     imgSrc1 = Url.Content("~/img/imageNotFound.png");
                 }
-                                <img src="@imgSrc1" />
+                <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
@@ -68,9 +80,8 @@
                 <div class="fs-6 fw-b">商品備註</div>
                 <ul>
                     <li>物品狀況:全新</li>
-                    <li>物品所在地:台灣，台北市</li>
-                    <li>最新關注時間:2022-10-07</li>
-                    <li>上架時間:2020-03-09</li>
+                    <li>物品所在地:台灣，<span>@Model.sellerRegion</span></li>
+                    <li>物品最新更新時間:<span>@Model.product.EditTime.ToString("yyyy-MM-dd")</span></li>
                 </ul>
             </div>
         </div>
@@ -84,21 +95,21 @@
                 {
                     if (i <= starCount)
                     {
-                                        <div class="starBox"><img src="~/img/YellowStar.png" /></div>
+                        <i class="text-warning fa-solid fa-star"></i>
                     }
                     else
                     {
-                                        <div class="starBox"><img src="~/img/WhiteStar.png" /></div>
+                        <i class="fa-regular fa-star"></i>
                     }
                 }
-                                <div class="ms-3">
-                                    4.2
-                                </div>
-                                <div class="ms-1">
-                                    <span>(</span><a href="#">10</a><span>)</span>
-                                </div>
-                                <div class="ms-3">|</div>
-                                <div class="ms-3">已售出: 15</div>
+                <div class="ms-3">
+                    4.2
+                </div>
+                <div class="ms-1">
+                    <span>(</span><a href="#">10</a><span>)</span>
+                </div>
+                <div class="ms-3">|</div>
+                <div class="ms-3">已售出: 15</div>
             }
         </div>
         <div class="itemDetails">
@@ -122,7 +133,7 @@
                         {
                             price = $"${minPrice.ToString("0")} - ${maxPrice.ToString("0")}";
                         }
-                                        <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                        <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                     }
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
@@ -147,12 +158,12 @@
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
                                 int quantity = i.Quantity;
-                                                <div class="ms-1 mb-1">
-                                                    <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
-                                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
-                                                    <div class="d-none price">@unitPrice</div>
-                                                    <img class="d-none itemStyleImg" src="@imgSrc" />
-                                                </div>
+                                <div class="ms-1 mb-1">
+                                    <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                    <div class="d-none price">@unitPrice</div>
+                                    <img class="d-none itemStyleImg" src="@imgSrc" />
+                                </div>
                             }
                         }
                     </div>
@@ -201,28 +212,29 @@
                 <div class="d-flex justify-content-start">
                     <div class="me-5">付款方式:</div>
                     <div>
-                        <div>PChomePay支付連 現金 (ATM、餘額、銀行支付)</div>
-                        <div>7-11取貨付款</div>
-                        <div>全家取貨付款</div>
-                        <div>萊爾富取貨付款</div>
+                        @{
+                            foreach (var i in Model.sellerPayment)
+                            {
+                                <div>@i.payment<span class="mx-2 text-danger" style="font-size:12px"><span>手續費:</span>@i.fee</span></div>
+                            }
+                        }
                     </div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="me-5">運送方式:</div>
                     <div>
-                        <div>7-11取貨付款<span class="fw-bold">60元</span></div>
-                        <div>7-11取貨<span class="fw-bold">79元</span></div>
-                        <div>全家取貨付款<span class="fw-bold">60元</span></div>
-                        <div>全家取貨<span class="fw-bold">60元</span></div>
-                        <div>萊爾富取貨付款<span class="fw-bold">45元</span></div>
-                        <div>萊爾富取貨<span class="fw-bold">45元</span></div>
-                        <div>宅配/快遞<span class="fw-bold">79元</span></div>
+                        @{
+                            foreach (var i in Model.sellerShipper)
+                            {
+                                <div>@i.shipper<span class="mx-2 text-danger" style="font-size:12px">$<span>@i.fee</span></span></div>
+                            }
+                        }
                     </div>
                 </div>
             </div>
             <div class="col-4" style="font-size:14px">
                 <div class="bg-secondary text-white fw-bold ps-2">買家資訊</div>
-                <div class="ps-2">林小偉<span class="ms-3"><a href="#"><i class="fa-solid fa-comment-dots text-warning"></i></a></span></div>
+                <div class="ps-2">@Model.seller.MemberAcc<span class="ms-3"><a href="#"><i class="fa-solid fa-comment-dots text-warning"></i></a></span></div>
                 <div class="d-flex align-items-center ps-2">
                     <div>全部商品:</div>
                     <div class="ms-3"><a href="@Url.Content("~/SalesCourt/賣場")" class="fs-5 fw-bold text-primary ">311</a></div>
@@ -231,38 +243,15 @@
                     <div>賣場評價:</div>
                     <div class="ms-3"><a href="@Url.Content("~/SalesCourt/評價")" class="fs-5 fw-bold text-primary ">4.9 (766)</a></div>
                 </div>
-
                 <div class="ps-2"><a href="@Url.Content("~/SalesCourt/關於我")" class="text-primary">關於我</a></div>
                 <div class="ps-2"><a href="@Url.Content("~/SalesCourt/賣場")" class="text-primary">追蹤賣家</a></div>
             </div>
         </div>
-
-
     </div>
 </div>
 <div class="sellerProducts mt-3">
-    <div class="d-flex justify-content-between align-items-center mb-1">
-        <div class="fs-3 fw-bold text-primary">賣家精選</div>
-        <div class="pageSelect d-flex align-items-center">
-            @{
-                int totalPage = 20;
-            }
-            <div class="fs-4 id=" sellerProductPage""><span id="page">1</span>/<span id="totalPage">@totalPage</span></div>
-            <button id="previousPage" disabled><</button>
-            <button id="nextPage">></button>
-        </div>
-    </div>
-
-    <div class="sellerProductsLayout">
-        <div class="">
-            @{
-                foreach (var product in Model.sellerProducts)
-                {
-                        @await Component.InvokeAsync("ProductCard", new { sellerProduct = product });
-                }
-            }
-        </div>
-    </div>
+    <div class="fs-4 fw-bold text-primary">賣家精選</div>
+    @await Component.InvokeAsync("ShowSelectedProducts", new { productIDs = Model.sellerProductIDs });
 </div>
 
 
@@ -305,7 +294,7 @@
                         @{
                             foreach (var i in Model.ReportType)
                             {
-                                                <option value="@i.ReportTypeId">@i.ReportTypeName</option>
+                                <option value="@i.ReportTypeId">@i.ReportTypeName</option>
                             }
                         }
                     </select>
@@ -325,16 +314,23 @@
         </div>
     </div>
 </div>
+
 <!--Modal End-->
 @section Scripts{
     <script src="~/js/Item/ItemIndex.js"></script>
+    <script src="~/js/ShowSelectedProducts.js"></script>
     <script>
         $(".bigPhoto .itemHeart").click(async function () {
-            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=57&productID=${@Model.product.ProductId}`;
+            const memberID = Number($(".memberID").html());
+            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
             let response = await fetch(requestUrl);
             let data = await response.text();
-            if (data == 1) {
-                $(this).addClass("text-danger");
+            if (data == "0") {
+                alert("請先登入方可加入我的最愛");
+                return;
+            }
+            else if (data == "1") {
+                $(this).removeClass("text-danger").addClass("text-danger");
             }
             else {
                 $(this).removeClass("text-danger");
@@ -343,8 +339,18 @@
         })
 
         $(".addToCart").click(async function () {
-            if ($("input[name='purchaseStyle']:checked").length != 1) {
+            const memberID = @memberID;
+            const quantity = Number($("input[name='purchaseCount']").attr("max"));
+            if (memberID <= 1) {
+                alert("請先登入再加入購物車");
+                return false;
+            }
+            else if ($("input[name='purchaseStyle']:checked").length != 1) {
                 alert("請選擇一個規格");
+                return false;
+            }
+            else if (Number($("input[name='purchaseCount']").val()) <= 0 || Number($("input[name='purchaseCount']").val()) > quantity) {
+                alert("你選的數量有誤");
                 return false;
             }
             else {
@@ -353,7 +359,6 @@
                 const requestUrl = "@Url.Content("~/Delivery/AddItemToCart")" + `?productDetailID=${productDetailID}&quantity=${quantity}`;
                 const response = await fetch(requestUrl);
                 const data = await response.json();
-
                 $(".dollarIcon").children().html(quantity);
                 $(".dollarIcon").animate({
                     top: "-=50",
@@ -387,7 +392,25 @@
             const response = await fetch(requestUrl);
             const data = await response.text();
             $(".itemRemainingQty").html("還剩" + data + "件");
-            $("input[name='purchaseCount']").attr("max", Number(data))
+            if (Number(data) <= 0) {
+                $("input[name='purchaseCount']").attr("min", 0);
+                $("input[name='purchaseCount']").attr("max", 0);
+                $("input[name='purchaseCount']").val(0);
+                $("input[name='purchaseCount']").prop("disabled", true);
+                $(".addToCart").prop("disabled", true);
+                $(".buyDirectly").prop("disabled", true);
+                $(this).prop("disabled", true);
+            }
+            else {
+                $("input[name='purchaseCount']").attr("min", 1);
+                $("input[name='purchaseCount']").attr("max", Number(data));
+                $("input[name='purchaseCount']").val(1);
+                $("input[name='purchaseCount']").prop("disabled", false);
+                $(".addToCart").prop("disabled", false);
+                $(".buyDirectly").prop("disabled", false);
+                $(this).prop("disabled", fales);
+            }
+           
         });
 
 

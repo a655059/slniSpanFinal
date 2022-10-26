@@ -9,13 +9,19 @@ namespace prjiSpanFinal.ViewModels.Item
     public class CItemIndexViewModel
     {
         public Product product { get; set; }
-        public string bigType { get; set; }
-        public string smallType { get; set; }
+        public BigType bigType { get; set; }
+        public SmallType smallType { get; set; }
         public List<ProductDetail> productDetails { get; set; }
         public List<byte[]> productPics { get; set; }
-        public List<CItemIndexSellerProductViewModel> sellerProducts { get; set; }
+        public List<int> sellerProductIDs { get; set; }
+        public MemberAccount seller { get; set; }
+        public string sellerRegion { get; set; }
+        public List<CSellerShipperViewModel> sellerShipper { get; set; }
+        public List<CSellerPaymentViewModel> sellerPayment { get; set; }
+        public Boolean Islike { get; set; }
         public List<ReportType> ReportType { get; set; }
         public bool IsLogin { get; set; }
         public MemberAccount user { get; set; }
+        
     }
 }
