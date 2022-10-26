@@ -11,6 +11,12 @@
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <style>
+        .active {
+            display: block !important;
+            color: yellow !important;
+        }
+    </style>
 }
 <div class="CategoryBody">
     <div class="row">
@@ -70,7 +76,7 @@
                     <div class="itembody-filter d-flex align-items-center justify-content-between">
                         <div class="itembody-filter1 "><span>篩選</span></div>
                         <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder1">
+                            <a class="itembody-filter2-btn linknoline SortOrder active" id="SortOrder1">
                                 綜合排序
                                 <input type="hidden" value="1" />
                             </a>
@@ -128,10 +134,25 @@
         let SortOrder = 1;
         let pages = 0;
         let keyword = '@Html.Raw(Model.SearchKeyword)';
+        let menu = document.getElementById("dropdownMenuLink");
 
 
         $(".SortOrder").click(function (event) {
+
             let target = $(event.target);
+            $(".active").removeClass("active");
+            target.addClass("active");
+
+            if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
+                if (!menu.classList.contains("active")) {
+                    menu.classList.add("active");
+                }
+                menu.textContent = this.textContent.trim();
+            }
+            else {
+                menu.textContent = "價格排序";
+            }
+
             SortOrder = target.find("input").val();
             CallgetJSON();
         });
