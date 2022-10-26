@@ -748,6 +748,41 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+        public IActionResult ArgumentDelete(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from i in db.Arguments
+                    where i.ArgumentId == id
+                    select i;
+            var g=G.First();
+            g.ArgumentTypeId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ArgumentApprove(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from i in db.Arguments
+                    where i.ArgumentId == id
+                    select i;
+            var g = G.First();
+            var K = (from k in db.Orders
+                    join m in db.MemberAccounts on k.MemberId equals m.MemberId
+                    where k.OrderId == g.OrderId
+                    select m).First();
+            K.MemStatusId = 4;
+            g.ArgumentTypeId = 6;
+            try
+            {
+                db.SaveChanges();
+                return Content(K.MemberId.ToString());
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+           
+        }
 
         #endregion
         #region EventRegion
