@@ -285,9 +285,64 @@ namespace prjiSpanFinal.Controllers
 
             //if (x != null) return RedirectToAction("修改關於我");
 
+            var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
+            string[] words = servicetime.ServiceTime.Split('/');
+
+            C關於我ViewModel me = new C關於我ViewModel();
+
+            //抓賣場服務時間內容  
+            foreach (var word in words)
+            {
+
+                string[] onerow = word.Split(',');
+                //onerow 一次可能帶出  只有  星期   時間    休息
+                if (onerow[0] != null)
+                {
+
+                    if (onerow[0] == "0")
+                    {     //星期
+
+                        if (onerow[1] != null)
+                        {
+                            me.weekDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.weekUp = onerow[2];
+                        }
+
+                    }
+                    if (onerow[0] == "1")
+                    {     //時間
+                        if (onerow[1] != null)
+                        {
+                            me.timeDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.timeUp = onerow[2];
+                        }
+                    }
+                    if (onerow[0] == "2")
+                    {     //每週
+                        if (onerow[1] != null)
+                        {
+                            me.takebreak = onerow[1];
+                        }
+                    }
+                }
+
+            }
+
+
             C關於我ViewModel outp = new C關於我ViewModel
             {
-                Memberid = x.MemberId
+                Memberid = x.MemberId,
+                weekDown = me.weekDown,
+                weekUp = me.weekUp,
+                timeDown = me.timeDown,
+                timeUp = me.timeUp,
+                takebreak = me.takebreak
             };
 
             return View(outp);
@@ -321,6 +376,12 @@ namespace prjiSpanFinal.Controllers
                 Caution = me.Caution
             };
 
+            //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
+            if(ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
+            {
+                add.ServiceTime = "";
+            }
+
             if(ServiceTime[0] == "on")
             {
                 add.ServiceTime += "0";
@@ -347,13 +408,12 @@ namespace prjiSpanFinal.Controllers
                 add.ServiceTime += "/";
             }
 
-            add.RenewProduct = NewMe.NewProductOnLoad;
-            add.SellerType = NewMe.SellerCategory;
-            add.AfterSales = NewMe.ServiceAfterBuy;
-            add.SellerCaution = NewMe.Caution;
+            add.RenewProduct += NewMe.NewProductOnLoad;
+            add.SellerType += NewMe.SellerCategory;
+            add.AfterSales += NewMe.ServiceAfterBuy;
+            add.SellerCaution += NewMe.Caution;
 
-            //dbContext.MemberAccounts.Add(add);
-            //return View();
+           
             dbContext.SaveChanges();
             return RedirectToAction("關於我");
             //return Content("Success", "text/plain");
@@ -363,21 +423,17 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 修改關於我()
         {
             getid();
-            //C關於我ViewModel me = new C關於我ViewModel { 
-            
-
-            
-            //}
-
+          
 
             var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
             string[] words = servicetime.ServiceTime.Split('/');
-            List<C關於我ViewModel> outme = new List<C關於我ViewModel>();
-
-            foreach(var word in words)
+           
+            C關於我ViewModel me = new C關於我ViewModel();
+            
+            //抓賣場服務時間內容  
+            foreach (var word in words)
             {
-                C關於我ViewModel me = new C關於我ViewModel();
-
+                
                 string[] onerow = word.Split(',');
                 //onerow 一次可能帶出  只有  星期   時間    休息
                 if (onerow[0] != null) {
@@ -416,8 +472,9 @@ namespace prjiSpanFinal.Controllers
                 
             }
 
+        
           
-            return View();
+            return View(me);
         }
 
         [HttpPost]
