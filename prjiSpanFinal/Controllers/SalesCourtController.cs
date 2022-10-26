@@ -63,7 +63,8 @@ namespace prjiSpanFinal.Controllers
             {
                 var pddt = dbContext.ProductDetails.Where(a => a.ProductId == pd.ProductId).FirstOrDefault();
                 var oddt = dbContext.OrderDetails.Where(a => a.ProductDetailId == pddt.ProductDetailId).Select(a => a.Comments.Select(c => c.CommentStar)).ToList();
-                var soldct = dbContext.ProductDetails.Where(a => a.Product.ProductId == pd.ProductId).ToList();
+                //var soldct = dbContext.ProductDetails.Where(a => a.Product.ProductId == pd.ProductId).ToList();
+                int sales = dbContext.OrderDetails.Where(o => o.Order.StatusId == 7 && o.ProductDetail.ProductId == pd.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
                 var uptime = dbContext.Products.FirstOrDefault(a => a.ProductId == pd.ProductId).EditTime;
                 var starctsum = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.ProductId == pd.ProductId).Select(a => (double)a.CommentStar).Sum();
                 var starct = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.ProductId == pd.ProductId).Select(a => (double)a.CommentStar);
@@ -77,7 +78,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     ProductName = pd.ProductName,
                     ProductPrice = pddt.UnitPrice.ToString(),
-                    SoldQuantity = soldct.Count(),
+                    SoldQuantity = sales,
                     AddedTime = uptime,
                     StarCount = staravg,
                     Producpic =  prodpic,
@@ -255,21 +256,21 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult 設定分類(int Memberid, string[] CustomizedCategoryName)
+        public IActionResult 設定分類(int Memberid, string[] CustomizedCategoryName,int[] SortNumber)
         {
-            //CustomizedCategory newcust = new CustomizedCategory();
-            //newcust.CustomizedCategoryId = custcate.CustomizedCategoryId;
+            CustomizedCategoryName = CustomizedCategoryName.Distinct().ToArray();
+            var cname = dbContext.CustomizedCategories.Where(c=>c.MemberId == Memberid).ToList();
 
-            //custmizcatery.CustomizedCategory
-
-            foreach(var ccn in CustomizedCategoryName)
-            {
-                CustomizedCategory newcust = new CustomizedCategory();
-                newcust.MemberId = Memberid;
-                newcust.CustomizedCategoryName = ccn;
-                newcust.SortNumber = 0;
-
-                dbContext.CustomizedCategories.Add(newcust);
+            for (int i = 1; i < CustomizedCategoryName.Length+1; i++) {      //這邊判斷是否是之前有的類別就不加入
+                if (cname.Select(o => o.CustomizedCategoryName).Contains(CustomizedCategoryName[i - 1]))
+                {
+                    cname.Where(o => o.CustomizedCategoryName == CustomizedCategoryName[i - 1]).FirstOrDefault().SortNumber = i;
+                }
+                else
+                {
+                    CustomizedCategory a = new CustomizedCategory() { CustomizedCategoryName = CustomizedCategoryName[i-1], MemberId = Memberid, SortNumber = i };
+                    dbContext.CustomizedCategories.Add(a);
+                }
             }
 
             dbContext.SaveChanges();
@@ -284,9 +285,64 @@ namespace prjiSpanFinal.Controllers
 
             //if (x != null) return RedirectToAction("修改關於我");
 
+            var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
+            string[] words = servicetime.ServiceTime.Split('/');
+
+            C關於我ViewModel me = new C關於我ViewModel();
+
+            //抓賣場服務時間內容  
+            foreach (var word in words)
+            {
+
+                string[] onerow = word.Split(',');
+                //onerow 一次可能帶出  只有  星期   時間    休息
+                if (onerow[0] != null)
+                {
+
+                    if (onerow[0] == "0")
+                    {     //星期
+
+                        if (onerow[1] != null)
+                        {
+                            me.weekDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.weekUp = onerow[2];
+                        }
+
+                    }
+                    if (onerow[0] == "1")
+                    {     //時間
+                        if (onerow[1] != null)
+                        {
+                            me.timeDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.timeUp = onerow[2];
+                        }
+                    }
+                    if (onerow[0] == "2")
+                    {     //每週
+                        if (onerow[1] != null)
+                        {
+                            me.takebreak = onerow[1];
+                        }
+                    }
+                }
+
+            }
+
+
             C關於我ViewModel outp = new C關於我ViewModel
             {
-                Memberid = x.MemberId
+                Memberid = x.MemberId,
+                weekDown = me.weekDown,
+                weekUp = me.weekUp,
+                timeDown = me.timeDown,
+                timeUp = me.timeUp,
+                takebreak = me.takebreak
             };
 
             return View(outp);
@@ -320,6 +376,12 @@ namespace prjiSpanFinal.Controllers
                 Caution = me.Caution
             };
 
+            //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
+            if(ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
+            {
+                add.ServiceTime = "";
+            }
+
             if(ServiceTime[0] == "on")
             {
                 add.ServiceTime += "0";
@@ -346,13 +408,12 @@ namespace prjiSpanFinal.Controllers
                 add.ServiceTime += "/";
             }
 
-            add.RenewProduct = NewMe.NewProductOnLoad;
-            add.SellerType = NewMe.SellerCategory;
-            add.AfterSales = NewMe.ServiceAfterBuy;
-            add.SellerCaution = NewMe.Caution;
+            add.RenewProduct += NewMe.NewProductOnLoad;
+            add.SellerType += NewMe.SellerCategory;
+            add.AfterSales += NewMe.ServiceAfterBuy;
+            add.SellerCaution += NewMe.Caution;
 
-            //dbContext.MemberAccounts.Add(add);
-            //return View();
+           
             dbContext.SaveChanges();
             return RedirectToAction("關於我");
             //return Content("Success", "text/plain");
@@ -362,9 +423,58 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 修改關於我()
         {
             getid();
+          
 
+            var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
+            string[] words = servicetime.ServiceTime.Split('/');
+           
+            C關於我ViewModel me = new C關於我ViewModel();
+            
+            //抓賣場服務時間內容  
+            foreach (var word in words)
+            {
+                
+                string[] onerow = word.Split(',');
+                //onerow 一次可能帶出  只有  星期   時間    休息
+                if (onerow[0] != null) {
+                    
+                    if (onerow[0] == "0") {     //星期
+                        
+                        if (onerow[1] != null)
+                        {
+                            me.weekDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.weekUp = onerow[2];
+                        }
 
-            return View();
+                    }
+                    if (onerow[0] == "1")
+                    {     //時間
+                        if (onerow[1] != null)
+                        {
+                            me.timeDown = onerow[1];
+                        }
+                        if (onerow[2] != null)
+                        {
+                            me.timeUp = onerow[2];
+                        }
+                    }
+                    if (onerow[0] == "2")
+                    {     //每週
+                        if (onerow[1] != null)
+                        {
+                            me.takebreak = onerow[1]; 
+                        }
+                    }
+                }
+                
+            }
+
+        
+          
+            return View(me);
         }
 
         [HttpPost]
@@ -379,5 +489,14 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("關於我");
 
         }
+    
+    
+
+        public IActionResult GetCustCategory(int id)
+        {
+            return Json(dbContext.CustomizedCategories.Where(c=>c.MemberId == id).Select(c=> new { c.Products.Count, c.CustomizedCategoryName,c.SortNumber }).OrderBy(o=>o.SortNumber).ToList());
+        }
+
+        
     }
 }

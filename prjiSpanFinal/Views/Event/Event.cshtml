@@ -1,0 +1,56 @@
+﻿@model prjiSpanFinal.ViewModels.Event.EventViewModel
+@{
+    ViewData["Title"] = "Event";
+}
+
+@section Styles{
+    <link href="~/css/Event/Discount.css" rel="stylesheet" />
+}
+<body>
+    <div>
+        <div class="w-100 event-header">
+            <img src="~/img/Event/EVENTDM.png" />
+        </div>
+        <div class="split">
+        </div>
+        <div>
+        </div>
+        <div>
+            <div class="coupongroup">
+
+                
+
+            </div>
+        </div>
+    </div>
+</body>
+@section Scripts{
+    <script src="~/js/Event/Coupon.js"></script>
+    <script>
+
+        let btn = document.querySelectorAll(".coupon-tag");
+        btn.forEach(t => t.addEventListener("click", function (event) {
+            let couponid = event.target.querySelector('input').value;
+            GetCoupon(event, couponid);
+
+        }))
+        function GetCoupon(event, couponid) {
+            $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
+        if (data == "1") {
+            window.alert("已經領取過此券！");
+        }
+        else if (data == "2") {
+            location.reload();
+        }
+        else {
+            window.alert("尚未登入");
+            window.location = "/Member/Login";
+                }
+            })
+        }
+        function btnColorChange(event) {
+
+        }
+    </script>
+}
+

@@ -7,6 +7,12 @@
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+<style>
+    .active {
+        display: block !important;
+        color: yellow !important;
+    }
+</style>
 }
 <div class="CategoryBody">
     <div class="CategoryHeader">
@@ -128,7 +134,7 @@
 
                     <div class="itembody-filter1 "><span>篩選</span></div>
                     <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                        <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder1">
+                        <a class="itembody-filter2-btn linknoline SortOrder active" id="SortOrder1">
                             綜合排序
                             <input type="hidden" value="1" />
                         </a>
@@ -195,12 +201,21 @@
         let SortOrder = 1;
         let pages = 0;
         let BigtypeId = "@Model.SearchType.BigTypeId";
+        let sort1 = document.getElementById("SortOrder1");
+        let menu = document.getElementById("dropdownMenuLink");
+
 
         $(".filterCheckBox").click(function (event) {
             SortOrder = 1;
             let target = $(event.target);
             let ischecked = target.prop('checked');
             let targetvalue = target.siblings("input").val();
+
+            $(".active").removeClass("active");
+            sort1.classList.add("active");
+            if (menu.classList.contains("active")) {
+                menu.textContent = "價格排序";
+            }
 
             if (ischecked) {
                 filter.push(targetvalue);
@@ -216,20 +231,37 @@
         });
 
         $(".SortOrder").click(function (event) {
+
             let target = $(event.target);
+            $(".active").removeClass("active");
+            target.addClass("active");
+            
+            if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
+                if (!menu.classList.contains("active")) {
+                    menu.classList.add("active");
+                }
+                menu.textContent = this.textContent.trim();
+            }
+            else {
+                menu.textContent = "價格排序";
+            }
+
             SortOrder = target.find("input").val();
             CallgetJSON();
         });
 
+
+
         $("#ff-types-prices-btn").click(function (event) {
             let minval = 0
+            let maxval = 9999999;
             if (parseInt($('#ff-pricemin').val()) > 0); {
                 minval = $('#ff-pricemin').val();
             }
-            let maxval = 9999999;
             if (parseInt($('#ff-pricemax').val()) > 0) {
                 maxval = $('#ff-pricemax').val();
             }
+
             if (parseInt(minval) > parseInt(maxval)) {
                 //todo#2
                 alert("數值設定錯誤！");
@@ -240,6 +272,7 @@
                 CallgetJSON();
             }
         })
+
         jQuery.postJSON = function (url, data, callback) {
             jQuery.post(url, data, callback, "json");
         };

@@ -2,7 +2,7 @@
 @model prjiSpanFinal.ViewModels.seller.CSellerCreateToViewViewModel
 @using prjiSpanFinal.ViewModels.seller;
 @{
-    ViewData["Title"] = "新增商品";
+    ViewData["Title"] = "編輯商品";
 }
 @section Styles
 {
@@ -128,9 +128,9 @@
                 <br />
                 <label>照片:</label>
                 <input type="file" id="text4" class="form-group" accept="image/*">
+                <img id="blah" src="#" alt="your image" />
             </div>
             <div class="modal-footer">
-                <button id="demomodal" type="button" class="btn btn-info">Demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
@@ -143,17 +143,14 @@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10" id="change1">
-        <div class="mt-3 mb-3">
-            <img src="~/img/跑條1.png" />
-        </div>
-        <h2 class="d-flex justify-content-center mb-2 ">新增商品</h2>
+        <h2 class="d-flex justify-content-center mb-2 ">編輯商品</h2>
         <div class="row">
             <div class="排版 mx-5">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="d-flex justify-content-start">
                     <label class="名稱寬">名稱</label>
-                    <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" />
+                    <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" value="@Model.ProductName"/>
                     <span class="text-danger"></span>
                 </div>
                 <div class="d-flex justify-content-start ">
@@ -191,6 +188,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @{ 
+                                    for(int i = 0; i < Model.Style.Count;i++) 
+                                    { 
+                                        <tr>
+                                            <td class="col 規格列表">@Model.Style[i]</td>
+                                            <td class="col 規格列表">@Model.Quantity[i]</td>
+                                            <td class="col 規格列表">@Model.UnitPrice[i].ToString("0")</td>
+                                            <td class="col 規格列表"><img src="data:image;base64,@System.Convert.ToBase64String(@Model.BodyPic[i])" width="30" height="30" /></td>
+                                            <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
+                                        </tr>
+                                    }                                   
+                                }                                
                             </tbody>
                         </table>
                         <div class="text-center">
@@ -207,7 +216,16 @@
                         @*    大頭照相片1     *@
                         <div>
                             <label class="btn" for="commentPhoto1">
-                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                @{
+                                    if (Model.DBtoPic != null)
+                                    {
+                                        <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])" width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    }
+                                    else
+                                    {
+                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    }
+                                }
                             </label>
                             <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
                         </div>
@@ -223,18 +241,33 @@
                                         string id = $"commentPhoto{i + 2}";
                                     }
                                     <label class="btn" for="@id">
-                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                        @{
+                                            if (Model.DBtoPic != null)
+                                            {
+                                                if (Model.DBtoPic.Count > 1 && i+1 < Model.DBtoPic.Count)
+                                                {
+                                                    <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])" width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                            }
+                                        }
                                     </label>
                                     <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
                                 </div>
                             }
                         }
-
                     </div>
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2 ">描述</label>
-                    <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea"></textarea>
+                    <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea">@Model.Description</textarea>
                 </div>
 
 
@@ -250,88 +283,17 @@
                                     <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
                                 </div><br />
                                 <div class="col-3"></div>
-                                @*<div class="col-6 my-1">
-                                        <div class="form-check form-switch d-flex justify-content-center">
-                                            <input id="@Model.ShiperID[i]" class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.shipID[i]">
-                                        </div>
-                                    </div>*@
                             }
                         }
                     </div>
                     <div class="col-2"></div><br />
                 </div>
 
-
                 <div class="row ">
-                    <div class="col-4"></div>
-                    <div class="col-8">
-                        <input type="button" value="下一步" id="next" class="btn btn-warning m-3 nextwork" />
-                        <input type="button" value="Demo" id="demo" class="btn btn-info m-3 nextwork" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="col-10 " id="change2" style="display:none">
-        <div class="mt-3">
-            <img src="~/img/跑條2.png" />
-        </div>
-        <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
-        <div>
-            <div class="">
-                <table class="">
-                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>優先曝光</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
-                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row py-3 border-bottom 背色">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>重點標題</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />50  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />70  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />100  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以粗體方式突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>亮眼底色</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />150  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />250  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />350  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以顯著底色突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
-                </table>
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-7">
-                        <input type="submit" value="完成" class="btn btn-warning m-4" id="final" />
+                    <div class="col-3"></div>
+                    <div class="col-9">
+                        <input type="button" value="確定" id="next" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="取消" id="cancle" class="btn btn-secondary m-3 nextwork" />
                     </div>
                 </div>
             </div>
@@ -341,34 +303,13 @@
 </div>
 @section Scripts{
     <script>
-/*const { Button } = require("../../wwwroot/lib/js/bootstrap.esm");*/
-
-
-
-
-        /////////大類小類連接---------------------------------------------------------------------------------------------------------------
-
-        const bigType = document.querySelector("#bigType");
-        const smallType = document.querySelector("#smallType");
-
-        bigType.addEventListener("change", async function() {
-            $.getJSON("/Seller/SmallType", { bigtype: $("#bigType").children("option:selected").val() }, function (data) {
-                $("#smallType").html("");
-                for (let i = 0; i < data.length; i++) {
-                    $("#smallType").append(`<option value="${data[i].id}">${data[i].name}</option>`);
-                }
-            });
+        $(document).on("click",".delbtn",function () {   //刪除資料庫生成的規格
+            $(this).parents("tr").remove();
         })
-      //------------------------------------------------
 
         let alldata = [];
-
         //資料暫存,後去把data變數傳入後端
-        let data = [
-            //['紅色', 7, 100, ''],
-            //['藍色', 10, 300, '']
-        ]
-
+        let data = []
         let tbody = document.querySelector('tbody')
         for (let i = 0; i < data.length; i++) {
             let tr = document.createElement('tr');
@@ -402,16 +343,16 @@
         $("#text4").on("change", function () {
             let photo;
             if (img.files.length != 0) {
-                photo=img.files;
+                photo = img.files;
             }
             console.log(photo)
             if (photo) {
-                    let reader = new FileReader();
+                let reader = new FileReader();
                 reader.readAsDataURL(photo[0]);
-                    reader.onload = function () {
-                        let src = reader.result;
-                        stylephoto=src.split(",")[1];
-                    };
+                reader.onload = function () {
+                    let src = reader.result;
+                    stylephoto = src.split(",")[1];
+                };
             }
         })
 
@@ -439,7 +380,7 @@
                 alldata.push(styleName);
 
                 let tr = document.createElement('tr');
-                for (let i = 0; i < dataNew.length-1; i++) {
+                for (let i = 0; i < dataNew.length - 1; i++) {
                     let td = document.createElement('td');
                     td.innerHTML = dataNew[i];
                     tr.appendChild(td);
@@ -448,6 +389,8 @@
                 //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
                 td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
                 tr.appendChild(td1);
+                console.log('stylephoto')
+                console.log(stylephoto)
 
                 let td = document.createElement('td');
                 td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
@@ -462,7 +405,7 @@
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
-          }
+            }
             else {
                 alert("項目,數量和價格不可為空");
             }
@@ -470,116 +413,7 @@
         })
 
 
-
-
-        //=========================================================
-
-        //大頭照新增  預覽
-        $(".commentphotoclass").change(function () {
-            const photo = document.getElementById($(this).attr("id")).files;
-            if (photo) {
-                let src = URL.createObjectURL(photo[0]);
-                console.log(src);
-                $(this).siblings('label').children().css( "background-image", `url('${src}')` );
-            }
-        });
-
-        //======================================================
-        //create下一步 按鈕
-
-        next.addEventListener("click", function () {
-
-            $("#change1").css("display", "none");
-            $("#change2").css("display", "block");
-
-        });
-
-        //=============================================
-        //Demo鍵
-        demo.addEventListener("click", function () {
-            document.getElementById("ProductName").value = "大西瓜";
-            document.getElementById("Description").value = "又圓又大";
-
-        });
-
-        demomodal.addEventListener("click", function () {
-            document.getElementById("text1").value="正方形";
-            document.getElementById("text2").value=2;
-            document.getElementById("text3").value=5000;
-        });
-
-        //=====================================================
-        //表單照片轉二進位儲存
-
-        let dataphoto = [];
-
-        let appleclass = document.getElementsByClassName("commentphotoclass");
-        $(".commentphotoclass").on("change", function () {
-            let photos = [];
-            dataphoto = [];
-            for (let i = 0; i < appleclass.length; i++) {
-                if (appleclass[i].files.length != 0) {
-                    photos.push(appleclass[i].files);
-                }
-            }
-
-            if (photos) {
-                $.each(photos, function (idx, photo) {
-                    let reader = new FileReader();
-                    reader.readAsDataURL(photo[0]);
-                    reader.onload = function () {
-                        let src = reader.result;
-                        dataphoto.push(src.split(",")[1]);
-                    };
-                });
-            }
-        })
-//====================================================================
-         //AD頁 儲存按鈕
-        final.addEventListener("click", function () {
-            console.log(dataphoto)
-            //for (let i = 0; i < 4; i++){
-            //    dataphoto.push(document.querySelector(`.commentPhoto${i + 2}`).value);
-            //}
-
-            //畫面的物流
-            let shiper = [];
-            @foreach (var item in  Model.shipID) {
-                        <text>
-                    shiper.push("@item");
-                    </text>
-                }
-              //要存入的金流
-             let payment = [];
-            @foreach (var item in Model.PaymentID){
-                <text>
-                    payment.push("@item");
-                    </text>
-            }
-
-            let pushData = {
-                暫存規格:alldata,
-                ProductName: document.getElementById("ProductName").value,
-                smalltype: $("#smallType").children("option:selected").val(),
-                Description: document.getElementById("Description").value,
-                BodyPic: dataphoto,
-                ShiperID: shiper,
-                PaymentID: payment
-            }
-
-            jQuery.postJSON = function (url, data, callback) {
-                jQuery.post(url, data, callback, "json");
-            };
-
-            $.postJSON("/Seller/CreateSuccess", { jsonString: pushData }, function () { });
-
-            alert("新增成功");
-
-            location.href = "/Seller/NewIndex" //跳回商品頁面
-
-            //轉json格式
-            @*let jsonall = JSON.stringify(pushData);
-            fetch("@Url.Content("~/Seller/CreateSuccess")" + `?jsonString=${jsonall}`);*@
-        })
     </script>
+
 }
+

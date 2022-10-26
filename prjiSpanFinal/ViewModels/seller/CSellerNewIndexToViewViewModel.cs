@@ -12,5 +12,6 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<List<int>> Quantity { get; set; }
         public List<List<decimal>> UnitPrice { get; set; }
         public List<List<byte[]>> Pic { get; set; }
+        public List<int> productId { get; set; }
     }
 }

@@ -62,5 +62,16 @@ namespace prjiSpanFinal.Controllers
             return Content("2", "text/plain", Encoding.UTF8);
             }
         }
+        public IActionResult Event(int? Eventid)
+        {
+            OfficialEventList oe = _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).FirstOrDefault();
+            //List<Product> evtProd = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Eventid);
+            EventViewModel EventVM = new EventViewModel()
+            {
+                OffcialEvent = oe,
+            };
+
+            return View(EventVM);
+        }
     }
 }

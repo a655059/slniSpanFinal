@@ -39,9 +39,36 @@ namespace prjiSpanFinal.Controllers
             return View(home);
         }
 
-        public IActionResult TakePopItem(int reqQty)
+        public IActionResult GetSearchDetail(string key)
         {
-            return Json(new SearchBar().PopItem5(reqQty));
+            List<string> keywordList = new List<string>();
+            //No cookies
+            if (Request.Cookies["key"] == null)
+            {
+                if (!String.IsNullOrEmpty(key)) {
+                    Response.Cookies.Append("key", key);
+                    keywordList.Add(key);
+                }
+            }
+            //if cookies 
+            else
+            {
+                string keywordReq = Request.Cookies["key"];
+                keywordList = (keywordReq.Split(",")).ToList();
+                if (!String.IsNullOrEmpty(key))
+                {
+                    if (!keywordList.Contains(key)) { 
+                        keywordList.Add(key);
+                        if (keywordList.Count == 8)
+                        {
+                            keywordList.RemoveAt(0);
+                        }
+                        keywordReq = String.Join(",", keywordList.ToArray());
+                        Response.Cookies.Append("key", keywordReq);
+                    }
+                }
+            }
+            return Json(keywordList.ToArray());
         }
 
         public IActionResult Privacy()

@@ -6,8 +6,9 @@
     ViewData["Title"] = "賣場";
 }
 @section Styles{
-    <link href="~/css/HomeStyle.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
+    
 
     <style>
         .dashed-divider {
@@ -41,7 +42,7 @@
                 <img src="@source" class="cardImg" alt="..." width="120" />
             </div>
 
-           
+
             <div class="p-2">@Model.SellerName 的賣場</div>
 
             <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
@@ -49,13 +50,13 @@
 
             <div class="row">
                 <div class="col">
-                    
+
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#f30959">
                         最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                     </button>
                 </div>
                 <div class="col">
-                   
+
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#fe6502">
                         蝦蝦通<i class="fa-solid fa-shrimp"></i>
                     </button>
@@ -71,6 +72,12 @@
             </h6>
 
             <ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span data-feather="file" class="align-text-bottom"></span>
+                        未分類
+                    </a>
+                </li>
                 @foreach (var item in Model.CourtCategoryName)
                 {
                     <li class="nav-item">
@@ -95,7 +102,7 @@
 
                         <div class="board-text">
                             @Model.CourtDescription
-                           
+
                         </div>
 
                     </div>
@@ -138,26 +145,25 @@
                             </div>
                         }
 
-                        @*@{
-                @for (int i = 0; i < 2; i++)
-                {
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <img src="~/img/product04.png" width="150" />
+
+                            <div class="sellsitem">
+                                <div>
+                                    <img src="/img/coupon.jpg" class="w-100">
+                                </div>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle">店到店免運</div>
+                                    <div class="cardPrice">2022/10/10生效</div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                            <div class="text-black-50">數量有限用完為止</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-warning buybtn">稍後使用</button>
+                                    </div>
+                                    <div class="cardPrice"><a href="/Item/Index/2113">使用規則</a></div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <div class="ps-2"><a href="#" class="text-primary">@Model.CardProduct.Select(a => a.ProductName)</a></div>
-                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
-                                <p>
-                                    已賣數量：227
-                                    上架時間： 2017-09-28 02:41:04
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }*@
 
 
                     </div>
@@ -226,7 +232,7 @@
 
 
                     <div class="display-2 text-bg-danger">@Model.star </div>
-                 
+
 
                     @{
                         if (Model.CardProduct.Count > 0)
