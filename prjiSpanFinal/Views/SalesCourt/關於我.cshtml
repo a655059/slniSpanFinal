@@ -19,6 +19,15 @@
 
     var payingName = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.PaymentName).ToList();
     var payingFee = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.Fee).ToList();
+
+
+    //var SalesCourtServiceTime   想說像修改關於我先把服務時間切分 再帶入viewmodel中的個別變數
+    var NewProductOnLoad = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).RenewProduct;
+    var SellerCategory = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).SellerType;
+    //售後服務      注意事項
+    var ServiceAfterBuy = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).AfterSales;
+    var Caution = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).SellerCaution;
+
 }
 
 @section Styles{
@@ -62,15 +71,15 @@
             <div class="col">
                 <div class="bg-secondary">賣場服務時間</div>
                 <p>
-                    星期一 - 星期五
-                    時間10:00-17:00
-                    國定例假日公休
+                    星期 @Model.weekDown - 星期 @Model.weekUp
+                    時間  @Model.timeDown:00- @Model.timeUp:00
+                    國定例假日公休 @Model.takebreak
                 </p>
             </div>
             <div class="col">
                 <div class="bg-secondary">新品上架時間</div>
                 <p>
-                    @Model.NewProductOnLoad
+                    @NewProductOnLoad
                 </p>
             </div>
             <div class="col">
@@ -91,7 +100,7 @@
             <div class="col">
                 <div class="bg-secondary">賣家類型</div>
                 <p>
-                    @Model.SellerCategory
+                    @SellerCategory
                 </p>
             </div>
         </div>
@@ -152,9 +161,12 @@
 <div class="container">
     <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: #ccd7b4">
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">注意事項</h1>
+            <h1 class="display-4 fst-italic">注意事項的售後服務</h1>
             <p class="lead my-3" style="font-size:1.4em">
-                @Model.Caution
+                @ServiceAfterBuy
+            </p>
+            <p class="lead my-3" style="font-size:1.4em">
+                @Caution
             </p>
             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
