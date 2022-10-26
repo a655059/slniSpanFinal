@@ -23,7 +23,9 @@
                 星期
                 <div class="col-2">
                     <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                        <option value="none" selected disabled hidden>@Model.weekDown</option>
                         @{
+
                             for (int i = 0; i < 7; i++)
                             {
                                 <option value="@(i+1)">@(i+1)</option>
@@ -34,6 +36,7 @@
                 ~星期
                 <div class="col-5">
                     <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                        <option value="none" selected disabled hidden>@Model.weekUp</option>
                         @{
                             for (int i = 0; i < 7; i++)
                             {
@@ -50,6 +53,7 @@
                 時間
                 <div class="col-2">
                     <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                        <option value="none" selected disabled hidden>@Model.timeDown</option>
                         @{
                             for (int i = 0; i < 10; i++)
                             {
@@ -66,6 +70,7 @@
                 點~
                 <div class="col-2">
                     <select name="" size="1" class="form-select form-select-sm" style="width:90px;">
+                        <option value="none" selected disabled hidden>@Model.timeUp</option>
                         @{
                             for (int i = 0; i < 10; i++)
                             {
