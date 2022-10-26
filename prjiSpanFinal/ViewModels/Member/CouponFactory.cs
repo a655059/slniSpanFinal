@@ -8,7 +8,7 @@ namespace prjiSpanFinal.ViewModels.Member
 {
     public class CouponFactory
     {
-        public List<Coupon> cGetCouponWallet(List<Coupon> listc,int MemID)
+        public List<Coupon> cGetCoupon(List<Coupon> listc,int MemID)
         {
             iSpanProjectContext _db = new iSpanProjectContext();
             listc = _db.CouponWallets.Where(c => c.MemberId == MemID).Select(c=>c.Coupon).ToList();
