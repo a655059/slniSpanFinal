@@ -1,0 +1,97 @@
+﻿@using prjiSpanFinal.ViewModels.newManagement
+@model List<CsubEventViewModel>
+
+@{
+    ViewData["Title"] = "subEventList";
+}
+
+<h1>子活動</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                活動名稱
+            </th>
+            <th>
+                子活動名稱
+            </th>
+            <th>
+                折扣
+            </th>
+            <th>
+               是否為免運券
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubOfficialEventList.SubOfficialEventListId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OfficialEventName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubOfficialEventList.SubEventName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubOfficialEventList.Discount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubOfficialEventList.IsFreeDelivery)
+                </td>
+                <td>
+                    <a name="@item.SubOfficialEventList.SubOfficialEventListId" class="Delete btn btn-outline-danger mb-1">刪除</a>
+                    @Html.ActionLink("新增子活動","subEventCreate","newManagement",new{id=item.SubOfficialEventList.OfficialEventListId},new{@class="btn btn-outline-warning mb-1"})
+                    @Html.ActionLink("修改", "SubEventEdit", new { id=item.SubOfficialEventList.OfficialEventListId },new{@class="btn btn-outline-secondary mb-1"})
+                    @*@Html.ActionLink("刪除", "SubEventDelete", new { id=item.SubOfficialEventList.OfficialEventListId })*@
+                </td>
+            </tr>
+        }
+@Html.ActionLink("回到活動", "EventList","newManagement",null,new{@class="btn btn-warning"}) 
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        let page = document.querySelectorAll(".paginations a");
+        let pagesss = document.querySelectorAll(".paginations span");
+        let pages = document.querySelectorAll(".paginations li");
+        let pagess = document.querySelectorAll(".paginations ul");
+        for (let a of page) {
+            a.classList.add('page-link');
+        }
+        for (let a of pagesss) {
+            a.classList.add('page-link');
+        }
+        for (let a of pages) {
+            a.classList.add('page-item')
+        }
+        for (let a of pagess) {
+            a.classList.add('pagination');
+        }
+
+        var Delete=document.querySelectorAll(".Delete");
+          for (var BTNdow of Delete) {
+            BTNdow.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let c=event.currentTarget.name;
+                let response = await fetch("@Url.Content("~/newManagement/subEventDelete")" + `?id=${c}`)
+                let data = await response.text();
+                if (data == 1) {
+                    $(this).closest("tr").remove();
+                }
+                else{
+                    alert("子活動不可少於一項");
+                }
+            })
+        }
+    </script>
+}

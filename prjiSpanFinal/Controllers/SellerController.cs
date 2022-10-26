@@ -68,7 +68,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
-            if(!dbcontext.Orders.Where(o=>o.OrderId==id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList().Contains(0))
+            if (!dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList().Contains(0))
             {
                 Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
                 b.StatusId = 7;
@@ -180,14 +180,14 @@ namespace prjiSpanFinal.Controllers
                 smallType = smallType,
                 memship = memship,
                 shipID = shiperlist,
-                PaymentID=mempay
+                PaymentID = mempay
             };
             return View(x);
         }
-       
 
-        public IActionResult AD(string jsonString) 
-        {           
+
+        public IActionResult AD(string jsonString)
+        {
             return PartialView(jsonString);
         }
 
@@ -218,27 +218,27 @@ namespace prjiSpanFinal.Controllers
             Product product = new Product()
             {
                 ProductName = result.ProductName,
-                SmallTypeId=Convert.ToInt32(result.smalltype),
-                MemberId= id,
-                RegionId= regionId,
-                Description=result.Description,
-                ProductStatusId=0,
-                EditTime=DateTime.Now,
-                CustomizedCategoryId=1
+                SmallTypeId = Convert.ToInt32(result.smalltype),
+                MemberId = id,
+                RegionId = regionId,
+                Description = result.Description,
+                ProductStatusId = 0,
+                EditTime = DateTime.Now,
+                CustomizedCategoryId = 1
             };
             _db.Products.Add(product);
             _db.SaveChanges();
 
             var productId = _db.Products.Select(n => n).FirstOrDefault();
 
-            for(int i =0; i < result.暫存規格.Count; i++)
+            for (int i = 0; i < result.暫存規格.Count; i++)
             {
                 ProductDetail productDetail = new ProductDetail()
                 {
                     ProductId = Convert.ToInt32(product.ProductId),
-                    Style=result.暫存規格[i].StyleStr,
-                    Quantity= Convert.ToInt32(result.暫存規格[i].QuantityStr),
-                    UnitPrice= Convert.ToInt32(result.暫存規格[i].UnitPriceStr),
+                    Style = result.暫存規格[i].StyleStr,
+                    Quantity = Convert.ToInt32(result.暫存規格[i].QuantityStr),
+                    UnitPrice = Convert.ToInt32(result.暫存規格[i].UnitPriceStr),
                     //Pic=result.暫存規格[i].BodyPicStr     //照片todo
                 };
                 _db.ProductDetails.Add(productDetail);
@@ -380,7 +380,7 @@ namespace prjiSpanFinal.Controllers
                 PaymentName = PaymentName,
                 ShipperId = ShipperId,
                 ShipperName = ShipperName,
-                x= SellerPaymentToView //對應到客戶的shipID
+                x = SellerPaymentToView //對應到客戶的shipID
             };
 
             return View(x);
@@ -526,12 +526,7 @@ namespace prjiSpanFinal.Controllers
 
         public void Couponresponse(string jsonString)
         {
-
         }
-
-
-
-        
 
         public IActionResult seller跑條(int page)
         {
@@ -540,7 +535,26 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Event()
         {
-            return View();
+            var E = _db.SubOfficialEventLists.Select(i => i).ToList();
+            var P = _db.Products.Select(i => i).ToList();
+           
+            var OE = _db.OfficialEventLists.Select(i => i).ToList();
+            List<CSubEventToProductViewModel> list = new();
+            foreach (var e in E)
+            {
+                var A = from a in OE
+                        where a.OfficialEventListId == e.OfficialEventListId
+                        select a;
+                CSubEventToProductViewModel C = new()
+                {
+                    Products = P,
+                    SubOfficialEventID = e,
+                    OfficialEventList = A.First(),
+                };
+                list.Add(C);
+            }
+
+            return View(list);
         }
     }
 }
