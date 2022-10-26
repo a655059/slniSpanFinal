@@ -130,6 +130,7 @@
                 <input type="file" id="text4" class="form-group" accept="image/*">
             </div>
             <div class="modal-footer">
+                <button id="demomodal" type="button" class="btn btn-info">Demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
@@ -265,7 +266,7 @@
                     <div class="col-4"></div>
                     <div class="col-8">
                         <input type="button" value="下一步" id="next" class="btn btn-warning m-3 nextwork" />
-                        <input type="button" value="Demo" id="demo" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="Demo" id="demo" class="btn btn-info m-3 nextwork" />
                     </div>
                 </div>
             </div>
@@ -499,6 +500,12 @@
             document.getElementById("ProductName").value = "大西瓜";
             document.getElementById("Description").value = "又圓又大";
 
+        });
+
+        demomodal.addEventListener("click", function () {
+            document.getElementById("text1").value="正方形";
+            document.getElementById("text2").value=2;
+            document.getElementById("text3").value=5000;
         });
 
         //=====================================================
