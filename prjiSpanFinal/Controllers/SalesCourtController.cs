@@ -352,6 +352,7 @@ namespace prjiSpanFinal.Controllers
 
             //if (x != null) return RedirectToAction("修改關於我");
 
+
             C關於我ViewModel outp = new C關於我ViewModel
             {
                 Memberid = x.MemberId
@@ -483,13 +484,63 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult 修改關於我(C關於我ViewModel me)
+        public IActionResult 修改關於我(C關於我ViewModel me,string[] ServiceTime)
         {
-            if (me != null)
-            {
+            var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == me.Memberid);
 
-                return RedirectToAction("關於我");
+            var NewMe = new C關於我ViewModel()
+            {
+                SalesCourtServiceTime = me.SalesCourtServiceTime,
+                NewProductOnLoad = me.NewProductOnLoad,
+                SellerCategory = me.SellerCategory,
+                ServiceAfterBuy = me.ServiceAfterBuy,
+                Caution = me.Caution
+            };
+
+            //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
+            if (ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
+            {
+                add.ServiceTime = "";
+                add.RenewProduct = "";
+                add.SellerType = "";
+                add.AfterSales = "";
+                add.SellerCaution = "";
             }
+
+            if (ServiceTime[0] == "on")
+            {
+                add.ServiceTime += "0";
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[0];
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[1];
+                add.ServiceTime += "/";
+            }
+            if (ServiceTime[1] == "on")
+            {
+                add.ServiceTime += "1";
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[2];
+                add.ServiceTime += ",";
+                add.ServiceTime += me.SalesCourtServiceTime[3];
+                add.ServiceTime += "/";
+            }
+            if (ServiceTime[2] == "on")
+            {
+                add.ServiceTime += "2";
+                add.ServiceTime += ",";
+                add.ServiceTime += ServiceTime[3];
+                add.ServiceTime += "/";
+            }
+
+            add.RenewProduct += NewMe.NewProductOnLoad;
+            add.SellerType += NewMe.SellerCategory;
+            add.AfterSales += NewMe.ServiceAfterBuy;
+            add.SellerCaution += NewMe.Caution;
+
+
+            dbContext.SaveChanges();
+            return RedirectToAction("關於我");
 
             return RedirectToAction("關於我");
 

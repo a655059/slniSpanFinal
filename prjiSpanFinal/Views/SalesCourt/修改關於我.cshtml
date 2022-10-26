@@ -1,6 +1,17 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C關於我ViewModel
 @{
     ViewData["Title"] = "修改關於我";
+
+    iSpanProjectContext dbContext = new iSpanProjectContext();
+    var me = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid);
+    var categoryName = dbContext.CustomizedCategories.Where(a => a.MemberId == Model.Memberid).Select(a => a.CustomizedCategoryName).ToList();
+
+    string outcname = "";
+
+    foreach (var cname in categoryName) {
+        outcname += cname;
+        outcname += "\r\n";
+    }
 }
 
 
@@ -18,7 +29,12 @@
             <div class="text-danger">賣場服務時間(必填)</div>
             <div class="row my-2">
                 <div class="col-1">
-                    <input type="checkbox" name="#" value="#">
+                    @{
+                        if (Model.weekDown != null) { 
+                            <input type="checkbox" name="on" value="#" checked ="checked" >        
+                        }
+
+                    }
                 </div>
                 星期
                 <div class="col-2">
@@ -48,7 +64,15 @@
             </div>
             <div class="row my-2">
                 <div class="col-1">
-                    <input type="checkbox" name="#" value="#">
+                    @{
+                        if (Model.timeDown != null)
+                        {
+                            <input type="checkbox" name="#" value="#" checked="checked">
+                        }
+
+                    }
+
+                    
                 </div>
                 時間
                 <div class="col-2">
@@ -89,11 +113,17 @@
             <p class="my-1">
                 <div class="row">
                     <div class="col-1">
-                        <input type="checkbox" name="#" value="">
+                        @{
+                            if (Model.takebreak != null)
+                            {
+                                <input type="checkbox" name="on" value="#" checked="checked">
+                            }
+
+                        }
                     </div>
                     每週
                     <div class="col-4">
-                        <input type="text" name="#" value="" style="width:180px">
+                        <input type="text" name="#" value="@Model.takebreak" style="width:180px" asp-for="@Model.takebreak">
                     </div>
                     公休
                 </div>
@@ -103,15 +133,19 @@
             </p>
         </div>
         <div class="col">
-            <div class="text-success">新品上架時間</div>
+            <div class="text-success" >新品上架時間</div>
             @*<input type="text" name="#" value="">*@
-            <textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+
+            <textarea class="form-control" style="height: 90px; width:570px;"  asp-for="@me.RenewProduct"></textarea>
             <div class="text-success">商品類型</div>
             @*<input type="text" name="#" value="">*@
-            <textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+            
+            <textarea class="form-control" style="height: 90px; width:570px;" asp-for="@outcname"></textarea>            
+            
+                        
             <div class="text-success">賣家類型</div>
             @*<input type="text" name="#" value="">*@
-            <textarea class="form-control" style="height: 90px; width:570px;"></textarea>
+            <textarea class="form-control" style="height: 90px; width:570px;"  asp-for="@me.SellerType"></textarea>
         </div>
     </div>
 
@@ -122,14 +156,14 @@
         <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
             <div class="bg-warning rounded-2">售後服務</div>
             @*<input type="text" name="#" value="">*@
-            <textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+            <textarea class="form-control" style="height: 184px; width:630px;" asp-for="@me.AfterSales"></textarea>
         </div>
     </div>
     <div class="col border  border-secondary  rounded-3">
         <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
             <div class="bg-warning rounded-2">注意事項</div>
             @*<input type="text" name="#" value="">*@
-            <textarea class="form-control" style="height: 184px; width:630px;"></textarea>
+            <textarea class="form-control" style="height: 184px; width:630px;" asp-for="@me.SellerCaution"></textarea>
         </div>
     </div>
 </div>
