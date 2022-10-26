@@ -14,9 +14,10 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<int> ShipperId { get; set; }
         public List<string> ShipperName { get; set; }
         /// <summary>
-        /// 傳進來的MB有的物流資料
+        /// 傳進來的資料庫有的物流資料
         /// </summary>
         public int ShipperIdToShip { get; set; }
+        public int PaymentIdToPay { get; set; }
         /// <summary>
         /// 1=true,0=false
         /// </summary>

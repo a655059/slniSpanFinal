@@ -128,7 +128,6 @@
                 <br />
                 <label>照片:</label>
                 <input type="file" id="text4" class="form-group" accept="image/*">
-                <img id="blah" src="#" alt="your image" />
             </div>
             <div class="modal-footer">
                 <button id="save" type="button" class="btn btn-warning">新增</button>
@@ -266,6 +265,7 @@
                     <div class="col-4"></div>
                     <div class="col-8">
                         <input type="button" value="下一步" id="next" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="Demo" id="demo" class="btn btn-warning m-3 nextwork" />
                     </div>
                 </div>
             </div>
@@ -330,7 +330,7 @@
                 <div class="row">
                     <div class="col-5"></div>
                     <div class="col-7">
-                        <input type="submit" value="下一步" class="btn btn-warning m-4" id="final"/>
+                        <input type="submit" value="完成" class="btn btn-warning m-4" id="final" />
                     </div>
                 </div>
             </div>
@@ -340,6 +340,8 @@
 </div>
 @section Scripts{
     <script>
+/*const { Button } = require("../../wwwroot/lib/js/bootstrap.esm");*/
+
 
 
 
@@ -349,22 +351,13 @@
         const smallType = document.querySelector("#smallType");
 
         bigType.addEventListener("change", async function() {
-            const bigTypeValue = bigType.options[bigType.selectedIndex].innerHTML;
-            let response = await fetch("@Url.Content("~/Seller/SmallType")" + `?bigtype=${bigTypeValue}`);
-            let smallTypes = await response.json();
-
-            renderSmallType(smallTypes);
+            $.getJSON("/Seller/SmallType", { bigtype: $("#bigType").children("option:selected").val() }, function (data) {
+                $("#smallType").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#smallType").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+                }
+            });
         })
-
-
-
-        function renderSmallType(datas) {
-            smallType.options.length = 0;
-            datas.forEach(S => {
-                const opt = new Option(S, S);
-                smallType.options.add(opt);
-            })
-        }
       //------------------------------------------------
 
         let alldata = [];
@@ -401,22 +394,38 @@
             document.getElementById("text4").value = '';
         }
 
+        //取得照片轉成二進位檔
+        let stylephoto;
+        let img = document.getElementById("text4");
 
+        $("#text4").on("change", function () {
+            let photo;
+            if (img.files.length != 0) {
+                photo=img.files;
+            }
+            console.log(photo)
+            if (photo) {
+                    let reader = new FileReader();
+                reader.readAsDataURL(photo[0]);
+                    reader.onload = function () {
+                        let src = reader.result;
+                        stylephoto=src.split(",")[1];
+                    };
+            }
+        })
 
         save.addEventListener("click", function () {
             let dataNew = [];
             let name = document.getElementById("text1").value;//prompt('請輸入姓名');
             let subject = document.getElementById("text2").value;
             let score = document.getElementById("text3").value;
-            //todo:取得照片
-            let img = document.getElementById("text4").value;
 
             //判斷資料有值再塞入
             if (name !== '' && subject !== '' && score !== '') {
                 dataNew.push(name);
                 dataNew.push(subject);
                 dataNew.push(score);
-                dataNew.push(img);
+                dataNew.push(stylephoto);
                 //塞資料到暫存    //可以存JSON的地方
                 data.push(dataNew);
                 //資料暫存,後去把data變數傳入後端
@@ -424,16 +433,21 @@
                     StyleStr: name,
                     QuantityStr: subject,
                     UnitPriceStr: score,
-                    BodyPicStr: img
+                    BodyPicStr: stylephoto
                 };
                 alldata.push(styleName);
 
                 let tr = document.createElement('tr');
-                for (let i = 0; i < dataNew.length; i++) {
+                for (let i = 0; i < dataNew.length-1; i++) {
                     let td = document.createElement('td');
                     td.innerHTML = dataNew[i];
                     tr.appendChild(td);
                 }
+                let td1 = document.createElement('td');
+                //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
+                td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
+                tr.appendChild(td1);
+
                 let td = document.createElement('td');
                 td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
                 let a = td.children[0];
@@ -457,7 +471,7 @@
 
 
 
-
+        //=========================================================
 
         //大頭照新增  預覽
         $(".commentphotoclass").change(function () {
@@ -469,7 +483,9 @@
             }
         });
 
+        //======================================================
         //create下一步 按鈕
+
         next.addEventListener("click", function () {
 
             $("#change1").css("display", "none");
@@ -477,32 +493,43 @@
 
         });
 
+        //=============================================
+        //Demo鍵
+        demo.addEventListener("click", function () {
+            document.getElementById("ProductName").value = "大西瓜";
+            document.getElementById("Description").value = "又圓又大";
 
-        final.addEventListener("click", function () {
+        });
 
-            let dataphoto = [];
+        //=====================================================
+        //表單照片轉二進位儲存
+
+        let dataphoto = [];
+
+        let appleclass = document.getElementsByClassName("commentphotoclass");
+        $(".commentphotoclass").on("change", function () {
             let photos = [];
-            let appleclass = document.getElementsByClassName("commentphotoclass");
+            dataphoto = [];
             for (let i = 0; i < appleclass.length; i++) {
                 if (appleclass[i].files.length != 0) {
                     photos.push(appleclass[i].files);
                 }
-                
             }
-            
-            console.log(photos)
+
             if (photos) {
                 $.each(photos, function (idx, photo) {
                     let reader = new FileReader();
-                    console.log(photo[0])
                     reader.readAsDataURL(photo[0]);
                     reader.onload = function () {
                         let src = reader.result;
-                        console.log(src)
                         dataphoto.push(src.split(",")[1]);
                     };
                 });
             }
+        })
+//====================================================================
+         //AD頁 儲存按鈕
+        final.addEventListener("click", function () {
             console.log(dataphoto)
             //for (let i = 0; i < 4; i++){
             //    dataphoto.push(document.querySelector(`.commentPhoto${i + 2}`).value);
@@ -532,8 +559,16 @@
                 ShiperID: shiper,
                 PaymentID: payment
             }
-            console.log(dataphoto)
-            $.post("/Seller/CreateSuccess", { jsonString: pushData });
+
+            jQuery.postJSON = function (url, data, callback) {
+                jQuery.post(url, data, callback, "json");
+            };
+
+            $.postJSON("/Seller/CreateSuccess", { jsonString: pushData }, function () { });
+
+            alert("新增成功");
+
+            location.href = "/Seller/NewIndex" //跳回商品頁面
 
             //轉json格式
             @*let jsonall = JSON.stringify(pushData);
