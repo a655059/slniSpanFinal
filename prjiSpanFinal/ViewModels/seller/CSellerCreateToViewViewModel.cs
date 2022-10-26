@@ -14,7 +14,6 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<int> PaymentID { get; set; }
 
         //傳出去的屬性
-        public int MemberID { get; set; }
         public string ProductName { get; set; }
         public int smalltype { get; set; }
         public List<string> Style { get; set; }
@@ -26,7 +25,7 @@ namespace prjiSpanFinal.ViewModels.seller
         public int ProductID { get; set; }
         public List<int> ShiperID { get; set; }
         public List<CSellerCreateToViewViewModel> 暫存規格 { get; set; }
-        public List<int> SaveCount { get; set; }
+        public List<byte[]> DBtoPic { get; set; }
 
         public string AD { get; set; }
 

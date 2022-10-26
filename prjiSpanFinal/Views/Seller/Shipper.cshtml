@@ -155,77 +155,20 @@
 @section Scripts
 {
     <script>
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
 
-        //let 金物流 = [];
-        ////付款區
-        //let paymentArray = [];  //存付款陣列
-        //$(".paymentID").on("change", function () {  //on繫節事件
-        //    paymentArray.length = 0;  //清空
-        //    $(this).closest(".layout").find(".paymentID:checked").each(function () {  //closest 目前位置向上比對
-        //        let selectedPaymentID = $(this).attr("id");  //目前屬性ID
-        //        paymentArray.push(selectedPaymentID);//push 從陣列後面增加 ID
-        //    })
-        //})
+        $("#save").click(function () {
+            $.postJSON("/Seller/Shipperrequest", {
+                payment: $.map($(".paymentID"), function (a) { return a.checked; }),
+                shipper: $.map($(".shiperID"), function (a) { return a.checked; })
+            }, function () {});   
+            alert("編輯完成");
+            location.href = "/Seller/Center";
+        })
 
-        ////物流區
-        //let shiperArray = [];
-        //$(".shiperID").on("change", function () {
-        //    shiperArray.length = 0;
-        //    $(this).closest(".shiperLayout").find(".shiperID:checked").each(function () {
-        //        let selectShipID = $(this).attr("id");
-        //        shiperArray.push(selectShipID);
-        //    })
-        //})
-
-
-            //送出按鈕
-            $("#save").click(async function () {
-                @*let payobject = { "金物流": "金流", "選取的": paymentArray };
-                let shipobject = { "金物流": "物流", "選取的": shiperArray };
-                let alljson = [];
-                alljson.push(payobject);
-                alljson.push(shipobject);
-                let jsonall = JSON.stringify(alljson);
-                console.log(payobject)
-                console.log(shipobject)
-                console.log(alljson)
-
-                let response = await fetch("@Url.Content("~/Seller/Shipperrequest")" + `?jsonString=${jsonall}`);
-                let data = await response.text();*@
-
-                jQuery.postJSON = function (url, data, callback) {
-                    jQuery.post(url, data, callback, "json");
-                };
-                console.log($(".shiperID"))
-                console.log($.map($(".shiperID"), function (a) { return a.checked; }))
-                
-                $.postJSON("/Seller/Shipperrequest", {
-                    payment: $.map($(".paymentID"), function (a) { return a.checked; }),
-                    shipper: $.map($(".shiperID"), function (a) { return a.checked; })
-                }, function () { });
-
-                if (data == 1) {
-                    alert("修改成功");
-                }
-                else {
-                    alert("請先登入");
-                //}
-            });
-        //`?json=${alljson}`把資料傳到後端
-        //{
-        //    body: jsonall, method: "post", headers: new Headers({ 'Context-Type': 'application/json' })//把資料傳到後端
-        //});
-        @* let response = await fetch("@Url.Content("~/Seller/Shipperrequest")", {
-            body: jsonall,
-            method: "post",
-            headers: { 'Context-Type': 'application/json' }
-        }) *@
-
-
-
-
-
-
-
+             
+              
     </script>
 }

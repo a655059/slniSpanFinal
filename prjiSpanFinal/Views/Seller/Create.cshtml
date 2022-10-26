@@ -265,6 +265,7 @@
                     <div class="col-4"></div>
                     <div class="col-8">
                         <input type="button" value="下一步" id="next" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="Demo" id="demo" class="btn btn-warning m-3 nextwork" />
                     </div>
                 </div>
             </div>
@@ -329,7 +330,7 @@
                 <div class="row">
                     <div class="col-5"></div>
                     <div class="col-7">
-                        <input type="submit" value="下一步" class="btn btn-warning m-4" id="final"/>
+                        <input type="submit" value="完成" class="btn btn-warning m-4" id="final" />
                     </div>
                 </div>
             </div>
@@ -403,7 +404,7 @@
                 photo=img.files;
             }
             console.log(photo)
-            if (photo) {               
+            if (photo) {
                     let reader = new FileReader();
                 reader.readAsDataURL(photo[0]);
                     reader.onload = function () {
@@ -444,7 +445,7 @@
                 }
                 let td1 = document.createElement('td');
                 //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
-                td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`; 
+                td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
                 tr.appendChild(td1);
 
                 let td = document.createElement('td');
@@ -492,12 +493,19 @@
 
         });
 
+        //=============================================
+        //Demo鍵
+        demo.addEventListener("click", function () {
+            document.getElementById("ProductName").value = "大西瓜";
+            document.getElementById("Description").value = "又圓又大";
+
+        });
 
         //=====================================================
         //表單照片轉二進位儲存
 
         let dataphoto = [];
-        
+
         let appleclass = document.getElementsByClassName("commentphotoclass");
         $(".commentphotoclass").on("change", function () {
             let photos = [];
@@ -520,7 +528,7 @@
             }
         })
 //====================================================================
-
+         //AD頁 儲存按鈕
         final.addEventListener("click", function () {
             console.log(dataphoto)
             //for (let i = 0; i < 4; i++){
@@ -557,6 +565,10 @@
             };
 
             $.postJSON("/Seller/CreateSuccess", { jsonString: pushData }, function () { });
+
+            alert("新增成功");
+
+            location.href = "/Seller/NewIndex" //跳回商品頁面
 
             //轉json格式
             @*let jsonall = JSON.stringify(pushData);
