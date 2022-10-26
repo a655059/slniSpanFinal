@@ -904,9 +904,10 @@ namespace prjiSpanFinal.Controllers
                 };
                 list.Add(model);
             }
+            var A=Q.First();
+            ViewBag.Id = A.OfficialEventListId;
             return View(list);
         }
-
         public IActionResult subEventCreate(int? id)
         {
             ViewBag.Id = id;
@@ -921,7 +922,7 @@ namespace prjiSpanFinal.Controllers
             {
                 db.SaveChanges();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
             }
@@ -950,6 +951,31 @@ namespace prjiSpanFinal.Controllers
             {
                 return Content("0");
             }
+        }
+        public IActionResult subEventEdit(int? id)
+        {
+            ViewBag.Id = id;
+            iSpanProjectContext db = new();
+            var q = from i in db.SubOfficialEventLists
+                    where i.SubOfficialEventListId == id
+                    select i;
+            var Q=q.First();
+            return View(Q);
+        }
+        [HttpPost]
+        public IActionResult subEventEdit(SubOfficialEventList ofevent)
+        {
+            iSpanProjectContext db = new();
+            var ofeven=ofevent;
+            var q = (from i in db.SubOfficialEventLists
+                    where i.SubOfficialEventListId == ofevent.SubOfficialEventListId
+                    select i).First();
+            q.OfficialEventListId = ofevent.OfficialEventListId;
+            q.SubEventName = ofevent.SubEventName;
+            q.Discount = ofevent.Discount;
+            q.IsFreeDelivery = ofevent.IsFreeDelivery;
+            db.SaveChanges();
+            return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
         }
         #endregion
     }
