@@ -1,0 +1,92 @@
+﻿@model List<prjiSpanFinal.ViewModels.Item.CShowBuyerCountViewModel>
+@{ 
+    int totalBuyerCountPage = Convert.ToInt32(Math.Ceiling(Model.Count / 20m));
+}
+<style>
+    button {
+        background-color: transparent;
+        border: none;
+    }
+
+    #commentPage button {
+        color: #4F4F4F;
+        transition: all 0.5s;
+    }
+
+    button:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>購買者</td>
+            <td>數量</td>
+            <td>時間</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var i in Model)
+            {
+                <tr>
+                    <td>@i.buyer.MemberAcc</td>
+                    <td>@i.buyCount</td>
+                    <td>@i.finishDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@{
+    if (Model.Count <= 0)
+    {
+        <div class="text-center">
+            <i class="fa-duotone fa-file-pen fs-1"></i>
+            <div class="fs-4">尚無評論</div>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center fs-6">
+            <button id="buyerCountPrevioustPage"><i class="fa-solid fa-angle-left"></i>上一頁</button>
+            <div id="buyerCountPage">
+                <span class="currentBuyerCountPage">@Model[0].page</span>
+                <span class="mx-2">/</span>
+                <span class="totalBuyerCountPage">@totalBuyerCountPage</span>
+            </div>
+            <button id="buyerCountNextPage">下一頁<i class="fa-solid fa-angle-right"></i></button>
+        </div>
+    }
+}
+
+
+<script>
+    $(function () {
+        let activePage = $("#activePage").val();
+        activePage = Math.ceil(activePage / 10);
+
+        if (activePage == 1) {
+            $("#commentPrevioustPage").attr("disabled", true).css("color", "#ADADAD");
+        }
+        if (activePage == 6) {
+            $("#commentNextPage").attr("disabled", true).css("color", "#ADADAD");
+        }
+        $("#commentPage").children().eq(activePage - 1).css("color", "#000000").css("font-weight", "bold");
+    });
+    @*$("#commentNextPage").click(function () {
+        @{ int nextPage = Model + 10;}
+        $(".partialView").load('@Url.Action("BuyerCount", "Item", new { id = nextPage })');
+
+    });
+    $("#commentPrevioustPage").click(function () {
+        @{ int previousPage = Model - 10; ;}
+        $(".partialView").load('@Url.Action("BuyerCount", "Item", new { id = previousPage })');
+    });
+    $("#commentPage button").click(function () {
+        let goPage = Number($(this).html());
+        goPage = (goPage * 10) - 9;
+        $(".partialView").load(`/Item/BuyerCount/${goPage}`);
+    });*@
+</script>

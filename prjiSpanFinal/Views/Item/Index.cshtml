@@ -9,8 +9,9 @@
     }
 }
 @section Styles{
-    <link rel="stylesheet" href="~/css/Item/ItemIndex.css" />
-    <link href="~/css/ProductCard.css" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
+    <link href="@Url.Content("~/css/ProductCard.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/Item/ShowItemComment.css")" rel="stylesheet" />
 }
 <div class="memberID d-none">@memberID</div>
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -249,9 +250,9 @@
         </div>
     </div>
 </div>
-<div class="sellerProducts mt-3">
+<div class="sellerProducts my-3">
     <div class="fs-4 fw-bold text-primary">賣家精選</div>
-    @await Component.InvokeAsync("ShowSelectedProducts", new { productIDs = Model.sellerProductIDs });
+    @await Component.InvokeAsync("ShowSelectedProducts", new { productIDs = Model.sellerProductIDs })
 </div>
 
 
@@ -262,8 +263,35 @@
         <button type="button" class="list-group-item list-group-item-action" id="comment">商品評價 (4.0/5)</button>
         <button type="button" class="list-group-item list-group-item-action" id="buyerCount">購買人次 (55)</button>
     </div>
-    <div class="partialView">
-
+    <div class="itemDescription rounded-2">
+        <div class="sellerName">@Model.seller.MemberAcc<span>的商店</span></div>
+        <div>
+            <div class="description">
+                @Model.product.Description;
+            </div>
+            @{
+                foreach (var i in Model.productPics)
+                {
+                    string imgSrc = "";
+                    try
+                    {
+                        string base64 = Convert.ToBase64String(i);
+                        imgSrc = $"data:image/gif;base64,{base64}";
+                    }
+                    catch
+                    {
+                        imgSrc = Url.Content("~/img/imageNotFound.png");
+                    }
+                    <div class="productImg"><img src="@imgSrc" /></div>
+                }
+            }
+        </div>
+    </div>
+    <div class="commentVC d-none">
+        @await Component.InvokeAsync("CShowItemComment", new { productID = Model.product.ProductId, page = 1 })
+    </div>
+    <div class="buyerCountVC d-none">
+        @await Component.InvokeAsync("ShowBuyerCount", new { productID = Model.product.ProductId, page = 1 })
     </div>
 </div>
 
@@ -317,8 +345,9 @@
 
 <!--Modal End-->
 @section Scripts{
-    <script src="~/js/Item/ItemIndex.js"></script>
-    <script src="~/js/ShowSelectedProducts.js"></script>
+    <script src="@Url.Content("~/js/Item/ItemIndex.js")"></script>
+    <script src="@Url.Content("~/js/ShowSelectedProducts.js")"></script>
+    <script src="@Url.Content("~/js/Item/ShowItemComment.js")"></script>
     <script>
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
@@ -359,28 +388,34 @@
                 const requestUrl = "@Url.Content("~/Delivery/AddItemToCart")" + `?productDetailID=${productDetailID}&quantity=${quantity}`;
                 const response = await fetch(requestUrl);
                 const data = await response.json();
-                $(".dollarIcon").children().html(quantity);
-                $(".dollarIcon").animate({
-                    top: "-=50",
-                    opacity: "1",
-                    zIndex: "0"
-                }, 50).animate({
-                    top: "-=30",
-                    opacity: "0",
-                }, 500).animate({
-                    top: "+=80",
-                    zIndex: "-1"
-                });
-                $(".itemRemainingQty").html("還剩" + data[1] + "件");
-                $("input[name='purchaseCount']").attr("max", Number(data[1]))
-                if ($("input[name='purchaseCount']").val() > Number(data[1])) {
-                    $("input[name='purchaseCount']").val(Number(data[1]));
+                if (data != "0") {
+                    $(".dollarIcon").children().html(quantity);
+                    $(".dollarIcon").animate({
+                        top: "-=50",
+                        opacity: "1",
+                        zIndex: "0"
+                    }, 50).animate({
+                        top: "-=30",
+                        opacity: "0",
+                    }, 500).animate({
+                        top: "+=80",
+                        zIndex: "-1"
+                    });
+                    $(".itemRemainingQty").html("還剩" + data[1] + "件");
+                    $("input[name='purchaseCount']").attr("max", Number(data[1]))
+                    if ($("input[name='purchaseCount']").val() > Number(data[1])) {
+                        $("input[name='purchaseCount']").val(Number(data[1]));
+                    }
+                    if (Number(data[1]) <= 0) {
+                        $("input:checked").attr("disabled", true);
+                        $("input[name='purchaseCount']").val(Number(data[1]));
+                    }
+                    $("#itemCountInCart").html(data[0]);
                 }
-                if (Number(data[1]) <= 0) {
-                    $("input:checked").attr("disabled", true);
-                    $("input[name='purchaseCount']").val(Number(data[1]));
+                else {
+                    alert("輸入商品數量有誤");
+                    return false;
                 }
-                $("#itemCountInCart").html(data[0]);
             }
         });
         $(".purchaseStyle").click(async function () {
@@ -410,27 +445,7 @@
                 $(".buyDirectly").prop("disabled", false);
                 $(this).prop("disabled", fales);
             }
-           
-        });
 
-
-
-
-
-        $(function () {
-            $(".partialView").load('@Url.Action("Description")');
-        });
-        $("#description").click(function () {
-            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-            $(".partialView").load('@Url.Action("Description")');
-        });
-        $("#comment").click(function () {
-            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-            $(".partialView").load('@Url.Action("Comment", new { id=1 })');
-        });
-        $("#buyerCount").click(function () {
-            $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
-            $(".partialView").load('@Url.Action("BuyerCount", new { id=1 })');
         });
 
         //檢舉功能圖片預覽

@@ -12,8 +12,6 @@ $(".purchaseStyle").mouseenter(function () {
     $(".bigPhoto img").attr("src", imgSrc);
 });
 
-
-
 $(".buyDirectly").click(function () {
     if ($("input[name='purchaseStyle']:checked").length != 1) {
         alert("請選擇一個規格");
@@ -21,6 +19,26 @@ $(".buyDirectly").click(function () {
     }
 });
 
+$("#description").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none");
+    $(".commentVC").removeClass("d-none").addClass("d-none");
+    $(".buyerCountVC").removeClass("d-none").addClass("d-none");
+});
+
+$("#comment").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none").addClass("d-none");
+    $(".commentVC").removeClass("d-none");
+    $(".buyerCountVC").removeClass("d-none").addClass("d-none");
+});
+
+$("#buyerCount").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none").addClass("d-none");
+    $(".commentVC").removeClass("d-none").addClass("d-none");
+    $(".buyerCountVC").removeClass("d-none");
+});
 
 
 
