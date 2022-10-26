@@ -29,10 +29,15 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     continue;
                 }
-                decimal x = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
-                decimal y = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderByDescending(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
+                var price = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice);
+                decimal x = price.Min();
+                decimal y = price.Max();
                 byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
-                int sales = db.OrderDetails.Where(o => o.Order.StatusId == 7 && o.ProductDetail.ProductId == item.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o=>o);
+                int sales = db.OrderDetails.Where(o => o.Order.StatusId == 7 ||o.Order.StatusId==6).Where(o=> o.ProductDetail.ProductId == item.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o=>o);
+                double stars = 0;
+                if (db.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == item.ProductId).Any()) { 
+                    stars = db.Comments.Select(c =>Convert.ToInt32(c.CommentStar)).ToList().Average();
+                }
                 List<decimal> dlist = new List<decimal>();
                 if (x == y)
                     dlist.Add(x);
@@ -47,6 +52,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 if (pic != null)
                     a.Pic = pic;
                 a.salesVolume = sales;
+                a.starCount = stars;
                 res.Add(a);
             }
             return res;
