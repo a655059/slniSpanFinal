@@ -1,6 +1,12 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C評價ViewModel
 @{
     ViewData["Title"] = "評價";
+
+    int AllWeekCommentCount = Model.BestCommentCountMethod.WeekCount + Model.MediumCommentCountMethod.WeekCount + Model.WorstCommentCountMethod.WeekCount;
+    int AllMonthCommentCount = Model.BestCommentCountMethod.MonthCount + Model.MediumCommentCountMethod.MonthCount + Model.WorstCommentCountMethod.MonthCount;
+    int AllHalfYearCommentCount = Model.BestCommentCountMethod.HalfYearCount + Model.MediumCommentCountMethod.HalfYearCount + Model.WorstCommentCountMethod.HalfYearCount;
+    int AllCounts = Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount;
+
 }
 
 @section Styles{
@@ -57,13 +63,13 @@
                         <div class="ps-2 w-auto">
                             <span class="text-dark" style="font-size:2em">優良交易評價:</span>
                             @*<span class="text-danger" style="font-size:3em">37595</span>*@
-                            <span class="text-danger" style="font-size:3em">@Model.BestCommentsCount</span>
+                            <span class="text-danger" style="font-size:3em">@Model.BestCommentCountMethod.AllCount</span>
                             <span class="text-dark" style="font-size:2em">則</span>
                         </div>
                         <div class="ps-2">
                             <img src="~/img/truck.png" width="30">
                             <a href="#" class="text-primary" style="font-size:1.5em">平均出貨天數:</a>
-                            <span class="text-dark" style="font-size:1.5em">0.7天</span>
+                            <span class="text-dark" style="font-size:1.5em">@Model.AvgShippingDate 天</span>
                         </div>
                         <div class="ps-2">
                             <img src="~/img/follow.png" width="30">
@@ -113,10 +119,10 @@
 
                         <tr class="table-light">
                             <th scope="row"><img src="~/img/greencircle.png" width="20" /> 優良評價</th>
-                            <td>241</td>
-                            <td>1489</td>
-                            <td>5587</td>
-                            <td>37519</td>
+                            <td>@Model.BestCommentCountMethod.WeekCount</td>
+                            <td>@Model.BestCommentCountMethod.MonthCount</td>
+                            <td>@Model.BestCommentCountMethod.HalfYearCount</td>
+                            <td>@Model.BestCommentCountMethod.AllCount</td>
                         </tr>
                         <tr class="table-secondary">
                             <th scope="row" height="30"></th>
@@ -127,10 +133,10 @@
                         </tr>
                         <tr class="table-light">
                             <th scope="row"><img src="~/img/bluetriangle.png" width="20" />普通評價</th>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>15</td>
-                            <td>211</td>
+                            <td>@Model.MediumCommentCountMethod.WeekCount</td>
+                            <td>@Model.MediumCommentCountMethod.MonthCount</td>
+                            <td>@Model.MediumCommentCountMethod.HalfYearCount</td>
+                            <td>@Model.MediumCommentCountMethod.AllCount</td>
                         </tr>
                         <tr class="table-secondary">
                             <th scope="row" height="30"></th>
@@ -141,10 +147,10 @@
                         </tr>
                         <tr class="table-light">
                             <th scope="row"><img src="~/img/redcross.png" width="20" />差勁評價</th>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>11</td>
-                            <td>135</td>
+                            <td>@Model.WorstCommentCountMethod.WeekCount</td>
+                            <td>@Model.WorstCommentCountMethod.MonthCount</td>
+                            <td>@Model.WorstCommentCountMethod.HalfYearCount</td>
+                            <td>@Model.WorstCommentCountMethod.AllCount</td>
                         </tr>
                         <tr class="table-secondary">
                             <th scope="row" height="30"></th>
@@ -155,10 +161,10 @@
                         </tr>
                         <tr class="table-light">
                             <th scope="row">評價次數</th>
-                            <td>242</td>
-                            <td>1093</td>
-                            <td>5613</td>
-                            <td>37865</td>
+                            <td>@AllWeekCommentCount</td>
+                            <td>@AllMonthCommentCount</td>
+                            <td>@AllHalfYearCommentCount</td>
+                            <td>@AllCounts</td>
                         </tr>
                     </tbody>
                 </table>
@@ -185,16 +191,16 @@
         <div class="row my-4 bg-opacity-50" style="background-color:#e1dcd7">
 
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">綜合評價紀錄(5619)</a></div>
+                <div class="ps-2"><a href="#" class="text-primary">綜合評價紀錄( @AllCounts )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">優良評價紀錄(5593)</a></div>
+                <div class="ps-2"><a href="#" class="text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">普通評價紀錄(15)</a></div>
+                <div class="ps-2"><a href="#" class="text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">差勁評價紀錄(11)</a></div>
+                <div class="ps-2"><a href="#" class="text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
             </div>
 
         </div>
