@@ -5,12 +5,12 @@
 @{
     ViewData["Title"] = "賣場";
 
-    
+
 }
 @section Styles{
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
-    
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
 
     <style>
         .dashed-divider {
@@ -144,71 +144,83 @@
                                                 已賣數量：@item.SoldQuantity
                                                 @*上架時間： 2017-09-28 02:41:04*@
                                                 上架時間： @item.AddedTime
+
                                             </div>
                                         </div>
                                     </div>
                                     <div>
                                         <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
                                     </div>
-                                    <div class="cardPrice"><a href="/Item/Index/2113">詳細查看</a></div>
+
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
+                                        <div class="starBox mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black"> @item.StarCount.ToString("0.00") </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
 
 
                             //過渡期的抓值寫法
                             @*<div class="col">
-                    <div class="row">
-                        <div class="col">
+                                    <div class="row">
+                                        <div class="col">
 
-                            @{
+                                            @{
 
-                                var base64Image1 = Convert.ToBase64String(item.Producpic);
-                                var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
+                                                var base64Image1 = Convert.ToBase64String(item.Producpic);
+                                                var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
 
-                            }
-                            <img src="@source1" class="cardImg" alt="..." width="150" />
-                        </div>
-                        <div class="col">
-                            <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
+                                            }
+                                            <img src="@source1" class="cardImg" alt="..." width="150" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
 
-                            <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $@item.ProductPrice</a></div>
-                            <p>
+                                            <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $@item.ProductPrice</a></div>
+                                            <p>
 
-                                已賣數量：@item.SoldQuantity
+                                                已賣數量：@item.SoldQuantity
 
-                                上架時間： @item.AddedTime
-                            </p>
-                        </div>
-                    </div>
-                </div>*@
+                                                上架時間： @item.AddedTime
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>*@
                         }
 
                     </div>
                     @*舊式原本寫死的*@
                     @*<div class="row">
-            @{
-                @for (int i = 0; i < 2; i++)
-                {
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <img src="~/img/product04.png" width="150" />
-                            </div>
-                            <div class="col">
-                                <div class="ps-2"><a href="#" class="text-primary">【24H出貨】 Kolin 歌林 手持吸塵器 HEAP氣旋 吸力永不減 吸塵器 KTC-SD401</a></div>
-                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
-                                <p>
-                                    已賣數量：227
-                                    上架時間： 2017-09-28 02:41:04
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
+                            @{
+                                @for (int i = 0; i < 2; i++)
+                                {
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img src="~/img/product04.png" width="150" />
+                                            </div>
+                                            <div class="col">
+                                                <div class="ps-2"><a href="#" class="text-primary">【24H出貨】 Kolin 歌林 手持吸塵器 HEAP氣旋 吸力永不減 吸塵器 KTC-SD401</a></div>
+                                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
+                                                <p>
+                                                    已賣數量：227
+                                                    上架時間： 2017-09-28 02:41:04
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
 
 
-        </div>*@
+                        </div>*@
 
                     <div class="row" style="background-color:#32d6a8">
 
@@ -229,23 +241,64 @@
                         </div>
                     </div>
 
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">排序</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">熱門度</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">價格</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">銷售</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">最新上架</a>
-                        </li>
-                    </ul>
+                    @*<ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active ordernavtabs" value="1" aria-current="page" href="#">排序</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="2" href="#">熱門度</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="3" href="#">價格</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="4" href="#">銷售</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="5" href="#">最新上架</a>
+                            </li>
+                        </ul>*@
+
+                    <div class="itembody-filter d-flex align-items-center justify-content-between">
+                        <div class="itembody-filter1 "><span>篩選</span></div>
+                        <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                            <a class="itembody-filter2-btn linknoline SortOrder active" id="SortOrder1">
+                                綜合排序
+                                <input type="hidden" value="1" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder2">
+                                最新商品
+                                <input type="hidden" value="2" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
+                                熱銷商品
+                                <input type="hidden" value="3" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                價格排序
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item SortOrder" id="SortOrder4">
+                                        <i class="fa fa-arrow-down"></i>
+                                        價格：由高至低
+                                        <input type="hidden" value="4" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item SortOrder" id="SortOrder5">
+                                        <i class="fa fa-arrow-up"></i>
+                                        價格：由低至高
+                                        <input type="hidden" value="5" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+
 
 
                     @*<div class="display-2 text-bg-danger">@Model.star </div>*@
@@ -288,12 +341,23 @@
                                     <div>
                                         <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
                                     </div>
-                                    <div class="cardPrice"><a href="/Item/Index/2113">詳細查看</a></div>
+
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
+                                        <div class="starBox mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black"> @item.StarCount.ToString("0.00") </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
 
 
-                         
+
                         }
 
                     </div>
