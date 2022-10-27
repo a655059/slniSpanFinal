@@ -357,79 +357,55 @@ namespace prjiSpanFinal.Controllers
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
-            var payname = _db.Payments.Select(n => n).ToList();
-            //var memberid = _db.PaymentToProducts.Select(n => n.ProductId);
-            //var productid = _db.PaymentToSellers.Select(n => n.MemberId);
-            var shipname = _db.Shippers.Select(n => n).ToList();
+            var allpay = _db.Payments.Select(n => n).ToList();
+            var allship = _db.Shippers.Select(n => n).ToList();
 
-            List<int> PaymentId = new List<int>();
-            List<string> PaymentName = new List<string>();
-            List<int> ShipperId = new List<int>();
-            List<string> ShipperName = new List<string>();
-            List<CSellerPaymentToViewViewModel> SellerPaymentToView = new List<CSellerPaymentToViewViewModel>();//客戶儲存的資料
+            CSellerPaymentToViewViewModel memdata = new CSellerPaymentToViewViewModel();
+            memdata.PaymentName = new List<string>();
+            memdata.ShipperName = new List<string>();
+            memdata.PayCheckedOX = new List<int>();
+            memdata.ShipCheckedOX = new List<int>();
+            memdata.PaymentId = new List<int>();
+            memdata.ShipperId = new List<int>();
 
             //客戶的payment
-            var paylist = _db.PaymentToSellers.Where(n => n.MemberId == id).Select(n => n.PaymentId).ToList();
+            var mempay = _db.PaymentToSellers.Where(n => n.MemberId == id).Select(n => n.PaymentId).ToList();
 
-            for (int i = 0; i < payname.Count; i++) //付款資料
+            for (int i = 0; i < allpay.Count; i++) //付款資料
             {
-                CSellerPaymentToViewViewModel SellerPay = new CSellerPaymentToViewViewModel();
+                memdata.PaymentName.Add(allpay[i].PaymentName);
 
-                PaymentName.Add(payname[i].PaymentName);
-                PaymentId.Add(payname[i].PaymentId);
-
-                if (paylist.Count > 0)
+                if (mempay.Count > i)
                 {
-                    SellerPay.PaymentIdToPay = payname[i].PaymentId;
-                    if (paylist.Any(n => n == payname[i].PaymentId))
-                    {
-                        SellerPay.CheckedOX = 1;
-                    }
-                    else
-                    {
-                        SellerPay.CheckedOX = 0;
-                    }
+                    memdata.PayCheckedOX.Add(1);
+                    memdata.PaymentId.Add(mempay[i]);
                 }
-                SellerPaymentToView.Add(SellerPay);
+                else
+                {
+                    memdata.PayCheckedOX.Add(0);
+                    memdata.PaymentId.Add(allpay[i].PaymentId);
+                }
             }
 
             //客戶的shiper
-            var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
-
-            for (int i = 0; i < shipname.Count; i++)//物流資料
+            var memship = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
+            for (int i = 0; i < allship.Count; i++)
             {
-                CSellerPaymentToViewViewModel SellerShiper = new CSellerPaymentToViewViewModel();
-
-                ShipperName.Add(shipname[i].ShipperName);
-                ShipperId.Add(shipname[i].ShipperId);
-
+                memdata.ShipperName.Add(allship[i].ShipperName);
                 //如果ShipperToSellers有資料
-                if (shiperlist.Count > 0)
+                if (memship.Count > i)
                 {
-                    SellerShiper.ShipperIdToShip = shipname[i].ShipperId;//把ShipperToSellers ID資料帶入
-
-                    if (shiperlist.Any(n => n == shipname[i].ShipperId))//有資料的話Checked給1 沒有給0
-                    {
-                        SellerShiper.CheckedOX = 1;// 有資料的話Checked打開
-                    }
-                    else
-                    {
-                        SellerShiper.CheckedOX = 0;// 有資料的話Checked關閉
-                    }
+                    memdata.ShipCheckedOX.Add(1);
+                    memdata.ShipperId.Add(memship[i]);
                 }
-                SellerPaymentToView.Add(SellerShiper);
+                else
+                {
+                    memdata.ShipCheckedOX.Add(0);
+                    memdata.ShipperId.Add(allship[i].ShipperId);
+                }
             }
 
-            CSellerPaymentToViewViewModel x = new CSellerPaymentToViewViewModel
-            {
-                PaymentId = PaymentId,
-                PaymentName = PaymentName,
-                ShipperId = ShipperId,
-                ShipperName = ShipperName,
-                x = SellerPaymentToView //對應到客戶的shipID
-            };
-
-            return View(x);
+            return View(memdata);
         }
 
         public void Shipperrequest(List<bool> payment, List<bool> shipper)

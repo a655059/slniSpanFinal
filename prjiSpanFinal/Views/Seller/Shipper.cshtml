@@ -73,15 +73,13 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-check form-switch 靠右">
-                                    @{
-                                        if (@Model.x[i].CheckedOX == 1)
+                                    @{ if (Model.PayCheckedOX[i]== 1)
                                         {
-                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.x[i].PaymentIdToPay">
-
+                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.PaymentId[i]">
                                         }
                                         else
                                         {
-                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox"  id="@Model.PaymentId[i]">
+                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" id="@Model.PaymentId[i]">
                                         }
                                     }
                                 </div>
@@ -117,7 +115,7 @@
                                 <div class="col-2">
                                     <div class="form-check form-switch 靠右">
                                         @{
-                                            if (@Model.x[i].CheckedOX == 1)
+                                            if (Model.ShipCheckedOX[i] == 1)
                                             {
                                                 <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.ShipperId[i]">
                                             }
