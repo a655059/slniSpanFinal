@@ -148,7 +148,6 @@
         </div>
     }
 </div>
-
         @section Scripts{
             <script>
                 $(".star").click(function () {
@@ -228,6 +227,7 @@
                 $(".commentPhoto").change(function () {
                     const photos = $(this)[0].files;
                     const div = $(this).closest(".orderDetailLayout").find(".previewCommentPhoto").attr("id");
+                    $(`#${div}`).empty();
                     if (photos) {
                         $.each(photos, function (idx, photo) {
                             let src = URL.createObjectURL(photo);

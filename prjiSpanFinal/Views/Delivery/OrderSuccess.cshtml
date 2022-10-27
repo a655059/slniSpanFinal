@@ -1,4 +1,4 @@
-﻿
+﻿@model prjiSpanFinal.Models.MemberAccount
 @{
     ViewData["Title"] = "OrderSuccess";
 }
@@ -9,14 +9,26 @@
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 3 }) 
 
 <div>
-    <div class="border m-auto text-center">
+    <div class="m-auto text-center my-2">
         <i class="fa-regular fa-circle-check fs-1 text-success"></i>
         <div class="text-black opacity-50 fs-4">已經收到你的訂單</div>
         <div class="fs-2">訂單編號:2017112345</div>
-        <div class="fs-6">相關資訊已寄送至Email:aaaa@gmail.com</div>
+        <div class="fs-6">相關資訊已寄送至Email:<span>@Model.Email</span></div>
     </div>
 </div>
+<div class="text-center">
+    <a href="@Url.Content("~/Home/Index")"><button class="btn btn-danger">繼續購物</button></a>
+</div>
 
+<div>
+    蝦到爆精選
+</div>
+<div>
+    猜你喜歡
+</div>
+<div>
+    電腦幫你選
+</div>
 
 @section Scripts{ 
     <script src="~/js/Delivery/ProgressBar.js"></script>

@@ -6,9 +6,9 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class ProductCardViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(CItemIndexSellerProductViewModel sellerProduct)
+        public async Task<IViewComponentResult> InvokeAsync(CItemIndexSellerProductViewModel product)
         {
-            return View(sellerProduct);
+            return View(product);
         }
     }
 }

@@ -12,8 +12,6 @@ $(".purchaseStyle").mouseenter(function () {
     $(".bigPhoto img").attr("src", imgSrc);
 });
 
-
-
 $(".buyDirectly").click(function () {
     if ($("input[name='purchaseStyle']:checked").length != 1) {
         alert("請選擇一個規格");
@@ -21,41 +19,32 @@ $(".buyDirectly").click(function () {
     }
 });
 
+$("#description").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none");
+    $(".commentVC").removeClass("d-none").addClass("d-none");
+    $(".buyerCountVC").removeClass("d-none").addClass("d-none");
+});
 
+$("#comment").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none").addClass("d-none");
+    $(".commentVC").removeClass("d-none");
+    $(".buyerCountVC").removeClass("d-none").addClass("d-none");
+});
 
-$(function () {
-    let i = 10;
-    $(".productCardLayout").each(function () {
-        $(this).css("left", i);
-        i += 210;
-    });
+$("#buyerCount").click(function () {
+    $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
+    $(".itemDescription").removeClass("d-none").addClass("d-none");
+    $(".commentVC").removeClass("d-none").addClass("d-none");
+    $(".buyerCountVC").removeClass("d-none");
 });
 
 
 
 
-//$("#nextPage").click(function () {
-//    let page = Number($("#page").html()) + 1;
-//    $("#page").html(page);
-//    if (Number($("#page").html()) != 1) {
-//        $("#previousPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
-//    }
-//    if ($("#page").html() == $("#totalPage").html()) {
-//        $("#nextPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
-//    }
-//});
 
-//$("#previousPage").click(function () {
-//    let page = Number($("#page").html()) - 1;
-//    $("#page").html(page);
-//    if (Number($("#page").html()) == 1) {
-//        $("#previousPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
-//    }
-//    if ($("#page").html() != $("#totalPage").html()) {
-//        $("#nextPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
-//    }
-//    $(".sellerCard").animate({ left: "+=1050px" });
-//});
+
 
 
 

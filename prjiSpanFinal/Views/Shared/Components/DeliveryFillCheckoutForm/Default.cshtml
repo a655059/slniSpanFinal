@@ -61,7 +61,6 @@
     <div class="d-flex justify-content-start align-items-center fs-5">
         <i class="fa-solid fa-truck-fast"></i>
         <div class="ms-2">聯絡及運送方式</div>
-        <input type="checkbox" value="" id="sameShipper" />
     </div>
     <div class="contactInfo">
         <div class="row my-1 align-items-center">
@@ -120,14 +119,15 @@
     </div>
     <div style="font-size:14px">
         <div class="d-none" id="selectedPaymentID">@selectedPaymentID</div>
-        <div class="my-2">
+        <div class="my-2 d-flex justify-content-start flex-wrap">
             @{
                 foreach (var i in Model.sellerShipperPayments[0].payments)
                 {
                     string paymentID = "payment" + i.PaymentId;
-                    <input type="radio" name="payment" id="@paymentID" class="payment" />
-                    <label for="@paymentID">@i.PaymentName</label>
-
+                    <div>
+                        <input type="radio" name="payment" id="@paymentID" class="payment" />
+                        <label for="@paymentID">@i.PaymentName<span class="text-danger ms-2 me-4" style="font-size:12px">手續費:$<span class="paymentFee">@i.Fee</span></span></label>
+                    </div>
                 }
             }
         </div>
@@ -168,6 +168,7 @@
     $(function () {
         if ($(".finalShipInfo").attr("id") == "session1") {
             $(".finalShipInfo").removeClass("d-none");
+
             let paymentID = $("#selectedPaymentID").html();
             paymentID = `payment${paymentID}`;
             $(`#${paymentID}`).prop("checked", true);
