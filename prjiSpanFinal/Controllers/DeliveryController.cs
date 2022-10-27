@@ -8,10 +8,14 @@ using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Delivery;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -622,20 +626,20 @@ namespace prjiSpanFinal.Controllers
                     dbContext.SaveChanges();
                 }
             }
-            MimeMessage message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Jacob", "ShopDaoBao@outlook.com"));
-            message.To.Add(new MailboxAddress("Jacob", "maimaisatt@gmail.com"));
-            message.Subject = "測試一下";
-            BodyBuilder builder = new BodyBuilder();
-            builder.HtmlBody = System.IO.File.ReadAllText("./Views/Delivery/MailContent.cshtml");
-            message.Body = builder.ToMessageBody();
-            using (SmtpClient client = new SmtpClient())
-            {
-                client.Connect("smtp.outlook.com", 25, false);
-                client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
-                client.Send(message);
-                client.Disconnect(true);
-            }
+            //MimeMessage message = new MimeMessage();
+            //message.From.Add(new MailboxAddress("Jacob", "ShopDaoBao@outlook.com"));
+            //message.To.Add(new MailboxAddress("Jacob", "maimaisatt@gmail.com"));
+            //message.Subject = "測試一下";
+            //BodyBuilder builder = new BodyBuilder();
+            //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Delivery/MailContent.cshtml");
+            //message.Body = builder.ToMessageBody();
+            //using (SmtpClient client = new SmtpClient())
+            //{
+            //    client.Connect("smtp.outlook.com", 25, false);
+            //    client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
+            //    client.Send(message);
+            //    client.Disconnect(true);
+            //}
             return View(cDeliveryCheckout.buyer);
         }
 
@@ -667,12 +671,54 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult OPayCheckout(string checkoutItems)
         {
-            //string tradeNo = Guid.NewGuid().ToString();
-            //tradeNo = tradeNo.Substring(tradeNo.Length - 12, 12);
-            //string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            string[] stringArr = Guid.NewGuid().ToString().Split('-');
+            string tradeNo = stringArr[2]+stringArr[3]+stringArr[4];
+            string tradeDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             List<CGoOPayCheckoutViewModel> cGoOPayCheckout = JsonSerializer.Deserialize<List<CGoOPayCheckoutViewModel>>(checkoutItems);
+            string itemName = "";
+            int totalAmount = 0;
+            foreach (var i in cGoOPayCheckout)
+            {
+                itemName += $"{i.productName}#";
+                totalAmount += i.productPrice;
+            }
+            itemName = itemName.TrimEnd('#');
+            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";
+            NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["HashKey"] = "5294y06JbISpM5x9";
+            parameters["ChoosePayment"] = "Credit";
+            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";    //完成後跳回去的頁面
+            parameters["CreditInstallment"] = "";
+            parameters["EncryptType"] = "1";
+            parameters["InstallmentAmount"] = "";
+            parameters["ItemName"] = itemName;
+            parameters["MerchantID"] = "2000132";
+            parameters["MerchantTradeDate"] = tradeDate;
+            parameters["MerchantTradeNo"] = tradeNo;
+            parameters["PaymentType"] = "aio";
+            parameters["Redeem"] = "";
+            parameters["ReturnURL"] = "https://developers.opay.tw/AioMock/MerchantReturnUrl";
+            parameters["StoreID"] = "";
+            parameters["TotalAmount"] = totalAmount.ToString();
+            parameters["TradeDesc"] = "建立信用卡測試訂單";
+            parameters["HashIV"] = "v77hoKGq4kWxNNIS";
+            string checkMacValue = parameters.ToString();
+            checkMacValue = checkMacValue.Replace("=", "%3d").Replace("&", "%26");
+            using var hash = SHA256.Create();
+            var byteArray = hash.ComputeHash(Encoding.UTF8.GetBytes(checkMacValue.ToLower()));
+            checkMacValue = Convert.ToHexString(byteArray).ToUpper();
+
             
-            return Content("checkoutItems");
+            COPayParametersViewModel cOPayParameters = new COPayParametersViewModel
+            {
+                tradeNO = tradeNo,
+                tradeDate = tradeDate,
+                totalAmount = totalAmount,
+                itemName = itemName,
+                clientBackURL = clientBackURL,
+                checkMacValue = checkMacValue
+            };
+            return Json(cOPayParameters);
         }
     }
 }
