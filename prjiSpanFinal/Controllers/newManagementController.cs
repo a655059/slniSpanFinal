@@ -395,7 +395,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
-            D.First().StatusId = 10;
+            D.First().StatusId = 9;
             db.SaveChanges();
             return RedirectToAction("OrderList", new { id });
         }
