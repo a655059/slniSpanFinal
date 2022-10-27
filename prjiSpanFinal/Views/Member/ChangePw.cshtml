@@ -36,12 +36,12 @@
 
                             <div class="form-outline mb-4">
                                 <input type="password" id="txtPW" name="txtPW" class="form-control form-control-lg" />
-                                <label class="form-label mt-3" for="txtPW">舊密碼</label>
+                                <label class="form-label mt-3">舊密碼</label>
                                 <small id="nowPWwarn" class="form-text text-muted"></small>
                             </div>
 
                             <div class="form-outline mb-4">
-                                <input type="password" id="txtNewPW" name="txtNewPW" class="form-control form-control-lg"/>
+                                <input type="password" id="txtNewPW" name="txtNewPW" class="form-control form-control-lg" />
                                 <label class="form-label mt-3" for="txtNewPW">新密碼</label>
                                 <small id="newPWwarn" class="form-text text-muted"></small>
                             </div>
@@ -52,7 +52,7 @@
                                 <small id="newPWchwarn" class="form-text text-muted"></small>
                             </div>
                             <div class="checkout-btn mt-30" style="margin:auto auto;">
-                                <input type="button" class="btn alazea-btn btn-lg mt-15" id="PWChange" value="修改">
+                                <button class="btn alazea-btn btn-lg mt-15" id="PWChange">修改</button>
                             </div>
                         </form>
                     </div>
@@ -60,7 +60,12 @@
             </div>
             <div class="col-3"></div>
         </div>
-    </div><script>
+    </div>
+</div>
+    @section Scripts
+{
+
+        <script>
     let nowPW = $("#txtPW");
     let nowWarn = $("#nowPWwarn");
     let newPW = $("#txtNewPW");
@@ -71,22 +76,28 @@
     let NowisOK = false;
     let NewisOK = false;
     let NewChisOK = false;
-    function Emptywarn(ele) {
+        function Emptywarn(ele)
+        {
         ele.html(`<i class="fa-solid fa-circle-xmark" style="color:red" >不得為空</i>`);
-    }
-    function Errorwarn(ele,errmsg) {
+        }
+        function Errorwarn(ele, errmsg)
+        {
         ele.html(`<i class="fa-solid fa-circle-xmark" style="color:red" >${errmsg}有誤</i>`);
-    }
-    function OKwarn(ele) {
+        }
+        function OKwarn(ele)
+        {
         ele.html(`<i class="fa-solid fa-circle-check" style="color:#73BF00"></i>`);
-    }
+        }
     //判斷是否空白&現在的密碼是否一致
-    nowPW.blur(function () {
-        if (nowPW.val() == "") {
+
+        nowPW.blur(function ()
+        {
+            if (nowPW.val() == "")
+            {
             Emptywarn(nowWarn);
             NowisOK = false;
-        }
-        else {
+            }
+            else {
             $.post('@Url.Content("~/Member/CheckNowPW")', { "txtPW": nowPW.val() },
                 function (data) {
                     if (data == "True") {
@@ -102,22 +113,25 @@
                     }
                 }
             )
-        }
-    });
+            }
+        });
     //判斷新密碼是否符合正則
-    newPW.blur(function () {
+        newPW.blur(function ()
+        {
         if (newPW.val() == "") {
             Emptywarn(newWarn);
             NewisOK = false;
         }
         else {
 
-                Errorwarn(newWarn, "格式");
-                NewisOK = false;
-            
+            OKwarn(newWarn);
+            NewisOK = true;
+
         }
-    });
-    PWcheck.blur(function () {
+        });
+
+        PWcheck.blur(function ()
+        {
         if (PWcheck.val() == "") {
             Emptywarn(newCHWarn);
             NewChisOK = false;
@@ -131,52 +145,62 @@
                 Errorwarn(newCHWarn, "密碼不符，");
                 NewChisOK = false;
             }
-        }
-    })
-    $("#PWChange").click(function () {
-        if (NowisOK && NewisOK && NewChisOK) {
-            $.post('@Url.Content("~/Member/ChangeNewPW")', { "txtNewPW": newPW.val() },
-                function (data) {
-                    if (data === "OK") {
-                        nowPW.val("");
-                        newPW.val("");
-                        PWcheck.val("");
-                        alert("修改成功");
-                        //$.bootstrapGrowl("修改成功", {
-                        //    ele: "body",
-                        //    type: "success",
-                        //    offset: { from: "top", amount: 300 },
-                        //    align: "center",
-                        //    width: "auto",
-                        //    delay: 3000,
-                        //    allow_dismiss: true,
-                        //    stackup_spacing: 10,
-                        //});
-                        NowisOK = false;
-                        nowWarn.html("");
-                        NewisOK = false;
-                        newWarn.html("");
-                        NewChisOK = false;
-                        newCHWarn.html("");
-                    } else if (data === "NO") {
-                        //$.bootstrapGrowl("修改失敗", {
-                        //    ele: "body",
-                        //    type: "danger",
-                        //    offset: { from: "top", amount: 300 },
-                        //    align: "center",
-                        //    width: "auto",
-                        //    delay: 3000,
-                        //    allow_dismiss: true,
-                        //    stackup_spacing: 10,
-                        //});
-                        alert("修改失敗");
-                    }
-                    else {
-                        window.location.href = '@Url.Content("~/Member/ChangeNewPW")';
-                    }
-                })
-        }
-    })
-</script>
-</div>
+            }
+        })
+
+
+        $("#PWChange").click(function ()
+        {
+            if (NowisOK && NewisOK && NewChisOK) {
+                $.post('@Url.Content("~/Member/ChangeNewPW")', { "txtNewPW": newPW.val() },
+                    function (data) {
+                        console.log(data)
+                        if (data === "OK") {
+                            nowPW.val("");
+                            newPW.val("");
+                            PWcheck.val("");
+                            alert("修改成功");
+                            //$.bootstrapGrowl("修改成功", {
+                            //    ele: "body",
+                            //    type: "success",
+                            //    offset: { from: "top", amount: 300 },
+                            //    align: "center",
+                            //    width: "auto",
+                            //    delay: 3000,
+                            //    allow_dismiss: true,
+                            //    stackup_spacing: 10,
+                            //});
+                            NowisOK = false;
+                            nowWarn.html("");
+                            NewisOK = false;
+                            newWarn.html("");
+                            NewChisOK = false;
+                            newCHWarn.html("");
+                            
+                        } else if (data === "NO") {
+                            //$.bootstrapGrowl("修改失敗", {
+                            //    ele: "body",
+                            //    type: "danger",
+                            //    offset: { from: "top", amount: 300 },
+                            //    align: "center",
+                            //    width: "auto",
+                            //    delay: 3000,
+                            //    allow_dismiss: true,
+                            //    stackup_spacing: 10,
+                            //});
+                            alert("修改失敗");
+                        }
+                        else {
+                            window.location.href = '@Url.Content("~/Member/ChangeNewPW")';
+                        }
+                    })
+            }
+            else {
+                alert("請填入資料");
+            }
+        })
+
+        </script>
+    }
+
 
