@@ -16,27 +16,27 @@
             </div>
             <div class="form-group">
                 <label asp-for="CouponName" class="control-label">優惠券名稱</label>
-                <input asp-for="CouponName" class="form-control" />
+                <input asp-for="CouponName" class="form-control inputs" />
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label">開始日期</label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control inputs" type="date"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ExpiredDate" class="control-label">失效日期</label>
-                <input asp-for="ExpiredDate" class="form-control" />
+                <input asp-for="ExpiredDate" class="form-control inputs"  type="date"/>
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Discount" class="control-label">折扣</label>
-                <input id="Discount" asp-for="Discount" class="form-control" />
+                <input id="Discount" asp-for="Discount" class="form-control inputs" />
                 <span asp-validation-for="Discount" class="text-danger">Ex:若為8折請填入0.8</span>
             </div>
             <div class="form-group">
                 <label asp-for="CouponCode" class="control-label">優惠券代碼</label>
-                <input asp-for="CouponCode" class="form-control" />
+                <input asp-for="CouponCode" class="form-control inputs" />
                 <span asp-validation-for="CouponCode" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,12 +44,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveStartDate" class="control-label">開始領取日期</label>
-                <input asp-for="ReceiveStartDate" class="form-control" />
+                <input asp-for="ReceiveStartDate" class="form-control inputs" type="date"/>
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveEndDate" class="control-label">截止領取日期</label>
-                <input asp-for="ReceiveEndDate" class="form-control" />
+                <input asp-for="ReceiveEndDate" class="form-control inputs" type="date" />
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -59,7 +59,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="MinimumOrder" class="control-label">最低消費金額</label>
-                <input asp-for="MinimumOrder" class="form-control" />
+                <input asp-for="MinimumOrder" class="form-control inputs" />
                 <span asp-validation-for="MinimumOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -75,7 +75,7 @@
 
 @section Scripts {
     <script>
-      var IsFreeDelivery = document.getElementById("IsFreeDelivery");
+        var IsFreeDelivery = document.getElementById("IsFreeDelivery");
         var confirms = document.getElementById("confirms");
         var Discount = $("#Discount");
         var Discounts= document.getElementById("Discount");

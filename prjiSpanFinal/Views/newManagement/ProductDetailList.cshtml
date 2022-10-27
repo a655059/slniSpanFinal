@@ -66,24 +66,33 @@
     </tbody>
 </table>
 <script>
-    //function really() {
-    //    let trs = document.querySelectorAll(".rowsss");
-    //    let dels = document.querySelectorAll(".deles");
+    function really() {
+        let trs = document.querySelectorAll(".rowsss");
+        let dels = document.querySelectorAll(".deles");
         
-    //    var yes = confirm('你確定要刪除嗎？');
-    //    if (yes){
-    //        return;
-    //    }
-    //    else{
-    //        alert("商品細項不可少於一項");
-    //        return;
-    //    }
-        //if(trs.length-1<=0){
-        //    for(let e of dels){
-        //        e.addEventListener("click",()=>{
-        //            alert("商品細項不可少於一項");
-        //            return;
-        //        })
-        //    }
+        var yes = confirm('你確定要刪除嗎？');
+        if (yes){
+            return;
+        }
+        else{
+            alert("商品細項不可少於一項");
+            return;
+        }
+        if(trs.length-1<=0){
+            for(let e of dels){
+                e.addEventListener("click",()=>{
+                    alert("商品細項不可少於一項");
+                    return;
+                })
+            } 
+        }
+        else{
+            for(let e of dels){
+                e.addEventListener("click",()=>{
+            $(this).closest("tr").remove();
+                    return;
+                })
+            }
+        }
      }
 </script>
