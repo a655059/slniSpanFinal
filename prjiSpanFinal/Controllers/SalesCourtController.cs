@@ -46,7 +46,7 @@ namespace prjiSpanFinal.Controllers
             var CourtCategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Seller.MemberId).ToList();
             var MemPic = Seller.MemPic;
 
-            var SellerNickName = dbContext.MemberAccounts.Where(a => a.MemberId == id).Select(a => a.NickName).FirstOrDefault();
+            var SellerNickName = dbContext.MemberAccounts.Where(a => a.MemberId == id).Select(a => a.MemberAcc).FirstOrDefault();
             var CourtDescription = dbContext.MemberAccounts.Where(a => a.MemberId == id).Select(a => a.Description).FirstOrDefault();
 
             List<string> CategoryName = new List<string>();
