@@ -226,6 +226,7 @@ namespace prjiSpanFinal.Controllers
             }
             db.MemberAccounts.Add(memberac);
             db.SaveChanges();
+            //return Content("OK", "text/plain", Encoding.UTF8);
             return RedirectToAction("LoginSuccess");
         }
         public IActionResult ShowPhoto(int id)
@@ -274,6 +275,24 @@ namespace prjiSpanFinal.Controllers
                 }
             }
         }
+        public IActionResult DeleteMylike(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                iSpanProjectContext db = new iSpanProjectContext();
+                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+                int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
+                var mk = db.Likes.FirstOrDefault(m => m.MemberId == memID && m.ProductId == id);
+                db.Likes.Remove(mk);
+                db.SaveChanges();
+                return Content("已取消收藏", "text/plain", Encoding.UTF8);
+            }
+        }
+
         public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
