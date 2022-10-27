@@ -435,6 +435,7 @@
                 sortmethod = 1;
                 reloaditem(sortmethod, tabid);
             }
+            nowpages = 1;
         })
         $("#ordersales").click(function () {
             if ($("#ordersales").hasClass("sorting_desc")) {
@@ -445,12 +446,14 @@
                 sortmethod = 3;
                 reloaditem(sortmethod, tabid);
             }
+            nowpages = 1;
         })
         $(".ordernavtabs").click(function (event) {
             tabid = $(event.currentTarget).siblings("input").val();
             $(event.currentTarget).addClass("active");
             $(event.currentTarget).parent().siblings().children("a").removeClass("active");
             reloaditem(sortmethod, tabid);
+            nowpages = 1;
         })
         $("#btnDate").click(function () {
             let keyword = $("#orderkeyword").val();
@@ -659,6 +662,7 @@
 
         $("#pagecountselect").change(function () {
             eachpage = $("#pagecountselect option:selected").val();
+            nowpages = 1;
             reloaditem(sortmethod, tabid, nowpages, eachpage);
         });
     </script>
