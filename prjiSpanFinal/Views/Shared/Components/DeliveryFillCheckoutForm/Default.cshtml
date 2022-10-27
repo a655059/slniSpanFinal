@@ -64,27 +64,27 @@
     </div>
     <div class="contactInfo">
         <div class="row my-1 align-items-center">
-            <label class="col-2 text-center" for="recipient">收件人</label>
+            <label class="col-2" for="recipient">收件人</label>
             <input class="contact col-5" type="text" name="recipient" placeholder="收件人真實姓名" id="recipient" value="@recipient" />
         </div>
 
         <div class="row my-1 align-items-center">
-            <label class="col-2 text-center" for="email">電子信箱</label>
+            <label class="col-2" for="email">電子信箱</label>
             <input class="contact col-5" type="email" name="email" placeholder="電子信箱" id="email" value="@email" />
         </div>
         <div class="row my-1 align-items-center">
-            <label class="col-2 text-center" for="phone">連絡電話</label>
+            <label class="col-2" for="phone">連絡電話</label>
             <input class="contact col-5" type="text" name="phone" placeholder="連絡電話" id="phone" value="@phone" />
         </div>
-        <div class="finalShipInfo d-none" id="@IsSession">
+        <div class="finalShipInfo my-1 d-none" id="@IsSession">
             <div class="d-flex justify-content-start align-items-end">
-                <div class="fw-bold ms-4" id="finalShipper">@shipperName</div>
+                <div class="fw-bold" id="finalShipper">@shipperName</div>
                 <div class="d-none" id="finalShipperID">@shipperID</div>
                 <div class="text-danger ms-2" style="font-size:12px">運費:$<span class="finalShipperFee">@shipperFee</span></div>
             </div>
         </div>
         <div class="row my-1 align-items-center">
-            <label class="col-2 text-center" for="address">收貨地址</label>
+            <label class="col-2" for="address">收貨地址</label>
             <input class="contact col-5" type="text" name="address" placeholder="收貨地址" id="address" value="@address" />
         </div>
         <button class="changeShip border-0 bg-transparent text-primary">選擇運送方式</button>

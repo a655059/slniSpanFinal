@@ -1,6 +1,5 @@
 ﻿
 
-
 $(".smallPhoto>div").mouseenter(function () {
     $(this).children().css("border-color", "orange").end().siblings().children().css("border-color", "#E0E0E0");
     let imgSrc = $(this).children().attr("src");

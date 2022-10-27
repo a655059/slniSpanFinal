@@ -239,6 +239,7 @@ namespace prjiSpanFinal.Controllers
                 var order = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
                 dbContext.Orders.Remove(order);
                 dbContext.SaveChanges();
+
                 return Content("0");
             }
             else

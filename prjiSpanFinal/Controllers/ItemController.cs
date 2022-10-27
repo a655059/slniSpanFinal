@@ -50,6 +50,8 @@ namespace prjiSpanFinal.Controllers
                 }).ToList();
                 int commentCount = 0;
                 double avgCommentStar = 0;
+                int sellerCommentCount = 0;
+                double avgSellerCommentStar = 0;
                 var comments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.ProductId == id).ToList();
                 if (comments.Count() > 0)
                 {
@@ -62,6 +64,13 @@ namespace prjiSpanFinal.Controllers
                 {
                     salesVolume = sales.Sum(i => i.Quantity);
                 }
+                var sellerComments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.Product.MemberId == product.seller.MemberId);
+                if (sellerComments.Count() > 0)
+                {
+                    sellerCommentCount = sellerComments.Count();
+                    avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
+                }
+
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 CItemIndexViewModel itemIndex = new();
                 itemIndex.product = product.product;
@@ -78,6 +87,8 @@ namespace prjiSpanFinal.Controllers
                 itemIndex.avgCommentStar = avgCommentStar;
                 itemIndex.commentCount = commentCount;
                 itemIndex.salesVolume = salesVolume;
+                itemIndex.avgSellerCommentStar = avgSellerCommentStar;
+                itemIndex.sellerCommentCount = sellerCommentCount;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
