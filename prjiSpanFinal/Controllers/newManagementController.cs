@@ -158,11 +158,7 @@ namespace prjiSpanFinal.Controllers
             var K = from k in db.ProductDetails
                     where k.ProductId == G.First().ProductId
                     select k;
-            if (K.Count() - 1 > 0)
-            {
-                db.ProductDetails.Remove(D.First());
-            }
-            db.SaveChanges();
+
             return RedirectToAction("ProductDetailList", new { id = X.ProductId });
         }
         #endregion
