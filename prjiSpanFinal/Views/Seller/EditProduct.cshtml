@@ -158,7 +158,7 @@
                     <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
                         @{
                             for (int i = 0; i < Model.bigType.Count; i++)
-                            {
+                            {                                
                                 <option value="@(i+1)">@Model.bigType[i]</option>
                             }
                         }
@@ -292,7 +292,7 @@
                 <div class="row ">
                     <div class="col-3"></div>
                     <div class="col-9">
-                        <input type="button" value="確定" id="next" class="btn btn-warning m-3 nextwork" />
+                        <input type="button" value="確定" id="good" class="btn btn-warning m-3 nextwork" />
                         <input type="button" value="取消" id="cancle" class="btn btn-secondary m-3 nextwork" />
                     </div>
                 </div>
@@ -409,10 +409,18 @@
             else {
                 alert("項目,數量和價格不可為空");
             }
-
         })
 
 
+
+
+        good.addEventListener("click", function () {
+            let name = document.getElementById("ProductName").value;
+            let smalltype = document.getElementById("smallType").value;
+
+            alert("修改完成");
+            location.href = "/Seller/NewIndex";
+        })
     </script>
 
 }
