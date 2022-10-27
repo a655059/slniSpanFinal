@@ -43,7 +43,7 @@ namespace prjiSpanFinal.ViewModels
         public List<byte[]> Pic { get; set; }
         public List<string> ProductName { get; set; }
 
-
+        public int OrderCount { get; set; }
 
     }
 }
