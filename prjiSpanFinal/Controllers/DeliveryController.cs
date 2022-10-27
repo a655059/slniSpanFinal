@@ -638,5 +638,41 @@ namespace prjiSpanFinal.Controllers
             }
             return View(cDeliveryCheckout.buyer);
         }
+
+        public IActionResult ShowOrderedOrder()
+        {
+            
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string buyerString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                var orderedOrders = dbContext.OrderDetails.Where(i => i.Order.MemberId == buyer.MemberId && i.Order.StatusId == 2).Select(i => new COrderedOrderViewModel
+                {
+                    orderDetail = i,
+                    order = i.Order,
+                    seller = i.ProductDetail.Product.Member,
+                    productDetail = i.ProductDetail,
+                    productName = i.ProductDetail.Product.ProductName,
+                }).ToList();
+
+                
+                return View(orderedOrders);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Member");
+            }
+        }
+
+        public IActionResult OPayCheckout(string checkoutItems)
+        {
+            //string tradeNo = Guid.NewGuid().ToString();
+            //tradeNo = tradeNo.Substring(tradeNo.Length - 12, 12);
+            //string timeNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            List<CGoOPayCheckoutViewModel> cGoOPayCheckout = JsonSerializer.Deserialize<List<CGoOPayCheckoutViewModel>>(checkoutItems);
+            
+            return Content("checkoutItems");
+        }
     }
 }

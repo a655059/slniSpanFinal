@@ -1,0 +1,148 @@
+﻿@model List<prjiSpanFinal.ViewModels.Delivery.COrderedOrderViewModel>
+@{
+    ViewData["Title"] = "GoOPay";
+    List<Order> orderList = new List<Order>();
+    foreach (var i in Model)
+    {
+        if (orderList.Contains(i.order))
+        {
+            continue;
+        }
+        else
+        {
+            orderList.Add(i.order);
+        }
+    }
+}
+
+@section Styles{ 
+    <style>
+        .imgDiv{
+            width:100px;
+            aspect-ratio:1/1;
+        }
+        .imgDiv img{
+            width:100%;
+            aspect-ratio:1/1;
+            object-fit:contain;
+        }
+    </style>
+}
+
+
+<h1>花錢囉</h1>
+
+@{
+    foreach (var i in orderList)
+    {
+        <div class="border px-3 py-2 my-3">
+            <div class="fs-6 border-bottom py-2"><span class="fs-4 fw-bold">@i.Member.MemberAcc</span>賣場的訂單</div>
+            <div class="border-bottom py-2">
+                @{
+                    foreach (var j in Model)
+                    {
+                        if (j.order == i)
+                        {
+                            string imgSrc = "";
+                            try
+                            {
+                                string base64 = Convert.ToBase64String(j.productDetail.Pic);
+                                imgSrc = $"data:image/gif;base64,{base64}";
+                            }
+                            catch
+                            {
+                                imgSrc = Url.Content("~/img/imageNotFound.png");
+                            }
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="imgDiv"><img src="@imgSrc" /></div>
+                                    <div>
+                                        <div class="productName">@j.productName</div>
+                                        <div>@j.productDetail.Style</div>
+                                        <div class="productPrice">@j.productDetail.UnitPrice</div>
+                                    </div>
+                                </div>
+                                <div>X<span class="purchaseCount">@j.orderDetail.Quantity</span></div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <button class="goOPayCheckout btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCheckout">付款</button>
+        </div>
+
+    }
+}
+<div class="modal" tabindex="-1" id="confirmCheckout">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCreditCard" method="post" accept-charset="UTF-8" action="https://payment-stage.opay.tw/Cashier/AioCheckOut/V5">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label" for="invalidCheck">
+                                我已確認訂購內容及寄送資訊無誤
+                            </label>
+                            <div class="invalid-feedback">
+                                您必須在提交前同意
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="MerchantID" value="2000132" />
+                    <input type="hidden" name="MerchantTradeNo" value="@ViewBag.tradeNo" />
+                    <input type="hidden" name="MerchantTradeDate" value="@ViewBag.timenow" />
+                    <input type="hidden" name="PaymentType" value="aio" />
+                    <input type="hidden" name="TotalAmount" value="@ViewBag.Total" />
+                    <input type="hidden" name="TradeDesc" value="建立信用卡測試訂單" />
+                    <input type="hidden" name="ItemName" value="@ViewBag.ItemName" />
+                    <input type="hidden" name="ReturnURL" value="https://developers.opay.tw/AioMock/MerchantReturnUrl" />
+                    <input type="hidden" name="ChoosePayment" value="Credit" />
+                    <input type="hidden" name="StoreID" value="" />
+                    <input type="hidden" name="ClientBackURL" value="@ViewBag.ClientBackURL" />
+                    <input type="hidden" name="CreditInstallment" value="" />
+                    <input type="hidden" name="InstallmentAmount" value="" />
+                    <input type="hidden" name="Redeem" value="" />
+                    <input type="hidden" name="EncryptType" value="1" />
+                    <input type="hidden" name="CheckMacValue" value="@ViewBag.checkMacValue" />
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">確認付款</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{ 
+    <script>
+        $(".goOPayCheckout").click(async function () {
+            let checkoutItems = [];
+            $(this).siblings().find(".purchaseCount").each(function () {
+                const productName = $(this).closest("div").siblings().find(".productName").html();
+                const productPrice = Number($(this).closest("div").siblings().find(".productPrice").html());
+                const purchaseCount = Number($(this).html());
+                const jsonObject = {
+                    "productName": productName,
+                    "productPrice": productPrice,
+                    "purchaseCount": purchaseCount
+                };
+                checkoutItems.push(jsonObject);
+            });
+            
+            const jsonString = JSON.stringify(checkoutItems);
+            const response = await fetch("@Url.Content("~/Delivery/OPayCheckout")" + `?checkoutItems=${jsonString}`);
+            const data = await response.text();
+            console.log(data);
+        });
+
+    </script>
+}
