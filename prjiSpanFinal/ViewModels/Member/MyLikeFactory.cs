@@ -48,7 +48,7 @@ namespace prjiSpanFinal.ViewModels.Member
                 MyLikeShowItem a = new MyLikeShowItem();
                 a.Product = item;
                 a.Price = dlist;
-                a.MylikeIsNullorNOT = true;
+               
                 if (pic != null)
                     a.Pic = pic;
                 a.salesVolume = sales;

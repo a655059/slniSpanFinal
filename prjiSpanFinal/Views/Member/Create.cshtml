@@ -198,7 +198,7 @@
                         </label>
                     </div>
                     <hr class="my-4">
-                    <button class="btn btn-primary" type="submit">註冊</button>
+                    <button class="btn btn-primary" type="submit" id="creat">註冊</button>
                     <button class="btn btn-secondary" id="clear">清除</button>
                     
                 </form>
@@ -218,8 +218,23 @@
         const selSite = document.querySelector("#state")
         const selregion = document.querySelector("#region")
         const Demo = document.querySelector("#Demo")
+        const create = document.querySelector("#creat")
 
+        @*create.addEventListener("click", function ()
+        {
+            $.post('@Url.Content("~/Member/create")'), function (data)
+            {
+                if (data == "ok")
+                {
+                                        Swal.fire(
+                                        '恭喜!',
+                                        '您已修改成功，請重新登入!',
+                                        'success'
+                                        ).then(function (result) { window.location.href = "@Url.ActionLink("login","Member")";})
 
+                }
+            }
+        })*@
 
         Demo.addEventListener("click", function () {
             $("#Name").val("王曉明")

@@ -41,9 +41,9 @@ namespace prjiSpanFinal.Models.LikeReq
                     //全部按讚
                     list = (new MyLikeFactory()).toShowItem(mylike);
                     break;
-                ////有效商品
+                //取消按讚
                 //case 6:
-                    
+
                 //    list = (new MyLikeFactory()).toShowItem(mylike);
                 //    break;
                 ////無效商品

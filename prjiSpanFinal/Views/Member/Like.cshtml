@@ -98,13 +98,13 @@
                     </a>
 
                     @*<a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        狀態
-                    </a>*@
-                    @*<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        編輯
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a class="dropdown-item SortOrder" id="SortOrder6">
+                            <a class="dropdown-item" id="cancle">
                                 <i></i>
-                                有效商品
+                                取消按讚
                                 <input type="hidden" value="6" />
                             </a>
                         </li>
@@ -243,6 +243,22 @@
         @*let BigtypeId = "@Model.SearchType.BigTypeId";*@
         //let sort1 = document.getElementById("SortOrder1");
         //let menu = document.getElementById("dropdownMenuLink");
+        const cancle = document.querySelector("#cancle")
+
+        cancle.addEventListener("click",function (event){
+            let likeid = event.currentTarget.textContent;
+            let div = $(this).closest(".dele");
+            $.get(`@Url.Content("~/member/DeleteMylike")`), { id: likeid }, function (data) {
+                if (data == "已取消收藏") {
+                    div.remove()
+                    alert("已取消收藏");
+                }
+                else {
+                        window.location.href = '@Url.Content("~/Member/DeleteMylike")';
+                    }
+            }
+        })
+
 
 
 
@@ -326,6 +342,7 @@
                         </div>
                     </div>
                     <div class="text-end text-black-50 sells">已賣出<span>${data[i].salesVolume}</span></div>
+                    
                 </div>
             </div>
         </div>
