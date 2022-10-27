@@ -18,6 +18,9 @@ namespace prjiSpanFinal.ViewModels.Item
         public string sellerRegion { get; set; }
         public List<CSellerShipperViewModel> sellerShipper { get; set; }
         public List<CSellerPaymentViewModel> sellerPayment { get; set; }
+        public double avgCommentStar { get; set; }
+        public int commentCount { get; set; }
+        public int salesVolume { get; set; }
         public Boolean Islike { get; set; }
         public List<ReportType> ReportType { get; set; }
         public bool IsLogin { get; set; }

@@ -91,26 +91,34 @@
         <h4>@Model.product.ProductName</h4>
         <div class="d-flex justify-content-start align-items-center">
             @{
-                int starCount = 4;
-                for (int i = 1; i <= 5; i++)
+                if (Model.commentCount == 0)
                 {
-                    if (i <= starCount)
-                    {
-                        <i class="text-warning fa-solid fa-star"></i>
-                    }
-                    else
-                    {
-                        <i class="fa-regular fa-star"></i>
-                    }
+                    <div class="opacity-50">尚無評價</div>
                 }
-                <div class="ms-3">
-                    4.2
-                </div>
+                else
+                {
+                    int starCount = Convert.ToInt32(Math.Round(Model.avgCommentStar, MidpointRounding.AwayFromZero));
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= starCount)
+                        {
+                            <i class="text-warning fa-solid fa-star"></i>
+                        }
+                        else
+                        {
+                            <i class="fa-regular fa-star"></i>
+                        }
+                    }
+                    <div class="ms-3">
+                        @Model.avgCommentStar
+                    </div>
+                }
+                
                 <div class="ms-1">
-                    <span>(</span><a href="#">10</a><span>)</span>
+                    <span>(</span><a href="#">@Model.commentCount</a><span>)</span>
                 </div>
                 <div class="ms-3">|</div>
-                <div class="ms-3">已售出: 15</div>
+                <div class="ms-3">已售出:<span>@Model.salesVolume</span></div>
             }
         </div>
         <div class="itemDetails">
@@ -238,7 +246,7 @@
                 <div class="ps-2">@Model.seller.MemberAcc<span class="ms-3"><a href="#"><i class="fa-solid fa-comment-dots text-warning"></i></a></span></div>
                 <div class="d-flex align-items-center ps-2">
                     <div>全部商品:</div>
-                    <div class="ms-3"><a href="@Url.Content("~/SalesCourt/賣場")" class="fs-5 fw-bold text-primary ">311</a></div>
+                    <div class="ms-3"><a href="@Url.Content("~/SalesCourt/賣場")" class="fs-5 fw-bold text-primary ">@Model.sellerProductIDs.Count</a></div>
                 </div>
                 <div class="d-flex align-items-center ps-2">
                     <div>賣場評價:</div>
@@ -257,15 +265,15 @@
 
 
 
-<div class="productDescription">
+<div>
     <div class="list-group list-group-horizontal mb-3">
-        <button type="button" class="list-group-item list-group-item-action active" id="description" aria-current="true">商品說明</button>
-        <button type="button" class="list-group-item list-group-item-action" id="comment">商品評價 (4.0/5)</button>
-        <button type="button" class="list-group-item list-group-item-action" id="buyerCount">購買人次 (55)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action active" id="description" aria-current="true">商品說明</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="comment">商品評價 (4.0/5)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">購買人次 (55)</button>
     </div>
     <div class="itemDescription rounded-2">
-        <div class="sellerName">@Model.seller.MemberAcc<span>的商店</span></div>
-        <div>
+        <div class="sellerName bg-warning bg-opacity-50 fs-3 fw-bold ps-2">@Model.seller.MemberAcc<span>的商店</span></div>
+        <div class="w-100 bg-warning bg-opacity-10 pb-3">
             <div class="description">
                 @Model.product.Description;
             </div>

@@ -48,6 +48,20 @@ namespace prjiSpanFinal.Controllers
                     payment = i.Payment.PaymentName,
                     fee = i.Payment.Fee,
                 }).ToList();
+                int commentCount = 0;
+                double avgCommentStar = 0;
+                var comments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.ProductId == id).ToList();
+                if (comments.Count() > 0)
+                {
+                    commentCount = comments.Count;
+                    avgCommentStar = comments.Average(i => i.CommentStar);
+                }
+                int salesVolume = 0;
+                var sales = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == id && i.Order.StatusId == 7);
+                if (sales.Count() > 0)
+                {
+                    salesVolume = sales.Sum(i => i.Quantity);
+                }
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 CItemIndexViewModel itemIndex = new();
                 itemIndex.product = product.product;
@@ -61,6 +75,9 @@ namespace prjiSpanFinal.Controllers
                 itemIndex.sellerRegion = product.sellerRegion;
                 itemIndex.sellerShipper = sellerShipper;
                 itemIndex.sellerPayment = sellerPayment;
+                itemIndex.avgCommentStar = avgCommentStar;
+                itemIndex.commentCount = commentCount;
+                itemIndex.salesVolume = salesVolume;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);

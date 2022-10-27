@@ -85,24 +85,24 @@
         width: 100%;
     }
 
-.sellerProducts .pageSelect button {
+/*.sellerProducts .pageSelect button {
     border: 1px solid #E0E0E0;
     border-radius: 5px;
     font-size: 20px;
     font-weight: bold;
     margin: 0 5px;
-}
+}*/
 
-.sellerProducts #previousPage {
+/*.sellerProducts #previousPage {
     background-color: #FFDCB9;
     color: #D0D0D0;
-}
+}*/
 
-.sellerProducts #nextPage {
+/*.sellerProducts #nextPage {
     background-color: #FFA042;
-}
+}*/
 
-.sellerName {
+/*.sellerName {
     background-color: #84C1FF;
     font-size: 1.5em;
     font-weight: bold;
@@ -111,7 +111,7 @@
     .sellerName + div {
         width: 100%;
         background-color: #ECF5FF;
-    }
+    }*/
 
 .description {
     line-height: 40px;
