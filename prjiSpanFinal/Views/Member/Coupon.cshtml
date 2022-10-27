@@ -45,8 +45,9 @@
     <div class="col-1"></div>
     <div class="col-11 ">
         <div class="input-group mb-1">
-            <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4><input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
+            <h4 style="padding-right:10px;margin:4px 7px 2px 4px;">新增優惠券</h4>
+            <input type="text" class="form-control input-text" placeholder="輸入折扣代碼" aria-label="Recipient's username" aria-describedby="basic-addon2" id="CouponCodeInput">
+            <button class="btn btn-outline-warning btn-lg" type="button" id="CouponCodeBtn"><i>輸入</i></button>
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item " id="all">
@@ -64,7 +65,7 @@
         </ul>
         <ul class="nav nav-tabs">
             <li class="nav-item" id="new">
-                <a class="nav-link ordernavtabs Sort active" aria-current="page" href="#">總覽</a>
+                <a class="nav-link ordernavtabs Sort active" aria-current="page" id="total" href="#">總覽</a>
                 <input type="hidden" value="1Sort" />
             </li>
             <li class="nav-item" id="new">
@@ -110,45 +111,6 @@
                     </div>
                 }
             </div>
-            @*<div>
-                        @for (int i = 15; i >= 1; i--)
-                        {
-                            <tr>
-                                <td>
-                                    <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                        <a href="#">
-                                            <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
-                                        </a>
-                                        <div class="px-1 d-flex flex-column justify-content-between">
-                                            <div class="cardTitle">店到店免運</div>
-                                            <div class="cardPrice">2022/10/10生效</div>
-                                            <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                <div class="d-flex justify-content-start flex-column mt-1">
-                                                     <div class="text-black-50">數量有限用完為止</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="sellsitem" style="border: 2px solid #D0D0D0;">
-                                        <a href="#">
-                                            <img href="#" src="~/img/coupon.jpg" width="350" height="200" class="cardImg" alt="..." />
-                                        </a>
-                                        <div class="px-1 d-flex flex-column justify-content-between">
-                                            <div class="cardTitle">店到店免運</div>
-                                            <div class="cardPrice">2022/10/10生效</div>
-                                            <div class="cardInfo d-flex justify-content-between align-items-end">
-                                                <div class="d-flex justify-content-start flex-column mt-1">
-                                                    <div class="text-black-50">數量有限用完為止</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                </div>*@
         </figure>
     </div>
 </div>
@@ -158,24 +120,40 @@
 {
     <script>
 
-//const { data } = require("jquery");
-
-        //const coupon蝦到爆 = document.querySelector("#coupon1");
-        //coupon蝦到爆.addEventListener("click", () => {
-        //    $("#coupon1").children().addClass("active")
-        //    $("#all").children().removeClass("active")
-        //    $(".aaa").html(str);
-        //    $(".ordernavtabs").click(function (event) {
-        //        tabid = $(event.currentTarget).siblings("input").val();
-        //        $(event.currentTarget).addClass("active");
-        //        $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-        //    })
-        //})
         let Filter = 0;
         let Sort = 1;
-        let sort1 = document.getElementById("new");
+        let sort1 = document.getElementById("total");
         let couponarea = $(`#CouponArea`);
         CallJson();
+
+        $(`#CouponCodeBtn`).click(function (event) {
+            let val = "";
+            val = $(`#CouponCodeInput`).val();
+            event.preventDefault();
+            console.log(val.trim());
+            if (val !="") {
+                $.getJSON(`/Member/getCouponsByCode`, { code: val }, function (data) {
+                    if (data != null) {
+                        if (data == 0) {
+                            alert("查無此券！");
+                        }
+                        else if (data == 1) {
+                            alert("你已經領過此券！");
+                        }
+                        else if (data == 2) {
+                            alert("領券期已過！");
+                        }
+                        else if (data == 3) {
+                            alert("還沒開放領券哦！");                            
+                        }
+                        else {
+                            alert("已新增優惠券！");
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+        })
 
         $(".Filter").click(function () {
             let target = $(event.target);
@@ -243,7 +221,6 @@
             }
             return str;
         }
-
     </script>
 }
 

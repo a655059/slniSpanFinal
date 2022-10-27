@@ -308,6 +308,39 @@ namespace prjiSpanFinal.Controllers
             int MemID = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             return Json(((new CouponFactory()).fReturnCoupon(filter, sort, MemID)).ToArray());
         }
+        public IActionResult getCouponsByCode(string code)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+
+            int check = (new CouponFactory()).getCouponByCodeCheck(code, id);            
+            switch (check)
+            {
+                case 0:
+                    return Json(0);
+                case 1:
+                    return Json(1);
+                case 2:
+                    return Json(2);
+                case 3:
+                    return Json(3);
+                default:
+                    Coupon c = dbcontext.Coupons.Where(c => c.CouponCode == code).FirstOrDefault();
+                    if (c != null)
+                    {
+                        CouponWallet cw = new CouponWallet()
+                        {
+                            CouponId = c.CouponId,
+                            IsExpired = false,
+                            MemberId = id,
+                        };
+                        dbcontext.CouponWallets.Add(cw);
+                        dbcontext.SaveChanges();
+                    }
+                    return Json(999);
+            }
+
+        }
         public IActionResult Order()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))

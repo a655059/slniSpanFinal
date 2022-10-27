@@ -140,5 +140,35 @@ namespace prjiSpanFinal.ViewModels.Member
             }
             return resListCoupon;
         }
+
+        public int getCouponByCodeCheck(string code,int id)
+        {
+            var coupon = _db.Coupons.Where(c => c.CouponCode.ToUpper() == code.ToUpper());
+            var check = _db.CouponWallets.Where(c => c.Coupon.CouponCode.ToUpper() == code.ToUpper());
+            if (!coupon.Any())
+            {
+                //填錯沒券
+                return 0;
+            }
+            if (check.Where(c => c.MemberId == id).Any())
+            {
+                //有券 有領過
+                return 1;
+            }
+            if (!coupon.Where(c=> DateTime.Compare(c.ReceiveEndDate, DateTime.Now) == 1).Any())
+            {
+                //超過領取時間
+                return 2;
+            }
+            if (!coupon.Where(c => DateTime.Compare( DateTime.Now, c.ReceiveStartDate) == 1).Any())
+            {
+                //未達領取時間
+                return 3;
+            }
+
+            //有券 沒領過
+            return 999;
+               
+        }
     }
 }
