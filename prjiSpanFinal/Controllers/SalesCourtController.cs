@@ -227,7 +227,7 @@ namespace prjiSpanFinal.Controllers
 
                 SellerPhoto = Seller.MemPic,
                 //卡在計算日期差距
-                AvgShippingDate = (SumShipDays / a.Count()).ToString("0.00"),
+                AvgShippingDate = SumShipDays / a.Count(),
                 BuyerCount = ordtail.Count(),
                 AddLoveCount = Follow.Count(),
                 //刪資料  等資料表
@@ -497,7 +497,6 @@ namespace prjiSpanFinal.Controllers
                 Caution = me.Caution
             };
 
-            //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
             if (ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
             {
                 add.ServiceTime = "";
@@ -529,7 +528,7 @@ namespace prjiSpanFinal.Controllers
             {
                 add.ServiceTime += "2";
                 add.ServiceTime += ",";
-                add.ServiceTime += ServiceTime[3];
+                add.ServiceTime += NewMe.SalesCourtServiceTime[4];
                 add.ServiceTime += "/";
             }
 
@@ -540,7 +539,7 @@ namespace prjiSpanFinal.Controllers
 
 
             dbContext.SaveChanges();
-            return RedirectToAction("關於我");
+            
 
             return RedirectToAction("關於我");
 

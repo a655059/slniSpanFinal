@@ -54,7 +54,7 @@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:#ccd7b4">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:bisque">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">@me.NickName 賣場資訊</h1>
         </div>
@@ -71,9 +71,13 @@
             <div class="col">
                 <div class="bg-secondary">賣場服務時間</div>
                 <p>
-                    星期 @Model.weekDown - 星期 @Model.weekUp
+                    星期 @Model.weekDown - 星期 @Model.weekUp                                      
+                </p>
+                <p>
                     時間  @Model.timeDown:00- @Model.timeUp:00
-                    國定例假日公休 @Model.takebreak
+                </p>
+                <p>
+                    國定例假日公休: @Model.takebreak
                 </p>
             </div>
             <div class="col">
@@ -110,7 +114,7 @@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: #ccd7b4">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
         <div class="col-md-6 px-0">
             <h1 class="display-4 fst-italic">付款與運送的方式</h1>
         </div>
@@ -118,14 +122,6 @@
         <div class="row" style="font-size:1.4em">
             <div class="col-6">
                 <div class="text-secondary" style="font-size:1.5em">付款方式</div>
-
-                @*<div class="col"><img src="~/img/fans.png" width="20" />粉絲:&nbsp;</div>*@
-                @*<div><img src="~/img/familymart.png" width="35" />全家取貨付款</div>
-                <div><img src="~/img/pchomepay.png" width="35" /><img src="~/img/7-11.png" width="35" />7-11取貨付款</div>
-                <div><img src="~/img/pchomepay.png" width="35" />PChomePay支付連 現金(ATM、餘額)</div>
-                <div><img src="~/img/pchomepay.png" width="35" />PChomePay支付連 信用卡(一次付清)</div>
-                <div>貨到付款</div>
-                <div>面交取貨付款(面交時才付款)</div>*@
 
                 @{ 
                     foreach (var item in shippingmethod)
@@ -137,18 +133,14 @@
             </div>
             <div class="col-6">
                 <div class="text-secondary" style="font-size:1.5em">運送方式</div>
-                @*<div><img src="~/img/familymart.png" width="35" />全家取貨付款 運費<span class="text-primary">60</span>元</div>
-                <div><img src="~/img/pchomepay.png" width="35" /><img src="~/img/7-11.png" width="35" />7-11取貨付款 運費<span class="text-primary">60</span>元</div>
-                <div>郵寄寄送 運費<span class="text-primary">130</span>元</div>
-                <div>宅配/快遞 運費<span class="text-primary">75</span>元</div>
-                <div>離島寄送 運費<span class="text-primary">100</span>元</div>
-                <div>貨到付款 運費<span class="text-primary">150</span>元</div>
-                <div>面交貨到付款(面交時才付款)</div>*@
+              
 
                 @{ 
                     for (int i = 0; i < payingName.Count(); i++) { 
                         <span>@payingName[i]</span>
+                        <span>:</span>
                         <span>@payingFee[i]</span>
+                        <br/>
                     }
                 }
             </div>
@@ -159,12 +151,14 @@
 </div>
 
 <div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: #ccd7b4">
+    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">注意事項的售後服務</h1>
+            <h1 class="display-4 fst-italic">注意事項及售後服務</h1>
+            <div>注意事項:</div>
             <p class="lead my-3" style="font-size:1.4em">
                 @ServiceAfterBuy
             </p>
+            <div>售後服務:</div>
             <p class="lead my-3" style="font-size:1.4em">
                 @Caution
             </p>

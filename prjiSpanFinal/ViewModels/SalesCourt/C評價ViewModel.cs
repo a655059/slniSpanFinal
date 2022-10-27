@@ -21,7 +21,7 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
 
         public byte[] SellerPhoto { get; set; }
         //平均出貨天數
-        public string AvgShippingDate { get; set; }
+        public double AvgShippingDate { get; set; }
         //交關過會員數
         public int BuyerCount { get; set; }
         //被加入最愛
