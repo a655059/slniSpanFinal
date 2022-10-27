@@ -114,7 +114,7 @@
 </table>
 <div style="align-content:center" class="paginations">
     @(Html.Pager(pagedList)
-        .Url(page => Url.Action("ReportList", new { page })).
+        .Url(page => Url.Action("CouponList", new { page })).
         DisplayEllipsesWhenNotShowingAllPageNumbers().
         MaximumPageNumbersToDisplay(3).
         Build()

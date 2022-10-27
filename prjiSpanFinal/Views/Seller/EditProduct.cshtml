@@ -195,13 +195,11 @@
                                             <td class="col 規格列表">@Model.Style[i]</td>
                                             <td class="col 規格列表">@Model.Quantity[i]</td>
                                             <td class="col 規格列表">@Model.UnitPrice[i].ToString("0")</td>
-                                            <td class="col 規格列表">@*@Model.BodyPic[i]*@</td>
-                                            <td class="col 規格列表"><p><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></p></td>
+                                            <td class="col 規格列表"><img src="data:image;base64,@System.Convert.ToBase64String(@Model.BodyPic[i])" width="30" height="30" /></td>
+                                            <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
                                         </tr>
-                                    }
-                                    
-                                }
-                                
+                                    }                                   
+                                }                                
                             </tbody>
                         </table>
                         <div class="text-center">
@@ -218,7 +216,16 @@
                         @*    大頭照相片1     *@
                         <div>
                             <label class="btn" for="commentPhoto1">
-                                <img width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                @{
+                                    if (Model.DBtoPic != null)
+                                    {
+                                        <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])" width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    }
+                                    else
+                                    {
+                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    }
+                                }
                             </label>
                             <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
                         </div>
@@ -234,7 +241,23 @@
                                         string id = $"commentPhoto{i + 2}";
                                     }
                                     <label class="btn" for="@id">
-                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                        @{
+                                            if (Model.DBtoPic != null)
+                                            {
+                                                if (Model.DBtoPic.Count > 1 && i+1 < Model.DBtoPic.Count)
+                                                {
+                                                    <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])" width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                            }
+                                        }
                                     </label>
                                     <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
                                 </div>
@@ -280,10 +303,114 @@
 </div>
 @section Scripts{
     <script>
+        $(document).on("click",".delbtn",function () {   //刪除資料庫生成的規格
+            $(this).parents("tr").remove();
+        })
 
+        let alldata = [];
+        //資料暫存,後去把data變數傳入後端
+        let data = []
+        let tbody = document.querySelector('tbody')
+        for (let i = 0; i < data.length; i++) {
+            let tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            for (let j = 0; j < data[i].length; j++) {
+                let td = document.createElement('td');
+                td.innerHTML = data[i][j];
+                tr.appendChild(td);
+            }
+        }
 
+        //show 出 model 可新增拍賣物品
+        let btn = document.querySelector(".btnnew")
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); //取消原本action的預設值
+            clickValue(); //清空值
+        })
 
-        /////////大類小類連接---------------------------------------------------------------------------------------------------------------
+        //清空model值
+        function clickValue() {
+            document.getElementById("text1").value = '';
+            document.getElementById("text2").value = '';
+            document.getElementById("text3").value = '';
+            document.getElementById("text4").value = '';
+        }
+
+        //取得照片轉成二進位檔
+        let stylephoto;
+        let img = document.getElementById("text4");
+
+        $("#text4").on("change", function () {
+            let photo;
+            if (img.files.length != 0) {
+                photo = img.files;
+            }
+            console.log(photo)
+            if (photo) {
+                let reader = new FileReader();
+                reader.readAsDataURL(photo[0]);
+                reader.onload = function () {
+                    let src = reader.result;
+                    stylephoto = src.split(",")[1];
+                };
+            }
+        })
+
+        save.addEventListener("click", function () {
+            let dataNew = [];
+            let name = document.getElementById("text1").value;//prompt('請輸入姓名');
+            let subject = document.getElementById("text2").value;
+            let score = document.getElementById("text3").value;
+
+            //判斷資料有值再塞入
+            if (name !== '' && subject !== '' && score !== '') {
+                dataNew.push(name);
+                dataNew.push(subject);
+                dataNew.push(score);
+                dataNew.push(stylephoto);
+                //塞資料到暫存    //可以存JSON的地方
+                data.push(dataNew);
+                //資料暫存,後去把data變數傳入後端
+                let styleName = {
+                    StyleStr: name,
+                    QuantityStr: subject,
+                    UnitPriceStr: score,
+                    BodyPicStr: stylephoto
+                };
+                alldata.push(styleName);
+
+                let tr = document.createElement('tr');
+                for (let i = 0; i < dataNew.length - 1; i++) {
+                    let td = document.createElement('td');
+                    td.innerHTML = dataNew[i];
+                    tr.appendChild(td);
+                }
+                let td1 = document.createElement('td');
+                //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
+                td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
+                tr.appendChild(td1);
+                console.log('stylephoto')
+                console.log(stylephoto)
+
+                let td = document.createElement('td');
+                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
+                let a = td.children[0];
+                a.addEventListener('click', () => {
+                    let parent = a.parentNode.parentNode;
+                    parent.remove();
+                })
+                tr.appendChild(td);
+                tbody.insertBefore(tr, tbody.children[0])
+
+                var myModalEl = document.getElementById('exampleModal');
+                var modal = bootstrap.Modal.getInstance(myModalEl)
+                modal.hide();
+            }
+            else {
+                alert("項目,數量和價格不可為空");
+            }
+
+        })
 
 
     </script>

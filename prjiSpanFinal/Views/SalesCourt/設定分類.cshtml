@@ -43,7 +43,7 @@
 
 
 @*最上面的新增規格欄位  叫出modal的按鈕  按下還不是確定新增*@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" id="btncreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     新增類別輸入框
 </button>
 <form class="" method="post" enctype="multipart/form-data" name="setcat" id="setcat">
@@ -57,7 +57,7 @@
         <section class=" form-group section d-flex justify-content-center">
             <table class="table w-100 ">
                 <thead>
-                    <tr>
+                    <tr id="categorytablehead">
                         <th class="col 規格列表">順序</th>
                         <th class="col 規格列表">商品數</th>
                         <th class="col 規格列表">類別</th>
@@ -74,7 +74,7 @@
 
     </div>
 
-    <button type="submit" class="btn btn-secondary">確定新增</button>
+    <a role="button" id="submitcategory" href="/SalesCourt/賣場" class="btn btn-secondary">確定新增</a>
 
 
 </form>
@@ -107,21 +107,105 @@
 
 @section Scripts{
     <script>
-        let count = 0;
+        /*let count = 0;*/
+        let sortmax = 0;
 
         let save = document.getElementById("save");
         /*let save_alter = document.getElementById("save");*/
 
-        load();
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
 
         function load() {
+            $.getJSON("/SalesCourt/GetCustCategory", { id: @Model.MemberId}, function (data) {
+                console.log(data);
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].sortNumber > sortmax) {
+                        sortmax = data[i].sortNumber;
+                    }
+                    $("tbody").append(`<tr class="custtr" draggable="true"><td class="sortnum">${data[i].sortNumber}</td><td>${data[i].count}</td><td class="custtext">${data[i].customizedCategoryName}</td><td><button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button></td></tr>`);
+                }
+            });
+            sortall();
+        }
+        load();
+
+        $("#btncreate").click(function () {   /*當modal打開要清空輸入欄位*/
+            $("#text3").val("");
+        })
+
+        $("#save").click(function () {     /*當modal按下儲存會關掉*/
+            $("tbody").append(`<tr class="custtr" draggable="true"><td class="sortnum">${++sortmax}</td><td>${0}</td><td class="custtext">${$("#text3").val()}</td><td><button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button></td></tr>`);
 
 
+            var myModalEl = document.getElementById('exampleModal');
+            var modal = bootstrap.Modal.getInstance(myModalEl);
+            modal.hide();
+            sortall();
+        })
+
+        $(document).on("click", ".delete", function (e) {       //單一個tr刪掉
+            $(this).parent().parent().remove();
+            sortall();
+        })
+       
+
+      
+        $("#submitcategory").click(function () {
+            let sortnumarr = [];
+            let textarr = [];
+            console.log($(".sortnum"));
+            for (let i = 0; i < $(".sortnum").length; i++) {
+                sortnumarr.push($(".sortnum").eq(i).html());
+                textarr.push($(".custtext").eq(i).html());
+            }
+            $.postJSON("/SalesCourt/設定分類", { Memberid: @Model.MemberId, CustomizedCategoryName: textarr, SortNumber: sortnumarr}, function () {
+            });
+        })
+
+        //let dropTarget = document.querySelectorAll('.custtr')
+        //for (let i = 0; i < dropTarget.length; i++) {
+        //    dropTarget[i].addEventListener('dragstart', dragStart)
+        //    dropTarget[i].addEventListener('drop', dropped)
+        //    dropTarget[i].addEventListener('dragenter', cancelDefault)
+        //    dropTarget[i].addEventListener('dragover', cancelDefault)
+        //}
+        $(document).on('dragstart', '.custtr', dragStart)
+        $(document).on('drop', '.custtr', dropped)
+        $(document).on('dragenter', '.custtr', cancelDefault)
+        $(document).on('dragover', '.custtr', cancelDefault)
+        $(document).on('drop', "#categorytablehead", dropped)
+        $(document).on('dragenter', "#categorytablehead", cancelDefault)
+        $(document).on('dragover', "#categorytablehead", cancelDefault)
+        jQuery.event.props.push('dataTransfer');
+
+        function cancelDefault(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            return false
         }
 
+        function dragStart(e) {
+            console.log('dragStart')
+            e.dataTransfer.setData('text/plain', $(e.currentTarget).children(".sortnum").html().toString())
+        }
 
+        function dropped(e) {
+            console.log('dropped')
+            cancelDefault(e)
+            let num = e.dataTransfer.getData('text/plain')
+            let aaa = $(`.sortnum:contains(${num})`).parent();
+            console.log(e.currentTarget)
+            $(e.currentTarget).after(aaa);
+            sortall();
+        }
 
-
+        function sortall() {
+            for (let i = 1; i < $(".sortnum").length+1; i++) {
+                $(".sortnum").eq(i-1).html(i);
+            }
+        }
         //function load() {
         //    const tbShipper = $('#shippers>tbody')
         //    $.getJSON(url, function (datas) {
@@ -139,68 +223,67 @@
         //    })
         //}
         //讀取text
-        function clickValue() {
-            document.getElementById("text3").value = '';
-        }
+        //function clickValue() {
+        //    document.getElementById("text3").value = '';
+        //}
 
-        /*本來下面是要寫在modal怎麼讀取下拉選單的值*/
-        /* $("select").children("option[value='1      ']")   */
+        ///*本來下面是要寫在modal怎麼讀取下拉選單的值*/
+        ///* $("select").children("option[value='1      ']")   */
 
-        let id;
+        //let id;
 
-        save.addEventListener("click", function () {
-            count++;
-            let dataNew = [];
-            let price = document.getElementById("text3").value;
-
-
-            if (price != '') {
-                dataNew.push(price);
-
-                let tbody = document.querySelector('tbody')
-                let Tr = document.createElement('tr');
-                let td0 = document.createElement('td');
-                td0.textContent = count;
-                Tr.appendChild(td0);
-                let td1 = document.createElement('td');
-                td1.textContent = 0;
-                Tr.appendChild(td1);
-                for (let i = 0; i < dataNew.length; i++) {
-                    let td = document.createElement('td');
-                    let inp = document.createElement('input');
-                    td.setAttribute("id", count);
-                    inp.setAttribute("type", "hidden");
-                    inp.setAttribute("name", "CustomizedCategoryName[]");
-                    inp.setAttribute("value", dataNew[i]);
-                    td.innerHTML = dataNew[i];
-                    Tr.appendChild(td);
-                    Tr.appendChild(inp);
-                }
-                /*產生刪除按鈕在modal的畫面*/
-                let td = document.createElement('td');
-                td.innerHTML = `<button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
-                /*let a = td.children[0];*/
-                let a = td;
-                a.addEventListener('click', () => {
-
-                    /*let parent = a.parentNode.parentNode;*/
-                    let parent = a.parentNode;
-                    parent.remove();
-                })
-                Tr.appendChild(td);
-                tbody.appendChild(Tr);
-                clickValue();
-                var myModalEl = document.getElementById('exampleModal');
-                var modal = bootstrap.Modal.getInstance(myModalEl)
-                modal.hide();               /*他使用hide把增加在modal的tr刪掉*/
+        //save.addEventListener("click", function () {
+        //    count++;
+        //    let dataNew = [];
+        //    let price = document.getElementById("text3").value;
 
 
-            }
-            else {
-                alert("項目,數量和價格不可為空值");
-            }
+        //    if (price != '') {
+        //        dataNew.push(price);
 
-        })
+        //        let tbody = document.querySelector('tbody')
+        //        let Tr = document.createElement('tr');
+        //        let td0 = document.createElement('td');
+        //        td0.setAttribute("name", "SortNumber[]");
+        //        td0.setAttribute("value", count);
+        //        Tr.appendChild(td0);
+        //        let td1 = document.createElement('td');
+        //        td1.textContent = 0;
+        //        Tr.appendChild(td1);
+        //        for (let i = 0; i < dataNew.length; i++) {
+        //            let td = document.createElement('td');
+        //            let inp = document.createElement('input');
+        //            td.setAttribute("id", count);
+        //            inp.setAttribute("type", "hidden");
+        //            inp.setAttribute("name", "CustomizedCategoryName[]");
+        //            inp.setAttribute("value", dataNew[i]);
+        //            td.innerHTML = dataNew[i];
+        //            Tr.appendChild(td);
+        //            Tr.appendChild(inp);
+        //        }
+        //        /*產生刪除按鈕在modal的畫面*/
+        //        let td = document.createElement('td');
+        //        td.innerHTML = `<button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
+        //        /*let a = td.children[0];*/
+        //        let a = td;
+        //        a.addEventListener('click', () => {
+
+        //            /*let parent = a.parentNode.parentNode;*/
+        //            let parent = a.parentNode;
+        //            parent.remove();
+        //        })
+        //        Tr.appendChild(td);
+        //        tbody.appendChild(Tr);
+        //        clickValue();
+        //    /*他使用hide把增加在modal的tr刪掉*/
+
+
+        //    }
+        //    else {
+        //        alert("項目,數量和價格不可為空值");
+        //    }
+
+        //})
 
 
     </script>

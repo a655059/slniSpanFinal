@@ -113,7 +113,6 @@
                         @Model.avgCommentStar
                     </div>
                 }
-                
                 <div class="ms-1">
                     <span>(</span><a href="#">@Model.commentCount</a><span>)</span>
                 </div>
@@ -488,7 +487,7 @@
 
 
         Save.addEventListener("click", () => {
-            if (!Reason.value|| ReportPic == null) {
+            if (!Reason.value || ReportPic == null) {
                 alert("所有欄位皆是必填!");
             }
             else {
@@ -500,13 +499,14 @@
                     ReportPic: ReportPic.split(',')[1]
                 }
                 jQuery.postJSON = function (url, data, callback) {
-                jQuery.post(url, data, callback, "json");};
-            console.log(Report);
-            $.postJSON("/Item/ReportCreate", { d: Report }, function () { });
-            alert("檢舉成功");
-            $("#reportmodal").modal('hide');
-        }
-         })
+                    jQuery.post(url, data, callback, "json");
+                };
+                console.log(Report);
+                $.postJSON("/Item/ReportCreate", { d: Report }, function () { });
+                alert("檢舉成功");
+                $("#reportmodal").modal('hide');
+            }
+        })
 
 
     </script>

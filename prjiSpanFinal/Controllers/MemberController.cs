@@ -19,6 +19,10 @@ using MimeKit;
 using prjiSpanFinal.Models.OrderReq2;
 using Org.BouncyCastle.Utilities;
 using prjiSpanFinal.Models.LikeReq;
+using prjiSpanFinal.ViewModels.Home;
+using prjiSpanFinal.Models.CategoryItemSort;
+using prjiSpanFinal.ViewModels.Category;
+using prjiSpanFinal.ViewModels.Header;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -26,6 +30,7 @@ namespace prjiSpanFinal.Controllers
     {
         private readonly IWebHostEnvironment _host;
         private readonly iSpanProjectContext _context;
+        
         public MemberController(iSpanProjectContext context, IWebHostEnvironment host) 
         {
             _host = host;
@@ -102,6 +107,7 @@ namespace prjiSpanFinal.Controllers
                 iSpanProjectContext db = new iSpanProjectContext();
                 MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 //acc = mem.memACC;
+                acc.Birthday = mem.Birthday;
                 if (mem.gender == "female")
                 {
                     acc.Gender = 2;
@@ -132,40 +138,42 @@ namespace prjiSpanFinal.Controllers
                     }
                     acc.MemPic = imgByte;
                 }
-                else if (mem.regionName != null)
+                if (mem.regionName != null)
                 {
                     int countryid = db.CountryLists.FirstOrDefault(p => p.CountryName == countryName).CountryId;
                     acc.RegionId = db.RegionLists.FirstOrDefault(p => p.RegionName == mem.regionName && p.CountryId== countryid).RegionId;
                 }
-                else if (mem.Name != null) { acc.Name = mem.Name; }
-                else if (mem.Address != null) { acc.Address = mem.Address; }
-                else if (mem.Phone != null) { acc.Phone = mem.Phone; }
-                else if (mem.BackUpEmail != null) { acc.BackUpEmail = mem.BackUpEmail; } 
-                else if (mem.Email != null) { acc.Email = mem.Email; }
-                else 
+                if (mem.Name == null)
                 {
                     acc.Name = "";
-                    acc.Address = "";
-                    acc.Phone = "";
-                    acc.BackUpEmail = "";
-                    acc.Email = "";
-                    acc.Birthday = mem.Birthday;
                 }
+                else { acc.Name = mem.Name; }
+
+                if(mem.NickName == null) { acc.NickName = ""; }
+                else { acc.NickName = mem.NickName; }
+
+                if(mem.Address == null) { acc.Address = ""; }
+                else { acc.Address = mem.Address; }
+
+                if (mem.BackUpEmail == null) { acc.BackUpEmail = ""; }
+                else { acc.BackUpEmail = mem.BackUpEmail; }
+
+                if (mem.Email == null) { acc.Email = ""; }
+                else { acc.Email = mem.Email; }
+
+                if (mem.Phone == null) { acc.Phone = ""; }
+                else { acc.Phone = mem.Phone; }
                 db.SaveChanges();
+                HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
+                return RedirectToAction("Login");
                 //刷新
-                acc = _context.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
-                string json = JsonSerializer.Serialize(mem);
-                HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json); //塞新資料到session
-                return View(acc);
+                //acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
+                //string json = JsonSerializer.Serialize(acc);
+                //HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json); //塞新資料到session
+                //return View(acc);
             }
 
         }
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-
         public IActionResult Create()
         {
             return View();
@@ -220,11 +228,24 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("LoginSuccess");
         }
-        public FileResult ShowPhoto(int id)
+        public IActionResult ShowPhoto(int id)
         {
             MemberAccount member = _context.MemberAccounts.Find(id);
+            MemberAccount mymempic = new MemberAccount();
+            if (member.MemPic != null)
+            {
             byte[] content = member.MemPic;
             return File(content, "image/jpeg");
+            }
+            else
+            {
+            string pName = "/img/Member/nopicmem.jpg";
+            string path = _host.WebRootPath + pName;
+            byte[] content = System.IO.File.ReadAllBytes(path);
+            return File(content, "image/jpg");
+            }
+
+
         }
 
         public IActionResult Like()
@@ -238,32 +259,64 @@ namespace prjiSpanFinal.Controllers
                 iSpanProjectContext dbcontext = new iSpanProjectContext();
                 string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-                var mylike = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => new MylikeViewModel()
+                
+                var mylike = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => p.Product).ToList();
+                if (mylike != null)
                 {
-
-                    ProductName = p.Product.ProductName,
-                    ProductID = p.ProductId,
-                    memberID = p.MemberId,
-                    MylikeID = p.LikeId,
-                    Quantity = p.Product.ProductDetails.Select(q => q.Quantity).FirstOrDefault(),
-                    ProductDetailID = p.Product.ProductDetails.Select(q => q.ProductDetailId).FirstOrDefault(),
-                    Unitprice = p.Product.ProductDetails.Select(q => q.UnitPrice).ToList(),
-                }) ;
-                return View(mylike);
+                var list = (new MyLikeFactory()).toShowItem(mylike);
+                    var mylikecategorylist = new MyLikeCategoryIndex();
+                    mylikecategorylist.MyLikeShowItem = list;
+                    return View(mylikecategorylist);
+                }
+                else
+                {
+                    return RedirectToAction("index", "home");
+                }
             }
         }
-        public IActionResult AllLike(int sort, int tab)
+        public IActionResult AllLike(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        {
+            //if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            //{
+            //    return RedirectToAction("Login");   //如果沒有登入則要求登入
+            //}
+            //iSpanProjectContext dbcontext = new iSpanProjectContext();
+            //int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            //var mylike = dbcontext.Likes.Where(p => p.MemberId == id).Select(p => p.Product).ToList();
+            //if (mylike != null)
+            //{
+            //var list = (new MyLikeFactory()).toShowItem(mylike);
+            //return Json(list);
+            //}
+            //else
+            //{
+            //    //string showNoItem = "抱歉!您還沒有按讚任何商品";
+            //    //(new MyLikeShowItem()).MylikeIsNull= showNoItem;
+            //    return Json(new MyLikeShowItem().MylikeIsNullorNOT);
+            //}
+            return Json(new LikeSortReq().MyLikeSortItems(BigTypeId, filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
+
+
+
+        }
+        public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        {
+
+            return Json(new SortRequest().SortItems(BigTypeId, filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
+        }
+        public IActionResult Coupon()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 return RedirectToAction("Login");   //如果沒有登入則要求登入
             }
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return Json(new LikeSortReq().SortTab(sort, tab, id));
-            
-        }
-        public IActionResult Coupon()
-        {
+            var CouponWallet = dbcontext.CouponWallets.Where(p => p.MemberId == id).Select(p => p.CouponId).ToList();
+            if (CouponWallet != null)
+            {
+
+            }
             return View();
         }
         public IActionResult Order()
@@ -406,16 +459,16 @@ namespace prjiSpanFinal.Controllers
             if (!String.IsNullOrEmpty(mempass)) { 
             MimeMessage message = new MimeMessage();
             BodyBuilder builder = new BodyBuilder();
-            var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+            //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
             //==>這裡可以放入圖片路徑
 
             builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            //builder.HtmlBody = "您的密碼為:"+mempass+"\n"+ $"當前時間:{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
-            //=>內容
+            builder.HtmlBody = "您的新密碼為:" + mempass + "\n" + $"當前時間:{DateTime.Now:yyyy-MM-dd HH:mm:ss}"+"請使用新密碼重新登入";
+                //=>內容
 
-            message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
+                message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
             message.To.Add(new MailboxAddress("詹勳棋", "harry80011@gmail.com"));
-            message.Subject = "忘記密碼"; //==>標題
+            message.Subject = "[C#蝦到爆商城(ShopDaoBao)]忘記密碼通知信"; //==>標題
             message.Body = builder.ToMessageBody();
 
 
@@ -435,10 +488,73 @@ namespace prjiSpanFinal.Controllers
             
             return RedirectToAction("forgetPw");
         }
+        
         public IActionResult ChangePw()
         {
-            return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                iSpanProjectContext db = new iSpanProjectContext();
+                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+                int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件                
+                string dbPW = db.MemberAccounts.FirstOrDefault(m => m.MemberId == memID).MemberPw;
+                if (dbPW!=null)
+                {
+                    return View();
+                }
+                return RedirectToAction("Index","home");
+            }
+
         }
+        //目前密碼
+        public IActionResult CheckNowPW(string txtPW)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                iSpanProjectContext db = new iSpanProjectContext();
+                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+                int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件                
+                string dbPW = db.MemberAccounts.FirstOrDefault(m => m.MemberId == memID).MemberPw;
+                if (dbPW == txtPW)
+                {
+                    return Content("True", "text/plain", Encoding.UTF8);
+                }
+                return Content("False", "text/plain", Encoding.UTF8);
+            }
+
+        }
+        //新密碼
+        public IActionResult ChangeNewPW(string txtNewPW)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                if (txtNewPW != null)
+                {
+                    iSpanProjectContext db = new iSpanProjectContext();
+                    string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                    int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId;
+                    var mem = db.MemberAccounts.FirstOrDefault(m => m.MemberId == memID);
+                    mem.MemberPw = txtNewPW;
+                    db.SaveChanges();
+                    return Content("OK", "text/plain", Encoding.UTF8);
+                }
+                return Content("NO", "text/plain", Encoding.UTF8);
+            }
+
+        }
+
+
         public IActionResult City()
         {
             var cities = _context.CountryLists.Select(a => a.CountryName).Distinct();

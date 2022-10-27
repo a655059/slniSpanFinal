@@ -1,0 +1,67 @@
+﻿@model prjiSpanFinal.Models.OfficialEventList
+
+@{
+    ViewData["Title"] = "EventCreate";
+}
+
+<h1>建立活動</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EventCreate" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="OfficialEventListId" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                活動名稱
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                開始日期
+                <input asp-for="StartDate" class="form-control" type="date" />
+            </div>
+            <div class="form-group">
+                結束日期
+                <input asp-for="EndDate" class="form-control" type="date" />
+            </div>
+            <div class="form-group">
+                開放參加日期
+                <input asp-for="JoinStartDate" class="form-control" type="date" />
+                <span asp-validation-for="JoinStartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                截止參加日期
+                <input asp-for="JoinEndDate" class="form-control" type="date" />
+                <span asp-validation-for="JoinEndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                活動照片
+                <input id="EventPic" asp-for="EventPic" class="form-control" type="file" />
+                 <p> 圖片預覽</p>
+                 <img id="Preview" style="max-height:200px;" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="確認" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="EventList" class="btn btn-danger mt-1">取消</a>
+</div>
+
+@section Scripts {
+    <script>
+        //圖片預覽
+        $('#EventPic').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#Preview').attr('src', objectURL);
+            console.log()
+        });
+    </script>
+    }

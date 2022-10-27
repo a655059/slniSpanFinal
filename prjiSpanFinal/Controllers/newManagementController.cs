@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MailKit.Search;
+using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Crypto.Engines;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.newManagement;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using X.PagedList;
 
@@ -149,7 +151,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.ProductDetails
                     where d.ProductDetailId == id
                     select d;
-            var X=D.First();
+            var X = D.First();
             var G = from g in db.Products
                     where g.ProductId == D.First().ProductId
                     select g;
@@ -159,9 +161,9 @@ namespace prjiSpanFinal.Controllers
             if (K.Count() - 1 > 0)
             {
                 db.ProductDetails.Remove(D.First());
-            }    
+            }
             db.SaveChanges();
-            return RedirectToAction("ProductDetailList", new { id=X.ProductId });
+            return RedirectToAction("ProductDetailList", new { id = X.ProductId });
         }
         #endregion
         #region MemberRegion
@@ -418,8 +420,8 @@ namespace prjiSpanFinal.Controllers
             if (id != null)
             {
                 var Qs = (from i in db.OrderDetails
-                         where i.OrderId == id
-                         select i);
+                          where i.OrderId == id
+                          select i);
                 var PDName = (from u in db.ProductDetails select u).ToList();
                 var PName = (from x in db.Products select x).ToList();
                 var SSName = (from s in db.ShippingStatuses select s).ToList();
@@ -436,13 +438,13 @@ namespace prjiSpanFinal.Controllers
                                               where ss.ShippingStatusId == Q.ShippingStatusId
                                               select ss.ShipStatusName).First(),
                         ProductName = (from x in PName
-                                      join xs in PDName on x.ProductId equals xs.ProductId
-                                      where xs.ProductDetailId == Q.ProductDetailId
-                                      select x.ProductName).First(),
+                                       join xs in PDName on x.ProductId equals xs.ProductId
+                                       where xs.ProductDetailId == Q.ProductDetailId
+                                       select x.ProductName).First(),
                     };
                     A.Add(a);
                 }
-                
+
                 return View(A);
             }
             else
@@ -476,14 +478,14 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             List<CReportListViewModel> list = new();
             IQueryable<Report> Reps = null;
-            if (keyword== null)
+            if (keyword == null)
             {
                 Reps = db.Reports.Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Reps = db.Reports.
-                     Where(i => i.ReportId == key||i.ReporterId==key).
+                     Where(i => i.ReportId == key || i.ReporterId == key).
                      Select(e => e);
             }
             else
@@ -499,14 +501,14 @@ namespace prjiSpanFinal.Controllers
             {
                 CReportListViewModel model = new()
                 {
-                    Report=p,
+                    Report = p,
 
                     ProductName = (from i in ProductName
                                    where i.ProductId == p.ProductId
                                    select i.ProductName).First(),
                     ReportTypeName = (from i in ReportTypeName
-                                     where i.ReportTypeId == p.ReportTypeId
-                                     select i.ReportTypeName).First(),
+                                      where i.ReportTypeId == p.ReportTypeId
+                                      select i.ReportTypeName).First(),
                     ReportStatusName = (from i in ReportStatusName
                                         where i.ReportStatusId == p.ReportStatusId
                                         select i.ReportStatusName).First(),
@@ -542,7 +544,7 @@ namespace prjiSpanFinal.Controllers
         {
             var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
-            Q.ReportStatusId =1 ;
+            Q.ReportStatusId = 1;
             db.SaveChanges();
             return Content("1");
         }
@@ -550,7 +552,7 @@ namespace prjiSpanFinal.Controllers
         {
             var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
-            Q.ReportStatusId =2;
+            Q.ReportStatusId = 2;
             db.SaveChanges();
             return Content("1");
         }
@@ -575,10 +577,10 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             var prod = from p in db.Products
-                       where p.ProductId ==Q.ProductId
+                       where p.ProductId == Q.ProductId
                        select p.ProductId;
             var G = db.Products.FirstOrDefault(i => i.ProductId == prod.First());
-            G.ProductStatusId =1 ;
+            G.ProductStatusId = 1;
             Q.ReportStatusId = 4;
             db.SaveChanges();
             return Content("1");
@@ -618,17 +620,17 @@ namespace prjiSpanFinal.Controllers
             else if (DateTime.TryParse(keyword, out DateTime key2))
             {
                 Coupons = db.Coupons.
-                     Where(i => i.StartDate == key2||i.ExpiredDate==key2||i.ReceiveStartDate==key2||i.ReceiveEndDate==key2).
+                     Where(i => i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2).
                      Select(e => e);
             }
             else
             {
                 Coupons = db.Coupons.
-                    Where(i => i.CouponCode.Contains(keyword)||i.CouponName.Contains(keyword)).
+                    Where(i => i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword)).
                     Select(e => e); ;
             }
-        
-            foreach(var coupon in Coupons)
+
+            foreach (var coupon in Coupons)
             {
                 list.Add(coupon);
             }
@@ -668,6 +670,347 @@ namespace prjiSpanFinal.Controllers
             db.Coupons.Add(coupon);
             db.SaveChanges();
             return RedirectToAction("CouponList");
+        }
+        public IActionResult CouponEdit()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CouponEdit(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("CouponList");
+        }
+        #endregion
+        #region ArgumentRegion
+        public List<CArgumentViewModel> GetArgumentsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<CArgumentViewModel> list = new();
+            IQueryable<Argument> Arguments = null;
+            if (keyword == null)
+            {
+                Arguments = db.Arguments.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Arguments = db.Arguments.
+                     Where(i => i.ArgumentId == key || i.OrderId == key).
+                     Select(e => e);
+            }
+            else
+            {
+                Arguments = db.Arguments.
+                    Where(i => i.ReasonText.Contains(keyword)).
+                    Select(e => e); ;
+            }
+            var ArgumentTypeName = (from i in db.ArgumentTypes select i).ToList();
+
+            var ArgumentReasonName = (from i in db.ArgumentReasons select i).ToList();
+            foreach (var p in Arguments)
+            {
+                CArgumentViewModel model = new()
+                {
+                    Argument = p,
+                    ArgumentReasonName = (from i in ArgumentReasonName
+                                          where i.ArgumentReasonId == p.ArgumentReasonId
+                                          select i.ArgumentReasonName).First(),
+                    ArgumentTypeName = (from i in ArgumentTypeName
+                                        where i.ArgumentTypeId == p.ArgumentTypeId
+                                        select i.ArgumentTypeName).First(),
+                };
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<CArgumentViewModel> GetArgumentsPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetArgumentsFromDatabase(keyword);
+            IPagedList<CArgumentViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult ArgumentList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetArgumentsPagedProcess(page, pageSize, keyword);
+            var PList = GetArgumentsPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult ArgumentDelete(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from i in db.Arguments
+                    where i.ArgumentId == id
+                    select i;
+            var g=G.First();
+            g.ArgumentTypeId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult ArgumentApprove(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from i in db.Arguments
+                    where i.ArgumentId == id
+                    select i;
+            var g = G.First();
+            var K = (from k in db.Orders
+                    join m in db.MemberAccounts on k.MemberId equals m.MemberId
+                    where k.OrderId == g.OrderId
+                    select m).First();
+            K.MemStatusId = 4;
+            g.ArgumentTypeId = 6;
+            try
+            {
+                db.SaveChanges();
+                return Content(K.MemberId.ToString());
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+           
+        }
+
+        #endregion
+        #region EventRegion
+        public IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
+        {
+            var db = new iSpanProjectContext();
+            IQueryable<OfficialEventList> Prods = null;
+            if (keyword == null)
+            {
+                Prods = db.OfficialEventLists.Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Prods = db.OfficialEventLists.
+                     Where(i => i.OfficialEventListId == key).
+                     Select(e => e);
+            }
+            else
+            {
+                Prods = db.OfficialEventLists.
+                    Where(i => i.EventName.Contains(keyword)).
+                    Select(e => e); ;
+            }
+            return Prods;
+        }
+        protected IPagedList<OfficialEventList> GetEventsPagedProcess(int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetEventsFromDatabase(keyword);
+            IPagedList<OfficialEventList> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult EventList(string keyword, int? page = 1)
+        {
+            //每頁幾筆
+            const int pageSize = 3;
+            //處理頁數
+            ViewBag.Prods = GetEventsPagedProcess(page, pageSize, keyword);
+            var PList = GetEventsPagedProcess(page, pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult EventCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EventCreate(CCreateEventViewModel ofevent)
+        {
+            iSpanProjectContext db = new();
+            OfficialEventList Ev = new()
+            {
+                EndDate = ofevent.EndDate,
+                EventName = ofevent.EventName,
+                JoinEndDate = ofevent.JoinEndDate,
+                JoinStartDate = ofevent.JoinStartDate,
+                OfficialEventListId = ofevent.OfficialEventListId,
+                StartDate = ofevent.StartDate,
+                SubOfficialEventLists = ofevent.SubOfficialEventLists,
+            };
+            using (var ms = new MemoryStream())
+            {
+                ofevent.EventPic.CopyTo(ms);
+                var filbytes = ms.ToArray();
+                Ev.EventPic = filbytes;
+            }
+            db.OfficialEventLists.Add(Ev);
+            db.SaveChanges();
+            SubOfficialEventList sub = new()
+            {
+                Discount = 1,
+                IsFreeDelivery = false,
+                OfficialEventListId = Ev.OfficialEventListId,
+                SubEventName = "預設活動",
+            };
+            db.SubOfficialEventLists.Add(sub);
+            db.SaveChanges();
+            return RedirectToAction("EventList");
+        }
+        public IActionResult EventEdit(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from g in db.OfficialEventLists where g.OfficialEventListId == id select g;
+            var ofevent = G.First();
+            CCreateEventViewModel Ev = new()
+            {
+                EndDate = ofevent.EndDate,
+                EventName = ofevent.EventName,
+                JoinEndDate = ofevent.JoinEndDate,
+                JoinStartDate = ofevent.JoinStartDate,
+                OfficialEventListId = ofevent.OfficialEventListId,
+                StartDate = ofevent.StartDate,
+                SubOfficialEventLists = ofevent.SubOfficialEventLists
+            };
+            return View(Ev);
+        }
+        [HttpPost]
+        public IActionResult EventEdit(CCreateEventViewModel ofevent)
+        {
+            iSpanProjectContext db = new();
+            OfficialEventList Ev = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == ofevent.OfficialEventListId);
+
+            Ev.EndDate = ofevent.EndDate;
+            Ev.EventName = ofevent.EventName;
+            Ev.JoinEndDate = ofevent.JoinEndDate;
+            Ev.JoinStartDate = ofevent.JoinStartDate;
+            Ev.OfficialEventListId = ofevent.OfficialEventListId;
+            Ev.StartDate = ofevent.StartDate;
+            Ev.SubOfficialEventLists = ofevent.SubOfficialEventLists;
+            using (var ms = new MemoryStream())
+            {
+                ofevent.EventPic.CopyTo(ms);
+                var filbytes = ms.ToArray();
+                Ev.EventPic = filbytes;
+            }
+            db.SaveChanges();
+            return RedirectToAction("EventList");
+        }
+        public IActionResult EventDelete(int? id)
+        {
+            iSpanProjectContext db = new();
+            var E = from e in db.OfficialEventLists
+                    where e.OfficialEventListId == id
+                    select e;
+            var Ev = E.First();
+            Ev.EndDate = DateTime.Now.AddDays(-1);
+            db.SaveChanges();
+            return Content(Ev.EndDate.ToString("yyyy/MM/dd"));
+        }
+        #endregion
+        #region subEventRegion
+        public IActionResult subEventList(int id)
+        {
+            iSpanProjectContext db = new();
+            List<CsubEventViewModel> list = new();
+            var Q = from i in db.SubOfficialEventLists
+                    where i.OfficialEventListId == id
+                    select i;
+            var en = (from o in db.OfficialEventLists select o).ToList();
+            foreach (var i in Q)
+            {
+                CsubEventViewModel model = new()
+                {
+                    SubOfficialEventList = i,
+                    OfficialEventName = (from s in en
+                                         where s.OfficialEventListId == i.OfficialEventListId
+                                         select s.EventName).First(),
+                };
+                list.Add(model);
+            }
+            var A=Q.First();
+            ViewBag.Id = A.OfficialEventListId;
+            return View(list);
+        }
+        public IActionResult subEventCreate(int? id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult subEventCreate(SubOfficialEventList ofevent)
+        {
+            iSpanProjectContext db = new();
+            db.SubOfficialEventLists.Add(ofevent);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
+            }
+            return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
+        }
+        public IActionResult subEventDelete(int? id)
+        {
+            var db = (new iSpanProjectContext());
+            var q = from i in db.SubOfficialEventLists
+                    where i.SubOfficialEventListId == id
+                    select i;
+            var X = q.First();
+            var G = from gg in db.OfficialEventLists
+                    where gg.OfficialEventListId == q.First().OfficialEventListId
+                    select gg.OfficialEventListId;
+            var g = from i in db.SubOfficialEventLists
+                    where i.OfficialEventListId == G.First()
+                    select i;
+            if (g.Count() - 1 > 0)
+            {
+                db.SubOfficialEventLists.Remove(q.First());
+                db.SaveChanges();
+                return Content("1");
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+        public IActionResult subEventEdit(int? id)
+        {
+            ViewBag.Id = id;
+            iSpanProjectContext db = new();
+            var q = from i in db.SubOfficialEventLists
+                    where i.SubOfficialEventListId == id
+                    select i;
+            var Q=q.First();
+            return View(Q);
+        }
+        [HttpPost]
+        public IActionResult subEventEdit(SubOfficialEventList ofevent)
+        {
+            iSpanProjectContext db = new();
+            var ofeven=ofevent;
+            var q = (from i in db.SubOfficialEventLists
+                    where i.SubOfficialEventListId == ofevent.SubOfficialEventListId
+                    select i).First();
+            q.OfficialEventListId = ofevent.OfficialEventListId;
+            q.SubEventName = ofevent.SubEventName;
+            q.Discount = ofevent.Discount;
+            q.IsFreeDelivery = ofevent.IsFreeDelivery;
+            db.SaveChanges();
+            return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
         }
         #endregion
     }

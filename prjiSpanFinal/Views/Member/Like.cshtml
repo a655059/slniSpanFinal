@@ -1,10 +1,16 @@
 ﻿@addTagHelper *, prjiSpanFinal
-@model IEnumerable<prjiSpanFinal.ViewModels.Member.MylikeViewModel>
+@model prjiSpanFinal.ViewModels.Category.MyLikeCategoryIndex
+@using prjiSpanFinal.ViewModels
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+@using System.Linq;
 @section Styles
 {
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/Item/ItemIndex.css" />
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
+
 }
 <style>
     /*        .list a:link{text-decoration:none;}
@@ -38,7 +44,40 @@
     }
 </style>
 
+@*@{
+        var starCount=0;
+        int memberID = 0;
+        int productID = 0;
+        int productDetialID = 0;
+        int orderdetailID = 0;
+        int salesCount = 0;
+        int statsID = 0;
+        if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+        {
+            string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+            MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
+            iSpanProjectContext db = new iSpanProjectContext();
+            memberID = loginMember.MemberId;
+            productID = db.Products.FirstOrDefault(p => p.MemberId == memberID).ProductId;
+            productDetialID = db.ProductDetails.FirstOrDefault(p => p.ProductId == productID).ProductDetailId;
+            orderdetailID = db.OrderDetails.FirstOrDefault(p => p.ProductDetailId == productDetialID).OrderDetailId;
 
+            starCount = db.Comments.Where(p => p.OrderDetailId == orderdetailID).Select(p=>(int)p.CommentStar).FirstOrDefault();
+
+
+            statsID = db.Orders.FirstOrDefault(p => p.MemberId == memberID).StatusId;
+            //statsID = db.OrderStatuses.FirstOrDefault(p => p.OrderStatusId == 7).OrderStatusId;
+            if (statsID == 7)
+            {
+                salesCount = db.OrderDetails.FirstOrDefault(p => p.OrderDetailId == orderdetailID).Quantity;
+            }
+            //if (starCount = null)
+            //{
+            //    starCount = 0;
+            //}
+        }
+
+    }*@
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">按讚好物</h2>
 <div class="row">
@@ -48,68 +87,137 @@
             <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
             <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
         </div>
-        <ul class="nav nav-tabs">
-            <li class="nav-item" id="PDall">
-                <a class="nav-link active ordernavtabs" aria-current="page" href="#">所有商品</a>
-                <input type="hidden" class="ordershipperstatus" value="0" />
-            </li>
-            <li class="nav-item" id="PDstage">
-                <a class="nav-link ordernavtabs" href="#">狀態</a>
-                <input type="hidden" class="ordershipperstatus" value="2" />
-            </li>
-            <li class="nav-item" id="PDdiscount">
-                <a class="nav-link ordernavtabs" href="#">折扣中</a>
-                <input type="hidden" class="ordershipperstatus" value="3" />
-            </li>
-            <li class="nav-item" id="PDclass">
-                <a class="nav-link ordernavtabs" href="#">類別</a>
-                <input type="hidden" class="ordershipperstatus" value="4" />
-            </li>
-        </ul>
+
+        <div class="itembody">
+            <div class="itembody-filter d-flex align-items-center justify-content-between">
+                <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                    <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder1">
+                        全部商品
+                        <input type="hidden" value="1" />
+                    </a>
+
+                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        狀態
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder6">
+                                <i></i>
+                                有效商品
+                                <input type="hidden" value="6" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder7">
+                                <i></i>
+                                無效商品
+                                <input type="hidden" value="7" />
+                            </a>
+                        </li>
+                    </ul>
+
+                    <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
+                        熱銷商品
+                        <input type="hidden" value="3" />
+                    </a>
+
+                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        價格排序
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder4">
+                                <i class="fa fa-arrow-down"></i>
+                                價格：由高至低
+                                <input type="hidden" value="4" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder5">
+                                <i class="fa fa-arrow-up"></i>
+                                價格：由低至高
+                                <input type="hidden" value="5" />
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="itemcol" id="OriginShowItem">
+
+            @{
+                if (Model.MyLikeShowItem.Count>0)
+                {
+
+                    @await Component.InvokeAsync("MyLikeCategoryShow", new { shopProduct = Model.MyLikeShowItem });
+
+                }
+                else
+                {
+                    <div>
+                        抱歉!您還沒有任何按讚商品
+                    </div>
+                }
+            }
+
+        </div>
+
+
+        @*@{ foreach (var item in Model)
+            {
+                <input type="hidden" name="Memberid" value="@item.MemberID" id="@item.MemberID">
+
+            }
+        }
         <figure style="background-color:#FCFCFC">
             @{
                 var count = 0;
                 foreach (var pd in Model)
                 {
                     count++;
+                    string productLink = Url.Content("~/Item/Index") + "?id=" + pd.Product.ProductId;
                     <figcaption style="font-size:15px; color: #8E8E8E; "><a>@count</a>件商品</figcaption>
                     <div class="aaa d-flex flex-wrap">
                         @for (int i = 0; i < count; i++)
                         {
                             <div class="sellsitem">
                                 <div>
-                                    <a href="/Item/Index/2113">
-                                        <img src="~/img/product01.png" class="cardImg" />
+                                    <a href="@productLink">
+                                        @if (pd.Pic != null)
+                                        {
+                                            var base64Image = Convert.ToBase64String(pd.Pic);
+                                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+                                            <img src="@source" class="cardImg" alt="..." />
+                                        }
                                     </a>
                                 </div>
                                 <div class="px-1 d-flex flex-column justify-content-between">
                                     <div class="cardTitleBox">
-                                        <div class="cardTitle">@pd.ProductName</div>
+                                        <div class="cardTitle">@pd.Product.ProductName</div>
                                     </div>
-                                    @{ if (pd.Unitprice.Count == 1)
+                                    @{ if (pd.Price.Count == 1)
                                         {
-                                            <div class="cardPrice">$@decimal.Round(pd.Unitprice[0])</div>
+                                            <div class="cardPrice">$@decimal.Round(pd.Price[0])</div>
 
                                         }
                                         else
                                         {
-                                            <div class="cardPrice">$@decimal.Round(pd.Unitprice[0])-$@decimal.Round(pd.Unitprice[1])</div>
+                                            <div class="cardPrice">$@decimal.Round(pd.Price[0])-$@decimal.Round(pd.Price[1])</div>
 
                                         }
                                     }
-                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
                                         <div class="starBox mt-1">
                                             <div class="d-flex justify-content-start">
                                                 <div class="starImg">
                                                     <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                                                 </div>
-                                                <div class="text-black">4.5</div>
+                                                <div class="text-black">@pd.starCount</div>
                                             </div>
-                                            <div class="text-black-50">已賣出<span>100</span></div>
                                         </div>
-                                        @*<div>
-                <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
-            </div>*@
+                                        <div class="text-end text-black-50 sells">已賣出<span>@pd.salesVolume</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -118,24 +226,54 @@
                 }
             }
 
-        </figure>
+        </figure>*@
     </div>
 </div>
 
 @section Scripts
 {
     <script>
-    const pd狀態 = document.querySelector("#PDstage")
-    const pd折扣 = document.querySelector("#PDdiscount")
-        const pd類別 = document.querySelector("#PDclass")
-        let tabid = 0;
+        let filter = [];
+        let priceMin = 0;
+        let priceMax = 999999999;
+
+        let SortOrder = 1;
+        let pages = 0;
+
+
+
+        @*pd全部.addEventListener("click", () => {
+            $.getJSON("/Member/AllLike", {}, function (data) {
+                $(".aaa").html("");
+                let a = "@Url.Content("~/img/product01.png")";
+                let str=` <div class="border w-25">
+                    <div>
+                        <img src='${a}' class="w-100" />
+                    </div>
+                    <div class="px-1 d-flex flex-column justify-content-between">
+                        <div class="cardTitle">商品:筆電</div>
+                        <div class="cardPrice">價格:$25000</div>
+                        <div class="cardInfo d-flex justify-content-between align-items-end">
+                            <div class="d-flex justify-content-start flex-column mt-1">
+                                <div class="text-black-50">銷售存量<span>100</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+
+                $(".aaa").html(str);
+                console.log(data);
+
+            }
+
+            )
+        })
 
     pd狀態.addEventListener("click", () => {
-        $("#PDstage").children().addClass("active")
-        $("#PDall").children().removeClass("active")
         let str = ""
         for (let i = 1; i < 7; i++) {
             let a = "@Url.Content("~/img/product01.png")";
+            $(".aaa").html("");
             str += ` <div class="border w-25">
                     <div>
                         <img src='${a}' class="w-100" />
@@ -152,19 +290,81 @@
                 </div>`
         }
         $(".aaa").html(str);
-    });
+    });*@
+        $(".SortOrder").click(function (event) {
+            let target = $(event.target);
+            SortOrder = target.find("input").val();
+            CallgetJSON();
+        });
 
-        $(".ordernavtabs").click(function (event) {
-            tabid = $(event.currentTarget).siblings("input").val();
-            $(event.currentTarget).addClass("active");
-            $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-            //$.getJSON(`/Member/SortOrder`, { sort: sortmethod, tab: tabid }, function (data) {
-            //    $("#orderlistbody").html("");
-            //    for (let i = 0; i < data.length; i++) {
-            //        $("#orderlistbody").append(OrderListItem(data[i]));
-            //    }
-            //});
-        })
+
+
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+        //$(".ordernavtabs").click(function (event) {
+        //    tabid = $(event.currentTarget).siblings("input").val();
+        //    $(event.currentTarget).addClass("active");
+        //    $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+        //})
+        function CallgetJSON() {
+            $.postJSON(`/Member/AllLike`, { BigTypeId: BigtypeId, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+                $("#OriginShowItem").html("");
+                if (data.length > 0) {
+                    $("#OriginShowItem").append(Items(data));
+                }
+                else {
+                    $("#OriginShowItem").html("<div>暫待新增商品</div>");
+                }
+            })
+        }
+
+                function Items(data) {
+            let item = "";
+            for (let i = 0; i < data.length; i++) {
+                let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
+                item = item+  `<div class="sellsitem">
+                           <a class="linknoline" href="${productLink}">`;
+                if (data[i].pic != null)
+                {
+
+                    item = item + `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
+                }
+                else
+                {
+                    item = item +` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
+                }
+                item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
+<div class="cardTitleBox">
+                        <div class="cardTitle"> ${ data[i].product.productName}</div></div>`
+                    if (data[i].price.Count == 1)
+                    {
+                        item = item + `<div class="cardPrice">${Math.round(data[i].price[0])}</div>`
+                    }
+                    else
+                    {
+                        item = item + `<div class="cardPrice">$`+`${Math.round(data[i].price[0])} - $`+`${Math.round(data[i].price[1])}</div>`
+                    }
+
+            item = item +
+                `<div class="cardInfo d-flex justify-content-between flex-row">
+                    <div class="starBox mt-1">
+                        <div class="d-flex justify-content-start">
+                            <div class="starImg">
+                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                            </div>
+                            <div class="text-black">${data[i].starCount.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="text-end text-black-50 sells">已賣出<span>${data[i].salesVolume}</span></div>
+                </div>
+            </div>
+        </div>
+    `}
+            return item;
+        }
+
+
 
     </script>
 }

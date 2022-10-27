@@ -4,10 +4,13 @@
 @addTagHelper *, prjiSpanFinal
 @{
     ViewData["Title"] = "賣場";
+
+
 }
 @section Styles{
-    <link href="~/css/HomeStyle.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/ItemIndex.css" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
 
     <style>
         .dashed-divider {
@@ -41,7 +44,7 @@
                 <img src="@source" class="cardImg" alt="..." width="120" />
             </div>
 
-           
+
             <div class="p-2">@Model.SellerName 的賣場</div>
 
             <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
@@ -49,13 +52,13 @@
 
             <div class="row">
                 <div class="col">
-                    
+
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#f30959">
                         最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                     </button>
                 </div>
                 <div class="col">
-                   
+
                     <button class="btn  btn-sm text-white rounded-5" style="background-color:#fe6502">
                         蝦蝦通<i class="fa-solid fa-shrimp"></i>
                     </button>
@@ -71,6 +74,12 @@
             </h6>
 
             <ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span data-feather="file" class="align-text-bottom"></span>
+                        未分類
+                    </a>
+                </li>
                 @foreach (var item in Model.CourtCategoryName)
                 {
                     <li class="nav-item">
@@ -89,18 +98,18 @@
 
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <div class="container  ">
-                    <div class="text-center text-black-50 p-4 mb-5 " style="background-color:#f6e529">
+                    <div class="rounded text-center text-black-50 p-4 mb-5 " style="background-color:#f6e529">
 
                         <h1 class="fw-bolder" style="font-size:3rem">@Model.SellerName 賣場相關資料</h1>
 
                         <div class="board-text">
                             @Model.CourtDescription
-                           
+
                         </div>
 
                     </div>
 
-                    <h6 class="display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
+                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
                         <span>精選商品</span>
                         <a class="link-secondary" href="#" aria-label="Add a new report">
                             <span data-feather="plus-circle" class="align-text-bottom"></span>
@@ -111,81 +120,107 @@
 
                         @foreach (var item in Model.CardProduct)
                         {
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col">
-                                        @*<img src="~/img/product04.png" width="150" />*@
-                                        @{
 
-                                            var base64Image1 = Convert.ToBase64String(item.Producpic);
-                                            var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
 
-                                        }
-                                        <img src="@source1" class="cardImg" alt="..." width="150" />
+                            <div class="sellsitem">
+                                <div>
+                                    @*<img src="/img/coupon.jpg" class="w-100">*@
+
+                                    @{
+
+                                        var base64Image1 = Convert.ToBase64String(item.Producpic);
+                                        var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
+
+                                    }
+                                    <img src="@source1" height="110px" width="200px" />
+                                </div>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle"><a href="#" class="text-primary">@item.ProductName</a></div>
+                                    <div class="cardPrice"><a href="#" style="color:#a25130">直接購買價： @Convert.ToDouble(item.ProductPrice).ToString("0.00")</a></div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                            <div class="text-black-50">
+                                                @*已賣數量：227*@
+                                                已賣數量：@item.SoldQuantity
+                                                @*上架時間： 2017-09-28 02:41:04*@
+                                                上架時間： @item.AddedTime
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
-                                        @*<div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>*@
-                                        <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $@item.ProductPrice</a></div>
-                                        <p>
-                                            @*已賣數量：227*@
-                                            已賣數量：@item.SoldQuantity
-                                            @*上架時間： 2017-09-28 02:41:04*@
-                                            上架時間： @item.AddedTime
-                                        </p>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                    </div>
+
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
+                                        <div class="starBox mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black"> @item.StarCount.ToString("0.00") </div>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
-                        }
-
-                        @*@{
-                @for (int i = 0; i < 2; i++)
-                {
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <img src="~/img/product04.png" width="150" />
-                            </div>
-                            <div class="col">
-                                <div class="ps-2"><a href="#" class="text-primary">@Model.CardProduct.Select(a => a.ProductName)</a></div>
-                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
-                                <p>
-                                    已賣數量：227
-                                    上架時間： 2017-09-28 02:41:04
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }*@
 
 
-                    </div>
-
-                    <div class="row">
-                        @{
-                            @for (int i = 0; i < 2; i++)
-                            {
-                                <div class="col">
+                            //過渡期的抓值寫法
+                            @*<div class="col">
                                     <div class="row">
                                         <div class="col">
-                                            <img src="~/img/product04.png" width="150" />
+
+                                            @{
+
+                                                var base64Image1 = Convert.ToBase64String(item.Producpic);
+                                                var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
+
+                                            }
+                                            <img src="@source1" class="cardImg" alt="..." width="150" />
                                         </div>
                                         <div class="col">
-                                            <div class="ps-2"><a href="#" class="text-primary">【24H出貨】 Kolin 歌林 手持吸塵器 HEAP氣旋 吸力永不減 吸塵器 KTC-SD401</a></div>
-                                            <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
+                                            <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
+
+                                            <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $@item.ProductPrice</a></div>
                                             <p>
-                                                已賣數量：227
-                                                上架時間： 2017-09-28 02:41:04
+
+                                                已賣數量：@item.SoldQuantity
+
+                                                上架時間： @item.AddedTime
                                             </p>
                                         </div>
                                     </div>
-                                </div>
-                            }
+                                </div>*@
                         }
 
-
                     </div>
+                    @*舊式原本寫死的*@
+                    @*<div class="row">
+                            @{
+                                @for (int i = 0; i < 2; i++)
+                                {
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img src="~/img/product04.png" width="150" />
+                                            </div>
+                                            <div class="col">
+                                                <div class="ps-2"><a href="#" class="text-primary">【24H出貨】 Kolin 歌林 手持吸塵器 HEAP氣旋 吸力永不減 吸塵器 KTC-SD401</a></div>
+                                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
+                                                <p>
+                                                    已賣數量：227
+                                                    上架時間： 2017-09-28 02:41:04
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+                        </div>*@
 
                     <div class="row" style="background-color:#32d6a8">
 
@@ -206,43 +241,129 @@
                         </div>
                     </div>
 
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">排序</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">熱門度</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">價格</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">銷售</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">最新上架</a>
-                        </li>
-                    </ul>
+                    @*<ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active ordernavtabs" value="1" aria-current="page" href="#">排序</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="2" href="#">熱門度</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="3" href="#">價格</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="4" href="#">銷售</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ordernavtabs" value="5" href="#">最新上架</a>
+                            </li>
+                        </ul>*@
+
+                    <div class="itembody-filter d-flex align-items-center justify-content-between">
+                        <div class="itembody-filter1 "><span>篩選</span></div>
+                        <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                            <a class="itembody-filter2-btn linknoline SortOrder active" id="SortOrder1">
+                                綜合排序
+                                <input type="hidden" value="1" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder2">
+                                最新商品
+                                <input type="hidden" value="2" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
+                                熱銷商品
+                                <input type="hidden" value="3" />
+                            </a>
+                            <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                價格排序
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item SortOrder" id="SortOrder4">
+                                        <i class="fa fa-arrow-down"></i>
+                                        價格：由高至低
+                                        <input type="hidden" value="4" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item SortOrder" id="SortOrder5">
+                                        <i class="fa fa-arrow-up"></i>
+                                        價格：由低至高
+                                        <input type="hidden" value="5" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
 
-                    <div class="display-2 text-bg-danger">@Model.star </div>
-                 
 
-                    @{
-                        if (Model.CardProduct.Count > 0)
+
+
+
+                    @*<div class="display-2 text-bg-danger">@Model.star </div>*@
+
+
+
+                    @*//-----------------------------------------------------------------*@
+
+                    <div class="row">
+
+                        @foreach (var item in Model.CardProduct)
                         {
-                            @foreach (var item in Model.CardProduct)
-                            {
-                                @await Component.InvokeAsync("SalesCourtCard", new { shopProduct = item });
-                            }
-                        }
-                        else
-                        {
-                            <div>
-                                暫待新增商品
+
+
+                            <div class="sellsitem">
+                                <div>
+                                    @*<img src="/img/coupon.jpg" class="w-100">*@
+
+                                    @{
+
+                                        var base64Image1 = Convert.ToBase64String(item.Producpic);
+                                        var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
+
+                                    }
+                                    <img src="@source1" height="110px" width="200px" />
+                                </div>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitle"><a href="#" class="text-primary">@item.ProductName</a></div>
+                                    <div class="cardPrice"><a href="#" style="color:#a25130">直接購買價： @Convert.ToDouble(item.ProductPrice).ToString("0.00")</a></div>
+                                    <div class="cardInfo d-flex justify-content-between align-items-end">
+                                        <div class="d-flex justify-content-start flex-column mt-1">
+                                            <div class="text-black-50">
+                                                @*已賣數量：227*@
+                                                已賣數量：@item.SoldQuantity
+                                                @*上架時間： 2017-09-28 02:41:04*@
+                                                上架時間： @item.AddedTime
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-warning buybtn">加入購物車</button>
+                                    </div>
+
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
+                                        <div class="starBox mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black"> @item.StarCount.ToString("0.00") </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+
+
+
                         }
-                    }
+
+                    </div>
+
+
+
 
 
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">

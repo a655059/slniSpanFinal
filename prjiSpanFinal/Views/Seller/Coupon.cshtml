@@ -22,7 +22,7 @@
 
         .modal{
             position:fixed;
-            top:100px;
+            top:50px;
         }
 
     </style>
@@ -51,6 +51,7 @@
                 </span>
             </div>
             <div class="modal-footer">
+                <button id="demo" type="button" class="btn btn-info">Demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
@@ -65,7 +66,7 @@
     <div class="col-9 ">
         <h2 class="d-flex justify-content-center">優惠劵</h2>
         <div class="">
-            <div class="my-3 mx-2 內文優惠劵">所有優惠劵<button class="btn btn-warning float-end w-25 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">建立+</button></div>
+            <div class="my-3 mx-2 內文優惠劵">所有優惠劵<button class="btn btn-warning float-end w-25 建立按鈕 btnnew" data-bs-toggle="modal" data-bs-target="#exampleModal">建立+</button></div>
             <div class="mx-2"><p>建立賣場優惠券或商品優惠券以吸引買家下單！</p></div>
             <div class="">
                 <div class="mx-2 input-group mb-3 w-50">
@@ -77,31 +78,35 @@
             <div class="">
                 <table class="table border rounded-2">
                     <tr class="text-bg-light p-3">
-                        <td scope="col"></td>
-                        <td scope="col">優惠券名稱</td>
-                        <td scope="col">優惠券序號</td>
-                        <td scope="col">折扣額度</td>
-                        <td scope="col">優惠券領取期間</td>
-                        <td scope="col">是否有效</td>
-                        <td scope="col">操作</td>
+                        <td scope="col" align="center"></td>
+                        <td scope="col" align="center">優惠券名稱</td>
+                        <td scope="col" align="center">優惠券序號</td>
+                        <td scope="col" align="center">折扣額度</td>
+                        <td scope="col" align="center">使用期間</td>
+                        <td scope="col" align="center">領用期間</td>
+                        <td scope="col" align="center">免運</td>
+                        <td scope="col" align="center">滿額</td>
+                        <td scope="col" align="center">操作</td>
                     </tr>
                     @{
                         for (var i = 0; i < Model.Count; i++)
                         {
                             <tr>
-                                <td scope="row"><img src="~/img/seller coupon.png" /></td>
-                                <td class="置中">@Model[i].CouponName</td>
-                                <td class="置中">@Model[i].CouponCode</td>
-                                <td class="置中">@Model[i].Discount</td>
-                                <td class="置中">@Model[i].StartDate - @Model[i].ExpiredDate</td>
-                                <td class="置中">有效</td>
-                                <td class="置中">
+                                <td class="col-1" align="center"><img src="~/img/seller coupon.png" /></td>
+                                <td class="置中 col" align="center">@Model[i].CouponName</td>
+                                <td class="置中 col" align="center">@Model[i].CouponCode</td>
+                                <td class="置中 col" align="center">@Model[i].Discount</td>
+                                <td class="置中 col" align="center">@Model[i].StartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</td>
+                                <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy/MM/dd")</td>
+                                <td class="置中 col" align="center">@Model[i].IsFreeDelivery</td>
+                                <td class="置中 col" align="center">@Model[i].MinimumOrder</td>
+                                <td class="置中 col" align="center">
                                     <div>
-                                        @Html.ActionLink("編輯", "Edit", new {@*--> id = item.FId<!--*@}, new { @style = "text-decoration:none;" })
+                                        <button class="btnEdit btn btn-secondary">編輯</button>
                                     </div>
-                                    <div> 
+                                    <div>
                                         @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
-                                                                    new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;" })
+                                                                    new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;", @class = "btn btn-danger mt-2" })
                                     </div>
                                 </td>
                             </tr>
@@ -115,26 +120,64 @@
 </div>
 @section Scripts
 {<script>
+    $(".btnnew").click(function (data) {
+        data.preventDefault(); //取消原本action的預設值
+        clickValue();//清空值
+    })
 
-    let couponlist = [];
 
-    $("#save").addEventListener("click", async function () {
+    //清空model值
+    function clickValue() {
+        document.getElementById("text1").value = '';
+        document.getElementById("text2").value = '';
+        document.getElementById("text3").value = '';
+        document.getElementById("startDate").value = '';
+        document.getElementById("endDate").value = '';
+    }
+
+
+
+    let couponlist = [];//拿來儲存取到的值
+
+    save.addEventListener("click", async function () {
 
         let name = document.getElementById("text1").value;
         let core = document.getElementById("text2").value;
         let sale = document.getElementById("text3").value;
+        console.log(sale)
         let startdate = document.getElementById("startDate").value;
+        console.log("startdate")
+        console.log(startdate)
         let enddate = document.getElementById("endDate").value;
-        let coupon = { "CouponName": name, "CouponCode": core, "Discount": sale, "StartDate": startdate, "ExpiredDate": enddate };
-        couponlist.push(coupon);
-        let json = JSON.stringify(data);
+        let coupon = {
+            "CouponName": name,
+            "CouponCode": core,
+            "Discount": parseFloat(sale),  //字串轉Float 不然json物件轉型會失敗
+            "StartDate": startdate,
+            "ExpiredDate": enddate,
+            "ReceiveStartDate": startdate,
+            "ReceiveEndDate": enddate,
+            "IsFreeDelivery": false,
+            "MinimumOrder":0
+        };
+        ;
+        let json = JSON.stringify(coupon);
         let response = await fetch("@Url.Content("~/Seller/Couponresponse")" + `?jsonString=${json}`);
 
+        var myModalEl = document.getElementById('exampleModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl)
+        modal.hide();
 
-
+        location.href = "/Seller/Coupon" //跳回Coupon頁面
     })
 
 
+    //=======Demo鍵=================================
+    demo.addEventListener("click", async function () {
+        document.getElementById("text1").value="Demo優惠";
+        document.getElementById("text2").value=6666;
+        document.getElementById("text3").value = 0.6;
+    })
 
 </script>
 }

@@ -53,7 +53,6 @@ if (header2exist) {
         //搜尋紀錄
 GetSearchDetail();
 function GetSearchDetail() {
-    console.log("123");
     $.post(`/Home/GetSearchDetail`, { key: searchkeyword }, function (data) {
         $("#searchkeyspace").html("");
         if (data.length > 0) {

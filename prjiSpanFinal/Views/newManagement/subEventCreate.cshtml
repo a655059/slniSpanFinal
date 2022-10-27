@@ -1,0 +1,78 @@
+﻿@model prjiSpanFinal.Models.SubOfficialEventList
+
+@{
+    ViewData["Title"] = "subEventCreate";
+}
+
+<h1>新增子活動</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="subEventCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="SubOfficialEventListId" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input value="@ViewBag.Id" asp-for="OfficialEventListId" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                子活動名稱
+                <input asp-for="SubEventName" class="form-control inputs" />
+                <span asp-validation-for="SubEventName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                折扣數
+                <input id="Discount" asp-for="Discount" class="form-control inputs" />
+                <span asp-validation-for="Discount" class="text-danger">ex:若為8折請輸入0.8</span>
+            </div>
+            <div class="form-group form-check">
+                是否為免運券
+                <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" />
+            </div>
+            <div class="form-group">
+                <input id="confirms" type="submit" value="確認" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("取消並回到列表","subEventList","newManagement",new{id=ViewBag.Id},new{@class="btn btn-outline-danger mt-1"})
+</div>
+@section Scripts{
+    <script>
+        var IsFreeDelivery = document.getElementById("IsFreeDelivery");
+        var confirms = document.getElementById("confirms");
+        var Discount = $("#Discount");
+        var Discounts= document.getElementById("Discount");
+        var Inputs=document.querySelectorAll(".inputs");
+        IsFreeDelivery.addEventListener("change", function () {
+            if (IsFreeDelivery.checked == true) {
+                Discount.prop('readonly', true);
+                Discounts.value = 1;
+            }
+            else {
+                Discounts.value = "";
+                Discount.prop('readonly', false);
+            }
+        })
+        Discounts.addEventListener("blur",function(event){
+            console.log(Number(Discounts.value))
+            if(isNaN(Number(Discounts.value))||Number(Discounts.value)>1){
+                alert("折扣欄位請輸入小於或等於1的小數!");
+                return;
+            }
+        })
+        confirms.addEventListener("click",function(event){
+            for(var l of Inputs){
+            if(!(l.value)){
+            event.preventDefault();
+            alert("每個欄位皆是必填");
+            break;
+            }
+            }
+        }
+        )
+    </script>
+}

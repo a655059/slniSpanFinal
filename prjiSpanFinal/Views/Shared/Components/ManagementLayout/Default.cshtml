@@ -1,5 +1,5 @@
 ﻿<style>
-    label {
+   #l {
         width: 20px;
         height: 80px;
         background-color: #d1d1d1;
@@ -19,7 +19,7 @@
         transform: translateX(0);
     }
 
-    label .fas {
+    #l .fas {
         transform: scaleX(-1);
     }
 
@@ -62,11 +62,12 @@
         <a class="btn btn-warning mb-1" href="@Url.Action("MemberList","newManagement")"><i class="fa-solid fa-m"></i>會員系統</a><br />
         <a class="btn btn-warning mb-1" href="@Url.Action("OrderList","newManagement")"><i class="fa-solid fa-o"></i>訂單系統</a><br />
         <a class="btn btn-warning mb-1" href="@Url.Action("ReportList","newManagement")"><i class="fa-solid fa-r"></i>檢舉處理</a><br />
-        <a class="btn btn-warning mb-1" href="@Url.Action("CouponList","newManagement")"><i class="fa-solid fa-c"></i>優惠券</a><br />
-        <a class="btn btn-warning mb-1" href="@Url.Action("ReportList","newManagement")"><i class="fa-solid fa-r"></i>檢舉處理</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("ArgumentList","newManagement")"><i class="fa-solid fa-a"></i>買賣糾紛處理</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("CouponList","newManagement")"><i class="fa-solid fa-c"></i>優惠券系統</a><br />
+        <a class="btn btn-warning mb-1" href="@Url.Action("EventList","newManagement")"><i class="fa-solid fa-e"></i>活動系統</a><br />
 
     </nav>
-    <label for="sideMenu-active">
+    <label id="l" for="sideMenu-active">
         <i class="fas fa-angle-right"></i>
     </label>
 </div>

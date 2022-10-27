@@ -6,7 +6,6 @@
 
 <h1>建立優惠券</h1>
 
-<h4>Coupon</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,27 +15,22 @@
                 <input asp-for="CouponId" class="form-control" type="hidden" />
             </div>
             <div class="form-group">
-                <label asp-for="CouponName" class="control-label">優惠券名稱</label>
                 優惠券名稱<input asp-for="CouponName" class="form-control" />
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label">開始日期</label>
-                開始日期<input asp-for="StartDate" class="form-control" />
+                開始日期<input asp-for="StartDate" class="form-control" type="date"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ExpiredDate" class="control-label">失效日期</label>
-                失效日期<input asp-for="ExpiredDate" class="form-control" />
+                失效日期<input asp-for="ExpiredDate" class="form-control" type="date"/>
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Discount" class="control-label">折扣</label>
                 折扣<input asp-for="Discount" class="form-control" />
                 <span asp-validation-for="Discount" class="text-danger fs-6">ex:若為8折優惠券則填入0.8</span>
             </div>
             <div class="form-group">
-                <label asp-for="CouponCode" class="control-label">優惠券代碼</label>
                 優惠券代碼<input asp-for="CouponCode" class="form-control" />
                 <span asp-validation-for="CouponCode" class="text-danger"></span>
             </div>
@@ -45,12 +39,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveStartDate" class="control-label">可以領取日期</label>
-                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" />
+                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="date"/>
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveEndDate" class="control-label">結束領取日期</label>
-                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" />
+                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="date"/>
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">

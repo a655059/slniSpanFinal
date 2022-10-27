@@ -1,111 +1,113 @@
 ﻿@model prjiSpanFinal.ViewModels.Event.CShowCoupon
 @{
-    bool isOutofDate = Model.isActive;
+    bool isBeforeExp = Model.isActive;
     bool isOKtoRecieve = Model.isPublish;
     bool isForFreeDelievery = Model.isFreeDelivery;
 }
-@{ 
-    if (isOKtoRecieve)
+@{ if (isBeforeExp)
     {
-        <div class="coupon coupon-enable d-flex  ">
-            <div class="coupon-start" style="color:RED">
-                <div class="coupon-start-head">
-                    <i class="fa fa-gift" aria-hidden="true"></i>
+        if (isOKtoRecieve)
+        {
+            <div class="coupon coupon-enable d-flex  ">
+                <div class="coupon-start" style="color:RED">
+                    <div class="coupon-start-head">
+                        <i class="fa fa-gift" aria-hidden="true"></i>
+                    </div>
+                    <span class="coupon-start-title">@Model.couponEventTitle<br />@Model.coupon.CouponName</span>
                 </div>
-                <span class="coupon-start-title">@Model.couponEventTitle<br />@Model.coupon.CouponName</span>
-            </div>
-            <div div class="coupon-end">
-                <div div class="coupon-end-start">
-                    @if (isForFreeDelievery)
-                    {
-                        <div class="ces-title">
-                            免運券
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="ces-title">
-                            訂單 @Model.Discount 折
-                        </div>
-                    }
-                    @if (Model.minimumOrder == 0)
-                    {
-                        <div class="ces-content">沒有限制</div>
-                    }
-                    else
-                    {
-                        <div class="ces-content">低消 @Model.minimumOrder 元</div>
-                    }
-                    <div class="ces-expdate">有效期限 @Model.coupon.ExpiredDate </div>
-                </div>
-                <div div class="coupon-end-end">
-                    <div>
-
-                        @if (Model.isLoggedHasCoupon == false)
+                <div div class="coupon-end">
+                    <div div class="coupon-end-start">
+                        @if (isForFreeDelievery)
                         {
-                            <a class="linknoline coupon-enable-btn coupon-tag">
-                                <div class="coupon-btn coupon-Active">
-                                    領券
-                                    <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
-                                </div>
-                            </a>
+                            <div class="ces-title">
+                                免運券
+                            </div>
                         }
                         else
                         {
-                            <a class="linknoline coupon-disable-btn">
-                                <div class="coupon-btn">
-                                    已領取
-                                    <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
-                                </div>
-                            </a>
+                            <div class="ces-title">
+                                訂單 @Model.Discount 折
+                            </div>
                         }
+                        @if (Model.minimumOrder == 0)
+                        {
+                            <div class="ces-content">沒有限制</div>
+                        }
+                        else
+                        {
+                            <div class="ces-content">低消 @Model.minimumOrder 元</div>
+                        }
+                        <div class="ces-expdate">有效期限 @Model.coupon.ExpiredDate </div>
+                    </div>
+                    <div div class="coupon-end-end">
+                        <div>
 
+                            @if (Model.isLoggedHasCoupon == false)
+                            {
+                                <a class="linknoline coupon-enable-btn coupon-tag">
+                                    <div class="coupon-btn coupon-Active">
+                                        領券
+                                        <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="linknoline coupon-disable-btn">
+                                    <div class="coupon-btn">
+                                        已領取
+                                        <input type="hidden" class="couponid" value="@Model.coupon.CouponId" />
+                                    </div>
+                                </a>
+                            }
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-    else if (!isOKtoRecieve)
-    {
-        <div class="coupon coupon-disable d-flex  ">
-            <div class="coupon-start" style="color:RED">
-                <div class="coupon-start-head">
-                    <i class="fa fa-gift" aria-hidden="true"></i>
+        }
+        else if (!isOKtoRecieve)
+        {
+            <div class="coupon coupon-disable d-flex  ">
+                <div class="coupon-start" style="color:RED">
+                    <div class="coupon-start-head">
+                        <i class="fa fa-gift" aria-hidden="true"></i>
+                    </div>
+                    <span class="coupon-start-title">@Model.couponEventTitle<br />@Model.coupon.CouponName</span>
                 </div>
-                <span class="coupon-start-title">@Model.couponEventTitle<br />@Model.coupon.CouponName</span>
-            </div>
-            <div div class="coupon-end">
-                <div div class="coupon-end-start">
-                    @if (isForFreeDelievery)
-                    {
-                        <div class="ces-title">
-                            免運券
+                <div div class="coupon-end">
+                    <div div class="coupon-end-start">
+                        @if (isForFreeDelievery)
+                        {
+                            <div class="ces-title">
+                                免運券
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="ces-title">
+                                訂單 @Model.Discount 折
+                            </div>
+                        }
+                        @if (Model.minimumOrder == 0)
+                        {
+                            <div class="ces-content">沒有限制</div>
+                        }
+                        else
+                        {
+                            <div class="ces-content">低消 @Model.minimumOrder 元</div>
+                        }
+                        <div class="ces-expdate">有效期限 @Model.coupon.ExpiredDate </div>
+                    </div>
+                    <div div class="coupon-end-end">
+                        <div>
+                            <a class="linknoline coupon-disable-btn">
+                                <div class="coupon-btn">已逾期</div>
+                            </a>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="ces-title">
-                            訂單 @Model.Discount 折
-                        </div>
-                    }
-                    @if (Model.minimumOrder == 0)
-                    {
-                        <div class="ces-content">沒有限制</div>
-                    }
-                    else
-                    {
-                        <div class="ces-content">低消 @Model.minimumOrder 元</div>
-                    }
-                    <div class="ces-expdate">有效期限 @Model.coupon.ExpiredDate </div>
-                </div>
-                <div div class="coupon-end-end">
-                    <div>
-                        <a class="linknoline coupon-disable-btn">
-                            <div class="coupon-btn">已逾期</div>
-                        </a>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
 }

@@ -230,12 +230,14 @@
         color:yellow;
         opacity:80%;
     }
-    /*item*/
-    .itembody {
-        width: 100%;
-        max-width: 1060px;
-        padding: 0;
-    }
+
+
+/*item*/
+.itembody {
+    width: 100%;
+    max-width: 1060px;
+    padding: 0;
+}
 .itembody-filter {
     width: 100%;
     height: 50px;
@@ -262,14 +264,10 @@
     color: white;
     cursor: pointer;
 }
-.itembody-filter2 > a:hover,
-.itembody-filter2 > a:active,
-.itembody-filter2 > a:focus {
+.itembody-filter2 > a:hover{
     opacity: 80%;
     color: yellow;
 }
-    .itembody-filter3 {
-    }
 .itemcol {
     width: 100%;
     padding-top: 10px;

@@ -1,9 +1,10 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model List<prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel>
 @{
     ViewData["Title"] = "Event";
 }
 @section Styles
-{
+    {
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <style>
         .建立按鈕 {
@@ -21,20 +22,22 @@
     </style>
 }
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <label>商品名稱:</label>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>選擇商品</option>
-                    <option value="1">蘋果</option>
-                    <option value="2">蘋果</option>
-                    <option value="3">蘋果</option>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>商品名稱:</label>
+                    <select id="ProductId" class="form-select" aria-label="Default select example">
+                        @{
+                        foreach (var i in Model.First().Products)
+                        {
+                            <option value="@i.ProductId">@i.ProductName</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="modal-footer">
@@ -77,16 +80,32 @@
                         <td class="col-2"></td>
                     </tr>
                     @{
-                        for (var i = 1; i <= 4; i++)
+                        foreach (var ev in Model)
                         {
                             <tr>
-                                <td class="col-3"><img src="~/img/活動.png" height="100" width="300"/></td>
-                                <td class="置中 col-6">【蝦爆熱銷品】2022.11.11最強購物節
-                                    <p>報名:子活動現在可報名，最早的報名將结束於21 天 9 小時。</p>
-                                    <p>2022-11-11 00:00:00 到 2022-11-18 23:59:59</p>
-                                </td>  
+                                <td class="col-3">
+                                    @{
+                                        var base64Image = Convert.ToBase64String(ev.OfficialEventList.EventPic);
+                                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                                    }
+                                    <img src="@source" alt="..." height="100" width="300" />
+                                </td>
+                                <td class="置中 col-6">
+                                    @ev.SubOfficialEventID.SubEventName
+                                    @{
+                                        if (ev.OfficialEventList.StartDate < DateTime.Now && ev.OfficialEventList.EndDate > DateTime.Now)
+                                        {
+                                            int Days = (ev.OfficialEventList.EndDate - DateTime.Now).Days;
+                                            int Hrs = (ev.OfficialEventList.EndDate - DateTime.Now).Hours - Days;
+                                            <p>報名:子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
+                                        }
+                                    }
+                                    <p>@ev.OfficialEventList.StartDate 到 @ev.OfficialEventList.EndDate</p>
+                                </td>
                                 <td class="置中 col-3">
-                                    <div><button class="btn btn-warning float-end w-50 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">參加活動</button></div>
+                                    <div>
+                                        <button class="btn btn-warning float-end w-50 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">參加活動</button>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -98,5 +117,5 @@
     <div class="col-1"></div>
 </div>
 @section Scripts
-{
+    {
 }
