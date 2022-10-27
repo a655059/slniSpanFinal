@@ -12,75 +12,75 @@
         }
     </style>
 }
-    <vc:member-ui></vc:member-ui>
-    <h2 class="d-flex justify-content-center">購買清單</h2>
-    <div id="orderdetaildiv">
-        <div class="row ">
-            <div class="col-1"></div>
-            <div class="col-11">
-                <div class="ordersearchbar">
-                    <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
-                    <span>
-                        <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
-                    </span>
-                </div>
-                <div class="ordersearchbar">
-                    <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵領收</button>
-                </div>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
-                        <input type="hidden" class="ordershipperstatus" value="0" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">訂單成立</a>
-                        <input type="hidden" class="ordershipperstatus" value="2" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">已付款</a>
-                        <input type="hidden" class="ordershipperstatus" value="3" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">已出貨</a>
-                        <input type="hidden" class="ordershipperstatus" value="4" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">已到貨</a>
-                        <input type="hidden" class="ordershipperstatus" value="5" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
-                        <input type="hidden" class="ordershipperstatus" value="8" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">待評價</a>
-                        <input type="hidden" class="ordershipperstatus" value="6" />
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ordernavtabs" href="#">已完成</a>
-                        <input type="hidden" class="ordershipperstatus" value="7" />
-                    </li>
-                </ul>
-                <table id="ordertable" class="table table-hover dataTable">
-                    <thead>
-                        <tr>
-                            <td>訂單資料</td>
-                            <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
-                            <td>商品詳情</td>
-                            <td class="th-sm sorting" id="ordersales">訂單金額</td>
-                            <td>訂單狀態</td>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        操作
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody id="orderlistbody">
-                    </tbody>
+<vc:member-ui></vc:member-ui>
+<h2 class="d-flex justify-content-center">購買清單</h2>
+<div id="orderdetaildiv">
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div class="ordersearchbar">
+                <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
+                <span>
+                    <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                </span>
+            </div>
+            <div class="ordersearchbar">
+                <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵領收</button>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
+                    <input type="hidden" class="ordershipperstatus" value="0" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">訂單成立</a>
+                    <input type="hidden" class="ordershipperstatus" value="2" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已付款</a>
+                    <input type="hidden" class="ordershipperstatus" value="3" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已出貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="4" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已到貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="5" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
+                    <input type="hidden" class="ordershipperstatus" value="8" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">待評價</a>
+                    <input type="hidden" class="ordershipperstatus" value="6" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已完成</a>
+                    <input type="hidden" class="ordershipperstatus" value="7" />
+                </li>
+            </ul>
+            <table id="ordertable" class="table table-hover dataTable">
+                <thead>
+                    <tr>
+                        <td>訂單資料</td>
+                        <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
+                        <td>商品詳情</td>
+                        <td class="th-sm sorting" id="ordersales">訂單金額</td>
+                        <td>訂單狀態</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    操作
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="orderlistbody">
+                </tbody>
             </table>
             <div class="row ">
                 <div class="col-4"></div>
@@ -218,11 +218,50 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-6" id="staticBackdropLabel4">您已領收全部<span id="reccount"></span>件商品</h1>
+                <h1 class="modal-title fs-6" id="staticBackdropLabel6">您已領收全部<span id="reccount"></span>件商品</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div>收到商品後別忘記幫我們做評價哦。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop7" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel7" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel7">申請</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 id="returnreason">原因:</h3>
+                <div id="returnreasonname"></div>
+                <h4>補充資訊:</h4>
+                <div id="returnreasontext"></div>
+                <h4>補充圖片:</h4>
+                <div id="returnreasonpics"></div>
+            </div>
+            <div class="modal-footer" id="returnfooter">
+                <button type="button" class="btn btn-primary" id="orderreturnsubmit" data-bs-target="#staticBackdrop8" data-bs-toggle="modal">同意</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop8" tabindex="-1" aria-labelledby="staticBackdropLabel8" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-6" id="staticBackdropLabel8">您已同意本次申訴</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請確認申訴內容已經處理完成，如果沒有妥善處理可能被重複申訴，若情況嚴重則可能被禁權。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -249,11 +288,11 @@
         function OrderListItem(data) {
             item = `<tr>
 
-                                        <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
-                                        <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                                                        <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
-                                        <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
-                                        <td>`;
+                                            <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
+                                            <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
+                                            <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
+                                            <td>`;
             let total = data.paymentFee;
             for (let i = 0; i < data.quantity.length; i++) {
                 item = item + `<img src="data:image;base64,${data.pic[i]}" width="60" height="60" />${data.productName[i]} ${data.style[i]} * ${data.quantity[i]} $${data.unitprice[i]}<br />`;
@@ -263,25 +302,28 @@
                 total = total + data.shipperFee;
             }
             item = item + `</td>
-                                        <td class="ordertotalprice">$${total}</td>
-                                        <td>${data.orderStatusName}</td>
-                                        <td style="text-align:center">
-                                            <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
+                                            <td class="ordertotalprice">$${total}</td>
+                                            <td>${data.orderStatusName}</td>
+                                            <td style="text-align:center">
+                                                <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
             if (data.shipperStatusId == 6 && data.buyerCommentId.includes(0)) {
                 item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
-            else if(data.shipperStatusId == 5 || data.shipperStatusId == 4){
+            else if (data.shipperStatusId == 5 || data.shipperStatusId == 4) {
                 item = item + `<a href="#staticBackdrop3" data-bs-toggle="modal" role="button" class="btn btn-success orderbuttonfi my-1">領收</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
             else if (data.shipperStatusId == 3 || data.shipperStatusId == 2) {
                 item = item + `<a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
+            if (data.shipperStatusId == 8) {
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop7" class="btn btn-info orderbuttonret my-1">查看</a>`;
+            }
             item = item + `<div>
-                                                <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
-                                            </div>
-                                            <input type="hidden" class="ordersellerid" value="${data.sellerId}" />
-                                        </td>
-                                    </tr>`;
+                                                    <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                                </div>
+                                                <input type="hidden" class="ordersellerid" value="${data.sellerId}" />
+                                            </td>
+                                        </tr>`;
             return item;
         }
 
@@ -339,7 +381,7 @@
         $(document).on("click", ".orderbuttonre", function () {
             arguesellerid = $(this).siblings(".ordersellerid").eq(0).val();
             argueorderid = $(this).parent().siblings().children().val();
-            $("#argueselect").children().eq(0).prop("selected","selected");
+            $("#argueselect").children().eq(0).prop("selected", "selected");
             $("#exampleFormControlTextarea1").val("");
             argueitem = $(this);
             $("#previewCommentPhoto").html("");
@@ -357,10 +399,10 @@
         };
 
         $("#orderarguesubmit").click(function () {
-            let pics = $.map($("#previewCommentPhoto").find("img"),function(item,index){
+            let pics = $.map($("#previewCommentPhoto").find("img"), function (item, index) {
                 return (item.src).split(',')[1];
             });
-            happy_sendnoti(4, arguesellerid,"你的訂單被買家投訴了，請點擊確認","/Seller/Order?sort=0&tab=8")
+            happy_sendnoti(4, arguesellerid, "你的訂單被買家投訴了，請點擊確認", "/Seller/Order?sort=0&tab=8")
             $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
                 reloaditem(sortmethod, tabid);
             });
@@ -371,7 +413,7 @@
                 reloaditem(sortmethod, tabid);
             });
         })
-        $("#orderrecallsubmit").click(function(){
+        $("#orderrecallsubmit").click(function () {
             let count1 = 0;
             let orderids = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".orderorderid"), function (item, index) {
                 return item.value;
@@ -379,16 +421,14 @@
             let statses = $.map($(".checkboxorder:checked").parent().parent().prev().prev().prev().prev().prev().find(".ordershipperstatus"), function (item, index) {
                 return item.value;
             });
-            for(let i = 0;i < statses.length;i++)
-            {
-                if (statses[i] == 5 || statses[i] == 4)
-                {
+            for (let i = 0; i < statses.length; i++) {
+                if (statses[i] == 5 || statses[i] == 4) {
                     count1++;
                     $.getJSON(`/Member/WriteReceive`, { id: orderids[i] }, function (data) {
                         reloaditem(sortmethod, tabid);
                     });
                 }
-                
+
             }
             $("#reccount").html(count1);
         })
@@ -398,8 +438,8 @@
             if (photos) {
                 $.each(photos, function (idx, photo) {
                     let reader = new FileReader();
-                    reader.readAsDataURL(photo); 
-                    reader.onloadend = function() {
+                    reader.readAsDataURL(photo);
+                    reader.onloadend = function () {
                         let src = reader.result;
                         $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img style="max-width:100px" src="${src}" /></div>`);
                     }
@@ -422,7 +462,7 @@
             $(this).closest(".deleteCommentPhoto").remove();
         });
 
-        function datetimetostring(dtime){
+        function datetimetostring(dtime) {
             let tempt = dtime.getFullYear().toString() + "-" + (dtime.getMonth() + 1).toString().padStart(2, '0') + "-" + dtime.getDate().toString().padStart(2, '0') + "<br />" + dtime.getHours().toString().padStart(2, '0') + ":" + dtime.getMinutes().toString().padStart(2, '0') + ":" + dtime.getSeconds().toString().padStart(2, '0');
             return tempt;
         }
@@ -430,5 +470,30 @@
         $(document).on("click", ".orderopenmsg", function () {
             happy_popup($(this).siblings("a").html());
         });
+
+        let returnorderid;
+        let returnitem;
+        let returntype;
+        $(document).on("click", ".orderbuttonret", function () {
+            returnorderid = $(this).parent().siblings().children().val();
+            commentitem = $(this);
+
+            $.getJSON(`/Seller/GetReturn`, { id: returnorderid }, function (data) {
+                returntype = data.typeID;
+                console.log(returntype)
+                $("#staticBackdropLabel7").html(`${data.typeName}申請`);
+                $("#returnreason").html(`${data.typeName}原因`);
+                $("#returnreasonname").html(`${data.reasonName}`);
+                $("#returnreasontext").html(`${data.reasonText}`);
+                $("#returnreasonpics").html("");
+                if (data.pics != undefined) {
+                    for (let i = 0; i < data.pics.length; i++) {
+                        $("#returnreasonpics").append(`<div class="deleteCommentPhoto"><img style="max-width:150px" src="data:image;base64,${data.pics[i]}" /></div>`);
+                    }
+                }
+            });
+            $("#returnfooter").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`);
+        })
+
     </script>
 }

@@ -26,7 +26,7 @@
                 </span>
             </div>
             <div class="ordersearchbar">
-                    <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵出貨</button>
+                <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵出貨</button>
             </div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -245,7 +245,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="staticBackdrop8" tabindex="-1" aria-labelledby="staticBackdropLabel6" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop8" tabindex="-1" aria-labelledby="staticBackdropLabel8" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -254,6 +254,59 @@
             </div>
             <div class="modal-body">
                 <div>請確認申訴內容已經處理完成，如果沒有妥善處理可能被重複申訴，若情況嚴重則可能被禁權。</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop9" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel9" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel9">申訴申請</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>請選擇申訴種類: </div>
+                <select class="form-select form-select-lg mb-3" id="arguetypeselect" aria-label=".form-select-lg example">
+                    <option value="5" selected>棄標投訴</option>
+                </select>
+                <div>請選擇申訴理由: </div>
+                <select class="form-select form-select-lg mb-3" id="argueselect" aria-label=".form-select-lg example">
+                    <option selected value="7">買家態度太差</option>
+                    <option value="8">逾時未取貨</option>
+                    <option value="10">逾時未付款</option>
+                    <option value="9">其他</option>
+                </select>
+                <div>請輸入補充資訊: </div>
+                <div class="mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <div id="previewCommentPhoto" class="d-flex"></div>
+                <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
+                    <i class="fa-solid fa-camera-retro me-2">新增照片</i>
+                </label>
+                <input type="file" name="" value="" id="commentPhoto" style="opacity:0" accept="image/*" multiple />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="orderarguesubmit" data-bs-target="#staticBackdrop10" data-bs-toggle="modal">送出</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdrop10" tabindex="-1" aria-labelledby="staticBackdropLabel10" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel10">您的申訴申請已送出</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>您可以與買家聯繫詢問申訴相關問題，或是從網頁上方幫助中心與客服聯絡以獲得更多資訊。</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -298,11 +351,11 @@
         function OrderListItem(data) {
             item = `<tr>
 
-                                <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
-                                    <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
-                                        <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
-                                <td>`;
+                                    <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
+                                        <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
+                                                                <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.buyerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
+                                            <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
+                                    <td>`;
             let total = data.paymentFee;
             for (let i = 0; i < data.quantity.length; i++) {
                 item = item + `<img src="data:image;base64,${data.pic[i]}" width="60" height="60" />${data.productName[i]} ${data.style[i]} * ${data.quantity[i]} $${data.unitprice[i]}<br />`;
@@ -312,25 +365,29 @@
                 total = total + data.shipperFee;
             }
             item = item + `</td>
-                                <td class="ordertotalprice">$${total}</td>
-                                <td>${data.orderStatusName}</td>
-                                <td style="text-align:center">
-                                    <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
+                                    <td class="ordertotalprice">$${total}</td>
+                                    <td>${data.orderStatusName}</td>
+                                    <td style="text-align:center">
+                                        <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
             if (data.shipperStatusId == 6 && data.sellerCommentId == 0) {
-                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a>`;
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a><br />`;
             }
             if (data.shipperStatusId == 3) {
-                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop3" class="btn btn-secondary orderbuttonfi my-1">出貨</a>`;
+                item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop3" class="btn btn-secondary orderbuttonfi my-1">出貨</a><br />`;
+            }
+            if (data.shipperStatusId == 2 || data.shipperStatusId == 3 || data.shipperStatusId == 4 || data.shipperStatusId == 5 || data.shipperStatusId == 6 || data.shipperStatusId == 8) {
+                item = item + ` <a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop9" role="button">申訴</a><br />`;
             }
             if (data.shipperStatusId == 8) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop7" class="btn btn-info orderbuttonret my-1">處理</a>`;
             }
+
             item = item + `<div>
-                                        <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
-                                    </div>
-                                    <input type="hidden" class="orderbuyerid" value="${data.buyerId}" />
-                                </td>
-                            </tr>`;
+                                            <input class="form-check-input checkboxorder" type="checkbox" value="" aria-label="...">
+                                        </div>
+                                        <input type="hidden" class="orderbuyerid" value="${data.buyerId}" />
+                                    </td>
+                                </tr>`;
             return item;
         }
 
@@ -420,7 +477,7 @@
         //})
 
         $("#orderrecsubmit").click(function () {
-            happy_sendnoti(2, recbuyerid,"賣家已經出貨囉，點擊獲得更多資訊","/Member/Order?sort=0&tab=4")
+            happy_sendnoti(2, recbuyerid, "賣家已經出貨囉，點擊獲得更多資訊", "/Member/Order?sort=0&tab=4")
             $.getJSON(`/Seller/WriteShipping`, { id: recorderid }, function (data) {
                 reloaditem(sortmethod, tabid);
             });
@@ -459,7 +516,7 @@
         $(document).on("click", ".orderbuttonret", function () {
             returnorderid = $(this).parent().siblings().children().val();
             commentitem = $(this);
-            
+
             $.getJSON(`/Seller/GetReturn`, { id: returnorderid }, function (data) {
                 returntype = data.typeID;
                 console.log(returntype)
@@ -474,18 +531,18 @@
                     }
                 }
             });
-            if(returntype != 5){
+            if (returntype != 5) {
                 $("#returnfooter").html(`<button type="button" class="btn btn-primary" id="orderreturnsubmit" data-bs-target="#staticBackdrop8" data-bs-toggle="modal">同意</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`);
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`);
             }
-            else{
+            else {
                 $("#returnfooter").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`);
             }
-            
+
 
         })
 
-        $(document).on("click", "#orderreturnsubmit",function () {
+        $(document).on("click", "#orderreturnsubmit", function () {
             console.log(returntype);
             $.getJSON(`/Seller/AcceptReturn`, { id: returnorderid, type: returntype }, function (data) {
                 reloaditem(sortmethod, tabid);
@@ -495,5 +552,62 @@
         $(document).on("click", ".orderopenmsg", function () {
             happy_popup($(this).siblings("a").html());
         });
+
+        let argueorderid;
+        let argueitem;
+        let arguebuyerid;
+        $(document).on("click", ".orderbuttonre", function () {
+            arguebuyerid = $(this).siblings(".orderbuyerid").eq(0).val();
+            argueorderid = $(this).parent().siblings().children().val();
+            $("#argueselect").children().eq(0).prop("selected", "selected");
+            $("#exampleFormControlTextarea1").val("");
+            argueitem = $(this);
+            $("#previewCommentPhoto").html("");
+        })
+
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+
+        $("#orderarguesubmit").click(function () {
+            let pics = $.map($("#previewCommentPhoto").find("img"), function (item, index) {
+                return (item.src).split(',')[1];
+            });
+            happy_sendnoti(4, arguebuyerid, "你的訂單被賣家投訴了，請點擊確認", "/Member/Order?sort=0&tab=8")
+            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
+                reloaditem(sortmethod, tabid);
+            });
+        })
+
+        $("#commentPhoto").change(function () {
+            const photos = document.getElementById("commentPhoto").files;
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(photo);
+                    reader.onloadend = function () {
+                        let src = reader.result;
+                        $("#previewCommentPhoto").append(`<div class="deleteCommentPhoto"><i class="fa-solid fa-circle-xmark"></i><img style="max-width:100px" src="${src}" /></div>`);
+                    }
+                });
+            }
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0.3");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+            $(this).children("i").css("opacity", "0");
+        });
+        $("#previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "pointer");
+        });
+        $("#previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+            $(this).css("cursor", "none");
+        });
+        $("#previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+            $(this).closest(".deleteCommentPhoto").remove();
+        });
+
+
     </script>
 }
