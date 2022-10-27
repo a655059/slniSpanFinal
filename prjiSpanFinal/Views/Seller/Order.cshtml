@@ -88,13 +88,12 @@
                 <div class="col-8">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item">
+                            <li class="page-item" id="orderpageup">
                                 <a class="page-link" href="#" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item">
+                            <li class="page-item" id="orderpagedown">
                                 <a class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
@@ -319,11 +318,18 @@
 {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
-        function reloaditem(sm, id) {
-            $.getJSON(`/Seller/SortOrder`, { sort: sm, tab: id }, function (data) {
+        let nowpages = 1;
+        function reloaditem(sm, id, pages = nowpages) {
+            $.getJSON(`/Seller/SortOrder`, { sort: sm, tab: id, pages: pages }, function (data) {
                 $("#orderlistbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     $("#orderlistbody").append(OrderListItem(data[i]));
+                }
+                if (data.length > 0) {
+                    PageNumFill(data[0].orderCount);
+                }
+                else {
+                    PageNumFill(1);
                 }
             });
         }
@@ -347,6 +353,23 @@
             }
             $(this).closest("div").siblings("input").val(starCount);
         });
+
+        function PageNumFill(c) {
+            let pagecount = Math.ceil(c / 5);
+            let midpagecount = Math.ceil(pagecount / 2);
+            if (midpagecount >= 2) {
+
+            }
+            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+            for (let i = 1; i < pagecount + 1; i++) {
+                if (i == nowpages) {
+                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
 
         function OrderListItem(data) {
             item = `<tr>
@@ -608,6 +631,20 @@
             $(this).closest(".deleteCommentPhoto").remove();
         });
 
+        $(document).on("click", ".orderpagenumclick", function () {
+            nowpages = $(this).html();
+            reloaditem(sortmethod, tabid, nowpages);
+        })
 
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            nowpages = Math.min(nowpages + 1,pagescount);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#orderpageup").click(function () {
+            nowpages = Math.max(nowpages - 1, 1);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
     </script>
 }
