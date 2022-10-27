@@ -96,15 +96,15 @@
                         {
                                     @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
                             @class="btn btn-outline-primary mb-2"})
-                                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
-                            @class="btn btn-outline-primary mb-2"})
+                            //        @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
+                            //@class="btn btn-outline-primary mb-2"})
                         }
                         else
                         {
                                    @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
                 @class="btn btn-outline-primary disabled"})
-                                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
-                @class="btn btn-outline-primary disabled"})
+                //                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
+                //@class="btn btn-outline-primary disabled"})
                         }
                     }
                 </td>

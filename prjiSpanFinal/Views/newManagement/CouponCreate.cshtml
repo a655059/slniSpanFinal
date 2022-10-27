@@ -19,11 +19,11 @@
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                開始日期<input asp-for="StartDate" class="form-control" type="date"/>
+                開始日期<input asp-for="StartDate" class="form-control" type="datetime"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                失效日期<input asp-for="ExpiredDate" class="form-control" type="date"/>
+                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime"/>
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,12 +39,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveStartDate" class="control-label">可以領取日期</label>
-                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="date"/>
+                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime"/>
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReceiveEndDate" class="control-label">結束領取日期</label>
-                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="date"/>
+                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime"/>
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">

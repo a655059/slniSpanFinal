@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Discount" class="control-label">折扣</label>
-                <input asp-for="Discount" class="form-control" />
+                <input id="Discount" asp-for="Discount" class="form-control" />
                 <span asp-validation-for="Discount" class="text-danger">Ex:若為8折請填入0.8</span>
             </div>
             <div class="form-group">
@@ -54,7 +54,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsFreeDelivery" /> 是否為免運券
+                    <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" /> 是否為免運券
                 </label>
             </div>
             <div class="form-group">
@@ -63,15 +63,49 @@
                 <span asp-validation-for="MinimumOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="確定" class="btn btn-primary" />
+                <input id="confirms" type="submit" value="確定" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="CouponList">優惠券列表</a>
+    <a asp-action="CouponList">取消並回到列表</a>
 </div>
 
 @section Scripts {
+    <script>
+      var IsFreeDelivery = document.getElementById("IsFreeDelivery");
+        var confirms = document.getElementById("confirms");
+        var Discount = $("#Discount");
+        var Discounts= document.getElementById("Discount");
+        var Inputs=document.querySelectorAll(".inputs");
+        IsFreeDelivery.addEventListener("change", function () {
+            if (IsFreeDelivery.checked == true) {
+                Discount.prop('readonly', true);
+                Discounts.value = 1;
+            }
+            else {
+                Discounts.value = "";
+                Discount.prop('readonly', false);
+            }
+        })
+        Discounts.addEventListener("blur",function(event){
+            console.log(Number(Discounts.value))
+            if(isNaN(Number(Discounts.value))||Number(Discounts.value)>1){
+                alert("折扣欄位請輸入小於或等於1的小數!");
+                return;
+            }
+        })
+        confirms.addEventListener("click",function(event){
+            for(var l of Inputs){
+            if(!(l.value)){
+            event.preventDefault();
+            alert("每個欄位皆是必填");
+            break;
+            }
+            }
+        }
+        )
+     </script>
 }

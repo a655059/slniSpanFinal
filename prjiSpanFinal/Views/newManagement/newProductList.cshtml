@@ -73,11 +73,11 @@
                     <input value="@item.ProductStatusName" class="form-control-plaintext psname" readonly>
                 </td>
                 <td>
-                    <a asp-action="ProductDown" name="@item.Product.ProductId" class="ProdDown btn btn-outline-secondary">下架</a>
-                    <a asp-action="ProductUndo" name="@item.Product.ProductId" class="ProdUndo btn btn-outline-primary">復原</a>
-                    <a asp-action="ProductDelete" name="@item.Product.ProductId" class="ProdDele btn btn-outline-danger">刪除</a>
-                    @Html.ActionLink("查看更多", "newProductList2", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
-                    @Html.ActionLink("檢視產品細節", "ProductDetailList", new { id=item.Product.ProductId },new{@class="btn btn-primary"})
+                    <a asp-action="ProductDown" name="@item.Product.ProductId" class="ProdDown btn btn-outline-secondary mb-1">下架</a>
+                    <a asp-action="ProductUndo" name="@item.Product.ProductId" class="ProdUndo btn btn-outline-primary mb-1">復原</a>
+                    <a asp-action="ProductDelete" name="@item.Product.ProductId" class="ProdDele btn btn-outline-danger mb-1">刪除</a>
+                    @Html.ActionLink("查看更多", "newProductList2", new { id=item.Product.ProductId },new{@class="btn btn-primary mb-1"})
+                    @Html.ActionLink("檢視產品細節", "ProductDetailList", new { id=item.Product.ProductId },new{@class="btn btn-primary mb-1"})
                 </td>
             </tr>
         }
