@@ -49,12 +49,12 @@ namespace prjiSpanFinal.Controllers
             if (_db.CouponWallets.Where(w => w.MemberId == loggedmem.MemberId && w.CouponId == couponid).Any()) {
                 return Content("1", "text/plain", Encoding.UTF8);
             }
-            else { 
-            CouponWallet CW = new CouponWallet()
-            {
-                CouponId = couponid,
-                MemberId = loggedmem.MemberId,
-                IsExpired = false
+            else {
+                CouponWallet CW = new CouponWallet()
+                {
+                    CouponId = couponid,
+                    MemberId = loggedmem.MemberId,
+                    IsExpired = false
             };
             _db.CouponWallets.Add(CW);
             _db.SaveChanges();
