@@ -8,7 +8,7 @@
         <ul class="list-unstyled ps-0">
             <li class="mb-4">
                 <div>
-                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">@Model.MemberAcc</span><br /><a asp-action="Edit">編輯我的資料</a>
+                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="70" height="70" style="border-radius: 50%; float:left; padding-right:3px;" /><br /><span style="font-weight:bold">@Model.MemberAcc</span><br /><a asp-action="Edit" asp-controller="Member">編輯我的資料</a>
                 </div>
             </li>
             <li class="mb-1" style="clear: left; ">
