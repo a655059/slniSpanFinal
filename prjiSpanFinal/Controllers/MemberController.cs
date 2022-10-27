@@ -333,25 +333,14 @@ namespace prjiSpanFinal.Controllers
             }
             return View();
         }
-        public IActionResult SortOrder(int sort, int tab, int pages, int eachpage)
+        public IActionResult SortOrder(int sort, int tab, int pages, int eachpage, string keyword, DateTime startdate, DateTime enddate)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
             {
                 return RedirectToAction("Login", "Member");
             }
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return Json(new OrderSortReq().SortTab(sort, tab, id, pages, eachpage));
-
-        }
-        public IActionResult SearchOrder(string keyword, DateTime startdate, DateTime enddate)
-        {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
-            {
-                return RedirectToAction("Login", "Member");
-            }
-            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return Json(new OrderSortReq().SearchOrder(keyword, startdate.AddDays(1), enddate.AddDays(1), id));
-
+            return Json(new OrderSortReq().SortTab(sort, tab, id, pages, eachpage, keyword, startdate, enddate.AddDays(1)));
         }
 
         public IActionResult WriteArgue(int id, int type,int reason, string keyword, List<byte[]> pics)

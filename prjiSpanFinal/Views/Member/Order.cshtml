@@ -21,7 +21,7 @@
             <div class="ordersearchbar">
                 <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
                 <span>
-                    <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                    <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" max="" value="搜尋" type="button" />
                 </span>
             </div>
             <div class="ordersearchbar">
@@ -134,7 +134,7 @@
                     <option selected value="1">我沒收到商品</option>
                     <option value="2">商品與期待不符</option>
                     <option value="3">商品有損壞</option>
-                    <option value="4">太慢</option>
+                    <option value="4">賣家不出貨</option>
                     <option value="5">服務態度太差</option>
                     <option value="6">其他</option>
                 </select>
@@ -284,10 +284,29 @@
     {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
+        /*startDate.max = new Date().toISOString().split("T")[0];*/
+        endDate.max = new Date().toISOString().split("T")[0];
+        let sortmethod = 0;
+        let tabid = 0;
         let nowpages = 1;
         let eachpage = 5;
-        function reloaditem(sm, id, pages = nowpages, eachpages = eachpage) {
-            $.getJSON(`/Member/SortOrder`, { sort: sm, tab: id, pages: pages, eachpage: eachpages }, function (data) {
+        let searchflag = false;
+        function reloaditem(sm = sortmethod, id = tabid, pages = nowpages, eachpages = eachpage) {
+            let keyword;
+            let startdate;
+            let enddate
+            if (searchflag) {
+                keyword = $("#orderkeyword").val();
+                startdate = $("#startDate").val();
+                enddate = $("#endDate").val();
+            }
+            else {
+                $("#orderkeyword").val("");
+                keyword = "";
+                startdate = "1990-01-01";
+                enddate = "2050-01-01";
+            }
+            $.getJSON(`/Member/SortOrder`, { sort: sm, tab: id, pages: pages, eachpage: eachpages, keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
                 $("#orderlistbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     $("#orderlistbody").append(OrderListItem(data[i]));
@@ -359,10 +378,8 @@
                                         </tr>`;
             return item;
         }
-
-        let sortmethod = 0;
-        let tabid = 0;
         $("#ordertime").click(function () {
+            nowpages = 1;
             if ($("#ordertime").hasClass("sorting_desc")) {
                 sortmethod = 0;
                 reloaditem(sortmethod, tabid);
@@ -371,9 +388,9 @@
                 sortmethod = 1;
                 reloaditem(sortmethod, tabid);
             }
-            nowpages = 1;
         })
         $("#ordersales").click(function () {
+            nowpages = 1;
             if ($("#ordersales").hasClass("sorting_desc")) {
                 sortmethod = 2;
                 reloaditem(sortmethod, tabid);
@@ -382,26 +399,29 @@
                 sortmethod = 3;
                 reloaditem(sortmethod, tabid);
             }
-            nowpages = 1;
         })
         $(".ordernavtabs").click(function (event) {
             tabid = $(event.currentTarget).siblings("input").val();
             $(event.currentTarget).addClass("active");
             $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-            reloaditem(sortmethod, tabid);
             nowpages = 1;
+            reloaditem(sortmethod, tabid);
         })
         $("#btnDate").click(function () {
-            let keyword = $("#orderkeyword").val();
-            let startdate = $("#startDate").val();
-            let enddate = $("#endDate").val();
-            $.getJSON(`/Member/SearchOrder`, { keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
-                $("#orderlistbody").html("");
-                for (let i = 0; i < data.length; i++) {
-                    $("#orderlistbody").append(OrderListItem(data[i]));
-                }
-            });
-            $("#orderkeyword").val("");
+            if (searchflag) {
+                searchflag = false;
+                $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
+                $("#btnDate").val("搜尋");
+                $("#orderkeyword").removeAttr("readonly");
+            }
+            else {
+                searchflag = true;
+                $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
+                $("#btnDate").val("解除搜尋");
+                $("#orderkeyword").attr("readonly", "readonly");
+            }
+            nowpages = 1;
+            reloaditem();
         });
         $("#flexCheckDefault").change(function () {
             if ($(this).prop("checked")) {
