@@ -308,16 +308,22 @@ namespace prjiSpanFinal.Controllers
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                return RedirectToAction("Login");   //如果沒有登入則要求登入
+                return RedirectToAction("Login");
             }
-            iSpanProjectContext dbcontext = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            var CouponWallet = dbcontext.CouponWallets.Where(p => p.MemberId == id).Select(p => p.CouponId).ToList();
-            if (CouponWallet != null)
-            {
 
-            }
-            return View();
+            List<CouponViewModel> listCvm = (new CouponFactory()).cGetCoupon(id);
+            MyCouponViewModel ViewModel = new MyCouponViewModel()
+            {
+                ListCoupon = listCvm,
+                MemberID = id
+            };
+            return View(ViewModel);
+        }
+        public IActionResult getCoupons(int filter ,int sort)
+        {
+            int MemID = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            return Json(((new CouponFactory()).fReturnCoupon(filter, sort, MemID)).ToArray());
         }
         public IActionResult Order()
         {

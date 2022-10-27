@@ -49,34 +49,45 @@
             <button class="btn btn-outline-warning btn-lg" type="button"><i>存儲</i></button>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav-item" id="all">
-                <a class="nav-link active ordernavtabs" aria-current="page" href="#">全部</a>
+            <li class="nav-item " id="all">
+                <a class="nav-link active ordernavtabs active Filter" aria-current="page" href="#">全部</a>
+                <input type="hidden" value="0Fall"/>
             </li>
-            <li class="nav-item" id="coupon1">
-                <a class="nav-link ordernavtabs" href="#">蝦到爆折價券</a>
+            <li class="nav-item " id="coupon1">
+                <a class="nav-link ordernavtabs Filter" href="#">商場折價券</a>
+                <input type="hidden" value="1Fofficial" />
             </li>
-            <li class="nav-item" id="coupon2">
-                <a class="nav-link ordernavtabs" href="#">賣場折價券</a>
-            </li>
-            <li class="nav-item" id="coupon3">
-                <a class="nav-link ordernavtabs" href="#">合作商家</a>
+            <li class="nav-item " id="coupon2">
+                <a class="nav-link ordernavtabs Filter" href="#">賣場折價券</a>
+                <input type="hidden" value="2Fcourt" />
             </li>
         </ul>
         <ul class="nav nav-tabs">
             <li class="nav-item" id="new">
-                <a class="nav-link active ordernavtabs" aria-current="page" href="#">最新</a>
+                <a class="nav-link ordernavtabs Sort active" aria-current="page" href="#">總覽</a>
+                <input type="hidden" value="1Sort" />
             </li>
-            <li class="nav-item" id="hot">
-                <a class="nav-link ordernavtabs" href="#">熱門</a>
+            <li class="nav-item" id="new">
+                <a class="nav-link ordernavtabs Sort" aria-current="page" href="#">可使用</a>
+                <input type="hidden" value="2Sort" />
             </li>
             <li class="nav-item" id="datetime">
-                <a class="nav-link ordernavtabs" href="#">即將到期</a>
+                <a class="nav-link ordernavtabs Sort" href="#">即將到期</a>
+                <input type="hidden" value="3Sort" />
+            </li>
+            <li class="nav-item" id="datetime">
+                <a class="nav-link ordernavtabs Sort" href="#">已使用</a>
+                <input type="hidden" value="4Sort" />
+            </li>
+            <li class="nav-item" id="datetime">
+                <a class="nav-link ordernavtabs Sort" href="#">失效優惠券</a>
+                <input type="hidden" value="5Sort" />
             </li>
         </ul>
 
         <figure style="background-color:#FCFCFC">
             <figcaption></figcaption>
-            <div class="aaa d-flex flex-wrap">
+            <div class="aaa d-flex flex-wrap" id="CouponArea">
                 @for (int i = 15; i >= 1; i--)
                 {
                     <div class="sellsitem">
@@ -146,36 +157,82 @@
 @section Scripts
 {
     <script>
-const { data } = require("jquery");
 
-        const coupon蝦到爆 = document.querySelector("#coupon1");
-        coupon蝦到爆.addEventListener("click", () => {
-            $("#coupon1").children().addClass("active")
-            $("#all").children().removeClass("active")
-            $(".aaa").html(str);
-            $(".ordernavtabs").click(function (event) {
-                tabid = $(event.currentTarget).siblings("input").val();
-                $(event.currentTarget).addClass("active");
-                $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-            })
+//const { data } = require("jquery");
+
+        //const coupon蝦到爆 = document.querySelector("#coupon1");
+        //coupon蝦到爆.addEventListener("click", () => {
+        //    $("#coupon1").children().addClass("active")
+        //    $("#all").children().removeClass("active")
+        //    $(".aaa").html(str);
+        //    $(".ordernavtabs").click(function (event) {
+        //        tabid = $(event.currentTarget).siblings("input").val();
+        //        $(event.currentTarget).addClass("active");
+        //        $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+        //    })
+        //})
+        let Filter = 0;
+        let Sort = 1;
+        let sort1 = document.getElementById("new");
+        let couponarea = $(`#CouponArea`);
+        CallJson();
+
+        $(".Filter").click(function () {
+            let target = $(event.target);
+            let val = (target.siblings(`input`).val()).charAt(0);
+            Sort = 1;
+            Filter = val;
+            $(".active").removeClass("active");
+            target.addClass("active");
+            sort1.classList.add("active");
+            CallJson();
         })
+
+        $(".Sort").click(function () {
+            let target = $(event.target);
+            let val = (target.siblings(`input`).val()).charAt(0);
+            Sort = val;
+            $(".Sort").removeClass(`active`);
+            target.addClass(`active`)
+            CallJson();
+        })
+        function CallJson() {
+            $.getJSON(`/Member/getCoupons`, { filter: Filter, sort: Sort }, function (data) {
+                couponarea.html("");
+                if (data.length > 0) {
+                    couponarea.html(RefreshCoupon(data));
+                }
+            })
+        }
         
         function RefreshCoupon(data) {
             let str = ""
-            if (data.length > 0) {
-                for (let i = 1; i < data.length; i++) {
+            console.log(data[0]);
+            console.log(data[0].coupon);
+            if (data.length > 0) {                
+                for (let i = 0; i < data.length; i++) {
                     let a = "@Url.Content("~/img/coupon.jpg")";
                     str += `  <div class="border w-25">
                         <div>
                             <img src='${a}' class="w-100" />
                         </div>
                         <div class="px-1 d-flex flex-column justify-content-between">
-                            <div class="cardTitle">店到店免運</div>
-                            <div class="cardPrice">2022/10/10生效</div>
+                            <div class="cardTitle">${data[i].coupon.couponName}</div>
+                            <div class="cardPrice">可使用：${data[i].startDate}</div>
+                            <div class="cardPrice">失效日：${data[i].expDate}</div>
                             <div class="cardInfo d-flex justify-content-between align-items-end">
-                                <div class="d-flex justify-content-start flex-column mt-1">
-                                    <div class="text-black-50">數量有限用完為止</div>
-                                </div>
+                                <div class="d-flex justify-content-start flex-column mt-1">`;
+                    if (data[i].isOverExpDate) {
+                        str += `<div class="text-black-50">已失效</div>`
+                    }
+                    else if (data[i].isNearExpDate) {
+                        str += `<div class="text-black-50">即將失效</div>`
+                    }
+                    else{
+                        str += `<div class="text-black-50">把握效期！盡快使用！</div>`
+                    }
+
+                            str+=    `</div>
                             </div>
                         </div>
                     </div>`
@@ -184,6 +241,7 @@ const { data } = require("jquery");
             else {
                 str = `<div><a href=""> 沒有優惠券哦！快去優惠券區領取吧！</a></div>`;
             }
+            return str;
         }
 
     </script>
