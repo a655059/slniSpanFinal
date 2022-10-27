@@ -91,15 +91,16 @@
         <div class="itembody">
             <div class="itembody-filter d-flex align-items-center justify-content-between">
                 <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+
                     <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder1">
                         全部商品
                         <input type="hidden" value="1" />
                     </a>
 
-                    <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    @*<a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         狀態
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    </a>*@
+                    @*<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
                             <a class="dropdown-item SortOrder" id="SortOrder6">
                                 <i></i>
@@ -114,7 +115,7 @@
                                 <input type="hidden" value="7" />
                             </a>
                         </li>
-                    </ul>
+                    </ul>*@
 
                     <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
                         熱銷商品
@@ -239,60 +240,28 @@
 
         let SortOrder = 1;
         let pages = 0;
+        @*let BigtypeId = "@Model.SearchType.BigTypeId";*@
+        //let sort1 = document.getElementById("SortOrder1");
+        //let menu = document.getElementById("dropdownMenuLink");
 
 
 
-        @*pd全部.addEventListener("click", () => {
-            $.getJSON("/Member/AllLike", {}, function (data) {
-                $(".aaa").html("");
-                let a = "@Url.Content("~/img/product01.png")";
-                let str=` <div class="border w-25">
-                    <div>
-                        <img src='${a}' class="w-100" />
-                    </div>
-                    <div class="px-1 d-flex flex-column justify-content-between">
-                        <div class="cardTitle">商品:筆電</div>
-                        <div class="cardPrice">價格:$25000</div>
-                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                            <div class="d-flex justify-content-start flex-column mt-1">
-                                <div class="text-black-50">銷售存量<span>100</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-
-                $(".aaa").html(str);
-                console.log(data);
-
-            }
-
-            )
-        })
-
-    pd狀態.addEventListener("click", () => {
-        let str = ""
-        for (let i = 1; i < 7; i++) {
-            let a = "@Url.Content("~/img/product01.png")";
-            $(".aaa").html("");
-            str += ` <div class="border w-25">
-                    <div>
-                        <img src='${a}' class="w-100" />
-                    </div>
-                    <div class="px-1 d-flex flex-column justify-content-between">
-                        <div class="cardTitle">商品:筆電</div>
-                        <div class="cardPrice">價格:$25000</div>
-                        <div class="cardInfo d-flex justify-content-between align-items-end">
-                            <div class="d-flex justify-content-start flex-column mt-1">
-                                <div class="text-black-50">銷售存量<span>100</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-        }
-        $(".aaa").html(str);
-    });*@
         $(".SortOrder").click(function (event) {
+
             let target = $(event.target);
+            $(".active").removeClass("active");
+            target.addClass("active");
+
+            //if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
+            //    if (!menu.classList.contains("active")) {
+            //        menu.classList.add("active");
+            //    }
+            //    menu.textContent = this.textContent.trim();
+            //}
+            //else {
+            //    menu.textContent = "價格排序";
+            //}
+
             SortOrder = target.find("input").val();
             CallgetJSON();
         });
@@ -308,7 +277,7 @@
         //    $(event.currentTarget).parent().siblings().children("a").removeClass("active");
         //})
         function CallgetJSON() {
-            $.postJSON(`/Member/AllLike`, { BigTypeId: BigtypeId, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+            $.postJSON(`/Member/AllLike`, {filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
                     $("#OriginShowItem").append(Items(data));

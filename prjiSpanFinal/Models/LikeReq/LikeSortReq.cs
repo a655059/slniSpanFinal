@@ -8,53 +8,64 @@ namespace prjiSpanFinal.Models.LikeReq
 {
     public class LikeSortReq
     {
-        public List<MyLikeShowItem> MyLikeSortItems(int BigTypeId, int[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        //like篩選的所有方法
+        public List<MyLikeShowItem> MyLikeSortItems( int[] filter, int priceMin, int priceMax, int SortOrder, int pages,int memberid)
         {
             iSpanProjectContext db = new iSpanProjectContext();
-            var prodlist = new List<Product>();
+            
+            var mylike = new List<Product>();
+            var LikeProduct = new List<Like>();
             #region Filter (List<Product>)
             //Filter
-            if (filter.Length > 0)
-            {
-                foreach (var item in filter)
-                {
-                    var a = db.Products.Where(p => p.SmallTypeId == item && p.ProductStatusId == 0).ToList();
-                    prodlist.AddRange(a);
-                }
-            }
-            else
-            {
-                //都要
-                prodlist = db.Products.Where(p => p.SmallType.BigTypeId == BigTypeId && p.ProductStatusId == 0).ToList();
-            }
+            //if (filter.Length > 0)
+            //{
+            //    foreach (var item in filter)
+            //    {
+            //        var a = db.Products.Where(p => p.SmallTypeId == item && p.ProductStatusId == 0).ToList();
+            //        prodlist.AddRange(a);
+            //    }
+            //}
+
+            //都要
+             mylike = db.Likes.Where(p => p.MemberId == memberid).Select(p => p.Product).ToList();
+            //var product_無效 = db.Likes.Where(p => p.Product.ProductStatusId == 1).ToList();
             #endregion
 
-            List<MyLikeShowItem> list = (new MyLikeFactory()).toShowItem(prodlist);
+            List<MyLikeShowItem> list = (new MyLikeFactory()).toShowItem(mylike);
 
             #region  SortOrder
             //SortOrder
             switch (SortOrder)
             {
-                case 2:
-                    //最新排序
-                    list = (new MyLikeFactory()).toShowItem(prodlist.OrderByDescending(p => p.ProductId).ToList());
+                case 1:
+                    //全部按讚
+                    list = (new MyLikeFactory()).toShowItem(mylike);
                     break;
+                ////有效商品
+                //case 6:
+                    
+                //    list = (new MyLikeFactory()).toShowItem(mylike);
+                //    break;
+                ////無效商品
+                //case 7:
+                //    list = (new MyLikeFactory()).toShowItem(mylike);
+                //    break;
                 case 3:
                     //熱銷排序
-                    list = ((new MyLikeFactory()).toShowItem(prodlist)).OrderByDescending(s => s.salesVolume).ToList();
+                    list = ((new MyLikeFactory()).toShowItem(mylike)).OrderByDescending(s => s.salesVolume).ToList();
                     break;
                 case 4:
                     //價高排序
-                    list = (new MyLikeFactory()).toShowItem(prodlist);
+                    list = (new MyLikeFactory()).toShowItem(mylike);
                     list = list.OrderByDescending(p => p.Price.Max()).ToList();
                     break;
                 case 5:
                     //價低排序
-                    list = (new MyLikeFactory()).toShowItem(prodlist);
+                    list = (new MyLikeFactory()).toShowItem(mylike);
                     list = list.OrderBy(p => p.Price.Min()).ToList();
                     break;
                 default:
-                    list = (new MyLikeFactory()).toShowItem(prodlist);
+                    list = (new MyLikeFactory()).toShowItem(mylike);
                     break;
             }
             #endregion
