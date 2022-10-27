@@ -8,7 +8,12 @@ namespace prjiSpanFinal.ViewModels.Event
 {
     public class EventFactory
     {
-        iSpanProjectContext _db = new iSpanProjectContext();
+        iSpanProjectContext _db;
+
+        public EventFactory()
+        {
+            _db = new iSpanProjectContext();
+        }
         public List<Coupon> listTheCoupons(int? memberid)
         {
             List<Coupon> res = new List<Coupon>();
