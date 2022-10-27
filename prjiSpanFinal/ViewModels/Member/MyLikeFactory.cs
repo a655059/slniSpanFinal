@@ -58,11 +58,11 @@ namespace prjiSpanFinal.ViewModels.Member
             return res;
         }
 
-        public List<MyLikeShowItem> toShowMore(List<MyLikeShowItem> list, int a, int b)
-        {
-            List<MyLikeShowItem> res = list.Skip(a).Take(b).ToList();
-            return res;
-        }
+        //public List<MyLikeShowItem> toShowMore(List<MyLikeShowItem> list, int a, int b)
+        //{
+        //    List<MyLikeShowItem> res = list.Skip(a).Take(b).ToList();
+        //    return res;
+        //}
         public List<SmallType> searchTypeSmall(BigType search)
         {
             iSpanProjectContext db = new iSpanProjectContext();

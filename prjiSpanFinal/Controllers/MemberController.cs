@@ -274,36 +274,19 @@ namespace prjiSpanFinal.Controllers
                 }
             }
         }
-        public IActionResult AllLike(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         {
-            //if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-            //{
-            //    return RedirectToAction("Login");   //如果沒有登入則要求登入
-            //}
-            //iSpanProjectContext dbcontext = new iSpanProjectContext();
-            //int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            //var mylike = dbcontext.Likes.Where(p => p.MemberId == id).Select(p => p.Product).ToList();
-            //if (mylike != null)
-            //{
-            //var list = (new MyLikeFactory()).toShowItem(mylike);
-            //return Json(list);
-            //}
-            //else
-            //{
-            //    //string showNoItem = "抱歉!您還沒有按讚任何商品";
-            //    //(new MyLikeShowItem()).MylikeIsNull= showNoItem;
-            //    return Json(new MyLikeShowItem().MylikeIsNullorNOT);
-            //}
-            return Json(new LikeSortReq().MyLikeSortItems(BigTypeId, filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
 
-
-
+            return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
         }
-        public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
-        {
+        //public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        //{
 
-            return Json(new SortRequest().SortItems(BigTypeId, filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
-        }
+        //    return Json(new SortRequest().SortItems(BigTypeId, filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages));
+        //}
         public IActionResult Coupon()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
