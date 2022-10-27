@@ -10,9 +10,10 @@ namespace prjiSpanFinal.Models.OrderReq2
 {
     public class OrderSortReq
     {
-        public List<OrderListViewModel> SortTab(int sort, int tab, int id) 
+        public List<OrderListViewModel> SortTab(int sort, int tab, int id, int pages, int eachpage) 
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
+            int ordercount = dbcontext.Orders.Where(o => o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Count();
             List<OrderListViewModel> q = dbcontext.Orders.Select(o => new OrderListViewModel()
             {
                 OrderId = o.OrderId,
@@ -49,6 +50,7 @@ namespace prjiSpanFinal.Models.OrderReq2
                 Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
                 Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
                 ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+                OrderCount = ordercount,
             }).ToList();
             if (tab == 0)
             {
@@ -74,7 +76,7 @@ namespace prjiSpanFinal.Models.OrderReq2
             {
                 q = q.OrderBy(o => o.PaymentFee + o.ShipperFee + o.Quantity.Select((Value, index) => Value * Convert.ToInt32(o.Unitprice[index])).Sum()).ToList();
             }
-            return q;
+            return q.Skip((pages - 1) * eachpage).Take(eachpage).ToList();
 
         }
         public List<OrderListViewModel> SearchOrder(string keyword, DateTime startdate, DateTime enddate, int id)
