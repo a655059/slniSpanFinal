@@ -576,7 +576,10 @@ function chatbotreply(header, msgbody) {
     }
     else {
         if (msgbody.includes("退貨")) {
-            botmsg = `您可以在<a href="/Member/Order">會員中心</a>的購買清單中點擊「申請退貨」，</br > 來進行退貨流程。`;
+            botmsg = `您可以在會員中心的購買清單中點擊「申請退貨」，</br > 來進行退貨流程。`;
+        }
+        else if (msgbody.includes("買東西") || msgbody.includes("購買")) {
+            botmsg = `瀏覽商品頁面後點擊加入購物車，</br >並在購物車頁面確認無誤後按下結帳即可。`;
         }
         else {
             botmsg = "我看不懂你在說甚麼，請換個說法試試看。";
