@@ -379,16 +379,6 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content("1");
         }
-        public IActionResult OrderStop(int id)
-        {
-            var db = (new iSpanProjectContext());
-            var D = from d in db.Orders
-                    where d.OrderId == id
-                    select d;
-            D.First().StatusId = 9;
-            db.SaveChanges();
-            return Content("1");
-        }
         public IActionResult OrderDelete(int id)
         {
             var db = (new iSpanProjectContext());
@@ -779,10 +769,32 @@ namespace prjiSpanFinal.Controllers
             }
            
         }
+        public IActionResult ArgumentApprove2(int? id)
+        {
+            iSpanProjectContext db = new();
+            var G = from i in db.Arguments
+                    where i.ArgumentId == id
+                    select i;
+            var g = G.First();
+            var S = db.OrderDetails.FirstOrDefault(i => i.OrderId == g.OrderId);
+            var E= db.ProductDetails.FirstOrDefault(s => s.ProductDetailId == S.ProductDetailId).ProductId;
+            var h = db.Products.FirstOrDefault(i => i.ProductId == E).MemberId;
+            var SellerId = h;
+            var Seller = db.MemberAccounts.FirstOrDefault(i => i.MemberId == SellerId);
+            Seller.MemStatusId= 4;
+            g.ArgumentTypeId = 6;
+            try
+            {
+                db.SaveChanges();
+                return Content(SellerId.ToString());
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
 
-        #endregion
-        #region EventRegion
-        public IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
+        }
+        protected  IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
             IQueryable<OfficialEventList> Prods = null;

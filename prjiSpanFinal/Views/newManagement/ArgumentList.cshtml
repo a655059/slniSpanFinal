@@ -60,8 +60,9 @@
                     @{
                         if (item.Argument.ArgumentTypeId == 5)
                         {
-                              <a name="@item.Argument.ArgumentId" class="Delete btn btn-outline-secondary">未成案</a>
-                              <a name="@item.Argument.ArgumentId" class="Approve btn btn-outline-primary">停權買家帳號</a>
+                          <a name="@item.Argument.ArgumentId" class="Delete btn btn-outline-secondary">未成案</a>
+                          <a name="@item.Argument.ArgumentId" class="Approve btn btn-outline-primary">停權買家帳號</a>
+                          <a name="@item.Argument.ArgumentId" class="Approve2 btn btn-outline-primary">停權賣家帳號</a>
                         }
                     }
                 </td>
@@ -95,6 +96,7 @@
         }
         let Delete = document.querySelectorAll(".Delete");
         let Approve = document.querySelectorAll(".Approve");
+        let Approve2 = document.querySelectorAll(".Approve2");
         let PSName = document.querySelectorAll(".statusname");
         for (var BTNdele of Delete) {
             BTNdele.addEventListener("click", async function (event) {
@@ -118,6 +120,24 @@
                     confirm("確認要停權買家帳戶嗎?");
                     if(confirm){
                     alert("已停權買家帳戶");
+                    $(this).siblings("a").remove();
+                    $(this).remove();
+                    happy_sendnoti(4,parseInt(data) , "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權", "/Member/Order");
+                    }
+                }
+            })
+        }
+        for (var BTNUnd of Approve2) {
+            BTNUnd.addEventListener("click", async function (event) {
+                event.preventDefault();
+                console.log(event.currentTarget.name);
+                let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove2")" + `?id=${event.currentTarget.name}`)
+                let data = await response.text();
+                if (data !=null) {
+                    $(this).closest("td").siblings().find(".statusname").val("處理完成");
+                    confirm("確認要停權賣家帳戶嗎?");
+                    if(confirm){
+                    alert("已停權賣家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
                     happy_sendnoti(4,parseInt(data) , "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權", "/Member/Order");
