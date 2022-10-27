@@ -10,10 +10,10 @@ namespace prjiSpanFinal.Models.OrderReq
 {
     public class OrderSortReq
     {
-        public List<OrderListViewModel> SortTab(int sort, int tab, int id, int pages) 
+        public List<OrderListViewModel> SortTab(int sort, int tab, int id, int pages, int eachpage) 
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            int ordercount = dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1).Count();
+            int ordercount = dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Count();
             List<OrderListViewModel> q = dbcontext.Orders.Select(o => new OrderListViewModel()
             {
                 OrderId = o.OrderId,
@@ -54,11 +54,11 @@ namespace prjiSpanFinal.Models.OrderReq
             }).ToList();
             if (tab == 0)
             {
-                q = q.Where(o => o.SellerId == id && o.ShipperStatusId != 1).ToList();
+                q = q.Where(o => o.SellerId == id && o.ShipperStatusId != 1 && o.ShipperStatusId != 9).ToList();
             }
             else
             {
-                q = q.Where(o => o.SellerId == id && o.ShipperStatusId == tab && o.ShipperStatusId != 1).ToList();
+                q = q.Where(o => o.SellerId == id && o.ShipperStatusId == tab && o.ShipperStatusId != 1 && o.ShipperStatusId != 9).ToList();
             }
             if(sort == 0)
             {
@@ -76,13 +76,13 @@ namespace prjiSpanFinal.Models.OrderReq
             {
                 q = q.OrderBy(o => o.PaymentFee + o.ShipperFee + o.Quantity.Select((Value, index) => Value * Convert.ToInt32(o.Unitprice[index])).Sum()).ToList();
             }
-            return q.Skip((pages-1)*5).Take(5).ToList();
+            return q.Skip((pages-1)* eachpage).Take(eachpage).ToList();
 
         }
         public List<OrderListViewModel> SearchOrder(string keyword, DateTime startdate, DateTime enddate, int id)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            List<OrderListViewModel> q = dbcontext.Orders.Where(o=>o.OrderDatetime >= startdate && o.OrderDatetime <= enddate && o.StatusId != 1).Select(o => new OrderListViewModel()
+            List<OrderListViewModel> q = dbcontext.Orders.Where(o=>o.OrderDatetime >= startdate && o.OrderDatetime <= enddate && o.StatusId != 1 && o.StatusId != 9).Select(o => new OrderListViewModel()
             {
                 OrderId = o.OrderId,
                 SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,

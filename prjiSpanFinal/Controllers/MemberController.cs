@@ -333,14 +333,14 @@ namespace prjiSpanFinal.Controllers
             }
             return View();
         }
-        public IActionResult SortOrder(int sort, int tab)
+        public IActionResult SortOrder(int sort, int tab, int pages, int eachpage)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
             {
                 return RedirectToAction("Login", "Member");
             }
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            return Json(new OrderSortReq().SortTab(sort, tab, id));
+            return Json(new OrderSortReq().SortTab(sort, tab, id, pages, eachpage));
 
         }
         public IActionResult SearchOrder(string keyword, DateTime startdate, DateTime enddate)

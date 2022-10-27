@@ -84,8 +84,15 @@
                 </tbody>
             </table>
             <div class="row ">
-                <div class="col-4"></div>
-                <div class="col-8">
+                <div class="d-flex justify-content-center">
+                    <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                        <option value="1">每頁1個</option>
+                        <option value="5" selected>每頁5個</option>
+                        <option value="10">每頁10個</option>
+                        <option value="20">每頁20個</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item" id="orderpageup">
@@ -100,6 +107,9 @@
                             </li>
                         </ul>
                     </nav>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span id="totalpagesdisplay"></span>
                 </div>
             </div>
         </div>
@@ -319,8 +329,9 @@
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
         let nowpages = 1;
-        function reloaditem(sm, id, pages = nowpages) {
-            $.getJSON(`/Seller/SortOrder`, { sort: sm, tab: id, pages: pages }, function (data) {
+        let eachpage = 5;
+        function reloaditem(sm, id, pages = nowpages, eachpages = eachpage) {
+            $.getJSON(`/Seller/SortOrder`, { sort: sm, tab: id, pages: pages, eachpage: eachpages }, function (data) {
                 $("#orderlistbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     $("#orderlistbody").append(OrderListItem(data[i]));
@@ -355,13 +366,12 @@
         });
 
         function PageNumFill(c) {
-            let pagecount = Math.ceil(c / 5);
-            let midpagecount = Math.ceil(pagecount / 2);
-            if (midpagecount >= 2) {
-
-            }
+            let pagecount = Math.ceil(c / eachpage);
+            $("#totalpagesdisplay").html(`共${pagecount}頁`);
+            let startpage = Math.max(1, Math.min(pagecount-4,parseInt(nowpages) - 2));
+            let endpage = Math.min(pagecount, Math.max(5,parseInt(nowpages) + 2));
             $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
-            for (let i = 1; i < pagecount + 1; i++) {
+            for (let i = startpage; i <= endpage; i++) {
                 if (i == nowpages) {
                     $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
                 }
@@ -638,13 +648,18 @@
 
         $("#orderpagedown").click(function () {
             let pagescount = $(".orderpagenumclicklist").length;
-            nowpages = Math.min(nowpages + 1,pagescount);
+            nowpages = Math.min(parseInt(nowpages) + 1,pagescount);
             reloaditem(sortmethod, tabid, nowpages);
         })
 
         $("#orderpageup").click(function () {
-            nowpages = Math.max(nowpages - 1, 1);
+            nowpages = Math.max(parseInt(nowpages) - 1, 1);
             reloaditem(sortmethod, tabid, nowpages);
         })
+
+        $("#pagecountselect").change(function () {
+            eachpage = $("#pagecountselect option:selected").val();
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        });
     </script>
 }

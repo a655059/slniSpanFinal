@@ -83,23 +83,32 @@
                 </tbody>
             </table>
             <div class="row ">
-                <div class="col-4"></div>
-                <div class="col-8">
+                <div class="d-flex justify-content-center">
+                    <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                        <option value="1">每頁1個</option>
+                        <option value="5" selected>每頁5個</option>
+                        <option value="10">每頁10個</option>
+                        <option value="20">每頁20個</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item">
+                            <li class="page-item" id="orderpageup">
                                 <a class="page-link" href="#" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item">
+                            <li class="page-item" id="orderpagedown">
                                 <a class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span id="totalpagesdisplay"></span>
                 </div>
             </div>
         </div>
@@ -275,15 +284,39 @@
     {
     <script src="~/js/DataTable/datatable.js"></script>
     <script>
-        function reloaditem(sm, id) {
-            $.getJSON(`/Member/SortOrder`, { sort: sm, tab: id }, function (data) {
+        let nowpages = 1;
+        let eachpage = 5;
+        function reloaditem(sm, id, pages = nowpages, eachpages = eachpage) {
+            $.getJSON(`/Member/SortOrder`, { sort: sm, tab: id, pages: pages, eachpage: eachpages }, function (data) {
                 $("#orderlistbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     $("#orderlistbody").append(OrderListItem(data[i]));
                 }
+                if (data.length > 0) {
+                    PageNumFill(data[0].orderCount);
+                }
+                else {
+                    PageNumFill(1);
+                }
             });
         }
         reloaditem(0, 0);
+
+        function PageNumFill(c) {
+            let pagecount = Math.ceil(c / eachpage);
+            $("#totalpagesdisplay").html(`共${pagecount}頁`);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == nowpages) {
+                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
 
         function OrderListItem(data) {
             item = `<tr>
@@ -495,5 +528,25 @@
             $("#returnfooter").html(`<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>`);
         })
 
+        $(document).on("click", ".orderpagenumclick", function () {
+            nowpages = $(this).html();
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#orderpageup").click(function () {
+            nowpages = Math.max(parseInt(nowpages) - 1, 1);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#pagecountselect").change(function () {
+            eachpage = $("#pagecountselect option:selected").val();
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        });
     </script>
 }

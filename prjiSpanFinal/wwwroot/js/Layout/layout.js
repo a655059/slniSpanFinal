@@ -75,7 +75,6 @@ function SearchKeyWord(data) {
 function ticktotimestamp(today) {
     
     tms = today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0') + today.getSeconds().toString().padStart(2, '0') + today.getMilliseconds().toString().padStart(3, '0') + today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
-    console.log(tms)
     return tms;
 }
 
@@ -94,7 +93,6 @@ else {
     $("#notificationlistbox").html("");
     $.getJSON("/MsgApi/GetNotificationbyID", { id: mymemid }, function (data) {
         let hrcount = 0;
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
             if (data[i].haveRead == false) {
                 hrcount++;
