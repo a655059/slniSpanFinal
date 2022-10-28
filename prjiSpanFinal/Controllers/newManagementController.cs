@@ -756,8 +756,10 @@ namespace prjiSpanFinal.Controllers
                     join m in db.MemberAccounts on k.MemberId equals m.MemberId
                     where k.OrderId == g.OrderId
                     select m).First();
+            var order = db.Orders.FirstOrDefault(i => i.OrderId == g.OrderId);
+            order.StatusId = 7;
             K.MemStatusId = 4;
-            g.ArgumentTypeId = 6;
+            g.ArgumentTypeId = 4;
             try
             {
                 db.SaveChanges();
@@ -777,12 +779,14 @@ namespace prjiSpanFinal.Controllers
                     select i;
             var g = G.First();
             var S = db.OrderDetails.FirstOrDefault(i => i.OrderId == g.OrderId);
+          
             var E= db.ProductDetails.FirstOrDefault(s => s.ProductDetailId == S.ProductDetailId).ProductId;
             var h = db.Products.FirstOrDefault(i => i.ProductId == E).MemberId;
             var SellerId = h;
             var Seller = db.MemberAccounts.FirstOrDefault(i => i.MemberId == SellerId);
             Seller.MemStatusId= 4;
-            g.ArgumentTypeId = 6;
+            var order = db.Orders.FirstOrDefault(i => i.OrderId == g.OrderId);
+            order.StatusId = 7;
             try
             {
                 db.SaveChanges();
