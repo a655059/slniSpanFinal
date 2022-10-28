@@ -76,13 +76,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult newProductList(string keyword, int? page = 1)
+        public IActionResult newProductList(string keyword, int? pageSize, int? page )
         {
+            ViewBag.pageSize=pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetPagedProcess(page, pageSize, keyword);
-            var PList = GetPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword);
+            var PList = GetPagedProcess(page, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -216,13 +218,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult MemberList(string keyword, int? page = 1)
+        public IActionResult MemberList(string keyword ,int? pageSize, int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetMemPagedProcess(page, pageSize, keyword);
-            var PList = GetMemPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetMemPagedProcess(page, (int)pageSize, keyword);
+            var PList = GetMemPagedProcess(page,(int) pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -338,13 +342,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult OrderList(string keyword, int? page = 1)
+        public IActionResult OrderList(string keyword, int? pageSize, int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetOrdersPagedProcess(page, pageSize, keyword);
-            var PList = GetOrdersPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetOrdersPagedProcess(page,(int)pageSize, keyword);
+            var PList = GetOrdersPagedProcess(page, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -355,6 +361,16 @@ namespace prjiSpanFinal.Controllers
                     where d.OrderId == id
                     select d;
             D.First().StatusId = 4;
+            db.SaveChanges();
+            return Content("1");
+        }
+        public IActionResult OrderStop(int id)
+        {
+            var db = (new iSpanProjectContext());
+            var D = from d in db.Orders
+                    where d.OrderId == id
+                    select d;
+            D.First().StatusId = 8;
             db.SaveChanges();
             return Content("1");
         }
@@ -516,13 +532,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult ReportList(string keyword, int? page = 1)
+        public IActionResult ReportList(string keyword, int? pageSize, int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetReportPagedProcess(page, pageSize, keyword);
-            var PList = GetReportPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetReportPagedProcess(page,(int)pageSize, keyword);
+            var PList = GetReportPagedProcess(page,(int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -635,13 +653,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult CouponList(string keyword, int? page = 1)
+        public IActionResult CouponList(string keyword, int? pageSize, int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetCouponsPagedProcess(page, pageSize, keyword);
-            var PList = GetCouponsPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetCouponsPagedProcess(page, (int)pageSize, keyword);
+            var PList = GetCouponsPagedProcess(page,(int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -657,9 +677,13 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }
-        public IActionResult CouponEdit()
+        public IActionResult CouponEdit(int? id)
         {
-            return View();
+            iSpanProjectContext db = new();
+            var cps = (from i in db.Coupons
+                       where i.CouponId == id
+                       select i).First();
+            return View(cps);
         }
         [HttpPost]
         public IActionResult CouponEdit(Coupon coupon)
@@ -724,13 +748,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult ArgumentList(string keyword, int? page = 1)
+        public IActionResult ArgumentList(string keyword, int? pageSize,int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetArgumentsPagedProcess(page, pageSize, keyword);
-            var PList = GetArgumentsPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetArgumentsPagedProcess(page,(int) pageSize, keyword);
+            var PList = GetArgumentsPagedProcess(page,(int) pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -740,7 +766,7 @@ namespace prjiSpanFinal.Controllers
             var G = from i in db.Arguments
                     where i.ArgumentId == id
                     select i;
-            var g=G.First();
+            var g = G.First();
             g.ArgumentTypeId = 4;
             db.SaveChanges();
             return Content("1");
@@ -753,9 +779,9 @@ namespace prjiSpanFinal.Controllers
                     select i;
             var g = G.First();
             var K = (from k in db.Orders
-                    join m in db.MemberAccounts on k.MemberId equals m.MemberId
-                    where k.OrderId == g.OrderId
-                    select m).First();
+                     join m in db.MemberAccounts on k.MemberId equals m.MemberId
+                     where k.OrderId == g.OrderId
+                     select m).First();
             var order = db.Orders.FirstOrDefault(i => i.OrderId == g.OrderId);
             order.StatusId = 7;
             K.MemStatusId = 4;
@@ -769,7 +795,7 @@ namespace prjiSpanFinal.Controllers
             {
                 return Content(null);
             }
-           
+
         }
         public IActionResult ArgumentApprove2(int? id)
         {
@@ -779,12 +805,12 @@ namespace prjiSpanFinal.Controllers
                     select i;
             var g = G.First();
             var S = db.OrderDetails.FirstOrDefault(i => i.OrderId == g.OrderId);
-          
-            var E= db.ProductDetails.FirstOrDefault(s => s.ProductDetailId == S.ProductDetailId).ProductId;
+
+            var E = db.ProductDetails.FirstOrDefault(s => s.ProductDetailId == S.ProductDetailId).ProductId;
             var h = db.Products.FirstOrDefault(i => i.ProductId == E).MemberId;
             var SellerId = h;
             var Seller = db.MemberAccounts.FirstOrDefault(i => i.MemberId == SellerId);
-            Seller.MemStatusId= 4;
+            Seller.MemStatusId = 4;
             var order = db.Orders.FirstOrDefault(i => i.OrderId == g.OrderId);
             order.StatusId = 7;
             try
@@ -798,7 +824,9 @@ namespace prjiSpanFinal.Controllers
             }
 
         }
-        protected  IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
+        #endregion
+        #region EventRegion
+        protected IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
             IQueryable<OfficialEventList> Prods = null;
@@ -833,13 +861,15 @@ namespace prjiSpanFinal.Controllers
                 return null;
             return pagelist;
         }
-        public IActionResult EventList(string keyword, int? page = 1)
+        public IActionResult EventList(string keyword, int? pageSize, int? page = 1)
         {
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
-            const int pageSize = 3;
+            pageSize ??= 3;//if null的寫法
+            page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetEventsPagedProcess(page, pageSize, keyword);
-            var PList = GetEventsPagedProcess(page, pageSize, keyword);
+            ViewBag.Prods = GetEventsPagedProcess(page, (int)pageSize, keyword);
+            var PList = GetEventsPagedProcess(page,(int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -951,7 +981,7 @@ namespace prjiSpanFinal.Controllers
                 };
                 list.Add(model);
             }
-            var A=Q.First();
+            var A = Q.First();
             ViewBag.Id = A.OfficialEventListId;
             return View(list);
         }
@@ -1006,17 +1036,17 @@ namespace prjiSpanFinal.Controllers
             var q = from i in db.SubOfficialEventLists
                     where i.SubOfficialEventListId == id
                     select i;
-            var Q=q.First();
+            var Q = q.First();
             return View(Q);
         }
         [HttpPost]
         public IActionResult subEventEdit(SubOfficialEventList ofevent)
         {
             iSpanProjectContext db = new();
-            var ofeven=ofevent;
+            var ofeven = ofevent;
             var q = (from i in db.SubOfficialEventLists
-                    where i.SubOfficialEventListId == ofevent.SubOfficialEventListId
-                    select i).First();
+                     where i.SubOfficialEventListId == ofevent.SubOfficialEventListId
+                     select i).First();
             q.OfficialEventListId = ofevent.OfficialEventListId;
             q.SubEventName = ofevent.SubEventName;
             q.Discount = ofevent.Discount;
