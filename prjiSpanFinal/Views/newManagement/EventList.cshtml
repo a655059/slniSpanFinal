@@ -113,12 +113,13 @@
         for (var BTNdow of Dele) {
             BTNdow.addEventListener("click", async function (event) {
                 event.preventDefault();
-                let response = await fetch("@Url.Content("~/newManagement/EventDelete")" + `?id=${event.currentTarget.name}`)
+                let c=event.currentTarget.name;
+                let response = await fetch("@Url.Content("~/newManagement/EventDelete")" + `?id=${c}`)
                 let data = await response.text();
                 if (data) 
                  {
                     confirm("確定要刪除嗎?");
-                    if(!confirm){
+                    if(confirm){
                     $(this).closest("td").siblings().find(".enddate").val(data);
                     alert("已經將活動結束");}
                 }

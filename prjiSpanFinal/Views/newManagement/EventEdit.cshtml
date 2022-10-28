@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EventEdit">
+        <form asp-action="EventEdit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="OfficialEventListId" class="form-control" type="hidden"/>
@@ -19,7 +19,7 @@
                 <label asp-for="EventName" class="control-label">活動名稱</label>
                 <input asp-for="EventName" class="form-control" />
                 <span asp-validation-for="EventName" class="text-danger"></span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label">開始日期</label>
                 <input type="date" name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control" />
@@ -39,6 +39,12 @@
                 <label asp-for="JoinEndDate" class="control-label">截止參加日期</label>
                 <input type="date" name="JoinEndDate" value="@Model.JoinEndDate.ToString("yyyy-MM-dd")" class="form-control" />
                 <span asp-validation-for="JoinEndDate" class="text-danger"></span>
+            </div>  
+            <div class="form-group">
+                活動照片
+                <input id="EventPic" name="EventPic" class="form-control" type="file" value="@Model.EventPic" />
+                 <p> 圖片預覽</p>
+                 <img id="Preview" style="max-height:200px;" />
             </div>
             <div class="form-group">
                 <input type="submit" value="確認" class="btn btn-primary" />
@@ -52,5 +58,13 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+      //圖片預覽
+        $('#EventPic').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#Preview').attr('src', objectURL);
+            console.log()
+        });
+    </script>
 }
