@@ -8,12 +8,11 @@
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
 }
 <body>
-    <div class="container">
         <div class="HomepageIndex">
             <section class="rounded-3 ">
                 <div class="row justify-content-between">
                     <!--類別列表-->
-                    <div class="col-3 listview rounded-start">
+                    <div class="col-xl-3 listview rounded-start">
                         <div class="listtype accordion" id="accordionTypeList">
                             @foreach (var Big in Model.lBigType)
                             {
@@ -43,7 +42,7 @@
                     </div>
                     <!--/類別列表-->
                     <!--Carouset-->
-                    <div class="col-9 align-items-center ">
+                    <div class="col-xl-9 align-items-center ">
                         <div class="row cateheader">
                             <div class="cateheader-1">
                                 <div id="carouselExampleIndicators" class="carousel slide " data-bs-interval="4000" data-bs-ride="carousel">
@@ -83,13 +82,13 @@
                             <div class="cateheader-2">
                                 <div class="row justify-content-between dm">
                                     <div class="col-6">
-                                        <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block w-100 rounded-2">
-                                            <img src="~/img/Homepage/DM-2HP.png" />
+                                        <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block rounded-2">
+                                            <img src="~/img/Homepage/DM-2HP.png" class="w-100"/>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block w-100 rounded-2">
-                                            <img src="~/img/Homepage/DM-2HP2.png" />
+                                        <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block rounded-2">
+                                            <img src="~/img/Homepage/DM-2HP2.png" class="w-100"/>
                                         </a>
                                     </div>
                                 </div>
@@ -147,7 +146,6 @@
                 </div>
             </div>
         </section>
-    </div>
     @section Scripts{
         <script src="~/js/Homepage/Index.js"></script>
     }

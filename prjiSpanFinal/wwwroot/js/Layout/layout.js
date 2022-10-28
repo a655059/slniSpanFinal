@@ -20,11 +20,16 @@ $(function () {
 if (header2exist) {
     const h1 = $("#header1");
     const h2 = document.getElementById("header2");
-    sizeble();
+    loadHeight();
+    //sizeble();
+    console.log(h1.height());
     addEventListener('resize', async () =>
         await sizeble());
     function sizeble() {
-        h2.style.marginTop = (h1.height() + 16) + "px";
+        h2.style.marginTop = (h1.height()+15) + "px";
+    }
+    function loadHeight() {
+        h2.style.marginTop = 53 + "px";
     }
 }
 

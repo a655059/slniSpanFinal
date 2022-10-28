@@ -58,6 +58,8 @@
     .header1nav > div > div > .nav {
         align-items: center;
         font-weight: bold;
+        flex-wrap:nowrap;
+        white-space:nowrap;
     }
         .header1nav > div > div > .nav a {
             padding: 0;
@@ -75,18 +77,23 @@
 .header-cart {
     float: right;
     padding-right: 30px;
-    padding-top: 10PX;
-    width: 150px
+/*    padding-top: 10PX;
+    width: 150px*/
+display:flex;
+align-items:center;
 }
-
     .header-cart > div {
+        display: flex;
+        white-space: nowrap;
+    }
+    .header-cart > div > div {
         display: inline-block;
         margin-left: 15px;
         margin-right: 20px;
-        flex:1;
+        flex: 1;
     }
 
-        .header-cart > div > a {
+        .header-cart > div > div > a {
             display: block;
             position: relative;
             max-height:30px;
@@ -94,12 +101,12 @@
             color: #FFF;
         }
 
-            .header-cart > div > a > i {
+            .header-cart > div > div > a > i {
                 display: block;
                 font-size: 20px;
             }
 
-            .header-cart > div > a > .qty {
+            .header-cart > div > div > a > .qty {
                 position: absolute;
                 right: -10px;
                 top: -13px;
@@ -113,7 +120,7 @@
                 background-color: #D10024;
             }
 
-            .header-cart > div > a > .qty-cart {
+            .header-cart > div > div > a > .qty-cart {
                 right: -15px;
             }
 
@@ -187,6 +194,7 @@
 
     .navlog > a {
         font-weight: bold;
+        white-space:nowrap;
     }
 
         .navlog > a:hover {
@@ -196,14 +204,19 @@
 /* /Header1 */
 
 /* Header2 */
+
+.h2Searchcart{
+
+}
 .layoutheader2 {
     padding-top: 15px;
     padding-bottom: 15px;
     background-color: #FFA724;
 }
     /*蝦到爆logo大小*/
-.lologo{
-    overflow:hidden;
+.lologo {
+    overflow: hidden;
+    margin-bottom: 10px;
 }
     .lologo > .header-logo{
         width:100%;
@@ -213,10 +226,17 @@
         justify-content: center;
     }
 
-            .lologo > .header-logo > .logo > .logopic {
+            .logo > .logopic {
                 min-width: 70%;
                 text-align: center;
             }
+@media only screen and (max-width: 1201px) {
+    .logopic {
+        min-width: 0 !important;
+        max-width:40%;
+    }
+}
+
     /*搜尋列相關*/
 .searchbar {
     position: relative;
@@ -228,7 +248,7 @@
 }
 
 .loschbar{
-    /*padding-left:70px;*/
+    margin-bottom:10px;
 }
 .loschbar > .input-group {
     border: 3px solid white;
@@ -349,10 +369,17 @@ body {
 }
 .lofooter-m{
     margin:0 5px;
+    margin-bottom:10px;
+    white-space:nowrap;
 }
     .lofooter-m > h3 {
         color: white;
     }
+.lofooter-links{
+    text-align:left;
+}
+
+
 .lofooter-links li + li {
     margin-top: 15px;
 }
@@ -369,5 +396,17 @@ body {
 }
 .lofooter-links li a:hover {
     color: #D10024;
+}
+.lofooter-helpcenter{
+    margin-left:1.5em;
+}
+@media only screen and (max-width: 993px) {
+    .lofooter-links {
+        text-align: center !important;
+    }
+
+    .lofooter-helpcenter {
+        margin-left: 0 !important;
+    }
 }
 /* /Footer共用 */

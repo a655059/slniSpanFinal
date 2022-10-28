@@ -58,20 +58,37 @@ namespace prjiSpanFinal.Controllers
             };
             _db.CouponWallets.Add(CW);
             _db.SaveChanges();
-
             return Content("2", "text/plain", Encoding.UTF8);
             }
         }
         public IActionResult Event(int? Eventid)
         {
-            OfficialEventList oe = _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).FirstOrDefault();
-            //List<Product> evtProd = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Eventid);
-            EventViewModel EventVM = new EventViewModel()
-            {
-                OffcialEvent = oe,
-            };
+            OfficialEventList Event= _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).FirstOrDefault();
+            EventViewModel EventVM = new EventViewModel();
+            MemberAccount loggedmem = new MemberAccount();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                loggedmem = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            if (Event != null) {
+                EventVM.OffcialEvent = Event;
+                EventVM.LogingMember = loggedmem;
+                //EventVM.EventCoupons=
+                EventVM.EventProducts = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Event.OfficialEventListId).Where(p => p.Product.ProductStatusId == 0).Select(p => p.Product).ToList();
+                DateTime today = DateTime.Now;
+                DateTime startday = Event.StartDate;
 
-            return View(EventVM);
+                //開始一周前開放看
+                if (today.Subtract(startday).TotalDays < 7)
+                {
+                    return View(EventVM);
+                }
+                //如果是管理員開放看
+                else if (loggedmem != null )
+                {
+                    if (loggedmem.MemberId == 1)
+                        return View(EventVM);
+                }
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
