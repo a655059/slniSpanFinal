@@ -8,22 +8,23 @@
                 @if (Model.MemberAcc == "admin") { 
                 <li><a href="@Url.Content("~/newManagement/PowerBi")" class="nav-link px-2 text-white navbody" id="backstage" >後台</a></li>
                 }
-                @*<li><a href="@Url.Content("~/Seller/Center")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
-                <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">會員中心</a></li>
-                <li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
-            <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
+
+
+@*<li><a href="@Url.Content("~/Seller/Center")" class="nav-link px-2 text-white navbody">賣家中心</a></li>
+                <li><a href="@Url.Content("~/Member/Order")" class="nav-link px-2 text-white navbody">會員中心</a></li>*@
             </ul>
             <div class="col-lg-4 col-md d-flex flex-row justify-content-end">
                 <div class="header-cart">
                     <div>
                         <!-- Menu Toogle -->
+                        @if (Model.MemberAcc != null) {
                         <div class="notification">
                             <div class="collapse notification-body" id="collapseExample1">
                                 <div class="notification-item">
                                     <div class="d-block">
                                         <div class="notification-item-title">收到的通知</div>
-                                        <ul class="notification-item-list" id="notificationlistbox">
-                                        </ul>
+                                        <div class="notification-item-list" id="notificationlistbox">
+                                        </div>
                                         <a class="linknoline" href="#!">
                                             <div class="notification-item-title">查看更多</div>
                                         </a>
@@ -34,6 +35,7 @@
                                 <i class="fa fa-solid fa-bell"></i>
                             </a>
                         </div>
+                        }
                         <!-- /Menu Toogle -->
                         <!-- Wishlist -->
                         <div class="helpcenter">
@@ -64,7 +66,7 @@
                     {
                         <div class="text-end navlog dropdown">
                             <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white; ">
-                                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="40" height="40" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
+                                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="32" height="32" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="@Url.Content("~/Member/Edit")">會員資料</a></li>
