@@ -10,7 +10,7 @@ namespace prjiSpanFinal.ViewModels.Event
     {
         public OfficialEventList OffcialEvent { get; set; }
         public List<Product> EventProducts { get; set; }
-        public List<Coupon> EventCoupons { get; set; }
+        public List<CShowCoupon> EventCoupons { get; set; }
         public MemberAccount LogingMember { get; set; }
 
     }

@@ -235,7 +235,7 @@
             let target = $(event.target);
             $(".active").removeClass("active");
             target.addClass("active");
-            
+
             if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
                 if (!menu.classList.contains("active")) {
                     menu.classList.add("active");
@@ -288,7 +288,11 @@
             })
         }
 
-        function Items(data) {
+        function ItemsComponent(data) {
+            var url = '@Url.Action("ViewFile", "Default")' + $(this).data("itemid");
+        }
+
+        @*function Items(data) {
             let item = "";
             for (let i = 0; i < data.length; i++) {
                 let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
@@ -331,7 +335,7 @@
         </div>
     `}
             return item;
-        }
+        }*@
 
     </script>
 }

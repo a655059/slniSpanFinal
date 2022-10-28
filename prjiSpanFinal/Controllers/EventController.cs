@@ -73,19 +73,16 @@ namespace prjiSpanFinal.Controllers
                 EventVM.LogingMember = loggedmem;
                 //EventVM.EventCoupons=
                 EventVM.EventProducts = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Event.OfficialEventListId).Where(p => p.Product.ProductStatusId == 0).Select(p => p.Product).ToList();
-                DateTime today = DateTime.Now;
-                DateTime startday = Event.StartDate;
-
                 //開始一周前開放看
-                if (today.Subtract(startday).TotalDays < 7)
-                {
+                double publishDay = (DateTime.Now).Subtract(Event.StartDate).TotalDays;
+                //如果是管理員開放看
+                if (loggedmem.MemberId == 1)
+                { 
                     return View(EventVM);
                 }
-                //如果是管理員開放看
-                else if (loggedmem != null )
+                else if (publishDay < 7)
                 {
-                    if (loggedmem.MemberId == 1)
-                        return View(EventVM);
+                    return View(EventVM);
                 }
             }
             return RedirectToAction("Index", "Home");
