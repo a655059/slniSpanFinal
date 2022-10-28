@@ -18,7 +18,10 @@
         <div>
             <div class="coupongroup">
 
-
+                @foreach (var item in Model.EventCoupons)
+                {
+                    @await Component.InvokeAsync("EventCoupon", new { showCoupon = item });
+                }
 
             </div>
         </div>

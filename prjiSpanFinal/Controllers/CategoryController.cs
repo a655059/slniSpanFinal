@@ -162,8 +162,10 @@ namespace prjiSpanFinal.Controllers
             //List <CShowItem> items= JsonSerializer.Deserialize<List<string>>(Json);
             return ViewComponent("CategoryShow", data);
         }
-        public IActionResult CallItemComponent(List<CShowItem> list)
+        public IActionResult CallItemComponent(string data)
         {
+            List<CShowItem> list = JsonSerializer.Deserialize<List<CShowItem>>(data);
+            //List<CShowItem> list = data;
             return ViewComponent("CategoryShow", list);
         }
     }
