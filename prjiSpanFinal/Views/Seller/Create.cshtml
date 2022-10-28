@@ -177,26 +177,57 @@
                 </div>
 
                 <div class="d-flex justify-content-start ">
-                    <label class="名稱寬 mt-2">規格</label>
-                    <span class="text-danger"></span>
-                    <section class="section">
-                        <table class="table w-100 text-center">
-                            <thead>
-                                <tr>
-                                    <th class="col 規格列表">樣式</th>
-                                    <th class="col 規格列表">數量</th>
-                                    <th class="col 規格列表">售價</th>
-                                    <th class="col 規格列表">照片</th>
-                                    <th class="col 規格列表">功能</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <div class="text-center">
-                            <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                    <label class="名稱寬 mt-2">自訂類別</label>
+                    <select class="form-select w-25 m-3" aria-label="Default select example" id="category">
+                        <option value="1" selected>未分類</option>
+                        @{
+                            if (Model.Category.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Category.Count; i++)
+                                {
+                                    <option value="@Model.CustomizedCategoryID[i]">@Model.Category[i]</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start ">
+                    <div id="newmodel2" style="display:none">
+                        <label class="名稱寬 mt-2">規格</label>
+                        <span class="text-danger"></span>
+                        <section class="section">
+                            <table class="table w-100 text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="col 規格列表">樣式</th>
+                                        <th class="col 規格列表">數量</th>
+                                        <th class="col 規格列表">售價</th>
+                                        <th class="col 規格列表">照片</th>
+                                        <th class="col 規格列表">功能</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tobodystyle">
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btnnew m-3 btn w-25 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">新增規格</button>
+                            </div>
+                        </section>
+                    </div>
+                    <div id="newmodel1">
+                        <div>
+                            <div class="d-flex justify-content-start">
+                                <label class="名稱寬 mt-2">數量</label>
+                                <input type="text" class="form-control mt-2 " id="styleqty" />
+                            </div>
+                            <div class="d-flex justify-content-start">
+                                <label class="名稱寬 mt-2">價格</label>
+                                <input type="text" class="form-control mt-2 " id="styleup" />
+                            </div>
                         </div>
-                    </section>
+                    </div>
+                    <button id="newmodelenter" class="my-2 btn btn-warning">進階模式</button>
                 </div>
 
                 <div class="addStyle">
@@ -238,8 +269,8 @@
                 </div>
 
 
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬">物流</label>
+                <div class="d-flex justify-content-start mt-1">
+                    <label class="名稱寬">物流方式</label>
                     <div class="col-1"></div>
                     <div class="row py-2 m-3 d-flex justify-content-around col-6">
                         @{
@@ -250,11 +281,24 @@
                                     <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
                                 </div><br />
                                 <div class="col-3"></div>
-                                @*<div class="col-6 my-1">
-                                        <div class="form-check form-switch d-flex justify-content-center">
-                                            <input id="@Model.ShiperID[i]" class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.shipID[i]">
-                                        </div>
-                                    </div>*@
+                            }
+                        }
+                    </div>
+                    <div class="col-2"></div><br />
+                </div>
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬">付款方式</label>
+                    <div class="col-1"></div>
+                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
+                        @{
+                            foreach (var i in Model.mempay)
+                            {
+                                <div class="col-3"></div>
+                                <div class="col-6 my-1">
+                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i.PaymentId).png" width="40" height="40" class="mx-2" />@(i.PaymentName)</label>
+                                </div><br />
+                                <div class="col-3"></div>
                             }
                         }
                     </div>
@@ -341,13 +385,9 @@
 </div>
 @section Scripts{
     <script>
-/*const { Button } = require("../../wwwroot/lib/js/bootstrap.esm");*/
-
-
-
 
         /////////大類小類連接---------------------------------------------------------------------------------------------------------------
-
+        let advancedmode = false;
         const bigType = document.querySelector("#bigType");
         const smallType = document.querySelector("#smallType");
 
@@ -362,6 +402,24 @@
       //------------------------------------------------
 
         let alldata = [];
+
+        //進階模式
+        $("#newmodelenter").click(function () {
+            if (advancedmode) {
+                advancedmode = false;
+                $("#newmodel1").css("display", "block");
+                $("#newmodel2").css("display", "none");
+            }
+            else {
+                advancedmode = true;
+                $("#newmodel2").css("display", "block");
+                $("#newmodel1").css("display", "none");
+            }
+            $("#styleup").val("");
+            $("#styleqty").val("");
+            $("#tobodystyle").empty();
+            alldata = [];
+        })
 
         //資料暫存,後去把data變數傳入後端
         let data = [
@@ -415,11 +473,13 @@
             }
         })
 
-        save.addEventListener("click", function () {
+        save.addEventListener("click", function () {            
+
             let dataNew = [];
             let name = document.getElementById("text1").value;//prompt('請輸入姓名');
             let subject = document.getElementById("text2").value;
             let score = document.getElementById("text3").value;
+
 
             //判斷資料有值再塞入
             if (name !== '' && subject !== '' && score !== '') {
@@ -488,7 +548,8 @@
         //create下一步 按鈕
 
         next.addEventListener("click", function () {
-
+            $("#newmodel2").css("display", "none");
+            $("#newmodel1").css("display", "none");
             $("#change1").css("display", "none");
             $("#change2").css("display", "block");
 
@@ -555,13 +616,36 @@
                 <text>
                     payment.push("@item");
                     </text>
+            }            
+            if (!advancedmode) {
+                if (dataphoto.length == 0) {
+                    let onestyle = {
+                        StyleStr: "預設",
+                        QuantityStr: document.getElementById("styleqty").value,
+                        UnitPriceStr: document.getElementById("styleup").value,
+                        /*BodyPicStr: dataphoto[0]*/
+                    };
+                    alldata.push(onestyle);
+                }
+                else {
+                    let onestyle = {
+                        StyleStr: "預設",
+                        QuantityStr: document.getElementById("styleqty").value,
+                        UnitPriceStr: document.getElementById("styleup").value,
+                        BodyPicStr: dataphoto[0]
+                    };
+                    alldata.push(onestyle);
+                }
             }
+           
+            
 
             let pushData = {
                 暫存規格:alldata,
                 ProductName: document.getElementById("ProductName").value,
                 smalltype: $("#smallType").children("option:selected").val(),
                 Description: document.getElementById("Description").value,
+                CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,
                 ShiperID: shiper,
                 PaymentID: payment
@@ -573,9 +657,15 @@
 
             $.postJSON("/Seller/CreateSuccess", { jsonString: pushData }, function () { });
 
-            alert("新增成功");
+            Swal.fire(
+                '成功!',
+                '您已新增成功!',
+                'success'
+            );
 
-            location.href = "/Seller/NewIndex" //跳回商品頁面
+            setTimeout(function () {
+                location.href = "/Seller/NewIndex"
+            }, 2000);
 
             //轉json格式
             @*let jsonall = JSON.stringify(pushData);
