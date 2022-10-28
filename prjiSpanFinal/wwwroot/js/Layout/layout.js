@@ -61,6 +61,7 @@ function GetSearchDetail() {
     $.post(`/Home/GetSearchDetail`, { key: searchkeyword }, function (data) {
         $("#searchkeyspace").html("");
         if (data.length > 0) {
+            $("#searchkeyspace").html("");
             $("#searchkeyspace").append(SearchKeyWord(data))
         }
     })
@@ -102,14 +103,14 @@ else {
             if (data[i].haveRead == false) {
                 hrcount++;
             }
-            $("#notificationlistbox").append(`<li class="notification-item-listitem">
-                                        <a href="${data[i].link}" class="d-flex justify-content-between linknoline">
-                                            <div class="d-flex flex-row">
+            $("#notificationlistbox").append(`<div class="notification-item-listitem">
+                                        <a href="${data[i].link}" class="d-flex flex-wrap justify-content-end linknoline notification-link">
+                                            <div class="d-flex flex-row w-100">
                                                 <div>
-                                                    <img src="data:image;base64,${data[i].iconPic}" alt="avatar" class="d-flex align-self-center me-3" style="width: 45px; height: 45px; border-radius: 50%;">
+                                                    <img src="data:image;base64,${data[i].iconPic}" alt="avatar" class="d-flex align-self-center me-3">
                                                     <span class="badge bg-success badge-dot"></span>
                                                 </div>
-                                                <div class="pt-1">
+                                                <div class="pt-1 w-100">
                                                     <p class="mb-0">${data[i].text}</p>
                                                 </div>
                                             </div>
@@ -118,7 +119,7 @@ else {
                                                 <p class="small text-muted mb-1"></p>
                                             </div>
                                         </a>
-                                    </li>`);
+                                    </div>`);
         }
         if (hrcount != 0) {
             $(".notificationbell").append(`<div class="qty notificationqty">${hrcount}</div>`);

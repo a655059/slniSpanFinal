@@ -27,7 +27,7 @@
     /*回到最上面*/
 .goTop {
     position: fixed;
-    right: 10rem;
+    right: 5%;
     bottom: 5rem;
     display:none;
  }
@@ -169,18 +169,32 @@ align-items:center;
     background-color:white;
 }
 .notification-item-list {
-    padding: 5px 20px;
-    border-top: 1px solid #BEBEBE;
+    /*border-top: 1px solid #BEBEBE;*/
 }
 .notification-item-listitem{
+    
+}
+#notificationlistbox {
+    white-space: normal;
+}
 
+.notification-link {
+    padding: 5px 20px;
 }
-/*nav註冊區*/
-.navlog {
-    margin-left: 10px;
-    padding-right: 10px;
-    font-size: 20px;
-}
+    .notification-link:hover {
+        background-color: #FCFCFC;
+        color: red;
+    }
+    .notification-link img {
+        width: 45px;
+        height: 45px;
+    }
+    /*nav註冊區*/
+    .navlog {
+        margin-left: 10px;
+        padding-right: 10px;
+        font-size: 20px;
+    }
 
     .navlog > .log {
         padding: 0px 10px 0px 10px;
@@ -201,12 +215,11 @@ align-items:center;
             opacity: 80%;
             color: red;
         }
+
+
 /* /Header1 */
-
 /* Header2 */
-
-.h2Searchcart{
-
+.h2Searchcart {
 }
 .layoutheader2 {
     padding-top: 15px;
@@ -410,3 +423,5 @@ body {
     }
 }
 /* /Footer共用 */
+
+
