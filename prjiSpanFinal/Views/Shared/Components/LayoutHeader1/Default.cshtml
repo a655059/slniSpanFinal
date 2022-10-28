@@ -3,7 +3,7 @@
 <div class="p-2 layoutheader1bg text-white header1nav noprintArea" id="header1">
     <div class="container-lg">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <ul class="nav col-8 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <ul class="nav col-lg-8 col-md me-auto  mb-md-0">
                 <li><a href="@Url.Content("~/Home/Index")" class="nav-link text-white px-2 navhead">蝦到爆</a></li>
                 @if (Model.MemberAcc == "admin") { 
                 <li><a href="@Url.Content("~/newManagement/PowerBi")" class="nav-link px-2 text-white navbody" id="backstage" >後台</a></li>
@@ -13,65 +13,69 @@
                 <li><a href="#" class="nav-link px-2 text-white navbody">FAQs</a></li>
             <li><a href="#" class="nav-link px-2 text-white navbody">About</a></li>*@
             </ul>
-            <div class="header-cart col-2 d-flex flex-row">
-                <!-- Menu Toogle -->
-                <div class="notification">
-                    <div class="collapse notification-body" id="collapseExample1">
-                        <div class="notification-item">
-                            <div class="d-block">
-                                <div class="notification-item-title">收到的通知</div>
-                                <ul class="notification-item-list" id="notificationlistbox">
-                                </ul>
-                                <a class="linknoline" href="#!">
-                                    <div class="notification-item-title">查看更多</div>
-                                </a>
+            <div class="col-lg-4 col-md d-flex flex-row justify-content-end">
+                <div class="header-cart">
+                    <div>
+                        <!-- Menu Toogle -->
+                        <div class="notification">
+                            <div class="collapse notification-body" id="collapseExample1">
+                                <div class="notification-item">
+                                    <div class="d-block">
+                                        <div class="notification-item-title">收到的通知</div>
+                                        <ul class="notification-item-list" id="notificationlistbox">
+                                        </ul>
+                                        <a class="linknoline" href="#!">
+                                            <div class="notification-item-title">查看更多</div>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
+                            <a class="linknoline notificationbell notification-trigger" id="notification-trigger" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+                                <i class="fa fa-solid fa-bell"></i>
+                            </a>
                         </div>
+                        <!-- /Menu Toogle -->
+                        <!-- Wishlist -->
+                        <div class="helpcenter">
+                            <a href="@Url.Content("~/FAQ/Index")" class="linknoline">
+                                <span>
+                                    <i class="fa fa-regular fa-circle-question"></i>
+                                    幫助中心
+                                </span>
+                            </a>
+                        </div>
+                        <!-- /Wishlist -->
+                        <!--帳號登入/創建-->
                     </div>
-                    <a class="linknoline notificationbell notification-trigger" id="notification-trigger" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
-                        <i class="fa fa-solid fa-bell"></i>
-                    </a>
                 </div>
-                <!-- /Menu Toogle -->
-                <!-- Wishlist -->
-                <div>
-                    <a href="@Url.Content("~/FAQ/Index")" class="linknoline">
-                        <span>
-                            <i class="fa fa-regular fa-circle-question"></i>
-                            幫助中心
-                        </span>
-                    </a>
-                </div>
-                <!-- /Wishlist -->
-                <!--帳號登入/創建-->
-            </div>
-            @{
-                if (Model.Mempic == null)
-                {
-                    <div class="text-end navlog col-2">
-                        <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
-                            登入
-                        </a>
-                        <a class="res me-2 linknoline" href="@Url.Content("~/Member/Create")">
-                            註冊
-                        </a>
-                    </div>
-                }
-                else
-                {
-                    <div class="text-end navlog col-2 dropdown">
-                        <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white; ">
-                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="40" height="40" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="@Url.Content("~/Member/Edit")">會員資料</a></li>
-                            <li><a class="dropdown-item" href="@Url.Content("~/Member/Order")">購物清單</a></li>
-                            <li><a class="dropdown-item" href="@Url.Content("~/Member/Logout")">登出</a></li>
-                        </ul>
-                    </div>
-                }
+                @{
+                    if (Model.Mempic == null)
+                    {
+                        <div class="text-end navlog">
+                            <a class="log me-2 linknoline" href="@Url.Content("~/Member/Login")">
+                                登入
+                            </a>
+                            <a class="res me-2 linknoline" href="@Url.Content("~/Member/Create")">
+                                註冊
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-end navlog dropdown">
+                            <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: white; ">
+                                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Mempic)" width="40" height="40" style="border-radius: 50%;" id="header1mempic" /><span style="font-size:80%; padding:3px;">@Model.MemberAcc</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="@Url.Content("~/Member/Edit")">會員資料</a></li>
+                                <li><a class="dropdown-item" href="@Url.Content("~/Member/Order")">購物清單</a></li>
+                                <li><a class="dropdown-item" href="@Url.Content("~/Member/Logout")">登出</a></li>
+                            </ul>
+                        </div>
+                    }
 
-            }
+                }
+            </div>
 
         </div>
         <!--/帳號登入/創建-->
