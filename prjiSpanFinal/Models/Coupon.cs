@@ -24,6 +24,7 @@ namespace prjiSpanFinal.Models
         public DateTime ReceiveEndDate { get; set; }
         public bool IsFreeDelivery { get; set; }
         public int MinimumOrder { get; set; }
+        public int OfficialEventListId { get; set; }
 
         public virtual ICollection<CouponWallet> CouponWallets { get; set; }
         public virtual ICollection<Order> Orders { get; set; }

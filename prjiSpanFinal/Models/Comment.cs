@@ -18,6 +18,8 @@ namespace prjiSpanFinal.Models
         public byte CommentStar { get; set; }
         public DateTime CommentTime { get; set; }
         public int ShipperStar { get; set; }
+        public string Comment2 { get; set; }
+        public string Comment3 { get; set; }
 
         public virtual OrderDetail OrderDetail { get; set; }
         public virtual ICollection<CommentPic> CommentPics { get; set; }

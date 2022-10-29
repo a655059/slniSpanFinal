@@ -11,11 +11,9 @@ namespace prjiSpanFinal.Models
         {
             AdtoProducts = new HashSet<AdtoProduct>();
             Likes = new HashSet<Like>();
-            PaymentToProducts = new HashSet<PaymentToProduct>();
             ProductDetails = new HashSet<ProductDetail>();
             ProductPics = new HashSet<ProductPic>();
             Reports = new HashSet<Report>();
-            ShipperToProducts = new HashSet<ShipperToProduct>();
             SubOfficialEventToProducts = new HashSet<SubOfficialEventToProduct>();
         }
 
@@ -36,11 +34,9 @@ namespace prjiSpanFinal.Models
         public virtual SmallType SmallType { get; set; }
         public virtual ICollection<AdtoProduct> AdtoProducts { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
-        public virtual ICollection<PaymentToProduct> PaymentToProducts { get; set; }
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }
         public virtual ICollection<ProductPic> ProductPics { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
-        public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
         public virtual ICollection<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
     }
 }
