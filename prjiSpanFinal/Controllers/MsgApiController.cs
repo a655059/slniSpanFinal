@@ -142,7 +142,6 @@ namespace prjiSpanFinal.Controllers
             {
                 if (mem.MemberPw == txtPW)
                 {
-                    
                     return Json(new CAppMember() {MemberAcc = mem.MemberAcc,Email = mem.Email, MemberId = mem.MemberId, MemberName = mem.Name, MemberPic = mem.MemPic, Phone = mem.Phone });
                 }
             }
