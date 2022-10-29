@@ -5,6 +5,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using prjiSpanFinal.ViewModels;
+using System.Text;
+using System.Text.Json;
+using prjiSpanFinal.ViewModels.App;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -125,6 +132,21 @@ namespace prjiSpanFinal.Controllers
             Notification a = new Notification() { MemberId = id,IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now };
             dbcontext.Notifications.Add(a);
             dbcontext.SaveChanges();
+        }
+
+        public IActionResult LoginCheck(string txtAccount, string txtPW)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var mem = dbcontext.MemberAccounts.FirstOrDefault(m => m.MemberAcc == txtAccount);
+            if (mem != null)
+            {
+                if (mem.MemberPw == txtPW)
+                {
+                    
+                    return Json(new CAppMember() {MemberAcc = mem.MemberAcc,Email = mem.Email, MemberId = mem.MemberId, MemberName = mem.Name, MemberPic = mem.MemPic, Phone = mem.Phone });
+                }
+            }
+            return Json(null);
         }
     }
 }
