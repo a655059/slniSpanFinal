@@ -25,6 +25,7 @@
                 </span>
             </div>
             <div class="ordersearchbar">
+                <a role="button" type="button" href="/Delivery/ShowOrderedOrder" class="btn btn-success">一鍵付款</a>
                 <button type="button" id="receiveall" data-bs-toggle="modal" href="#staticBackdrop5" class="btn btn-success">一鍵領收</button>
             </div>
             <ul class="nav nav-tabs">
@@ -364,9 +365,11 @@
             else if (data.shipperStatusId == 5 || data.shipperStatusId == 4) {
                 item = item + `<a href="#staticBackdrop3" data-bs-toggle="modal" role="button" class="btn btn-success orderbuttonfi my-1">領收</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
-            else if (data.shipperStatusId == 3 || data.shipperStatusId == 2) {
+            else if (data.shipperStatusId == 3) {
                 item = item + `<a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
+            else if (data.shipperStatusId == 2)
+                item = item + `<a href="/Delivery/ShowOrderedOrder?id=${data.orderId}" role="button" class="btn btn-success orderbuttonde my-1">付款</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             if (data.shipperStatusId == 8) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop7" class="btn btn-info orderbuttonret my-1">查看</a>`;
             }
@@ -486,6 +489,7 @@
                 }
 
             }
+            $("#flexCheckDefault").removeAttr("checked");
             $("#reccount").html(count1);
         })
 
