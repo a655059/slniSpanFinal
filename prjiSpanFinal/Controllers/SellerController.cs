@@ -261,26 +261,6 @@ namespace prjiSpanFinal.Controllers
                 _db.ProductPics.Add(productPic);
             }
 
-            for (int i = 0; i < result.ShiperID.Count; i++)
-            {
-                ShipperToProduct shipperToProduct = new ShipperToProduct()
-                {
-                    ShipperId = Convert.ToInt32(result.ShiperID[i]),
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.ShipperToProducts.Add(shipperToProduct);
-            }
-
-            for (int i = 0; i < result.PaymentID.Count; i++)
-            {
-                PaymentToProduct paymentToProduct = new PaymentToProduct()
-                {
-                    PaymentId = Convert.ToInt32(result.PaymentID[i]),
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.PaymentToProducts.Add(paymentToProduct);
-            }
-
             //if (!_db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n).Any())
             //{
             //    CustomizedCategory customizedCategory = new CustomizedCategory()
