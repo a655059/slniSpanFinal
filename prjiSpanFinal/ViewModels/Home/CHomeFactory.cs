@@ -29,7 +29,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     continue;
                 }
-                var price = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice);
+                var price = db.ProductDetails.Where(p => p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice);
                 decimal x = price.Min();
                 decimal y = price.Max();
                 byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
