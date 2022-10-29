@@ -27,6 +27,9 @@ namespace prjiSpanFinal.Models
         public DateTime ReceiveDate { get; set; }
         public int PaymentId { get; set; }
         public string OrderMessage { get; set; }
+        public string RecieveName { get; set; }
+        public string RecieveEmail { get; set; }
+        public string RecievePhone { get; set; }
 
         public virtual Coupon Coupon { get; set; }
         public virtual MemberAccount Member { get; set; }

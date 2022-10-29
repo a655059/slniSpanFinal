@@ -23,6 +23,7 @@ namespace prjiSpanFinal.Models
             ReceiveAdrLists = new HashSet<ReceiveAdrList>();
             Reports = new HashSet<Report>();
             ShipperToSellers = new HashSet<ShipperToSeller>();
+            WebAds = new HashSet<WebAd>();
         }
 
         public int MemberId { get; set; }
@@ -47,6 +48,7 @@ namespace prjiSpanFinal.Models
         public string AfterSales { get; set; }
         public string RenewProduct { get; set; }
         public string SellerType { get; set; }
+        public int ReportedTime { get; set; }
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
@@ -64,5 +66,6 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<ReceiveAdrList> ReceiveAdrLists { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<ShipperToSeller> ShipperToSellers { get; set; }
+        public virtual ICollection<WebAd> WebAds { get; set; }
     }
 }

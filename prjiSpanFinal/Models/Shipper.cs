@@ -10,7 +10,6 @@ namespace prjiSpanFinal.Models
         public Shipper()
         {
             Orders = new HashSet<Order>();
-            ShipperToProducts = new HashSet<ShipperToProduct>();
             ShipperToSellers = new HashSet<ShipperToSeller>();
         }
 
@@ -20,7 +19,6 @@ namespace prjiSpanFinal.Models
         public int Fee { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<ShipperToProduct> ShipperToProducts { get; set; }
         public virtual ICollection<ShipperToSeller> ShipperToSellers { get; set; }
     }
 }

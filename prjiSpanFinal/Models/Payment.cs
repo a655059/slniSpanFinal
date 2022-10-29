@@ -10,7 +10,6 @@ namespace prjiSpanFinal.Models
         public Payment()
         {
             Orders = new HashSet<Order>();
-            PaymentToProducts = new HashSet<PaymentToProduct>();
             PaymentToSellers = new HashSet<PaymentToSeller>();
         }
 
@@ -19,7 +18,6 @@ namespace prjiSpanFinal.Models
         public int Fee { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<PaymentToProduct> PaymentToProducts { get; set; }
         public virtual ICollection<PaymentToSeller> PaymentToSellers { get; set; }
     }
 }
