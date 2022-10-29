@@ -72,7 +72,7 @@ namespace prjiSpanFinal.Controllers
                 EventVM.OffcialEvent = Event;
                 EventVM.LogingMember = loggedmem;
                 //EventVM.EventCoupons=
-                EventVM.EventProducts = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Event.OfficialEventListId).Where(p => p.Product.ProductStatusId == 0).Select(p => p.Product).ToList();
+                
                 //開始一周前開放看
                 double publishDay = (DateTime.Now).Subtract(Event.StartDate).TotalDays;
                 //如果是管理員開放看

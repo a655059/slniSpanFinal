@@ -34,9 +34,10 @@ namespace prjiSpanFinal.ViewModels.Home
                 decimal y = price.Max();
                 byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
                 int sales = db.OrderDetails.Where(o => o.Order.StatusId == 7 ||o.Order.StatusId==6).Where(o=> o.ProductDetail.ProductId == item.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o=>o);
+                var Comments = db.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == item.ProductId);
                 double stars = 0;
-                if (db.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == item.ProductId).Any()) { 
-                    stars = db.Comments.Select(c =>Convert.ToInt32(c.CommentStar)).ToList().Average();
+                if (Comments.Any()) { 
+                    stars = Comments.Select(c =>Convert.ToInt32(c.CommentStar)).ToList().Average();
                 }
                 List<decimal> dlist = new List<decimal>();
                 if (x == y)
