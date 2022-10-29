@@ -1,4 +1,8 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json
+@using System.Linq;
+@using prjiSpanFinal.ViewModels
 @model prjiSpanFinal.ViewModels.seller.CSellerPaymentToViewViewModel
 @{
     ViewData["Title"] = "Shipper";
@@ -49,6 +53,32 @@
     </style>
 }
 
+@{
+    int id = 0;
+    if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+    {
+        string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+        MemberAccount loginMember = JsonSerializer.Deserialize<MemberAccount>(json);
+        id = loginMember.MemberId;
+    }
+
+    iSpanProjectContext dbcontext = new iSpanProjectContext();
+
+    var PaymentIdList= dbcontext.PaymentToSellers.Where(n => n.MemberId == id).Select(n => n.PaymentId).ToList();
+    List<bool> HavePayData = new List<bool>() { false, false, false, false, false, false, false, false,false };
+    foreach(var i in PaymentIdList)
+    {
+        HavePayData[i-1] = true;
+    }
+
+    var ShipmentIdList = dbcontext.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
+    List<bool> HaveShipData = new List<bool>() { false, false, false, false, false};
+    foreach (var i in ShipmentIdList)
+    {
+        HaveShipData[i - 1] = true;
+    }
+}
+
 <div class="row overflow-auto">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-1"></div>
@@ -62,24 +92,24 @@
         <div class="layout 線條陰影">
             <div class="">
                 @{
-                    string[] 照片路徑 = { "~/img/信用卡.jpg", "~/img/銀行轉帳.jpg", "~/img/金融簽帳.jpg", "~/img/歐付寶.jpg" };
+                    string[] 照片路徑 = { "~/img/payment1.png", "~/img/payment2.png", "~/img/payment3.png", "~/img/payment4.png" };
                     for (int i = 0; i < 4; i++)
                     {
                         <div class="row py-2 m-3 border rounded-2">
                             <div class="col-2"></div>
                             <div class="col-4">
-                                <input type="hidden" name="PaymentId" value="@(i + 1)" />
+                                <input type="hidden" name="PaymentId"/>
                                 <label class="d-flex justify-content-start"><img src="@Url.Content(照片路徑[i])" width="40" height="40" class="mx-2" />@Model.PaymentName[i]</label>
                             </div>
                             <div class="col-4">
                                 <div class="form-check form-switch 靠右">
-                                    @{ if (Model.PayCheckedOX[i]== 1)
+                                    @{ if (HavePayData[i])
                                         {
-                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.PaymentId[i]">
+                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked">
                                         }
                                         else
                                         {
-                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox" id="@Model.PaymentId[i]">
+                                            <input class="paymentID form-check-input 按鈕大小" type="checkbox">
                                         }
                                     }
                                 </div>
@@ -105,8 +135,8 @@
             <div class="線條陰影">
                 <div class="shiperLayout">
                     @{
-                        string[] 物流照片路徑 = { "~/img/payment5.png", "~/img/payment6.png", "~/img/payment7.png", "~/img/payment8.png" };
-                        for (int i = 0; i < 4; i++)
+                        string[] 物流照片路徑 = { "~/img/payment5.png", "~/img/payment6.png", "~/img/payment7.png", "~/img/payment8.png","~/img/payment11.png",};
+                        for (int i = 0; i < 5; i++)
                         {
                             <div class=" row py-2 m-3 border rounded-2">
                                 <div class="col-4">
@@ -115,13 +145,13 @@
                                 <div class="col-2">
                                     <div class="form-check form-switch 靠右">
                                         @{
-                                            if (Model.ShipCheckedOX[i] == 1)
+                                            if (HaveShipData[i])
                                             {
-                                                <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked" id="@Model.ShipperId[i]">
+                                                <input class="shiperID form-check-input 按鈕大小" type="checkbox" checked="checked">
                                             }
                                             else
                                             {
-                                                <input class="shiperID form-check-input 按鈕大小" type="checkbox" id="@Model.ShipperId[i]">
+                                                <input class="shiperID form-check-input 按鈕大小" type="checkbox">
                                             }
                                         }
                                     </div>
@@ -131,7 +161,16 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="form-check form-switch 靠右">
-                                        <input class="paymentID form-check-input 按鈕大小" type="checkbox" id="@Model.PaymentId[i+4]">
+                                        @{
+                                                if (HavePayData[i + 4])
+                                                {
+                                                    <input class="paymentID form-check-input 按鈕大小" type="checkbox" checked="checked">
+                                                }
+                                                else
+                                                {
+                                                    <input class="paymentID form-check-input 按鈕大小" type="checkbox">
+                                                }
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +179,7 @@
                 </div>
 
                 <div class="d-flex justify-content-around m-2">
-                    <button id="save" type="submit" class="btn btn-warning mb-3">確定</button>
+                    <button id="save" type="button" class="btn btn-warning mb-3">確定</button>
                     <button id="close" type="button" class="btn btn-secondary mb-3">取消</button>
                 </div>
 
@@ -161,12 +200,20 @@
             $.postJSON("/Seller/Shipperrequest", {
                 payment: $.map($(".paymentID"), function (a) { return a.checked; }),
                 shipper: $.map($(".shiperID"), function (a) { return a.checked; })
-            }, function () {});   
-            alert("編輯完成");
-            location.href = "/Seller/Center";
+            }, function () { });
+
+            Swal.fire(
+                '成功!',
+                '您已修改成功!',
+                'success'
+            );
+
+            setTimeout(function () {
+                location.href = "/Seller/Center"
+            }, 2000);
         })
 
-             
-              
+
+
     </script>
 }

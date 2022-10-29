@@ -52,7 +52,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult SmallTypeSort(int id, int priceMin, int priceMax, int SortOrder, int pages)
         {
-
+            
             return Json(new SortRequest().SmalltypeSortItem(id, priceMin, priceMax, SortOrder, pages));
         }
         public IActionResult SmallType(int? id)
@@ -72,6 +72,7 @@ namespace prjiSpanFinal.Controllers
             
             return View(list);
         }
+
         public IActionResult SearchResult(string keyword)
         {
             if(keyword == null) {

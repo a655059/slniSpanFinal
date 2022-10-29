@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "ArgumentList";
     var pagedList = (IPagedList)ViewBag.Prods;
+     if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -15,24 +16,24 @@
         }
     </style>
 }
-    <h1>訂單</h1>
+    <h1>消費糾紛</h1>
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Argument.ArgumentId)
+                  ID
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Argument.OrderId)
+               訂單ID(點擊以查看詳情)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ArgumentTypeName)
+                   消費糾紛類型
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ArgumentReasonName)
+                    爭議原因
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Argument.ReasonText)
+                    內容
                 </th>
                 <th></th>
             </tr>
@@ -42,19 +43,19 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(model => item.Argument.ArgumentId)
+                    <input value="@item.Argument.ArgumentId" class="form-control-plaintext" readonly>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => item.Argument.OrderId)
+                    @Html.ActionLink($"{item.Argument.OrderId}","OrderDetailList","newManagement",new{id=item.Argument.OrderId},new{@class="form-control-plaintext text"})
                 </td>
                 <td>
-                    <input value="@item.ArgumentTypeName" class="statusname form-control-plaintext">
+                    <input value="@item.ArgumentTypeName" class="statusname form-control-plaintext" readonly>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => item.ArgumentReasonName)
+                    <input value="@item.ArgumentReasonName" class="form-control-plaintext" readonly>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => item.Argument.ReasonText)
+                    <input value="@item.Argument.ReasonText" class="form-control-plaintext" readonly>
                 </td>
                 <td>
                     @{
@@ -70,11 +71,38 @@
         }
     </tbody>
 </table>
+@*分頁導覽*@
 <div style="align-content:center" class="paginations">
-    @(Html.Pager(pagedList)
-        .Url(page => Url.Action("ArgumentList", new { page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(3)
-        .Build())
+    @{int ps = 3;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
+      @Html.Pager(pagedList).Url(page => Url.Action("ArgumentList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
+        
+    每頁
+    <select id="pagesize">
+        <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
+        @{
+            if (ViewBag.pageSize != 3) {
+                    <option value=3>3</option>
+            }}
+            @{
+            if (ViewBag.pageSize != 5) {
+                  <option value=5>5</option>
+            }}
+            @{
+            if (ViewBag.pageSize != 10) {
+               <option value=10>10</option>
+            }}
+            @{
+            if (ViewBag.pageSize != 20) {
+                  <option value=20>20</option>
+            }}
+            @{
+            if (ViewBag.pageSize != 100) {
+                    <option value=100>100</option>
+            }}
+     </select>
+     筆
 </div>
+@*分頁導覽*@
 
 @section Scripts{
     <script>
@@ -145,5 +173,13 @@
                 }
             })
         }
+           //選取一頁幾筆
+        let pagesize=document.getElementById("pagesize");
+        let pageSize=0;
+        pagesize.addEventListener("change",function(){
+            pageSize=pagesize.options[pagesize.selectedIndex].value
+            let link="@Url.Content("~/newManagement/ArgumentList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
     </script>
     }

@@ -177,15 +177,21 @@ namespace prjiSpanFinal.Controllers
             var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == id).Select(n => n.ShipperId).ToList();
             var memship = _db.Shippers.Where(n => shiperlist.Contains(n.ShipperId)).Select(s => s.ShipperName).ToList();
 
-            var mempay = _db.PaymentToSellers.Where(n => n.MemberId == id).Select(n => n.PaymentId).ToList();
+            var paylist = _db.PaymentToSellers.Where(n => n.MemberId == id).Select(n => n.PaymentId).ToList();
+            var mempay = _db.Payments.Where(n => paylist.Contains(n.PaymentId)).Select(n => n).ToList();
 
+            var Category = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryName).ToList();
+            var CustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryId).ToList();
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
                 smallType = smallType,
+                Category= Category,
+                CustomizedCategoryID= CustomizedCategoryID,
                 memship = memship,
                 shipID = shiperlist,
-                PaymentID = mempay
+                PaymentID = paylist,
+                mempay= mempay,
             };
             return View(x);
         }
@@ -224,7 +230,7 @@ namespace prjiSpanFinal.Controllers
                 Description = result.Description,
                 ProductStatusId = 0,
                 EditTime = DateTime.Now,
-                CustomizedCategoryId = 1
+                CustomizedCategoryId = result.CategoryID,
             };
             _db.Products.Add(product);
             _db.SaveChanges();
@@ -255,27 +261,18 @@ namespace prjiSpanFinal.Controllers
                 _db.ProductPics.Add(productPic);
             }
 
-            for (int i = 0; i < result.ShiperID.Count; i++)
-            {
-                ShipperToProduct shipperToProduct = new ShipperToProduct()
-                {
-                    ShipperId = Convert.ToInt32(result.ShiperID[i]),
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.ShipperToProducts.Add(shipperToProduct);
-            }
+            //if (!_db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n).Any())
+            //{
+            //    CustomizedCategory customizedCategory = new CustomizedCategory()
+            //    {
+            //        MemberId = id,
+            //        CustomizedCategoryName = "未分類",
+            //        SortNumber = 1
+            //    };
+            //    _db.CustomizedCategories.Add(customizedCategory);
+            //}
 
-            for (int i = 0; i < result.PaymentID.Count; i++)
-            {
-                PaymentToProduct paymentToProduct = new PaymentToProduct()
-                {
-                    PaymentId = Convert.ToInt32(result.PaymentID[i]),
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.PaymentToProducts.Add(paymentToProduct);
-            }
             _db.SaveChanges();
-
         }
 
 

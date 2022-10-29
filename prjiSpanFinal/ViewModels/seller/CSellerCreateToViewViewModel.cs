@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjiSpanFinal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,10 @@ namespace prjiSpanFinal.ViewModels.seller
     {
         public List<string> bigType { get; set; }
         public List<string> smallType { get; set; }
+        public List<string> Category { get; set; }
+        public List<int> CustomizedCategoryID { get; set; }
         public List<string> memship { get; set; }
+        public List<Payment> mempay { get; set; }
         public List<int> shipID { get; set; }
         public List<int> PaymentID { get; set; }
 
@@ -23,6 +27,7 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<byte[]> BodyPic { get; set; }
         public string Description { get; set; }
         public int ProductID { get; set; }
+        public int CategoryID { get; set; }
         public List<int> ShiperID { get; set; }
         public List<CSellerCreateToViewViewModel> 暫存規格 { get; set; }
         public List<byte[]> DBtoPic { get; set; }
