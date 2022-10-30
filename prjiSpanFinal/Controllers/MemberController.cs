@@ -23,6 +23,7 @@ using prjiSpanFinal.ViewModels.Home;
 using prjiSpanFinal.Models.CategoryItemSort;
 using prjiSpanFinal.ViewModels.Category;
 using prjiSpanFinal.ViewModels.Header;
+using Microsoft.EntityFrameworkCore;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -455,7 +456,99 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult FollowCenter()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
             return View();
+        }
+        public IActionResult GetSortedFollow(int sort, int pages, int eachpage, string keyword, DateTime startdate, DateTime enddate)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            //var q = dbcontext.Follows.Where(f => f.MemberId == id).Select(f => new
+            //{
+            //    name = f.FollowedMem.Products.OrderByDescending(p => p.EditTime).FirstOrDefault().ProductName,
+            //    acc = f.FollowedMem.MemberAcc,
+            //    time = f.FollowedMem.Products.OrderByDescending(p => p.EditTime).FirstOrDefault().EditTime,
+            //    id = f.FollowedMem.MemberId,
+            //    pid = f.FollowedMem.Products.OrderByDescending(p => p.EditTime).FirstOrDefault().ProductId,
+            //    pic = f.FollowedMem.MemPic,
+            //    count = 0
+            //}).ToList();
+            var q = dbcontext.Follows.Where(f => f.MemberId == id).Select(f => new FollowViewModel()
+            {
+                acc = f.FollowedMem.MemberAcc,
+                id = f.FollowedMem.MemberId,
+                pic = f.FollowedMem.MemPic,
+            }).ToList();
+            foreach(var f in q)
+            {
+                if(dbcontext.Products.Where(p=>p.MemberId == f.id).Any())
+                {
+                    var a = dbcontext.Products.Where(p => p.MemberId == f.id && p.ProductStatusId == 0).OrderByDescending(p => p.EditTime).FirstOrDefault();
+                    f.time = a.EditTime;
+                    f.name = a.ProductName;
+                    f.pid = a.ProductId;
+                }
+                else
+                {
+                    f.time = new DateTime(1999,1,1);
+                    f.name = "暫無商品";
+                    f.pid = 0;
+                }
+                if(f.pic == null)
+                {
+                    string pName = "/img/Member/nopicmem.jpg";
+                    string path = _host.WebRootPath + pName;
+                    byte[] content = System.IO.File.ReadAllBytes(path);
+                    f.pic = content;
+                }
+            }    
+            if (sort == 0)
+            {
+                q = q.OrderBy(o => o.acc).ToList();
+            }
+            else if(sort == 1)
+            {
+                q = q.OrderByDescending(o => o.acc).ToList();
+            }
+            else if(sort == 2)
+            {
+                q = q.OrderByDescending(o => o.time).ToList();
+            }
+            else if(sort == 3)
+            {
+                q = q.OrderBy(o => o.time).ToList();
+            }
+            if (keyword != null)
+            {
+                keyword.Trim();
+                string[] keys = keyword.Split(" ");
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    q = q.Where(o => o.acc.Contains(keys[i]) || o.name.Contains(keys[i])).Select(o => o).ToList();
+                }
+            }
+
+            return Json(q.Skip((pages - 1) * eachpage).Take(eachpage).ToList());
+        }
+
+        public IActionResult WriteUnFollow(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int myid = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            dbcontext.Follows.Remove(dbcontext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).FirstOrDefault());
+            dbcontext.SaveChanges();
+            return Json("0");
         }
 
         public IActionResult OrderDetail(int id)

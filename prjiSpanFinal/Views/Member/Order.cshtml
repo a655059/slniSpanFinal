@@ -343,7 +343,7 @@
 
                                             <td><input type="hidden" class="orderorderid" value="${data.orderId}" />
                                             <input type="hidden" class="ordershipperstatus" value="${data.shipperStatusId}" />
-                                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價">${data.sellerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
+                                                            <input type="hidden" class="orderorderdate" value="${Date.parse(data.orderDatetime)}" />${data.orderId}<br /><a class="namenounderline" href="/SalesCourt/評價?id=${data.sellerId}">${data.sellerAcc}</a><br /><a href="#" class="orderopenmsg"><i class="fa fa-comment" style="color:orange"></i></a></td>
                                             <td>${datetimetostring((new Date(data.orderDatetime)))}</td>
                                             <td>`;
             let total = data.paymentFee;

@@ -2,6 +2,7 @@
 
 @section Styles{
     <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
+    <link href="~/css/DataTable/datatable.css" rel="stylesheet" />
 }
 
 <vc:member-ui></vc:member-ui>
@@ -10,28 +11,262 @@
     <div class="row ">
         <div class="col-1"></div>
         <div class="col-11">
-            <table class="table table-hover w-100">
-                <tr>
-                    <td>
-                        <img style="float:left; width:70px;" src="~/img/Member/pekopeko.jpg" class="rounded-circle"/>
-                        <div>
-                            喵喵喵 ACC12345678 最後更新:fsdfsdfdsdsdsfsdsdsdfdsfsdfdsf
-                        </div>
-                        <div>
-                            產品名稱就是這麼長產品名稱就是這麼長產品名稱就是這麼長產品名稱就是這麼長
-                        </div>
-                    </td>
-                    <td width="150px">
-                        <a role="button" href="#" class="btn btn-warning orderbuttonret my-1">解除追蹤</a>
-                    </td>
-                </tr>
+                <div class="ordersearchbar">
+                    <input type="text" class="form-control rounded" placeholder="搜尋追蹤" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
+                    <span>
+                        <input id="startDate" class="form-control orderdatepicker" type="date" /> ~ <input id="endDate" class="form-control orderdatepicker" type="date" /> <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                    </span>
+                </div>
+
+        <div class="itembody my-3">
+            <div class="itembody-filter d-flex align-items-center justify-content-between">
+                <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
+                    <a class="itembody-filter2-btn linknoline dropdown-toggle mx-3" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        賣家帳號排序
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder0">
+                                <i class="fa fa-arrow-down"></i>
+                                帳號：由前至後
+                                <input type="hidden" value="4" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder1">
+                                <i class="fa fa-arrow-up"></i>
+                                帳號：由後至前
+                                <input type="hidden" value="5" />
+                            </a>
+                        </li>
+                    </ul>
+
+                    <a class="itembody-filter2-btn linknoline dropdown-toggle mx-3" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        更新時間排序
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder2">
+                                <i class="fa fa-arrow-down"></i>
+                                時間：由近而遠
+                                <input type="hidden" value="4" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder3">
+                                <i class="fa fa-arrow-up"></i>
+                                時間：由遠而近
+                                <input type="hidden" value="5" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            <table class="table table-hover w-100" >
+                <tbody id="followtablebody">
+                    
+                </tbody>
             </table>
+            <div class="row ">
+                <div class="d-flex justify-content-center">
+                    <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                        <option value="1">每頁1個</option>
+                        <option value="5" selected>每頁5個</option>
+                        <option value="10">每頁10個</option>
+                        <option value="20">每頁20個</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item" id="orderpageup">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" id="orderpagedown">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span id="totalpagesdisplay"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts{
     <script>
+        let today = new Date();
+        let startdatestring = (today.getFullYear() - 1) + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
+        let enddatestring = today.getFullYear() + "-" + (today.getMonth() + 1).toString().padStart(2, '0') + "-" + today.getDate().toString().padStart(2, '0');
+        $("#startDate").val(startdatestring);
+        $("#endDate").val(enddatestring);
 
+
+        function FollowListItem(data){
+            return item = `<tr>
+                        <td class="followtabletd">
+                                    <img style="float:left; width:70px;" src="data:image;base64,${data.pic}" class="rounded-circle" />
+                            <div class="ms-3">
+                                <div class="my-2">
+                                                        賣家: <a href="/SalesCourt/賣場?id=${data.id}" class="linknoline">${data.acc}</a><a href="#" class="orderopenmsg"><i class="fa fa-comment mx-2" style="color:orange"></i></a> 最後更新: <span class="followsellertime">${datetimetostring(new Date(data.time))}</span>
+                                </div>
+                                <div class="my-2">
+                                        最新商品: <a href="/Item/Index?id=${data.pid}" class="linknoline followsellerprod">${data.name}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="110px">
+                            <input type="hidden" class="followedid" value="${data.id}" />
+                            <input type="hidden" class="followselleracc" value="${data.acc}" />
+                            <a role="button" href="#" class="btn btn-warning btnunfollow my-3">解除追蹤</a>
+                        </td>
+                    </tr>`;
+        }
+
+
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+        endDate.max = new Date().toISOString().split("T")[0];
+        let sortmethod = 2;
+        let nowpages = 1;
+        let eachpage = 5;
+        let searchflag = false;
+        function reloaditem() {
+            let keyword;
+            let startdate;
+            let enddate
+            if (searchflag) {
+                keyword = $("#orderkeyword").val();
+                startdate = $("#startDate").val();
+                enddate = $("#endDate").val();
+            }
+            else {
+                $("#orderkeyword").val("");
+                keyword = "";
+                startdate = "1990-01-01";
+                enddate = "2050-01-01";
+            }
+            $.getJSON(`/Member/GetSortedFollow`, { sort: sortmethod, pages: nowpages, eachpage: eachpage, keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
+                $("#followtablebody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#followtablebody").append(FollowListItem(data[i]));
+                }
+                if (data.length > 0) {
+                    PageNumFill(data.length);
+                }
+                else {
+                    PageNumFill(1);
+                }
+            });
+        }
+        reloaditem(0, 0);
+        function PageNumFill(c) {
+            let pagecount = Math.ceil(c / eachpage);
+            $("#totalpagesdisplay").html(`共${pagecount}頁`);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == nowpages) {
+                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
+        $("#btnDate").click(function () {
+            if (searchflag) {
+                searchflag = false;
+                $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
+                $("#btnDate").val("搜尋");
+                $("#orderkeyword").removeAttr("readonly");
+            }
+            else {
+                searchflag = true;
+                $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
+                $("#btnDate").val("解除搜尋");
+                $("#orderkeyword").attr("readonly", "readonly");
+            }
+            nowpages = 1;
+            reloaditem();
+        });
+
+        $(document).on("click", ".orderpagenumclick", function () {
+            nowpages = $(this).html();
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#orderpageup").click(function () {
+            nowpages = Math.max(parseInt(nowpages) - 1, 1);
+            reloaditem(sortmethod, tabid, nowpages);
+        })
+
+        $("#pagecountselect").change(function () {
+            eachpage = $("#pagecountselect option:selected").val();
+            nowpages = 1;
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        });
+
+        function datetimetostring(dtime) {
+            if(dtime < new Date("1999-12-31"))
+            {
+                return "暫無更新";
+            }
+            let tempt = dtime.getFullYear().toString() + "-" + (dtime.getMonth() + 1).toString().padStart(2, '0') + "-" + dtime.getDate().toString().padStart(2, '0') +" "+ dtime.getHours().toString().padStart(2, '0') + ":" + dtime.getMinutes().toString().padStart(2, '0') + ":" + dtime.getSeconds().toString().padStart(2, '0');
+            return tempt;
+        }
+
+        $(document).on("click", ".orderopenmsg", function () {
+            happy_popup($(this).siblings("a").html());
+        });
+
+        $("#SortOrder0").click(function () {
+            nowpages = 1;
+            sortmethod = 0;
+            reloaditem();
+        })
+        $("#SortOrder1").click(function () {
+            nowpages = 1;
+            sortmethod = 1;
+            reloaditem();
+        })
+        $("#SortOrder2").click(function () {
+            nowpages = 1;
+            sortmethod = 2;
+            reloaditem();
+        })
+        $("#SortOrder3").click(function () {
+            nowpages = 1;
+            sortmethod = 3;
+            reloaditem();
+        })
+
+        $(document).on("click",".btnunfollow",function(){
+            let aaa = $(this);
+            $.getJSON(`/Member/WriteUnFollow`,{id:$(this).siblings(".followedid").val()},function(){
+                Swal.fire(
+                    '移除追蹤',
+                    '您已移除追蹤賣家' + aaa.siblings(".followselleracc").val(),
+                    'warning'
+                );
+            });
+            reloaditem();
+        })
     </script>
 }
