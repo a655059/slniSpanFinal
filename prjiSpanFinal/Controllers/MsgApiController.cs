@@ -151,7 +151,24 @@ namespace prjiSpanFinal.Controllers
         public IActionResult GetOrders(int id)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var vm = dbcontext.Orders.Where(o => o.MemberId == id).Select(o => new ViewModels.App.OrderDetailViewModel()
+            var vm = dbcontext.Orders.Where(o => o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Select(o => new ViewModels.App.OrderListViewModel()
+            {
+                OrderId = o.OrderId,
+                OrderDatetime = o.OrderDatetime,
+                OrderStatusName = o.Status.OrderStatusName,
+                Quantity = o.OrderDetails.Select(o => o.Quantity).FirstOrDefault(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).FirstOrDefault(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).FirstOrDefault(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).FirstOrDefault(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).FirstOrDefault(),
+            }).ToList().OrderByDescending(o=>o.OrderDatetime);
+            return Json(vm);
+        }
+
+        public IActionResult GetOrderDetail(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new ViewModels.App.OrderDetailViewModel()
             {
                 OrderId = o.OrderId,
                 SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
@@ -184,8 +201,13 @@ namespace prjiSpanFinal.Controllers
                 Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
                 Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
                 ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
-            }).ToList();
+            }).FirstOrDefault();
             return Json(vm);
+        }
+        public IActionResult GetNewNotificationbyID(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            return Json(dbcontext.Notifications.Where(n => n.MemberId == id && n.HaveRead == false).OrderByDescending(o => o.Time).Select(n => new CNotification(){ NotificationId = n.NotificationId, Text = n.Text, Time = n.Time, TextContent= n.TextContent}).ToList());
         }
     }
 }

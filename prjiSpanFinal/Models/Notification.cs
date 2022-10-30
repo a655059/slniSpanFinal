@@ -14,6 +14,7 @@ namespace prjiSpanFinal.Models
         public int MemberId { get; set; }
         public bool HaveRead { get; set; }
         public DateTime Time { get; set; }
+        public string TextContent { get; set; }
 
         public virtual IconType IconType { get; set; }
         public virtual MemberAccount Member { get; set; }
