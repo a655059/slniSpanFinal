@@ -5,6 +5,19 @@
 @{
     ViewData["Title"] = "賣場";
 
+    iSpanProjectContext dbContext = new iSpanProjectContext();
+    var bestsell = dbContext.Products.Where(a => a.MemberId == Model.SellerId).Select(p => new {
+        link = "/Item/Index?id=" + p.ProductId,
+        pic = p.ProductPics.FirstOrDefault().Pic,
+        name = p.ProductName,
+        price1 = p.ProductDetails.Select(a => a.UnitPrice).Min(),
+        price2 = p.ProductDetails.Select(a => a.UnitPrice).Max(),
+        star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count,
+        sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+        upload = p.EditTime,
+    }).OrderByDescending(a => a.sales).ToList();
+        
+
 }
 @section Styles{
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
@@ -15,6 +28,11 @@
         .dashed-divider {
             height: 1px;
             border-top: 2px dashed #dcdcdc;
+        }
+
+        .ordersearchbar {
+            padding: 3px;
+            text-align: right;
         }
     </style>
 }
@@ -99,6 +117,7 @@
 
                 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <div class="container  ">
+
                     <div class="rounded text-center text-black-50 p-4 mb-5 " style="background-color:#f6e529">
 
                         <h1 class="fw-bolder" style="font-size:3rem">@Model.SellerName 賣場相關資料</h1>
@@ -110,6 +129,8 @@
 
                     </div>
 
+
+
                     <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
                         <span>精選商品</span>
                         <a class="link-secondary" href="#" aria-label="Add a new report">
@@ -117,64 +138,46 @@
                         </a>
                     </h6>
 
-                    <div class="row">
+                    <div class="row" id="bestsellproduct">
 
-
-
+                        @for (int i = 0; i < bestsell.Count(); i++)
+                        {
                             
-                            @*<div class="col">
-                                    <div class="row">
-                                        <div class="col">
+                            <div class="sellsitem">
+                                <a class="linknoline" href="@bestsell[i].link">
+                                    @*@if (bestsell[i].pic != null)
+        {
+            var base64Image = Convert.ToBase64String(bestsell[i].pic);
+            var source = String.Format("data:image/png;base64,{0}", base64Image);
 
-                                            @{
-
-                                                var base64Image1 = Convert.ToBase64String(item.Producpic);
-                                                var source1 = String.Format("data:image/png;base64,{0}", base64Image1);
-
-                                            }
-                                            <img src="@source1" class="cardImg" alt="..." width="150" />
-                                        </div>
-                                        <div class="col">
-                                            <div class="ps-2"><a href="#" class="text-primary">@item.ProductName</a></div>
-
-                                            <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $@item.ProductPrice</a></div>
-                                            <p>
-
-                                                已賣數量：@item.SoldQuantity
-
-                                                上架時間： @item.AddedTime
-                                            </p>
-                                        </div>
+            <img src="@source" class="cardImg" alt="..." />
+        }*@
+                                    <img src="data:png;base64,@bestsell[i].pic" class="cardImg" alt="..." />
+                                </a>
+                                <div class="px-1 d-flex flex-column justify-content-between">
+                                    <div class="cardTitleBox">
+                                        <div class="cardTitle">@bestsell[i].name</div>
                                     </div>
-                                </div>*@
+                                    <div class="cardPrice">@bestsell[i].price1.ToString("0.00") - @bestsell[i].price2.ToString("0.00")</div>
+                                    <div class="cardInfo d-flex justify-content-between flex-row">
+                                        <div class="starBox mt-1">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="starImg">
+                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                </div>
+                                                <div class="text-black">@bestsell[i].star.ToString("0.00")</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end text-black-50 sells">已賣出<span>@bestsell[i].sales</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         }
 
                     </div>
-                    @*舊式原本寫死的*@
-                    @*<div class="row">
-                            @{
-                                @for (int i = 0; i < 2; i++)
-                                {
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col">
-                                                <img src="~/img/product04.png" width="150" />
-                                            </div>
-                                            <div class="col">
-                                                <div class="ps-2"><a href="#" class="text-primary">【24H出貨】 Kolin 歌林 手持吸塵器 HEAP氣旋 吸力永不減 吸塵器 KTC-SD401</a></div>
-                                                <div class="ps-2"><a href="#" style="color:#a25130">直接購買價： $155 - $1,180</a></div>
-                                                <p>
-                                                    已賣數量：227
-                                                    上架時間： 2017-09-28 02:41:04
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
 
 
-                        </div>*@
+
 
                     <div class="row" style="background-color:#32d6a8">
 
@@ -196,143 +199,13 @@
                     </div>
 
 
+                    <div class="ordersearchbar">
+                        <input type="text" class="form-control rounded" placeholder="搜尋產品" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword">
+                        <span>
+                            <input id="btnDate" class="btn btn-primary" value="搜尋" type="button">
+                        </span>
+                    </div>
 
-
-                    @*<div class="filter-body d-flex  flex-wrap align-content-start">
-                            <div class="filter-types" id="filterTspace">
-                                <ul id="filterT-ul">
-                                    <li>
-                                        <a href="@Url.Content("~/SalesCourt/Index" + "?id=" + Model.SearchType.BigTypeId)" class="linknoline">
-                                            <span class="fticon">
-                                                <i class="fa-solid fa-circle-play"></i>
-                                            </span>
-                                            <span class="fttitle fttitlemain">@Model.SearchType.BigTypeName</span>
-                                        </a>
-                                    </li>
-                                    @{
-                                        foreach (var item in Model.lSmallType)
-                                        {
-                                            if (item.BigTypeId == Model.SearchType.BigTypeId)
-                                            {
-                                                <li>
-                                                    <a href="@Url.Content("~/SalesCourt/SmallType" + "?id=" + item.SmallTypeId)" class="linknoline">
-                                                        <span class="fttitle">@item.SmallTypeName</span>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-
-
-                                    }
-                                </ul>
-                            </div>
-                            @{ if (Model.cShowItem.Count > 0)
-                                {
-                                    <div class="filter-filter w-100">
-                                        <div class="ff-title d-flex justify-content-center w-100">
-                                            <span><i class="fa fa-filter"></i></span>
-                                            <span>條件篩選</span>
-                                        </div>
-                                        <div class="ffsplits">
-                                            <div class="ff-typestitle w-100 p-1">
-                                                價格區間
-                                            </div>
-                                            <div class="d-flex w-100 flex-row ff-types-prices">
-                                                <div class="ff-types-prices-child2">
-                                                    <input placeholder="＄最小值" />
-                                                </div>
-                                                <div class="ff-types-prices-child1 text-center opacity-50">
-                                                    ─
-                                                </div>
-                                                <div class="ff-types-prices-child2">
-                                                    <input placeholder="＄最大值" />
-                                                </div>
-                                            </div>
-                                            <button class="w-100 text-center ff-types-prices-btn" id="ff-types-prices-btn">搜尋</button>
-                                        </div>
-                                    </div>
-                                } }
-                        </div>*@
-
-
-                    @*<div class="itembody">
-                            @{ if (Model.cShowItem.Count > 0)
-                                {
-                                    <div class="itembody-filter d-flex align-items-center justify-content-between">
-                                        <div class="itembody-filter1 "><span>篩選</span></div>
-                                        <div class="itembody-filter2 d-flex justify-content-start align-items-stretch">
-                                            <a class="itembody-filter2-btn linknoline SortOrder active" id="SortOrder1">
-                                                綜合排序
-                                                <input type="hidden" value="1" />
-                                            </a>
-                                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder2">
-                                                最新商品
-                                                <input type="hidden" value="2" />
-                                            </a>
-                                            <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
-                                                熱銷商品
-                                                <input type="hidden" value="3" />
-                                            </a>
-                                            <a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                                價格排序
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <li>
-                                                    <a class="dropdown-item SortOrder" id="SortOrder4">
-                                                        <i class="fa fa-arrow-down"></i>
-                                                        價格：由高至低
-                                                        <input type="hidden" value="4" />
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item SortOrder" id="SortOrder5">
-                                                        <i class="fa fa-arrow-up"></i>
-                                                        價格：由低至高
-                                                        <input type="hidden" value="5" />
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                } }
-                            <div class="itemcol" id="OriginShowItem">
-
-                                @{
-                                    if (Model.cShowItem.Count > 0)
-                                    {
-
-                                        @await Component.InvokeAsync("SalesCourtCard", new { shopProduct = Model.cShowItem });
-
-                                    }
-                                    else
-                                    {
-                                        <div>
-                                            暫待新增商品
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        </div>*@
-
-
-
-                    @*<ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active ordernavtabs" value="1" aria-current="page" href="#">排序</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link ordernavtabs" value="2" href="#">熱門度</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link ordernavtabs" value="3" href="#">價格</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link ordernavtabs" value="4" href="#">銷售</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link ordernavtabs" value="5" href="#">最新上架</a>
-                            </li>
-                        </ul>*@
 
                     <div class="itembody-filter d-flex align-items-center justify-content-between">
                         <div class="itembody-filter1 "><span>篩選</span></div>
@@ -373,13 +246,6 @@
 
 
 
-
-
-
-                    @*<div class="display-2 text-bg-danger">@Model.star </div>*@
-
-
-
                     @*//-----------------------------------------------------------------*@
 
                     <div class="row" id="salescourtcardbody">
@@ -387,23 +253,20 @@
                     </div>
 
 
-
-
-
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">
                         <ul class="pagination">
-                            <li class="page-item">
+                            <li class="page-item" id="orderpageup">
                                 <a class="page-link" href="#" aria-label="Previous">
                                     <span aria-hidden="true">«</span>
                                 </a>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item"><a class="page-link" href="#">6</a></li>
-                            <li class="page-item">
+                            <li class="page-item orderpagenumclicklist"><a id="page1" class=" page-link" href="#">1</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page2" class=" page-link" href="#">2</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page3" class=" page-link" href="#">3</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page4" class=" page-link" href="#">4</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page5" class=" page-link" href="#">5</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page6" class=" page-link" href="#">6</a></li>
+                            <li class="page-item" id="orderpagedown">
                                 <a class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">»</span>
                                 </a>
@@ -429,16 +292,21 @@
 
 
 @section Scripts{
-    @*<script src="~/js/Category/Index.js"></script>*@
+  
     
 <script>
+
+
     let mode = 0;
+    let eachpages = 1;
+    let nowpages = 1;
+    let searchflag = false;
 
     jQuery.postJSON = function (url, data, callback) {
         jQuery.post(url, data, callback, "json");
     };
 
-
+        
     load();
     function returnCard(data) {
         return `<div class="sellsitem">
@@ -465,29 +333,41 @@
     </div>`
     }
 
-    $("#SortOrder1").click(function () {
-        mode = 1;
-        $("#salescourtcardbody").empty();
-        load();
-    })
+    /*    let aa = $.map($(".check"),*/
+    //function loadbest() {
+    //    $.getJSON("/SalesCourt/GetBestSell", { id: SalesCourtSellerId }, function (data) {
+    //        $("#bestsellproduct").html("")
+    //        for (let i = 0; i < data.length; i++) {
+    //            $("#bestsellproduct").append(returnCard(data[i]));
+    //        }
+    //    })
+    //}
 
-    $("#SortOrder2").click(function () {
-        mode = 2;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-/*    let aa = $.map($(".check"),*/
     function load() {
-        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode:mode }, function (data) {
+        let keyword;
+        if (searchflag) {
+            keyword = $("#orderkeyword").val();
+        }
+        else {
+            $("#orderkeyword").val("");
+            keyword = "";
+        }
+               
+
+        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode:mode,pages:nowpages,keyword:keyword}, function (data) {
+            
+            $("#salescourtcardbody").html("");
             for (let i = 0; i < data.length; i++) {
                 /*$(".check").eq(i).a*/
                 $("#salescourtcardbody").append(returnCard(data[i]));
             }
 
+            
         })
-
+                
+        
     }
-    
+
     //打開蝦蝦通
     $(document).on("click", ".orderopenmsg", function () {
         happy_popup($("#SalesCourtSellerName").val());
@@ -522,166 +402,93 @@
 
 </script>
 
+    $("#btnDate").click(function () {
+        if (searchflag) {
+            searchflag = false;
+            $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
+            $("#btnDate").val("搜尋");
+            $("#orderkeyword").removeAttr("readonly");
+        }
 
-    @*$(".SortOrder").click(function (event) {
-
-                    let target = $(event.target);
-                    $(".active").removeClass("active");
-                    target.addClass("active");
-
-                    if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
-                        if (!menu.classList.contains("active")) {
-                            menu.classList.add("active");
-                        }
-                        menu.textContent = this.textContent.trim();
-                    }
-                    else {
-                        menu.textContent = "價格排序";
-                    }
-
-                    SortOrder = target.find("input").val();
-                    CallgetJSON();
-                });
-
-                $("#ff-types-prices-btn").click(function (event) {
-                    let minval = 0
-                    if (parseInt($('#ff-pricemin').val()) > 0); {
-                        minval = $('#ff-pricemin').val();
-                    }
-                    let maxval = 9999999;
-                    if (parseInt($('#ff-pricemax').val()) > 0) {
-                        maxval = $('#ff-pricemax').val();
-                    }
-                    if (parseInt(minval) > parseInt(maxval)) {
-                        //todo#2
-                        alert("數值設定錯誤！");
-                    }
-                    if (minval <= maxval) {
-                        priceMin = parseInt(minval);
-                        priceMax = parseInt(maxval);
-                        CallgetJSON();
-                    }
-                })
-                jQuery.postJSON = function (url, data, callback) {
-                    jQuery.post(url, data, callback, "json");
-                };
-                function CallgetJSON() {
-                    $.postJSON(`/SalesCourt/SmallTypeSort`, { id: SmalltypeId, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
-                        $("#OriginShowItem").html("") ;
-                        if (data.length > 0) {
-                            $("#OriginShowItem").append(Items(data));
-                        }
-                        else {
-                            $("#OriginShowItem").html("<div>暫待新增商品</div>") ;
-                        }
-                    })
-                }
-
-                function Items(data) {
-                    let item = "";
-                    for (let i = 0; i < data.length; i++) {
-                        let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
-                        item = item+  `<div class="sellsitem">
-                                   <a class="linknoline" href="${productLink}">`;
-                        if (data[i].pic != null)
-                        {
-
-                            item = item + `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
-                        }
-                        else
-                        {
-                            item = item +` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
-                        }
-                        item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
-        <div class="cardTitleBox">
-                                <div class="cardTitle"> ${ data[i].product.productName}</div></div>`
-                            if (data[i].price.Count == 1)
-                            {
-                                item = item + `<div class="cardPrice">${Math.round(data[i].price[0])}</div>`
-                            }
-                            else
-                            {
-                                item = item + `<div class="cardPrice">$`+`${Math.round(data[i].price[0])} - $`+`${Math.round(data[i].price[1])}</div>`
-                            }
-
-                    item = item +
-                        `<div class="cardInfo d-flex justify-content-between flex-row">
-                            <div class="starBox mt-1">
-                                <div class="d-flex justify-content-start">
-                                    <div class="starImg">
-                                        <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                                    </div>
-                                    <div class="text-black">${data[i].starCount.toFixed(1)}</div>
-                                </div>
-                            </div>
-                            <div class="text-end text-black-50 sells">已賣出<span>${data[i].salesVolume}</span></div>
-                        </div>
-                    </div>
-                </div>
-            `}
-                    return item;
-                }*@
-
-    <!--</script>-->
-    @*<script>
+        else {
+            searchflag = true;
+            $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
+            $("#btnDate").val("解除搜尋");
+            $("#orderkeyword").removeAttr("readonly", "readonly");
+        }
+        nowpages = 1;
+        load();
+    })
 
 
-            $(".SortOrder").click(function (event) {
-
-                let target = $(event.target);
-                $(".active").removeClass("active");
-                target.addClass("active");
-
-                if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
-                    if (!menu.classList.contains("active")) {
-                        menu.classList.add("active");
-                    }
-                    menu.textContent = this.textContent.trim();
-
-                }
-                else {
-                    menu.textContent = "價格排序";
-                }
-
-                SortOrder = target.find("input").val();
-                CallgetJSON();
-            });
 
 
-            $("#ff-types-prices-btn").click(function (event) {      /*抓價格區間*/
-                let minval = 0
-                if (parseInt($('#ff-pricemin').val()) > 0); {
-                    minval = $('#ff-pricemin').val();
-                }
-                let maxval = 9999999;
-                if (parseInt($('#ff-pricemax').val()) > 0) {
-                    maxval = $('#ff-pricemax').val();
-                }
-                if (parseInt(minval) > parseInt(maxval)) {
-                    //todo#2
-                    alert("數值設定錯誤！");
-                }
-                if (minval <= maxval) {
-                    priceMin = parseInt(minval);
-                    priceMax = parseInt(maxval);
-                    CallgetJSON();
-                }
-            })
+    $("#orderpagedown").click(function () {
+        let pagescount = $(".orderpagenumclicklist").length;
+        nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+        /*nowpages = 2;*/
+        $("#salescourtcardbody").empty();
+        load();
+    })
 
-            jQuery.postJSON = function (url, data, callback) {
-                jQuery.post(url, data, callback, "json");
-            };
 
-            function CallgetJSON() {
-                $.postJSON(`/SalesCourt/SmallTypeSort`, { id: MemberId, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
-                    $("#OriginShowItem").html("");
-                    if (data.length > 0) {
-                        $("#OriginShowItem").append(Items(data));
-                    }
-                    else {
-                        $("#OriginShowItem").html("<div>暫待新增商品</div>");
-                    }
-                })
-            }
-        </script>*@
+    $("#orderpageup").click(function () {
+        nowpages = Math.max(parseInt(nowpages) - 1, 1);
+        /*nowpages = 1;*/
+        $("#salescourtcardbody").empty();
+        load();
+    })
+  
+
+    $("#SortOrder1").click(function () {
+        mode = 1;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#SortOrder2").click(function () {
+        mode = 2;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#SortOrder3").click(function () {
+        mode = 3;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#SortOrder4").click(function () {
+        mode = 4;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#SortOrder5").click(function () {
+        mode = 5;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#page1").click(function () {
+        nowpages = 1;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#page2").click(function () {
+        nowpages = 2;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+    $("#page3").click(function () {
+        nowpages = 3;
+        $("#salescourtcardbody").empty();
+        load();
+    })
+</script>
+
+
+  
 }
