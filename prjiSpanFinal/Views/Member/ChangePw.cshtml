@@ -22,39 +22,39 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6 row" style="text-align:center">
-                <div class="col-3"></div>
+                <div class="col-3">
+
+                </div>
                 <div class="col-6">
-                    <div class="mb-4 ms-4">
+                    <div class="mb-4 me-5">
                         <a href="@Url.Content("~/Home/Index")">
                             <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
                         </a>
                     </div>
                     <div style="text-align:center">
-                        <form style="width: 23rem;">
-                            <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">修改密碼</h3>
 
+                        <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">修改密碼</h3>
 
-                            <div class="form-outline mb-4">
-                                <input type="password" id="txtPW" name="txtPW" class="form-control form-control-lg" />
-                                <label class="form-label mt-3">舊密碼</label>
-                                <small id="nowPWwarn" class="form-text text-muted"></small>
-                            </div>
+                        <div class="form-outline mb-4">
+                            <input type="password" id="txtPW" name="txtPW" class="form-control form-control-lg" />
+                            <label class="form-label mt-3">舊密碼</label>
+                            <small id="nowPWwarn" class="form-text text-muted"></small>
+                        </div>
 
-                            <div class="form-outline mb-4">
-                                <input type="password" id="txtNewPW" name="txtNewPW" class="form-control form-control-lg" />
-                                <label class="form-label mt-3" for="txtNewPW">新密碼</label>
-                                <small id="newPWwarn" class="form-text text-muted"></small>
-                            </div>
+                        <div class="form-outline mb-4">
+                            <input type="password" id="txtNewPW" name="txtNewPW" class="form-control form-control-lg" />
+                            <label class="form-label mt-3" for="txtNewPW">新密碼</label>
+                            <small id="newPWwarn" class="form-text text-muted"></small>
+                        </div>
 
-                            <div class="form-outline mb-4">
-                                <input type="password" id="txtPWcheck" name="txtPWcheck" class="form-control form-control-lg" />
-                                <label class="form-label mt-3" for="txtPWcheck">再次確認新密碼</label>
-                                <small id="newPWchwarn" class="form-text text-muted"></small>
-                            </div>
-                            <div class="checkout-btn mt-30" style="margin:auto auto;">
-                                <button class="btn alazea-btn btn-lg mt-15" id="PWChange">修改</button>
-                            </div>
-                        </form>
+                        <div class="form-outline mb-4">
+                            <input type="password" id="txtPWcheck" name="txtPWcheck" class="form-control form-control-lg" />
+                            <label class="form-label mt-3" for="txtPWcheck">再次確認新密碼</label>
+                            <small id="newPWchwarn" class="form-text text-muted"></small>
+                        </div>
+                        <div class="checkout-btn mt-30" style="margin:auto auto;">
+                            <button class="btn btn-primary" id="PWChange">修改</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,22 +165,22 @@
                             newWarn.html("");
                             NewChisOK = false;
                             newCHWarn.html("");
-                            alert("修改成功");
-                                        // Swal.fire(
-                                        //'恭喜!',
-                                        //'您已修改成功，請重新登入!',
-                                        //'success'
-                                        //)
+                            /*alert("修改成功");*/
+                                         Swal.fire(
+                                        '恭喜!',
+                                        '您已修改成功，請重新登入!',
+                                        'success'
+                                        ).then(function (result) {window.location.href = "@Url.ActionLink("login","Member")"; })
                         }
                         else if (data === "NO")
                         {
-                            alert("修改失敗");
-                            @*Swal.fire({
+                            /*alert("修改失敗");*/
+                            Swal.fire({
                                 icon: 'error',
                                 title: '失敗',
                                 text: '修改失敗',
                                 footer: '<a href="">請重新輸入</a>'
-                            }).then(function (result) {window.location.href = "@Url.ActionLink("ChangePw","Member")"; })*@
+                            }).then(function (result) {window.location.href = "@Url.ActionLink("ChangePw","Member")"; })
                         }
                         else {
                             window.location.href = '@Url.Content("~/Member/ChangeNewPW")';
@@ -188,7 +188,11 @@
                     })
             }
             else {
-                alert("請填入資料");
+                Swal.fire({
+                    icon: 'error',
+                    title: '失敗',
+                    text: '修改失敗，請重新輸入'
+                })
             }
         })
 

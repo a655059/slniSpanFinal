@@ -14,5 +14,7 @@ namespace prjiSpanFinal.ViewModels.Category
         public SmallType SearchSmallType { get; set; }
         public List<MyLikeShowItem> MyLikeShowItem { get; set; }
         public string SearchKeyword { get; set; }
+        public string mylikeCancle { get; set; }
+
     }
 }
