@@ -1,6 +1,6 @@
 ﻿@media (min-width: 1400px) {
     .container {
-        max-width: 1350px;
+        max-width: 1370px;
     }
 }
 @media (min-width: 768px) {
@@ -8,20 +8,39 @@
         max-width: 720px;
     }
 }
-
-/* 左側 */
-.listview {
-    box-sizing: border-box;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    flex-shrink: 0;
-    align-content: flex-start;
-    border: 0 solid #000;
-    margin: 0;
-    min-width: 0;
-    margin-bottom:30px;
+.layout1renderdiv{
+    background-color:transparent;
 }
+.HP-Panel{
+    background-color:white;
+    padding:20px 15px;
+    border-radius:15px;
+}
+.HP-Header {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+    .HP-Header img {
+        width: 20px;
+    }
+    .HP-Header span {
+        font-size: 18px;
+    }
+    /* 左側 */
+    .listview {
+        box-sizing: border-box;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        flex-shrink: 0;
+        align-content: flex-start;
+        border: 0 solid #000;
+        margin: 0;
+        min-width: 0;
+        margin-bottom: 30px;
+    }
 
 .listtype {
     height: 588px;
@@ -106,19 +125,7 @@
         color:red;
         opacity: 80%;
     }
-/*AD*/
-.Homepage-AD {
-}
 
-    .Homepage-AD > a {
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-        .Homepage-AD > a:hover {
-            opacity: 80%;
-        }
-/*/AD*/
 .cateheader {
     max-height: 100%;
 }
@@ -175,7 +182,7 @@
     }
 /*分隔線*/
 .split {
-    height: 50px;
+    height: 20px;
     width: 100%;
 }
 

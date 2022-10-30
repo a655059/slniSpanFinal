@@ -57,7 +57,7 @@
     }
 
 .split {
-    height: 50px;
+    height: 20px;
     width: 100%;
 }
 .cateAD{
@@ -65,11 +65,8 @@
     height:300px;
     overflow:hidden;
     border-radius:10px;
-    border:1px solid purple;
+    /*border:1px solid purple;*/
     margin:10px 0 10px 0 
-}
-.cateAD > a > img{
-    width:100%    
 }
 .CategoryBody > .row {
     flex-wrap: nowrap;

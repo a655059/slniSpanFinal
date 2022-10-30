@@ -8,6 +8,11 @@ namespace prjiSpanFinal.ViewModels.Event
 {
     public class CShowCoupon
     {
+        iSpanProjectContext _db;
+        public CShowCoupon()
+        {
+            _db = new iSpanProjectContext();
+        }
         //優惠券名字
         public string couponEventTitle { get; set; }
         //優惠券
@@ -67,8 +72,7 @@ namespace prjiSpanFinal.ViewModels.Event
         public MemberAccount memberSetCoupon
         {
             get
-            {
-                iSpanProjectContext _db = new iSpanProjectContext();                
+            {            
                 return _db.MemberAccounts.Where(a => a.MemberId == coupon.MemberId).FirstOrDefault();
             }
         }
@@ -96,7 +100,6 @@ namespace prjiSpanFinal.ViewModels.Event
         {
             get
             {
-                iSpanProjectContext _db = new iSpanProjectContext();
                 if (loggeduser != null)
                 {
                     if (_db.CouponWallets.Where(w => w.MemberId == loggeduser.MemberId && w.CouponId == coupon.CouponId).Any())

@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "TestImage";
+}
+
+<h1>TestImage</h1>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" id="adimg" name="adimg" />
+    <input type="text" id="adnum" name="adnum" />
+    <img id="preview" style="max-height:300px" />
+    <div>
+        <input type="submit" id="submit">
+    </div>
+</form>
+@section Scripts{
+
+    <script>
+        $('#adimg').on('change', function (event) {
+            const file = this.files[0];
+            if (file != null) {
+                const objUrl = URL.createObjectURL(file);
+                $('#preview').attr('src', objUrl);
+            }
+            else {
+                $('#preview').attr('src', "");
+            }
+        })
+    </script>
+}

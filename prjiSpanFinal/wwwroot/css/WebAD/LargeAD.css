@@ -1,0 +1,11 @@
+﻿.Large-AD {
+}
+
+    .Large-AD > a {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .Large-AD > a:hover {
+            opacity: 90%;
+        }

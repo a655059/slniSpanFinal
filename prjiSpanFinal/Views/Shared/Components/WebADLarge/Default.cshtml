@@ -1,0 +1,16 @@
+﻿@using prjiSpanFinal.Models
+@model WebAd
+@{
+    
+}
+@{
+    <div class="w-100 Large-AD d-flex justify-content-center ">
+        <a href="#1" class="w-100">
+            @{
+                var base64Image = Convert.ToBase64String(Model.WebAdimage);
+                var source = String.Format("data:image/png;base64,{0}", base64Image);
+                <img src="@source" class="img-fluid w-100" alt="AD" />
+            }
+        </a>
+    </div>
+}

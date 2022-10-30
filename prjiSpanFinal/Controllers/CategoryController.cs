@@ -14,15 +14,18 @@ namespace prjiSpanFinal.Controllers
 {
     public class CategoryController : Controller
     {
-        iSpanProjectContext _db = new iSpanProjectContext();
+        iSpanProjectContext _db;
         List<Product> listprod;
         List<CShowItem> slist;
         CCategoryIndex list;
+        List<WebAd> WebadLarge;
         public CategoryController()
-        {
+        {            
+            _db = new iSpanProjectContext();
             listprod =new List<Product>();
             slist =new List<CShowItem>();
             list = new CCategoryIndex();
+            WebadLarge = _db.WebAds.Where(a => a.IsPublishing == true).Where(a => a.MemberId == 1).Where(a => a.WebAdimageTypeId == 3).ToList();
         }
 
         public IActionResult Index(int? id)
@@ -37,6 +40,7 @@ namespace prjiSpanFinal.Controllers
             list.cShowItem = slist;
             list.SearchType = _db.BigTypes.Where(t => t.BigTypeId == id).FirstOrDefault();
             list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
+            list.WebADLarge = (new CHomeFactory()).toRndImg(WebadLarge);
 
             return View(list);
         }
@@ -68,8 +72,8 @@ namespace prjiSpanFinal.Controllers
             list.SearchType = _db.SmallTypes.Where(t => t.SmallTypeId == id).Select(t => t.BigType).FirstOrDefault();
             list.lSmallType = (new CHomeFactory()).searchTypeSmall(list.SearchType);
             list.SearchSmallType = _db.SmallTypes.Where(t => t.SmallTypeId == id).FirstOrDefault();
+            list.WebADLarge = (new CHomeFactory()).toRndImg(WebadLarge);
 
-            
             return View(list);
         }
 
@@ -90,51 +94,51 @@ namespace prjiSpanFinal.Controllers
                 list.cShowItem = (new CHomeFactory()).toShowItem(listprod);
             }
             list.SearchKeyword = keyword;
-
+            list.WebADLarge = (new CHomeFactory()).toRndImg(WebadLarge);
 
             return View(list);
         }
-        List<CShowItem> fSortOrder(int sortOrder,List<Product> listprod)
-        {
-            List<Product> Ordered=new List<Product>();
-            List<CShowItem> SIlist = new List<CShowItem>();
-            switch (sortOrder)
-            {
-                case 1:
-                    //一般排序      
-                    SIlist= (new CHomeFactory()).toShowItem(listprod);
-                    return SIlist;
-                case 2:
-                    //最新排序
-                    SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductId).ToList());
-                    return SIlist;
-                case 3:
-                    //熱銷排序
-                    SIlist = ((new CHomeFactory()).toShowItem(listprod)).OrderBy(s=>s.salesVolume).ToList();
-                    return SIlist;
-                case 4:
-                    //價高排序
-                    SIlist = (new CHomeFactory()).toShowItem(listprod);
-                    return SIlist.OrderByDescending(p => p.Price.Max()).ToList();
-                case 5:
-                    //價低排序
-                    SIlist = (new CHomeFactory()).toShowItem(listprod);
-                    return SIlist.OrderBy(p => p.Price.Min()).ToList();
-                default:
-                    SIlist = (new CHomeFactory()).toShowItem(listprod);
-                    return SIlist;
-            }
-        }
-        List<Product> fFacetOrder(string keyword, List<Product> listprod)
-        {
-            string[] temp= keyword.Split(',');
-            List<int> tempSmallTypeIDs = new List<int>();
-            foreach(var Idstring in temp)
-            {
-                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
-            }
-            return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
-        }
+        //List<CShowItem> fSortOrder(int sortOrder,List<Product> listprod)
+        //{
+        //    List<Product> Ordered=new List<Product>();
+        //    List<CShowItem> SIlist = new List<CShowItem>();
+        //    switch (sortOrder)
+        //    {
+        //        case 1:
+        //            //一般排序      
+        //            SIlist= (new CHomeFactory()).toShowItem(listprod);
+        //            return SIlist;
+        //        case 2:
+        //            //最新排序
+        //            SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductId).ToList());
+        //            return SIlist;
+        //        case 3:
+        //            //熱銷排序
+        //            SIlist = ((new CHomeFactory()).toShowItem(listprod)).OrderBy(s=>s.salesVolume).ToList();
+        //            return SIlist;
+        //        case 4:
+        //            //價高排序
+        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
+        //            return SIlist.OrderByDescending(p => p.Price.Max()).ToList();
+        //        case 5:
+        //            //價低排序
+        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
+        //            return SIlist.OrderBy(p => p.Price.Min()).ToList();
+        //        default:
+        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
+        //            return SIlist;
+        //    }
+        //}
+        //List<Product> fFacetOrder(string keyword, List<Product> listprod)
+        //{
+        //    string[] temp= keyword.Split(',');
+        //    List<int> tempSmallTypeIDs = new List<int>();
+        //    foreach(var Idstring in temp)
+        //    {
+        //        tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
+        //    }
+        //    return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
+        //}
         public IActionResult CBselected(string keyword)
         {
             if (string.IsNullOrEmpty(keyword))

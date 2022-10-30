@@ -70,5 +70,15 @@ namespace prjiSpanFinal.ViewModels.Home
             List<SmallType> res = db.SmallTypes.Where(t => t.BigTypeId == search.BigTypeId).ToList();
             return res;
         }
+
+        public List<WebAd> toRndImg(List<WebAd> list)
+        {
+            if (list == null) { 
+                return list;
+            }
+            List<WebAd> res = list.OrderBy(p => Guid.NewGuid()).ToList();
+            return res;
+        }
+
     }
 }

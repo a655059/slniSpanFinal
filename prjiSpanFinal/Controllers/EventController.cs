@@ -63,26 +63,29 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Event(int? Eventid)
         {
-            OfficialEventList Event= _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).FirstOrDefault();
-            EventViewModel EventVM = new EventViewModel();
-            MemberAccount loggedmem = new MemberAccount();
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-                loggedmem = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
-            if (Event != null) {
-                EventVM.OffcialEvent = Event;
-                EventVM.LogingMember = loggedmem;
-                //EventVM.EventCoupons=
-                
-                //開始一周前開放看
-                double publishDay = (DateTime.Now).Subtract(Event.StartDate).TotalDays;
-                //如果是管理員開放看
-                if (loggedmem.MemberId == 1)
-                { 
-                    return View(EventVM);
-                }
-                else if (publishDay < 7)
+            if (Eventid > 1)
+            {
+                EventViewModel EventVM = (new EventFactory()).fToEvent(Convert.ToInt32(Eventid));
+                MemberAccount evtLoggedAcc = new MemberAccount();
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
-                    return View(EventVM);
+                    evtLoggedAcc = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+                }
+                if (EventVM != null)
+                {
+                    EventVM.LogingMember = evtLoggedAcc;
+                    //開始一周前開放看
+                    double evtPublishDay = (DateTime.Now).Subtract(EventVM.Event.StartDate).TotalDays;
+                    //如果是管理員開放看
+                    if (evtLoggedAcc.MemberId == 1)
+                    {
+                        return View(EventVM);
+                    }
+                    //七天前開放瀏覽
+                    else if (evtPublishDay < 7)
+                    {
+                        return View(EventVM);
+                    }
                 }
             }
             return RedirectToAction("Index", "Home");

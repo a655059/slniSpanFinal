@@ -1,0 +1,41 @@
+﻿.FSitem {
+    width: 200px;
+    height: 250px;
+    margin: 4px 5px 4px 5px;
+    display: inline;
+    padding: 0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    transition: all .5s
+}
+.FSitemImg {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+}
+.FSitemTitleBox {
+    height: 65px;
+}
+.FSitemTitle {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    letter-spacing: 1px;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    text-overflow: ellipsis;
+}
+.FSitemPrice {
+    color: red;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.FSitemInfo {
+    font-size: 1em;
+    flex-wrap: nowrap;
+}

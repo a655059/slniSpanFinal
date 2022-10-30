@@ -11,6 +11,7 @@
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
     <style>
         .active {
             display: block !important;
@@ -60,9 +61,10 @@
                             <span>你或許會想知道...</span>
                         </div>
                         <div class="Searchresult-AD d-flex justify-content-center">
-                            <a href="@Url.Content("~/Event/Discount")">
-                                <img src="~/img/Category/CateAD2.png" />
-                            </a>
+                            @if (Model.WebADLarge.Count > 0)
+                            {
+                                @await Component.InvokeAsync("WebADLarge", new { list = Model.WebADLarge });
+                            }
                         </div>
                     } }
                 <div class="Searchresult-ResultTitle">
