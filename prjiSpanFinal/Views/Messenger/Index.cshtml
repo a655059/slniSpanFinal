@@ -1,32 +1,35 @@
 ﻿@section Styles
 {
     <style>
-        .main {
-            background-color: black;
-        }
     </style>
 }
-<a role="button" id="samplebtnmsg"></a>
-<label for="applebanana">上傳圖片</label>
-<input type="file" id="applebanana"/>
+    @for(int i=0;i<100;i++)
+    {
+        <input class="democheck" type="checkbox" />
+    }
+<input type="checkbox" />
+<a role="button" class="btn btn-primary" id="demo1">console array</a>
+<a role="button" class="btn btn-primary" id="demo2">console string</a>
 @section Scripts
 {
 <script>
-    jQuery.postJSON = function (url, data, callback) {
-        jQuery.post(url, data, callback, "json");
-    };
-    $("#applebanana").on("change", function () {
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const pic = reader.result;
-            console.log(pic)
-            $.postJSON("/Messenger/NewIcon", { pic: pic.split(',')[1] }, function () { });
-        });
-        reader.readAsDataURL(this.files[0]);
+    $("#demo1").click(function () {
+        let arrayC = [];
+        for (let i = 0; i < $(".democheck").length;i++)
+        {
+            arrayC.push($(".democheck").prop("checked"));
+        }
+        console.log(arrayC)
     })
-    //$("#samplebtnmsg").click(function () {
-    //    $.post("/Messenger/NewIcon", { pic: pic });
-    //})
+    $("#demo2").click(function(){
+            console.log(
+                JSON.stringify($.map($(".democheck"), function (data) {
+                    return data.checked
+                }))
+            )
+    })
+
+      
 </script>
     
 }
