@@ -453,7 +453,7 @@ namespace prjiSpanFinal.Controllers
             return Json("1");
         }
 
-        public IActionResult Print()
+        public IActionResult NotificationCenter()
         {
             return View();
         }
