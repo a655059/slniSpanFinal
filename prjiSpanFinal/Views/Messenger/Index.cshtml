@@ -5,9 +5,8 @@
 }
     @for(int i=0;i<100;i++)
     {
-        <input class="democheck" type="checkbox" />
+        <input class="democheck" type="checkbox"/>
     }
-<input type="checkbox" />
 <a role="button" class="btn btn-primary" id="demo1">console array</a>
 <a role="button" class="btn btn-primary" id="demo2">console string</a>
 @section Scripts
@@ -17,7 +16,7 @@
         let arrayC = [];
         for (let i = 0; i < $(".democheck").length;i++)
         {
-            arrayC.push($(".democheck").prop("checked"));
+            arrayC.push($(".democheck")[i].checked);
         }
         console.log(arrayC)
     })
