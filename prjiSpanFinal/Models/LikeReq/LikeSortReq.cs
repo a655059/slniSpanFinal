@@ -56,11 +56,13 @@ namespace prjiSpanFinal.Models.LikeReq
                     break;
                 case 4:
                     //價高排序
+                    
                     list = (new MyLikeFactory()).toShowItem(mylike);
                     list = list.OrderByDescending(p => p.Price.Max()).ToList();
                     break;
                 case 5:
                     //價低排序
+                    
                     list = (new MyLikeFactory()).toShowItem(mylike);
                     list = list.OrderBy(p => p.Price.Min()).ToList();
                     break;

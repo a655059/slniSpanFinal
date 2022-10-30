@@ -59,6 +59,8 @@
                 white-space: nowrap;
                 -webkit-overflow-scrolling: touch;
             }
+
+
     </style>
 }
 <div class="container">
@@ -73,6 +75,7 @@
                         <div class="form-group col-12">
                             <label asp-for="Name" class="form-label"><span style="color:red;">*</span>姓名</label>
                             <input asp-for="Name" type="text" class="form-control" id="Name" placeholder="" value="" required />
+                            <small id="NameHelp" class="form-text text-muted"></small>
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
@@ -86,12 +89,13 @@
                                     必填欄位
                                 </div>
                             </div>
-
+                            <small id="Acchelp" class="form-text text-muted"></small>
 
                         </div>
                         <div class="form-group col-12">
                             <label asp-for="MemberPw" class="form-label"><span style="color:red;">*</span>密碼</label>
                             <input asp-for="MemberPw" class="form-control" id="MemPw" required />
+                            
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
@@ -99,6 +103,8 @@
                         <div class="form-group col-12">
                             <label asp-for="Email" class="control-label"><span style="color:red;">*</span>信箱</label>
                             <input asp-for="Email" class="form-control" id="MemEmail" required />
+                            <small id="Emailhelp" class="form-text text-muted"></small>
+
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
@@ -107,6 +113,8 @@
                         <div class="form-group">
                             <label asp-for="Phone" class="control-label"><span style="color:red;">*</span>手機</label>
                             <input asp-for="Phone" class="form-control" id="MemPhone" required />
+                            <small id="Phonehelp" class="form-text text-muted"></small>
+
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
@@ -220,21 +228,49 @@
         const Demo = document.querySelector("#Demo")
         const create = document.querySelector("#creat")
 
-        @*create.addEventListener("click", function ()
-        {
-            $.post('@Url.Content("~/Member/create")'), function (data)
-            {
-                if (data == "ok")
-                {
-                                        Swal.fire(
-                                        '恭喜!',
-                                        '您已修改成功，請重新登入!',
-                                        'success'
-                                        ).then(function (result) { window.location.href = "@Url.ActionLink("login","Member")";})
+        const help = document.querySelector("#NameHelp")
+        const Acchelp = document.querySelector("#Acchelp")
+        const Emailhelp = document.querySelector("#Emailhelp")
+        const Phonehelp = document.querySelector("#Phonehelp")
 
-                }
+        const textname = document.querySelector("#Name")
+        const textAcc = document.querySelector("#MemAc")
+        const textEmail = document.querySelector("#MemEmail")
+        const textPhone = document.querySelector("#MemPhone")
+
+
+
+        textname.addEventListener("blur", async () => {
+            let responce = await fetch("@Url.Content("/member/CheckName")" + `?name=${textname.value}`)
+            let data = await responce.text()
+            if (data == "True") {
+                help.textContent = "已註冊";
             }
-        })*@
+        })
+        textAcc.addEventListener("blur", async () => {
+            let responce = await fetch("@Url.Content("/member/CheckAccount")" + `?acc=${textAcc.value}`)
+            let data = await responce.text()
+            if (data == "True") {
+                Acchelp.textContent = "已註冊";
+            }
+        })
+
+        textEmail.addEventListener("blur", async () => {
+            let responce = await fetch("@Url.Content("/member/CheckEmail")" + `?Email=${textEmail.value}`)
+            let data = await responce.text()
+            if (data == "True") {
+                Emailhelp.textContent = "已註冊";
+            }
+        })
+
+        textPhone.addEventListener("blur", async () => {
+            let responce = await fetch("@Url.Content("/member/CheckPhone")" + `?Phone=${textPhone.value}`)
+            let data = await responce.text()
+            if (data == "True") {
+                Phonehelp.textContent = "已註冊";
+            }
+        })
+
 
         Demo.addEventListener("click", function () {
             $("#Name").val("王曉明")

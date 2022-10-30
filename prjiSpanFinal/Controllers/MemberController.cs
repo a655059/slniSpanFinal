@@ -229,6 +229,27 @@ namespace prjiSpanFinal.Controllers
             //return Content("OK", "text/plain", Encoding.UTF8);
             return RedirectToAction("LoginSuccess");
         }
+        public IActionResult CheckName(string name)
+        {
+            var exists = _context.MemberAccounts.Any(m => m.Name == name);
+            return Content(exists.ToString(), "text/plain");
+        }
+        public IActionResult CheckAccount(string acc)
+        {
+            var exists = _context.MemberAccounts.Any(m => m.MemberAcc == acc);
+            return Content(exists.ToString(), "text/plain");
+        }
+        public IActionResult CheckEmail(string Email)
+        {
+            var exists = _context.MemberAccounts.Any(m => m.Email == Email);
+            return Content(exists.ToString(), "text/plain");
+        }
+        public IActionResult CheckPhone(string Phone)
+        {
+            var exists = _context.MemberAccounts.Any(m => m.Phone == Phone);
+            return Content(exists.ToString(), "text/plain");
+        }
+
         public IActionResult ShowPhoto(int id)
         {
             MemberAccount member = _context.MemberAccounts.Find(id);
@@ -275,7 +296,8 @@ namespace prjiSpanFinal.Controllers
                 }
             }
         }
-        public IActionResult DeleteMylike(int id)
+
+        public IActionResult deletLike(int likeID, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -283,14 +305,19 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
-                iSpanProjectContext db = new iSpanProjectContext();
-                string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-                int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
-                var mk = db.Likes.FirstOrDefault(m => m.MemberId == memID && m.ProductId == id);
-                db.Likes.Remove(mk);
-                db.SaveChanges();
-                return Content("已取消收藏", "text/plain", Encoding.UTF8);
+                iSpanProjectContext dbcontext = new iSpanProjectContext();
+                string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+
+                var mylikeID = dbcontext.Likes.Where(p => p.LikeId == likeID).Select(p => p.LikeId).ToList();
+                dbcontext.Remove(mylikeID);
+                dbcontext.SaveChanges();
+
+                return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
+
             }
+
+
         }
 
         public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
