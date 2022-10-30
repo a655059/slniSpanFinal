@@ -8,6 +8,7 @@ namespace prjiSpanFinal.ViewModels.Delivery
     public class CPurchaseItemInfo
     {
         public int orderDetailID { get; set; }
+        public int productDetailID { get; set; }
         public string productName { get; set; }
         public byte[] productDetailPic { get; set; }
         public string unitPrice { get; set; }
