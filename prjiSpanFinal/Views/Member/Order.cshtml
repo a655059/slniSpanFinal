@@ -461,7 +461,7 @@
             let pics = $.map($("#previewCommentPhoto").find("img"), function (item, index) {
                 return (item.src).split(',')[1];
             });
-            happy_sendnoti(4, arguesellerid, "你的訂單被買家投訴了，請點擊確認", "/Seller/Order?sort=0&tab=8")
+            happy_sendnoti(4, arguesellerid, "你的訂單被買家投訴了", "/Seller/Order?sort=0&tab=8", "如果有需要幫助可以聯絡客服中心。");
             $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
                 reloaditem(sortmethod, tabid);
             });

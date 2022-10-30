@@ -110,7 +110,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult GetNotificationbyID(int id)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).OrderByDescending(o=>o.Time).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time }).ToList()); 
+            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).OrderByDescending(o=>o.Time).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time, n.TextContent }).ToList()); 
         }
         public void HaveReadAllNoti(int id)
         {
@@ -122,14 +122,14 @@ namespace prjiSpanFinal.Controllers
             }
             dbcontext.SaveChanges();
         }
-        public void SendNoti(int type, int id, string text, string link)
+        public void SendNoti(int type, int id, string text, string link, string content)
         {
             if(text == null)
             {
                 text = "";
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            Notification a = new Notification() { MemberId = id,IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now };
+            Notification a = new Notification() { MemberId = id,IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now , TextContent = content };
             dbcontext.Notifications.Add(a);
             dbcontext.SaveChanges();
         }

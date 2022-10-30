@@ -12,6 +12,7 @@ namespace prjiSpanFinal.Models
         public int MemberId { get; set; }
         public int WebAdimageTypeId { get; set; }
         public bool IsPublishing { get; set; }
+        public string Path { get; set; }
 
         public virtual MemberAccount Member { get; set; }
         public virtual WebAdimageType WebAdimageType { get; set; }

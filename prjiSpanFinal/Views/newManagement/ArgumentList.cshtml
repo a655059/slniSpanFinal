@@ -150,7 +150,7 @@
                     alert("已停權買家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
-                    happy_sendnoti(4,parseInt(data) , "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權", "/Member/Order");
+                    happy_sendnoti(4, parseInt(data), "您的帳戶已被停權", "/Member/Order", "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權");
                     }
                 }
             })
@@ -168,7 +168,7 @@
                     alert("已停權賣家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
-                    happy_sendnoti(4,parseInt(data) , "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權", "/Member/Order");
+                        happy_sendnoti(4, parseInt(data), "您的帳戶已被停權", "/Member/Order", "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權");
                     }
                 }
             })

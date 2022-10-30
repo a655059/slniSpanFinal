@@ -19,7 +19,9 @@ namespace prjiSpanFinal.Models
         public DateTime JoinStartDate { get; set; }
         public DateTime JoinEndDate { get; set; }
         public byte[] EventPic { get; set; }
+        public int OfficialEventTypeId { get; set; }
 
+        public virtual OfficialEventType OfficialEventType { get; set; }
         public virtual ICollection<SubOfficialEventList> SubOfficialEventLists { get; set; }
     }
 }
