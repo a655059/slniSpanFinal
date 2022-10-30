@@ -27,7 +27,7 @@
         <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
             <a href="~/SalesCourt/關於我"> 關於我</a>
         </button>
-
+        <input type="hidden" value="@Model.Memberid" id="CommentId" />
         <div class="row">
 
             <div class="col-6 rounded-2">
@@ -191,40 +191,25 @@
         <div class="row my-4 bg-opacity-50" style="background-color:#e1dcd7">
 
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">綜合評價紀錄( @AllCounts )</a></div>
+                <div id="commentrecord1" class="ps-2"><a href="#" class="text-primary">綜合評價紀錄( @AllCounts )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord2" class="ps-2"><a href="#" class="text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord3" class="ps-2"><a href="#" class="text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div class="ps-2"><a href="#" class="text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord4" class="ps-2"><a href="#" class="text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
             </div>
 
         </div>
 
-        @{
-            @foreach (var item in Model.CardContent)
-            {
-                <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                    @*<i class="fa-regular fa-circle"></i>*@
-                    <div>
-                        <img src="~/img/greencircle.png" width="20" />
-                        <span class="text-dark" style="font-size:1.5em">買家:@item.CommentBuyer</span>
-                    </div>
+        <div class="row" id="commentlist">
 
-                    <div class="dashed-divider"></div>
-                    @*<div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">【24H出貨】(袋裝) 4米5噸 拖車繩 拉車繩 牽引繩 拖車繩 拖車索 拖車勾 拖車線 汽機車用品</a></div>*@
-                    <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">@item.ProductName</a></div>
 
-                    @*<div class="my-2 text-dark" style="font-size:1.5em">意見：	東西真的不錯耶...我好喜歡，謝謝啊~~ (2022-10-10 08:52:04)</div>*@
-                    <div class="my-2 text-dark" style="font-size:1.5em">@item.CommentContent</div>
-                </div>
-            }
-
-        }
+        </div>
+       
 
 
         <nav aria-label="Page navigation example" class="justify-content-center d-flex m-5">
@@ -249,3 +234,62 @@
         </nav>
 
     </div>
+
+@section Scripts{ 
+    <script>
+        let mode = 0;
+                
+
+        function cmCard(data) {
+            return `
+                    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                    <div>
+                        <img src="~/img/greencircle.png" width="20" />
+                        <span class="text-dark" style="font-size:1.5em">買家:${data.buyername}</span>
+                    </div>
+                    <div class="dashed-divider"></div>
+                   
+                    <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">${data.productname}</a></div>
+                       
+                    <div class="my-2 text-dark" style="font-size:1.5em">${data.commentcontent}</div>
+                    </div>`
+
+        }
+
+        load();
+        function load() {
+            $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode }, function (data) {
+                console.log(data);
+                $("#commentlist").html();
+                for (let i = 0; i < data.length; i++){
+                    $("#commentlist").append(cmCard(data[i]));
+                }
+            })
+        }
+
+        /*綜合*/
+        $("#commentrecord1").click(function () {
+            mode = 1;
+            $("#commentlist").empty();
+            load();
+        })
+        /*優良*/
+        $("#commentrecord2").click(function () {
+            mode = 2;
+            $("#commentlist").empty();
+            load();
+        })
+        /*普通*/
+        $("#commentrecord3").click(function () {
+            mode = 3;
+            $("#commentlist").empty();
+            load();
+        })
+        /*差勁*/
+        $("#commentrecord4").click(function () {
+            mode = 4;
+            $("#commentlist").empty();
+            load();
+        })
+    </script>
+}

@@ -22,46 +22,31 @@ namespace prjiSpanFinal.Controllers
         iSpanProjectContext dbContext = new iSpanProjectContext();
         public static List<C關於我ViewModel> abme = new List<C關於我ViewModel>();
         List<Product> listprod;
-        List<CShowItem> slist;
-        CSalesCourtIndex list;
+       
         public int id;
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        public IActionResult Index(int? id)
+        public IActionResult Index()
         {
-            if (id == 0 || id == null)
-            {
-                return RedirectToAction("Index", "賣場");
-            }
-            listprod = dbContext.Products.Where(p => p.SmallType.BigTypeId == id && p.ProductStatusId == 0).ToList();
-            slist = (new CSalesCourtFactory()).toShowItem(listprod);
-            list = new CSalesCourtIndex();
-            list.cShowItem = slist;
-            list.SearchType = dbContext.BigTypes.Where(t => t.BigTypeId == id).FirstOrDefault();
-            list.lSmallType = (new CSalesCourtFactory()).searchTypeSmall(list.SearchType);
-
-            return View(list);
+            return View();
         }
+
 
         public SalesCourtController()
         {
             listprod = new List<Product>();
-            list = new CSalesCourtIndex();
+            
         }
 
-        //public void getid()
-        //{
-        //    id = 2; //備用帳號
-        //    if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-        //    {
-        //        string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-        //        id = (JsonSerializer.Deserialize<MemberAccount>(json)).MemberId;
-        //    }
-        //}
+        public void getid()
+        {
+            id = 2; //備用帳號
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                id = (JsonSerializer.Deserialize<MemberAccount>(json)).MemberId;
+            }
+        }
+
 
         public IActionResult 賣場(int id)
         {
@@ -132,7 +117,7 @@ namespace prjiSpanFinal.Controllers
 
 
             listprod = dbContext.Products.Where(p => p.SmallTypeId == id && p.ProductStatusId == 0).ToList();
-            List<CShowItem> slist = (new CSalesCourtFactory()).toShowItem(listprod);
+            
 
 
 
@@ -149,128 +134,10 @@ namespace prjiSpanFinal.Controllers
                    
             return View(showsalescourt);
         }
+            
 
 
-        public IActionResult SmallType(int? id)
-        {
-            if (id == 0 || id == null)
-            {
-                return RedirectToAction("賣場");
-            }
-            listprod = dbContext.Products.Where(p => p.SmallTypeId == id && p.ProductStatusId == 0).ToList();
-            List<CShowItem> slist = (new CSalesCourtFactory()).toShowItem(listprod);
-            CSalesCourtIndex list = new CSalesCourtIndex();
-            list.cShowItem = slist;
-            list.SearchType = dbContext.SmallTypes.Where(t => t.SmallTypeId == id).Select(t => t.BigType).FirstOrDefault();
-            list.lSmallType = (new CSalesCourtFactory()).searchTypeSmall(list.SearchType);
-            list.SearchSmallType = dbContext.SmallTypes.Where(t => t.SmallTypeId == id).FirstOrDefault();
-
-
-            return View(list);
-        }
-
-        public IActionResult SmallTypeSort(int id, int priceMin, int priceMax, int SortOrder, int pages)
-        {
-
-            return Json(new SortRequest().SmalltypeSortItem(id, priceMin, priceMax, SortOrder, pages));
-        }
-
-
-        public IActionResult SearchResult(string keyword)
-        {
-            if (keyword == null)
-            {
-                return RedirectToAction("賣場");
-            }
-            listprod = dbContext.Products.ToList();
-            keyword.Trim();
-            string[] keys = keyword.Split(" ");
-            for (int i = 0; i < keys.Length; i++)
-            {
-                listprod = listprod.Where(p => p.ProductName.Contains(keys[i]) || p.Description.Contains(keys[i]) && p.ProductStatusId == 0).Select(p => p).ToList();
-            }
-            list = new CSalesCourtIndex();
-            if (listprod.Any())
-            {
-                list.cShowItem = (new CSalesCourtFactory()).toShowItem(listprod);
-            }
-            list.SearchKeyword = keyword;
-
-
-            return View(list);
-        }
-        List<CShowItem> fSortOrder(int sortOrder, List<Product> listprod)
-        {
-            List<Product> Ordered = new List<Product>();
-            List<CShowItem> SIlist = new List<CShowItem>();
-            switch (sortOrder)
-            {
-                case 1:
-                    //一般排序      
-                    SIlist = (new CSalesCourtFactory()).toShowItem(listprod);
-                    return SIlist;
-                case 2:
-                    //最新排序
-                    SIlist = (new CSalesCourtFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductId).ToList());
-                    return SIlist;
-                case 3:
-                    //熱銷排序
-                    SIlist = ((new CSalesCourtFactory()).toShowItem(listprod)).OrderBy(s => s.salesVolume).ToList();
-                    return SIlist;
-                case 4:
-                    //價高排序
-                    SIlist = (new CSalesCourtFactory()).toShowItem(listprod);
-                    return SIlist.OrderByDescending(p => p.Price.Max()).ToList();
-                case 5:
-                    //價低排序
-                    SIlist = (new CSalesCourtFactory()).toShowItem(listprod);
-                    return SIlist.OrderBy(p => p.Price.Min()).ToList();
-                default:
-                    SIlist = (new CSalesCourtFactory()).toShowItem(listprod);
-                    return SIlist;
-            }
-        }
-        List<Product> fFacetOrder(string keyword, List<Product> listprod)
-        {
-            string[] temp = keyword.Split(',');
-            List<int> tempSmallTypeIDs = new List<int>();
-            foreach (var Idstring in temp)
-            {
-                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
-            }
-            return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
-        }
-        public IActionResult CBselected(string keyword)
-        {
-            if (string.IsNullOrEmpty(keyword))
-            {
-                return null;
-            }
-            List<string> temp = JsonSerializer.Deserialize<List<string>>(keyword);
-            List<int> tempSmallTypeIDs = new List<int>();
-            List<CShowItem> SIlist = new List<CShowItem>();
-            listprod = dbContext.Products.ToList();
-            //string[] temp = keyword.Split(',');
-            foreach (var Idstring in temp)
-            {
-                tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
-            }
-
-            listprod = listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
-            SIlist = (new CSalesCourtFactory()).toShowItem(listprod);
-            string jsonString = JsonSerializer.Serialize(SIlist);
-
-            return Json(jsonString);
-        }
-        public IActionResult FilterShowItem(List<CShowItem> data)
-        {
-            return ViewComponent("SalesCourtCard", data);
-        }
-
-
-
-
-        public IActionResult 評價()
+        public IActionResult 評價(int id)
         {//針對某特定賣家評價
 
           
@@ -368,6 +235,7 @@ namespace prjiSpanFinal.Controllers
 
             C評價ViewModel outcomment = new C評價ViewModel
             {
+                Memberid = id,
                 StarCount = star_count,
 
                 BestCommentCountMethod = bstcmt,
@@ -391,8 +259,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 設定分類()
         {
-          
-
+            getid();
             CustomizedCategory csct = new CustomizedCategory
             {
                 MemberId = id
@@ -421,7 +288,8 @@ namespace prjiSpanFinal.Controllers
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("賣場");
+            return RedirectToAction("賣場", new{ id = Memberid });
+            //return View();
         }
 
         public IActionResult 關於我(int id)
@@ -775,7 +643,77 @@ namespace prjiSpanFinal.Controllers
             return Json(dbContext.CustomizedCategories.Where(c => c.MemberId == id).Select(c => new { c.Products.Count, c.CustomizedCategoryName, c.SortNumber }).OrderBy(o => o.SortNumber).ToList());
         }
 
-        public IActionResult GetItems(int id,int mode) {
+        //public IActionResult GetBestSell(int id)
+        //{
+        //    return Json(dbContext.Products.Where(a => a.MemberId == id).Select(b => new
+        //    {
+        //        link = "/Item/Index?id=" + b.ProductId,
+        //        pic = b.ProductPics.FirstOrDefault().Pic,
+        //        name = b.ProductName,
+        //        price1 = b.ProductDetails.Select(a => a.UnitPrice).Min(),
+        //        price2 = b.ProductDetails.Select(a => a.UnitPrice).Max(),
+        //        star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == b.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == b.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == b.ProductId).Select(a => a.CommentStar).ToList().Count,
+        //        sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == b.ProductId).Select(a => a.Quantity).Sum(),
+        //        upload = b.EditTime,
+        //    }).OrderByDescending(a => a.sales).ToList());
+
+        //} 
+
+        public IActionResult GetComment(int id,int mode) {
+            // 買家對  訂單評價    
+            
+
+            var q = dbContext.Comments.Where(a => a.OrderDetail.Order.MemberId == id).Select(p => new
+            {
+                link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
+                buyername = p.OrderDetail.Order.Member.MemberAcc,
+                productname = p.OrderDetail.ProductDetail.Product.ProductName,
+                commentcontent = p.Comment1,
+                commentstar = p.CommentStar,
+            }).ToList();
+
+
+            if (mode == 0) { 
+            }
+            
+            else if (mode == 1) { 
+                
+            }
+            //優良
+            else if (mode == 2)
+            {
+                q = q.Where(a => a.commentstar == 5).ToList();
+            }
+            //普通
+            else if (mode == 3)
+            {
+                q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
+            }
+            //差勁
+            else
+            {
+                q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
+            }
+            return Json(q);
+           
+            //賣家對買家平價
+            //else
+            //{
+            //    var q = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(p => new
+            //    {
+            //        link = "/Item/Index?id=" + p.ProductDetail.Product.ProductId,
+            //        sellername = p.ProductDetail.Product.Member.MemberAcc,
+            //        buyername = p.Order.Member.MemberAcc,
+            //        commentforcustomer = p.Order.CommentForCustomers.Select(a => a.Comment),
+            //    }).ToList();
+
+            //    return Json(q);
+            //}
+                                    
+            
+        }
+
+        public IActionResult GetItems(int id,int mode,int pages,string keyword) {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
                 link = "/Item/Index?id=" + p.ProductId,
@@ -785,21 +723,60 @@ namespace prjiSpanFinal.Controllers
                 price2 = p.ProductDetails.Select(a => a.UnitPrice).Max(),
                 star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count,
                 sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+                upload = p.EditTime,
 
             }).ToList();
+                               
 
             if (mode == 0)
             {
-                return Json(q.OrderBy(a => a.price1));
+              
             }
+            //綜和排序
             else if (mode == 1)
             {
-                return Json(q.OrderBy(a => a.price2));
+               
             }
-            else {
-                return Json(q.OrderBy(a => a.sales));
+            //最新商品
+            else if(mode == 2) {
+                
+                q = q.OrderByDescending(a => a.upload).ToList();
             }
-            
+            //熱銷商品
+            else if (mode == 3)
+            {
+               
+                q = q.OrderByDescending(a => a.sales).ToList();
+            }
+            //價格排序  由高到低
+            else if (mode == 4)
+            {
+                
+                q = q.OrderByDescending(a => a.price1).ToList();
+            }
+            //價格排序  由低到高
+            else if (mode == 5)
+            {
+                
+                q = q.OrderBy(a => a.price1).ToList();
+            }
+            else
+            {
+                
+            }
+
+            if (keyword != null)
+            {
+                keyword.Trim();
+                string[] keys = keyword.Split(" ");
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    q = q.Where(a => a.name.Contains(keys[i]) || a.price1.ToString().Contains(keys[i])
+                    || a.price2.ToString().Contains(keys[i]) || a.sales.ToString().Contains(keys[i])).ToList();
+                }
+            }
+
+            return Json(q.Skip((pages-1)*4).Take(4));
         }
     }
 }
