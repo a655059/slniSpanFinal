@@ -29,6 +29,28 @@
                 <Label Text="您的訂單:" FontSize="Large"></Label>
             </StackLayout>
             <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="2"  >
+                                <StackLayout>
+                                    <Image Source="{Binding Pic[0]}"  HeightRequest="370" Aspect="AspectFit"/>
+                                    <StackLayout>
+                                        <Label Text="{Binding ProductName[0]}" FontSize="Large" TextColor="Black"/>
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                                            <Label Text="單價:" FontSize="Medium"/>
+                                            <Label Text="{Binding Unitprice[0]}" FontSize="Medium"/>
+                                        </StackLayout>
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                                            <Label Text="數量:" FontSize="Medium"/>
+                                            <Label Text="{Binding Quantity[0]}" FontSize="Medium"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
     </ContentPage.Content>

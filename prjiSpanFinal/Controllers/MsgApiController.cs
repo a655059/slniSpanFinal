@@ -147,5 +147,45 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(null);
         }
+
+        public IActionResult GetOrders(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.MemberId == id).Select(o => new ViewModels.App.OrderDetailViewModel()
+            {
+                OrderId = o.OrderId,
+                SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                SellerEmail = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Email,
+                SellerName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Name,
+                SellerPhone = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Phone,
+                BuyerAcc = o.Member.MemberAcc,
+                BuyerEmail = o.Member.Email,
+                BuyerName = o.Member.Name,
+                BuyerPhone = o.Member.Phone,
+                OrderDatetime = o.OrderDatetime,
+                RecieveAdr = o.RecieveAdr,
+                CouponName = o.Coupon.CouponName,
+                IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                OrderStatusName = o.Status.OrderStatusName,
+                ShipperStatusId = o.StatusId,
+                ShipperName = o.Shipper.ShipperName,
+                ShipperFee = o.Shipper.Fee,
+                ShipperPhone = o.Shipper.Phone,
+                PaymentDate = o.PaymentDate,
+                ShippingDate = o.ShippingDate,
+                ReceiveDate = o.ReceiveDate,
+                PaymentName = o.Payment.PaymentName,
+                PaymentFee = o.Payment.Fee,
+                OrderMessage = o.OrderMessage,
+                OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
+                Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+            }).ToList();
+            return Json(vm);
+        }
     }
 }
