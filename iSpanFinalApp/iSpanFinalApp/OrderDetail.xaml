@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="iSpanFinalApp.OrderDetail">
+    <ContentPage.Content>
+
+        <StackLayout x:Name="outerstack">
+            <ScrollView>
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding OrderStatusName}" FontSize="56" TextColor="Blue"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="結帳時間:" FontSize="18" TextColor="Black"/>
+                        <Label Text="{Binding OrderDatetimeCool}" FontSize="18" TextColor="Black"/>
+                    </StackLayout>
+                    <StackLayout x:Name="layoutsl">
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="訂單明細:" FontSize="24" TextColor="Black"/>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="小計:                                 " FontSize="16"/>
+                                <Label Text="折扣:" FontSize="16"/>
+                                <Label Text="支付費用:" FontSize="16"/>
+                                <Label Text="運費:" FontSize="16"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="{Binding SmallTotal}" FontSize="16"/>
+                                <Label Text="{Binding CouponName}" FontSize="16"/>
+                                <Label Text="{Binding PaymentFee}" FontSize="16"/>
+                                <Label Text="{Binding shipperfeecount}" FontSize="16"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="賣家資訊:" FontSize="24" TextColor="Black"/>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="帳號:                     " FontSize="16"/>
+                                <Label Text="名字:" FontSize="16"/>
+                                <Label Text="電話:" FontSize="16"/>
+                                <Label Text="Email:" FontSize="16"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="{Binding SellerAcc}" FontSize="16"/>
+                                <Label Text="{Binding SellerName}" FontSize="16"/>
+                                <Label Text="{Binding SellerPhone}" FontSize="16"/>
+                                <Label Text="{Binding SellerEmail}" FontSize="16"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="買家資訊:" FontSize="24" TextColor="Black"/>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout>
+                                <Label Text="帳號:                     " FontSize="16"/>
+                                <Label Text="名字:" FontSize="16"/>
+                                <Label Text="電話:" FontSize="16"/>
+                                <Label Text="Email:" FontSize="16"/>
+                            </StackLayout>
+                            <StackLayout>
+                                <Label Text="{Binding BuyerAcc}" FontSize="16"/>
+                                <Label Text="{Binding BuyerName}" FontSize="16"/>
+                                <Label Text="{Binding BuyerPhone}" FontSize="16"/>
+                                <Label Text="{Binding BuyerEmail}" FontSize="16"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            <StackLayout Grid.Row="1" BackgroundColor="Orange" Orientation="Horizontal">
+                <Label Text="蝦到爆商城   總金額:$" FontSize="28" TextColor="White"/>
+                <Label Text="{Binding BigTotal}" FontSize="28" TextColor="White"/>
+            </StackLayout>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

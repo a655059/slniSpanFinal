@@ -22,7 +22,6 @@ if (header2exist) {
     const h2 = document.getElementById("header2");
     loadHeight();
     //sizeble();
-    console.log(h1.height());
     addEventListener('resize', async () =>
         await sizeble());
     function sizeble() {
@@ -89,8 +88,8 @@ if (mymemid == null) {
     $(".notification").css("display", "none");
 }
 else {
-    function happy_sendnoti(type, sendtomemberid ,text, link) {
-        $.getJSON("/MsgApi/SendNoti", { type: type, id: sendtomemberid, text:text,link:link }, function (data) {
+    function happy_sendnoti(type, sendtomemberid, text, link, content = "") {
+        $.getJSON("/MsgApi/SendNoti", { type: type, id: sendtomemberid, text:text,link:link, content:content }, function (data) {
 
         })
     }
@@ -110,8 +109,13 @@ else {
                                                     <img src="data:image;base64,${data[i].iconPic}" alt="avatar" class="d-flex align-self-center me-3">
                                                     <span class="badge bg-success badge-dot"></span>
                                                 </div>
-                                                <div class="pt-1 w-100">
-                                                    <p class="mb-0">${data[i].text}</p>
+                                                <div>
+                                                        <div class="pt-1 w-100">
+                                                            <p class="mb-0">${data[i].text}</p>
+                                                        </div>
+                                                        <div class="pt-1 w-100">
+                                                    <p class="mb-0 small">${data[i].textContent}</p>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <div class="pt-1">

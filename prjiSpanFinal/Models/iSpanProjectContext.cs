@@ -41,6 +41,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
+        public virtual DbSet<OfficialEventType> OfficialEventTypes { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; }
@@ -625,6 +626,11 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(500);
 
+                entity.Property(e => e.TextContent)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("(N'(\"\")')");
+
                 entity.Property(e => e.Time).HasColumnType("datetime");
 
                 entity.HasOne(d => d.IconType)
@@ -658,7 +664,26 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.JoinStartDate).HasColumnType("datetime");
 
+                entity.Property(e => e.OfficialEventTypeId).HasColumnName("OfficialEventTypeID");
+
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.OfficialEventType)
+                    .WithMany(p => p.OfficialEventLists)
+                    .HasForeignKey(d => d.OfficialEventTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OfficialEventList_OfficialEventType");
+            });
+
+            modelBuilder.Entity<OfficialEventType>(entity =>
+            {
+                entity.ToTable("OfficialEventType");
+
+                entity.Property(e => e.OfficialEventTypeId).HasColumnName("OfficialEventTypeID");
+
+                entity.Property(e => e.OfficialEventTypeName)
+                    .IsRequired()
+                    .HasMaxLength(500);
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -1169,6 +1194,11 @@ namespace prjiSpanFinal.Models
                 entity.Property(e => e.WebAdid).HasColumnName("WebADID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasDefaultValueSql("(N'(\"\")')");
 
                 entity.Property(e => e.WebAdimage)
                     .IsRequired()

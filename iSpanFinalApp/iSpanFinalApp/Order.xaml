@@ -6,11 +6,11 @@
     <ContentPage.Content>
         <StackLayout>
             <StackLayout BackgroundColor="Orange" >
-                <Label HorizontalOptions="Start" Text="蝦到爆商城" TextColor="White" FontSize="Title"></Label>
+                <Label HorizontalOptions="Start" Text="蝦到爆商城" TextColor="White" FontSize="40"></Label>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" Margin="10">
-                <StackLayout >
+                <StackLayout WidthRequest="150">
                     <Frame CornerRadius="100" HeightRequest="100" WidthRequest="100" HorizontalOptions="Start" Padding="0" IsClippedToBounds="True">
                         <Image x:Name="Mempic" HorizontalOptions="Center" VerticalOptions="Center" />
                     </Frame>
@@ -29,6 +29,43 @@
                 <Label Text="您的訂單:" FontSize="Large"></Label>
             </StackLayout>
             <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="3">
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding OrderStatusName}" FontSize="Large" TextColor="Blue"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="結帳時間:" FontSize="Medium" TextColor="Black"/>
+                                        <Label Text="{Binding OrderDatetimeCool}" FontSize="Medium" TextColor="Black"/>
+                                    </StackLayout>
+                                    <StackLayout  Orientation="Horizontal">
+                                        <Image Source="{Binding SourcePic}" WidthRequest="100" HeightRequest="100"/>
+                                        <StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding ProductName}  " FontSize="Large" TextColor="Black"/>
+                                                <Label Text="{Binding Style}" FontSize="Large" TextColor="Black"/>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal" Margin="20,0,0,0">
+                                                <Label Text="單價:" FontSize="Medium"/>
+                                                <Label Text="{Binding Unitprice}" FontSize="Medium"/>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal" Margin="20,0,0,0">
+                                                <Label Text="數量:" FontSize="Medium"/>
+                                                <Label Text="{Binding Quantity}" FontSize="Medium"/>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="查看更多這筆訂單資訊..." FontSize="Medium" TextColor="Gray"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
     </ContentPage.Content>

@@ -535,7 +535,7 @@
         //})
 
         $("#orderrecsubmit").click(function () {
-            happy_sendnoti(2, recbuyerid, "賣家已經出貨囉，點擊獲得更多資訊", "/Member/Order?sort=0&tab=4")
+            happy_sendnoti(2, recbuyerid, "賣家已經出貨囉，", "/Member/Order?sort=0&tab=4", "可以在購買清單中查看訂單狀況。")
             $.getJSON(`/Seller/WriteShipping`, { id: recorderid }, function (data) {
                 reloaditem(sortmethod, tabid);
             });

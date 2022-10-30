@@ -110,7 +110,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult GetNotificationbyID(int id)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).OrderByDescending(o=>o.Time).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time }).ToList()); 
+            return Json(dbcontext.Notifications.Where(n=>n.MemberId == id).OrderByDescending(o=>o.Time).Select(n=> new {n.HaveRead,n.IconType.IconPic,n.Link,n.Text,n.Time, n.TextContent }).ToList()); 
         }
         public void HaveReadAllNoti(int id)
         {
@@ -122,14 +122,14 @@ namespace prjiSpanFinal.Controllers
             }
             dbcontext.SaveChanges();
         }
-        public void SendNoti(int type, int id, string text, string link)
+        public void SendNoti(int type, int id, string text, string link, string content)
         {
             if(text == null)
             {
                 text = "";
             }
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            Notification a = new Notification() { MemberId = id,IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now };
+            Notification a = new Notification() { MemberId = id,IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now , TextContent = content };
             dbcontext.Notifications.Add(a);
             dbcontext.SaveChanges();
         }
@@ -146,6 +146,68 @@ namespace prjiSpanFinal.Controllers
                 }
             }
             return Json(null);
+        }
+
+        public IActionResult GetOrders(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Select(o => new ViewModels.App.OrderListViewModel()
+            {
+                OrderId = o.OrderId,
+                OrderDatetime = o.OrderDatetime,
+                OrderStatusName = o.Status.OrderStatusName,
+                Quantity = o.OrderDetails.Select(o => o.Quantity).FirstOrDefault(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).FirstOrDefault(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).FirstOrDefault(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).FirstOrDefault(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).FirstOrDefault(),
+            }).ToList().OrderByDescending(o=>o.OrderDatetime);
+            return Json(vm);
+        }
+
+        public IActionResult GetOrderDetail(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => new ViewModels.App.OrderDetailViewModel()
+            {
+                OrderId = o.OrderId,
+                SellerAcc = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                SellerEmail = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Email,
+                SellerName = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Name,
+                SellerPhone = o.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.Phone,
+                BuyerAcc = o.Member.MemberAcc,
+                BuyerEmail = o.Member.Email,
+                BuyerName = o.Member.Name,
+                BuyerPhone = o.Member.Phone,
+                OrderDatetime = o.OrderDatetime,
+                RecieveAdr = o.RecieveAdr,
+                CouponName = o.Coupon.CouponName,
+                IsFreeDelivery = o.Coupon.IsFreeDelivery,
+                OrderStatusName = o.Status.OrderStatusName,
+                ShipperStatusId = o.StatusId,
+                ShipperName = o.Shipper.ShipperName,
+                ShipperFee = o.Shipper.Fee,
+                ShipperPhone = o.Shipper.Phone,
+                PaymentDate = o.PaymentDate,
+                ShippingDate = o.ShippingDate,
+                ReceiveDate = o.ReceiveDate,
+                PaymentName = o.Payment.PaymentName,
+                PaymentFee = o.Payment.Fee,
+                OrderMessage = o.OrderMessage,
+                OrderDetailId = o.OrderDetails.Select(o => o.OrderDetailId).ToList(),
+                Quantity = o.OrderDetails.Select(o => o.Quantity).ToList(),
+                ShipStatusName = o.OrderDetails.Select(o => o.ShippingStatus.ShipStatusName).ToList(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).ToList(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+            }).FirstOrDefault();
+            return Json(vm);
+        }
+        public IActionResult GetNewNotificationbyID(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            return Json(dbcontext.Notifications.Where(n => n.MemberId == id && n.HaveRead == false).OrderByDescending(o => o.Time).Select(n => new CNotification(){ NotificationId = n.NotificationId, Text = n.Text, Time = n.Time, TextContent= n.TextContent}).ToList());
         }
     }
 }
