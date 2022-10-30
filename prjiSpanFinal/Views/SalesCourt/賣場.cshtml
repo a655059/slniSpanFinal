@@ -47,6 +47,7 @@
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
                 <span>賣家資料</span>
                 <input type="hidden" value="@Model.SellerId" id="SalesCourtSellerId"/>
+                <input type="hidden" value="@Model.SellerName" id="SalesCourtSellerName"/>
                 <a class="link-secondary" href="#" aria-label="Add a new report">
                     <span data-feather="plus-circle" class="align-text-bottom"></span>
                 </a>
@@ -71,13 +72,13 @@
             <div class="row">
                 <div class="col">
 
-                    <button class="btn  btn-sm text-white rounded-5" style="background-color:#f30959">
+                    <button class="btn  btn-sm text-white rounded-5" id="btnsalescourtfollowed" style="background-color:#f30959">
                         最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                     </button>
                 </div>
                 <div class="col">
 
-                    <button class="btn  btn-sm text-white rounded-5" style="background-color:#fe6502">
+                    <button class="btn  btn-sm text-white rounded-5 orderopenmsg" style="background-color:#fe6502">
                         蝦蝦通<i class="fa-solid fa-shrimp"></i>
                     </button>
                 </div>
@@ -366,6 +367,40 @@
                 
         
     }
+
+    //打開蝦蝦通
+    $(document).on("click", ".orderopenmsg", function () {
+        happy_popup($("#SalesCourtSellerName").val());
+    });
+
+    //按追蹤賣家
+    $("#btnsalescourtfollowed").click(function(){
+        $.getJSON("/SalesCourt/WriteFollow", { id: $("#SalesCourtSellerId").val() },function(data){
+            if(data == 1){
+                Swal.fire(
+                    '追蹤成功',
+                    '您已成功追蹤賣家'+$("#SalesCourtSellerName").val(),
+                    'success'
+                );
+            }
+            else if(data == 0){
+                Swal.fire(
+                    '移除追蹤',
+                    '您已移除追蹤賣家'+$("#SalesCourtSellerName").val(),
+                    'warning'
+                );
+            }
+            else{
+                Swal.fire(
+                    '錯誤',
+                    '不要按自己追蹤',
+                    'error'
+                );
+            }
+        });
+    })
+
+</script>
 
     $("#btnDate").click(function () {
         if (searchflag) {

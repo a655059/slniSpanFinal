@@ -778,5 +778,30 @@ namespace prjiSpanFinal.Controllers
 
             return Json(q.Skip((pages-1)*4).Take(4));
         }
+
+        public IActionResult WriteFollow(int id)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int myid = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            if(myid == id)
+            {
+                return Json("999");
+            }
+            if(dbContext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).Any())
+            {
+                dbContext.Follows.Remove(dbContext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).FirstOrDefault());
+                dbContext.SaveChanges();
+                return Json("0");
+            }
+            else
+            {
+                dbContext.Follows.Add(new Follow() { FollowedMemId = id, MemberId = myid });
+                dbContext.SaveChanges();
+                return Json("1");
+            }
+        }
     }
 }

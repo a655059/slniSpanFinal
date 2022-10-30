@@ -105,7 +105,7 @@ else {
             $("#notificationlistbox").append(`<div class="notification-item-listitem">
                                         <a href="${data[i].link}" class="d-flex flex-wrap justify-content-end linknoline notification-link">
                                             <div class="d-flex flex-row w-100">
-                                                <div>
+                                                <div style="float:left;">
                                                     <img src="data:image;base64,${data[i].iconPic}" alt="avatar" class="d-flex align-self-center me-3">
                                                     <span class="badge bg-success badge-dot"></span>
                                                 </div>
