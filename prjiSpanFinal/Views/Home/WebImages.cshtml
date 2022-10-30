@@ -1,0 +1,52 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.WebAd>
+
+@{
+    ViewData["Title"] = "WebImages";
+}
+
+<h1>WebImages</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WebAdid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebAdimage)
+                
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebAdimageTypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPublishing)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WebAdid)
+            </td>
+            <td>
+                @{var base64Image = Convert.ToBase64String(item.WebAdimage);
+                    var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    <img src="@source" alt="..." style="max-height:300px" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WebAdimageTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPublishing)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

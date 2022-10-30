@@ -15,5 +15,6 @@ namespace prjiSpanFinal.ViewModels.Category
         public SmallType SearchSmallType { get; set; }
         public List<CShowItem> cShowItem { get; set; }
         public string SearchKeyword { get; set; }
+        public List<WebAd> WebADLarge { get; set; }
     }
 }

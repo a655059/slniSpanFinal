@@ -5,52 +5,71 @@
 
 @section Styles{
     <link href="~/css/Event/Discount.css" rel="stylesheet" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
 }
 <body>
     <div>
         <div class="w-100 event-header">
-            <img src="~/img/Event/EVENTDM.png" />
+            @if (Model.Event.EventPic != null)
+            {
+                var base64Image = Convert.ToBase64String(Model.Event.EventPic);
+                var source = String.Format("data:image/png;base64,{0}", base64Image);
+                <img src="@source" alt="..." />
+            }
         </div>
-        <div class="split">
-        </div>
-        <div>
-        </div>
-        <div>
+        <div class="split"></div>
+        @if (Model.EventCoupons.Count > 0)
+        {
             <div class="coupongroup">
-
-                
-
+                @foreach (var item in Model.EventCoupons)
+                {
+                    @await Component.InvokeAsync("EventCoupon", new { showCoupon = item });
+                }
             </div>
-        </div>
+        }
+        @if (Model.EventSubs.Count > 0) {
+            foreach(var Subs in Model.EventSubs) {
+                if (Subs.SubEventProducts.Count > 0) {
+                    <div>
+                        <div>@Subs.SubEvent.SubEventName</div>
+                        @await Component.InvokeAsync("HomeItemShow", new { shopProduct = Subs.SubEventProducts });
+                    </div>
+                }
+            }
+        }
     </div>
 </body>
 @section Scripts{
     <script src="~/js/Event/Coupon.js"></script>
+@*優惠券*@
     <script>
+        /*優惠券*/
+        const evtCouponCount =@Model.EventCoupons.Count;
 
+        if (evtCouponCount > 0) {
         let btn = document.querySelectorAll(".coupon-tag");
         btn.forEach(t => t.addEventListener("click", function (event) {
             let couponid = event.target.querySelector('input').value;
             GetCoupon(event, couponid);
-
         }))
-        function GetCoupon(event, couponid) {
-            $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
-        if (data == "1") {
-            window.alert("已經領取過此券！");
+            function GetCoupon(event, couponid) {
+                $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
+                    if (data == "1") {
+                        window.alert("已經領取過此券！");
+                    }
+                    else if (data == "2") {
+                        location.reload();
+                    }
+                    else {
+                        window.alert("尚未登入");
+                        window.location = "/Member/Login";
+                    }
+                })
+            }
         }
-        else if (data == "2") {
-            location.reload();
-        }
-        else {
-            window.alert("尚未登入");
-            window.location = "/Member/Login";
-                }
-            })
-        }
-        function btnColorChange(event) {
+    </script>
+    <script>
 
-        }
     </script>
 }
 

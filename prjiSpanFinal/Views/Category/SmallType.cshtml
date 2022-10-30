@@ -7,6 +7,7 @@
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
     <style>
         .active {
             display: block !important;
@@ -15,6 +16,11 @@
     </style>
 }
 <div class="CategoryBody">
+    @if (Model.WebADLarge.Count > 0)
+    {
+        @await Component.InvokeAsync("WebADLarge", new { list = Model.WebADLarge });
+        <div class="split"></div>
+    }
     <div class="row">
         <div class="filter-body d-flex  flex-wrap align-content-start">
             <div class="filter-types" id="filterTspace">

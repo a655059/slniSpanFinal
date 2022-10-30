@@ -63,29 +63,29 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Event(int? Eventid)
         {
-            OfficialEventList Event= _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).FirstOrDefault();
-            EventViewModel EventVM = new EventViewModel();
-            MemberAccount loggedmem = new MemberAccount();
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
-                loggedmem = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
-            if (Event != null) {
-                EventVM.OffcialEvent = Event;
-                EventVM.LogingMember = loggedmem;
-                //EventVM.EventCoupons=
-                EventVM.EventProducts = _db.SubOfficialEventToProducts.Where(p => p.SubOfficialEventList.OfficialEventListId == Event.OfficialEventListId).Where(p => p.Product.ProductStatusId == 0).Select(p => p.Product).ToList();
-                DateTime today = DateTime.Now;
-                DateTime startday = Event.StartDate;
-
-                //開始一周前開放看
-                if (today.Subtract(startday).TotalDays < 7)
+            if (Eventid > 1)
+            {
+                EventViewModel EventVM = (new EventFactory()).fToEvent(Convert.ToInt32(Eventid));
+                MemberAccount evtLoggedAcc = new MemberAccount();
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
-                    return View(EventVM);
+                    evtLoggedAcc = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
                 }
-                //如果是管理員開放看
-                else if (loggedmem != null )
+                if (EventVM != null)
                 {
-                    if (loggedmem.MemberId == 1)
+                    EventVM.LogingMember = evtLoggedAcc;
+                    //開始一周前開放看
+                    double evtPublishDay = (DateTime.Now).Subtract(EventVM.Event.StartDate).TotalDays;
+                    //如果是管理員開放看
+                    if (evtLoggedAcc.MemberId == 1)
+                    {
                         return View(EventVM);
+                    }
+                    //七天前開放瀏覽
+                    else if (evtPublishDay < 7)
+                    {
+                        return View(EventVM);
+                    }
                 }
             }
             return RedirectToAction("Index", "Home");

@@ -8,6 +8,8 @@ using System.Linq;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Home;
 using prjiSpanFinal.Models.LayOutReq;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -30,15 +32,64 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Index()
         {
+            var webAds = _db.WebAds.Where(a => a.IsPublishing == true);
+            
             CHomeIndex home = new CHomeIndex()
             {
                 lSmallType = listSmallType,
                 lBigType = listBigType,
                 cShowItem = listItem,
+                WebADCarousel = webAds.Where(a => a.WebAdimageTypeId == 1).ToList(),
+                WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a=>a.WebAdimageTypeId==2).ToList()),
+                WebADBig = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 3).ToList()),
             };
             return View(home);
         }
+        public IActionResult FlashSales()
+        {
+            return View();
+        }
 
+        //  測試用 //
+        public IActionResult TestImage()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult TestImage(IFormFile adimg,string adnum)
+        {
+            if (adimg != null)
+            {
+                MemoryStream ms = new MemoryStream();
+                adimg.CopyTo(ms);
+                if (adnum==null) {
+
+                    WebAd ads = new WebAd()
+                    {
+                        MemberId = 1,
+                        WebAdimage = ms.ToArray(),
+                        WebAdimageTypeId = 1,
+                        IsPublishing = true,
+                    };
+                    _db.WebAds.Add(ads);
+                }
+                else if(_db.WebAds.Where(w => w.WebAdid == Convert.ToInt32(adnum)).Any())
+                {
+                    WebAd ads = _db.WebAds.Where(w => w.WebAdid == Convert.ToInt32(adnum)).FirstOrDefault();
+                    ads.WebAdimage = ms.ToArray();
+                }
+                _db.SaveChanges();
+            }
+            return View();
+        }
+        public IActionResult WebImages()
+        {
+            var LIST = _db.WebAds;
+            return View(LIST);
+        }
+        //  End測試用   //
+
+        //  LayOutUse   //
         public IActionResult GetSearchDetail(string key)
         {
             List<string> keywordList = new List<string>();
@@ -70,7 +121,8 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(keywordList.ToArray());
         }
-
+        //  EndLayOutUse  //
+        
         public IActionResult Privacy()
         {
             return View();

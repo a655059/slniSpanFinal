@@ -7,12 +7,13 @@
 @section Styles{
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
-<style>
-    .active {
-        display: block !important;
-        color: yellow !important;
-    }
-</style>
+    <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
+    <style>
+        .active {
+            display: block !important;
+            color: yellow !important;
+        }
+    </style>
 }
 <div class="CategoryBody">
     <div class="CategoryHeader">
@@ -31,12 +32,12 @@
 
         }
     </div>
-
-    <div class="cateAD">
-        <a href="@Url.Content("~/Event/Discount")">
-            <img src="~/img/Category/CateAD.png" />
-        </a>
-    </div>
+    <div class="split"></div>
+    @if (Model.WebADLarge.Count > 0)
+    {
+        @await Component.InvokeAsync("WebADLarge", new { list = Model.WebADLarge });
+        <div class="split"></div>
+    }
     <div class="row">
         <div class="filter-body d-flex  flex-wrap align-content-start">
             <div class="filter-types" id="filterTspace">
@@ -81,28 +82,28 @@
                                 int stock = @Model.cShowItem.Where(p => p.Product.SmallTypeId == item.SmallTypeId).ToList().Count;
 
 
-                                                <div class="w-100 p-1 ff-types-type d-flex ">
-                                                    @{
-                                                        if (stock > 0)
-                                                        {
-                                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" />
-                                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" disabled />
-                                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
-                                                        }
-                                                    }
-                                                    <label class="ff-types-type-label" for="ffcb_@item.SmallTypeId">
-                                                        <span class="ff-types-typeid">
-                                                            @item.SmallTypeName
-                                                        </span>
-                                                        <span class="ff-types-typecount">
-                                                            (@stock)
-                                                        </span>
-                                                    </label>
-                                                </div>
+                                <div class="w-100 p-1 ff-types-type d-flex ">
+                                    @{
+                                        if (stock > 0)
+                                        {
+                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" />
+                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="filterCheckBox" name="ffcb_smalltypeid" id="ffcb_@item.SmallTypeId" disabled />
+                                            <input type="hidden" value="@item.SmallTypeId" class="filterSmallID" />
+                                        }
+                                    }
+                                    <label class="ff-types-type-label" for="ffcb_@item.SmallTypeId">
+                                        <span class="ff-types-typeid">
+                                            @item.SmallTypeName
+                                        </span>
+                                        <span class="ff-types-typecount">
+                                            (@stock)
+                                        </span>
+                                    </label>
+                                </div>
                             }
 
                         }
@@ -169,24 +170,24 @@
 
                 </div>
             }
-        <div class="itemcol" id="OriginShowItem">
+            <div class="itemcol" id="OriginShowItem">
 
-            @{
-                if (Model.cShowItem.Count > 0)
-                {
+                @{
+                    if (Model.cShowItem.Count > 0)
+                    {
 
-                    @await Component.InvokeAsync("CategoryShow", new { shopProduct = Model.cShowItem });
+                        @await Component.InvokeAsync("CategoryShow", new { shopProduct = Model.cShowItem });
 
+                    }
+                    else
+                    {
+                        <div>
+                            暫待新增商品
+                        </div>
+                    }
                 }
-                else
-                {
-                    <div>
-                        暫待新增商品
-                    </div>
-                }
-            }
 
-        </div>
+            </div>
         </div>
     </div>
 </div>
@@ -235,7 +236,7 @@
             let target = $(event.target);
             $(".active").removeClass("active");
             target.addClass("active");
-            
+
             if (this == $(".SortOrder")[3] || this == $(".SortOrder")[4]) {
                 if (!menu.classList.contains("active")) {
                     menu.classList.add("active");
@@ -249,8 +250,6 @@
             SortOrder = target.find("input").val();
             CallgetJSON();
         });
-
-
 
         $("#ff-types-prices-btn").click(function (event) {
             let minval = 0
@@ -280,13 +279,23 @@
             $.postJSON(`/Category/SortOrder`, { BigTypeId: BigtypeId, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("") ;
                 if (data.length > 0) {
+                    //console.log(data);
                     $("#OriginShowItem").append(Items(data));
+                    //ItemsComponent(data);
                 }
                 else {
                     $("#OriginShowItem").html("<div>暫待新增商品</div>") ;
                 }
             })
         }
+
+        //function ItemsComponent(data) {
+        //    //console.log(data);
+        //    $.postJSON('/Category/CallItemComponent', { data: data }, function (data) {
+        //        //console.log(data);
+        //        //$("#OriginShowItem").load(data);
+        //    })
+        //}
 
         function Items(data) {
             let item = "";
@@ -303,8 +312,7 @@
                 {
                     item = item +` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
                 }
-                item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
-<div class="cardTitleBox">
+                item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
                         <div class="cardTitle"> ${ data[i].product.productName}</div></div>`
                     if (data[i].price.Count == 1)
                     {
