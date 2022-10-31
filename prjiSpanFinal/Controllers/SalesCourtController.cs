@@ -151,7 +151,7 @@ namespace prjiSpanFinal.Controllers
             //order shipping date- receive date
             //平均出貨天數       order中的 shippingday-orderdatetime
             var a = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(a => a.Order.ShippingDate).ToList();
-            var b = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(a => a.Order.OrderDatetime).ToList();
+            var b = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(a => a.Order.PaymentDate).ToList();
 
             List<double> DateSum = new List<double>();
             double SumShipDays = 0;
@@ -159,7 +159,11 @@ namespace prjiSpanFinal.Controllers
             for (int i = 0; i < a.Count; i++)
             {
                 TimeSpan TS = new TimeSpan(a[i].Ticks - b[i].Ticks);
-                double diff = Convert.ToDouble(TS.TotalDays);
+                double diff = 0;
+                if(TS.TotalDays >= 0)
+                {
+                    diff = Convert.ToDouble(TS.TotalDays);
+                }
                 SumShipDays += diff;
             }
 
@@ -288,8 +292,9 @@ namespace prjiSpanFinal.Controllers
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("賣場", new{ id = Memberid });
+            //return RedirectToAction("賣場", new{ id = Memberid });
             //return View();
+            return RedirectToAction("賣場");
         }
 
         public IActionResult 關於我(int id)
@@ -659,6 +664,8 @@ namespace prjiSpanFinal.Controllers
 
         //} 
 
+       
+
         public IActionResult GetComment(int id,int mode) {
             // 買家對  訂單評價    
             
@@ -713,7 +720,21 @@ namespace prjiSpanFinal.Controllers
             
         }
 
-        public IActionResult GetItems(int id,int mode,int pages,string keyword) {
+
+        public IActionResult GetCustomize(int id)
+        {
+            var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id).Select(p => new
+            {
+                name = p.CustomizedCategoryName,
+
+            }).ToList();
+
+            //q = q.Where(a => a.name == custname).ToList();
+
+            return Json(q);
+        }
+
+        public IActionResult GetItems(int id,int mode,int pages,string keyword,string customname) {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
                 link = "/Item/Index?id=" + p.ProductId,
@@ -724,10 +745,10 @@ namespace prjiSpanFinal.Controllers
                 star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count,
                 sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
                 upload = p.EditTime,
+                customizename = p.CustomizedCategory.CustomizedCategoryName,
 
             }).ToList();
-                               
-
+                             
             if (mode == 0)
             {
               
@@ -764,7 +785,7 @@ namespace prjiSpanFinal.Controllers
             {
                 
             }
-
+            //找關鍵字
             if (keyword != null)
             {
                 keyword.Trim();
@@ -775,7 +796,12 @@ namespace prjiSpanFinal.Controllers
                     || a.price2.ToString().Contains(keys[i]) || a.sales.ToString().Contains(keys[i])).ToList();
                 }
             }
-
+            //判別類別名稱相同
+            if (customname != null)
+            {
+                q = q.Where(a => a.customizename == customname).ToList();
+            }
+            
             return Json(q.Skip((pages-1)*4).Take(4));
         }
 

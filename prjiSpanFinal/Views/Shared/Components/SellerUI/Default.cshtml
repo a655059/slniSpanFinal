@@ -1,4 +1,8 @@
 ﻿@model prjiSpanFinal.ViewModels.Header.CHeader1ViewModel
+@{ 
+    iSpanProjectContext dbContext = new iSpanProjectContext();
+    var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberAcc == Model.MemberAcc);
+}
 <div class="sidemenu noprintArea">
     <div style="width: 180px;">
         <a href="@Url.Content("~/Seller/Center")" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
@@ -55,7 +59,7 @@
                 <div class="sellerleftsiderbar collapse show" id="court-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a asp-action="設定分類" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">設定分類</a></li>
-                        <li><a asp-action="修改關於我" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯關於我</a></li>
+                        <li><a asp-action="修改關於我?id=@q.MemberId"  asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯關於我</a></li>
                         <li><a asp-action="修改關於我" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯賣場資訊</a></li>
                     </ul>
                 </div>

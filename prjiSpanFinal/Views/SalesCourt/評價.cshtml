@@ -21,167 +21,166 @@
 
 <div class="container">
     <div class="ps-2">
-        <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-            <a href="~/SalesCourt/賣場"> 回賣場</a>
-        </button>
-        <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-            <a href="~/SalesCourt/關於我"> 關於我</a>
-        </button>
+        
+            <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/賣場?id=@Model.Memberid" > 回賣場</a>
+        
+            <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/關於我?id=@Model.Memberid"> 關於我</a>
+        
+        
+    <div class="row">
         <input type="hidden" value="@Model.Memberid" id="CommentId" />
-        <div class="row">
+        <div class="col-6 rounded-2">
 
-            <div class="col-6 rounded-2">
+            <div class="row">
 
-                <div class="row">
+                <div class="col-4">
+                    @*<img src="~/img/member.png" width="150" class="m-3" />*@
+                    @{
 
-                    <div class="col-4">
-                        @*<img src="~/img/member.png" width="150" class="m-3" />*@
-                        @{
+                        var base64Image = Convert.ToBase64String(Model.SellerPhoto);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
 
-                            var base64Image = Convert.ToBase64String(Model.SellerPhoto);
-                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
 
+
+
+                    <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
+                        最<i class="fa-sharp fa-solid fa-heart"></i>賣家
+                    </button>
+                </div>
+                <div class="col-8">
+                    <div>
+                        @for (int i = 0; i < Model.StarCount; i++)
+                        {
+                            <span><img src="~/img/YellowStar.png" width="80" /></span>
                         }
-                        <img src="@source" class="cardImg" alt="..." width="120" />
 
-
-
-                        <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
-                            最<i class="fa-sharp fa-solid fa-heart"></i>賣家
-                        </button>
-                    </div>
-                    <div class="col-8">
-                        <div>
-                            @for (int i = 0; i < Model.StarCount; i++)
-                            {
-                                <span><img src="~/img/YellowStar.png" width="80" /></span>
-                            }
-
-
-                        </div>
-                        <div class="dashed-divider"></div>
-                        <div class="ps-2 w-auto">
-                            <span class="text-dark" style="font-size:2em">優良交易評價:</span>
-                            @*<span class="text-danger" style="font-size:3em">37595</span>*@
-                            <span class="text-danger" style="font-size:3em">@Model.BestCommentCountMethod.AllCount</span>
-                            <span class="text-dark" style="font-size:2em">則</span>
-                        </div>
-                        <div class="ps-2">
-                            <img src="~/img/truck.png" width="30">
-                            <a href="#" class="text-primary" style="font-size:1.5em">平均出貨天數:</a>
-                            <span class="text-dark" style="font-size:1.5em">@Model.AvgShippingDate.ToString("0.00") 天</span>
-                        </div>
-                        <div class="ps-2">
-                            <img src="~/img/follow.png" width="30">
-                            <a href="#" class="text-primary" style="font-size:1.5em">交關過會員數:</a>
-                            @*<span class="text-dark" style="font-size:1.5em">15044次</span>*@
-                            <span class="text-dark" style="font-size:1.5em">@Model.BuyerCount 次</span>
-                        </div>
-                        <div class="ps-2">
-                            <img src="~/img/fans.png" width="30">
-                            <a href="#" class="text-primary" style="font-size:1.5em">被加入最愛賣家次數:</a>
-                            @*<span class="text-dark" style="font-size:1.5em">737次</span>*@
-                            <span class="text-dark" style="font-size:1.5em">@Model.AddLoveCount</span>
-                        </div>
-                        <div class="ps-2">
-                            <img src="~/img/trashcan.png" width="30">
-                            <a href="#" class="text-primary" style="font-size:1.5em">棄單次數:</a>
-                            <span class="text-dark" style="font-size:1.5em">0次</span>
-                        </div>
 
                     </div>
-
+                    <div class="dashed-divider"></div>
+                    <div class="ps-2 w-auto">
+                        <span class="text-dark" style="font-size:2em">優良交易評價:</span>
+                        @*<span class="text-danger" style="font-size:3em">37595</span>*@
+                        <span class="text-danger" style="font-size:3em">@Model.BestCommentCountMethod.AllCount</span>
+                        <span class="text-dark" style="font-size:2em">則</span>
+                    </div>
+                    <div class="ps-2">
+                        <img src="~/img/truck.png" width="30">
+                        <a href="#" class="text-primary" style="font-size:1.5em">平均出貨天數:</a>
+                        <span class="text-dark" style="font-size:1.5em">@Model.AvgShippingDate.ToString("0.00") 天</span>
+                    </div>
+                    <div class="ps-2">
+                        <img src="~/img/follow.png" width="30">
+                        <a href="#" class="text-primary" style="font-size:1.5em">交關過會員數:</a>
+                        @*<span class="text-dark" style="font-size:1.5em">15044次</span>*@
+                        <span class="text-dark" style="font-size:1.5em">@Model.BuyerCount 次</span>
+                    </div>
+                    <div class="ps-2">
+                        <img src="~/img/fans.png" width="30">
+                        <a href="#" class="text-primary" style="font-size:1.5em">被加入最愛賣家次數:</a>
+                        @*<span class="text-dark" style="font-size:1.5em">737次</span>*@
+                        <span class="text-dark" style="font-size:1.5em">@Model.AddLoveCount</span>
+                    </div>
+                    <div class="ps-2">
+                        <img src="~/img/trashcan.png" width="30">
+                        <a href="#" class="text-primary" style="font-size:1.5em">棄單次數:</a>
+                        <span class="text-dark" style="font-size:1.5em">0次</span>
+                    </div>
 
                 </div>
 
 
             </div>
 
-            <div class="col-6">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">1週之內</th>
-                            <th scope="col">1個月之內</th>
-                            <th scope="col">半年之內</th>
-                            <th scope="col">全部紀錄</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="table-secondary">
-                            <th scope="row" height="30"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr class="table-light">
-                            <th scope="row"><img src="~/img/greencircle.png" width="20" /> 優良評價</th>
-                            <td>@Model.BestCommentCountMethod.WeekCount</td>
-                            <td>@Model.BestCommentCountMethod.MonthCount</td>
-                            <td>@Model.BestCommentCountMethod.HalfYearCount</td>
-                            <td>@Model.BestCommentCountMethod.AllCount</td>
-                        </tr>
-                        <tr class="table-secondary">
-                            <th scope="row" height="30"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr class="table-light">
-                            <th scope="row"><img src="~/img/bluetriangle.png" width="20" />普通評價</th>
-                            <td>@Model.MediumCommentCountMethod.WeekCount</td>
-                            <td>@Model.MediumCommentCountMethod.MonthCount</td>
-                            <td>@Model.MediumCommentCountMethod.HalfYearCount</td>
-                            <td>@Model.MediumCommentCountMethod.AllCount</td>
-                        </tr>
-                        <tr class="table-secondary">
-                            <th scope="row" height="30"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr class="table-light">
-                            <th scope="row"><img src="~/img/redcross.png" width="20" />差勁評價</th>
-                            <td>@Model.WorstCommentCountMethod.WeekCount</td>
-                            <td>@Model.WorstCommentCountMethod.MonthCount</td>
-                            <td>@Model.WorstCommentCountMethod.HalfYearCount</td>
-                            <td>@Model.WorstCommentCountMethod.AllCount</td>
-                        </tr>
-                        <tr class="table-secondary">
-                            <th scope="row" height="30"></th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr class="table-light">
-                            <th scope="row">評價次數</th>
-                            <td>@AllWeekCommentCount</td>
-                            <td>@AllMonthCommentCount</td>
-                            <td>@AllHalfYearCommentCount</td>
-                            <td>@AllCounts</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-
 
         </div>
+
+        <div class="col-6">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">1週之內</th>
+                        <th scope="col">1個月之內</th>
+                        <th scope="col">半年之內</th>
+                        <th scope="col">全部紀錄</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-secondary">
+                        <th scope="row" height="30"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr class="table-light">
+                        <th scope="row"><img src="~/img/greencircle.png" width="20" /> 優良評價</th>
+                        <td>@Model.BestCommentCountMethod.WeekCount</td>
+                        <td>@Model.BestCommentCountMethod.MonthCount</td>
+                        <td>@Model.BestCommentCountMethod.HalfYearCount</td>
+                        <td>@Model.BestCommentCountMethod.AllCount</td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <th scope="row" height="30"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-light">
+                        <th scope="row"><img src="~/img/bluetriangle.png" width="20" />普通評價</th>
+                        <td>@Model.MediumCommentCountMethod.WeekCount</td>
+                        <td>@Model.MediumCommentCountMethod.MonthCount</td>
+                        <td>@Model.MediumCommentCountMethod.HalfYearCount</td>
+                        <td>@Model.MediumCommentCountMethod.AllCount</td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <th scope="row" height="30"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-light">
+                        <th scope="row"><img src="~/img/redcross.png" width="20" />差勁評價</th>
+                        <td>@Model.WorstCommentCountMethod.WeekCount</td>
+                        <td>@Model.WorstCommentCountMethod.MonthCount</td>
+                        <td>@Model.WorstCommentCountMethod.HalfYearCount</td>
+                        <td>@Model.WorstCommentCountMethod.AllCount</td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <th scope="row" height="30"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="table-light">
+                        <th scope="row">評價次數</th>
+                        <td>@AllWeekCommentCount</td>
+                        <td>@AllMonthCommentCount</td>
+                        <td>@AllHalfYearCommentCount</td>
+                        <td>@AllCounts</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
 
 
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">賣場評價</a>
+                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#">賣場評價</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">買家評價</a>
+                    <a id="buyercomment" class="nav-link" href="#">買家評價</a>
                 </li>
 
             </ul>
@@ -209,7 +208,7 @@
 
 
         </div>
-       
+
 
 
         <nav aria-label="Page navigation example" class="justify-content-center d-flex m-5">
@@ -235,61 +234,65 @@
 
     </div>
 
-@section Scripts{ 
-    <script>
-        let mode = 0;
-                
+    @section Scripts{
+        <script>
+            let mode = 0;
+            let switch = 0;
 
-        function cmCard(data) {
-            return `
-                    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                    <div>
-                        <img src="~/img/greencircle.png" width="20" />
-                        <span class="text-dark" style="font-size:1.5em">買家:${data.buyername}</span>
-                    </div>
-                    <div class="dashed-divider"></div>
-                   
-                    <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">${data.productname}</a></div>
-                       
-                    <div class="my-2 text-dark" style="font-size:1.5em">${data.commentcontent}</div>
-                    </div>`
+            function cmCard(data) {
+                return `
+                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                            <div>
+                                <img src="~/img/greencircle.png" width="20" />
+                                <span class="text-dark" style="font-size:1.5em">買家:${data.buyername}</span>
+                            </div>
+                            <div class="dashed-divider"></div>
+                            <a class="linknoline" href="${data.link}">
+                            <div class="ps-2" style="font-size:1.5em"><a href="#" class="text-primary">${data.productname}</a></div>
+                            </a>
+                            <div class="my-2 text-dark" style="font-size:1.5em">${data.commentcontent}</div>
+                            </div>`
 
-        }
+            }
 
-        load();
-        function load() {
-            $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode }, function (data) {
-                console.log(data);
-                $("#commentlist").html();
-                for (let i = 0; i < data.length; i++){
-                    $("#commentlist").append(cmCard(data[i]));
-                }
+            load();
+            function load() {
+                $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode }, function (data) {
+                    console.log(data);
+                    $("#commentlist").html();
+                    for (let i = 0; i < data.length; i++) {
+                        $("#commentlist").append(cmCard(data[i]));
+                    }
+
+                    if (data.length > 0) {
+                        /*PageNumFill(data[0].)*/
+                    }
+                })
+            }
+
+            /*綜合*/
+            $("#commentrecord1").click(function () {
+                mode = 1;
+                $("#commentlist").empty();
+                load();
             })
-        }
-
-        /*綜合*/
-        $("#commentrecord1").click(function () {
-            mode = 1;
-            $("#commentlist").empty();
-            load();
-        })
-        /*優良*/
-        $("#commentrecord2").click(function () {
-            mode = 2;
-            $("#commentlist").empty();
-            load();
-        })
-        /*普通*/
-        $("#commentrecord3").click(function () {
-            mode = 3;
-            $("#commentlist").empty();
-            load();
-        })
-        /*差勁*/
-        $("#commentrecord4").click(function () {
-            mode = 4;
-            $("#commentlist").empty();
-            load();
-        })
-    </script>
-}
+            /*優良*/
+            $("#commentrecord2").click(function () {
+                mode = 2;
+                $("#commentlist").empty();
+                load();
+            })
+            /*普通*/
+            $("#commentrecord3").click(function () {
+                mode = 3;
+                $("#commentlist").empty();
+                load();
+            })
+            /*差勁*/
+            $("#commentrecord4").click(function () {
+                mode = 4;
+                $("#commentlist").empty();
+                load();
+            })
+        </script>
+    }

@@ -16,8 +16,9 @@
         sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
         upload = p.EditTime,
     }).OrderByDescending(a => a.sales).ToList();
-        
 
+
+    
 }
 @section Styles{
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
@@ -46,8 +47,8 @@
             <!--左邊的選項欄位-->
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
                 <span>賣家資料</span>
-                <input type="hidden" value="@Model.SellerId" id="SalesCourtSellerId"/>
-                <input type="hidden" value="@Model.SellerName" id="SalesCourtSellerName"/>
+                <input type="hidden" value="@Model.SellerId" id="SalesCourtSellerId" />
+                <input type="hidden" value="@Model.SellerName" id="SalesCourtSellerName" />
                 <a class="link-secondary" href="#" aria-label="Add a new report">
                     <span data-feather="plus-circle" class="align-text-bottom"></span>
                 </a>
@@ -65,14 +66,14 @@
 
 
             <div class="p-2">@Model.SellerName 的賣場</div>
-
-            <div class="ps-2"><a href="~/SalesCourt/評價" class="text-primary">評價</a></div>
-            <div class="ps-2"><a href="~/SalesCourt/關於我" class="text-primary">關於我</a></div>
+            
+            <div class="ps-2"><a href="~/SalesCourt/評價?id=@Model.SellerId" class="text-primary">評價</a></div>
+            <div class="ps-2"><a href="~/SalesCourt/關於我?id=@Model.SellerId" class="text-primary">關於我</a></div>
 
             <div class="row">
                 <div class="col">
 
-                    <button class="btn  btn-sm text-white rounded-5" id="btnsalescourtfollowed" style="background-color:#f30959">
+                    <button class="btn  btn-sm text-white rounded-5 followflag" id="btnsalescourtfollowed" style="background-color: #f30959">
                         最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                     </button>
                 </div>
@@ -94,21 +95,21 @@
 
             <ul>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="">
                         <span data-feather="file" class="align-text-bottom"></span>
                         未分類
                     </a>
                 </li>
-                @foreach (var item in Model.CourtCategoryName)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file" class="align-text-bottom"></span>
-                            @item
-                        </a>
-                    </li>
-                }
+
+                             
+
             </ul>
+
+            <div class="row" id="customizename">
+
+
+
+            </div>
         </nav>
 
         <main class="col-md-7 ms-sm-auto col-lg-10 ">
@@ -145,14 +146,7 @@
                             
                             <div class="sellsitem">
                                 <a class="linknoline" href="@bestsell[i].link">
-                                    @*@if (bestsell[i].pic != null)
-        {
-            var base64Image = Convert.ToBase64String(bestsell[i].pic);
-            var source = String.Format("data:image/png;base64,{0}", base64Image);
-
-            <img src="@source" class="cardImg" alt="..." />
-        }*@
-                                    <img src="data:png;base64,@bestsell[i].pic" class="cardImg" alt="..." />
+                                    <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
                                 </a>
                                 <div class="px-1 d-flex flex-column justify-content-between">
                                     <div class="cardTitleBox">
@@ -256,18 +250,18 @@
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">
                         <ul class="pagination">
                             <li class="page-item" id="orderpageup">
-                                <a class="page-link" href="#" aria-label="Previous">
+                                <a class="page-link" href="#salescourtcardbody" aria-label="Previous">
                                     <span aria-hidden="true">«</span>
                                 </a>
                             </li>
-                            <li class="page-item orderpagenumclicklist"><a id="page1" class=" page-link" href="#">1</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page2" class=" page-link" href="#">2</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page3" class=" page-link" href="#">3</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page4" class=" page-link" href="#">4</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page5" class=" page-link" href="#">5</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page6" class=" page-link" href="#">6</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page1" class=" page-link" href="#salescourtcardbody">1</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page2" class=" page-link" href="#salescourtcardbody">2</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page3" class=" page-link" href="#salescourtcardbody">3</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page4" class=" page-link" href="#salescourtcardbody">4</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page5" class=" page-link" href="#salescourtcardbody">5</a></li>
+                            <li class="page-item orderpagenumclicklist"><a id="page6" class=" page-link" href="#salescourtcardbody">6</a></li>
                             <li class="page-item" id="orderpagedown">
-                                <a class="page-link" href="#" aria-label="Next">
+                                <a class="page-link" href="#salescourtcardbody" aria-label="Next">
                                     <span aria-hidden="true">»</span>
                                 </a>
                             </li>
@@ -294,20 +288,23 @@
 @section Scripts{
   
     
-<script>
-
-
+    <script>
     let mode = 0;
+    let ccc = 0;
     let eachpages = 1;
     let nowpages = 1;
     let searchflag = false;
+    let followFlag = false;
+    /*類別按下去就會一直保留限制 直到按下未分類*/
+    let customname = "";
 
     jQuery.postJSON = function (url, data, callback) {
         jQuery.post(url, data, callback, "json");
     };
 
-        
+    loadcustom();
     load();
+    
     function returnCard(data) {
         return `<div class="sellsitem">
         <a class="linknoline" href="${data.link}">
@@ -331,7 +328,7 @@
             </div>
         </div>
     </div>`
-    }
+        }
 
     /*    let aa = $.map($(".check"),*/
     //function loadbest() {
@@ -343,6 +340,35 @@
     //    })
     //}
 
+    
+
+    $(document).on("click", ".salescourtclick", function () {
+        customname = $(this).html();
+        $("#salescourtcardbody").empty();
+        load();
+    })
+
+
+    function returncust(data) {
+
+        return `
+           <li class=" salescourtclicklist">
+                <a role="button" class="salescourtclick">${data.name}</a>
+            </li>`;
+    }
+
+
+    function loadcustom() {
+        $.getJSON("/SalesCourt/GetCustomize", { id: SalesCourtSellerId.value }, function (data) {
+            $("#customizename").html("")
+            for (let i = 0; i < data.length; i++) {
+                $("#customizename").append(returncust(data[i]));
+            }
+
+        })
+
+    }
+
     function load() {
         let keyword;
         if (searchflag) {
@@ -352,43 +378,45 @@
             $("#orderkeyword").val("");
             keyword = "";
         }
-               
 
-        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode:mode,pages:nowpages,keyword:keyword}, function (data) {
-            
+        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, keyword: keyword, customname: customname}, function (data) {
+
             $("#salescourtcardbody").html("");
             for (let i = 0; i < data.length; i++) {
                 /*$(".check").eq(i).a*/
                 $("#salescourtcardbody").append(returnCard(data[i]));
             }
-
-            
         })
-                
-        
-    }
+     }
+
 
     //打開蝦蝦通
     $(document).on("click", ".orderopenmsg", function () {
         happy_popup($("#SalesCourtSellerName").val());
     });
 
+
     //按追蹤賣家
     $("#btnsalescourtfollowed").click(function(){
         $.getJSON("/SalesCourt/WriteFollow", { id: $("#SalesCourtSellerId").val() },function(data){
-            if(data == 1){
+            if (data == 1) {
+                $("#btnsalescourtfollowed").attr('style', 'background-color:#b7b0bd');
                 Swal.fire(
                     '追蹤成功',
                     '您已成功追蹤賣家'+$("#SalesCourtSellerName").val(),
                     'success'
                 );
+
             }
-            else if(data == 0){
+            else if (data == 0) {
+                $("#btnsalescourtfollowed").attr('style', 'background-color:#f30959');
                 Swal.fire(
                     '移除追蹤',
                     '您已移除追蹤賣家'+$("#SalesCourtSellerName").val(),
                     'warning'
                 );
+
+
             }
             else{
                 Swal.fire(
@@ -399,6 +427,7 @@
             }
         });
     })
+
 
     $("#btnDate").click(function () {
         if (searchflag) {
@@ -418,9 +447,6 @@
         load();
     })
 
-
-
-
     $("#orderpagedown").click(function () {
         let pagescount = $(".orderpagenumclicklist").length;
         nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
@@ -436,7 +462,7 @@
         $("#salescourtcardbody").empty();
         load();
     })
-  
+
 
     $("#SortOrder1").click(function () {
         mode = 1;
@@ -485,7 +511,7 @@
         $("#salescourtcardbody").empty();
         load();
     })
-</script>
+    </script>
 
 
   
