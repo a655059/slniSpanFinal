@@ -59,10 +59,12 @@ namespace prjiSpanFinal.Controllers
                     avgCommentStar = comments.Average(i => i.CommentStar);
                 }
                 int salesVolume = 0;
+                int buyerCount = 0;
                 var sales = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == id && i.Order.StatusId == 7);
                 if (sales.Count() > 0)
                 {
                     salesVolume = sales.Sum(i => i.Quantity);
+                    buyerCount = dbContext.OrderDetails.Where(i => i.ProductDetail.ProductId == id && i.Order.StatusId == 7).Select(i => i.Order.MemberId).Distinct().Count();
                 }
                 var sellerComments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.Product.MemberId == product.seller.MemberId);
                 if (sellerComments.Count() > 0)
@@ -87,6 +89,7 @@ namespace prjiSpanFinal.Controllers
                 itemIndex.avgCommentStar = avgCommentStar;
                 itemIndex.commentCount = commentCount;
                 itemIndex.salesVolume = salesVolume;
+                itemIndex.buyerCount = buyerCount;
                 itemIndex.avgSellerCommentStar = avgSellerCommentStar;
                 itemIndex.sellerCommentCount = sellerCommentCount;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))

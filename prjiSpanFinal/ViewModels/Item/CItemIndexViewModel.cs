@@ -21,6 +21,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public double avgCommentStar { get; set; }
         public int commentCount { get; set; }
         public int salesVolume { get; set; }
+        public int buyerCount { get; set; }
         public double avgSellerCommentStar { get; set; }
         public int sellerCommentCount { get; set; }
         public Boolean Islike { get; set; }
