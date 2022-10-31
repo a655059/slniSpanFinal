@@ -247,6 +247,7 @@
                 return;
             }
         }
+
       //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
@@ -257,8 +258,7 @@
        document.location.href=link;
         })
 
-         //篩選MemberStauts
-    let filter=document.getElementById("filter");
+        let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
