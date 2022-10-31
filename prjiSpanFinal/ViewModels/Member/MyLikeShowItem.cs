@@ -15,6 +15,7 @@ namespace prjiSpanFinal.ViewModels.Member
         public double starCount { get; set; }
         public int MemberID { get; set; }
         public string ProductStatus { get; set; }
+        public string keyword { get; set; }
         
 
 

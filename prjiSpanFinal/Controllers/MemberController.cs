@@ -298,7 +298,7 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
-        public IActionResult deletLike(int likeID, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        public IActionResult deletLike(int[] PdID, string[] filter, int priceMin, int priceMax, int SortOrder, int pages,string keyword)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -309,25 +309,48 @@ namespace prjiSpanFinal.Controllers
                 iSpanProjectContext dbcontext = new iSpanProjectContext();
                 string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-
-                var mylikeID = dbcontext.Likes.Where(p => p.LikeId == likeID).Select(p => p.LikeId).ToList();
-                dbcontext.Remove(mylikeID);
+                foreach(var item in PdID)
+                {
+                var DeltlikeID = dbcontext.Likes.Where(p => p.ProductId == item).Select(p => p).FirstOrDefault() ;
+                dbcontext.Likes.Remove(DeltlikeID);
+                
+                }
+                //var mylikeID = dbcontext.Likes.Where(p => p.LikeId == likeID).Select(p => p.LikeId).ToList();
                 dbcontext.SaveChanges();
 
-                return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
+                return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID, keyword));
 
             }
 
 
         }
 
-        public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
+        public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages,string keyword)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
             int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+            //var q = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => new {
+            //name=p.Product.ProductName,
+            //price1=p.Product.ProductDetails.Select(p=>p.UnitPrice).Min(),
+            //price2=p.Product.ProductDetails.Select(p=>p.UnitPrice).Max(),
+            //sales= dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+            //}).ToList();
+            
+                
+            //if (keyword != null)
+            //{
+            //    keyword.Trim();
+            //    string[] keys = keyword.Split(" ");
+            //    for (int i = 0; i < keys.Length; i++)
+            //    {
+            //        q = q.Where(a => a.name.Contains(keys[i]) || a.price1.ToString().Contains(keys[i])
+            //        || a.price2.ToString().Contains(keys[i]) || a.sales.ToString().Contains(keys[i])).ToList();
+            //    }
+            //}
+            
 
-            return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
+            return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID,keyword));
         }
         //public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         //{

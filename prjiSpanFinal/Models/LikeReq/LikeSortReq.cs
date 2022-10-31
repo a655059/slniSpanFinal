@@ -9,29 +9,40 @@ namespace prjiSpanFinal.Models.LikeReq
     public class LikeSortReq
     {
         //like篩選的所有方法
-        public List<MyLikeShowItem> MyLikeSortItems( int[] filter, int priceMin, int priceMax, int SortOrder, int pages,int memberid)
+        public List<MyLikeShowItem> MyLikeSortItems( int[] filter, int priceMin, int priceMax, int SortOrder, int pages,int memberid,string keyword)
         {
             iSpanProjectContext db = new iSpanProjectContext();
             
             var mylike = new List<Product>();
             var LikeProduct = new List<Like>();
             #region Filter (List<Product>)
-            //Filter
-            //if (filter.Length > 0)
-            //{
-            //    foreach (var item in filter)
-            //    {
-            //        var a = db.Products.Where(p => p.SmallTypeId == item && p.ProductStatusId == 0).ToList();
-            //        prodlist.AddRange(a);
-            //    }
-            //}
-
             //都要
              mylike = db.Likes.Where(p => p.MemberId == memberid).Select(p => p.Product).ToList();
             //var product_無效 = db.Likes.Where(p => p.Product.ProductStatusId == 1).ToList();
             #endregion
 
             List<MyLikeShowItem> list = (new MyLikeFactory()).toShowItem(mylike);
+
+            //關鍵字搜尋要放進list(做另一個方法有keyword一樣有SortOrder狀態篩選)
+            var q = db.Likes.Where(p => p.MemberId == memberid).Select(p => new
+            {
+                name = p.Product.ProductName,
+                price1 = p.Product.ProductDetails.Select(p => p.UnitPrice).Min(),
+                price2 = p.Product.ProductDetails.Select(p => p.UnitPrice).Max(),
+                sales = db.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+            }).ToList();
+
+            if (!String.IsNullOrWhiteSpace(keyword))
+            {
+                keyword.Trim();
+                string[] keys = keyword.Split(" ");
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    q = q.Where(a => a.name.Contains(keys[i]) || a.price1.ToString().Contains(keys[i])
+                    || a.price2.ToString().Contains(keys[i]) || a.sales.ToString().Contains(keys[i])).ToList();
+                }
+            }
+           
 
             #region  SortOrder
             //SortOrder
@@ -41,15 +52,6 @@ namespace prjiSpanFinal.Models.LikeReq
                     //全部按讚
                     list = (new MyLikeFactory()).toShowItem(mylike);
                     break;
-                //取消按讚
-                //case 6:
-
-                //    list = (new MyLikeFactory()).toShowItem(mylike);
-                //    break;
-                ////無效商品
-                //case 7:
-                //    list = (new MyLikeFactory()).toShowItem(mylike);
-                //    break;
                 case 3:
                     //熱銷排序
                     list = ((new MyLikeFactory()).toShowItem(mylike)).OrderByDescending(s => s.salesVolume).ToList();
@@ -80,6 +82,8 @@ namespace prjiSpanFinal.Models.LikeReq
             list2 = list.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
             list1.AddRange(list2);
             #endregion
+
+
 
             //Pages #todo
             //TBC
