@@ -279,8 +279,9 @@
 <div>
     <div class="list-group list-group-horizontal mb-3">
         <button type="button" class="list-group-item-warning list-group-item list-group-item-action active" id="description" aria-current="true">商品說明</button>
-        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="comment">商品評價 (4.0/5)</button>
-        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">購買人次 (55)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="comment">商品評價 (<span>@Model.avgCommentStar.ToString("0.0")</span>/5)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">購買人次 (<span>@Model.buyerCount</span>)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="messageBoard">留言板</button>
     </div>
     <div class="itemDescription rounded-2">
         <div class="sellerName bg-warning bg-opacity-50 fs-3 fw-bold ps-2" id="@Model.seller.MemberAcc">@Model.seller.MemberAcc<span>的商店</span></div>
@@ -456,7 +457,7 @@
         });
         $(".purchaseStyle").click(async function () {
             let price = $(this).siblings(".price").html();
-            $(".itemPrice").html(price);
+            $(".itemPrice").html(`$${price}`);
             $(this).removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-danger").closest("div").siblings().children("label").removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-outline-secondary");
             const productDetailID = $(this).siblings("input").val();
             const requestUrl = "@Url.Content("~/Delivery/ShowQtyToSpecificMember")" + `?productDetailID=${productDetailID}`;
