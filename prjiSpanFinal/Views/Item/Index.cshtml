@@ -313,6 +313,9 @@
     <div class="buyerCountVC d-none">
         @await Component.InvokeAsync("ShowBuyerCount", new { productID = Model.product.ProductId, page = 1 })
     </div>
+    <div class="messageBoardVC d-none">
+        @await Component.InvokeAsync("ShowMessageBoard", new { productID = Model.product.ProductId })
+    </div>
 </div>
 
 <!--Modal-->

@@ -1,6 +1,13 @@
-﻿
-<div>
+﻿@model List<prjiSpanFinal.ViewModels.Item.CMessageBoardViewModel>
 
-
-</div>
+@{ 
+    foreach (var i in Model)
+            {
+                <div>
+                    <div>@i.member.MemberAcc</div>
+                    <div>@i.messageBoard.Message</div>
+                    <div>@i.product.ProductName</div>
+                </div>
+            }
+}
 
