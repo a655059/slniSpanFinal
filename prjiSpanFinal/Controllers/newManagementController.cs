@@ -15,25 +15,38 @@ namespace prjiSpanFinal.Controllers
     public class newManagementController : Controller
     {
         #region ProductRegion
-        public List<CProductListViewModel> GetProductsFromDatabase(string keyword)
+        public List<CProductListViewModel> GetProductsFromDatabase(string keyword, string filter)
         {
             var db = new iSpanProjectContext();
             List<CProductListViewModel> list = new();
             IQueryable<Product> Prods = null;
-            if (keyword == null)
+            int FilterId;
+            if (!String.IsNullOrEmpty(filter))
+            {
+                FilterId = db.ProductStatuses.FirstOrDefault(i => i.ProductStatusName == filter).ProductStatusId;
+            }
+            else
+            {
+                FilterId = -1;
+            }
+            if (keyword == null&& FilterId<0)
             {
                 Prods = db.Products.Select(i => i);
+            }
+            else if (keyword == null)
+            {
+                Prods = db.Products.Where(i=>i.ProductStatusId==FilterId).Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Prods = db.Products.
-                     Where(i => i.ProductId == key).
+                     Where(i => i.ProductId == key&&i.ProductStatusId==FilterId).
                      Select(e => e);
             }
             else
             {
                 Prods = db.Products.
-                    Where(i => i.ProductName.Contains(keyword)).
+                    Where(i => i.ProductName.Contains(keyword) && i.ProductStatusId == FilterId).
                     Select(e => e); ;
             }
             var ProductStatusName = (from i in db.ProductStatuses select i).ToList();
@@ -63,28 +76,28 @@ namespace prjiSpanFinal.Controllers
 
             return list;
         }
-        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword)
+        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword,string filter)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetProductsFromDatabase(keyword);
+            var listUnpaged = GetProductsFromDatabase(keyword,filter);
             IPagedList<CProductListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult newProductList(string keyword, int? pageSize, int? page )
+        public IActionResult newProductList(string keyword, int? pageSize, int? page,string filter)
         {
             ViewBag.pageSize=pageSize;
             //每頁幾筆
-            pageSize ??= 3;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword);
-            var PList = GetPagedProcess(page, (int)pageSize, keyword);
+            ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword,filter);
+            var PList = GetPagedProcess(page, (int)pageSize, keyword,filter);
             //填入頁面資料
             return View(PList);
         }
@@ -165,26 +178,41 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region MemberRegion
-        public List<CMemberListViewModel> GetMembersFromDatabase(string keyword)
+        public List<CMemberListViewModel> GetMembersFromDatabase(string keyword, string filter)
         {
             var db = new iSpanProjectContext();
             List<CMemberListViewModel> list = new();
             IQueryable<MemberAccount> mems = null;
-            if (String.IsNullOrEmpty(keyword))
+
+            int FilterId;
+            if (!String.IsNullOrEmpty(filter))
             {
-                mems = db.MemberAccounts.Select(i => i);
-            }
-            else if (int.TryParse(keyword, out int key))
-            {
-                mems = db.MemberAccounts.
-                     Where(i => i.MemberId == key).
-                     Select(e => e);
+                FilterId = db.MemStatuses.FirstOrDefault(i => i.MemStatusName == filter).MemStatusId;
             }
             else
             {
+                FilterId = -1;
+            }
+
+            if (String.IsNullOrEmpty(keyword) && FilterId < 0)
+            {
+                mems = db.MemberAccounts.Select(i => i);
+            }
+            else if (keyword == null&&FilterId>0)
+            {
+                mems = db.MemberAccounts.Where(i => i.MemStatusId == FilterId).Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key)&&FilterId>0)
+            {
                 mems = db.MemberAccounts.
-                    Where(i => i.Name.Contains(keyword) || i.Phone.Contains(keyword) || i.Email.Contains(keyword) || i.MemberAcc.Contains(keyword)).
-                    Select(e => e); ;
+                     Where(i => i.MemberId == key&&  i.MemStatusId == FilterId).
+                     Select(e => e);
+            }
+            else if(FilterId>0)
+            {
+                mems = db.MemberAccounts.
+                    Where(i =>i.MemStatusId==FilterId&&( i.Name.Contains(keyword) || i.Phone.Contains(keyword) || i.Email.Contains(keyword) ||  i.MemberAcc.Contains(keyword))).
+                    Select(e => e); 
             }
             var MemStatuses = (from i in db.MemStatuses select i).ToList();
             var RegionLists = (from i in db.RegionLists select i).ToList();
@@ -205,28 +233,28 @@ namespace prjiSpanFinal.Controllers
 
             return list;
         }
-        protected IPagedList<CMemberListViewModel> GetMemPagedProcess(int? page, int pageSize, string keyword)
+        protected IPagedList<CMemberListViewModel> GetMemPagedProcess(int? page, int? pageSize, string keyword, string filter)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetMembersFromDatabase(keyword);
-            IPagedList<CMemberListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            var listUnpaged = GetMembersFromDatabase(keyword,filter);
+            IPagedList<CMemberListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, (int)pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult MemberList(string keyword ,int? pageSize, int? page = 1)
+        public IActionResult MemberList(string keyword, string filter, int? pageSize, int? page = 1)
         {
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 3;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetMemPagedProcess(page, (int)pageSize, keyword);
-            var PList = GetMemPagedProcess(page,(int) pageSize, keyword);
+            ViewBag.Prods = GetMemPagedProcess(page, (int)pageSize, keyword,filter);
+            var PList = GetMemPagedProcess(page,(int) pageSize, keyword,filter);
             //填入頁面資料
             return View(PList);
         }

@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "newProductList";
     var pagedList = (IPagedList)ViewBag.Prods;
-     if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
+     if(ViewBag.pageSize==null){ ViewBag.pageSize = 5; }
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -20,6 +20,19 @@
     <form>
         <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋,或是不輸入回到列表" class="form-control" />
         <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+    </form>
+       <form>
+        依會員狀態篩選
+       <select id="filter" name="filter">
+           <option value="">選擇會員狀態</option>
+           <option value="簡易會員">簡易會員</option>
+           <option value="正式會員">正式會員</option>
+           <option value="未註冊完整">未註冊完整</option>
+           <option value="停權中">停權中</option>
+           <option value="已刪除">已刪除</option>
+           <option value="管理員">管理員</option>
+       </select> 
+        <input type="submit" value="全部會員" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
@@ -242,6 +255,15 @@
         pagesize.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
             let link="@Url.Content("~/newManagement/MemberList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+
+         //篩選MemberStauts
+    let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
+            Filter=filter.options[filter.selectedIndex].value
+            let link="@Url.Content("~/newManagement/MemberList")"+`?filter=${Filter}`;
        document.location.href=link;
         })
     </script>
