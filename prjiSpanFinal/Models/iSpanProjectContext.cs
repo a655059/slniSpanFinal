@@ -39,6 +39,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<Like> Likes { get; set; }
         public virtual DbSet<MemStatus> MemStatuses { get; set; }
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
+        public virtual DbSet<MessageBoard> MessageBoards { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
         public virtual DbSet<OfficialEventType> OfficialEventTypes { get; set; }
@@ -62,6 +63,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<SmallType> SmallTypes { get; set; }
         public virtual DbSet<SubOfficialEventList> SubOfficialEventLists { get; set; }
         public virtual DbSet<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
+        public virtual DbSet<TradeFeeList> TradeFeeLists { get; set; }
         public virtual DbSet<WebAd> WebAds { get; set; }
         public virtual DbSet<WebAdimageType> WebAdimageTypes { get; set; }
 
@@ -69,6 +71,7 @@ namespace prjiSpanFinal.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=iSpanProject;Integrated Security=True");
             }
         }
@@ -606,6 +609,33 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.RegionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MemberAccount_RegionList");
+            });
+
+            modelBuilder.Entity<MessageBoard>(entity =>
+            {
+                entity.ToTable("MessageBoard");
+
+                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.Property(e => e.PostTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MessageBoards)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoard_MemberAccount");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.MessageBoards)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoard_Product");
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -1185,6 +1215,25 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.SubOfficialEventListId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubOfficialEventToProduct_SubOfficialEventList");
+            });
+
+            modelBuilder.Entity<TradeFeeList>(entity =>
+            {
+                entity.HasKey(e => e.TradeFeeId);
+
+                entity.ToTable("TradeFeeList");
+
+                entity.Property(e => e.TradeFeeId).HasColumnName("TradeFeeID");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.TradeFeeLists)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TradeFeeList_Orders");
             });
 
             modelBuilder.Entity<WebAd>(entity =>

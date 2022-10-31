@@ -12,6 +12,7 @@ namespace prjiSpanFinal.Models
             Arguments = new HashSet<Argument>();
             CommentForCustomers = new HashSet<CommentForCustomer>();
             OrderDetails = new HashSet<OrderDetail>();
+            TradeFeeLists = new HashSet<TradeFeeList>();
         }
 
         public int OrderId { get; set; }
@@ -39,5 +40,6 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Argument> Arguments { get; set; }
         public virtual ICollection<CommentForCustomer> CommentForCustomers { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<TradeFeeList> TradeFeeLists { get; set; }
     }
 }
