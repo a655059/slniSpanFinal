@@ -1,0 +1,77 @@
+﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.Member.MyBalance
+@{
+    ViewData["Title"] = "Balance";
+}
+@section Styles{
+
+    <link href="~/css/MemberUI/sidebar.css" rel="stylesheet" />
+    <link href="~/css/MemberUI/Balance.css" rel="stylesheet" />
+}
+
+<vc:member-ui></vc:member-ui>
+<h2 class="d-flex justify-content-center">儲值金</h2>
+<div id="orderdetaildiv">
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div class="balance-container">
+                <div>
+                    現存蝦蝦幣
+                </div>
+                <div id="balanceHave">
+                    @Model.Balance
+                </div><div>
+                    <span>
+                        儲值蝦蝦幣：
+                    </span>
+                    <input type="text" id="charge" />
+                </div>
+                <br />
+                <div class="btn btn-success" onkeypress="isNumberKey(event)" id="chargebtn">儲值</div>
+            </div>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">總覽</a>
+                    <a class="nav-item nav-link" id="1" data-toggle="tab" href="#!" role="tab" aria-controls="nav-increase" aria-selected="false">增加＋</a>
+                    <a class="nav-item nav-link" id="2" data-toggle="tab" href="#!" role="tab" aria-controls="nav-decrease" aria-selected="false">減少－</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">123</div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+                    const charge = $("#charge")
+                    const item = $(".nav-item");
+                    let currentFilter = 0;
+                    const pane = $(".tab-pane");
+                    item.click(function (event) {
+                        item.removeClass("active");
+                        $(this).addClass("active");
+                        currentFilter = parseInt($(this).attr("id"));
+                        console.log(currentFilter);
+                    })
+                    function isNumberKey(evt) {
+                        var charCode = (evt.which) ? evt.which : evt.keyCode
+                        if (charCode > 31 && (charCode < 48 || charCode > 57))
+                            return false;
+                        return true;
+                    }
+
+                    $("#chargebtn").click(function () {
+                        if (parseInt(charge.val()) > 0) {
+                            $.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
+                                if (data != null) {
+                                    $("#balanceHave").text(data);
+                                }
+                                charge.val("");
+                            })
+                        }
+                    })
+    </script>
+
+}

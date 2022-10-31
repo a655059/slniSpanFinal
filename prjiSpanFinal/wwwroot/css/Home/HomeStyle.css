@@ -11,36 +11,55 @@
 .layout1renderdiv{
     background-color:transparent;
 }
-.HP-Panel{
-    background-color:white;
-    padding:20px 15px;
-    border-radius:15px;
+.HP-Panel {
+    background-color: white;
+    padding: 20px 15px;
+    border-radius: 15px;
+    box-shadow: 1px 1px rgba(255, 130, 5, 0.2);
 }
 .HP-Header {
     width: 100%;
+    padding-left:10px;
     display: flex;
     justify-content: start;
-    align-items: center;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #FF8000;
 }
     .HP-Header img {
         width: 20px;
+        object-fit:contain;
     }
-    .HP-Header span {
-        font-size: 18px;
-    }
-    /* 左側 */
-    .listview {
-        box-sizing: border-box;
-        display: flex;
-        position: relative;
-        flex-direction: column;
-        flex-shrink: 0;
-        align-content: flex-start;
-        border: 0 solid #000;
-        margin: 0;
-        min-width: 0;
-        margin-bottom: 30px;
-    }
+.HP-Header-Text{
+    
+}
+.HP-Header-Title {
+    font-size: 25px;
+    color: red;
+    font-weight: bold
+}
+.HP-Header-SubTitle {
+    font-size: 1rem;
+    color: blue;
+}
+.HP-Item {
+    position: relative;
+    width: 100%;
+    background-color: white;
+    padding: 5px 20px;
+}
+/* 左側 */
+.listview {
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-content: flex-start;
+    border: 0 solid #000;
+    margin: 0;
+    min-width: 0;
+    margin-bottom: 30px;
+}
 
 .listtype {
     height: 588px;
@@ -208,7 +227,9 @@
     flex-wrap: wrap;
     justify-content: flex-start
 }
-
+.text-strat-text {
+    border-bottom: 1px solid #FF8000;
+}
 
 .showmoreitem {
     color: red;

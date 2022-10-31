@@ -7,6 +7,41 @@
     <link href="~/css/Home/HomeStyle.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
+    <link href="~/css/Home/FSItem.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        .swiper {
+            width: 100%;
+            height: 100%;
+            --swiper-navigation-color: red;
+            --swiper-navigation-size: 25px;
+            overflow: hidden;
+            outline: none;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            
+        }
+        .my-button-disabled{
+            display:none;
+        }
+    </style>
 }
 <body>
     <div class="HP-Panel">
@@ -118,16 +153,6 @@
                     <div class="split2"></div>
                     <div class="cateheader-2">
                         <div class="row justify-content-between dm">
-                            @*<div class="col-6">
-                                    <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block rounded-2">
-                                        <img src="~/img/Homepage/DM-2HP.png" class="w-100" />
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block rounded-2">
-                                        <img src="~/img/Homepage/DM-2HP2.png" class="w-100" />
-                                    </a>
-                                </div>*@
                             @{
                                 if (Model.WebADSmall.Count >= 2)
                                 {
@@ -184,17 +209,6 @@
     {
         <div class="split"></div>
         <div class="HP-Panel">
-            @*<div class="split"></div>
-                <div class="w-100 Large-AD d-flex justify-content-center ">
-                    <a href="#1" class="w-100">
-                        @{
-                            var base64Image = Convert.ToBase64String(Model.WebADBig[0].WebAdimage);
-                            var source = String.Format("data:image/png;base64,{0}", base64Image);
-                            <img src="@source" class="img-fluid w-100" alt="AD" />
-                        }
-                    </a>
-                </div>*@
-
             @await Component.InvokeAsync("WebADLarge", new { list = Model.WebADBig })
         </div>
     }
@@ -202,11 +216,12 @@
     <div class="split"></div>
     <div class="HP-Panel" id="Flash-Sales">
         <div class="HP-Header">
-            <img src="~/img/Homepage/SellsOnFire.png"/>
-            <span>限時搶購</span>
+            <img src="~/img/Homepage/SellsOnFire.png" />
+            <span class="HP-Header-Title">限時搶購</span>
+            @*<span class="HP-Header-SubTitle">大家都在看...</span>*@
         </div>
         <div class="HP-Item">
-            
+            @await Component.InvokeAsync("HomeFS", new { list = Model.cShowItem })
         </div>
     </div>
 
@@ -215,9 +230,13 @@
     <div class="HP-Panel" id="Best-Buy">
         <div class="HP-Header">
             <img src="~/img/Homepage/SellsOnFire.png" />
-            <span>發燒商品</span>
+            <div class="HP-Header-Text">
+                <span class="HP-Header-Title">發燒商品</span>
+                <span class="HP-Header-SubTitle">大家都在看</span>
+            </div>
         </div>
         <div class="HP-Item">
+            @await Component.InvokeAsync("HomeBB", new { list = Model.cShowItem })
         </div>
     </div>
     <div class="split"></div>
@@ -225,9 +244,9 @@
         <div class="d-flex justify-content-center">
             <div class="row">
                 <div class="text-start">
-                    <div>
+                    <div class="text-strat-text">
                         <span class="fs-3 fw-bold text-primary guessliketitle">猜你喜歡</span>
-                        <span class="fs-6 text-muted">有著你想要的東西...</span>
+                        <span class="fs-6 text-muted">有著你想要的東西</span>
                     </div>
                     <div class="itembody  ">
                         <div class="itemcol d-flex justify-content-center" id="itemcol">
@@ -262,7 +281,25 @@
     </section>
     @section Scripts{
         <script src="~/js/Homepage/Index.js"></script>
+
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <script>
+            var swiper = new Swiper(".mySwiper", {
+                slidesPerView: 5,
+                spaceBetween: -20,
+                slidesPerGroup: 2,
+                loop: false,
+                loopFillGroupWithBlank: false,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                    disabledClass: 'my-button-disabled',
+                },
+            });
         </script>
     }
 </body>
