@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "newProductList";
     var pagedList = (IPagedList)ViewBag.Prods;
-    if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
+    if(ViewBag.pageSize==null){ ViewBag.pageSize = 5; }
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -20,6 +20,16 @@
     <form>
         <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋,或不輸入回到列表" class="form-control" />
         <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+    </form>
+    <form>
+        依商品狀態篩選
+       <select id="filter" name="filter">
+           <option value="">選擇商品狀態</option>
+           <option value="上架中">上架中</option>
+           <option value="已下架">已下架</option>
+           <option value="已刪除">已刪除</option>
+       </select> 
+        <input type="submit" value="全部商品" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
@@ -103,23 +113,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                    <option value=3>3</option>
+                                    <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                  <option value=5>5</option>
+                                  <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-               <option value=10>10</option>
+                               <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                  <option value=20>20</option>
+                                  <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                    <option value=100>100</option>
+                                    <option value=100>100</option>
             }}
      </select>
      筆
@@ -189,6 +199,15 @@
         pagesize.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
             let link="@Url.Content("~/newManagement/newProductList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+
+        //篩選ProductStauts
+        let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
+            Filter=filter.options[filter.selectedIndex].value
+            let link="@Url.Content("~/newManagement/newProductList")"+`?filter=${Filter}`;
        document.location.href=link;
         })
     </script>

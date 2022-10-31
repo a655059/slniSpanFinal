@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "OrderList";
     var pagedList = (IPagedList)ViewBag.Prods;
-    if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
+    if(ViewBag.pageSize==null){ViewBag.pageSize = 5;}
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -15,8 +15,19 @@
             width: 160px;
         }
     </style>
-}
+}  
+    
     <h1>訂單</h1>
+    <form>
+        依訂單狀態篩選
+       <select id="filter" name="filter">
+             <option value="">選擇訂單狀態</option>
+           @foreach(var i in ViewBag.OrderStatus){
+                <option value="@i.OrderStatusName">@i.OrderStatusName</option>
+           }
+       </select> 
+        <input type="submit" value="全部訂單" class="btn btn-outline-secondary" />
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -117,6 +128,14 @@
             </tr>
         }
     </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-muted" colspan="5">
+                第 @(pagedList.PageCount < pagedList.PageNumber ? 0 : pagedList.PageNumber) 頁，共 @pagedList.PageCount 頁。
+                每頁 @pagedList.PageSize 筆資料，全部共有 @pagedList.TotalItemCount 筆資料。
+            </td>
+        </tr>
+    </tfoot>
 </table>
 @*分頁導覽*@
 <div style="align-content:center" class="paginations">
@@ -128,23 +147,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                    <option value=3>3</option>
+                        <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                  <option value=5>5</option>
+                      <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-               <option value=10>10</option>
+                   <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                  <option value=20>20</option>
+                      <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                    <option value=100>100</option>
+                        <option value=100>100</option>
             }}
      </select>
      筆
@@ -228,12 +247,23 @@
                 return;
             }
         }
-        //選取一頁幾筆
+
+      //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/OrderList")"+`?pageSize=${pageSize}&filter=${Filter}`;
+       document.location.href=link;
+        })
+
+        let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
-            let link="@Url.Content("~/newManagement/OrderList")"+`?pageSize=${pageSize}`;
+            Filter=filter.options[filter.selectedIndex].value
+            let link="@Url.Content("~/newManagement/OrderList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })
     </script>

@@ -65,10 +65,10 @@
                     @Html.DisplayFor(modelItem => item.CouponName)
                 </td>
                 <td>
-                    <input value="@item.StartDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                    <input value="@item.StartDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    <input value="@item.ExpiredDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                    <input value="@item.ExpiredDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Discount)
@@ -97,15 +97,11 @@
                         {
                                     @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
                             @class="btn btn-outline-primary mb-2"})
-                            //        @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
-                            //@class="btn btn-outline-primary mb-2"})
                         }
                         else
                         {
                                    @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
                 @class="btn btn-outline-primary disabled"})
-                //                    @Html.ActionLink("刪除", "CouponDelete","newManagement", new { id=item.CouponId },new{
-                //@class="btn btn-outline-primary disabled"})
                         }
                     }
                 </td>
@@ -171,7 +167,8 @@
         pagesize.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
             let link="@Url.Content("~/newManagement/CouponList")"+`?pageSize=${pageSize}`;
-       document.location.href=link;
+          document.location.href=link;
         })
+
     </script>
 }
