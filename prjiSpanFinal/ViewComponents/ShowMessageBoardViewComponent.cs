@@ -10,18 +10,24 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class ShowMessageBoardViewComponent : ViewComponent
     {
+        List<CMessageBoardViewModel> messageBoards = new List<CMessageBoardViewModel>();
         public async Task<IViewComponentResult> InvokeAsync(int productID)
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
-            var firstMessageBoardIDs = dbContext.MessageBoards.Where(i => i.ProductId == productID && i.Parent == 0).Select(i => i.MessageBoardId).ToList();
-            foreach (var a in firstMessageBoardIDs)
+            var messages = dbContext.MessageBoards.Select(i => new CMessageBoardViewModel
             {
-                GetChildren(a);
+                messageBoard = i,
+                product = i.Product,
+                member = i.Member,
+            });
+            var firstMessageBoards = messages.Where(i => i.messageBoard.ProductId == productID && i.messageBoard.Parent == 0).ToList();
+            foreach (var a in firstMessageBoards)
+            {
+                messageBoards.Add(a);
+                GetChildren(a.messageBoard.MessageBoardId);
             }
             return View(messageBoards);
         }
-        //private List<int> messageBoardIDs = new List<int>();
-        private List<CMessageBoardViewModel> messageBoards = new List<CMessageBoardViewModel>();
         public void GetChildren(int messageBoardID)
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
@@ -31,9 +37,6 @@ namespace prjiSpanFinal.ViewComponents
                 product = i.Product,
                 member = i.Member,
             });
-            var firstMessage = messages.Where(i => i.messageBoard.MessageBoardId == messageBoardID).FirstOrDefault();
-
-            messageBoards.Add(firstMessage);
             var children = messages.Where(i => i.messageBoard.Parent == messageBoardID).ToList();
             if (children.Count > 0)
             {

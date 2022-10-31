@@ -18,7 +18,7 @@ $("#description").click(function () {
     $(".itemDescription").removeClass("d-none");
     $(".commentVC").removeClass("d-none").addClass("d-none");
     $(".buyerCountVC").removeClass("d-none").addClass("d-none");
-    $(".messageBoard").removeClass("d-none").addClass("d-none");
+    $(".messageBoardVC").removeClass("d-none").addClass("d-none");
 });
 
 $("#comment").click(function () {
@@ -26,7 +26,7 @@ $("#comment").click(function () {
     $(".itemDescription").removeClass("d-none").addClass("d-none");
     $(".commentVC").removeClass("d-none");
     $(".buyerCountVC").removeClass("d-none").addClass("d-none");
-    $(".messageBoard").removeClass("d-none").addClass("d-none");
+    $(".messageBoardVC").removeClass("d-none").addClass("d-none");
 });
 
 $("#buyerCount").click(function () {
@@ -34,7 +34,7 @@ $("#buyerCount").click(function () {
     $(".itemDescription").removeClass("d-none").addClass("d-none");
     $(".commentVC").removeClass("d-none").addClass("d-none");
     $(".buyerCountVC").removeClass("d-none");
-    $(".messageBoard").removeClass("d-none").addClass("d-none");
+    $(".messageBoardVC").removeClass("d-none").addClass("d-none");
 });
 
 $("#messageBoard").click(function () {
@@ -42,7 +42,7 @@ $("#messageBoard").click(function () {
     $(".itemDescription").removeClass("d-none").addClass("d-none");
     $(".commentVC").removeClass("d-none").addClass("d-none");
     $(".buyerCountVC").removeClass("d-none").addClass("d-none");
-    $(".messageBoard").removeClass("d-none");
+    $(".messageBoardVC").removeClass("d-none");
 });
 
 

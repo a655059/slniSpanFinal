@@ -1,13 +1,26 @@
 ﻿@model List<prjiSpanFinal.ViewModels.Item.CMessageBoardViewModel>
-
 @{ 
-    foreach (var i in Model)
+    int maxParent = Model.Select(i => i.messageBoard.Parent).Max();
+}
+<div class="bg-warning bg-opacity-10">
+    <div class="messageLayout text-center">
+        @{
+            foreach (var i in Model)
             {
-                <div>
+                string className = "parent" + i.messageBoard.Parent;
+                <div class="@className">
                     <div>@i.member.MemberAcc</div>
                     <div>@i.messageBoard.Message</div>
-                    <div>@i.product.ProductName</div>
                 </div>
             }
-}
+        }
+    </div>
+    
+</div>
 
+
+<script>
+    $(function () {
+
+    });
+</script>
