@@ -1,0 +1,20 @@
+﻿.balance-container{
+    width:100%;
+    justify-content:center;
+    text-align:center;
+    margin:10px 30px 10px 0;
+}
+#balanceHave {
+    font-size: 36px;
+    line-height: 54px;
+    letter-spacing: 1px;
+    font-weight:600;
+}
+#nav-tabContent {
+    border: 1px solid lightgrey;
+    margin: 10px;
+    border-radius:5px;
+}
+#nav-tabContent div{
+    padding:10px;
+}

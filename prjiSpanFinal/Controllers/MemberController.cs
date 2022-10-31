@@ -725,5 +725,40 @@ namespace prjiSpanFinal.Controllers
             HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult Balance()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login");   //如果沒有登入則要求登入
+            }
+            iSpanProjectContext db = new iSpanProjectContext();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            MyBalance ViewMondel = new MyBalance()
+            {
+                Balance = db.MemberAccounts.Where(m => m.MemberId == id).Select(m => m.Balance).FirstOrDefault(),
+            };
+            return View(ViewMondel);
+        }
+        public IActionResult BalanceCharge(string pay)
+        {
+            iSpanProjectContext db = new iSpanProjectContext();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            int money = Convert.ToInt32(pay);
+
+            MemberAccount user = db.MemberAccounts.Where(m => m.MemberId == id).FirstOrDefault();
+            user.Balance += money;
+            db.SaveChanges();
+            return Json(user.Balance);
+        }
+        //public IActionResult BalanceInfo(int status)
+        //{
+        //    iSpanProjectContext db = new iSpanProjectContext();
+        //    List<>
+        //    switch (status)
+        //    {
+        //        case 1:
+
+        //    }
+        //}
     }
 }
