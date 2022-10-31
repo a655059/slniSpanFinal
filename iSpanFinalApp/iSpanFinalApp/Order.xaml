@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <StackLayout>
             <StackLayout BackgroundColor="Orange" >
-                <Label HorizontalOptions="Start" Text="蝦到爆商城" TextColor="White" FontSize="40"></Label>
+                <Label HorizontalOptions="Start" Text="蝦到爆商城" TextColor="White" FontSize="40" Margin="10,0,0,0"></Label>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" Margin="10">
@@ -28,21 +28,21 @@
             <StackLayout Margin="10">
                 <Label Text="您的訂單:" FontSize="Large"></Label>
             </StackLayout>
-            <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent">
+            <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Grid Padding="3">
                                 <StackLayout>
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding OrderStatusName}" FontSize="Large" TextColor="Blue"/>
+                                        <Label Text="{Binding OrderStatusName}" FontSize="Large" TextColor="Blue" Margin="10,0,0,0"/>
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="結帳時間:" FontSize="Medium" TextColor="Black"/>
+                                        <Label Text="結帳時間:" FontSize="Medium" TextColor="Black" Margin="10,0,0,0"/>
                                         <Label Text="{Binding OrderDatetimeCool}" FontSize="Medium" TextColor="Black"/>
                                     </StackLayout>
                                     <StackLayout  Orientation="Horizontal">
-                                        <Image Source="{Binding SourcePic}" WidthRequest="100" HeightRequest="100"/>
+                                        <Image Source="{Binding SourcePic}" WidthRequest="100" HeightRequest="100" Margin="10,0,0,0"/>
                                         <StackLayout>
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{Binding ProductName}  " FontSize="Large" TextColor="Black"/>
@@ -59,7 +59,7 @@
                                         </StackLayout>
                                     </StackLayout>
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="查看更多這筆訂單資訊..." FontSize="Medium" TextColor="Gray"/>
+                                        <Label Text="查看更多這筆訂單資訊..." FontSize="Medium" TextColor="Gray" Margin="10,0,0,0"/>
                                     </StackLayout>
                                 </StackLayout>
                             </Grid>

@@ -16,6 +16,7 @@ namespace prjiSpanFinal.Models
             FollowFollowedMems = new HashSet<Follow>();
             FollowMembers = new HashSet<Follow>();
             Likes = new HashSet<Like>();
+            MessageBoards = new HashSet<MessageBoard>();
             Notifications = new HashSet<Notification>();
             Orders = new HashSet<Order>();
             PaymentToSellers = new HashSet<PaymentToSeller>();
@@ -60,6 +61,7 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Follow> FollowFollowedMems { get; set; }
         public virtual ICollection<Follow> FollowMembers { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<MessageBoard> MessageBoards { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentToSeller> PaymentToSellers { get; set; }
