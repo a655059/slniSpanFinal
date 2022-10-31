@@ -44,13 +44,13 @@
 }
 
 <div class="ps-2">
-    <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-        <a href="~/SalesCourt/賣場"> 回賣場</a>
-    </button>
-    <button class="btn btn-outline-success rounded-2 btn-sm ms-2">
-        <a href="~/SalesCourt/評價"> 評價</a>
-    </button>
-   
+    @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2">*@
+        <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/賣場?id=@Model.Memberid"> 回賣場</a>
+    @*</button>*@
+    @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2">*@
+        <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/評價?id=@Model.Memberid"> 評價</a>
+    @*</button>*@
+    <input type="hidden" value="@Model.Memberid" id="abmeID" />
 </div>
 
 <div class="container">

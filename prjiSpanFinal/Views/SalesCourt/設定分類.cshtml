@@ -74,8 +74,8 @@
 
     </div>
 
-    <a role="button" id="submitcategory" href="/SalesCourt/賣場" class="btn btn-secondary">確定新增</a>
-
+    <a role="button" id="submitcategory" href="/SalesCourt/賣場?id=@Model.MemberId" class="btn btn-secondary">確定新增</a>
+    
 
 </form>
 
@@ -97,7 +97,8 @@
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button id="save" type="button" class="btn btn-primary">新增</button>
+                <button id="save" type="button" class="btn btn-primary" href="~/SalesCourt/賣場?id=@Model.MemberId">新增</button>
+                @*<a role="button" id="save" class="btn btn-primary" href="~/SalesCourt/賣場?id=@Model.MemberId">新增</a>*@
             </div>
         </div>
     </div>
