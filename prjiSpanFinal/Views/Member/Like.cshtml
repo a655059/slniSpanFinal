@@ -117,7 +117,7 @@
         <div class="itemcol" id="OriginShowItem">
 
             @{
-                if (Model.MyLikeShowItem.Count > 0 && Model.mylikeCancle != "cancle")
+                if (Model.MyLikeShowItem.Count > 0)
                 {
 
                     @await Component.InvokeAsync("MyLikeCategoryShow", new { shopProduct = Model.MyLikeShowItem });
@@ -186,7 +186,7 @@
                 $("#orderkeyword").val("");
                 keyword = "";
             }
-            $.getJSON(`/Member/AllLike`, { keyword: keyword, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+            $.postJSON(`/Member/SearchLike`, { keyword: keyword, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax}, function (data) {
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
                     $("#OriginShowItem").append(Items(data));
