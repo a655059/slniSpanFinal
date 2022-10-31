@@ -139,7 +139,6 @@
 </div>
 
 
-@*<form action="@Url.Content("~/seller/CreateToDB")" method="post">*@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10" id="change1">
@@ -154,7 +153,7 @@
                 <div class="d-flex justify-content-start">
                     <label class="名稱寬">名稱</label>
                     <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" />
-                    <span class="text-danger"></span>
+                    <span style="color:red;margin:2px" id="checkname"></span>
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-3">類別</label>
@@ -219,15 +218,14 @@
                         <div>
                             <div class="d-flex justify-content-start">
                                 <label class="名稱寬">數量</label>
-                                <input type="text" class="form-control 名稱 mx-3 textval" id="styleqty" />
+                                <input type="text" class="form-control 名稱 mx-3 textval" id="styleqty" /><span style="color:red;margin:2px" id="checkqty"></span>
                             </div>
                             <div class="d-flex justify-content-start">
                                 <label class="名稱寬 mt-2">價格</label>
-                                <input type="text" class="form-control 名稱 mx-3 textval mt-2" id="styleup" />
+                                <input type="text" class="form-control 名稱 mx-3 textval mt-2" id="styleup" /><span style="color:red;margin:3px" id="checkup"></span>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <button id="newmodelenter" class="my-2 btn btn-secondary">其他樣式</button>
@@ -267,14 +265,14 @@
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2 ">描述</label>
-                    <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea"></textarea>
+                    <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea"></textarea><span style="color:red;margin:3px" id="checkdes"></span>
                 </div>
 
 
                 <div class="d-flex justify-content-start mt-1">
-                    <label class="名稱寬">物流方式</label>
+                    <label class="名稱寬">物流方式</label><span style="color:red" id="addship"></span>
                     <div class="col-1"></div>
-                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
+                    <div class="row py-2 m-3 d-flex justify-content-around col-6 checkship">
                         @{
                             for (int i = 0; i < Model.memship.Count; i++)
                             {
@@ -290,9 +288,9 @@
                 </div>
 
                 <div class="d-flex justify-content-start ">
-                    <label class="名稱寬">付款方式</label>
+                    <label class="名稱寬">付款方式</label><span style="color:red" id="addpay"></span>
                     <div class="col-1"></div>
-                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
+                    <div class="row py-2 m-3 d-flex justify-content-around col-6  checkpay">
                         @{
                             foreach (var i in Model.mempay)
                             {
@@ -377,6 +375,7 @@
                 <div class="row">
                     <div class="col-5"></div>
                     <div class="col-7">
+                        <input type="button" value="上一步" class="btn btn-secondary m-4" id="back" />
                         <input type="submit" value="完成" class="btn btn-warning m-4" id="final" />
                     </div>
                 </div>
@@ -427,10 +426,7 @@
         })
 
         //資料暫存,後去把data變數傳入後端
-        let data = [
-            //['紅色', 7, 100, ''],
-            //['藍色', 10, 300, '']
-        ]
+        let data = [];
 
         let tbody = document.querySelector('tbody')
         for (let i = 0; i < data.length; i++) {
@@ -553,9 +549,35 @@
         //create下一步 按鈕
 
         next.addEventListener("click", function () {
-            $("#change1").css("display", "none");
-            $("#change2").css("display", "block");
+            if ($("#ProductName").val() == "") {
+                alert("名稱請填寫完整");
+            }
+            else if ($("#styleqty").val() == "") {
+                alert("數量請填寫完整");
+            }
+            else if ($("#styleup").val() == "") {
+                alert("價格請填寫完整");
+            }
+            else if ($("#Description").val() == "") {
+                alert("描述請填寫完整");
+            }
+            else if ($(".checkship").val() == "") {
+                alert("請至物流設定中設定物流");
+            }
+            else if ($(".checkpay").val() == "") {
+                alert("請至物流設定中設定付款");        
+            }
+            else{
+                $("#change1").css("display", "none");
+                $("#change2").css("display", "block");
+            }        
+        });
 
+        //create 上一步 按鈕
+
+        back.addEventListener("click", function () {
+            $("#change1").css("display", "block");
+            $("#change2").css("display", "none");
         });
 
         //=============================================
@@ -670,10 +692,44 @@
             setTimeout(function () {
                 location.href = "/Seller/NewIndex"
             }, 2000);
-
-            //轉json格式
-            @*let jsonall = JSON.stringify(pushData);
-            fetch("@Url.Content("~/Seller/CreateSuccess")" + `?jsonString=${jsonall}`);*@
+           
         })
+        //============防呆=====================
+        $("#ProductName").blur(function () {
+            if (($("#ProductName").val()) == "") {
+                $("#checkname").html("必填欄位");
+            }
+            else {
+                $("#checkname").html("");
+            }
+        });
+
+        $("#styleqty").blur(function () {
+            if (($("#styleqty").val()) == "") {
+                $("#checkqty").html("必填欄位");
+            }
+            else {
+                $("#checkqty").html("");
+            }
+        });
+
+        $("#styleup").blur(function () {
+            if (($("#styleup").val()) == "") {
+                $("#checkup").html("必填欄位");
+            }
+            else {
+                $("#checkup").html("");
+            }
+        });
+
+        $("#Description").blur(function () {
+            if (($("#Description").val()) == "") {
+                $("#checkdes").html("必填欄位");
+            }
+            else {
+                $("#checkdes").html("");
+            }
+        });
+
     </script>
 }
