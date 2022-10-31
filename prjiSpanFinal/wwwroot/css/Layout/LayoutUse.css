@@ -146,6 +146,7 @@ align-items:center;
     }
 .notification {
     position: relative;
+    
 }
 .notification-trigger {
     position:relative;
@@ -158,10 +159,11 @@ align-items:center;
     border: 1px solid #FF8000;
     border-radius: 10px;
     overflow: hidden;
+    max-height:600px;
 }
 .notification-item {
     color: #4F4F4F;
-    width:300px
+    width:400px
 }
 .notification-item-title 
 {padding: 10px;
