@@ -17,6 +17,16 @@
     </style>
 }
     <h1>消費糾紛</h1>
+    <form>
+        依類型篩選
+       <select id="filter" name="filter">
+             <option value="">選擇類型</option>
+           @foreach(var i in ViewBag.ArgumentType){
+                <option value="@i.ArgumentTypeName">@i.ArgumentTypeName</option>
+           }
+       </select> 
+        <input type="submit" value="全部" class="btn btn-outline-secondary" />
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -173,12 +183,23 @@
                 }
             })
         }
-           //選取一頁幾筆
+            //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/ArgumentList")"+`?pageSize=${pageSize}&filter=${Filter}`;
+       document.location.href=link;
+        })
+
+         //篩選
+    let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value
-            let link="@Url.Content("~/newManagement/ArgumentList")"+`?pageSize=${pageSize}`;
+            Filter=filter.options[filter.selectedIndex].value
+            let link="@Url.Content("~/newManagement/ArgumentList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })
     </script>

@@ -29,18 +29,18 @@ namespace prjiSpanFinal.Controllers
             {
                 FilterId = -1;
             }
-            if (keyword == null&& FilterId<0)
+            if (keyword == null && FilterId < 0)
             {
                 Prods = db.Products.Select(i => i);
             }
             else if (keyword == null)
             {
-                Prods = db.Products.Where(i=>i.ProductStatusId==FilterId).Select(i => i);
+                Prods = db.Products.Where(i => i.ProductStatusId == FilterId).Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Prods = db.Products.
-                     Where(i => i.ProductId == key&&i.ProductStatusId==FilterId).
+                     Where(i => i.ProductId == key && i.ProductStatusId == FilterId).
                      Select(e => e);
             }
             else
@@ -76,28 +76,28 @@ namespace prjiSpanFinal.Controllers
 
             return list;
         }
-        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword,string filter)
+        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword, string filter)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetProductsFromDatabase(keyword,filter);
+            var listUnpaged = GetProductsFromDatabase(keyword, filter);
             IPagedList<CProductListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult newProductList(string keyword, int? pageSize, int? page,string filter)
+        public IActionResult newProductList(string keyword, int? pageSize, int? page, string filter)
         {
-            ViewBag.pageSize=pageSize;
+            ViewBag.pageSize = pageSize;
             //每頁幾筆
             pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword,filter);
-            var PList = GetPagedProcess(page, (int)pageSize, keyword,filter);
+            ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword, filter);
+            var PList = GetPagedProcess(page, (int)pageSize, keyword, filter);
             //填入頁面資料
             return View(PList);
         }
@@ -216,11 +216,11 @@ namespace prjiSpanFinal.Controllers
                 else
                 {
                     mems = db.MemberAccounts.
-                        Where(i => i.MemberId == key ).
+                        Where(i => i.MemberId == key).
                         Select(e => e);
                 }
             }
-            else 
+            else
             {
                 if (FilterId > 0)
                 {
@@ -260,7 +260,7 @@ namespace prjiSpanFinal.Controllers
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetMembersFromDatabase(keyword,filter);
+            var listUnpaged = GetMembersFromDatabase(keyword, filter);
             IPagedList<CMemberListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, (int)pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
@@ -274,8 +274,8 @@ namespace prjiSpanFinal.Controllers
             pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetMemPagedProcess(page, (int)pageSize, keyword,filter);
-            var PList = GetMemPagedProcess(page,(int) pageSize, keyword,filter);
+            ViewBag.Prods = GetMemPagedProcess(page, (int)pageSize, keyword, filter);
+            var PList = GetMemPagedProcess(page, (int)pageSize, keyword, filter);
             //填入頁面資料
             return View(PList);
         }
@@ -340,7 +340,7 @@ namespace prjiSpanFinal.Controllers
                 FilterId = -1;
             }
 
-            if (keyword == null )
+            if (keyword == null)
             {
                 if (FilterId < 0)
                 {
@@ -429,14 +429,14 @@ namespace prjiSpanFinal.Controllers
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetOrdersFromDatabase(keyword,filter);
+            var listUnpaged = GetOrdersFromDatabase(keyword, filter);
             IPagedList<COrderListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult OrderList(string keyword,string filter, int? pageSize, int? page = 1)
+        public IActionResult OrderList(string keyword, string filter, int? pageSize, int? page = 1)
         {
             ViewBag.OrderStatus = (new iSpanProjectContext().OrderStatuses).Select(i => i);
             ViewBag.pageSize = pageSize;
@@ -444,8 +444,8 @@ namespace prjiSpanFinal.Controllers
             pageSize ??= 3;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetOrdersPagedProcess(page,(int)pageSize, keyword,filter);
-            var PList = GetOrdersPagedProcess(page, (int)pageSize, keyword,filter);
+            ViewBag.Prods = GetOrdersPagedProcess(page, (int)pageSize, keyword, filter);
+            var PList = GetOrdersPagedProcess(page, (int)pageSize, keyword, filter);
             //填入頁面資料
             return View(PList);
         }
@@ -570,7 +570,7 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region ReportRegion
-        public List<CReportListViewModel> GetReportsFromDatabase(string keyword,string filter)
+        public List<CReportListViewModel> GetReportsFromDatabase(string keyword, string filter)
         {
             var db = new iSpanProjectContext();
             List<CReportListViewModel> list = new();
@@ -593,7 +593,7 @@ namespace prjiSpanFinal.Controllers
                 }
                 else
                 {
-                    Reps = db.Reports.Where(i=>i.ReportStatusId==FilterId).Select(i => i);
+                    Reps = db.Reports.Where(i => i.ReportStatusId == FilterId).Select(i => i);
                 }
             }
             else if (int.TryParse(keyword, out int key))
@@ -607,7 +607,7 @@ namespace prjiSpanFinal.Controllers
                 else
                 {
                     Reps = db.Reports.
-                         Where(i =>i.ReportStatusId==FilterId&&(i.ReportId == key || i.ReporterId == key)).
+                         Where(i => i.ReportStatusId == FilterId && (i.ReportId == key || i.ReporterId == key)).
                          Select(e => e);
                 }
             }
@@ -622,7 +622,7 @@ namespace prjiSpanFinal.Controllers
                 else
                 {
                     Reps = db.Reports.
-                     Where(i =>i.ReportStatusId==FilterId&&i.Reason.Contains(keyword)).
+                     Where(i => i.ReportStatusId == FilterId && i.Reason.Contains(keyword)).
                      Select(e => e);
                 }
             }
@@ -655,14 +655,14 @@ namespace prjiSpanFinal.Controllers
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetReportsFromDatabase(keyword,filter);
+            var listUnpaged = GetReportsFromDatabase(keyword, filter);
             IPagedList<CReportListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult ReportList(string keyword,string filter, int? pageSize, int? page = 1)
+        public IActionResult ReportList(string keyword, string filter, int? pageSize, int? page = 1)
         {
             ViewBag.ReprotStatus = (new iSpanProjectContext().ReportStatuses).Select(i => i.ReportStatusName);
             ViewBag.pageSize = pageSize;
@@ -670,8 +670,8 @@ namespace prjiSpanFinal.Controllers
             pageSize ??= 3;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetReportPagedProcess(page,filter,(int)pageSize, keyword);
-            var PList = GetReportPagedProcess(page,filter,(int)pageSize, keyword);
+            ViewBag.Prods = GetReportPagedProcess(page, filter, (int)pageSize, keyword);
+            var PList = GetReportPagedProcess(page, filter, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -792,7 +792,7 @@ namespace prjiSpanFinal.Controllers
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetCouponsPagedProcess(page, (int)pageSize, keyword);
-            var PList = GetCouponsPagedProcess(page,(int)pageSize, keyword);
+            var PList = GetCouponsPagedProcess(page, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -820,32 +820,77 @@ namespace prjiSpanFinal.Controllers
         public IActionResult CouponEdit(Coupon coupon)
         {
             iSpanProjectContext db = new();
-            db.Coupons.Add(coupon);
+            var cp = db.Coupons.FirstOrDefault(i=>i.CouponId==coupon.CouponId);
+            cp.CouponName=coupon.CouponName;
+            cp.MemberId=coupon.MemberId;
+            cp.CouponName=coupon.CouponName;
+            cp.StartDate=coupon.StartDate;
+            cp.ExpiredDate=coupon.ExpiredDate;
+            cp.Discount=coupon.Discount;
+            cp.CouponCode=coupon.CouponCode;
+            cp.ReceiveStartDate=coupon.ReceiveStartDate;
+            cp.ReceiveEndDate=coupon.ReceiveEndDate;
+            cp.IsFreeDelivery=coupon.IsFreeDelivery;
+            cp.MinimumOrder=coupon.MinimumOrder;
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }
         #endregion
         #region ArgumentRegion
-        public List<CArgumentViewModel> GetArgumentsFromDatabase(string keyword)
+        public List<CArgumentViewModel> GetArgumentsFromDatabase(string keyword, string filter)
         {
             var db = new iSpanProjectContext();
             List<CArgumentViewModel> list = new();
             IQueryable<Argument> Arguments = null;
-            if (keyword == null)
+            int FilterId;
+            if (!String.IsNullOrEmpty(filter))
             {
-                Arguments = db.Arguments.Select(i => i);
-            }
-            else if (int.TryParse(keyword, out int key))
-            {
-                Arguments = db.Arguments.
-                     Where(i => i.ArgumentId == key || i.OrderId == key).
-                     Select(e => e);
+                FilterId = db.ArgumentTypes.FirstOrDefault(i => i.ArgumentTypeName == filter).ArgumentTypeId;
             }
             else
             {
-                Arguments = db.Arguments.
+                FilterId = -1;
+            }
+            if (keyword == null)
+            {
+                if (FilterId < 0)
+                {
+                    Arguments = db.Arguments.Select(i => i);
+                }
+                else
+                {
+                    Arguments = db.Arguments.Where(i => i.ArgumentTypeId == FilterId).Select(i => i);
+                }
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                if (FilterId < 0)
+                {
+                    Arguments = db.Arguments.
+                         Where(i => i.ArgumentId == key || i.OrderId == key).
+                         Select(e => e);
+                }
+                else
+                {
+                    Arguments = db.Arguments.
+                         Where(i => i.ArgumentTypeId == FilterId && (i.ArgumentId == key || i.OrderId == key)).
+                         Select(e => e);
+                }
+            }
+            else
+            {
+                if (FilterId < 0)
+                {
+                    Arguments = db.Arguments.
                     Where(i => i.ReasonText.Contains(keyword)).
+                    Select(e => e);
+                }
+                else
+                {
+                    Arguments = db.Arguments.
+                    Where(i => i.ArgumentTypeId == FilterId && i.ReasonText.Contains(keyword)).
                     Select(e => e); ;
+                }
             }
             var ArgumentTypeName = (from i in db.ArgumentTypes select i).ToList();
 
@@ -866,28 +911,29 @@ namespace prjiSpanFinal.Controllers
             }
             return list;
         }
-        protected IPagedList<CArgumentViewModel> GetArgumentsPagedProcess(int? page, int pageSize, string keyword)
+        protected IPagedList<CArgumentViewModel> GetArgumentsPagedProcess(int? page, int pageSize, string keyword, string filter)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetArgumentsFromDatabase(keyword);
+            var listUnpaged = GetArgumentsFromDatabase(keyword, filter);
             IPagedList<CArgumentViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult ArgumentList(string keyword, int? pageSize,int? page = 1)
+        public IActionResult ArgumentList(string keyword, string filter, int? pageSize, int? page = 1)
         {
+            ViewBag.ArgumentType = (new iSpanProjectContext().ArgumentTypes).Select(i => i);
             ViewBag.pageSize = pageSize;
             //每頁幾筆
             pageSize ??= 3;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetArgumentsPagedProcess(page,(int) pageSize, keyword);
-            var PList = GetArgumentsPagedProcess(page,(int) pageSize, keyword);
+            ViewBag.Prods = GetArgumentsPagedProcess(page, (int)pageSize, keyword, filter);
+            var PList = GetArgumentsPagedProcess(page, (int)pageSize, keyword, filter);
             //填入頁面資料
             return View(PList);
         }
@@ -1000,7 +1046,7 @@ namespace prjiSpanFinal.Controllers
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetEventsPagedProcess(page, (int)pageSize, keyword);
-            var PList = GetEventsPagedProcess(page,(int)pageSize, keyword);
+            var PList = GetEventsPagedProcess(page, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
