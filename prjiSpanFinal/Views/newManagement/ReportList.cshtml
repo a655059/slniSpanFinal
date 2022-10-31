@@ -21,6 +21,16 @@
         <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋,或不輸入回到列表" class="form-control" />
         <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
     </form>
+  <form>
+        依處理狀態篩選
+       <select id="filter" name="filter">
+             <option value="">選擇處理狀態</option>
+           @foreach(var i in ViewBag.ReprotStatus){
+                <option value="@i">@i</option>
+           }
+       </select> 
+        <input type="submit" value="全部狀態" class="btn btn-outline-secondary" />
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -232,8 +242,20 @@
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            let link="@Url.Content("~/newManagement/ReportList")"+`?pageSize=${pageSize}`;
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/ReportList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
+        })
+
+         //篩選MemberStauts
+    let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
+            pageSize=pagesize.options[pagesize.selectedIndex].value
+            Filter=filter.options[filter.selectedIndex].value
+            let link="@Url.Content("~/newManagement/ReportList")"+`?filter=${Filter}&pageSize=${pageSize}`;
+       document.location.href=link;
+        })
     </script>
     }
