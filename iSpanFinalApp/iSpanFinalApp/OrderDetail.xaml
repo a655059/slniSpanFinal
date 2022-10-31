@@ -5,7 +5,7 @@
     <ContentPage.Content>
 
         <StackLayout x:Name="outerstack">
-            <ScrollView>
+            <ScrollView Margin="10,0,0,0">
                 <StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <Label Text="{Binding OrderStatusName}" FontSize="56" TextColor="Blue"/>
@@ -67,10 +67,16 @@
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
+                    <StackLayout>
+                        <Label Text="給賣家的話:" FontSize="24" TextColor="Black"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding OrderMessage}" FontSize="16"/>
+                        </StackLayout>
+                    </StackLayout>
                 </StackLayout>
             </ScrollView>
-            <StackLayout Grid.Row="1" BackgroundColor="Orange" Orientation="Horizontal">
-                <Label Text="蝦到爆商城   總金額:$" FontSize="28" TextColor="White"/>
+            <StackLayout Grid.Row="1" BackgroundColor="Orange" Orientation="Horizontal" >
+                <Label Text="蝦到爆商城   總金額:$" FontSize="28" TextColor="White"  Margin="10,0,0,0"/>
                 <Label Text="{Binding BigTotal}" FontSize="28" TextColor="White"/>
             </StackLayout>
         </StackLayout>
