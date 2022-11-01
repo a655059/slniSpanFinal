@@ -36,10 +36,10 @@
             -ms-flex-align: center;
             -webkit-align-items: center;
             align-items: center;
-            
         }
-        .my-button-disabled{
-            display:none;
+
+        .my-button-disabled {
+            display: none;
         }
     </style>
 }
@@ -84,14 +84,14 @@
                             <div id="carouselExampleIndicators" class="carousel slide " data-bs-interval="4000" data-bs-ride="carousel">
                                 <div class="carousel-indicators">
                                     @*
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>*@
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>*@
                                     @{
                                         if (Model.WebADCarousel.Count > 0)
                                         {
 
                                             <button type="button" data-bs-target="#carouselExampleIndicators" id="carouselslide-0" data-bs-slide-to="0" class="active" aria-label="Slide 0"></button>
-                                            if (Model.WebADCarousel.Count >= 2)
+                                            if (Model.WebADCarousel.Count > 1)
                                             {
                                                 for (int i = 1; i < Model.WebADCarousel.Count; i++)
                                                 {
@@ -99,56 +99,63 @@
                                                 }
                                             }
                                         }
+                                        else
+                                        {
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                        }
 
 
                                     }
                                 </div>
-                                @*<div class="carousel-inner d-flex">
-                                    <div class="carousel-item active">
-                                        <a href="@Url.Content("~/FAQ/Index")">
-                                            <img src="~/img/Homepage/DM-1HP_Mention.png" />
-                                        </a>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <a href="@Url.Content("~/Event/Discount")">
-                                            <img src="~/img/Homepage/DM-1HP_COUPOIN.png" />
-                                        </a>
-                                    </div>*@
-                                @{
-                                    if (Model.WebADCarousel.Count >= 2)
-                                    {
-                                        <div class="carousel-item active">
-                                            <a href="">
-                                                @{var base64Image = Convert.ToBase64String(Model.WebADCarousel[0].WebAdimage);
-                                                    var source = String.Format("data:image/png;base64,{0}", base64Image);
-                                                    <img src="@source" />
-                                                }
-                                            </a>
-                                        </div>
-                                        for (int i = 1; i < Model.WebADCarousel.Count; i++)
+                                <div class="carousel-inner d-flex">
+                                    @{
+                                        if (Model.WebADCarousel.Count > 0)
                                         {
-                                            <div class="carousel-item">
+                                            <div class="carousel-item active">
                                                 <a href="">
-                                                    @{ base64Image = Convert.ToBase64String(Model.WebADCarousel[i].WebAdimage);
-                                                        source = String.Format("data:image/png;base64,{0}", base64Image);
+                                                    @{var base64Image = Convert.ToBase64String(Model.WebADCarousel[0].WebAdimage);
+                                                        var source = String.Format("data:image/png;base64,{0}", base64Image);
                                                         <img src="@source" />
                                                     }
                                                 </a>
                                             </div>
+                                            if (Model.WebADCarousel.Count > 1)
+                                            {
+                                                for (int i = 1; i < Model.WebADCarousel.Count; i++)
+                                                {
+                                                    <div class="carousel-item">
+                                                        <a href="">
+                                                            @{ base64Image = Convert.ToBase64String(Model.WebADCarousel[i].WebAdimage);
+                                                                source = String.Format("data:image/png;base64,{0}", base64Image);
+                                                                <img src="@source" />
+                                                            }
+                                                        </a>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="carousel-item active">
+                                                <a href="@Url.Content("~/FAQ/Index")">
+                                                    <img src="~/img/Homepage/DM-1HP_Mention.png" />
+                                                </a>
+                                            </div>
+
+
                                         }
                                     }
-
-                                }
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                                </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
                     </div>
                     <div class="split2"></div>
                     <div class="cateheader-2">
@@ -229,9 +236,9 @@
 
     <div class="HP-Panel" id="Best-Buy">
         <div class="HP-Header">
-            <img src="~/img/Homepage/SellsOnFire.png" />
+            <img src="~/img/Homepage/BBIcon.png" />
             <div class="HP-Header-Text">
-                <span class="HP-Header-Title">發燒商品</span>
+                <span class="HP-Header-Title">激推商品</span>
                 <span class="HP-Header-SubTitle">大家都在看</span>
             </div>
         </div>
@@ -244,7 +251,8 @@
         <div class="d-flex justify-content-center">
             <div class="row">
                 <div class="text-start">
-                    <div class="text-strat-text">
+                    <div class="text-start-text">
+                        <img src="~/img/Homepage/guesslike.png" />
                         <span class="fs-3 fw-bold text-primary guessliketitle">猜你喜歡</span>
                         <span class="fs-6 text-muted">有著你想要的東西</span>
                     </div>
