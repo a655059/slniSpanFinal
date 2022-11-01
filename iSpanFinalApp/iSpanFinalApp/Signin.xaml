@@ -5,27 +5,27 @@
     <ContentPage.Content>
         <StackLayout Margin="10,0,10,0">
             <StackLayout>
-                <Label Text="姓名" FontSize="20" />
-                <Entry x:Name="txtName" FontSize="20" WidthRequest="200" Placeholder="姓名" Text=""/>
-                <Label Text="帳號" FontSize="20" />
-                <Entry x:Name="txtID" FontSize="20" WidthRequest="200" Placeholder="帳號" Text=""/>
-                <Label Text="密碼" FontSize="20"/>
-                <Entry x:Name="txtPW" FontSize="20" WidthRequest="200" Placeholder="密碼" Text="" IsPassword="True"/>
-                <Label Text="確認密碼" FontSize="20"/>
-                <Entry x:Name="txtconfirmPW" FontSize="20" WidthRequest="200" Placeholder="確認密碼" Text="" IsPassword="True"/>
-                <Label Text="電話號碼" FontSize="20"/>
-                <Entry x:Name="txtPhone" FontSize="20" WidthRequest="200" Placeholder="電話號碼" Text=""/>
-                <Label Text="Email" FontSize="20"/>
-                <Entry x:Name="txtEmail" FontSize="20" WidthRequest="200" Placeholder="xxx@gmail.com" Text=""/>
+                <Label Text="姓名" FontSize="18" />
+                <Entry x:Name="txtName" FontSize="18" WidthRequest="200" Placeholder="姓名" Text=""/>
+                <Label Text="帳號" FontSize="18" />
+                <Entry x:Name="txtID" FontSize="18" WidthRequest="200" Placeholder="帳號" Text=""/>
+                <Label Text="密碼" FontSize="18"/>
+                <Entry x:Name="txtPW" FontSize="18" WidthRequest="200" Placeholder="密碼" Text="" IsPassword="True"/>
+                <Label Text="確認密碼" FontSize="18"/>
+                <Entry x:Name="txtconfirmPW" FontSize="18" WidthRequest="200" Placeholder="確認密碼" Text="" IsPassword="True"/>
+                <Label Text="電話號碼" FontSize="18"/>
+                <Entry x:Name="txtPhone" FontSize="18" WidthRequest="200" Placeholder="電話號碼" Text=""/>
+                <Label Text="Email" FontSize="18"/>
+                <Entry x:Name="txtEmail" FontSize="18" WidthRequest="200" Placeholder="xxx@gmail.com" Text=""/>
             </StackLayout>
             <StackLayout VerticalOptions="EndAndExpand">
-                <Button x:Name="signin" FontSize="20" Text="註冊" Clicked="signin_Clicked"  BackgroundColor="Orange"></Button>
+                <Button x:Name="signin" FontSize="18" Text="註冊" Clicked="signin_Clicked"  BackgroundColor="Orange"></Button>
             </StackLayout>
             <StackLayout Orientation="Horizontal" BackgroundColor="OrangeRed" VerticalOptions="EndAndExpand">
-                <Button Clicked="btnDemo1" Margin="3" VerticalOptions="Start" Text="Acc" BackgroundColor="White" FontSize="20"></Button>
-                <Button Clicked="btnDemo2" Margin="3" VerticalOptions="Start" Text="Phone" BackgroundColor="White" FontSize="20"></Button>
-                <Button Clicked="btnDemo3" Margin="3" VerticalOptions="Start" Text="Mail" BackgroundColor="White" FontSize="20"></Button>
-                <Button Clicked="btnDemo4" Margin="3" VerticalOptions="Start" Text="OK" BackgroundColor="White" FontSize="20"></Button>
+                <Button Clicked="btnDemo1" Margin="2" VerticalOptions="Start" Text="Acc" BackgroundColor="White" FontSize="18"></Button>
+                <Button Clicked="btnDemo2" Margin="2" VerticalOptions="Start" Text="Phone" BackgroundColor="White" FontSize="18"></Button>
+                <Button Clicked="btnDemo3" Margin="2" VerticalOptions="Start" Text="Mail" BackgroundColor="White" FontSize="18"></Button>
+                <Button Clicked="btnDemo4" Margin="2" VerticalOptions="Start" Text="OK" BackgroundColor="White" FontSize="18"></Button>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

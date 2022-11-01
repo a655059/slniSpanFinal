@@ -147,7 +147,7 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(null);
         }
-        public IActionResult Signin(string txtAccount, string txtPW, string txtPhone, string txtEmail)
+        public IActionResult Signin(string txtName, string txtAccount, string txtPW, string txtPhone, string txtEmail)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             if (dbcontext.MemberAccounts.Where(m=>m.MemberAcc == txtAccount).Any())
@@ -165,7 +165,7 @@ namespace prjiSpanFinal.Controllers
             string pName = "/img/Member/nopicmem.jpg";
             string path = _enviro.WebRootPath + pName;
             byte[] content = System.IO.File.ReadAllBytes(path);
-            dbcontext.MemberAccounts.Add(new MemberAccount() {MemberAcc = txtAccount, MemberPw = txtPW, Phone = txtPhone, Email = txtEmail, MemPic = content });
+            dbcontext.MemberAccounts.Add(new MemberAccount() {MemberAcc = txtAccount, MemberPw = txtPW, Phone = txtPhone, Email = txtEmail, MemPic = content, RegionId= 1, MemStatusId = 1,Name = txtName });
             dbcontext.SaveChanges();
             return Json("0");
         }
