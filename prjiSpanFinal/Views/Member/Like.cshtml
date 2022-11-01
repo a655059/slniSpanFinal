@@ -50,8 +50,8 @@
     <div class="col-1"></div>
     <div class="col-11 ">
         <div class="input-group mb-1">
-            <input type="text" class="form-control input-text" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <button class="btn btn-outline-warning btn-lg" type="button"><i>搜尋</i></button>
+            <input type="text" class="form-control input-text" placeholder="搜尋產品" aria-label="Recipient's username" id="orderkeyword" aria-describedby="basic-addon2">
+            <button class="btn btn-primary" type="button" id="btnDate"><i>搜尋</i></button>
         </div>
 
         <div class="itembody">
@@ -117,7 +117,7 @@
         <div class="itemcol" id="OriginShowItem">
 
             @{
-                if (Model.MyLikeShowItem.Count > 0 && Model.mylikeCancle != "cancle")
+                if (Model.MyLikeShowItem.Count > 0)
                 {
 
                     @await Component.InvokeAsync("MyLikeCategoryShow", new { shopProduct = Model.MyLikeShowItem });
@@ -145,36 +145,48 @@
 
         let SortOrder = 1;
         let pages = 0;
+        let searchflag = false;
         @*let BigtypeId = "@Model.SearchType.BigTypeId";*@
         //let sort1 = document.getElementById("SortOrder1");
         //let menu = document.getElementById("dropdownMenuLink");
         const cancle = document.querySelector("#deletMylike")
         const subtn = document.querySelector("#subtn")
-        let checkedValuesArray =[];
+        let ArrpdID = [];
+
         //$('input:checkbox[checked=true]').each(function (item) {
         //    item.val();
         //})
-        subtn.addEventListener("click", () => {
-            
-            for (let i = 0; i < $(".democheck").length; i++) {
-                checkedValuesArray.push($(".democheck")[i].checked);
+
+        $("#btnDate").click(function (event) {
+            if (searchflag) {
+                searchflag = false;
+                $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
+                $("#btnDate").val("搜尋");
+                $("#orderkeyword").removeAttr("readonly");
             }
-            console.log(checkedValuesArray)
+
+            else {
+                searchflag = true;
+                $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
+                $("#btnDate").val("解除搜尋");
+                $("#orderkeyword").removeAttr("readonly", "readonly");
+            }
+            let target = $(event.target);
+            SortOrder = target.find("input").val();
+            load();
         })
 
 
-
-
-
-        subtn.addEventListener("click", () => {
-            $("#subtn").style.display = "none";
-            $('input:checkbox[checked=true]').each(function (item) {
-                console.log(item)
-                checkedValues.push(item.val());
-                console.log(checkedValues.join(','));
-            })
-
-            $.postJSON(`/member/deletLike`, { filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }), function (data) {
+        function load() {
+            let keyword;
+            if (searchflag) {
+                keyword = $("#orderkeyword").val();
+            }
+            else {
+                $("#orderkeyword").val("");
+                keyword = "";
+            }
+            $.postJSON(`/Member/SearchLike`, { keyword: keyword, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax}, function (data) {
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
                     $("#OriginShowItem").append(Items(data));
@@ -182,8 +194,48 @@
                 else {
                     $("#OriginShowItem").html("<div>暫待新增商品</div>");
                 }
+            })
+
+        }
+
+
+        $("#subtn").on("click", $(".AAA"), function () {
+            let dataAll = document.querySelectorAll(".democheck:checked")
+            //dataAll.forEach(p =>console.log(p.getAttribute("value")))
+            for (let i = 0; i < dataAll.length; i++) {
+                ArrpdID.push(dataAll[i].getAttribute('value'));
+            }
+            subtn.style.display = "none";
+            //console.log(ArrpdID)
+                /*dataAll.forEach(p => p.getAttribute("value"))*/
+
+            //let data = $(".democheck:checked").attr("value")
+            //console.log(data)
+            //checkedValuesArray.push($(".democheck:checked").attr("value"))
+            //console.log("2")
+            //console.log(checkedValuesArray)
+
+            $.postJSON(`/member/deletLike`, { PdID: ArrpdID, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }), function (data) {
+                $("#OriginShowItem").html("");
+                if (data.length > 0) {
+                    $("#OriginShowItem").append(deletItems(data));
+                }
+                else {
+                    $("#OriginShowItem").html("<div>暫待新增商品</div>");
+                }
 
             }
+
+            $.getJSON(`/Member/AllLike`, { filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+                $("#OriginShowItem").html("");
+                if (data.length > 0) {
+                    $("#OriginShowItem").append(Items(data));
+                }
+                else {
+                    $("#OriginShowItem").html("<div>暫待新增商品</div>");
+                }
+            })
+
 
         })
 
@@ -258,7 +310,6 @@
                 item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
                         <div class="cardTitleBox">
                         <div class="cardTitle"> ${ data[i].product.productName}</div>
-                        <button type="button" class="btn btn-light">Light</button>
                         </div>`
                     if (data[i].price.Count == 1)
                     {
@@ -308,10 +359,9 @@
                 item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
                         <div class="cardTitleBox">
                         <div class="cardTitle"> ${ data[i].product.productName}</div>
-                        <div>
-                        <input type="checkbox" class"democheck">
+                        <div class="AAA">
+                        <input type="checkbox" class="democheck" id="inputcheck[${i}]" value="${data[i].product.productId}">
                         <label >收回讚</label>
-                        <input type="hidden" value="${data[i].likeID}">
                         </div>
                         </div>`
                     if (data[i].price.Count == 1)
