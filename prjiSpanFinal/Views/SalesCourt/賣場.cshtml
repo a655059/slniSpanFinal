@@ -67,8 +67,8 @@
 
             <div class="p-2">@Model.SellerName 的賣場</div>
             
-            <div class="ps-2"><a href="~/SalesCourt/評價?id=@Model.SellerId" class="text-primary">評價</a></div>
-            <div class="ps-2"><a href="~/SalesCourt/關於我?id=@Model.SellerId" class="text-primary">關於我</a></div>
+            <div class="ps-2"><a href="~/SalesCourt/評價?id=@Model.SellerId" class="text-primary linknoline">評價</a></div>
+            <div class="ps-2"><a href="~/SalesCourt/關於我?id=@Model.SellerId" class="text-primary linknoline">關於我</a></div>
 
             <div class="row">
                 <div class="col">
@@ -283,6 +283,7 @@
 
 </div>
 
+<div class="text-primary" style="color:deepskyblue">
 
 
 @section Scripts{
@@ -352,9 +353,9 @@
     function returncust(data) {
 
         return `
-           <li class=" salescourtclicklist">
-                <a role="button" class="salescourtclick">${data.name}</a>
-            </li>`;
+           <div class=" salescourtclicklist" >
+                <a role="button" class="salescourtclick linknoline text-primary" >${data.name}</a>
+            </div>`;
     }
 
 

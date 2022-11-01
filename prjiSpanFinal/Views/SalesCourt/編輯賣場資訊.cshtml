@@ -1,0 +1,160 @@
+﻿@model prjiSpanFinal.ViewModels.SalesCourt.Card賣場ViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "編輯賣場資訊";
+
+}
+@section Styles{
+   <style>
+       .ordersearchbar {
+           padding: 3px;
+           text-align: right;
+       }
+
+       .m-2 {
+           margin-top: 0.25rem !important;
+           margin-bottom: 0.25rem !important;
+       }
+   </style>
+}
+
+<input type="hidden" value="@Model.MemberId" id="editsalescourtid" />
+
+<h2 class="d-flex justify-content-center">編輯我的賣場</h2>
+<div id="orderdetaildiv">
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div class="ordersearchbar">
+                <input type="text" class="form-control rounded" placeholder="搜尋產品" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
+                <span>
+                     <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
+                </span>
+            </div>
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
+                    <input type="hidden" class="ordershipperstatus" value="0" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">訂單成立</a>
+                    <input type="hidden" class="ordershipperstatus" value="2" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已付款</a>
+                    <input type="hidden" class="ordershipperstatus" value="3" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已出貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="4" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已到貨</a>
+                    <input type="hidden" class="ordershipperstatus" value="5" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
+                    <input type="hidden" class="ordershipperstatus" value="8" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">待評價</a>
+                    <input type="hidden" class="ordershipperstatus" value="6" />
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ordernavtabs" href="#">已完成</a>
+                    <input type="hidden" class="ordershipperstatus" value="7" />
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="row">
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+            編號
+        </div>
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+            商品名稱
+        </div>
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+            商品價格
+        </div>
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+            商品星星
+        </div>
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+            商品售出數
+        </div>
+        <div class="row col align-content-center justify-content-center 內容文字大小">
+        </div>
+        <div class=" row align-content-center col justify-content-center mx-2" style="width:15px;height:20px"></div>
+    </div>
+</div>
+
+<div id="salescourtcardbody">
+
+
+</div>
+
+<div style="font-size:20px" class="m-2"></div>
+
+@section Scripts{
+    <script>
+        let mode = 0;
+        let eachpages = 1;
+        let nowpages = 1;
+        let customname = "";
+
+        function returnCard(data) {
+            return `<div class="row ">
+                <div class="row col align-content-center justify-content-center 內容文字大小">
+                    編號:
+                </div>
+                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
+                    ${data.name}
+                </div>
+                <div class="row col align-content-center justify-content-center 內容文字大小">
+                    ${data.price1} - ${data.price2}
+                </div>
+                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
+                    ${data.star}
+                </div>
+                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
+                    ${data.sales}
+                </div>
+                <div class="row col align-content-center justify-content-center 內容文字大小" style="width:15px; height:10px">
+                    <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco m-2">選為精選商品</a><br />
+                </div>
+                <div class=" row align-content-center col justify-content-center mx-2"></div>
+                                
+            </div>`;
+
+        }
+
+        load();
+
+        function load() {
+            let keyword = " ";
+
+            $.getJSON("/SalesCourt/GetCard", { id: editsalescourtid.value }, function (data) {
+
+                $("#salescourtcardbody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    console.log(data);
+                    /*$(".check").eq(i).a*/
+                    $("#salescourtcardbody").append(returnCard(data[i]));
+                }
+            })
+        }
+
+
+
+    </script>
+}
