@@ -30,6 +30,7 @@
         object-fit:contain;
     }
 .HP-Header-Text{
+    padding-left:5PX;
     
 }
 .HP-Header-Title {
@@ -211,7 +212,7 @@
 }
 /*猜你喜歡商品區*/
 .guessliketitle {
-    padding-left: 20px;
+    padding-left: 5px;
 }
 
 .itembody {
@@ -227,10 +228,13 @@
     flex-wrap: wrap;
     justify-content: flex-start
 }
-.text-strat-text {
+.text-start-text {
     border-bottom: 1px solid #FF8000;
 }
-
+.text-start-text img {
+    width: 20px;
+    object-fit: contain;
+}
 .showmoreitem {
     color: red;
     border: 1px solid red;

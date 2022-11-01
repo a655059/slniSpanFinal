@@ -11,10 +11,36 @@
     font-weight:600;
 }
 #nav-tabContent {
+    margin-top: 10px;
     border: 1px solid lightgrey;
-    margin: 10px;
-    border-radius:5px;
+    border-radius: 5px;
+    padding: 15px;
 }
-#nav-tabContent div{
-    padding:10px;
+#nav-tabItemBox{
+    margin-bottom:10px;
+}
+#nav-tabItemBody{
+    width:85%;
+}
+#nav-tabItemTitle {
+    font-size: 20px;
+}
+#nav-tabItemDate {
+    font-size:14px;
+}
+#nav-tabItemAmount{
+    width:15%;
+}
+#nav-tabItemAmount > img {
+    width: 48px;
+    height: 48px;
+}
+    #nav-tabItemAmount > div {
+        font-size: 24px;
+        line-height: 36px;
+        letter-spacing: .9px;
+        text-align:start;
+    }
+#PagesArea{
+    margin:15px 0;
 }
