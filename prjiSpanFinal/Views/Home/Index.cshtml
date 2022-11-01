@@ -17,6 +17,7 @@
             --swiper-navigation-size: 25px;
             overflow: hidden;
             outline: none;
+            z-index: auto;
         }
 
         .swiper-slide {
@@ -36,6 +37,12 @@
             -ms-flex-align: center;
             -webkit-align-items: center;
             align-items: center;
+        }
+        .swiper-button-next, .swiper-button-prev {
+            z-index:auto;
+        }
+        .swiper-wrapper{
+            z-index:auto;
         }
 
         .my-button-disabled {
@@ -289,7 +296,6 @@
     </section>
     @section Scripts{
         <script src="~/js/Homepage/Index.js"></script>
-
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <script>
             var swiper = new Swiper(".mySwiper", {
