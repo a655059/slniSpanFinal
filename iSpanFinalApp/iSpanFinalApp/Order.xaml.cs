@@ -93,5 +93,52 @@ namespace iSpanFinalApp
                 await Navigation.PushAsync(new OrderDetail(ods));
             }
         }
+
+        private async void btnbuyer_Clicked(object sender, EventArgs e)
+        {
+            btnbuyer.BackgroundColor = Color.Orange;
+            btnseller.BackgroundColor = Color.LightGray;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = thiscompurl;
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var result = await client.GetStringAsync($"/MsgApi/GetOrders?id={mem.MemberId}");
+            var ods = JsonConvert.DeserializeObject<List<OrderListViewModel>>(result);
+            if (ods.Count != 0)
+            {
+                listItem.ItemsSource = ods;
+                listItem.ItemTapped += btnOD;
+            }
+            else
+            {
+                listItem.ItemsSource = ods;
+            }
+        }
+
+        private async void btnseller_Clicked(object sender, EventArgs e)
+        {
+            btnbuyer.BackgroundColor = Color.LightGray;
+            btnseller.BackgroundColor = Color.Orange;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = thiscompurl;
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var result = await client.GetStringAsync($"/MsgApi/GetOrdersSeller?id={mem.MemberId}");
+            var ods = JsonConvert.DeserializeObject<List<OrderListViewModel>>(result);
+            if (ods.Count != 0)
+            {
+                listItem.ItemsSource = ods;
+                listItem.ItemTapped += btnOD;
+            }
+            else
+            {
+                listItem.ItemsSource = ods;
+            }
+        }
+
+        private async void logout_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
     }
 }

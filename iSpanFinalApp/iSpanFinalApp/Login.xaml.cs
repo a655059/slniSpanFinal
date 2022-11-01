@@ -49,6 +49,7 @@ namespace iSpanFinalApp
             {
                 await DisplayAlert("登入成功", "帳號密碼正確，成功登入。", "OK");
                 await Navigation.PushAsync(new Order(member));
+                txtID.Text = txtPW.Text = "";
             }
         }
 
@@ -73,5 +74,9 @@ namespace iSpanFinalApp
             txtPW.Text = "shirannfla";
         }
 
+        private async void btnSignin_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Signin());
+        }
     }
 }
