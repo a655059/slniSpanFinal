@@ -28,8 +28,8 @@
             </StackLayout>
             <StackLayout Margin="10" Orientation="Horizontal">
                 <Label Text="您的訂單:" FontSize="Large" VerticalTextAlignment="Center"></Label>
-                <Button x:Name="btnbuyer" Text="買東西" Margin="100,0,0,0" FontSize="Large" BackgroundColor="Orange" Clicked="btnbuyer_Clicked"></Button>
-                <Button x:Name="btnseller" Text="賣東西" FontSize="Large" BackgroundColor="LightGray" Clicked="btnseller_Clicked"></Button>
+                <Button x:Name="btnbuyer" Text="我是買家" Margin="60,0,0,0" FontSize="Large" BackgroundColor="Orange" Clicked="btnbuyer_Clicked"></Button>
+                <Button x:Name="btnseller" Text="我是賣家" FontSize="Large" BackgroundColor="LightGray" Clicked="btnseller_Clicked"></Button>
             </StackLayout>
             <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent" >
                 <ListView.ItemTemplate>

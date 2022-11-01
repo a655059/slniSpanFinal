@@ -33,7 +33,7 @@ namespace iSpanFinalApp
             client.BaseAddress = thiscompurl;
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var re = await client.GetStringAsync($"/MsgApi/Signin?txtAccount={txtID.Text}&txtPW={txtPW.Text}&txtPhone={txtPhone.Text}&txtEmail={txtEmail.Text}");
+            var re = await client.GetStringAsync($"/MsgApi/Signin?txtName={txtName.Text}&txtAccount={txtID.Text}&txtPW={txtPW.Text}&txtPhone={txtPhone.Text}&txtEmail={txtEmail.Text}");
             var st = JsonConvert.DeserializeObject<string>(re);
             if (st == "0")
             {
