@@ -10,10 +10,10 @@
     var pagedList = (IPagedList)ViewBag.Prods;   
     if(ViewBag.pageSize==null){ ViewBag.pageSize = 5; }
 }
-<h1>非活動優惠券</h1>
+<h1>活動優惠券</h1>
 
 <p>
-    <a asp-action="CouponCreate" class="btn btn-light">新增優惠券</a>
+    <a asp-action="EventCouponCreate" class="btn btn-light">新增活動優惠券</a>
 </p>
 
 <table class="table">
@@ -110,6 +110,7 @@
         }
     </tbody>
 </table>
+
 @*分頁導覽*@
 <div style="align-content:center" class="paginations">
     @{int ps = 3;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
@@ -142,7 +143,8 @@
      筆
 </div>
 @*分頁導覽*@
-
+@Html.ActionLink("回到活動列表", "EventList","newManagement", null,new{
+                            @class="btn btn-danger mb-2"})
 
 @section Scripts{
     <script>

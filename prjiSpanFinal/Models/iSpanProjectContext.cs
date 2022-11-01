@@ -66,6 +66,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<SubOfficialEventList> SubOfficialEventLists { get; set; }
         public virtual DbSet<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
         public virtual DbSet<TradeFeeList> TradeFeeLists { get; set; }
+        public virtual DbSet<Verify> Verifies { get; set; }
         public virtual DbSet<WebAd> WebAds { get; set; }
         public virtual DbSet<WebAdimageType> WebAdimageTypes { get; set; }
 
@@ -1250,6 +1251,8 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.SubOfficialEventListId).HasColumnName("SubOfficialEventListID");
 
+                entity.Property(e => e.VerifyId).HasColumnName("VerifyID");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SubOfficialEventToProducts)
                     .HasForeignKey(d => d.ProductId)
@@ -1261,6 +1264,12 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.SubOfficialEventListId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubOfficialEventToProduct_SubOfficialEventList");
+
+                entity.HasOne(d => d.Verify)
+                    .WithMany(p => p.SubOfficialEventToProducts)
+                    .HasForeignKey(d => d.VerifyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOfficialEventToProduct_Verifies");
             });
 
             modelBuilder.Entity<TradeFeeList>(entity =>
@@ -1280,6 +1289,15 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TradeFeeList_Orders");
+            });
+
+            modelBuilder.Entity<Verify>(entity =>
+            {
+                entity.Property(e => e.VerifyId).HasColumnName("VerifyID");
+
+                entity.Property(e => e.VerifyName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<WebAd>(entity =>

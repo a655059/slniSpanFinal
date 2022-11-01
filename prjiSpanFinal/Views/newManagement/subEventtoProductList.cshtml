@@ -1,0 +1,107 @@
+﻿@model IEnumerable<subEventtoProductListViewModel>
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Core.Fluent;
+@using X.PagedList.Web.Common;
+@using prjiSpanFinal.ViewModels.newManagement
+@{
+    ViewData["Title"] = "subEventtoProductList";
+    var pagedList = (IPagedList)ViewBag.Prods;
+    if (ViewBag.pageSize == null) { ViewBag.pageSize = 5; }
+}
+
+<h1>參加活動商品</h1>
+<form>
+    <input type="search" name="keyword" placeholder="輸入內容進行搜尋,或不輸入回到列表" class="form-control" />
+    <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+</form>
+<form>
+    依類型篩選
+    <select id="filter" name="filter">
+        <option value="">選擇類型</option>
+        @foreach (var i in ViewBag.Verifies)
+        {
+            <option value="@i.VerifyName">@i.VerifyName</option>
+        }
+    </select>
+    <input type="submit" value="全部" class="btn btn-outline-secondary" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                子活動名稱
+            </th>
+            <th>
+                商品名稱
+            </th>
+            <th>
+                審核狀態
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubOfficialEventToProduct.SubOfficialEventToProductId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.subEventName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    <label class="statusname">@item.Verify</label>
+                </td>
+                <td>
+                    <a class="Approve btn btn-primary"  name="@item.SubOfficialEventToProduct.ProductId/@item.ProductName">通過</a>
+                    <a class="Deny btn btn-primary" name="@item.SubOfficialEventToProduct.ProductId/@item.ProductName">不通過</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        let Approve=document.querySelectorAll(".Approve");
+        let Deny=document.querySelectorAll(".Deny");
+            for (var BTNDeny of Approve) {
+            BTNDeny.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let id=event.currentTarget.name.split("/")[0]
+                let pname=event.currentTarget.name.split("/")[1]
+                let response = await fetch("@Url.Content("~/newManagement/EtoPApprove")" + `?id=${id}`)
+                let data = await response.text();
+                if (data !=null) {
+                    $(this).closest("td").siblings().find(".statusname").val("通過");
+                    alert("審核通過");
+                    happy_sendnoti(4, parseInt(data), `您的商品已經通過活動審核`, "/Member/Order", `您的商品${pname},於前日提出申請參加活動,已經通過活動審核`);
+                    }
+                }
+            })
+         for (var BTNDeny of Deny) {
+            BTNDeny.addEventListener("click", async function (event) {
+                event.preventDefault();
+                let id=event.currentTarget.name.split("/")[0]
+                let pname=event.currentTarget.name.split("/")[1]
+                let response = await fetch("@Url.Content("~/newManagement/EtoPDeny")" + `?id=${id}`)
+                let data = await response.text();
+                if (data !=null) {
+                    $(this).closest("td").siblings().find(".statusname").val("不通過");
+                    alert("審核不通過");
+                    happy_sendnoti(4, parseInt(data), `您的商品未通過活動審核`, "/Member/Order", `您的商品${pname},於前日提出申請參加活動,但通過活動審核,請嘗試以其他商品再次進行申請`);
+                    }
+                }
+            })
+    </script>
+
+
+
+}
