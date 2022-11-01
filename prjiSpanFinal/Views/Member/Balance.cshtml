@@ -16,6 +16,7 @@
         <div class="col-1"></div>
         <div class="col-11">
             <div class="balance-container">
+                <img src="~/img/ShaShaCoin.png" />
                 <div>
                     現存蝦蝦幣
                 </div>
@@ -25,10 +26,10 @@
                     <span>
                         儲值蝦蝦幣：
                     </span>
-                    <input type="text" id="charge" />
+                    <input type="text" onkeypress="isNumberKey(event)" id="charge" />
                 </div>
                 <br />
-                <div class="btn btn-success" onkeypress="isNumberKey(event)" id="chargebtn">儲值</div>
+                <div class="btn btn-success" id="chargebtn">儲值</div>
             </div>
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -38,7 +39,8 @@
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">123</div>
+                <div>
+                </div>
             </div>
         </div>
     </div>
@@ -48,19 +50,18 @@
                     const charge = $("#charge")
                     const item = $(".nav-item");
                     let currentFilter = 0;
-                    const pane = $(".tab-pane");
+        const pane = $(".tab-pane");
+
+
+        RefreshRecord();
+
                     item.click(function (event) {
                         item.removeClass("active");
                         $(this).addClass("active");
                         currentFilter = parseInt($(this).attr("id"));
-                        console.log(currentFilter);
+                        RefreshRecord();
                     })
-                    function isNumberKey(evt) {
-                        var charCode = (evt.which) ? evt.which : evt.keyCode
-                        if (charCode > 31 && (charCode < 48 || charCode > 57))
-                            return false;
-                        return true;
-                    }
+
 
                     $("#chargebtn").click(function () {
                         if (parseInt(charge.val()) > 0) {
@@ -70,8 +71,48 @@
                                 }
                                 charge.val("");
                             })
+                            item.removeClass("active");
+                            $("#0").addClass("active");
+                            currentFilter = 0;
+                            RefreshRecord();
                         }
                     })
+        function RefreshRecord() {
+            $.post(`BalanceInfo`, { status: currentFilter }, function (data) {
+                $("#nav-tabContent").html("");
+                res = "";
+                console.log(data);
+                if (data.length>0) {
+                    for (let i = 0; i < data.length; i++) {
+                        res += `
+                    <div class="d-flex justify-content-between" id="nav-tabItemBox">
+                        <div class="row" id="nav-tabItemBody">
+                            <div id="nav-tabItemTitle">`;
+                        res += data[i].recordReason;
+                        res += `</div>
+                            <div id="nav-tabItemDate">`;
+                        res += data[i].recordDate
+                        res += `</div>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-center" id="nav-tabItemAmount">
+                            <img src="/img/ShaShaCoin.png" />
+                            <div class="d-flex">`;
+                        if (data[i].recordMoney > 0) {
+                            res+="+"
+                        }
+                        res += data[i].recordMoney
+                            res+=`</div>
+                        </div>
+                    </div>
+                `;
+                    }
+                }
+                else {
+                    res = `<div class="d-flex justify-content-between">尚無交易紀錄</div>`;
+                }
+                $("#nav-tabContent").html(res);
+            })
+        }
     </script>
 
 }

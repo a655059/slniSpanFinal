@@ -804,18 +804,24 @@ namespace prjiSpanFinal.Controllers
 
             MemberAccount user = db.MemberAccounts.Where(m => m.MemberId == id).FirstOrDefault();
             user.Balance += money;
+            BalanceRecord record = new BalanceRecord()
+            {
+                MemberId = id,
+                Amount = money,
+                Reason = "Charge",
+                Record = DateTime.Now,
+            };
+            db.BalanceRecords.Add(record);
             db.SaveChanges();
             return Json(user.Balance);
         }
-        //public IActionResult BalanceInfo(int status)
-        //{
-        //    iSpanProjectContext db = new iSpanProjectContext();
-        //    List<>
-        //    switch (status)
-        //    {
-        //        case 1:
-
-        //    }
-        //}
+        public IActionResult BalanceInfo(int status)
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<BalanceRecordViewModel> res = new List<BalanceRecordViewModel>();
+            res = (new BalanceFactory()).fBalanceRecordFilter( id, status);
+            
+            return Json(res);
+        }
     }
 }
