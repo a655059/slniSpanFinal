@@ -40,6 +40,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<MemStatus> MemStatuses { get; set; }
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
         public virtual DbSet<MessageBoard> MessageBoards { get; set; }
+        public virtual DbSet<MessageBoardLike> MessageBoardLikes { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
         public virtual DbSet<OfficialEventType> OfficialEventTypes { get; set; }
@@ -636,6 +637,29 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MessageBoard_Product");
+            });
+
+            modelBuilder.Entity<MessageBoardLike>(entity =>
+            {
+                entity.ToTable("MessageBoardLike");
+
+                entity.Property(e => e.MessageBoardLikeId).HasColumnName("MessageBoardLikeID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MessageBoardLikes)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoardLike_MemberAccount");
+
+                entity.HasOne(d => d.MessageBoard)
+                    .WithMany(p => p.MessageBoardLikes)
+                    .HasForeignKey(d => d.MessageBoardId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoardLike_MessageBoard");
             });
 
             modelBuilder.Entity<Notification>(entity =>
