@@ -69,7 +69,7 @@
             <h1 class="hh">會員註冊</h1>
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">基本資料</h4><button id="Demo" class="btn btn-info" type="button">DEMO</button>
-                <form name="userInfo" class="needs-validation" method="post" enctype="multipart/form-data">
+                <form name="userInfo" class="needs-validation" method="post" enctype="multipart/form-data" onSubmit="return myFunctionName()">
                     <div class="row g-3">
                         <div asp-validation-summary="ModelOnly" class="text-danger col-12"></div>
                         <div class="form-group col-12">
@@ -218,7 +218,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/form-validation.js"></script>
+    @*<script src="~/js/form-validation.js"></script>*@
 
     <script>
         const clear = document.querySelector("#clear");
@@ -237,22 +237,62 @@
         const textAcc = document.querySelector("#MemAc")
         const textEmail = document.querySelector("#MemEmail")
         const textPhone = document.querySelector("#MemPhone")
+        
+        let nameCheck = true
+        let AccCheck = true
+        let EmailCheck = true
+        let PhoneCheck=true
 
 
+        //create.addEventListener("click", function () {
+        //    myFunctionName();
+        //})
+
+        function myFunctionName(){
+            if (nameCheck && AccCheck && EmailCheck && PhoneCheck) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
 
         textname.addEventListener("blur", async () => {
             let responce = await fetch("@Url.Content("/member/CheckName")" + `?name=${textname.value}`)
             let data = await responce.text()
             if (data == "True") {
                 help.textContent = "已註冊";
+                nameCheck = false;
+                myFunctionName();
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: '姓名已註冊',
+                })
             }
-        })
+            else {
+                help.textContent = "";
+                nameCheck = true;
+                myFunctionName();
+            }
+
+            }
+
+        )
         textAcc.addEventListener("blur", async () => {
             let responce = await fetch("@Url.Content("/member/CheckAccount")" + `?acc=${textAcc.value}`)
             let data = await responce.text()
             if (data == "True") {
                 Acchelp.textContent = "已註冊";
-            }
+                AccCheck = false;
+                myFunctionName();
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: '帳號已註冊',
+                })
+            } else { Acchelp.textContent = ""; AccCheck = true; myFunctionName();}
+
         })
 
         textEmail.addEventListener("blur", async () => {
@@ -260,7 +300,15 @@
             let data = await responce.text()
             if (data == "True") {
                 Emailhelp.textContent = "已註冊";
-            }
+                EmailCheck = false;
+                myFunctionName();
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: '信箱已註冊',
+                })
+            } else { Emailhelp.textContent = ""; EmailCheck = true; myFunctionName(); }
+
         })
 
         textPhone.addEventListener("blur", async () => {
@@ -268,7 +316,15 @@
             let data = await responce.text()
             if (data == "True") {
                 Phonehelp.textContent = "已註冊";
-            }
+                PhoneCheck = false;
+                myFunctionName();
+                Swal.fire({
+                    icon: 'error',
+                    title: '錯誤',
+                    text: '手機已註冊',
+                })
+            } else { Phonehelp.textContent = ""; PhoneCheck = true; myFunctionName();}
+
         })
 
 
@@ -279,6 +335,7 @@
             $("#MemEmail").val("Wang20221101@@gmail.com")
             $("#MemPhone").val("0966076245")
             $("#Memadd").val("復興南路一段390號3樓")
+
 
         })
 
