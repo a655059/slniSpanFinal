@@ -22,7 +22,7 @@ namespace prjiSpanFinal.Controllers
         iSpanProjectContext dbContext = new iSpanProjectContext();
         public static List<C關於我ViewModel> abme = new List<C關於我ViewModel>();
         List<Product> listprod;
-       
+
         public int id;
 
         public IActionResult Index()
@@ -34,7 +34,7 @@ namespace prjiSpanFinal.Controllers
         public SalesCourtController()
         {
             listprod = new List<Product>();
-            
+
         }
 
         public void getid()
@@ -117,7 +117,7 @@ namespace prjiSpanFinal.Controllers
 
 
             listprod = dbContext.Products.Where(p => p.SmallTypeId == id && p.ProductStatusId == 0).ToList();
-            
+
 
 
 
@@ -131,16 +131,16 @@ namespace prjiSpanFinal.Controllers
                 Picture = MemPic,
                 SellerId = id
             };
-                   
+
             return View(showsalescourt);
         }
-            
+
 
 
         public IActionResult 評價(int id)
         {//針對某特定賣家評價
 
-          
+
 
             var Comment = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id);
             var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
@@ -160,7 +160,7 @@ namespace prjiSpanFinal.Controllers
             {
                 TimeSpan TS = new TimeSpan(a[i].Ticks - b[i].Ticks);
                 double diff = 0;
-                if(TS.TotalDays >= 0)
+                if (TS.TotalDays >= 0)
                 {
                     diff = Convert.ToDouble(TS.TotalDays);
                 }
@@ -292,14 +292,14 @@ namespace prjiSpanFinal.Controllers
 
             dbContext.SaveChanges();
 
-            //return RedirectToAction("賣場", new{ id = Memberid });
+            return View("賣場", new{ id = Memberid });
             //return View();
-            return RedirectToAction("賣場");
+            //return RedirectToAction("賣場");
         }
 
         public IActionResult 關於我(int id)
         {
-            
+
             MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
             //if (x != null) return RedirectToAction("修改關於我");
@@ -369,7 +369,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 新增關於我()
         {
-           
+
             MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
             //if (x != null) return RedirectToAction("修改關於我");
@@ -445,10 +445,10 @@ namespace prjiSpanFinal.Controllers
         }
 
 
-        public IActionResult 修改關於我(int id)
+        public IActionResult 修改關於我()
         {
-           
 
+            getid();
 
             var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
             C關於我ViewModel me = new C關於我ViewModel();
@@ -467,7 +467,7 @@ namespace prjiSpanFinal.Controllers
                     //onerow 一次可能帶出  只有  星期   時間    休息
                     if (onerow[0] != null)
                     {
-                        if (onerow[0] == "0")       
+                        if (onerow[0] == "0")
                         {     //星期
 
                             if (onerow[1] != null)
@@ -504,9 +504,9 @@ namespace prjiSpanFinal.Controllers
 
             }
 
-            
 
-           
+
+
 
 
 
@@ -514,7 +514,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult 修改關於我(C關於我ViewModel me,string[] ServiceTime)
+        public IActionResult 修改關於我(C關於我ViewModel me, string[] ServiceTime)
         {
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == me.Memberid);
 
@@ -533,7 +533,7 @@ namespace prjiSpanFinal.Controllers
             }
 
             //如果服務項目 三個都勾
-           if(ServiceTime.Length == 3)
+            if (ServiceTime.Length == 3)
             {
                 add.ServiceTime += "0";
                 add.ServiceTime += ",";
@@ -541,21 +541,21 @@ namespace prjiSpanFinal.Controllers
                 add.ServiceTime += ",";
                 add.ServiceTime += me.SalesCourtServiceTime[1];
                 add.ServiceTime += "/";
-              
+
                 add.ServiceTime += "1";
                 add.ServiceTime += ",";
                 add.ServiceTime += me.SalesCourtServiceTime[2];
                 add.ServiceTime += ",";
                 add.ServiceTime += me.SalesCourtServiceTime[3];
                 add.ServiceTime += "/";
-               
+
                 add.ServiceTime += "2";
                 add.ServiceTime += ",";
                 add.ServiceTime += NewMe.SalesCourtServiceTime[4];
                 add.ServiceTime += "/";
             }
 
-           //當長度為二會有三種組合
+            //當長度為二會有三種組合
             else if (ServiceTime.Length == 2)
             {
                 //第一種   有 星期 時間
@@ -578,14 +578,15 @@ namespace prjiSpanFinal.Controllers
                 }
                 //第二種 有 時間 每週
                 //要怎麼分辨
-                                
-
-                else if (me.SalesCourtServiceTime.Length == 3) {
-
-                    string a = me.SalesCourtServiceTime[0].Substring(0,1);
 
 
-                    if (me.SalesCourtServiceTime[0].Substring(0,1) == "0")
+                else if (me.SalesCourtServiceTime.Length == 3)
+                {
+
+                    string a = me.SalesCourtServiceTime[0].Substring(0, 1);
+
+
+                    if (me.SalesCourtServiceTime[0].Substring(0, 1) == "0")
                     {           //當salescourtserviectime開頭沒有零代表是星期的值
 
                         add.ServiceTime += "1";
@@ -620,25 +621,37 @@ namespace prjiSpanFinal.Controllers
 
                 }
                 //第三種 有 星期 每週
-                             
+
             }
 
 
-            if (add.RenewProduct != null)   add.RenewProduct = "";
+            if (add.RenewProduct != null) add.RenewProduct = "";
             add.RenewProduct = NewMe.NewProductOnLoad;
-            if (add.SellerType != null)     add.SellerType = "";
+            if (add.SellerType != null) add.SellerType = "";
             add.SellerType = NewMe.SellerCategory;
-            if (add.AfterSales != null)     add.AfterSales = "";
+            if (add.AfterSales != null) add.AfterSales = "";
             add.AfterSales = NewMe.ServiceAfterBuy;
-            if (add.SellerCaution != null)  add.SellerCaution = "";
+            if (add.SellerCaution != null) add.SellerCaution = "";
             add.SellerCaution = NewMe.Caution;
 
 
             dbContext.SaveChanges();
-            
+
 
             return RedirectToAction("關於我");
 
+        }
+
+        public IActionResult 編輯賣場資訊() {
+            getid();
+
+
+            Card賣場ViewModel card = new Card賣場ViewModel()
+            {
+                MemberId = id,
+            };
+
+            return View(card);
         }
 
 
@@ -664,11 +677,12 @@ namespace prjiSpanFinal.Controllers
 
         //} 
 
-       
 
-        public IActionResult GetComment(int id,int mode) {
+
+        public IActionResult GetComment(int id, int mode,int pages,int eachpage)
+        {
             // 買家對  訂單評價    
-            
+
 
             var q = dbContext.Comments.Where(a => a.OrderDetail.Order.MemberId == id).Select(p => new
             {
@@ -677,14 +691,17 @@ namespace prjiSpanFinal.Controllers
                 productname = p.OrderDetail.ProductDetail.Product.ProductName,
                 commentcontent = p.Comment1,
                 commentstar = p.CommentStar,
+                count = 0,
             }).ToList();
 
 
-            if (mode == 0) { 
+            if (mode == 0)
+            {
             }
-            
-            else if (mode == 1) { 
-                
+
+            else if (mode == 1)
+            {
+                q = q.ToList();
             }
             //優良
             else if (mode == 2)
@@ -701,8 +718,15 @@ namespace prjiSpanFinal.Controllers
             {
                 q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
             }
-            return Json(q);
-           
+
+            //foreach (var item in q) {
+            //var lenth = q.Count;
+            //foreach (var item in q) {
+            //    item.count = lenth;
+            //}
+            //}
+            return Json(q.Skip((pages - 1) * eachpage).Take(eachpage));
+
             //賣家對買家平價
             //else
             //{
@@ -716,8 +740,8 @@ namespace prjiSpanFinal.Controllers
 
             //    return Json(q);
             //}
-                                    
-            
+
+
         }
 
 
@@ -734,7 +758,7 @@ namespace prjiSpanFinal.Controllers
             return Json(q);
         }
 
-        public IActionResult GetItems(int id,int mode,int pages,string keyword,string customname) {
+        public IActionResult GetCard(int id) {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
                 link = "/Item/Index?id=" + p.ProductId,
@@ -748,42 +772,62 @@ namespace prjiSpanFinal.Controllers
                 customizename = p.CustomizedCategory.CustomizedCategoryName,
 
             }).ToList();
-                             
+
+            return Json(q);
+        }
+
+        public IActionResult GetItems(int id, int mode, int pages, string keyword, string customname)
+        {
+            var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
+            {
+                link = "/Item/Index?id=" + p.ProductId,
+                pic = p.ProductPics.FirstOrDefault().Pic,
+                name = p.ProductName,
+                price1 = p.ProductDetails.Select(a => a.UnitPrice).Min(),
+                price2 = p.ProductDetails.Select(a => a.UnitPrice).Max(),
+                star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count,
+                sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+                upload = p.EditTime,
+                customizename = p.CustomizedCategory.CustomizedCategoryName,
+
+            }).ToList();
+
             if (mode == 0)
             {
-              
+
             }
             //綜和排序
             else if (mode == 1)
             {
-               
+
             }
             //最新商品
-            else if(mode == 2) {
-                
+            else if (mode == 2)
+            {
+
                 q = q.OrderByDescending(a => a.upload).ToList();
             }
             //熱銷商品
             else if (mode == 3)
             {
-               
+
                 q = q.OrderByDescending(a => a.sales).ToList();
             }
             //價格排序  由高到低
             else if (mode == 4)
             {
-                
+
                 q = q.OrderByDescending(a => a.price1).ToList();
             }
             //價格排序  由低到高
             else if (mode == 5)
             {
-                
+
                 q = q.OrderBy(a => a.price1).ToList();
             }
             else
             {
-                
+
             }
             //找關鍵字
             if (keyword != null)
@@ -801,8 +845,8 @@ namespace prjiSpanFinal.Controllers
             {
                 q = q.Where(a => a.customizename == customname).ToList();
             }
-            
-            return Json(q.Skip((pages-1)*4).Take(4));
+
+            return Json(q.Skip((pages - 1) * 4).Take(4));
         }
 
         public IActionResult WriteFollow(int id)
@@ -812,11 +856,11 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Login", "Member");
             }
             int myid = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            if(myid == id)
+            if (myid == id)
             {
                 return Json("999");
             }
-            if(dbContext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).Any())
+            if (dbContext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).Any())
             {
                 dbContext.Follows.Remove(dbContext.Follows.Where(f => f.MemberId == myid && f.FollowedMemId == id).FirstOrDefault());
                 dbContext.SaveChanges();

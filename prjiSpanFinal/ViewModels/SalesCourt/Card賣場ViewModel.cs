@@ -8,6 +8,7 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
 {
     public class Card賣場ViewModel
     {
+        public int MemberId { get; set; }
         public string ProductName { get; set; }
         public string ProductPrice { get; set; }
         //販賣數量跟銷售應該是一樣的東西
