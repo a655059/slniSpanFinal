@@ -144,14 +144,14 @@ namespace prjiSpanFinal.Controllers
                     Like newLike = new Like
                     {
                         MemberId = (int)memberID,
-                        ProductId =productID,
+                        ProductId = productID,
                     };
                     dbContext.Likes.Add(newLike);
                     dbContext.SaveChanges();
                     return Content("1");
                 }
             }
-            
+
         }
 
         public IActionResult ReportCreate(Report d)
@@ -166,7 +166,7 @@ namespace prjiSpanFinal.Controllers
                     ReportTypeId = d.ReportTypeId,
                     Reason = d.Reason,
                     ReportPic = d.ReportPic,
-                    ReportStatusId=1,
+                    ReportStatusId = 1,
                 };
                 db.Reports.Add(report);
                 db.SaveChanges();
@@ -213,9 +213,59 @@ namespace prjiSpanFinal.Controllers
                 return Content("0");
             }
         }
+
+        public IActionResult LikeMessageBoard(int messageBoardID)
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                int userID = JsonSerializer.Deserialize<MemberAccount>(memberString).MemberId;
+                var isLike = dbContext.MessageBoardLikes.Where(i => i.MessageBoardId == messageBoardID && i.MemberId == userID).FirstOrDefault();
+                if (isLike == null)
+                {
+                    MessageBoardLike messageBoardLike = new MessageBoardLike
+                    {
+                        MessageBoardId = messageBoardID,
+                        MemberId = userID,
+                    };
+                    dbContext.MessageBoardLikes.Add(messageBoardLike);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    dbContext.MessageBoardLikes.Remove(isLike);
+                    dbContext.SaveChanges();
+                }
+                return Content("1");
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+
+        public IActionResult DeleteMessage(int messageBoardID)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            int userID = JsonSerializer.Deserialize<MemberAccount>(memberString).MemberId;
+            var messageBoardLikes = dbContext.MessageBoardLikes.Where(i => i.MessageBoardId == messageBoardID);
+            foreach (var a in messageBoardLikes)
+            {
+                dbContext.MessageBoardLikes.Remove(a);
+            }
+            dbContext.SaveChanges();
+            var messageBoard = dbContext.MessageBoards.Where(i => i.MessageBoardId == messageBoardID).FirstOrDefault();
+            dbContext.MessageBoards.Remove(messageBoard);
+            dbContext.SaveChanges();
+            return Content("1");
+        }
+
         public IActionResult ShowMessageBoard(int productID)
         {
             return ViewComponent("ShowMessageBoard", productID);
         }
+
     }
 }
