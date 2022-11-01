@@ -1,15 +1,16 @@
 ﻿@using X.PagedList.Mvc.Core.Fluent
-@model IEnumerable<prjiSpanFinal.Models.Coupon>
+@model IEnumerable<CouponViewModel>
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
 @using X.PagedList.Web.Common;
 @using prjiSpanFinal.ViewModels;
+@using prjiSpanFinal.ViewModels.newManagement
 @{
     ViewData["Title"] = "CouponList";
     var pagedList = (IPagedList)ViewBag.Prods;   
     if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
 }
-<h1>優惠券</h1>
+<h1>非活動優惠券</h1>
 
 <p>
     <a asp-action="CouponCreate" class="btn btn-light">新增優惠券</a>
@@ -37,7 +38,7 @@
                 優惠券代碼
             </th>
             <th>
-                發放會員ID
+                發放會員
             </th>
             <th>
                 可以領取日期
@@ -59,48 +60,48 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CouponId)
+                    @Html.DisplayFor(modelItem => item.Coupon.CouponId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CouponName)
+                    @Html.DisplayFor(modelItem => item.Coupon.CouponName)
                 </td>
                 <td>
-                    <input value="@item.StartDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
+                    <input value="@item.Coupon.StartDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    <input value="@item.ExpiredDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
+                    <input value="@item.Coupon.ExpiredDate.ToString("yyyy/MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Discount)
+                    @Html.DisplayFor(modelItem => item.Coupon.Discount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CouponCode)
+                    @Html.DisplayFor(modelItem => item.Coupon.CouponCode)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MemberId)
+                    @Html.DisplayFor(modelItem => item.MemberAcc)
                 </td>
                 <td>
-                    <input value="@item.ReceiveStartDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                    <input value="@item.Coupon.ReceiveStartDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    <input value="@item.ReceiveEndDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
+                    <input value="@item.Coupon.ReceiveEndDate.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsFreeDelivery)
+                    @Html.DisplayFor(modelItem => item.Coupon.IsFreeDelivery)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MinimumOrder)
+                    @Html.DisplayFor(modelItem => item.Coupon.MinimumOrder)
                 </td>
                 <td>
                     @{
-                        if (item.MemberId == 1)
+                        if (item.Coupon.MemberId == 1)
                         {
-                                    @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
+                                        @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.Coupon.CouponId },new{
                             @class="btn btn-outline-primary mb-2"})
                         }
                         else
                         {
-                                   @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.CouponId },new{
+                                       @Html.ActionLink("修改", "CouponEdit","newManagement", new {  id=item.Coupon.CouponId },new{
                 @class="btn btn-outline-primary disabled"})
                         }
                     }
@@ -119,23 +120,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                    <option value=3>3</option>
+                        <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                  <option value=5>5</option>
+                      <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-               <option value=10>10</option>
+                   <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                  <option value=20>20</option>
+                      <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                    <option value=100>100</option>
+                        <option value=100>100</option>
             }}
      </select>
      筆

@@ -47,7 +47,7 @@
                     使用者定義類別
                 </th>
                 <th>
-                    賣家ID
+                    賣家帳號
                 </th>
                 <th>
                     地區
@@ -75,7 +75,7 @@
                     <input class="form-control-plaintext" value="@item.CustomizedCategoryName" readonly>
                 </td>
                 <td>
-                    <input class="form-control-plaintext" value="@item.Product.MemberId" readonly>
+                    <input class="form-control-plaintext" value="@item.MemberAcc" readonly>
                 </td>
                 <td>
                     <input class="form-control-plaintext" value="@item.RegionName" readonly>
@@ -113,23 +113,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                                    <option value=3>3</option>
+                                                        <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                                  <option value=5>5</option>
+                                                      <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-                               <option value=10>10</option>
+                                                   <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                                  <option value=20>20</option>
+                                                      <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                                    <option value=100>100</option>
+                                                        <option value=100>100</option>
             }}
      </select>
      筆
@@ -197,8 +197,9 @@
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            let link="@Url.Content("~/newManagement/newProductList")"+`?pageSize=${pageSize}`;
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/newProductList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
 
@@ -206,8 +207,9 @@
         let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            Filter=filter.options[filter.selectedIndex].value
-            let link="@Url.Content("~/newManagement/newProductList")"+`?filter=${Filter}`;
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/newProductList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })
     </script>
