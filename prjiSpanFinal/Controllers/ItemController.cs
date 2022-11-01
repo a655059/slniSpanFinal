@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.Item;
@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 
@@ -186,6 +187,35 @@ namespace prjiSpanFinal.Controllers
         public IActionResult BuyerCount(int? id)
         {
             return PartialView("~/Views/Item/_ItemBuyerCountPartial.cshtml", (int)id);
+        }
+
+        public IActionResult AddMessage(int messageParentID, string message, int productID)
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                int userID = JsonSerializer.Deserialize<MemberAccount>(memberString).MemberId;
+                MessageBoard messageBoard = new MessageBoard
+                {
+                    MemberId = userID,
+                    ProductId = productID,
+                    Message = message,
+                    Parent = messageParentID,
+                    PostTime = DateTime.Now,
+                };
+                dbContext.MessageBoards.Add(messageBoard);
+                dbContext.SaveChanges();
+                return Content("1");
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+        public IActionResult ShowMessageBoard(int productID)
+        {
+            return ViewComponent("ShowMessageBoard", productID);
         }
     }
 }
