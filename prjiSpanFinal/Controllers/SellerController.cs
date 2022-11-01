@@ -196,9 +196,18 @@ namespace prjiSpanFinal.Controllers
             return View(x);
         }
 
-        public IActionResult AD(string jsonString)
+        public IActionResult AD()
         {
-            return PartialView(jsonString);
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            CSellerADViewModel ViewModel = new CSellerADViewModel()
+            {
+                SellerProds = _db.Products.Where(p => p.MemberId == id).ToList(),
+            };
+            return View(ViewModel);
         }
 
 

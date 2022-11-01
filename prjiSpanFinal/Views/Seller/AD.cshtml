@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
+@model prjiSpanFinal.ViewModels.seller.CSellerADViewModel
 @{
     ViewData["Title"] = "AD";
 }
@@ -9,22 +10,49 @@
         .內文優惠劵 {
             font-weight: 700;
             font-size: 30px;
-            height: 80px;            
+            height: 80px;
         }
 
-        .高度{
-            height:80px;            
+        .高度 {
+            height: 80px;
         }
 
         .背色 {
             background-color: lightyellow
         }
+
         .置中 {
             display: flex;
-            align-items: center; 
+            align-items: center;
         }
     </style>
 }
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>商品名稱:</label>
+                
+                    @{
+                        foreach (var i in Model.SellerProds)
+                        {
+                            <div>123</div>
+                        }
+                    }
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="row ">
@@ -32,7 +60,7 @@
     <div class="col-10 ">
         <div class="mt-3">@await Component.InvokeAsync("seller跑條", new { page = 1 })</div>
         <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
-        
+
         <div>
             <div class="">
                 <table class="">
