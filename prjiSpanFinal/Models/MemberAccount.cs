@@ -9,6 +9,7 @@ namespace prjiSpanFinal.Models
     {
         public MemberAccount()
         {
+            BalanceRecords = new HashSet<BalanceRecord>();
             ChatLogSendFromNavigations = new HashSet<ChatLog>();
             ChatLogSendToNavigations = new HashSet<ChatLog>();
             CouponWallets = new HashSet<CouponWallet>();
@@ -55,6 +56,7 @@ namespace prjiSpanFinal.Models
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
+        public virtual ICollection<BalanceRecord> BalanceRecords { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendFromNavigations { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendToNavigations { get; set; }
         public virtual ICollection<CouponWallet> CouponWallets { get; set; }
