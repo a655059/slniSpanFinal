@@ -795,7 +795,7 @@ namespace prjiSpanFinal.Controllers
         {
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 3;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetCouponsPagedProcess(page, (int)pageSize, keyword);
@@ -803,8 +803,9 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
-        public IActionResult CouponCreate()
+        public IActionResult CouponCreate(int id)
         {
+            ViewBag.Id = id;
             return View();
         }
         [HttpPost]
@@ -1144,6 +1145,83 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content(Ev.EndDate.ToString("yyyy/MM/dd"));
         }
+        public IActionResult EventCouponCreate(int id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EventCouponCreate(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("CouponList");
+        }
+        public List<CouponViewModel> GetEventCouponsFromDatabase(int id,string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<CouponViewModel> list = new();
+            IQueryable<Coupon> Coupons = null;
+            if (keyword == null)
+            {
+                Coupons = db.Coupons.Where(i => i.OfficialEventListId ==id).Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.OfficialEventListId ==id && (i.CouponId == key || i.MemberId == key)).
+                     Select(e => e);
+            }
+            else if (DateTime.TryParse(keyword, out DateTime key2))
+            {
+                Coupons = db.Coupons.
+                     Where(i => i.OfficialEventListId ==id && (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
+                     Select(e => e);
+            }
+            else
+            {
+                Coupons = db.Coupons.
+                    Where(i => i.OfficialEventListId ==id && (i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
+                    Select(e => e); ;
+            }
+            var MemberAcc = (from i in db.MemberAccounts select i).ToList();
+            foreach (var coupon in Coupons)
+            {
+                CouponViewModel model = new()
+                {
+                    Coupon = coupon,
+                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == coupon.MemberId).MemberAcc
+                };
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<CouponViewModel> GetEventCouponsPagedProcess(int id,int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetEventCouponsFromDatabase(id,keyword);
+            IPagedList<CouponViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult EventCouponList(int id,string keyword, int? pageSize, int? page = 1)
+        {
+            ViewBag.pageSize = pageSize;
+            //每頁幾筆
+            pageSize ??= 5;//if null的寫法
+            page ??= 1;
+            //處理頁數
+            ViewBag.Prods = GetEventCouponsPagedProcess(id,page, (int)pageSize, keyword);
+            var PList = GetEventCouponsPagedProcess(id,page, (int)pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
         #endregion
         #region subEventRegion
         public IActionResult subEventList(int id)
@@ -1238,6 +1316,7 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
         }
+     
         #endregion
     }
 }
