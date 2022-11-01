@@ -746,24 +746,24 @@ namespace prjiSpanFinal.Controllers
             IQueryable<Coupon> Coupons = null;
             if (keyword == null)
             {
-                Coupons = db.Coupons.Where(i=>i.OfficialEventListId==1).Select(i => i);
+                Coupons = db.Coupons.Where(i => i.OfficialEventListId == 1).Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Coupons = db.Coupons.
-                     Where(i =>i.OfficialEventListId==1&&( i.CouponId == key ||i.MemberId==key)).
+                     Where(i => i.OfficialEventListId == 1 && (i.CouponId == key || i.MemberId == key)).
                      Select(e => e);
             }
             else if (DateTime.TryParse(keyword, out DateTime key2))
             {
                 Coupons = db.Coupons.
-                     Where(i =>i.OfficialEventListId==1&& (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
+                     Where(i => i.OfficialEventListId == 1 && (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
                      Select(e => e);
             }
             else
             {
                 Coupons = db.Coupons.
-                    Where(i =>i.OfficialEventListId ==1&&( i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
+                    Where(i => i.OfficialEventListId == 1 && (i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
                     Select(e => e); ;
             }
             var MemberAcc = (from i in db.MemberAccounts select i).ToList();
@@ -937,7 +937,7 @@ namespace prjiSpanFinal.Controllers
             ViewBag.ArgumentType = (new iSpanProjectContext().ArgumentTypes).Select(i => i);
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 3;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetArgumentsPagedProcess(page, (int)pageSize, keyword, filter);
@@ -1158,31 +1158,31 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }
-        public List<CouponViewModel> GetEventCouponsFromDatabase(int id,string keyword)
+        public List<CouponViewModel> GetEventCouponsFromDatabase(int id, string keyword)
         {
             var db = new iSpanProjectContext();
             List<CouponViewModel> list = new();
             IQueryable<Coupon> Coupons = null;
             if (keyword == null)
             {
-                Coupons = db.Coupons.Where(i => i.OfficialEventListId ==id).Select(i => i);
+                Coupons = db.Coupons.Where(i => i.OfficialEventListId == id).Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Coupons = db.Coupons.
-                     Where(i => i.OfficialEventListId ==id && (i.CouponId == key || i.MemberId == key)).
+                     Where(i => i.OfficialEventListId == id && (i.CouponId == key || i.MemberId == key)).
                      Select(e => e);
             }
             else if (DateTime.TryParse(keyword, out DateTime key2))
             {
                 Coupons = db.Coupons.
-                     Where(i => i.OfficialEventListId ==id && (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
+                     Where(i => i.OfficialEventListId == id && (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
                      Select(e => e);
             }
             else
             {
                 Coupons = db.Coupons.
-                    Where(i => i.OfficialEventListId ==id && (i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
+                    Where(i => i.OfficialEventListId == id && (i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
                     Select(e => e); ;
             }
             var MemberAcc = (from i in db.MemberAccounts select i).ToList();
@@ -1197,28 +1197,28 @@ namespace prjiSpanFinal.Controllers
             }
             return list;
         }
-        protected IPagedList<CouponViewModel> GetEventCouponsPagedProcess(int id,int? page, int pageSize, string keyword)
+        protected IPagedList<CouponViewModel> GetEventCouponsPagedProcess(int id, int? page, int pageSize, string keyword)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetEventCouponsFromDatabase(id,keyword);
+            var listUnpaged = GetEventCouponsFromDatabase(id, keyword);
             IPagedList<CouponViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
             return pagelist;
         }
-        public IActionResult EventCouponList(int id,string keyword, int? pageSize, int? page = 1)
+        public IActionResult EventCouponList(int id, string keyword, int? pageSize, int? page = 1)
         {
             ViewBag.pageSize = pageSize;
             //每頁幾筆
             pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
-            ViewBag.Prods = GetEventCouponsPagedProcess(id,page, (int)pageSize, keyword);
-            var PList = GetEventCouponsPagedProcess(id,page, (int)pageSize, keyword);
+            ViewBag.Prods = GetEventCouponsPagedProcess(id, page, (int)pageSize, keyword);
+            var PList = GetEventCouponsPagedProcess(id, page, (int)pageSize, keyword);
             //填入頁面資料
             return View(PList);
         }
@@ -1316,7 +1316,89 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("subEventList", new { id = ofevent.OfficialEventListId });
         }
-     
+
+        public List<subEventtoProductListViewModel> GetEtoPsFromDatabase(int id, string keyword)
+        {
+            var db = new iSpanProjectContext();
+            List<subEventtoProductListViewModel> list = new();
+            IQueryable<SubOfficialEventToProduct> EtoPs = null;
+            if (keyword == null)
+            {
+                EtoPs = db.SubOfficialEventToProducts.Where(i => i.SubOfficialEventListId == id).Select(i => i);
+            }
+            else if (int.TryParse(keyword, out int key))
+            {
+                EtoPs = db.SubOfficialEventToProducts.
+                     Where(i => i.SubOfficialEventListId == id && i.SubOfficialEventListId == key).
+                     Select(e => e);
+            }
+            else
+            {
+                EtoPs = db.SubOfficialEventToProducts.
+                    Where(i => i.SubOfficialEventListId == id && (i.Product.ProductName.Contains(keyword) || i.SubOfficialEventList.SubEventName.Contains(keyword))).
+                    Select(e => e); ;
+            }
+            var ProductName =db.Products.ToList();
+            var Verify = db.Verifies.ToList();
+            var subEventName = db.SubOfficialEventLists.ToList();
+            foreach (var EventToProds in EtoPs)
+            {
+                subEventtoProductListViewModel model = new()
+                {
+                    SubOfficialEventToProduct= EventToProds,
+                    ProductName = ProductName.FirstOrDefault(I=>I.ProductId==EventToProds.ProductId).ProductName,
+                    subEventName= subEventName.FirstOrDefault(i=>i.SubOfficialEventListId== EventToProds.SubOfficialEventListId).SubEventName,
+                    Verify= Verify.FirstOrDefault(i=>i.VerifyId==EventToProds.VerifyId).VerifyName,
+                };
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<subEventtoProductListViewModel> GetEtoPsPagedProcess(int id, int? page, int pageSize, string keyword)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetEtoPsFromDatabase(id, keyword);
+            IPagedList<subEventtoProductListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
+            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+                return null;
+            return pagelist;
+        }
+        public IActionResult subEventtoProductList(int id, string keyword, int? pageSize, int? page = 1)
+        {
+            iSpanProjectContext db = new();
+            ViewBag.pageSize = pageSize;
+            ViewBag.Verifies = db.Verifies.ToList();
+            //每頁幾筆
+            pageSize ??= 5;//if null的寫法
+            page ??= 1;
+            //處理頁數
+            ViewBag.Prods = GetEtoPsPagedProcess(id, page, (int)pageSize, keyword);
+            var PList = GetEtoPsPagedProcess(id, page, (int)pageSize, keyword);
+            //填入頁面資料
+            return View(PList);
+        }
+        public IActionResult EtoPApprove(int id)
+        {
+            iSpanProjectContext db = new();
+            var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
+            prod.VerifyId = 2;
+            var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
+            db.SaveChanges();
+            return Content($"{p}");
+        }
+        public IActionResult EtoPDeny(int id)
+        {
+            iSpanProjectContext db = new();
+            var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
+            prod.VerifyId = 3;
+            var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
+            db.SaveChanges();
+            return Content($"{p}");
+        }
         #endregion
     }
 }

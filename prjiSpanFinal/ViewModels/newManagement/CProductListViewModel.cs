@@ -10,6 +10,5 @@ namespace prjiSpanFinal.ViewModels
         public string ProductStatusName { get; set; }
         public string RegionName { get; set; }
         public string CustomizedCategoryName { get; set; }
-
     }
 }

@@ -52,6 +52,7 @@
                 <td>
                     <a name="@item.SubOfficialEventList.SubOfficialEventListId" class="Delete btn btn-outline-danger mb-1">刪除</a>
                     @Html.ActionLink("修改", "subEventEdit", new { id=item.SubOfficialEventList.SubOfficialEventListId },new{@class="btn btn-outline-secondary mb-1"})
+                    @Html.ActionLink("檢視參加活動商品", "subEventtoProductList", new { id=item.SubOfficialEventList.SubOfficialEventListId },new{@class="btn btn-outline-secondary mb-1"})
                 </td>
             </tr>
         }

@@ -9,6 +9,7 @@ namespace prjiSpanFinal.Models
     {
         public MemberAccount()
         {
+            BalanceRecords = new HashSet<BalanceRecord>();
             ChatLogSendFromNavigations = new HashSet<ChatLog>();
             ChatLogSendToNavigations = new HashSet<ChatLog>();
             CouponWallets = new HashSet<CouponWallet>();
@@ -16,6 +17,7 @@ namespace prjiSpanFinal.Models
             FollowFollowedMems = new HashSet<Follow>();
             FollowMembers = new HashSet<Follow>();
             Likes = new HashSet<Like>();
+            MessageBoardLikes = new HashSet<MessageBoardLike>();
             MessageBoards = new HashSet<MessageBoard>();
             Notifications = new HashSet<Notification>();
             Orders = new HashSet<Order>();
@@ -54,6 +56,7 @@ namespace prjiSpanFinal.Models
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
+        public virtual ICollection<BalanceRecord> BalanceRecords { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendFromNavigations { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendToNavigations { get; set; }
         public virtual ICollection<CouponWallet> CouponWallets { get; set; }
@@ -61,6 +64,7 @@ namespace prjiSpanFinal.Models
         public virtual ICollection<Follow> FollowFollowedMems { get; set; }
         public virtual ICollection<Follow> FollowMembers { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<MessageBoardLike> MessageBoardLikes { get; set; }
         public virtual ICollection<MessageBoard> MessageBoards { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Order> Orders { get; set; }

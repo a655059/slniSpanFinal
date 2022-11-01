@@ -7,6 +7,11 @@ namespace prjiSpanFinal.Models
 {
     public partial class MessageBoard
     {
+        public MessageBoard()
+        {
+            MessageBoardLikes = new HashSet<MessageBoardLike>();
+        }
+
         public int MessageBoardId { get; set; }
         public int MemberId { get; set; }
         public int ProductId { get; set; }
@@ -16,5 +21,6 @@ namespace prjiSpanFinal.Models
 
         public virtual MemberAccount Member { get; set; }
         public virtual Product Product { get; set; }
+        public virtual ICollection<MessageBoardLike> MessageBoardLikes { get; set; }
     }
 }

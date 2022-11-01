@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "ArgumentList";
     var pagedList = (IPagedList)ViewBag.Prods;
-     if(ViewBag.pageSize==null){ ViewBag.pageSize = 3; }
+     if(ViewBag.pageSize==null){ ViewBag.pageSize = 5; }
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -17,6 +17,10 @@
     </style>
 }
     <h1>消費糾紛</h1>
+    <form>
+        <input type="search" name="keyword" placeholder="輸入內容進行搜尋,或不輸入回到列表" class="form-control" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+    </form>
     <form>
         依類型篩選
        <select id="filter" name="filter">
@@ -147,8 +151,8 @@
                 }
             })
         }
-        for (var BTNUnd of Approve) {
-            BTNUnd.addEventListener("click", async function (event) {
+        for (var BTNDeny of Approve) {
+            BTNDeny.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove")" + `?id=${event.currentTarget.name}`)
@@ -165,8 +169,8 @@
                 }
             })
         }
-        for (var BTNUnd of Approve2) {
-            BTNUnd.addEventListener("click", async function (event) {
+        for (var BTNDeny of Approve2) {
+            BTNDeny.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove2")" + `?id=${event.currentTarget.name}`)

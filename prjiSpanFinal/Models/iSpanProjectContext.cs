@@ -23,6 +23,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<Argument> Arguments { get; set; }
         public virtual DbSet<ArgumentReason> ArgumentReasons { get; set; }
         public virtual DbSet<ArgumentType> ArgumentTypes { get; set; }
+        public virtual DbSet<BalanceRecord> BalanceRecords { get; set; }
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
@@ -40,6 +41,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<MemStatus> MemStatuses { get; set; }
         public virtual DbSet<MemberAccount> MemberAccounts { get; set; }
         public virtual DbSet<MessageBoard> MessageBoards { get; set; }
+        public virtual DbSet<MessageBoardLike> MessageBoardLikes { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OfficialEventList> OfficialEventLists { get; set; }
         public virtual DbSet<OfficialEventType> OfficialEventTypes { get; set; }
@@ -64,6 +66,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<SubOfficialEventList> SubOfficialEventLists { get; set; }
         public virtual DbSet<SubOfficialEventToProduct> SubOfficialEventToProducts { get; set; }
         public virtual DbSet<TradeFeeList> TradeFeeLists { get; set; }
+        public virtual DbSet<Verify> Verifies { get; set; }
         public virtual DbSet<WebAd> WebAds { get; set; }
         public virtual DbSet<WebAdimageType> WebAdimageTypes { get; set; }
 
@@ -197,6 +200,27 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasDefaultValueSql("('糾紛1')");
+            });
+
+            modelBuilder.Entity<BalanceRecord>(entity =>
+            {
+                entity.ToTable("BalanceRecord");
+
+                entity.Property(e => e.BalanceRecordId).HasColumnName("BalanceRecordID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Reason)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Record).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.BalanceRecords)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BalanceRecord_MemberAccount");
             });
 
             modelBuilder.Entity<BigType>(entity =>
@@ -636,6 +660,29 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MessageBoard_Product");
+            });
+
+            modelBuilder.Entity<MessageBoardLike>(entity =>
+            {
+                entity.ToTable("MessageBoardLike");
+
+                entity.Property(e => e.MessageBoardLikeId).HasColumnName("MessageBoardLikeID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.MessageBoardId).HasColumnName("MessageBoardID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MessageBoardLikes)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoardLike_MemberAccount");
+
+                entity.HasOne(d => d.MessageBoard)
+                    .WithMany(p => p.MessageBoardLikes)
+                    .HasForeignKey(d => d.MessageBoardId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MessageBoardLike_MessageBoard");
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -1204,6 +1251,8 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.SubOfficialEventListId).HasColumnName("SubOfficialEventListID");
 
+                entity.Property(e => e.VerifyId).HasColumnName("VerifyID");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SubOfficialEventToProducts)
                     .HasForeignKey(d => d.ProductId)
@@ -1215,6 +1264,12 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.SubOfficialEventListId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubOfficialEventToProduct_SubOfficialEventList");
+
+                entity.HasOne(d => d.Verify)
+                    .WithMany(p => p.SubOfficialEventToProducts)
+                    .HasForeignKey(d => d.VerifyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOfficialEventToProduct_Verifies");
             });
 
             modelBuilder.Entity<TradeFeeList>(entity =>
@@ -1234,6 +1289,15 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TradeFeeList_Orders");
+            });
+
+            modelBuilder.Entity<Verify>(entity =>
+            {
+                entity.Property(e => e.VerifyId).HasColumnName("VerifyID");
+
+                entity.Property(e => e.VerifyName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<WebAd>(entity =>
