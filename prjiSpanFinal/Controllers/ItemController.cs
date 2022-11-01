@@ -245,6 +245,22 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
+        public IActionResult DeleteMessage(int messageBoardID)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            int userID = JsonSerializer.Deserialize<MemberAccount>(memberString).MemberId;
+            var messageBoardLikes = dbContext.MessageBoardLikes.Where(i => i.MessageBoardId == messageBoardID);
+            foreach (var a in messageBoardLikes)
+            {
+                dbContext.MessageBoardLikes.Remove(a);
+            }
+            dbContext.SaveChanges();
+            var messageBoard = dbContext.MessageBoards.Where(i => i.MessageBoardId == messageBoardID).FirstOrDefault();
+            dbContext.MessageBoards.Remove(messageBoard);
+            dbContext.SaveChanges();
+            return Content("1");
+        }
 
         public IActionResult ShowMessageBoard(int productID)
         {

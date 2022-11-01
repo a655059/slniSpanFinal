@@ -11,8 +11,10 @@ namespace prjiSpanFinal.ViewModels.Item
         public MessageBoard messageBoard { get; set; }
         public Product product { get; set; }
         public MemberAccount member { get; set; }
+
         public int layer { get; set; }
-        public byte[] userPic { get; set; }
+        public MemberAccount user { get; set; }
+        public Boolean isLike { get; set; }
         public int productID { get; set; }
         public int likeCount { get; set; }
         public List<CMessageBoardViewModel> cMessageBoardList { get; set; }
