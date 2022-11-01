@@ -245,6 +245,7 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
+
         public IActionResult ShowMessageBoard(int productID)
         {
             return ViewComponent("ShowMessageBoard", productID);
