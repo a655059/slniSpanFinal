@@ -15,33 +15,47 @@
         }
     </style>
 }
-    <div class="row">
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6 row" style="text-align:center">
         <div class="col-3"></div>
-        <div class="col-6 row" style="text-align:center">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <div class="mb-4 ms-4">
-                    <a href="@Url.Content("~/Home/Index")">
-                        <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
-                    </a>
-                </div>
-                <div style="text-align:center">
-
-                    <form  action="@Url.Content("~/Member/forgetPw")" method="post" style="width: 23rem;">
-
-                        <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">重新設定密碼</h3>
-
-                        <div class="form-outline mb-4">
-                            <input type="text" id="forget" name="PhoneMail" class="form-control form-control-lg" />
-                            <label class="form-label mt-3" for="form2Example18">請輸入手機或Email</label>
-                        </div>
-                        <p><input type="submit" value="確認"/></p>
-
-                    </form>
-                </div>
+        <div class="col-6">
+            <div class="mb-4 ms-4">
+                <a href="@Url.Content("~/Home/Index")">
+                    <img src="~/img/Layout/LOGO_Long2.png" style="background-color: orange;" />
+                </a>
             </div>
-            <div class="col-3"></div>
+            <div style="text-align:center">
+
+                <form action="@Url.Content("~/Member/forgetPw")" method="post" style="width: 23rem;">
+
+                    <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">重新設定密碼</h3>
+
+                    <div class="form-outline mb-4">
+                        <input type="text" id="forget" name="PhoneMail" class="form-control form-control-lg" />
+                        <label class="form-label mt-3" for="form2Example18">請輸入手機或Email</label>
+                    </div>
+                    <p><input type="submit" value="確認" id="ok" /></p>
+
+                </form>
+            </div>
         </div>
         <div class="col-3"></div>
-     </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+@section Scripts {
+    <script>
+    const ok = document.querySelector("#ok")
+    ok.addEventListener("click", function () {
+        alert("已成功發信，請確認")
+    //     Swal.fire(
+    //    '恭喜!',
+    //    '已成功發送信件，請重新登入!',
+    //    'success'
+    //)
+    })
 
+
+    </script>
+}
