@@ -11,5 +11,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public MessageBoard messageBoard { get; set; }
         public Product product { get; set; }
         public MemberAccount member { get; set; }
+        public int layer { get; set; }
+        public byte[] userPic { get; set; }
     }
 }
