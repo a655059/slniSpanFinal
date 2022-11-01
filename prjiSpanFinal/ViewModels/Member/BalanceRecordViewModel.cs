@@ -10,6 +10,7 @@ namespace prjiSpanFinal.ViewModels.Member
     {
         public BalanceRecord Balance { get; set; }
 
+        public int BalanceCount { get; set; }
         public int RecordMoney
         {
             get { return Balance.Amount; }

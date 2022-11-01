@@ -808,18 +808,18 @@ namespace prjiSpanFinal.Controllers
             {
                 MemberId = id,
                 Amount = money,
-                Reason = "Charge",
+                Reason = "網頁儲值",
                 Record = DateTime.Now,
             };
             db.BalanceRecords.Add(record);
             db.SaveChanges();
             return Json(user.Balance);
         }
-        public IActionResult BalanceInfo(int status)
+        public IActionResult BalanceInfo(int status,int nowpages)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<BalanceRecordViewModel> res = new List<BalanceRecordViewModel>();
-            res = (new BalanceFactory()).fBalanceRecordFilter( id, status);
+            List<BalanceRecordViewModel> res;
+            res = (new BalanceFactory()).fBalanceRecordFilter( id, status, nowpages);
             
             return Json(res);
         }

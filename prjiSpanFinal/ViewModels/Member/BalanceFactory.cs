@@ -8,7 +8,7 @@ namespace prjiSpanFinal.ViewModels.Member
 {
     public class BalanceFactory
     {
-        public List<BalanceRecordViewModel> fBalanceRecordFilter( int id, int status)
+        public List<BalanceRecordViewModel> fBalanceRecordFilter( int id, int status,int nowpages)
         {
             iSpanProjectContext db = new iSpanProjectContext();
             List<BalanceRecord> record = new List<BalanceRecord>();
@@ -33,11 +33,12 @@ namespace prjiSpanFinal.ViewModels.Member
                     BalanceRecordViewModel vm = new BalanceRecordViewModel
                     {
                         Balance = item,
+                        BalanceCount = record.Count(),
                     };
                     res.Add(vm);
                 }
             }
-            return res;
+            return res.OrderByDescending(p=>p.Balance.BalanceRecordId).Skip((nowpages - 1)*10).Take(10).ToList();
         }
     }
 }
