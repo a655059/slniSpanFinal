@@ -69,7 +69,7 @@ namespace prjiSpanFinal.ViewModels.Member
         //    List<SmallType> res = db.SmallTypes.Where(t => t.BigTypeId == search.BigTypeId).ToList();
         //    return res;
         //}
-        public List<MyLikeShowItem> SearchItem(List<Like> list)
+        public List<MyLikeShowItem> SearchItem(List<Product> list)
         {
             iSpanProjectContext db = new iSpanProjectContext();
 
@@ -81,7 +81,7 @@ namespace prjiSpanFinal.ViewModels.Member
             }
             foreach (var item in list)
             {
-                if (item ==null)
+                if (item.ProductStatusId != 0)
                 {
                     continue;
                 }
@@ -89,7 +89,7 @@ namespace prjiSpanFinal.ViewModels.Member
                 decimal y = db.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderByDescending(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
                 byte[] pic = db.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
                 int sales = db.OrderDetails.Where(o => o.Order.StatusId == 7 && o.ProductDetail.ProductId == item.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
-                string pdName = db.Products.Where(p => p.ProductId == item.ProductId).Select(p => p.ProductName).FirstOrDefault();
+                //string pdName = db.Products.Where(p => p.ProductId == item.ProductId).Select(p => p.ProductName).FirstOrDefault();
                 List<decimal> dlist = new List<decimal>();
                 if (x == y)
                     dlist.Add(x);
@@ -101,8 +101,7 @@ namespace prjiSpanFinal.ViewModels.Member
 
                 MyLikeShowItem a = new MyLikeShowItem();
                 //a.Like.Product.ProductId = item.ProductId;
-                a.Like = item;
-                a.Product.ProductName = pdName;
+                a.Product = item;
                 a.Price = dlist;
                 if (pic != null)
                     a.Pic = pic;
