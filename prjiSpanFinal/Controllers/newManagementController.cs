@@ -49,6 +49,7 @@ namespace prjiSpanFinal.Controllers
                     Where(i => i.ProductName.Contains(keyword) && i.ProductStatusId == FilterId).
                     Select(e => e); ;
             }
+            var MemberAcc = (from i in db.MemberAccounts select i).ToList();
             var ProductStatusName = (from i in db.ProductStatuses select i).ToList();
             var RegionName = (from i in db.RegionLists select i).ToList();
             var SmallTypeName = (from i in db.SmallTypes select i).ToList();
@@ -58,6 +59,7 @@ namespace prjiSpanFinal.Controllers
                 CProductListViewModel model = new()
                 {
                     Product = p,
+                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == p.MemberId).MemberAcc,
                     ProductStatusName = (from i in ProductStatusName
                                          where i.ProductStatusId == p.ProductStatusId
                                          select i.ProductStatusName).First(),
@@ -737,48 +739,53 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region CouponRegion
-        public List<Coupon> GetCouponsFromDatabase(string keyword)
+        public List<CouponViewModel> GetCouponsFromDatabase(string keyword)
         {
             var db = new iSpanProjectContext();
-            List<Coupon> list = new();
+            List<CouponViewModel> list = new();
             IQueryable<Coupon> Coupons = null;
             if (keyword == null)
             {
-                Coupons = db.Coupons.Select(i => i);
+                Coupons = db.Coupons.Where(i=>i.OfficialEventListId==1).Select(i => i);
             }
             else if (int.TryParse(keyword, out int key))
             {
                 Coupons = db.Coupons.
-                     Where(i => i.CouponId == key || i.MemberId == key).
+                     Where(i =>i.OfficialEventListId==1&&( i.CouponId == key ||i.MemberId==key)).
                      Select(e => e);
             }
             else if (DateTime.TryParse(keyword, out DateTime key2))
             {
                 Coupons = db.Coupons.
-                     Where(i => i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2).
+                     Where(i =>i.OfficialEventListId==1&& (i.StartDate == key2 || i.ExpiredDate == key2 || i.ReceiveStartDate == key2 || i.ReceiveEndDate == key2)).
                      Select(e => e);
             }
             else
             {
                 Coupons = db.Coupons.
-                    Where(i => i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword)).
+                    Where(i =>i.OfficialEventListId ==1&&( i.CouponCode.Contains(keyword) || i.CouponName.Contains(keyword))).
                     Select(e => e); ;
             }
-
+            var MemberAcc = (from i in db.MemberAccounts select i).ToList();
             foreach (var coupon in Coupons)
             {
-                list.Add(coupon);
+                CouponViewModel model = new()
+                {
+                    Coupon = coupon,
+                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == coupon.MemberId).MemberAcc
+                };
+                list.Add(model);
             }
             return list;
         }
-        protected IPagedList<Coupon> GetCouponsPagedProcess(int? page, int pageSize, string keyword)
+        protected IPagedList<CouponViewModel> GetCouponsPagedProcess(int? page, int pageSize, string keyword)
         {
             // 過濾從client傳送過來有問題頁數
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
             var listUnpaged = GetCouponsFromDatabase(keyword);
-            IPagedList<Coupon> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            IPagedList<CouponViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
             if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
                 return null;
@@ -820,18 +827,18 @@ namespace prjiSpanFinal.Controllers
         public IActionResult CouponEdit(Coupon coupon)
         {
             iSpanProjectContext db = new();
-            var cp = db.Coupons.FirstOrDefault(i=>i.CouponId==coupon.CouponId);
-            cp.CouponName=coupon.CouponName;
-            cp.MemberId=coupon.MemberId;
-            cp.CouponName=coupon.CouponName;
-            cp.StartDate=coupon.StartDate;
-            cp.ExpiredDate=coupon.ExpiredDate;
-            cp.Discount=coupon.Discount;
-            cp.CouponCode=coupon.CouponCode;
-            cp.ReceiveStartDate=coupon.ReceiveStartDate;
-            cp.ReceiveEndDate=coupon.ReceiveEndDate;
-            cp.IsFreeDelivery=coupon.IsFreeDelivery;
-            cp.MinimumOrder=coupon.MinimumOrder;
+            var cp = db.Coupons.FirstOrDefault(i => i.CouponId == coupon.CouponId);
+            cp.CouponName = coupon.CouponName;
+            cp.MemberId = coupon.MemberId;
+            cp.CouponName = coupon.CouponName;
+            cp.StartDate = coupon.StartDate;
+            cp.ExpiredDate = coupon.ExpiredDate;
+            cp.Discount = coupon.Discount;
+            cp.CouponCode = coupon.CouponCode;
+            cp.ReceiveStartDate = coupon.ReceiveStartDate;
+            cp.ReceiveEndDate = coupon.ReceiveEndDate;
+            cp.IsFreeDelivery = coupon.IsFreeDelivery;
+            cp.MinimumOrder = coupon.MinimumOrder;
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }

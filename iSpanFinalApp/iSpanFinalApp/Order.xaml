@@ -5,8 +5,9 @@
              NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout BackgroundColor="Orange" >
+            <StackLayout BackgroundColor="Orange" Orientation="Horizontal">
                 <Label HorizontalOptions="Start" Text="蝦到爆商城" TextColor="White" FontSize="40" Margin="10,0,0,0"></Label>
+                <Button x:Name="logout" Text="登出" Margin="100,0,0,0" FontSize="Large" BackgroundColor="Orange" Clicked="logout_Clicked"></Button>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" Margin="10">
@@ -25,8 +26,10 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
-            <StackLayout Margin="10">
-                <Label Text="您的訂單:" FontSize="Large"></Label>
+            <StackLayout Margin="10" Orientation="Horizontal">
+                <Label Text="您的訂單:" FontSize="Large" VerticalTextAlignment="Center"></Label>
+                <Button x:Name="btnbuyer" Text="買東西" Margin="100,0,0,0" FontSize="Large" BackgroundColor="Orange" Clicked="btnbuyer_Clicked"></Button>
+                <Button x:Name="btnseller" Text="賣東西" FontSize="Large" BackgroundColor="LightGray" Clicked="btnseller_Clicked"></Button>
             </StackLayout>
             <ListView x:Name="listItem" HasUnevenRows="True" BackgroundColor="Transparent" >
                 <ListView.ItemTemplate>

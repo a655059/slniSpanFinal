@@ -4,7 +4,7 @@
     ViewData["Title"] = "CouponCreate";
 }
 
-<h1>建立優惠券</h1>
+<h1>建立非活動用優惠券</h1>
 
 <hr />
 <div class="row">
@@ -19,11 +19,11 @@
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                開始日期<input asp-for="StartDate" class="form-control" type="datetime"/>
+                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime"/>
+                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime-local"/>
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -38,13 +38,11 @@
                 <input asp-for="MemberId" class="form-control plaintext" value="1" type="hidden"/>
             </div>
             <div class="form-group">
-                <label asp-for="ReceiveStartDate" class="control-label">可以領取日期</label>
-                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime"/>
+                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local"/>
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReceiveEndDate" class="control-label">結束領取日期</label>
-                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime"/>
+                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime-local"/>
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -53,6 +51,9 @@
             <div class="form-group">
                 最低消費金額 <input asp-for="MinimumOrder" class="form-control" />
                 <span asp-validation-for="MinimumOrder" class="text-danger"></span>
+            </div>       
+            <div class="form-group">
+                 <input asp-for="OfficialEventListId" value="1" class="form-control" type="hidden"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="確認" class="btn btn-primary mb-2" />

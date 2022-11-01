@@ -1,6 +1,124 @@
-﻿
-<div>
+﻿@model List<prjiSpanFinal.ViewModels.Item.CMessageBoardViewModel>
+@{ 
+    int maxLayer = Model.Select(i => i.layer).Max();
+    string messageLayout = "messageLayout" + maxLayer;
+    string userImgSrc = "";
+    int productID = Model[0].messageBoard.ProductId;
+    if (Model.Count > 0)
+    {
+        try
+        {
+            string base65 = Convert.ToBase64String(Model[0].userPic);
+            userImgSrc = $"data:image/gif;base64,{base65}";
+        }
+        catch
+        {
+            userImgSrc = Url.Content("~/img/Member/nopicmem.jpg");
+        }
 
 
+    }
+}
+<style>
+
+</style>
+<div class="messageLayout bg-warning bg-opacity-10" id="@messageLayout">
+    <div class="productID d-none">@productID</div>
+    <div class="w-75 m-auto">
+        @{
+            foreach (var i in Model)
+            {
+                string class1 = "layer" + i.layer;
+                string messageBoardID = "messageBoardID" + i.messageBoard.MessageBoardId;
+                string imgSrc = "";
+                try
+                {
+                    string base64 = Convert.ToBase64String(i.member.MemPic);
+                    imgSrc = $"data:image/gif;base64,{base64}";
+                }
+                catch
+                {
+                    imgSrc = Url.Content("~/img/Member/nopicmem.jpg");
+                }
+                int periodDay = (DateTime.Now - i.messageBoard.PostTime).Days;
+                int periodHour = (DateTime.Now - i.messageBoard.PostTime).Hours;
+                int periodMinute = (DateTime.Now - i.messageBoard.PostTime).Minutes;
+                int periodSecond = (DateTime.Now - i.messageBoard.PostTime).Seconds;
+                string period = "";
+                if (periodDay != 0)
+                {
+                    period = periodDay + "天前";
+                }
+                if (periodDay == 0 && periodHour != 0)
+                {
+                    period = periodHour + "小時前";
+                }
+                if (periodDay == 0 && periodHour == 0 && periodMinute != 0)
+                {
+                    period = periodMinute + "分鐘前";
+                }
+                if (periodDay == 0 && periodHour == 0 && periodMinute == 0 && periodSecond != 0)
+                {
+                    period = periodSecond + "秒前";
+                }
+                
+                <div class="@class1 messageBoardID d-flex flex-fill mb-2" style="position:relative" id="@messageBoardID">
+                    @{
+                        if (i.layer == 0)
+                        {
+                            <div style="width:50px;aspect-ratio:1/1;">
+                                <img src="@imgSrc" alt="Alternate Text" style="width:100%;aspect-ratio:1/1;object-fit:contain;border-radius:50%" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-centser" style="width:50px;aspect-ratio:1/1;">
+                                <img src="@imgSrc" alt="Alternate Text" style="width:60%;aspect-ratio:1/1;object-fit:contain;border-radius:50%" />
+                            </div>
+                        }
+                    }
+                    <div class="messageContent">
+                        <div class="border rounded-2 ps-2 py-1">
+                            @{
+                                if (i.layer == 0)
+                                {
+                                    <div class="text-black opacity-50 " style="font-size:12px">作者</div>
+                                }
+                            }
+                            <div>@i.member.MemberAcc</div>
+                            <div>@i.messageBoard.Message</div>
+                        </div>
+                        <div class="messageFooter d-flex" style="font-size:12px">
+                            <div class="me-3">@period</div>
+                            <div class="messageLikeBtn text-primary me-3" style="cursor:pointer">讚</div>
+                            <div class="messageReplyBtn text-primary" style="cursor:pointer">回覆</div>
+                        </div>
+                        <div class="messageReplay" style="display:none">
+                            <div class="d-flex">
+                                <div class="text-centser" style="width:50px;aspect-ratio:1/1;">
+                                    <img src="@userImgSrc" alt="Alternate Text" style="width:60%;aspect-ratio:1/1;object-fit:contain;border-radius:50%" />
+                                </div>
+                                <input class="message border rounded-5 ps-2" style="height:30px" type="text" placeholder="回覆......" />
+                                <div class="messageSubmit" style="cursor:pointer">送出</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+            }
+        }
+    </div>
 </div>
-
+<script>
+    $(function () {
+        const maxLayer = Number($(".messageLayout").attr("id").substring(13));
+        for (let i = 0; i <= maxLayer; i++) {
+            const left = `+=${i * 50}px`;
+            const width = `${500 - i * 50}px`
+            $(`.layer${i}`).css({ "left": left });
+            $(`.layer${i}`).find(".messageContent").css("width", width);
+        }
+    });
+</script>
+@*<script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>*@

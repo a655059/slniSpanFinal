@@ -147,6 +147,28 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(null);
         }
+        public IActionResult Signin(string txtAccount, string txtPW, string txtPhone, string txtEmail)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            if (dbcontext.MemberAccounts.Where(m=>m.MemberAcc == txtAccount).Any())
+            {
+                return Json("1");
+            }
+            if (dbcontext.MemberAccounts.Where(m => m.Phone == txtPhone).Any())
+            {
+                return Json("2");
+            }
+            if (dbcontext.MemberAccounts.Where(m => m.Email == txtEmail).Any())
+            {
+                return Json("3");
+            }
+            string pName = "/img/Member/nopicmem.jpg";
+            string path = _enviro.WebRootPath + pName;
+            byte[] content = System.IO.File.ReadAllBytes(path);
+            dbcontext.MemberAccounts.Add(new MemberAccount() {MemberAcc = txtAccount, MemberPw = txtPW, Phone = txtPhone, Email = txtEmail, MemPic = content });
+            dbcontext.SaveChanges();
+            return Json("0");
+        }
 
         public IActionResult GetOrders(int id)
         {
@@ -162,6 +184,23 @@ namespace prjiSpanFinal.Controllers
                 Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).FirstOrDefault(),
                 ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).FirstOrDefault(),
             }).ToList().OrderByDescending(o=>o.OrderDatetime);
+            return Json(vm);
+        }
+
+        public IActionResult GetOrdersSeller(int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var vm = dbcontext.Orders.Where(o => o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Select(o => new ViewModels.App.OrderListViewModel()
+            {
+                OrderId = o.OrderId,
+                OrderDatetime = o.OrderDatetime,
+                OrderStatusName = o.Status.OrderStatusName,
+                Quantity = o.OrderDetails.Select(o => o.Quantity).FirstOrDefault(),
+                Unitprice = o.OrderDetails.Select(o => o.Unitprice).FirstOrDefault(),
+                Style = o.OrderDetails.Select(o => o.ProductDetail.Style).FirstOrDefault(),
+                Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).FirstOrDefault(),
+                ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).FirstOrDefault(),
+            }).ToList().OrderByDescending(o => o.OrderDatetime);
             return Json(vm);
         }
 
