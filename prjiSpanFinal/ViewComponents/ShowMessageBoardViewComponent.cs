@@ -23,7 +23,6 @@ namespace prjiSpanFinal.ViewComponents
                 string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 userPic = JsonSerializer.Deserialize<MemberAccount>(memberString).MemPic;
             }
-
             var firstMessageBoards = dbContext.MessageBoards.Where(i => i.ProductId == productID && i.Parent == 0).Select(i => new CMessageBoardViewModel
             {
                 messageBoard = i,
@@ -31,13 +30,27 @@ namespace prjiSpanFinal.ViewComponents
                 member = i.Member,
                 layer = 0,
                 userPic = userPic,
-            });
+            }).ToList();
             foreach (var a in firstMessageBoards)
             {
+                var likeCounts = dbContext.MessageBoardLikes.Where(i => i.MessageBoardId == a.messageBoard.MessageBoardId).ToList();
+                if (likeCounts.Count > 0)
+                {
+                    a.likeCount = likeCounts.Count;
+                }
+                else
+                {
+                    a.likeCount = 0;
+                }
                 messageBoards.Add(a);
                 GetChildren(a);
             }
-            return View(messageBoards);
+            CMessageBoardViewModel cMessageBoard = new CMessageBoardViewModel
+            {
+                cMessageBoardList = messageBoards,
+                productID = productID,
+            };
+            return View(cMessageBoard);
         }
         public void GetChildren(CMessageBoardViewModel firstMessage)
         {
@@ -53,6 +66,15 @@ namespace prjiSpanFinal.ViewComponents
             {
                 foreach (var a in children)
                 {
+                    var likeCounts = dbContext.MessageBoardLikes.Where(i => i.MessageBoardId == a.messageBoard.MessageBoardId).ToList();
+                    if (likeCounts.Count > 0)
+                    {
+                        a.likeCount = likeCounts.Count;
+                    }
+                    else
+                    {
+                        a.likeCount = 0;
+                    }
                     messageBoards.Add(a);
                     GetChildren(a);
                 }
