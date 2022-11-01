@@ -71,8 +71,8 @@
             <div class="">
                 <div class="mx-2 input-group mb-3 w-50">
                     <span class="input-group-text">優惠劵名稱</span>
-                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    <button class="btn btn-outline-secondary" type="button">確定</button>
+                    <input id="selectname" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <button class="btn btn-outline-secondary" type="button" id="selectbtn"><i class="fa fa-search"></i></button>
                 </div>
             </div>
             <div class="">
@@ -88,30 +88,32 @@
                         <td scope="col" align="center">滿額</td>
                         <td scope="col" align="center">操作</td>
                     </tr>
-                    @{
-                        for (var i = 0; i < Model.Count; i++)
-                        {
-                            <tr>
-                                <td class="col-1" align="center"><img src="~/img/seller coupon.png" /></td>
-                                <td class="置中 col" align="center">@Model[i].CouponName</td>
-                                <td class="置中 col" align="center">@Model[i].CouponCode</td>
-                                <td class="置中 col" align="center">@Model[i].Discount</td>
-                                <td class="置中 col" align="center">@Model[i].StartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</td>
-                                <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy/MM/dd")</td>
-                                <td class="置中 col" align="center">@Model[i].IsFreeDelivery</td>
-                                <td class="置中 col" align="center">@Model[i].MinimumOrder</td>
-                                <td class="置中 col" align="center">
-                                    <div>
-                                        <button class="btnEdit btn btn-secondary">編輯</button>
-                                    </div>
-                                    <div>
-                                        @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
-                                                                    new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;", @class = "btn btn-danger mt-2" })
-                                    </div>
-                                </td>
-                            </tr>
+                    <tbody id="selectcoupon">
+                        @{
+                            for (var i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
+                                    <td class="置中 col" align="center">@Model[i].CouponName</td>
+                                    <td class="置中 col" align="center">@Model[i].CouponCode</td>
+                                    <td class="置中 col" align="center">@Model[i].Discount</td>
+                                    <td class="置中 col" align="center">@Model[i].StartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="置中 col" align="center">@Model[i].IsFreeDelivery</td>
+                                    <td class="置中 col" align="center">@Model[i].MinimumOrder</td>
+                                    <td class="置中 col" align="center">
+                                        <div>
+                                            <button class="btnEdit btn btn-secondary">編輯</button>
+                                        </div>
+                                        <div>
+                                            @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
+                                                                        new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;", @class = "btn btn-danger mt-2" })
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
-                    }
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -179,5 +181,42 @@
         document.getElementById("text3").value = 0.6;
     })
 
+
+    //===============搜尋=========================
+    $("#selectbtn").click(function () {
+        $("#selectcoupon").html("");
+        let selectname = $("#selectname").val();
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+        $.postJSON("/Seller/SelectCoupon", { select: selectname }, function (dataname) {
+            console.log(1)
+            console.log(dataname)
+            let item = "";
+            for (var i = 0; i < dataname.length; i++)
+            {
+                item = item +
+                    `<tr>
+                        <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
+                        <td class="置中 col" align="center">${dataname[i].couponName}</td>
+                        <td class="置中 col" align="center">${dataname[i].couponCode}</td>
+                        <td class="置中 col" align="center">${dataname[i].discount}</td>
+                        <td class="置中 col" align="center">${dataname[i].startDate}<br />|<br />${dataname[i].expiredDate}</td>
+                        <td class="置中 col" align="center">${dataname[i].receiveStartDate}<br />|<br />${dataname[i].receiveEndDate}</td>
+                        <td class="置中 col" align="center">${dataname[i].isFreeDelivery}</td>
+                        <td class="置中 col" align="center">${dataname[i].minimumOrder}</td>
+                        <td class="置中 col" align="center">
+                            <div>
+                                <button class="btnEdit btn btn-secondary">編輯</button>
+                            </div>
+                            <div>
+                                <a class="btn btn-danger my-2" href="/Seller/DeleteProduct/${dataname[i].couponId}" onclick="return confirm('確定要刪除嗎?')">刪除</a>
+                            </div>
+                        </td>
+                    </tr>`
+            }
+            $("#selectcoupon").append(item);
+        })
+    })
 </script>
 }

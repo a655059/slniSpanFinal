@@ -7,6 +7,7 @@ namespace prjiSpanFinal.ViewModels.seller
 {
     public class CSellerNewIndexToViewViewModel
     {
+        public int memberid { get; set; }
         public List<string> productName { get; set; }
         public List<List<string>> Style { get; set; }
         public List<List<int>> Quantity { get; set; }

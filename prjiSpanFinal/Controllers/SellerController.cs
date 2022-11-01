@@ -206,7 +206,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public void CreateSuccess(CSellerCreateToViewViewModel jsonString)//新增商品所有資料session  //新增成功畫面
+        public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功
         {
 
             //HttpContext.Session.Remove(CSellerSessionViewModel.PRODUCT_ALL_DATA);
@@ -275,19 +275,6 @@ namespace prjiSpanFinal.Controllers
             _db.SaveChanges();
         }
 
-
-
-
-
-
-        //連結小類別選項
-
-        public IActionResult SmallType(int bigtype)
-        {
-            var a = _db.SmallTypes.Where(s => s.BigTypeId == bigtype).Select(s => new { id = s.SmallTypeId, name = s.SmallTypeName }).ToList();
-            return Json(a);
-        }
-
         public IActionResult OrderDetail(int id)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -331,6 +318,15 @@ namespace prjiSpanFinal.Controllers
             }).FirstOrDefault();
             return View(vm);
         }
+
+            //連結小類別選項
+
+        public IActionResult SmallType(int bigtype)
+        {
+            var a = _db.SmallTypes.Where(s => s.BigTypeId == bigtype).Select(s => new { id = s.SmallTypeId, name = s.SmallTypeName }).ToList();
+            return Json(a);
+        }
+
 
 
         public IActionResult Shipper()  //傳資料進去view
@@ -532,10 +528,6 @@ namespace prjiSpanFinal.Controllers
 
 
         }
-
-
-
-
         public IActionResult SelectIndex(string select)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -589,10 +581,10 @@ namespace prjiSpanFinal.Controllers
                 Style = listStyle,
                 Quantity = listQty,
                 UnitPrice = listPrice,
-                Pic = listPic
+                Pic = listPic,
+                ProductStatusId = liststatus
             };
             return Json(x);
-
         }
 
 
@@ -647,16 +639,22 @@ namespace prjiSpanFinal.Controllers
             return View(x);            
         }
 
+        public void EditProductSuccess(CSellerCreateToViewViewModel jsonString) //商品編輯儲存
+        {
+        
+
+        }
 
 
 
-        public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
+            public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
         {
             var result = select;
             if (result != null)
             {
                 Product product = _db.Products.Where(n => n.ProductId == result.productId[0]).FirstOrDefault();
                 product.ProductStatusId = result.ProductStatusId[0];
+                product.EditTime = DateTime.Now;
                 _db.SaveChanges();
             }
             return RedirectToAction("NewIndex");
@@ -736,6 +734,20 @@ namespace prjiSpanFinal.Controllers
             var x = _db.Coupons.Where(n => n.MemberId == memId).Select(n => n).ToList();
 
             return View(x);
+        }
+        public IActionResult SelectCoupon(string select)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            string logindata = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
+
+            var x = _db.Coupons.Where(n => n.MemberId == memId&&n.CouponName==select).Select(n => n).ToList();
+
+
+            return Json(x);
         }
 
         public void Couponresponse(string jsonString)

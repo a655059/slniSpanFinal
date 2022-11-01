@@ -139,7 +139,6 @@
 </div>
 
 
-@*<form action="@Url.Content("~/seller/CreateToDB")" method="post">*@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10" id="change1">
@@ -187,17 +186,20 @@
                                     <th class="col 規格列表">功能</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="styletbody">
                                 @{ 
-                                    for(int i = 0; i < Model.Style.Count;i++) 
-                                    { 
-                                        <tr>
+                                    string styleid = "";
+                                    for (int i = 0; i < Model.Style.Count;i++)
+                                    {
+                                        styleid = ("styleid" + i);
+                                        <tr id="@styleid">
                                             <td class="col 規格列表">@Model.Style[i]</td>
                                             <td class="col 規格列表">@Model.Quantity[i]</td>
                                             <td class="col 規格列表">@Model.UnitPrice[i].ToString("0")</td>
                                             <td class="col 規格列表"><img src="data:image;base64,@System.Convert.ToBase64String(@Model.BodyPic[i])" width="30" height="30" /></td>
                                             <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
                                         </tr>
+
                                     }                                   
                                 }                                
                             </tbody>
@@ -219,7 +221,7 @@
                                 @{
                                     if (Model.DBtoPic != null)
                                     {
-                                        <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])" width="100" height="100" class="border  " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                       <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
                                     }
                                     else
                                     {
@@ -246,7 +248,7 @@
                                             {
                                                 if (Model.DBtoPic.Count > 1 && i+1 < Model.DBtoPic.Count)
                                                 {
-                                                    <img src="data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])" width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                    <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                                 }
                                                 else
                                                 {
@@ -303,13 +305,32 @@
 </div>
 @section Scripts{
     <script>
-        $(document).on("click",".delbtn",function () {   //刪除資料庫生成的規格
+
+
+        $(document).on("click", ".delbtn", function () {   //刪除資料庫生成的規格
             $(this).parents("tr").remove();
         })
 
+        /////////大類小類連接---------------------------------------------------------------------------------------------------------------
+        let advancedmode = false;
+        const bigType = document.querySelector("#bigType");
+        const smallType = document.querySelector("#smallType");
+
+        bigType.addEventListener("change", async function () {
+            $.getJSON("/Seller/SmallType", { bigtype: $("#bigType").children("option:selected").val() }, function (data) {
+                $("#smallType").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#smallType").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+                }
+            });
+        })
+        //------------------------------------------------
+
         let alldata = [];
+
         //資料暫存,後去把data變數傳入後端
-        let data = []
+        let data = [];
+
         let tbody = document.querySelector('tbody')
         for (let i = 0; i < data.length; i++) {
             let tr = document.createElement('tr');
@@ -357,10 +378,12 @@
         })
 
         save.addEventListener("click", function () {
+
             let dataNew = [];
             let name = document.getElementById("text1").value;//prompt('請輸入姓名');
             let subject = document.getElementById("text2").value;
             let score = document.getElementById("text3").value;
+
 
             //判斷資料有值再塞入
             if (name !== '' && subject !== '' && score !== '') {
@@ -389,8 +412,6 @@
                 //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
                 td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
                 tr.appendChild(td1);
-                console.log('stylephoto')
-                console.log(stylephoto)
 
                 let td = document.createElement('td');
                 td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
@@ -409,17 +430,107 @@
             else {
                 alert("項目,數量和價格不可為空");
             }
+
         })
 
 
 
 
-        good.addEventListener("click", function () {
-            let name = document.getElementById("ProductName").value;
-            let smalltype = document.getElementById("smallType").value;
+        //=========================================================
 
-            alert("修改完成");
-            location.href = "/Seller/NewIndex";
+        //大頭照新增  預覽
+        $(".commentphotoclass").change(function () {
+            const photo = document.getElementById($(this).attr("id")).files;
+            if (photo) {
+                let src = URL.createObjectURL(photo[0]);
+                console.log(src);
+                $(this).siblings('label').children().css("background-image", `url('${src}')`);
+            }
+        });
+        //=====================================================
+        //表單照片轉二進位儲存
+
+        let dataphoto = [];
+
+        let appleclass = document.getElementsByClassName("commentphotoclass");
+        $(".commentphotoclass").on("change", function () {
+            let photos = [];
+            dataphoto = [];
+            for (let i = 0; i < appleclass.length; i++) {
+                if (appleclass[i].files.length != 0) {
+                    photos.push(appleclass[i].files);
+                }
+            }
+
+            if (photos) {
+                $.each(photos, function (idx, photo) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(photo[0]);
+                    reader.onload = function () {
+                        let src = reader.result;
+                        dataphoto.push(src.split(",")[1]);
+                    };
+                });
+            }
+        })
+//====================================================================
+         good.addEventListener("click", function () {
+
+             for (let i = 0; i < $("#styletbody").children().length; i++) {
+                 var id = document.getElementById('styleid' + i);
+                 console.log(id)
+                 let styleName = {
+                     StyleStr: id.children[0].textContent,
+                     QuantityStr: id.children[1].textContent,
+                     UnitPriceStr: id.children[2].textContent,
+                     BodyPicStr: id.children[3].va
+                 };        
+                 alldata.push(styleName);
+             }
+             
+
+            //畫面的物流
+            let shiper = [];
+            @foreach (var item in  Model.shipID) {
+                        <text>
+                    shiper.push("@item");
+                    </text>
+                }
+              //要存入的金流
+             let payment = [];
+            @foreach (var item in Model.PaymentID){
+                <text>
+                    payment.push("@item");
+                    </text>
+            }
+
+            let pushData = {
+                暫存規格:alldata,
+                ProductName: document.getElementById("ProductName").value,
+                smalltype: $("#smallType").children("option:selected").val(),
+                Description: document.getElementById("Description").value,
+                CategoryID: $("#category").children("option:selected").val(),
+                BodyPic: dataphoto,
+                ShiperID: shiper,
+                PaymentID: payment
+            }
+
+            jQuery.postJSON = function (url, data, callback) {
+                jQuery.post(url, data, callback, "json");
+            };
+
+             $.postJSON("/Seller/EditProductSuccess", { jsonString: pushData }, function () { });
+
+            //Swal.fire(
+            //    '成功!',
+            //    '您已修改成功!',
+            //    'success'
+            //);
+
+            //setTimeout(function () {
+            //    location.href = "/Seller/NewIndex"
+            //}, 2000);
+
         })
     </script>
 
