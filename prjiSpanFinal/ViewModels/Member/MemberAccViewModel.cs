@@ -3,6 +3,8 @@ using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace prjiSpanFinal.ViewModels.Member
@@ -106,6 +108,25 @@ namespace prjiSpanFinal.ViewModels.Member
         public string TW { get; set; }
         public string PhoneMail { get; set; }
         public IFormFile File1 { get; set; }
+
+        public string PWHasH()
+        {
+            string afterhash = "abcdefghijklmnopqrstuvwxyz";
+            string number = "0123456789";
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random crandom = new Random();
+            int sub1 = crandom.Next(2);
+            int sub2 = crandom.Next(10);
+            string newpw= afterhash.Substring(sub1, sub2) + number.Substring(sub1, sub2)+ABC.Substring(sub2, sub1);
+            //using (SHA256 mysha256 = SHA256.Create())
+            //{
+            //    //現在輸入的pw變成byte陣列
+            //    byte[] bytes = Encoding.UTF8.GetBytes(pw);
+            //    var hash = mysha256.ComputeHash(bytes);
+            //    afterhash = Convert.ToBase64String(hash);
+            //}
+            return newpw;
+        }
     }
 
 }

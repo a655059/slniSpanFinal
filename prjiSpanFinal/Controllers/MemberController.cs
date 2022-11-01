@@ -660,27 +660,37 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
-            memberac = mem.memACC;
-            var mempass = "";
-           mempass = db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).MemberPw;
-            if (!String.IsNullOrEmpty(mempass)) { 
-            MimeMessage message = new MimeMessage();
-            BodyBuilder builder = new BodyBuilder();
-            //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
-            //==>這裡可以放入圖片路徑
+            //memberac = mem.memACC;
 
-            builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            builder.HtmlBody = "您的新密碼為:" + mempass + "\n" + $"當前時間:{DateTime.Now:yyyy-MM-dd HH:mm:ss}"+"請使用新密碼重新登入";
+            //var mempass = "";
+            var memacc = db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).MemberAcc;//找到忘記會員
+
+            //驗證信箱或手機存不存在
+            if (!String.IsNullOrEmpty(memacc))
+            {
+                var Newpassword = new MemberAccViewModel().PWHasH();
+                MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberAcc == memacc);
+                acc.MemberPw = Newpassword;
+                db.SaveChanges();
+                MimeMessage message = new MimeMessage();
+                BodyBuilder builder = new BodyBuilder();
+                //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+                //==>這裡可以放入圖片路徑
+
+                //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
+                builder.HtmlBody = $"<p>尊敬的會員您好：您新的密碼為{Newpassword}。<br>請以新密碼登入並修改您的舊密碼。如果未有忘記密碼的需求，請忽略此信件。</p><br>"+
+                                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>"+
+                                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
                 //=>內容
 
                 message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
-            message.To.Add(new MailboxAddress("詹勳棋", "harry80011@gmail.com"));
-            message.Subject = "[C#蝦到爆商城(ShopDaoBao)]忘記密碼通知信"; //==>標題
-            message.Body = builder.ToMessageBody();
+                message.To.Add(new MailboxAddress("王曉明", "Wang20221101@gmail.com"));
+                message.Subject = "[C#蝦到爆商城(ShopDaoBao)]忘記密碼通知信"; //==>標題
+                message.Body = builder.ToMessageBody();
 
 
-            using (SmtpClient client = new SmtpClient())
-            {
+                using (SmtpClient client = new SmtpClient())
+                {
                 client.Connect("smtp.outlook.com", 25, MailKit.Security.SecureSocketOptions.StartTls);
                 //第二個參數是port
                 //outlook.com smtp.outlook.com port:25
@@ -689,7 +699,8 @@ namespace prjiSpanFinal.Controllers
                 client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
                 client.Send(message);
                 client.Disconnect(true);
-            }
+                }
+
                 return RedirectToAction("Login");
             }
             
