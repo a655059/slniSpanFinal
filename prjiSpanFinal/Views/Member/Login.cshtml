@@ -35,13 +35,18 @@
                         <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">登入</h3>
 
                         <div class="form-outline mb-4">
-                            <input type="email" id="txtAccount" value="" class="form-control form-control-lg" />
+                            <input type="text" id="txtAccount" value="" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example18">帳號</label>
                         </div>
 
                         <div class="form-outline mb-4">
                             <input type="password" id="txtPW" value="" class="form-control form-control-lg" />
                             <label class="form-label" for="form2Example28">密碼</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="text" id="txtValidation" value="" class="form-control form-control-lg" />
+                                <label class="form-label" for="form2Example28">驗證碼(點擊刷新)</label><a href="#" id="loginvali"><img src="/Member/GetValidateCode" class="ms-2" id="loginvaliimg" /></a>
                         </div>
 
                         <div class="pt-1 mb-4">
@@ -73,17 +78,18 @@
     <script>
         let txtAcc = $("#txtAccount");
         let txtPW = $("#txtPW");
+        let txtValidation = $("#txtValidation");
 
         $("#btnlogin").click(function () {
             event.preventDefault();
-            $.post('@Url.Content("~/Member/LoginCheck")', { "txtAccount": txtAcc.val(), "txtPW": txtPW.val() }, function (data) {
+            $.post('@Url.Content("~/Member/LoginCheck")', { "txtAccount": txtAcc.val(), "txtPW": txtPW.val(), "txtValidation": txtValidation.val() }, function (data) {
                 if (data == "2"){
                     Swal.fire(
                         '成功',
                         "管理員登入成功",
                         'success'
-                    );
-                    window.location = "/newManagement/PowerBi";
+                    ).then(function () { window.location = "/newManagement/PowerBi"; });
+                    
                 }
                 else if (data == "1") {
                     Swal.fire(
@@ -91,12 +97,18 @@
                         `登入成功，${$("#txtAccount").val()} 歡迎回來`,
                         'success'
                     ).then(function(){window.location = "/";});
-                    
+                }
+                else if(data == "11"){
+                    Swal.fire(
+                        '失敗',
+                        "驗證碼錯誤",
+                        'error'
+                    );
                 }
                 else {
                     Swal.fire(
                         '失敗',
-                        "登入失敗",
+                        "帳號密碼錯誤",
                         'error'
                     );
                 }
@@ -122,5 +134,10 @@
             $("#txtAccount").val("admin");
             $("#txtPW").val("admin");
         });
+
+        $("#loginvali").click(function(){
+            var unique = $.now();
+            $(this).children().attr("src", `/Member/GetValidateCode/${unique}`);
+        })
     </script>
 }

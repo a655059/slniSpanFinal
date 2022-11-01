@@ -51,8 +51,17 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        public IActionResult LoginCheck(string txtAccount, string txtPW)
+        public IActionResult LoginCheck(string txtAccount, string txtPW, string txtValidation)
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGIN_VALIDATION))
+            {
+                return RedirectToAction("Login");
+            }
+            if (txtValidation != HttpContext.Session.GetString(CDictionary.SK_LOGIN_VALIDATION) && txtValidation != null) //暫時讓他空白不然很麻煩
+            {
+                return Content("11", "text/plain", Encoding.UTF8);
+            }
+
             var mem = _context.MemberAccounts.FirstOrDefault(m => m.MemberAcc == txtAccount);
             if (mem != null)
             {
@@ -69,7 +78,7 @@ namespace prjiSpanFinal.Controllers
                     return Content("1", "text/plain", Encoding.UTF8);
                 }
             }
-            return Content("0", "text/plain", Encoding.UTF8); ;
+            return Content("0", "text/plain", Encoding.UTF8);
         }
         public IActionResult LoginSuccess()
         {
@@ -387,8 +396,55 @@ namespace prjiSpanFinal.Controllers
                     }
                     return Json(999);
             }
-
         }
+        private string RandomCode(int length)
+        {
+            string s = "0123456789zxcvbnmasdfghjklqwertyuiop";
+            StringBuilder sb = new StringBuilder();
+            Random rand = new Random();
+            int index;
+            for (int i = 0; i < length; i++)
+            {
+                index = rand.Next(0, s.Length);
+                sb.Append(s[index]);
+            }
+            HttpContext.Session.SetString(CDictionary.SK_LOGIN_VALIDATION, sb.ToString());
+            return sb.ToString();
+        }
+        private void PaintInterLine(Graphics g, int num, int width, int height)
+        {
+            Random r = new Random();
+            int startX, startY, endX, endY;
+            for (int i = 0; i < num; i++)
+            {
+                startX = r.Next(0, width);
+                startY = r.Next(0, height);
+                endX = r.Next(0, width);
+                endY = r.Next(0, height);
+                g.DrawLine(new Pen(Brushes.Red), startX, startY, endX, endY);
+            }
+        }
+
+        public IActionResult GetValidateCode()
+        {
+            byte[] data = null;
+            string code = RandomCode(5);
+            TempData["code"] = code;
+            MemoryStream ms = new MemoryStream();
+            using (Bitmap map = new Bitmap(100, 40))
+            {
+                using (Graphics g = Graphics.FromImage(map))
+                {
+                    g.Clear(Color.White);
+                    g.DrawString(code, new Font("黑體", 18.0F), Brushes.Blue, new Point(10, 8));
+                    PaintInterLine(g, 10, map.Width, map.Height);
+                }
+                map.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            data = ms.GetBuffer();
+            return File(data, "image/jpeg");
+        }
+
         public IActionResult Order()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
