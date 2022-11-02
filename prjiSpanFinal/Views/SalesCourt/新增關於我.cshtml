@@ -16,11 +16,11 @@
 
         <div class="row">
             <div class="col">
-                <input type="hidden" name="Memberid" value="@Model.Memberid" id="@Model.Memberid" >
+                <input type="hidden" name="Memberid" value="@Model.Memberid" id="@Model.Memberid">
                 <div class="text-danger">賣場服務時間(必填)</div>
                 <div class="row my-2">
                     <div class="col-1">
-                        <input type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
+                        <input class="checklist" type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
                     </div>
                     星期
                     <div class="col-2">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="row my-2">
                     <div class="col-1">
-                        <input type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
+                        <input class="checklist" type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
                     </div>
                     時間
                     <div class="col-2">
@@ -86,7 +86,7 @@
                 <p class="my-1">
                     <div class="row">
                         <div class="col-1">
-                            <input type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
+                            <input class="checklist" type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">
                         </div>
                         每週
                         <div class="col-4">
@@ -101,12 +101,22 @@
             </div>
             <div class="col">
                 <div class="text-success">新品上架時間</div>
-              
+
                 <textarea name="NewProductOnLoad" class="form-control" style="height: 90px; width:570px;"></textarea>
-                
+
                 <div class="text-success">賣家類型</div>
-               
-                <textarea name ="SellerCategory" class="form-control" style="height: 90px; width:570px;"></textarea>
+
+                <textarea name="SellerCategory" class="form-control" style="height: 90px; width:570px;"></textarea>
+
+                <label>
+                    <input type="radio" value="tw" />每天
+                    <input type="radio" value="tw" />1-3天
+                    <input type="radio" value="tw" />3-5天
+                    <input type="radio" value="tw" />每週
+                    <input type="radio" value="tw" />隔週
+                    <input type="radio" value="tw" />不定期
+                    @*<input class="checklist" type="checkbox" name="ServiceTime[]" value="@Model.SalesCourtServiceTime" id="@Model.SalesCourtServiceTime">*@
+                </label>
             </div>
         </div>
 
@@ -116,22 +126,50 @@
         <div class="col">
             <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
                 <div class="bg-warning rounded-2">售後服務</div>
-               
-                <textarea name ="ServiceAfterBuy" class="form-control" style="height: 184px; width:630px;"></textarea>
+
+                <textarea name="ServiceAfterBuy" class="form-control" style="height: 184px; width:630px;"></textarea>
             </div>
         </div>
         <div class="col">
             <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
                 <div class="bg-warning rounded-2">注意事項</div>
-               
-                <textarea name ="Caution" class="form-control" style="height: 184px; width:630px;"></textarea>
+
+                <textarea name="Caution" class="form-control" style="height: 184px; width:630px;"></textarea>
             </div>
         </div>
     </div>
 
     <div class="form-group ">
         <input type="submit" value="送出" id="btnSubmit" class="btn btn-success" />
-
+        <a role="button" class="btn btn-primary" id="demo1">console array</a>
+        <a role="button" class="btn btn-primary" id="demo2">console string</a>
     </div>
 
+   
+
 </form>
+
+
+@section Scripts
+{
+    <script>
+    $("#demo1").click(function () {
+        let arrayC = [];
+        for (let i = 0; i < $(".checklist").length;i++)
+        {
+            arrayC.push($(".checklist")[i].checked);
+        }
+        console.log(arrayC)
+    })
+    $("#demo2").click(function(){
+            console.log(
+                JSON.stringify($.map($(".checklist"), function (data) {
+                    return data.checked
+                }))
+            )
+    })
+
+
+    </script>
+
+}
