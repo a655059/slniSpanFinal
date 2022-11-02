@@ -50,7 +50,7 @@
     <div class="col-1"></div>
     <div class="col-11 ">
         <div class="input-group mb-1">
-            <input type="text" class="form-control input-text" placeholder="搜尋產品" aria-label="Recipient's username" id="orderkeyword" aria-describedby="basic-addon2">
+            <input type="text" class="form-control rounded" placeholder="搜尋產品" aria-label="Recipient's username" id="orderkeyword" aria-describedby="basic-addon2">
             <button class="btn btn-primary" type="button" id="btnDate"><i>搜尋</i></button>
         </div>
 
@@ -64,24 +64,24 @@
                     </a>
 
                     @*<a class="itembody-filter2-btn linknoline dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                            編輯
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li>
-                                <a class="dropdown-item" id="cancle">
-                                    <i></i>
-                                    取消按讚
-                                    <input type="hidden" value="6" />
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item SortOrder" id="SortOrder7">
-                                    <i></i>
-                                    無效商品
-                                    <input type="hidden" value="7" />
-                                </a>
-                            </li>
-                        </ul>*@
+                        編輯
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item" id="cancle">
+                                <i></i>
+                                取消按讚
+                                <input type="hidden" value="6" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item SortOrder" id="SortOrder7">
+                                <i></i>
+                                無效商品
+                                <input type="hidden" value="7" />
+                            </a>
+                        </li>
+                    </ul>*@
 
                     <a class="itembody-filter2-btn linknoline SortOrder" id="SortOrder3">
                         熱銷商品
@@ -133,6 +133,35 @@
             }
 
         </div>
+        <div class="row ">
+            <div class="d-flex justify-content-center">
+                <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                    <option value="1">每頁1個</option>
+                    <option value="5" selected>每頁5個</option>
+                    <option value="10">每頁10個</option>
+                    <option value="20">每頁20個</option>
+                </select>
+            </div>
+            <div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" id="orderpageup">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="orderpagedown">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span id="totalpagesdisplay"></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -152,10 +181,45 @@
         const cancle = document.querySelector("#deletMylike")
         const subtn = document.querySelector("#subtn")
         let ArrpdID = [];
+        //換頁
+        function reloaditem() {
+            let keyword;
+            //let startdate;
+            //let enddate
+            if (searchflag) {
+                keyword = $("#orderkeyword").val();
+                //startdate = $("#startDate").val();
+                //enddate = $("#endDate").val();
+            }
+            else {
+                $("#orderkeyword").val("");
+                keyword = "";
+                //startdate = "1990-01-01";
+                //enddate = "2050-01-01";
+            }
+            $.getJSON(`/Member/GetSortedFollow`, { sort: sortmethod, pages: nowpages, eachpage: eachpage, keyword: keyword, startdate: startdate, enddate: enddate }, function (data) {
+                $("#followtablebody").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#followtablebody").append(FollowListItem(data[i]));
+                }
+                if (data.length > 0) {
+                    PageNumFill(data.length);
+                }
+                else {
+                    PageNumFill(0);
+                }
+            });
+        }
 
-        //$('input:checkbox[checked=true]').each(function (item) {
-        //    item.val();
-        //})
+        $("#pagecountselect").change(function () {
+            eachpage = $("#pagecountselect option:selected").val();
+            nowpages = 1;
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        });
+
+
+
+
 
         $("#btnDate").click(function (event) {
             if (searchflag) {
