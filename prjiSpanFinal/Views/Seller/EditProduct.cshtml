@@ -147,9 +147,10 @@
             <div class="排版 mx-5">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" id="pid" value="@Model.ProductID"/>
                 <div class="d-flex justify-content-start">
                     <label class="名稱寬">名稱</label>
-                    <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" value="@Model.ProductName"/>
+                    <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" value="@Model.ProductName" />
                     <span class="text-danger"></span>
                 </div>
                 <div class="d-flex justify-content-start ">
@@ -157,7 +158,7 @@
                     <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
                         @{
                             for (int i = 0; i < Model.bigType.Count; i++)
-                            {                                
+                            {
                                 <option value="@(i+1)">@Model.bigType[i]</option>
                             }
                         }
@@ -167,6 +168,22 @@
                             for (int i = 0; i < 17; i++)
                             {
                                 <option value="@(i+1)">@Model.smallType[i]</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start ">
+                    <label class="名稱寬 mt-3">自訂類別</label>
+                    <select class="form-select w-25 m-3" aria-label="Default select example" id="category">
+                        <option value="1" selected>未分類</option>
+                        @{
+                            if (Model.Category.Count >0)
+                            {
+                                for (int i = 0; i < Model.Category.Count; i++)
+                                {
+                                    <option value="@Model.CustomizedCategoryID[i]">@Model.Category[i]</option>
+                                }
                             }
                         }
                     </select>
@@ -187,10 +204,11 @@
                                 </tr>
                             </thead>
                             <tbody id="styletbody">
-                                @{ 
+                                @{
                                     string styleid = "";
-                                    for (int i = 0; i < Model.Style.Count;i++)
+                                    for (int i = 0; i < Model.Style.Count; i++)
                                     {
+
                                         styleid = ("styleid" + i);
                                         <tr id="@styleid">
                                             <td class="col 規格列表">@Model.Style[i]</td>
@@ -200,8 +218,8 @@
                                             <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
                                         </tr>
 
-                                    }                                   
-                                }                                
+                                    }
+                                }
                             </tbody>
                         </table>
                         <div class="text-center">
@@ -214,55 +232,49 @@
                 </div>
                 <div class="d-flex justify-content-start">
                     <label class="名稱寬 mt-2">封面照片</label>
-                    <div class="d-flex justify-content-start">
+                    <div class="d-flex justify-content-start" id="pichead">
                         @*    大頭照相片1     *@
-                        <div>
-                            <label class="btn" for="commentPhoto1">
-                                @{
-                                    if (Model.DBtoPic != null)
-                                    {
-                                       <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                    }
-                                    else
-                                    {
-                                        <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                    }
+                        <label class="btn" for="commentPhoto1">
+                            @{
+                                if (Model.DBtoPic != null)
+                                {
+                                    <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
                                 }
-                            </label>
-                            <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
-                        </div>
+                                else
+                                {
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                }
+                            }
+                        </label>
+                        <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
                     </div>
                     <label class="名稱寬 mt-2">其他照片</label>
-                    <div class="d-flex justify-content-start">
+                    <div class="d-flex justify-content-start" id="picbody">
                         @*    大頭照相片2     *@
                         @{
                             for (int i = 0; i < 4; i++)
                             {
-                                <div>
+                                string id = $"commentPhoto{i + 2}";
+                                <label class="btn" for="@id">
                                     @{
-                                        string id = $"commentPhoto{i + 2}";
-                                    }
-                                    <label class="btn" for="@id">
-                                        @{
-                                            if (Model.DBtoPic != null)
+                                        if (Model.DBtoPic != null)
+                                        {
+                                            if (Model.DBtoPic.Count > 1 && i + 1 < Model.DBtoPic.Count)
                                             {
-                                                if (Model.DBtoPic.Count > 1 && i+1 < Model.DBtoPic.Count)
-                                                {
-                                                    <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                                }
-                                                else
-                                                {
-                                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                                }
+                                                <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                             }
                                             else
                                             {
                                                 <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                             }
                                         }
-                                    </label>
-                                    <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
-                                </div>
+                                        else
+                                        {
+                                            <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                        }
+                                    }
+                                </label>
+                                <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
                             }
                         }
                     </div>
@@ -476,17 +488,41 @@
 //====================================================================
          good.addEventListener("click", function () {
 
+             //資料庫規格資料
              for (let i = 0; i < $("#styletbody").children().length; i++) {
                  var id = document.getElementById('styleid' + i);
-                 console.log(id)
-                 let styleName = {
+
+                 let stylephoto;
+                 if (id.children[3].children[0]!=null) {                     
+                     let src = id.children[3].children[0].getAttribute("src");
+                         stylephoto = src.split(",")[1];
+                 }
+                 let styleSpec = {
                      StyleStr: id.children[0].textContent,
                      QuantityStr: id.children[1].textContent,
                      UnitPriceStr: id.children[2].textContent,
-                     BodyPicStr: id.children[3].va
+                     BodyPicStr: stylephoto
                  };        
-                 alldata.push(styleName);
+                 alldata.push(styleSpec);
              }
+
+             //資料庫照片資料
+             let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
+             dataphoto.push(hesdpic);
+
+             if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
+                 dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
+                 if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
+                     dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
+                     if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
+                         dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
+                         if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
+                             dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
+                         }
+                     }
+                 }
+             }
+             
              
 
             //畫面的物流
@@ -503,16 +539,17 @@
                     payment.push("@item");
                     </text>
             }
-
+             console.log($("#category").children("option:selected").val())
             let pushData = {
-                暫存規格:alldata,
+                暫存規格: alldata,
                 ProductName: document.getElementById("ProductName").value,
                 smalltype: $("#smallType").children("option:selected").val(),
                 Description: document.getElementById("Description").value,
                 CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,
                 ShiperID: shiper,
-                PaymentID: payment
+                PaymentID: payment,
+                ProductID:$("#pid").val()
             }
 
             jQuery.postJSON = function (url, data, callback) {
