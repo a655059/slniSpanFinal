@@ -1,0 +1,45 @@
+﻿.modal {
+    --bs-modal-width:930px!important;
+}
+.modal-Prod {
+    height:200px;
+    width:150px;
+    margin:10px;
+    border: 1px solid lightgray;
+}
+.modal-Prod-Body{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    flex-wrap:wrap;
+}
+.modal-Prod-Pic {
+    margin:10px;
+    display: block;
+    width: 70%;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    object-fit: cover;
+}
+.modal-Prod-ItemTilte {
+    width:100%;
+    height: 25px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    letter-spacing: 1px;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    text-overflow: ellipsis;
+}
+.Item-Price {
+    width: 100%;
+    color: red;
+}
+.Item-check {
+    width: 100%;
+}

@@ -13,6 +13,7 @@ using prjiSpanFinal.Models.OrderReq;
 using prjiSpanFinal.ViewModels.Order;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.IO;
+using prjiSpanFinal.ViewModels.Home;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -205,7 +206,7 @@ namespace prjiSpanFinal.Controllers
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             CSellerADViewModel ViewModel = new CSellerADViewModel()
             {
-                SellerProds = _db.Products.Where(p => p.MemberId == id).ToList(),
+                SellerProds = (new CHomeFactory()).toShowItem(_db.Products.Where(p => p.MemberId == id).ToList()),
             };
             return View(ViewModel);
         }

@@ -1,4 +1,5 @@
 ﻿using prjiSpanFinal.Models;
+using prjiSpanFinal.ViewModels.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace prjiSpanFinal.ViewModels.seller
 {
     public class CSellerADViewModel
     {
-        public List<Product> SellerProds { get; set; }
+        public List<CShowItem> SellerProds { get; set; }
     }
 }
