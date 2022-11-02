@@ -8,100 +8,80 @@
 
 }
 @section Styles{
-   <style>
-       .ordersearchbar {
-           padding: 3px;
-           text-align: right;
-       }
+    <style>
+        .ordersearchbar {
+            padding: 3px;
+            text-align: right;
+        }
 
-       .m-2 {
-           margin-top: 0.25rem !important;
-           margin-bottom: 0.25rem !important;
-       }
-   </style>
+        .m-2 {
+            margin-top: 0.25rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+    </style>
 }
 
+
 <input type="hidden" value="@Model.MemberId" id="editsalescourtid" />
+<p>
+    編輯我的賣場資訊
+</p>
 
-<h2 class="d-flex justify-content-center">編輯我的賣場</h2>
-<div id="orderdetaildiv">
-    <div class="row ">
-        <div class="col-1"></div>
-        <div class="col-11">
-            <div class="ordersearchbar">
-                <input type="text" class="form-control rounded" placeholder="搜尋產品" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
-                <span>
-                     <input id="btnDate" class="btn btn-primary" value="搜尋" type="button" />
-                </span>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                商品名稱
+            </th>
+            <th>
+                商品價格
+            </th>
+            <th>
+                星星數
+            </th>
+            <th>
+                販賣數量
+            </th>
+            <th>
+                選為精選商品
+            </th>
+        </tr>
+    </thead>
+    <tbody id="salescourtcardbody">
+    </tbody>
+</table>
+
+
+
+
+@*<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel3">確定要修改為精選商品嗎</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>請修改後賣場頁面再次確認。</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="orderrecsubmit" data-bs-target="#staticBackdrop4" data-bs-toggle="modal">送出</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                </div>
             </div>
-
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active ordernavtabs" aria-current="page" href="#">總覽</a>
-                    <input type="hidden" class="ordershipperstatus" value="0" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">訂單成立</a>
-                    <input type="hidden" class="ordershipperstatus" value="2" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">已付款</a>
-                    <input type="hidden" class="ordershipperstatus" value="3" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">已出貨</a>
-                    <input type="hidden" class="ordershipperstatus" value="4" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">已到貨</a>
-                    <input type="hidden" class="ordershipperstatus" value="5" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">退貨處理中</a>
-                    <input type="hidden" class="ordershipperstatus" value="8" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">待評價</a>
-                    <input type="hidden" class="ordershipperstatus" value="6" />
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ordernavtabs" href="#">已完成</a>
-                    <input type="hidden" class="ordershipperstatus" value="7" />
-                </li>
-            </ul>
-
         </div>
-    </div>
-</div>
+    </div>*@
+
+@*<div id="salescourtcardbody">
 
 
-<div>
-    <div class="row">
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-            編號
-        </div>
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-            商品名稱
-        </div>
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-            商品價格
-        </div>
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-            商品星星
-        </div>
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-            商品售出數
-        </div>
-        <div class="row col align-content-center justify-content-center 內容文字大小">
-        </div>
-        <div class=" row align-content-center col justify-content-center mx-2" style="width:15px;height:20px"></div>
-    </div>
-</div>
-
-<div id="salescourtcardbody">
-
-
-</div>
+    </div>*@
 
 <div style="font-size:20px" class="m-2"></div>
 
@@ -113,28 +93,29 @@
         let customname = "";
 
         function returnCard(data) {
-            return `<div class="row ">
-                <div class="row col align-content-center justify-content-center 內容文字大小">
-                    編號:
-                </div>
-                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
-                    ${data.name}
-                </div>
-                <div class="row col align-content-center justify-content-center 內容文字大小">
-                    ${data.price1} - ${data.price2}
-                </div>
-                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
-                    ${data.star}
-                </div>
-                <div class="row col align-content-center justify-content-center 內容文字大小" style="font-size:20px">
-                    ${data.sales}
-                </div>
-                <div class="row col align-content-center justify-content-center 內容文字大小" style="width:15px; height:10px">
-                    <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco m-2">選為精選商品</a><br />
-                </div>
-                <div class=" row align-content-center col justify-content-center mx-2"></div>
-                                
-            </div>`;
+            return `<tr>
+                        <td></td>
+                        <td>
+                            編號:
+                        </td>
+                        <td>
+                            ${data.name}
+                        </td>
+                        <td>
+                            ${data.price1} - ${data.price2}
+                        </td>
+                        <td>
+                            ${data.star}
+                        </td>
+                        <td>
+                            ${data.sales}
+                        </td>
+                        <td>
+                            <input type="hidden" value="${data.productid}" class="thisproduct" />
+                            <a role="button" class="btn  btn-primary choiceproduct my-2">選為精選商品</a>
+                        </td>
+
+                    </tr>`;
 
         }
 
@@ -149,12 +130,39 @@
                 for (let i = 0; i < data.length; i++) {
                     console.log(data);
                     /*$(".check").eq(i).a*/
-                    $("#salescourtcardbody").append(returnCard(data[i]));
+                    $("#salescourtcardbody").append(
+                        returnCard(data[i])
+                    );
                 }
             })
         }
 
 
 
+        $(".choiceproduct").click(function () {
+            $.getJSON("/SalesCourt/WriteChoice", { productid: editsalescourtid.value }, function (data) {
+
+                if (data == 1) {
+                    $(".choiceproduct").attr('style', 'background-color:#b7b0bd');
+                    Swal.fire(
+                        '選取成功',
+                        '您已選擇精選商品' + $("").val(),
+                        'success'
+                    );
+                }
+                else if (data == 0) {
+                    $(".choiceproduct").attr('style', 'background-color:#f30959');
+                    Swal.fire(
+                        '移除精選',
+                        '您已移除精選商品' + $("").val(),
+                        'warning'
+                    );
+
+                }
+            })
+        })
+
+
     </script>
 }
+
