@@ -54,6 +54,7 @@ namespace prjiSpanFinal.Controllers
             var RegionName = (from i in db.RegionLists select i).ToList();
             var SmallTypeName = (from i in db.SmallTypes select i).ToList();
             var CustomizedCategoryName = (from i in db.CustomizedCategories select i).ToList();
+            var ProductPic = db.ProductPics.ToList();
             foreach (var p in Prods)
             {
                 CProductListViewModel model = new()
@@ -73,6 +74,11 @@ namespace prjiSpanFinal.Controllers
                                               where i.CustomizedCategoryId == p.CustomizedCategoryId
                                               select i.CustomizedCategoryName).First(),
                 };
+              var Q = ProductPic.Where(i=>i.ProductId==model.Product.ProductId);
+                if (Q.Any())
+                {
+                    model.ProductPic = Q.First().Pic;
+                }
                 list.Add(model);
             }
 
@@ -331,7 +337,6 @@ namespace prjiSpanFinal.Controllers
             var db = new iSpanProjectContext();
             List<COrderListViewModel> list = new();
             IQueryable<Order> Orders = null;
-
             int FilterId;
             if (!String.IsNullOrEmpty(filter))
             {
@@ -443,7 +448,7 @@ namespace prjiSpanFinal.Controllers
             ViewBag.OrderStatus = (new iSpanProjectContext().OrderStatuses).Select(i => i);
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 3;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetOrdersPagedProcess(page, (int)pageSize, keyword, filter);
@@ -1060,6 +1065,9 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EventCreate()
         {
+            iSpanProjectContext db = new();
+            var Q=db.OfficialEventTypes.ToList();
+            ViewBag.EventType = Q;
             return View();
         }
         [HttpPost]
@@ -1075,6 +1083,7 @@ namespace prjiSpanFinal.Controllers
                 OfficialEventListId = ofevent.OfficialEventListId,
                 StartDate = ofevent.StartDate,
                 SubOfficialEventLists = ofevent.SubOfficialEventLists,
+                OfficialEventTypeId=ofevent.OfficialEventTypeId
             };
             using (var ms = new MemoryStream())
             {
@@ -1100,24 +1109,13 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext db = new();
             var G = from g in db.OfficialEventLists where g.OfficialEventListId == id select g;
             var ofevent = G.First();
-            CCreateEventViewModel Ev = new()
-            {
-                EndDate = ofevent.EndDate,
-                EventName = ofevent.EventName,
-                JoinEndDate = ofevent.JoinEndDate,
-                JoinStartDate = ofevent.JoinStartDate,
-                OfficialEventListId = ofevent.OfficialEventListId,
-                StartDate = ofevent.StartDate,
-                SubOfficialEventLists = ofevent.SubOfficialEventLists
-            };
-            return View(Ev);
+            return View(ofevent);
         }
         [HttpPost]
         public IActionResult EventEdit(CCreateEventViewModel ofevent)
         {
             iSpanProjectContext db = new();
             OfficialEventList Ev = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == ofevent.OfficialEventListId);
-
             Ev.EndDate = ofevent.EndDate;
             Ev.EventName = ofevent.EventName;
             Ev.JoinEndDate = ofevent.JoinEndDate;
@@ -1145,6 +1143,8 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return Content(Ev.EndDate.ToString("yyyy/MM/dd"));
         }
+        #endregion
+        #region EventCouponRegion
         public IActionResult EventCouponCreate(int id)
         {
             ViewBag.Id = id;
@@ -1354,6 +1354,8 @@ namespace prjiSpanFinal.Controllers
             }
             return list;
         }
+        #endregion
+        #region SubEventToProductRegion
         protected IPagedList<subEventtoProductListViewModel> GetEtoPsPagedProcess(int id, int? page, int pageSize, string keyword)
         {
             // 過濾從client傳送過來有問題頁數
@@ -1372,6 +1374,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext db = new();
             ViewBag.pageSize = pageSize;
             ViewBag.Verifies = db.Verifies.ToList();
+            ViewBag.subEvent = db.SubOfficialEventLists.FirstOrDefault(i => i.SubOfficialEventListId == id).OfficialEventListId;
             //每頁幾筆
             pageSize ??= 5;//if null的寫法
             page ??= 1;

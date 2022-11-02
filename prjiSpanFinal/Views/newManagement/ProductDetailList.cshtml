@@ -53,10 +53,16 @@
                 </td>
                 <td>
                     @{
-                        var base64Image = Convert.ToBase64String(item.Pic);
-                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                        if (item.Pic != null)
+                        {
+                            var base64Image = Convert.ToBase64String(item.Pic);
+                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+                            <img src="@source" class="cardImg" alt="..." width="120" />
+                        }
+                        else{
+                            <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
+                        }
                     }
-                    <img src="@source" class="cardImg" alt="..." width="120" />
                 </td>
                 <td>
                     @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId},new{onclick="return confirm('確定要刪除嗎?若商品細項少於一項則無法刪除')",@class="btn btn-primary deles"})
