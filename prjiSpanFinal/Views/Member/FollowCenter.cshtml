@@ -170,7 +170,7 @@
         }
         reloaditem(0, 0);
         function PageNumFill(c) {
-            let pagecount = Math.ceil(Math.min(1, c) / eachpage);
+            let pagecount = Math.ceil(Math.max(1, c) / eachpage);
             $("#totalpagesdisplay").html(`共${pagecount}頁，${c}筆資料`);
             let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
             let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
