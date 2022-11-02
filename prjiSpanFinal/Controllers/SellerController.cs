@@ -608,6 +608,7 @@ namespace prjiSpanFinal.Controllers
             var mempay = _db.PaymentToSellers.Where(n => n.MemberId == memId).Select(n => n.PaymentId).ToList();
 
             var pName = _db.Products.Where(n => n.ProductId == id).Select(n => n.ProductName).FirstOrDefault();
+            var pProductId = id;
             //var pSmallTypeID = _db.Products.Where(n => n.ProductId == id).Select(n => n.SmallTypeId).FirstOrDefault();
             //var pSmallTypeName = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.SmallTypeName).FirstOrDefault();
             //var pBigTypeID = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.BigTypeId).FirstOrDefault();
@@ -618,7 +619,8 @@ namespace prjiSpanFinal.Controllers
             var pUnitPrice = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.UnitPrice).ToList();
             var pBodyPic = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Pic).ToList();
             var pDescription = _db.Products.Where(n => n.ProductId == id).Select(n => n.Description).FirstOrDefault();
-            
+            var pCategory = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryName).ToList();
+            var pCustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryId).ToList();
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
@@ -626,7 +628,8 @@ namespace prjiSpanFinal.Controllers
                 memship = memship,
                 shipID = shiperlist,
                 PaymentID = mempay,
-
+                Category=pCategory,
+                CustomizedCategoryID=pCustomizedCategoryID,
                 ProductName = pName,
                 //smalltype= pSmallTypeName,
                 DBtoPic= pDBtoPic,
@@ -634,15 +637,26 @@ namespace prjiSpanFinal.Controllers
                 Quantity = PQuantity,
                 UnitPrice = pUnitPrice,
                 BodyPic=pBodyPic,
-                Description = pDescription
+                Description = pDescription,
+                ProductID=Convert.ToInt32(pProductId)
             };
             return View(x);            
         }
 
         public void EditProductSuccess(CSellerCreateToViewViewModel jsonString) //商品編輯儲存
         {
-        
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int memId = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
+            var Product= _db.Products.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).FirstOrDefault();
+            Product.ProductName = jsonString.ProductName;
+            Product.SmallTypeId = jsonString.smalltype;
+            Product.MemberId = Product.MemberId;
+            Product.RegionId = Product.RegionId;
+            Product.Description = jsonString.Description;
+            Product.ProductStatusId = Product.ProductStatusId;
+            Product.EditTime = DateTime.Now;
+            Product.CustomizedCategoryId = jsonString.CategoryID;
         }
 
 
