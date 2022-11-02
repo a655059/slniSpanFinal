@@ -21,7 +21,7 @@
 
 <div class="messageLayout bg-warning bg-opacity-10 py-3" id="@messageLayout">
     <div class="productID d-none">@productID</div>
-    <div class="messageBox w-75 m-auto">
+    <div class="messageBox m-auto" style="width:600px">
         @{
             if (Model.cMessageBoardList.Count > 0)
             {
@@ -137,7 +137,7 @@
         }
         
     </div>
-    <div class="w-75 m-auto">
+    <div class="m-auto" style="width:600px">
         <div class="d-flex align-items-baseline">
             <div class="me-1" style="width:50px;aspect-ratio:1/1;">
                 <img src="@userImgSrc" alt="Alternate Text" style="width:60%;aspect-ratio:1/1;object-fit:contain;border-radius:50%" />

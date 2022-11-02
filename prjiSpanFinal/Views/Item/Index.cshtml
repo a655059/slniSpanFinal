@@ -314,7 +314,7 @@
         @await Component.InvokeAsync("ShowBuyerCount", new { productID = Model.product.ProductId, page = 1 })
     </div>
     <div class="messageBoardVC d-none">
-        @await Component.InvokeAsync("ShowMessageBoard", new { productID = Model.product.ProductId })
+        @*@await Component.InvokeAsync("ShowMessageBoard", new { productID = Model.product.ProductId })*@
     </div>
 </div>
 
@@ -371,8 +371,12 @@
     <script src="@Url.Content("~/js/Item/ItemIndex.js")"></script>
     <script src="@Url.Content("~/js/ShowSelectedProducts.js")"></script>
     <script src="@Url.Content("~/js/Item/ShowItemComment.js")"></script>
-    <script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>
+    @*<script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>*@
     <script>
+        $(function () {
+            const productID = $("#ProductId").val();
+            $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+        });
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
             let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
@@ -607,6 +611,6 @@
             });
 
         });
-        
+
     </script>
 }
