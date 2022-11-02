@@ -101,24 +101,25 @@
         // Modal
         let Model = $("#addADItem");
         // CheckBox
-        let ModelCheckBox = $(".Item-check");
+        let ModelCheckBox;
         let ModelItemArea = $("#modal-Item-Box");
-
         let nowpage = 1;
 
         Model.on("show.bs.modal", function (evt) {
-            if (temp != null) {
-                temp.prop("checked", true)
+            nowpage = 1;
+            getItem();
+            ModelCheckBox = $(".Item-check");
+            if (ModelCheckBox.val() == itemID) {
+                console.log($(this));
             }
         })
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
         });
 
-
-        $(".Item-check").on("click", function (evt) {
-            ModelnowChecked = $(this);
-            if (ModelnowChecked.is(":checked")) {
+        ModelItemArea.on("click", function (evt) {
+            if ($(event.target).is(":checked")) {
+                ModelnowChecked = $(event.target);
                 ModelCheckBox.prop("checked", false);
                 ModelnowChecked.prop("checked", true);
             }
@@ -137,58 +138,59 @@
 
         function getItem() {
             $.post("getItem", { nowpage: nowpage }, function (data) {
-                console.log(data);
+                setItem(data);
             })
         }
 
-        @*function setItem(data) {
-            if (data.)
-                        foreach (var item in Model.SellerProds)
+        function setItem(data) {
+            ModelItemArea.html("");
+            res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length;i++)
                         {
-                            string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;
-                            <div class="modal-Prod">
-                                <div class="modal-Prod-Body">
-                                    @if (item.Pic != null)
+                    let productLink = `@Url.Content("~/Item/Index")` + "?id=" + data[i].product.productId;
+                    res+=`  <div class="modal-Prod">
+                                <div class="modal-Prod-Body">`
+                                    if (data[i].pic != null)
                                     {
-                                        var base64Image = Convert.ToBase64String(item.Pic);
-                                        var source = String.Format("data:image/png;base64,{0}", base64Image);
-                                        <img src="@source" class="modal-Prod-Pic" alt="" />
+                                        res += `<img src="data:image;base64,${data[i].pic}" class="modal-Prod-Pic" alt="" />`
                                     }
                                     else
                                     {
-                                        <img src="#" class="modal-Prod-Pic" alt="此商品沒有圖片" />
+                                        res +=`<img src="#" class="modal-Prod-Pic" alt="此商品沒有圖片" />`
                                     }
-                                    <div class="modal-Prod-ItemTilte">
-                                        <a class="linknoline" href="@productLink">
-                                            @item.Product.ProductId -
-                                            @item.Product.ProductName
+                    res +=`<div class="modal-Prod-ItemTilte">
+                                        <a class="linknoline" href="${productLink}">
+                                            ${data[i].product.productId} -
+                                            ${data[i].product.productName}
                                         </a>
-                                    </div>
-                                    @{ if (item.Price.Count == 1)
+                                    </div>`
+                    if (data[i].price.length == 1)
                                         {
-                                            <div class="Item-Price">$@decimal.Round(item.Price[0])</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="Item-Price">$@decimal.Round(item.Price[0]) - $@decimal.Round(item.Price[1])</div>
-                                        }
-
-
-                                    }
-                                    <div class="Item-Checkbox">
-                                        @{ if (item.Product.ProductStatusId != 0)
-                                            {
-                                                <input type="checkbox" class="Item-check" disabled value="@item.Product.ProductId" />}
-                                            else
-                                            {
-                                                <input type="checkbox" class="Item-check" value="@item.Product.ProductId" />}
-
-                                        }
-                                    </div>
+                        res +=`<div class="Item-Price">$` + `${Math.round(data[i].price[0])}</div>`
+                    }
+                    else if (data[i].price.length == 2)
+                    {
+                        res += `<div class="Item-Price">$` + `${Math.round(data[i].price[0])} - $` + `${Math.round(data[i].price[1])}</div>`
+                    }
+                    res +=`<div class="Item-Checkbox">`
+                    if (data[i].product.productStatusId != 0)
+                    {
+                        res += `<input type="checkbox" class="Item-check" disabled value="${data[i].product.productId}" />`
+                    }
+                    else
+                    {
+                        res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" />`
+                    }
+                    res += `</div>
                                 </div>
-                            </div>
-                        }
-        }*@
+                            </div>`
+                }
+            } else {
+                res =`<div>無可訂閱廣告的商品！</div>`
+            }
+            ModelItemArea.html(res);
+        }
     </script>
     
 }
