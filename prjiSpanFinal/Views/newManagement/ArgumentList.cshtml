@@ -155,12 +155,12 @@
             BTNDeny.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
+                 let c=confirm("確認要停權買家帳戶嗎?");
+                 if(c){
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data !=null) {
                     $(this).closest("td").siblings().find(".statusname").val("處理完成");
-                    confirm("確認要停權買家帳戶嗎?");
-                    if(confirm){
                     alert("已停權買家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
@@ -173,12 +173,12 @@
             BTNDeny.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
+                let c=confirm("確認要停權賣家帳戶嗎?");
+                if(c){
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove2")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data !=null) {
                     $(this).closest("td").siblings().find(".statusname").val("處理完成");
-                    confirm("確認要停權賣家帳戶嗎?");
-                    if(confirm){
                     alert("已停權賣家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
@@ -197,8 +197,8 @@
        document.location.href=link;
         })
 
-         //篩選
-    let filter=document.getElementById("filter");
+       //篩選
+        let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
             pageSize=pagesize.options[pagesize.selectedIndex].value

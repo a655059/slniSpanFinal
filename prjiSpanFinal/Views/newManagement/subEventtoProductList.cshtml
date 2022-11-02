@@ -11,6 +11,7 @@
 }
 
 <h1>參加活動商品</h1>
+
 <form>
     <input type="search" name="keyword" placeholder="輸入內容進行搜尋,或不輸入回到列表" class="form-control" />
     <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
@@ -57,17 +58,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
-                <td>
-                    <label class="statusname">@item.Verify</label>
+                <td class="statusname">
+                       @Html.DisplayFor(modelItem => item.Verify)
                 </td>
                 <td>
-                    <a class="Approve btn btn-primary"  name="@item.SubOfficialEventToProduct.ProductId/@item.ProductName">通過</a>
-                    <a class="Deny btn btn-primary" name="@item.SubOfficialEventToProduct.ProductId/@item.ProductName">不通過</a>
+                    <a class="Approve btn btn-primary"  name="@item.SubOfficialEventToProduct.SubOfficialEventToProductId/@item.ProductName">通過</a>
+                    <a class="Deny btn btn-primary" name="@item.SubOfficialEventToProduct.SubOfficialEventToProductId/@item.ProductName">不通過</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+@Html.ActionLink("回到子活動","subEventList","newManagement",new{id=ViewBag.subEvent},new{@class="btn btn-outline-danger"})
 @section Scripts{
     <script>
         let Approve=document.querySelectorAll(".Approve");
@@ -80,12 +82,13 @@
                 let response = await fetch("@Url.Content("~/newManagement/EtoPApprove")" + `?id=${id}`)
                 let data = await response.text();
                 if (data !=null) {
-                    $(this).closest("td").siblings().find(".statusname").val("通過");
+                    $(this).closest("td").siblings(".statusname").text("通過");
                     alert("審核通過");
-                    happy_sendnoti(4, parseInt(data), `您的商品已經通過活動審核`, "/Member/Order", `您的商品${pname},於前日提出申請參加活動,已經通過活動審核`);
+                   happy_sendnoti(4, parseInt(data), `您的商品已經通過活動審核`, "/Member/Order", `您的商品${pname},於前日提出申請參加活動,已經通過活動審核`);
                     }
                 }
-            })
+             )
+            }
          for (var BTNDeny of Deny) {
             BTNDeny.addEventListener("click", async function (event) {
                 event.preventDefault();
@@ -94,12 +97,12 @@
                 let response = await fetch("@Url.Content("~/newManagement/EtoPDeny")" + `?id=${id}`)
                 let data = await response.text();
                 if (data !=null) {
-                    $(this).closest("td").siblings().find(".statusname").val("不通過");
+                    $(this).closest("td").siblings(".statusname").text("不通過");
                     alert("審核不通過");
                     happy_sendnoti(4, parseInt(data), `您的商品未通過活動審核`, "/Member/Order", `您的商品${pname},於前日提出申請參加活動,但通過活動審核,請嘗試以其他商品再次進行申請`);
                     }
-                }
-            })
+                })
+            }
     </script>
 
 
