@@ -9,7 +9,10 @@ namespace prjiSpanFinal.Models
     {
         public MemberAccount()
         {
+            AddBiddingCalendars = new HashSet<AddBiddingCalendar>();
+            AutoBiddings = new HashSet<AutoBidding>();
             BalanceRecords = new HashSet<BalanceRecord>();
+            BiddingDetails = new HashSet<BiddingDetail>();
             ChatLogSendFromNavigations = new HashSet<ChatLog>();
             ChatLogSendToNavigations = new HashSet<ChatLog>();
             CouponWallets = new HashSet<CouponWallet>();
@@ -56,7 +59,10 @@ namespace prjiSpanFinal.Models
 
         public virtual MemStatus MemStatus { get; set; }
         public virtual RegionList Region { get; set; }
+        public virtual ICollection<AddBiddingCalendar> AddBiddingCalendars { get; set; }
+        public virtual ICollection<AutoBidding> AutoBiddings { get; set; }
         public virtual ICollection<BalanceRecord> BalanceRecords { get; set; }
+        public virtual ICollection<BiddingDetail> BiddingDetails { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendFromNavigations { get; set; }
         public virtual ICollection<ChatLog> ChatLogSendToNavigations { get; set; }
         public virtual ICollection<CouponWallet> CouponWallets { get; set; }

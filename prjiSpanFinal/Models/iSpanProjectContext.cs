@@ -18,12 +18,16 @@ namespace prjiSpanFinal.Models
         }
 
         public virtual DbSet<Ad> Ads { get; set; }
+        public virtual DbSet<AddBiddingCalendar> AddBiddingCalendars { get; set; }
         public virtual DbSet<AdtoProduct> AdtoProducts { get; set; }
         public virtual DbSet<ArguePic> ArguePics { get; set; }
         public virtual DbSet<Argument> Arguments { get; set; }
         public virtual DbSet<ArgumentReason> ArgumentReasons { get; set; }
         public virtual DbSet<ArgumentType> ArgumentTypes { get; set; }
+        public virtual DbSet<AutoBidding> AutoBiddings { get; set; }
         public virtual DbSet<BalanceRecord> BalanceRecords { get; set; }
+        public virtual DbSet<Bidding> Biddings { get; set; }
+        public virtual DbSet<BiddingDetail> BiddingDetails { get; set; }
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
@@ -95,6 +99,29 @@ namespace prjiSpanFinal.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasDefaultValueSql("('廣告1')");
+            });
+
+            modelBuilder.Entity<AddBiddingCalendar>(entity =>
+            {
+                entity.ToTable("AddBiddingCalendar");
+
+                entity.Property(e => e.AddBiddingCalendarId).HasColumnName("AddBiddingCalendarID");
+
+                entity.Property(e => e.BiddingId).HasColumnName("BiddingID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Bidding)
+                    .WithMany(p => p.AddBiddingCalendars)
+                    .HasForeignKey(d => d.BiddingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AddBiddingCalendar_Bidding");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.AddBiddingCalendars)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AddBiddingCalendar_MemberAccount");
             });
 
             modelBuilder.Entity<AdtoProduct>(entity =>
@@ -202,6 +229,29 @@ namespace prjiSpanFinal.Models
                     .HasDefaultValueSql("('糾紛1')");
             });
 
+            modelBuilder.Entity<AutoBidding>(entity =>
+            {
+                entity.ToTable("AutoBidding");
+
+                entity.Property(e => e.AutoBiddingId).HasColumnName("AutoBiddingID");
+
+                entity.Property(e => e.BiddingId).HasColumnName("BiddingID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Bidding)
+                    .WithMany(p => p.AutoBiddings)
+                    .HasForeignKey(d => d.BiddingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AutoBidding_Bidding");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.AutoBiddings)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AutoBidding_MemberAccount");
+            });
+
             modelBuilder.Entity<BalanceRecord>(entity =>
             {
                 entity.ToTable("BalanceRecord");
@@ -221,6 +271,48 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.MemberId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BalanceRecord_MemberAccount");
+            });
+
+            modelBuilder.Entity<Bidding>(entity =>
+            {
+                entity.ToTable("Bidding");
+
+                entity.Property(e => e.BiddingId).HasColumnName("BiddingID");
+
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ProductDetailId).HasColumnName("ProductDetailID");
+
+                entity.Property(e => e.StartTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.ProductDetail)
+                    .WithMany(p => p.Biddings)
+                    .HasForeignKey(d => d.ProductDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Bidding_ProductDetail");
+            });
+
+            modelBuilder.Entity<BiddingDetail>(entity =>
+            {
+                entity.ToTable("BiddingDetail");
+
+                entity.Property(e => e.BiddingDetailId).HasColumnName("BiddingDetailID");
+
+                entity.Property(e => e.BiddingId).HasColumnName("BiddingID");
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.HasOne(d => d.Bidding)
+                    .WithMany(p => p.BiddingDetails)
+                    .HasForeignKey(d => d.BiddingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BiddingDetail_Bidding");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.BiddingDetails)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BiddingDetail_MemberAccount");
             });
 
             modelBuilder.Entity<BigType>(entity =>

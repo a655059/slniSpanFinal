@@ -9,6 +9,7 @@ namespace prjiSpanFinal.Models
     {
         public ProductDetail()
         {
+            Biddings = new HashSet<Bidding>();
             OrderDetails = new HashSet<OrderDetail>();
         }
 
@@ -20,6 +21,7 @@ namespace prjiSpanFinal.Models
         public byte[] Pic { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual ICollection<Bidding> Biddings { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
