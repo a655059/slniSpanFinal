@@ -91,7 +91,7 @@ namespace prjiSpanFinal.Models.LikeReq
             //TBC
             return list1;
         }
-        public List<MyLikeShowItem> LikeSearchItem(int[] filter, int priceMin, int priceMax, int SortOrder, int pages, int memberid, string keyword)
+        public List<MyLikeShowItem> LikeSearchItem(int[] filter, int priceMin, int priceMax, int SortOrder, int memberid, string keyword)
         {
             iSpanProjectContext db = new iSpanProjectContext();
             List<Product> LikeProduct = new List<Product>();
@@ -118,8 +118,8 @@ namespace prjiSpanFinal.Models.LikeReq
                     ListPD.Add(item);
                 }
             }
-            List<MyLikeShowItem> list = (new MyLikeFactory()).SearchItem(ListPD);
-            //switch
+            List<MyLikeShowItem> list = (new MyLikeFactory()).SearchItem(ListPD);//有關鍵字的所有like
+            //switch(小的篩選器)
             switch (SortOrder)
             {
                 case 1:
@@ -153,6 +153,12 @@ namespace prjiSpanFinal.Models.LikeReq
             list2 = list.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
             list1.AddRange(list2);
             //Pages #todo
+            //List<MyLikeShowItem> list3;
+            //List<MyLikeShowItem> list4;
+            
+            //list1 = list1.Skip((pages - 1) * eachpage).Take(eachpage).ToList();
+            //list4= list2.Skip((pages - 1) * eachpage).Take(eachpage).ToList();
+            //list3.AddRange(list4);
             //TBC
             return list1;
         }

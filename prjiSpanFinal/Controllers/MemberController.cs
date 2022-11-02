@@ -343,13 +343,21 @@ namespace prjiSpanFinal.Controllers
             int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
             return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
         }
-        public IActionResult SearchLike(string[] filter, int priceMin, int priceMax, int SortOrder, int pages,string keyword)
+        public IActionResult SearchLike(string[] filter, int priceMin, int priceMax, int SortOrder,string keyword)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
             int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-            return Json(new LikeSortReq().LikeSearchItem(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID, keyword));
+            return Json(new LikeSortReq().LikeSearchItem(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, memID, keyword));
         }
+        //按讚換頁
+        //public IActionResult Page(int pages,int eachpage)
+        //{
+        //    iSpanProjectContext dbcontext = new iSpanProjectContext();
+        //    string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+        //    int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+        //    return Json(new LikeSortReq().LikeSearchItem(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, memID, keyword));
+        //}
 
         //public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
         //{
