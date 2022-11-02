@@ -210,8 +210,12 @@ namespace prjiSpanFinal.Controllers
             };
             return View(ViewModel);
         }
-
-
+        public IActionResult getItem(int nowpage)
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<CShowItem> res = (new CSellerADFactory()).fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            return Json(res);
+        }
 
 
 

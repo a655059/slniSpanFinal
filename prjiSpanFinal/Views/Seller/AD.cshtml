@@ -29,7 +29,7 @@
     </style>
 }
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addADItem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -38,8 +38,111 @@
             </div>
             <div class="modal-body">
                 <label>商品名稱:</label>
-                <div class="d-flex flex-wrap justify-content-center align-items-center ">
-                    @{
+                <div class="d-flex flex-wrap justify-content-center align-items-center" id="modal-Item-Box">
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save" type="button" class="btn btn-warning">新增</button>
+                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row ">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-10 ">
+        <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addADItem">
+            加入選取產品
+        </button>
+        <div>
+            <div class="">
+                <table class="">
+                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
+                    <tr class="row bg-light py-3 border-bottom">
+                        <td class="col-1 置中"><input type="checkbox" /></td>
+                        <td class="col-2 置中"><h5></h5></td>
+                        <td class="col-6 pt-3">
+                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
+                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
+                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
+                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
+                        </td>
+                        <td class="col-3">
+                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
+                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
+                        </td>
+                    </tr>
+                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
+                </table>
+                <div class="row">
+                    <div class="col-5"></div>
+                    <div class="col-7">
+                        <input type="submit" value="下一步" class="btn btn-warning m-4" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        // Modal運作時當前勾選
+        let ModelnowChecked;
+        // 按下確認存取商品ID
+        let itemID;
+        // 按下確認存取 勾選
+        let temp;
+        // Modal
+        let Model = $("#addADItem");
+        // CheckBox
+        let ModelCheckBox = $(".Item-check");
+        let ModelItemArea = $("#modal-Item-Box");
+
+        let nowpage = 1;
+
+        Model.on("show.bs.modal", function (evt) {
+            if (temp != null) {
+                temp.prop("checked", true)
+            }
+        })
+        Model.on("hidden.bs.modal", function (evt) {
+            ModelCheckBox.prop("checked", false);
+        });
+
+
+        $(".Item-check").on("click", function (evt) {
+            ModelnowChecked = $(this);
+            if (ModelnowChecked.is(":checked")) {
+                ModelCheckBox.prop("checked", false);
+                ModelnowChecked.prop("checked", true);
+            }
+            else {
+                ModelnowChecked.prop("checked", false);
+            }
+        })
+
+        $("#save").click(function (evt) {
+            if (ModelCheckBox.is(":checked")) {
+                temp = ModelnowChecked;
+                itemID = ModelnowChecked.val();
+                Model.modal('hide');
+            }
+        })
+
+        function getItem() {
+            $.post("getItem", { nowpage: nowpage }, function (data) {
+                console.log(data);
+            })
+        }
+
+        @*function setItem(data) {
+            if (data.)
                         foreach (var item in Model.SellerProds)
                         {
                             string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;
@@ -69,106 +172,23 @@
                                         {
                                             <div class="Item-Price">$@decimal.Round(item.Price[0]) - $@decimal.Round(item.Price[1])</div>
                                         }
+
+
                                     }
-                                    <div class="">
-                                        <input type="checkbox" class="Item-check" value="@item.Product.ProductId" />
+                                    <div class="Item-Checkbox">
+                                        @{ if (item.Product.ProductStatusId != 0)
+                                            {
+                                                <input type="checkbox" class="Item-check" disabled value="@item.Product.ProductId" />}
+                                            else
+                                            {
+                                                <input type="checkbox" class="Item-check" value="@item.Product.ProductId" />}
+
+                                        }
                                     </div>
                                 </div>
                             </div>
                         }
-                    }
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="save" type="button" class="btn btn-warning">新增</button>
-                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="row ">
-    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
-    <div class="col-10 ">
-        <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            加入選取產品
-        </button>
-
-
-        <div>
-            <div class="">
-                <table class="">
-                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>優先曝光</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
-                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row py-3 border-bottom 背色">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>重點標題</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />50  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />70  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />100  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以粗體方式突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5>亮眼底色</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />150  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />250  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />350  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以顯著底色突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
-                </table>
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-7">
-                        <input type="submit" value="下一步" class="btn btn-warning m-4" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@section Scripts
-{
-    <script>
-        $(".Item-check").on("click", function (evt) {
-            let $cb = $(this);
-            if ($cb.is(":checked")) {
-                $(".Item-check").prop("checked", false);
-                $cb.prop("checked", true);
-            }
-            else {
-                $cb.prop("checked", false);
-            }
-        })
+        }*@
     </script>
     
 }
