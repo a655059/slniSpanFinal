@@ -218,7 +218,7 @@ namespace prjiSpanFinal.Controllers
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
             var regionId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.RegionId).FirstOrDefault();
-            int smID = result.smalltype;
+            var smID = _db.SmallTypes.Where(n => n.SmallTypeName == result.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
             //var smID = _db.SmallTypes.FirstOrDefault(n => n.SmallTypeName == smName).SmallTypeId;
 
             Product product = new Product()
@@ -649,14 +649,43 @@ namespace prjiSpanFinal.Controllers
             int memId = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
 
             var Product= _db.Products.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).FirstOrDefault();
+            var smID = _db.SmallTypes.Where(n => n.SmallTypeName == jsonString.smalltype).Select(n => n.SmallTypeId).FirstOrDefault();
             Product.ProductName = jsonString.ProductName;
-            Product.SmallTypeId = jsonString.smalltype;
+            Product.SmallTypeId = smID;
             Product.MemberId = Product.MemberId;
             Product.RegionId = Product.RegionId;
             Product.Description = jsonString.Description;
             Product.ProductStatusId = Product.ProductStatusId;
             Product.EditTime = DateTime.Now;
             Product.CustomizedCategoryId = jsonString.CategoryID;
+
+            var ProductDetail = _db.ProductDetails.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
+            for (int i = 0; i < jsonString.暫存規格.Count; i++)
+            {
+                if (jsonString.暫存規格[i] != null)
+                {
+                    ProductDetail[i].Style = jsonString.暫存規格[i].StyleStr;
+                    ProductDetail[i].Quantity = Convert.ToInt32(jsonString.暫存規格[i].QuantityStr);
+                    ProductDetail[i].UnitPrice = Convert.ToDecimal(jsonString.暫存規格[i].UnitPriceStr);
+                    if (jsonString.暫存規格[i].BodyPicStr != null)
+                    {
+                        ProductDetail[i].Pic = jsonString.暫存規格[i].BodyPicStr;
+                    }
+                }
+            }
+
+            var ProductPic = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
+            if (jsonString.BodyPic.Count > 0)
+            {
+                for (int i = 0; i < jsonString.BodyPic.Count; i++)
+                {
+                    if (jsonString.BodyPic[i] != null)
+                    {
+                        ProductPic[i].Pic = jsonString.BodyPic[i];
+                    }
+                }
+            }
+            _db.SaveChanges();
         }
 
 
@@ -781,11 +810,28 @@ namespace prjiSpanFinal.Controllers
                 MemberId = memId,
                 ReceiveStartDate = result.StartDate,
                 ReceiveEndDate = result.ExpiredDate,
-                IsFreeDelivery = false,
-                MinimumOrder = 0
+                IsFreeDelivery = result.IsFreeDelivery,
+                MinimumOrder = result.MinimumOrder
             };
             _db.Coupons.Add(coupon);
             _db.SaveChanges();
+        }
+        public IActionResult DeleteCoupon(int? id)  //刪除商品
+        {
+            if (id != null)
+            {
+                Coupon coupon = _db.Coupons.Where(n => n.CouponId == id).FirstOrDefault();
+                coupon.ExpiredDate= DateTime.Now.AddDays(-1); 
+                coupon.ReceiveEndDate= DateTime.Now.AddDays(-1);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Coupon");
+        }
+
+        public void EditCoupon(Coupon jsonString)
+        {
+            var Coupon = _db.Coupons.Where(n => n.CouponId == jsonString.CouponId).Select(n => n).FirstOrDefault();
+
         }
 
         public IActionResult seller跑條(int page)
