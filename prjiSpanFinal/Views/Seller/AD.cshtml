@@ -36,8 +36,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <label>商品名稱:</label>
+            <div class="modal-body">                
                 <div class="d-flex flex-wrap justify-content-center align-items-center" id="modal-Item-Box">
                     
                 </div>
@@ -109,15 +108,25 @@
             nowpage = 1;
             getItem();
             ModelCheckBox = $(".Item-check");
-            if (ModelCheckBox.val() == itemID) {
-                console.log($(this));
-            }
         })
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
         });
 
-        ModelItemArea.on("click", function (evt) {
+        //ModelItemArea.on("click", function (evt) {
+        //    if ($(event.target).is(":checked")) {
+        //        ModelnowChecked = $(event.target);
+        //        ModelCheckBox.prop("checked", false);
+        //        ModelnowChecked.prop("checked", true);
+        //    }
+        //    else {
+        //        ModelnowChecked.prop("checked", false);
+        //    }
+        //    console.log($(event.target));
+        //    console.log(event.target);
+        //    console.log(ModelnowChecked);
+        //})
+        ModelItemArea.on("click", $(".Item-Checkbox"),function (evt) {
             if ($(event.target).is(":checked")) {
                 ModelnowChecked = $(event.target);
                 ModelCheckBox.prop("checked", false);
@@ -126,6 +135,9 @@
             else {
                 ModelnowChecked.prop("checked", false);
             }
+            console.log($(event.target));
+            console.log(event.target);
+            console.log(ModelnowChecked);
         })
 
         $("#save").click(function (evt) {
@@ -180,7 +192,12 @@
                     }
                     else
                     {
-                        res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" />`
+                        if (data[i].product.productId == itemID) {
+                            res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" checked/>`
+                        }
+                        else {
+                            res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" />`
+                        }
                     }
                     res += `</div>
                                 </div>
