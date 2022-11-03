@@ -213,11 +213,24 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getItem(int nowpage)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CShowItem> res = (new CSellerADFactory()).fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            List<CShowItem> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
             return Json(res);
         }
-
-
+        public IActionResult ADshowCheckItem(int itemID)
+        {
+            CShowItem res = new CSellerADFactory().fgetCheckedshowItem(_db.Products.Where(p => p.ProductId == itemID).ToList());
+            return Json(res);
+        }
+        public IActionResult getAD(int ADfilter)
+        {
+            List<Ad> ad = new CSellerADFactory().fgetAD(_db.Ads.ToList(), ADfilter);
+            return Json(ad);
+        }
+        public IActionResult getResult(int[] ADIDs)
+        {
+            List<Ad> ad = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
+            return Json(ad);
+        }
 
 
         public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功

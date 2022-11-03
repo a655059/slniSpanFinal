@@ -7,25 +7,8 @@
 {
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/SellerUI/SellerAD.css" rel="stylesheet" />
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <style>
-        .內文優惠劵 {
-            font-weight: 700;
-            font-size: 30px;
-            height: 80px;
-        }
-
-        .高度 {
-            height: 80px;
-        }
-
-        .背色 {
-            background-color: lightyellow
-        }
-
-        .置中 {
-            display: flex;
-            align-items: center;
-        }
     </style>
 }
 
@@ -36,10 +19,26 @@
                 <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">                
+            <div class="modal-body">
                 <div class="d-flex flex-wrap justify-content-center align-items-center" id="modal-Item-Box">
-                    
+
                 </div>
+            </div>
+            <div class="d-flex justify-content-center" id="PagesArea">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" id="orderpageup">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="orderpagedown">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <div class="modal-footer">
                 <button id="save" type="button" class="btn btn-warning">新增</button>
@@ -54,36 +53,82 @@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10 ">
-        <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addADItem">
-            加入選取產品
-        </button>
-        <div>
-            <div class="">
-                <table class="">
-                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-2 置中"><h5></h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
-                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
-                </table>
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-7">
-                        <input type="submit" value="下一步" class="btn btn-warning m-4" />
+        <h2 class="d-flex justify-content-center">蝦到爆廣告</h2>
+        <div class="row" id="ShowAreaBox">
+            <div class="col-4">
+                <nav style="margin-top:10px">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">標題高光</a>
+                        <a class="nav-item nav-link" id="1" data-toggle="tab" href="#!" role="tab" aria-controls="nav-increase" aria-selected="false">內容特效</a>
+                        <a class="nav-item nav-link" id="2" data-toggle="tab" href="#!" role="tab" aria-controls="nav-decrease" aria-selected="false">登上發燒</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">
+                        <div id="ADeffectArea" class="d-flex flex-wrap align-content-center align-items-center justify-content-center">
+                            <div class="ADeffect ADsensor row" id="e1">
+                                <div class="d-flex justify-content-between align-items-center ADe-Header">
+                                    <div class="ADe-Title">
+                                        代名字近來
+                                    </div>
+                                    <div class="ADe-Price">
+                                        代錢進來
+                                    </div>
+                                </div>
+                                <div class="ADe-Description">
+                                    代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-4">
+                <div class="row justify-content-center ">
+                    <div class="d-flex justify-content-evenly align-items-center align-content-center" id="ShowArea">
+                        <div id="CheckedItemAD">
+
+                        </div>
+                    </div>
+                    <button type="button" id="addItemBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addADItem">
+                        選取產品
+                    </button>
+                </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-3 d-flex justify-content-center align-items-center flex-wrap ">
+                <div class="text-center">
+                    <label class="ResultTitle">結算</label>
+                </div>
+                <div class="row align-content-between justify-content-end text-end " id="ResultArea">
+                    <div class="d-flex  flex-wrap " id="Result-CheckedeffectList">
+                        <div class="Result-Checkedeffect row">
+                            <div class="text-start Result-Checkedeffect-Title">
+                                標題高光
+                            </div>
+                            <div class="text-end Result-Checkedeffect-Price">
+                                $ 123
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Result-Total">
+                        <div id="Result-Total-Border"></div>
+                        <div id="Result-Total-Price">
+                            Total: 0$
+                        </div>
+                    </div>
+                </div>
+                <div class="btn" id="Result-btn">
+                    確認
+                </div>
+            </div>
+        </div>
+        <div id="SubListBox">
+            <div id="SubList">
+                <ul>
+                    <li>123</li>
+                    <li>456</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -102,31 +147,21 @@
         // CheckBox
         let ModelCheckBox;
         let ModelItemArea = $("#modal-Item-Box");
-        let nowpage = 1;
+        let itemNowpage = 1;
 
         Model.on("show.bs.modal", function (evt) {
-            nowpage = 1;
+            itemNowpage = 1;
             getItem();
-            ModelCheckBox = $(".Item-check");
         })
+
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
-        });
+            //if (itemID != null) {
 
-        //ModelItemArea.on("click", function (evt) {
-        //    if ($(event.target).is(":checked")) {
-        //        ModelnowChecked = $(event.target);
-        //        ModelCheckBox.prop("checked", false);
-        //        ModelnowChecked.prop("checked", true);
-        //    }
-        //    else {
-        //        ModelnowChecked.prop("checked", false);
-        //    }
-        //    console.log($(event.target));
-        //    console.log(event.target);
-        //    console.log(ModelnowChecked);
-        //})
-        ModelItemArea.on("click", $(".Item-Checkbox"),function (evt) {
+            //}
+        })
+
+        ModelItemArea.on("click", ".Item-check",function (evt) {
             if ($(event.target).is(":checked")) {
                 ModelnowChecked = $(event.target);
                 ModelCheckBox.prop("checked", false);
@@ -135,9 +170,6 @@
             else {
                 ModelnowChecked.prop("checked", false);
             }
-            console.log($(event.target));
-            console.log(event.target);
-            console.log(ModelnowChecked);
         })
 
         $("#save").click(function (evt) {
@@ -146,12 +178,16 @@
                 itemID = ModelnowChecked.val();
                 Model.modal('hide');
             }
+            $.post("ADshowCheckItem", { itemID: itemID }, function (data) {
+                Items(data);
+            })
         })
 
         function getItem() {
-            $.post("getItem", { nowpage: nowpage }, function (data) {
+            $.post("getItem", { nowpage: itemNowpage }, function (data) {
                 setItem(data);
             })
+            ModelCheckBox = $(".Item-check");
         }
 
         function setItem(data) {
@@ -203,11 +239,212 @@
                                 </div>
                             </div>`
                 }
+                PageFill(itemNowpage);
             } else {
-                res =`<div>無可訂閱廣告的商品！</div>`
+                res = `<div>無可訂閱廣告的商品！</div>`
+                PageFill(1);
             }
             ModelItemArea.html(res);
         }
+
+        function PageFill(data) {
+            let pagecount = Math.ceil(data / 10);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(itemNowpage) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(itemNowpage) + 2));
+            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == itemNowpage) {
+                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
+
+        $(document).on("click", ".orderpagenumclick", function () {
+            itemNowpage = $(this).html();
+            getItem();
+        })
+
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            itemNowpage = Math.min(parseInt(itemNowpage) + 1, pagescount);
+            getItem();
+        })
+
+        $("#orderpageup").click(function () {
+            itemNowpage = Math.max(parseInt(itemNowpage) - 1, 1);
+            getItem();
+        })
+
+        let ADfilter = 0;
+        let ADnav = $(".nav-item");
+        let eid = [];
+        let ADarea = $("#ADeffectArea");
+
+        getAD();
+
+        ADnav.click(function () {
+            ADnav.removeClass("active");
+            $(this).addClass("active");
+            ADfilter = parseInt($(this).attr("id"));
+            getAD();
+        })
+
+        function getAD() {
+            $.post("getAD", { ADfilter: ADfilter }, function (data) {
+                fillAD(data);
+            })
+            $.post("getResult", { ADIDs: eid }, function (data) {
+                //console.log(data);
+                fillresult(data);
+            })
+            
+        }
+
+        function fillAD(data) {
+            ADarea.html("");
+            let res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    if (eid.includes(data[i].adId)) {
+                        res += `<div class="ADeffect ADsensor-checked row" id="e${data[i].adId}">`;
+                    }
+                    else {
+                        res += `<div class="ADeffect ADsensor row" id="e${data[i].adId}">`;
+                    }
+
+                    res += `<div class="d-flex justify-content-between align-items-center ADe-Header">
+                            <div class="ADe-Title">`;
+                    res += data[i].adName;
+                    res += `</div>
+                            <div class="ADe-Price">`
+                    res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣/${data[i].adPeriod}天`;
+                    res += `</div>
+                        </div>
+                        <div class="ADe-Description">`
+                    //待更新
+                    res += `代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來`;
+                    res += `</div>
+                    </div>`
+                }
+            }
+            else {
+                res = `<div>暫待新增廣告訂閱內容</div>`
+            }
+            ADarea.html(res);
+        }
+
+        ADarea.on("click", ".ADeffect", function (evt) {
+            let hit = $(this);
+            let id = parseInt($(this).attr("id").substring(1));
+            if (hit.hasClass("ADsensor-checked")) {
+                hit.removeClass("ADsensor-checked");
+                hit.addClass("ADsensor");
+                let targetindex = eid.indexOf(id);
+                if (targetindex > -1) {
+                    eid.splice(targetindex, 1);
+                }
+            }
+            else if (hit.hasClass("ADsensor")) {
+                hit.siblings().removeClass("ADsensor-checked");
+                hit.siblings().addClass("ADsensor");
+                hit.removeClass("ADsensor");
+                hit.addClass("ADsensor-checked");
+                eid.forEach(function (target) {
+                    if (Math.floor((id - 1) / 3) == Math.floor((target - 1) / 3)) {
+                        let targetindex = eid.indexOf(target);
+                        if (targetindex > -1) {
+                            eid.splice(targetindex, 1);
+                        }
+                    }
+                })
+                eid.push(id);
+            }
+            getAD();
+        })
+
+        function fillresult(data) {
+            $("#Result-CheckedeffectList").html("");
+            $("#Result-Total-Price").html("");
+            let res = "";
+            let resPrice = "";
+            let tottalprice = 0;
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+
+                    res += `<div class="Result-Checkedeffect row" >
+                                <div class="text-start Result-Checkedeffect-Title">`;
+                    res += data[i].adName + " - " + data[i].adPeriod + " 日 ";
+                    res += `</div>
+                                <div class="text-end Result-Checkedeffect-Price">`;
+                    res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣`;
+                    res += `</div>
+                            </div>`;
+                    tottalprice += data[i].adFee * data[i].adPeriod;
+                }
+
+                resPrice = `Total: $ ${tottalprice}`;
+            }
+            else {
+                res = `<div class="Result-Checkedeffect row">
+                                <div class="text-end Result-Checkedeffect-Title">
+                                    尚未選擇任何方案
+                                </div>
+                            </div>`
+                resPrice += `Total: $ 0`;
+            }
+            $("#Result-CheckedeffectList").html(res);
+            $("#Result-Total-Price").html(resPrice);
+        }
+        function Items(data) {
+            $("#ShowArea").html("");
+            let item = "";
+            if (data != null) {
+                
+                    let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
+                    item += `<div class="sellsitem">
+                           <a class="linknoline" href="${productLink}">`;
+                    if (data.pic != null) {
+
+                        item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
+                    }
+                    else {
+                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
+                    }
+                    item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
+                        <div class="cardTitle"> ${data.product.productName}</div></div>`
+                    if (data.price.Count == 1) {
+                        item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`
+                    }
+                    else {
+                        item += `<div class="cardPrice">$` + `${Math.round(data.price[0])} - $` + `${Math.round(data.price[1])}</div>`
+                    }
+
+                    item +=
+                        `<div class="cardInfo d-flex justify-content-between flex-row">
+                    <div class="starBox mt-1">
+                        <div class="d-flex justify-content-start">
+                            <div class="starImg">
+                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                            </div>
+                            <div class="text-black">${data.starCount.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
+                </div>
+            </div>
+        </div>
+`
+            }
+            else {
+                item =`<div id="CheckedItemAD"></div>`
+            }
+            console.log(data);
+            console.log(item);
+            $("#ShowArea").html(item);
+        }
     </script>
-    
+
 }
