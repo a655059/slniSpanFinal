@@ -19,7 +19,7 @@ namespace prjiSpanFinal.ViewModels.Member
         public string ProductStatus { get; set; }
         public string keyword { get; set; }
         
-
+        public int LikeCount { get; set; }
 
     }
 }
