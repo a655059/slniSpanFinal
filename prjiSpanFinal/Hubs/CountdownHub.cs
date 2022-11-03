@@ -10,6 +10,7 @@ namespace prjiSpanFinal.Hubs
     {
         public async Task Countdown(int biddingID)
         {
+            
             await Clients.All.SendAsync("", biddingID);
         }
     }
