@@ -1491,9 +1491,9 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext db = new();
             Shipper ship = new()
             {
-                ShipperName=shipper.ShipperName,
-                Phone=shipper.Phone,
-                Fee=shipper.Fee,
+                ShipperName = shipper.ShipperName,
+                Phone = shipper.Phone,
+                Fee = shipper.Fee,
             };
             db.Shippers.Add(ship);
             db.SaveChanges();
@@ -1515,6 +1515,82 @@ namespace prjiSpanFinal.Controllers
             ship.Phone = shipper.Phone;
             db.SaveChanges();
             return RedirectToAction("ShipperList");
+        }
+        #endregion
+        #region FAQRegion
+        public IActionResult FAQList()
+        {
+            iSpanProjectContext db = new();
+            var FAQ = db.Faqs.ToList();
+            var FAQType = db.Faqtypes.ToList();
+            List<FAQViewModel> list = new();
+            foreach (var f in FAQ)
+            {
+                FAQViewModel fAQ = new()
+                {
+                    Faq = f,
+                    FaqTypeName = FAQType.FirstOrDefault(i => i.FaqtypeId == f.FaqtypeId).FaqtypeName,
+                };
+                list.Add(fAQ);
+            }
+            return View(list);
+        }
+        public IActionResult FAQCreate()
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            ViewBag.FAQTypes = FAQTypes;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult FAQCreate(Faq faq)
+        {
+            iSpanProjectContext db = new();
+            Faq F = new()
+            {
+                Answer = faq.Answer,
+                Question = faq.Question,
+                FaqtypeId = faq.FaqtypeId,
+            };
+            db.Faqs.Add(F);
+            db.SaveChanges();
+            return RedirectToAction("FAQList");
+        }
+
+        public IActionResult FAQEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            ViewBag.FAQTypes = FAQTypes;
+            var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == id);
+            return View(FAQ);
+        }
+        [HttpPost]
+        public IActionResult FAQEdit(Faq faq)
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == faq.Faqid);
+            FAQ.Answer = faq.Answer;
+            FAQ.FaqtypeId = faq.FaqtypeId;
+            FAQ.Question = faq.Question;
+            db.SaveChanges();
+            return RedirectToAction("FAQList");
+        }
+        public IActionResult FAQDelete(int id)
+        {
+            iSpanProjectContext db = new();
+            var faq = db.Faqs.FirstOrDefault(i => i.Faqid == id);
+            db.Faqs.Remove(faq);
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
         }
         #endregion
     }
