@@ -305,63 +305,63 @@ namespace prjiSpanFinal.Controllers
             //if (x != null) return RedirectToAction("修改關於我");
 
             var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
-            string[] words = servicetime.ServiceTime.Split('/');
+            //string[] words = servicetime.ServiceTime.Split('/');
 
             C關於我ViewModel me = new C關於我ViewModel();
 
             //抓賣場服務時間內容  
-            foreach (var word in words)
-            {
+            //foreach (var word in words)
+            //{
 
-                string[] onerow = word.Split(',');
-                //onerow 一次可能帶出  只有  星期   時間    休息
-                if (onerow[0] != null)
-                {
+            //    string[] onerow = word.Split(',');
+            //    //onerow 一次可能帶出  只有  星期   時間    休息
+            //    if (onerow[0] != null)
+            //    {
 
-                    if (onerow[0] == "0")
-                    {     //星期
+            //        if (onerow[0] == "0")
+            //        {     //星期
 
-                        if (onerow[1] != null)
-                        {
-                            me.weekDown = onerow[1];
-                        }
-                        if (onerow[2] != null)
-                        {
-                            me.weekUp = onerow[2];
-                        }
+            //            if (onerow[1] != null)
+            //            {
+            //                me.weekDown = onerow[1];
+            //            }
+            //            if (onerow[2] != null)
+            //            {
+            //                me.weekUp = onerow[2];
+            //            }
 
-                    }
-                    if (onerow[0] == "1")
-                    {     //時間
-                        if (onerow[1] != null)
-                        {
-                            me.timeDown = onerow[1];
-                        }
-                        if (onerow[2] != null)
-                        {
-                            me.timeUp = onerow[2];
-                        }
-                    }
-                    if (onerow[0] == "2")
-                    {     //每週
-                        if (onerow[1] != null)
-                        {
-                            me.takebreak = onerow[1];
-                        }
-                    }
-                }
+            //        }
+            //        if (onerow[0] == "1")
+            //        {     //時間
+            //            if (onerow[1] != null)
+            //            {
+            //                me.timeDown = onerow[1];
+            //            }
+            //            if (onerow[2] != null)
+            //            {
+            //                me.timeUp = onerow[2];
+            //            }
+            //        }
+            //        if (onerow[0] == "2")
+            //        {     //每週
+            //            if (onerow[1] != null)
+            //            {
+            //                me.takebreak = onerow[1];
+            //            }
+            //        }
+            //    }
 
-            }
+            //}
 
 
             C關於我ViewModel outp = new C關於我ViewModel
             {
-                Memberid = x.MemberId,
-                weekDown = me.weekDown,
-                weekUp = me.weekUp,
-                timeDown = me.timeDown,
-                timeUp = me.timeUp,
-                takebreak = me.takebreak
+                Memberid = /*x.MemberId*/1,
+                weekDown = /*me.weekDown*/"1",
+                weekUp = /*me.weekUp*/"1",
+                timeDown = /*me.timeDown*/"1",
+                timeUp = /*me.timeUp*/"1",
+                takebreak = /*me.takebreak*/"1"
             };
 
             return View(outp);
@@ -454,57 +454,57 @@ namespace prjiSpanFinal.Controllers
             C關於我ViewModel me = new C關於我ViewModel();
             me.Memberid = id;
 
+            #region
+            //if (servicetime.ServiceTime != null)  //當有內容
+            //{
+            //    string[] words = servicetime.ServiceTime.Split('/');
 
-            if (servicetime.ServiceTime != null)  //當有內容
-            {
-                string[] words = servicetime.ServiceTime.Split('/');
+            //    //抓賣場服務時間內容  
+            //    foreach (var word in words)
+            //    {
 
-                //抓賣場服務時間內容  
-                foreach (var word in words)
-                {
+            //        string[] onerow = word.Split(',');
+            //        //onerow 一次可能帶出  只有  星期   時間    休息
+            //        if (onerow[0] != null)
+            //        {
+            //            if (onerow[0] == "0")
+            //            {     //星期
 
-                    string[] onerow = word.Split(',');
-                    //onerow 一次可能帶出  只有  星期   時間    休息
-                    if (onerow[0] != null)
-                    {
-                        if (onerow[0] == "0")
-                        {     //星期
+            //                if (onerow[1] != null)
+            //                {
+            //                    me.weekDown = onerow[1];
+            //                }
+            //                if (onerow[2] != null)
+            //                {
+            //                    me.weekUp = onerow[2];
+            //                }
 
-                            if (onerow[1] != null)
-                            {
-                                me.weekDown = onerow[1];
-                            }
-                            if (onerow[2] != null)
-                            {
-                                me.weekUp = onerow[2];
-                            }
+            //            }
+            //            if (onerow[0] == "1")
+            //            {     //時間
+            //                if (onerow[1] != null)
+            //                {
+            //                    me.timeDown = onerow[1];
+            //                }
+            //                if (onerow[2] != null)
+            //                {
+            //                    me.timeUp = onerow[2];
+            //                }
+            //            }
+            //            if (onerow[0] == "2")
+            //            {     //每週
+            //                if (onerow[1] != null)
+            //                {
+            //                    me.takebreak = onerow[1];
+            //                }
+            //            }
+            //        }
 
-                        }
-                        if (onerow[0] == "1")
-                        {     //時間
-                            if (onerow[1] != null)
-                            {
-                                me.timeDown = onerow[1];
-                            }
-                            if (onerow[2] != null)
-                            {
-                                me.timeUp = onerow[2];
-                            }
-                        }
-                        if (onerow[0] == "2")
-                        {     //每週
-                            if (onerow[1] != null)
-                            {
-                                me.takebreak = onerow[1];
-                            }
-                        }
-                    }
+            //    }
 
-                }
+            //}
 
-            }
-
-
+            #endregion
 
 
 
@@ -514,131 +514,17 @@ namespace prjiSpanFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult 修改關於我(C關於我ViewModel me, string[] ServiceTime)
+        public IActionResult 修改關於我(int Memberid,string asd)
         {
-            var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == me.Memberid);
-
-            var NewMe = new C關於我ViewModel()
-            {
-                SalesCourtServiceTime = me.SalesCourtServiceTime,
-                NewProductOnLoad = me.NewProductOnLoad,
-                SellerCategory = me.SellerCategory,
-                ServiceAfterBuy = me.ServiceAfterBuy,
-                Caution = me.Caution
-            };
-
-            if (ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
-            {
-                add.ServiceTime = null;
-            }
-
-            //如果服務項目 三個都勾
-            if (ServiceTime.Length == 3)
-            {
-                add.ServiceTime += "0";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[0];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[1];
-                add.ServiceTime += "/";
-
-                add.ServiceTime += "1";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[2];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[3];
-                add.ServiceTime += "/";
-
-                add.ServiceTime += "2";
-                add.ServiceTime += ",";
-                add.ServiceTime += NewMe.SalesCourtServiceTime[4];
-                add.ServiceTime += "/";
-            }
-
-            //當長度為二會有三種組合
-            else if (ServiceTime.Length == 2)
-            {
-                //第一種   有 星期 時間
-                if (me.SalesCourtServiceTime.Length == 4)
-                {
-                    add.ServiceTime += "0";
-                    add.ServiceTime += ",";
-                    add.ServiceTime += me.SalesCourtServiceTime[0];
-                    add.ServiceTime += ",";
-                    add.ServiceTime += me.SalesCourtServiceTime[1];
-                    add.ServiceTime += "/";
-
-                    add.ServiceTime += "1";
-                    add.ServiceTime += ",";
-                    add.ServiceTime += me.SalesCourtServiceTime[2];
-                    add.ServiceTime += ",";
-                    add.ServiceTime += me.SalesCourtServiceTime[3];
-                    add.ServiceTime += "/";
-
-                }
-                //第二種 有 時間 每週
-                //要怎麼分辨
-
-
-                else if (me.SalesCourtServiceTime.Length == 3)
-                {
-
-                    string a = me.SalesCourtServiceTime[0].Substring(0, 1);
-
-
-                    if (me.SalesCourtServiceTime[0].Substring(0, 1) == "0")
-                    {           //當salescourtserviectime開頭沒有零代表是星期的值
-
-                        add.ServiceTime += "1";
-                        add.ServiceTime += ",";
-                        add.ServiceTime += me.SalesCourtServiceTime[0];
-                        add.ServiceTime += ",";
-                        add.ServiceTime += me.SalesCourtServiceTime[1];
-                        add.ServiceTime += "/";
-
-                        add.ServiceTime += "2";
-                        add.ServiceTime += ",";
-                        add.ServiceTime += NewMe.SalesCourtServiceTime[2];
-                        add.ServiceTime += "/";
-
-                    }
-                    else
-                    {
-                        add.ServiceTime += "0";
-                        add.ServiceTime += ",";
-                        add.ServiceTime += me.SalesCourtServiceTime[0];
-                        add.ServiceTime += ",";
-                        add.ServiceTime += me.SalesCourtServiceTime[1];
-                        add.ServiceTime += "/";
-
-
-                        add.ServiceTime += "2";
-                        add.ServiceTime += ",";
-                        add.ServiceTime += NewMe.SalesCourtServiceTime[2];
-                        add.ServiceTime += "/";
-
-                    }
-
-                }
-                //第三種 有 星期 每週
-
-            }
-
-
-            if (add.RenewProduct != null) add.RenewProduct = "";
-            add.RenewProduct = NewMe.NewProductOnLoad;
-            if (add.SellerType != null) add.SellerType = "";
-            add.SellerType = NewMe.SellerCategory;
-            if (add.AfterSales != null) add.AfterSales = "";
-            add.AfterSales = NewMe.ServiceAfterBuy;
-            if (add.SellerCaution != null) add.SellerCaution = "";
-            add.SellerCaution = NewMe.Caution;
-
-
+            var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
+            add.ServiceTime = asd;
+                      
+          
             dbContext.SaveChanges();
 
 
-            return RedirectToAction("關於我");
+           // return RedirectToAction("關於我", new { id = Memberid });
+            return RedirectToAction("賣場");
 
         }
 
@@ -777,6 +663,12 @@ namespace prjiSpanFinal.Controllers
             }).ToList();
 
             return Json(q);
+        }
+
+        public IActionResult GetAlterMe(int id) {
+            var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).ServiceTime;
+            return Json(q);
+
         }
 
         public IActionResult GetItems(int id, int mode, int pages, string keyword, string customname)
