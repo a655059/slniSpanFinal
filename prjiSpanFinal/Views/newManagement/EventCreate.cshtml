@@ -38,6 +38,14 @@
                 <span asp-validation-for="JoinEndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                活動類型
+                <select asp-for="OfficialEventTypeId" class="form-control mb-1">
+                    @foreach(var a in ViewBag.EventType){
+                        <option value="@a.OfficialEventTypeId">@a.OfficialEventTypeName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
                 活動照片
                 <input id="EventPic" asp-for="EventPic" class="form-control" type="file" />
                  <p> 圖片預覽</p>

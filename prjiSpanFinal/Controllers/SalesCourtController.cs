@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -292,9 +293,8 @@ namespace prjiSpanFinal.Controllers
 
             dbContext.SaveChanges();
 
-            return View("賣場", new{ id = Memberid });
-            //return View();
-            //return RedirectToAction("賣場");
+            return View("賣場", new { id = Memberid });
+          
         }
 
         public IActionResult 關於我(int id)
@@ -642,7 +642,8 @@ namespace prjiSpanFinal.Controllers
 
         }
 
-        public IActionResult 編輯賣場資訊() {
+        public IActionResult 編輯賣場資訊()
+        {
             getid();
 
 
@@ -679,7 +680,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public IActionResult GetComment(int id, int mode,int pages,int eachpage)
+        public IActionResult GetComment(int id, int mode, int pages, int eachpage)
         {
             // 買家對  訂單評價    
 
@@ -758,11 +759,13 @@ namespace prjiSpanFinal.Controllers
             return Json(q);
         }
 
-        public IActionResult GetCard(int id) {
+        public IActionResult GetCard(int id)
+        {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
                 link = "/Item/Index?id=" + p.ProductId,
                 pic = p.ProductPics.FirstOrDefault().Pic,
+                productid = p.ProductId,
                 name = p.ProductName,
                 price1 = p.ProductDetails.Select(a => a.UnitPrice).Min(),
                 price2 = p.ProductDetails.Select(a => a.UnitPrice).Max(),
@@ -849,6 +852,14 @@ namespace prjiSpanFinal.Controllers
             return Json(q.Skip((pages - 1) * 4).Take(4));
         }
 
+
+        public IActionResult WriteChoice(int productid)
+        {
+
+            return Json("1");
+        }
+
+
         public IActionResult WriteFollow(int id)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
@@ -875,3 +886,4 @@ namespace prjiSpanFinal.Controllers
         }
     }
 }
+

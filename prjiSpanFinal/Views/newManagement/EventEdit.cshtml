@@ -1,4 +1,4 @@
-﻿@model prjiSpanFinal.ViewModels.newManagement.CCreateEventViewModel
+﻿@model prjiSpanFinal.Models.OfficialEventList
 
 @{
     ViewData["Title"] = "EventEdit";
@@ -42,12 +42,12 @@
             </div>  
             <div class="form-group">
                 活動照片
-                <input id="EventPic" name="EventPic" class="form-control" type="file" value="@Model.EventPic" />
+                <input id="EventPic" name="EventPic" class="form-control" type="file"@* value="@Model.EventPic"*@ />
                  <p> 圖片預覽</p>
                  <img id="Preview" style="max-height:200px;" />
             </div>
             <div class="form-group">
-                <input type="submit" value="確認" class="btn btn-primary" />
+                <input id="submit" type="submit" value="確認" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -66,5 +66,17 @@
             $('#Preview').attr('src', objectURL);
             console.log()
         });
+
+        document.getElementById("submit").addEventListener("click",function(){
+         
+        const ABC = $('#EventPic').val();
+        console.log($('#EventPic').val());
+        if(!ABC){
+           alert("請加入照片");
+           event.preventDefault();
+           return;
+        }
+        })
+        
     </script>
 }

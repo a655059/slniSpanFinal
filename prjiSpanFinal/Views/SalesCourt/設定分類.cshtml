@@ -137,7 +137,15 @@
         })
 
         $("#save").click(function () {     /*當modal按下儲存會關掉*/
-            $("tbody").append(`<tr class="custtr" draggable="true"><td class="sortnum">${++sortmax}</td><td>${0}</td><td class="custtext">${$("#text3").val()}</td><td><button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button></td></tr>`);
+            $("tbody").append(`
+                <tr class="custtr" draggable="true">
+                <td class="sortnum">${++sortmax}</td>
+                <td>${0}</td>
+                <td class="custtext">${$("#text3").val()}</td>
+                <td>
+                <button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>
+                </td>
+                </tr>`);
 
 
             var myModalEl = document.getElementById('exampleModal');
@@ -207,85 +215,7 @@
                 $(".sortnum").eq(i-1).html(i);
             }
         }
-        //function load() {
-        //    const tbShipper = $('#shippers>tbody')
-        //    $.getJSON(url, function (datas) {
-        //        const docFrag = $(document.createDocumentFragment())
-        //        $.each(datas, function (index, shipper) {
-        //            const cell1 = $('<td></td>').text(shipper.shipperId);
-        //            const cell2 = $('<td></td>').text(shipper.companyName);
-        //            const cell3 = $('<td></td>').text(shipper.phone);
-        //            const cell4 = $('<td></td>').html('<button class="btn btn-secondary mr-3" data-toggle="modal" data-target="#addModal"><i class="fas fa-pen-nib"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>')
-
-        //            const row = $('<tr></tr>').append([cell1, cell2, cell3, cell4])
-        //            docFrag.append(row)
-        //        })
-        //        tbShipper.html(docFrag)
-        //    })
-        //}
-        //讀取text
-        //function clickValue() {
-        //    document.getElementById("text3").value = '';
-        //}
-
-        ///*本來下面是要寫在modal怎麼讀取下拉選單的值*/
-        ///* $("select").children("option[value='1      ']")   */
-
-        //let id;
-
-        //save.addEventListener("click", function () {
-        //    count++;
-        //    let dataNew = [];
-        //    let price = document.getElementById("text3").value;
-
-
-        //    if (price != '') {
-        //        dataNew.push(price);
-
-        //        let tbody = document.querySelector('tbody')
-        //        let Tr = document.createElement('tr');
-        //        let td0 = document.createElement('td');
-        //        td0.setAttribute("name", "SortNumber[]");
-        //        td0.setAttribute("value", count);
-        //        Tr.appendChild(td0);
-        //        let td1 = document.createElement('td');
-        //        td1.textContent = 0;
-        //        Tr.appendChild(td1);
-        //        for (let i = 0; i < dataNew.length; i++) {
-        //            let td = document.createElement('td');
-        //            let inp = document.createElement('input');
-        //            td.setAttribute("id", count);
-        //            inp.setAttribute("type", "hidden");
-        //            inp.setAttribute("name", "CustomizedCategoryName[]");
-        //            inp.setAttribute("value", dataNew[i]);
-        //            td.innerHTML = dataNew[i];
-        //            Tr.appendChild(td);
-        //            Tr.appendChild(inp);
-        //        }
-        //        /*產生刪除按鈕在modal的畫面*/
-        //        let td = document.createElement('td');
-        //        td.innerHTML = `<button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>`;
-        //        /*let a = td.children[0];*/
-        //        let a = td;
-        //        a.addEventListener('click', () => {
-
-        //            /*let parent = a.parentNode.parentNode;*/
-        //            let parent = a.parentNode;
-        //            parent.remove();
-        //        })
-        //        Tr.appendChild(td);
-        //        tbody.appendChild(Tr);
-        //        clickValue();
-        //    /*他使用hide把增加在modal的tr刪掉*/
-
-
-        //    }
-        //    else {
-        //        alert("項目,數量和價格不可為空值");
-        //    }
-
-        //})
-
+      
 
     </script>
 }

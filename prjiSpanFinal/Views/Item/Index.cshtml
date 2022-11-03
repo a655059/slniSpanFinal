@@ -548,24 +548,65 @@
             happy_popup(sellerAcc);
         });
 
-        $(".messageSubmit").click(async function () {
-        const message = $(this).siblings(".message").val();
-        if (message == "") {
-            Swal.fire("請輸入留言內容");
-        }
-        else {
-            const productID = Number($(this).closest(".messageLayout").find(".productID").html());
 
-            const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
-            const response = await fetch("@Url.Content("~/Item/AddMessage")" + `?messageParentID=${messageParentID}&message=${message}&productID=${productID}`);
-            const data = await response.text();
-            if (data == "1") {
-                $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+        $(".messageBoardVC").on("click", ".messageSubmit", async function () {
+            const message = $(this).siblings(".message").val();
+            if (message == "") {
+                Swal.fire("請輸入留言內容");
             }
             else {
-                Swal.fire("請先登入再留言");
+                const messageType = $(this).siblings(".message").attr("placeholder");
+                const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+                let messageParentID = 0;
+                if (messageType == "回覆......") {
+                    messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+                }
+                const response = await fetch("@Url.Content("~/Item/AddMessage")" + `?messageParentID=${messageParentID}&message=${message}&productID=${productID}`);
+                const data = await response.text();
+                if (data == "1") {
+                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                }
+                else {
+                    Swal.fire("請先登入再留言");
+                }
             }
-        }
-    });
+        });
+
+        $(".messageBoardVC").on("click", ".messageLikeBtn", async function () {
+            const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+            const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+            const response = await fetch("@Url.Content("~/Item/LikeMessageBoard")" + `?messageBoardID=${messageParentID}`);
+            const data = await response.text();
+            if (data == "1") {
+                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                }
+            else {
+                Swal.fire("請先登入再按讚");
+            }
+        });
+
+        $(".messageBoardVC").on("click", ".deleteReplyBtn", function () {
+            Swal.fire({
+                title: "確定要收回留言嗎?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "確定",
+                denyButtonText: "取消",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+                    const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+                    const response = await fetch("@Url.Content("~/Item/DeleteMessage")" + `?messageBoardID=${messageParentID}`);
+                    const data = await response.text();
+                    if (data == "1") {
+                        $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                    }
+                } else if (result.isDenied) {
+
+                }
+            });
+
+        });
+        
     </script>
 }

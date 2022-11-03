@@ -47,6 +47,9 @@
                     使用者定義類別
                 </th>
                 <th>
+                    產品照片
+                </th>
+                <th>
                     賣家帳號
                 </th>
                 <th>
@@ -73,6 +76,21 @@
                 </td>
                 <td>
                     <input class="form-control-plaintext" value="@item.CustomizedCategoryName" readonly>
+                </td>
+                <td>
+                    @{
+                        if (item.ProductPic != null)
+                        {
+                            var base64Image = Convert.ToBase64String(item.ProductPic);
+                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+                            <img src="@source" class="cardImg" alt="找不到圖片" width="120" />
+                        }
+                        else
+                        {
+                            <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
+                        }
+                    }
+                    
                 </td>
                 <td>
                     <input class="form-control-plaintext" value="@item.MemberAcc" readonly>

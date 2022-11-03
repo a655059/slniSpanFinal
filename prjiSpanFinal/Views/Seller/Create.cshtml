@@ -523,7 +523,7 @@
                 var myModalEl = document.getElementById('exampleModal');
                 var modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
-          }
+            }
             else {
                 alert("項目,數量和價格不可為空");
             }
@@ -549,6 +549,8 @@
         //create下一步 按鈕
 
         next.addEventListener("click", function () {
+
+            console.log($(".checkship").children())
             if ($("#ProductName").val() == "") {
                 alert("名稱請填寫完整");
             }
@@ -561,10 +563,10 @@
             else if ($("#Description").val() == "") {
                 alert("描述請填寫完整");
             }
-            else if ($(".checkship").val() == "") {
+            else if ($(".checkship").children() == null) {
                 alert("請至物流設定中設定物流");
             }
-            else if ($(".checkpay").val() == "") {
+            else if ($(".checkpay").children() == null) {
                 alert("請至物流設定中設定付款");        
             }
             else{
@@ -665,7 +667,7 @@
             }
            
             
-
+            console.log($("#smallType").children("option:selected").val())
             let pushData = {
                 暫存規格:alldata,
                 ProductName: document.getElementById("ProductName").value,

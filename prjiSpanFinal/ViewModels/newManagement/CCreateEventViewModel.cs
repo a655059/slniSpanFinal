@@ -8,6 +8,7 @@ namespace prjiSpanFinal.ViewModels.newManagement
     public class CCreateEventViewModel
     {
         public int OfficialEventListId { get; set; }
+        public int OfficialEventTypeId { get; set; }
         public string EventName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

@@ -16,6 +16,7 @@
         <div class="col-1"></div>
         <div class="col-11">
             <div class="balance-container">
+                <img src="~/img/ShaShaCoin.png" />
                 <div>
                     現存蝦蝦幣
                 </div>
@@ -25,11 +26,12 @@
                     <span>
                         儲值蝦蝦幣：
                     </span>
-                    <input type="text" id="charge" />
+                    <input type="text" onkeypress="isNumberKey(event)" id="charge" />
                 </div>
                 <br />
-                <div class="btn btn-success" onkeypress="isNumberKey(event)" id="chargebtn">儲值</div>
+                <div class="btn btn-success" id="chargebtn">儲值</div>
             </div>
+
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">總覽</a>
@@ -37,9 +39,27 @@
                     <a class="nav-item nav-link" id="2" data-toggle="tab" href="#!" role="tab" aria-controls="nav-decrease" aria-selected="false">減少－</a>
                 </div>
             </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">123</div>
+            <div class="d-flex justify-content-center" id="PagesArea">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" id="orderpageup">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="orderpagedown">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
+            <div class="tab-content" id="nav-tabContent">
+                <div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -79,34 +99,106 @@
 </form>
 @section Scripts{
     <script>
-                    const charge = $("#charge")
-                    const item = $(".nav-item");
-                    let currentFilter = 0;
-                    const pane = $(".tab-pane");
-                    item.click(function (event) {
-                        item.removeClass("active");
-                        $(this).addClass("active");
-                        currentFilter = parseInt($(this).attr("id"));
-                        console.log(currentFilter);
-                    })
-                    function isNumberKey(evt) {
-                        var charCode = (evt.which) ? evt.which : evt.keyCode
-                        if (charCode > 31 && (charCode < 48 || charCode > 57))
-                            return false;
-                        return true;
+        let currentFilter = 0;
+        let nowpages = 1;
+        const charge = $("#charge")
+        const item = $(".nav-item");
+        const pane = $(".tab-pane");
+
+        RefreshRecord();
+
+        $("#chargebtn").click(function () {
+            if (parseInt(charge.val()) > 0) {
+                $.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
+                    if (data != null) {
+                        $("#balanceHave").text(data);
                     }
+                    charge.val("");
+                })
+                item.removeClass("active");
+                $("#0").addClass("active");
+                currentFilter = 0;
+                nowpages = 1;
+                RefreshRecord();
+            }
+        })
 
-                    $("#chargebtn").click(function () {
-                        if (parseInt(charge.val()) > 0) {
-                            $.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
-                                if (data != null) {
-                                    $("#balanceHave").text(data);
-                                }
-                                charge.val("");
-                            })
+        item.click(function (event) {
+            item.removeClass("active");
+            $(this).addClass("active");
+            currentFilter = parseInt($(this).attr("id"));
+            nowpages = 1;
+            RefreshRecord();
+        })
+
+        function PageFill(data) {
+            let pagecount = Math.ceil(data / 10);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == nowpages) {
+                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
+
+        $(document).on("click", ".orderpagenumclick", function () {
+            nowpages = $(this).html();
+            RefreshRecord();
+            console.log(nowpages);
+        })
+
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+            RefreshRecord();
+            console.log(nowpages);
+        })
+
+        $("#orderpageup").click(function () {
+            nowpages = Math.max(parseInt(nowpages) - 1, 1);
+            RefreshRecord();
+            console.log(nowpages);
+        })
+
+        function RefreshRecord() {
+            $.post(`BalanceInfo`, { status: currentFilter, nowpages: nowpages}, function (data) {
+                $("#nav-tabContent").html("");
+                res = "";
+                if (data.length>0) {
+                    for (let i = 0; i < data.length; i++) {
+                        res += `
+                    <div class="d-flex justify-content-between" id="nav-tabItemBox">
+                        <div class="row" id="nav-tabItemBody">
+                            <div id="nav-tabItemTitle">`;
+                        res += data[i].recordReason;
+                        res += `</div>
+                            <div id="nav-tabItemDate">`;
+                        res += data[i].recordDate;
+                        res += `</div>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-center" id="nav-tabItemAmount">
+                            <img src="/img/ShaShaCoin.png" />
+                            <div class="d-flex">`;
+                        if (data[i].recordMoney > 0) {
+                            res+="+"
                         }
-                    })
-
+                        res += data[i].recordMoney;
+                        res += `</div></div></div>`;
+                    }
+                    PageFill(data[0].balanceCount);
+                }
+                else {
+                    res = `<div class="d-flex justify-content-between">尚無交易紀錄</div>`;
+                    PageFill(1);
+                }
+                $("#nav-tabContent").html(res);
+            })
+        }
     </script>
 
 }
