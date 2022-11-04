@@ -13,6 +13,7 @@ using prjiSpanFinal.Models.OrderReq;
 using prjiSpanFinal.ViewModels.Order;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.IO;
+using prjiSpanFinal.ViewModels.Home;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -196,14 +197,40 @@ namespace prjiSpanFinal.Controllers
             return View(x);
         }
 
-        public IActionResult AD(string jsonString)
+        public IActionResult AD()
         {
-            return PartialView(jsonString);
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            CSellerADViewModel ViewModel = new CSellerADViewModel()
+            {
+                SellerProds = (new CHomeFactory()).toShowItem(_db.Products.Where(p => p.MemberId == id).ToList()),
+            };
+            return View(ViewModel);
         }
-
-
-
-
+        public IActionResult getItem(int nowpage)
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<CShowItem> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            return Json(res);
+        }
+        public IActionResult ADshowCheckItem(int itemID)
+        {
+            CShowItem res = new CSellerADFactory().fgetCheckedshowItem(_db.Products.Where(p => p.ProductId == itemID).ToList());
+            return Json(res);
+        }
+        public IActionResult getAD(int ADfilter)
+        {
+            List<Ad> ad = new CSellerADFactory().fgetAD(_db.Ads.ToList(), ADfilter);
+            return Json(ad);
+        }
+        public IActionResult getResult(int[] ADIDs)
+        {
+            List<Ad> ad = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
+            return Json(ad);
+        }
 
 
         public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功

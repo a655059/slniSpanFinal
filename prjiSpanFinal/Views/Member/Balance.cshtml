@@ -63,6 +63,40 @@
         </div>
     </div>
 </div>
+
+<form id="formCreditCard" method="post" accept-charset="UTF-8" action="https://payment-stage.opay.tw/Cashier/AioCheckOut/V5">
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+            <label class="form-check-label" for="invalidCheck">
+                我已確認訂購內容及寄送資訊無誤
+            </label>
+            <div class="invalid-feedback">
+                您必須在提交前同意
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="MerchantID" value="2000132" />
+    <input type="hidden" name="MerchantTradeNo" value="" />
+    <input type="hidden" name="MerchantTradeDate" value="" />
+    <input type="hidden" name="PaymentType" value="aio" />
+    <input type="hidden" name="TotalAmount" value="" />
+    <input type="hidden" name="TradeDesc" value="建立信用卡測試訂單" />
+    <input type="hidden" name="ItemName" value="" />
+    <input type="hidden" name="ReturnURL" value="https://developers.opay.tw/AioMock/MerchantReturnUrl" />
+    <input type="hidden" name="ChoosePayment" value="Credit" />
+    <input type="hidden" name="StoreID" value="" />
+    <input type="hidden" name="ClientBackURL" value="" />
+    <input type="hidden" name="CreditInstallment" value="" />
+    <input type="hidden" name="InstallmentAmount" value="" />
+    <input type="hidden" name="Redeem" value="" />
+    <input type="hidden" name="EncryptType" value="1" />
+    <input type="hidden" name="CheckMacValue" value="" />
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">確認付款</button>
+    </div>
+</form>
 @section Scripts{
     <script>
         let currentFilter = 0;

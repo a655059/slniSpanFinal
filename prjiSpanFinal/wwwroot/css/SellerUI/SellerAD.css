@@ -1,0 +1,180 @@
+﻿.modal {
+    --bs-modal-width:930px!important;
+}
+.modal-Prod {
+    height:200px;
+    width:150px;
+    margin:10px;
+    border: 1px solid lightgray;
+}
+.modal-Prod-Body{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    flex-wrap:wrap;
+}
+.modal-Prod-Pic {
+    margin:10px;
+    display: block;
+    width: 70%;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    object-fit: cover;
+}
+.modal-Prod-ItemTilte {
+    width:100%;
+    height: 25px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    letter-spacing: 1px;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    text-overflow: ellipsis;
+}
+.nav-item {
+    color: #FF5809;
+}
+    .nav-item:hover {
+        color: #FF5151;
+    }
+.active {
+    font-weight:bold;
+    color: #FF0000!important;
+}
+.Item-Price {
+    width: 100%;
+    color: red;
+}
+.Item-check {
+    width: 100%;
+}
+#PagesArea{
+    margin:20px 0;
+}
+
+#ShowAreaBox {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+#ShowArea {
+    width: 100%;
+    height: 340px;
+}
+#addItemBtn {
+    background-color: white;
+    color: #6C3365;
+    border-color: #7E3D76;
+    width: 80%;
+    margin: 5px 40px;
+}
+    #addItemBtn:hover {
+        background-color: #6C3365;
+        color:white;
+    }
+
+#CheckedItemAD {
+    width: 200px;
+    height: 250px;
+    background-color: black;
+}
+#SubList{
+    margin-top:40px;
+    border:1px solid lightgray;
+}
+.ADeffect {
+    user-select: none;
+    width: 80%;
+    border: 1px solid #FF8000;
+    border-radius: 10px;
+    margin: 5px;
+}
+.ADsensor {
+    background-color: white;
+    color: #FF9224;
+}
+    .ADsensor:hover {
+        color: #F75000;
+    }
+    .ADsensor:active {
+        background-color: #F75000;
+        color: white;
+    }
+.ADsensor-checked {
+    background-color: #FF5809;
+    color: white;
+}
+    .ADsensor-checked:active {
+        background-color: #F75000;
+        color: white;
+    }
+.ADe-Header {
+    margin-top: 5px;
+}
+.ADe-Title {
+    margin-left:10px;
+    font-size:15px;
+    font-weight:bold;
+}
+.ADe-Price{
+    font-size:10px;
+}
+.ADe-Description{
+    text-align:center;
+    font-size:13px;
+    margin-bottom:5px;
+}
+.ResultTitle {
+    font-size: 30px;
+    font-weight: bold;
+    color: #0000C6;
+}
+#ResultArea {
+    width: 100%;
+    height: 70%;
+    background-color: #FFFFFF;
+    color: #FF8000;
+    border-radius: 5px;
+}
+#Result-Total{
+    width:100%;
+}
+#Result-Total-Border {
+    position: relative;
+    left: 25px;
+    top: 0;
+    width: 85%;
+    border-top: 1px solid red;
+    
+}
+#Result-Total-Price{    
+    margin:0 20px;
+    margin-top:10px;
+}
+#Result-CheckedeffectList{
+    padding:10px 10px 5px 10px;
+}
+.Result-Checkedeffect {
+    margin:10px 0;
+    width: 100%;
+    height:50px;
+}
+.Result-Checkedeffect-Title{
+    font-weight:bold;
+    font-size:18px;
+}
+.Result-Checkedeffect-Price {
+    font-size: 16px;
+}
+#Result-btn {
+    border-color: #FF8000;
+    color: #FF8000;
+}
+    #Result-btn:hover {
+        color: white;
+        background-color: #FF8000;
+    }
