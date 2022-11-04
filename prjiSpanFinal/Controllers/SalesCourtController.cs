@@ -393,45 +393,7 @@ namespace prjiSpanFinal.Controllers
             };
 
             //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
-            if (ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
-            {
-                add.ServiceTime = "";
-                add.RenewProduct = "";
-                add.SellerType = "";
-                add.AfterSales = "";
-                add.SellerCaution = "";
-            }
-
-            if (ServiceTime[0] == "on")
-            {
-                add.ServiceTime += "0";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[0];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[1];
-                add.ServiceTime += "/";
-            }
-            if (ServiceTime[1] == "on")
-            {
-                add.ServiceTime += "1";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[2];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[3];
-                add.ServiceTime += "/";
-            }
-            if (ServiceTime[2] == "on")
-            {
-                add.ServiceTime += "2";
-                add.ServiceTime += ",";
-                add.ServiceTime += ServiceTime[3];
-                add.ServiceTime += "/";
-            }
-
-            add.RenewProduct += NewMe.NewProductOnLoad;
-            add.SellerType += NewMe.SellerCategory;
-            add.AfterSales += NewMe.ServiceAfterBuy;
-            add.SellerCaution += NewMe.Caution;
+        
 
 
             dbContext.SaveChanges();
@@ -512,7 +474,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 修改關於我(int Memberid,string asd)
         {
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
-            add.ServiceTime = asd;
+            add.Description = asd;
                       
           
             dbContext.SaveChanges();
@@ -660,7 +622,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         public IActionResult GetAlterMe(int id) {
-            var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).ServiceTime;
+            var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).Description;
             return Json(q);
 
         }

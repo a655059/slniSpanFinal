@@ -22,12 +22,7 @@
 
 
     //var SalesCourtServiceTime   想說像修改關於我先把服務時間切分 再帶入viewmodel中的個別變數
-    var NewProductOnLoad = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).RenewProduct;
-    var SellerCategory = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).SellerType;
-    //售後服務      注意事項
-    var ServiceAfterBuy = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).AfterSales;
-    var Caution = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Model.Memberid).SellerCaution;
-
+   
 }
 
 @section Styles{
@@ -90,7 +85,7 @@
             <div class="col">
                 <div class="bg-secondary">新品上架時間</div>
                 <p>
-                    @NewProductOnLoad
+                   
                 </p>
             </div>
             <div class="col">
@@ -111,7 +106,7 @@
             <div class="col">
                 <div class="bg-secondary">賣家類型</div>
                 <p>
-                    @SellerCategory
+                    
                 </p>
             </div>
         </div>
@@ -163,11 +158,11 @@
             <h1 class="display-4 fst-italic">注意事項及售後服務</h1>
             <div>注意事項:</div>
             <p class="lead my-3" style="font-size:1.4em">
-                @ServiceAfterBuy
+               
             </p>
             <div>售後服務:</div>
             <p class="lead my-3" style="font-size:1.4em">
-                @Caution
+               
             </p>
             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
