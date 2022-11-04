@@ -12,16 +12,16 @@ namespace prjiSpanFinal.Hubs
     {
         public async Task Countdown(int biddingID)
         {
-            iSpanProjectContext dbContext = new iSpanProjectContext();
-            DateTime endTime = dbContext.Biddings.Where(i => i.BiddingId == 3).Select(i => i.EndTime).FirstOrDefault();
+            //iSpanProjectContext dbContext = new iSpanProjectContext();
+            //DateTime endTime = dbContext.Biddings.Where(i => i.BiddingId == 3).Select(i => i.EndTime).FirstOrDefault();
             
-            while (true)
-            {
-                TimeSpan remainingTime = endTime - DateTime.Now;
-                string time = remainingTime.Days + "天" + remainingTime.Hours + "時" + remainingTime.Minutes + "分" + remainingTime.Seconds + "秒";
-                Thread.Sleep(1000);
-                await Clients.All.SendAsync("Countdown", time);
-            }
+            //while (true)
+            //{
+            //    TimeSpan remainingTime = endTime - DateTime.Now;
+            //    string time = remainingTime.Days + "天" + remainingTime.Hours + "時" + remainingTime.Minutes + "分" + remainingTime.Seconds + "秒";
+            //    Thread.Sleep(1000);
+            //    await Clients.All.SendAsync("Countdown", time);
+            //}
 
             
         }
