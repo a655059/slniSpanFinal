@@ -7,5 +7,6 @@ namespace prjiSpanFinal.ViewModels
         public static readonly string SK_LOGIN_VALIDATION = "SK_LOGIN_VALIDATION";
         public static readonly string SK_PURCHASEITEMINFO = "SK_PURCHASEITEMINFO";
         public static readonly string SK_ALL_INFO_TO_SHOW_CHECKOUT = "SK_ALL_INFO_TO_SHOW_CHECKOUT";
+        public static readonly string SK_MAILCHECK= "SK_MAILCHECK";
     }
 }
