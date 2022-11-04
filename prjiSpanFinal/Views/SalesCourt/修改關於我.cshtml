@@ -3,7 +3,9 @@
     ViewData["Title"] = "修改關於我";
 }
 
+<a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/編輯賣場資訊">編輯賣場資訊</a>
 
+<a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/設定分類">設定分類</a>
 <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;background-color:burlywood">
     <div>修改關於我</div>
 
@@ -12,7 +14,7 @@
 <form class="outlook" method="post" enctype="multipart/form-data" name="newabme" id="newabme">
 </form>
 
-<form  class="first" method="post" enctype="multipart/form-data" name="newabme" id="newabme">
+<form class="first" method="post" enctype="multipart/form-data" name="newabme" id="newabme">
     <div class="form-group row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
         <div class="bg-warning rounded">賣場描述</div>
 
@@ -276,7 +278,7 @@
 
 @section Scripts
 {       @*check帶出值怪*@
-        <script>
+<script>
 
         jQuery.postJSON = function (url, data, callback) {
             jQuery.post(url, data, callback, "json");
@@ -410,7 +412,7 @@
                                     <textarea name="NewProductOnLoad" class="form-control asdf" style="height: 90px; width:570px;">${data.text[2]}</textarea>
 
                                     <div class="text-success">新品上架時間</div>
-                                       
+
 
                                     <label>
                                         <input class="checklist" name="upload" type="radio" value="avday" />每天
@@ -419,7 +421,7 @@
                                         <input class="checklist" name="upload" type="radio" value="avweek" />每週
                                         <input class="checklist" name="upload" type="radio" value="skipweek" />隔週
                                         <input class="checklist" name="upload" type="radio" value="notsureperiod" />不定期
-                                     
+
                                     </label>
                             </div>
                         </div>
@@ -427,7 +429,7 @@
                       <div class="row">
                             <div class="col">
                                 <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
-                                    <div class="bg-warning rounded-2">售後服務</div>                               
+                                    <div class="bg-warning rounded-2">售後服務</div>
 
                                     <div class="col">
                                         <input type="hidden" name="Memberid" value="">
@@ -482,7 +484,7 @@
                                 <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
                                     <div class="bg-warning rounded-2">注意事項</div>
 
-                                  
+
                                     <div class="row my-2">
                                         <div class="col-1">
                                             <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
@@ -548,10 +550,10 @@
             }
 
             if (data.selectopt[4] == 1) {       //要怎麼改selectopt選項的內容
-                $(".scst")[4].val() = "是";
+                $(".scst")[4].text("是");
             }
             if (data.selectopt[4] == 2) {
-                $(".scst")[4].val() = "否";
+                $(".scst")[4].text("否");
             }
         }
 
@@ -567,7 +569,7 @@
                     loadcheck(datas);
                     $(".first").html("");
                 }
-               
+
 
                 //console.log(datas.selectopt[0]);
                 //console.log(datas.text[0]);
@@ -611,7 +613,8 @@
 
         $("#btnSubmit").click(function () {
             loadpost();
-            $.postJSON("/SalesCourt/修改關於我", { Memberid: @Model.Memberid,asd:asd})
+            $.postJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function () {
+            });
         })
 
         let aaa1 = "";
@@ -713,6 +716,6 @@
             });
         });
 
-        </script>
+</script>
 
-    }
+}
