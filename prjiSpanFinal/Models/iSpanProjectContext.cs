@@ -667,7 +667,6 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.Description)
                     .IsRequired()
-                    .HasMaxLength(500)
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Email)
