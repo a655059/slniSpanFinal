@@ -29,8 +29,8 @@
 <script>
     @*setTimeout("location.href='@Url.Content("~/member/login")'", 3000);*@
     Swal.fire(
-        '恭喜!',
-        '您已註冊成功，請重新登入!',
+        '恭喜,您已註冊成功!',
+        '若欲成為正式會員,請至註冊信箱驗證!',
         'success'
     ).then(function (result) { window.location.href = "@Url.ActionLink("login","Member")";})
 </script>
