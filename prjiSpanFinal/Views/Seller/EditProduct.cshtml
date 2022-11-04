@@ -236,14 +236,14 @@
                         @*    大頭照相片1     *@
                         <label class="btn" for="commentPhoto1">
                             @{
-                                if (Model.DBtoPic != null)
-                                {
+                                    if (Model.DBtoPic != null)
+                                    {
                                     <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                }
-                                else
-                                {
+                                    }
+                                    else
+                                    {
                                     <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                }
+                                    }
                             }
                         </label>
                         <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
@@ -255,26 +255,28 @@
                             for (int i = 0; i < 4; i++)
                             {
                                 string id = $"commentPhoto{i + 2}";
-                                <label class="btn" for="@id">
-                                    @{
-                                        if (Model.DBtoPic != null)
-                                        {
-                                            if (Model.DBtoPic.Count > 1 && i + 1 < Model.DBtoPic.Count)
+                                <div>
+                                    <label class="btn" for="@id">
+                                        @{
+                                            if (Model.DBtoPic != null)
                                             {
-                                                <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                if (Model.DBtoPic.Count > 1 && i + 1 < Model.DBtoPic.Count)
+                                                {
+                                                    <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
+                                                else
+                                                {
+                                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                                }
                                             }
                                             else
                                             {
                                                 <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                             }
                                         }
-                                        else
-                                        {
-                                            <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                        }
-                                    }
-                                </label>
-                                <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
+                                    </label>
+                                    <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
+                                </div>
                             }
                         }
                     </div>
@@ -455,7 +457,6 @@
             const photo = document.getElementById($(this).attr("id")).files;
             if (photo) {
                 let src = URL.createObjectURL(photo[0]);
-                console.log(src);
                 $(this).siblings('label').children().css("background-image", `url('${src}')`);
             }
         });
@@ -491,37 +492,49 @@
              //資料庫規格資料
              for (let i = 0; i < $("#styletbody").children().length; i++) {
                  var id = document.getElementById('styleid' + i);
-
                  let stylephoto;
-                 if (id.children[3].children[0]!=null) {                     
-                     let src = id.children[3].children[0].getAttribute("src");
+                 if (id != null) {
+                     if (id.children[3].children[0] != null) {
+                         let src = id.children[3].children[0].getAttribute("src");
                          stylephoto = src.split(",")[1];
+                     }
+                     let styleSpec = {
+                         StyleStr: id.children[0].textContent,
+                         QuantityStr: id.children[1].textContent,
+                         UnitPriceStr: id.children[2].textContent,
+                         BodyPicStr: stylephoto
+                     };
+                     alldata.push(styleSpec);
                  }
-                 let styleSpec = {
-                     StyleStr: id.children[0].textContent,
-                     QuantityStr: id.children[1].textContent,
-                     UnitPriceStr: id.children[2].textContent,
-                     BodyPicStr: stylephoto
-                 };        
-                 alldata.push(styleSpec);
+                 
              }
 
              //資料庫照片資料
-             let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
-             dataphoto.push(hesdpic);
-
-             if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
-                 dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
-                 if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
-                     dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
-                     if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
-                         dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
-                         if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
-                             dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
-                         }
-                     }
-                 }
+             if (!$("#commentPhoto1").change(function () { })) {
+                 let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
+                 dataphoto.push(hesdpic);
              }
+
+             console.log(2)
+             
+
+             for (let i = 0; i < 4; i++){                
+                 if (!$(`#commentPhoto${i}`).change(function () { })) {
+                    if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
+                        dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
+                        if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
+                            dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
+                            if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
+                                dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
+                                if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
+                                    dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
+                                }
+                            }
+                        }
+                    }
+                }
+             }
+             
              
              
 
@@ -543,7 +556,7 @@
             let pushData = {
                 暫存規格: alldata,
                 ProductName: document.getElementById("ProductName").value,
-                smalltype: $("#smallType").children("option:selected").val(),
+                smalltype: $("#smallType").children("option:selected").text(),
                 Description: document.getElementById("Description").value,
                 CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,

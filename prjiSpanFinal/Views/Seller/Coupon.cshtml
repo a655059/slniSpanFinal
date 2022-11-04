@@ -16,18 +16,18 @@
             font-size: 20px;
         }
 
-        .置中{
+        .置中 {
             vertical-align: middle;
         }
 
-        .modal{
-            position:fixed;
-            top:50px;
+        .modal {
+            position: fixed;
+            top: 50px;
         }
-
     </style>
 }
 
+@*新增用的modal*@
 <div class="modal fade modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -36,13 +36,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="d-flex justify-content-start">
+                    <label>是否為免運券</label>
+                    <div class="form-check form-switch mx-2">
+                        <input class="form-check-input " type="checkbox" id="check">
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <label>滿額:</label>
+                        <div>
+                            <input type="text" id="text0" class="form-control mx-2">
+                        </div>
+                    </div>
+                </div>
+                <br />
                 <label>優惠劵名稱:</label>
                 <input type="text" id="text1" class="form-control my-1">
                 <br />
                 <label>優惠劵序號:</label>
                 <input type="text" id="text2" class="form-control my-1">
                 <br />
-                <label>折扣額度:</label>
+                <label>折扣折數:</label>
                 <input type="text" id="text3" class="form-control my-1">
                 <br />
                 <label>優惠券可使用期間:</label>
@@ -51,9 +64,54 @@
                 </span>
             </div>
             <div class="modal-footer">
-                <button id="demo" type="button" class="btn btn-info">Demo</button>
+                <button id="demo" type="button" class="btn btn-info">新增Demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*編輯用的modal*@
+<div class="modal fade modal" id="ExampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">建立優惠劵</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-start">
+                    <label>是否為免運券</label>
+                    <div class="form-check form-switch mx-2">
+                        <input class="form-check-input " type="checkbox" id="checkEdit">
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <label>滿額:</label>
+                        <div>
+                            <input type="text" id="text00" class="form-control mx-2">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <label>優惠劵名稱:</label>
+                <input type="text" id="text11" class="form-control my-1">
+                <br />
+                <label>優惠劵序號:</label>
+                <input type="text" id="text22" class="form-control my-1">
+                <br />
+                <label>折扣折數:</label>
+                <input type="text" id="text33" class="form-control my-1">
+                <br />
+                <label>優惠券可使用期間:</label>
+                <span>
+                    <input id="startDate11" class="form-control orderdatepicker" type="date"> ~ <input id="endDate11" class="form-control orderdatepicker" type="date">
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button id="demoEdit" type="button" class="btn btn-info">編輯Demo</button>
+                <button id="saveEdit" type="button" class="btn btn-warning">確定</button>
+                <button id="closeEdit" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
         </div>
     </div>
@@ -81,32 +139,44 @@
                         <td scope="col" align="center"></td>
                         <td scope="col" align="center">優惠券名稱</td>
                         <td scope="col" align="center">優惠券序號</td>
-                        <td scope="col" align="center">折扣額度</td>
+                        <td scope="col" align="center">折數</td>
                         <td scope="col" align="center">使用期間</td>
                         <td scope="col" align="center">領用期間</td>
-                        <td scope="col" align="center">免運</td>
+                        <td scope="col" align="center">是否免運</td>
                         <td scope="col" align="center">滿額</td>
                         <td scope="col" align="center">操作</td>
                     </tr>
                     <tbody id="selectcoupon">
                         @{
+                            //string btnEdit = "btnEdit";
                             for (var i = 0; i < Model.Count; i++)
                             {
-                                <tr>
+                                //btnEdit = btnEdit + i;
+                                <tr id="viewmodel">
+                                    <input type="hidden" id="couponid" value="@Model[i].CouponId">
                                     <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
-                                    <td class="置中 col" align="center">@Model[i].CouponName</td>
-                                    <td class="置中 col" align="center">@Model[i].CouponCode</td>
-                                    <td class="置中 col" align="center">@Model[i].Discount</td>
-                                    <td class="置中 col" align="center">@Model[i].StartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="couponName 置中 col" align="center">@Model[i].CouponName</td>
+                                    <td class="couponCode 置中 col" align="center">@Model[i].CouponCode</td>
+                                    <td class="discount 置中 col" align="center">@Model[i].Discount</td>
+                                    <td class="置中 col" align="center"><div class="startDate">@Model[i].StartDate.ToString("yyyy/MM/dd")</div>|<br /><div class="endDate">@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</div></td>
                                     <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy/MM/dd")</td>
-                                    <td class="置中 col" align="center">@Model[i].IsFreeDelivery</td>
-                                    <td class="置中 col" align="center">@Model[i].MinimumOrder</td>
+                                    @{
+                                        if (Model[i].IsFreeDelivery == true)
+                                        {
+                                            <td class="isfree 置中 col" align="center" id="true"><img src="~/img/check.png" /></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="isfree 置中 col" align="center" id="false"></td>
+                                        }
+                                    }
+                                    <td class="Minimum 置中 col" align="center">@Model[i].MinimumOrder</td>
                                     <td class="置中 col" align="center">
                                         <div>
-                                            <button class="btnEdit btn btn-secondary">編輯</button>
+                                            <button class="btnEdit btn btn-secondary" data-bs-toggle="modal" data-bs-target="#ExampleModal">編輯</button>
                                         </div>
                                         <div>
-                                            @Html.ActionLink("刪除", "Delete", "Product", new {@*--> id = item.FId<!--*@},
+                                            @Html.ActionLink("刪除", "DeleteCoupon", "Seller", new { id = Model[i].CouponId },
                                                                         new { onclick = "return confirm('確定要刪除嗎?')", @style = "text-decoration:none;", @class = "btn btn-danger mt-2" })
                                         </div>
                                     </td>
@@ -121,102 +191,206 @@
     <div class="col-1"></div>
 </div>
 @section Scripts
-{<script>
-    $(".btnnew").click(function (data) {
-        data.preventDefault(); //取消原本action的預設值
-        clickValue();//清空值
-    })
+{
+    <script>
+        //日期過期不能填
 
-
-    //清空model值
-    function clickValue() {
-        document.getElementById("text1").value = '';
-        document.getElementById("text2").value = '';
-        document.getElementById("text3").value = '';
-        document.getElementById("startDate").value = '';
-        document.getElementById("endDate").value = '';
-    }
-
-
-
-    let couponlist = [];//拿來儲存取到的值
-
-    save.addEventListener("click", async function () {
-
-        let name = document.getElementById("text1").value;
-        let core = document.getElementById("text2").value;
-        let sale = document.getElementById("text3").value;
-        console.log(sale)
-        let startdate = document.getElementById("startDate").value;
-        console.log("startdate")
-        console.log(startdate)
-        let enddate = document.getElementById("endDate").value;
-        let coupon = {
-            "CouponName": name,
-            "CouponCode": core,
-            "Discount": parseFloat(sale),  //字串轉Float 不然json物件轉型會失敗
-            "StartDate": startdate,
-            "ExpiredDate": enddate,
-            "ReceiveStartDate": startdate,
-            "ReceiveEndDate": enddate,
-            "IsFreeDelivery": false,
-            "MinimumOrder":0
-        };
-        ;
-        let json = JSON.stringify(coupon);
-        let response = await fetch("@Url.Content("~/Seller/Couponresponse")" + `?jsonString=${json}`);
-
-        var myModalEl = document.getElementById('exampleModal');
-        var modal = bootstrap.Modal.getInstance(myModalEl)
-        modal.hide();
-
-        location.href = "/Seller/Coupon" //跳回Coupon頁面
-    })
-
-
-    //=======Demo鍵=================================
-    demo.addEventListener("click", async function () {
-        document.getElementById("text1").value="Demo優惠";
-        document.getElementById("text2").value=6666;
-        document.getElementById("text3").value = 0.6;
-    })
-
-
-    //===============搜尋=========================
-    $("#selectbtn").click(function () {
-        $("#selectcoupon").html("");
-        let selectname = $("#selectname").val();
-        jQuery.postJSON = function (url, data, callback) {
-            jQuery.post(url, data, callback, "json");
-        };
-        $.postJSON("/Seller/SelectCoupon", { select: selectname }, function (dataname) {
-            console.log(1)
-            console.log(dataname)
-            let item = "";
-            for (var i = 0; i < dataname.length; i++)
-            {
-                item = item +
-                    `<tr>
-                        <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
-                        <td class="置中 col" align="center">${dataname[i].couponName}</td>
-                        <td class="置中 col" align="center">${dataname[i].couponCode}</td>
-                        <td class="置中 col" align="center">${dataname[i].discount}</td>
-                        <td class="置中 col" align="center">${dataname[i].startDate}<br />|<br />${dataname[i].expiredDate}</td>
-                        <td class="置中 col" align="center">${dataname[i].receiveStartDate}<br />|<br />${dataname[i].receiveEndDate}</td>
-                        <td class="置中 col" align="center">${dataname[i].isFreeDelivery}</td>
-                        <td class="置中 col" align="center">${dataname[i].minimumOrder}</td>
-                        <td class="置中 col" align="center">
-                            <div>
-                                <button class="btnEdit btn btn-secondary">編輯</button>
-                            </div>
-                            <div>
-                                <a class="btn btn-danger my-2" href="/Seller/DeleteProduct/${dataname[i].couponId}" onclick="return confirm('確定要刪除嗎?')">刪除</a>
-                            </div>
-                        </td>
-                    </tr>`
+        $("#startDate").click(function () {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            let date = today.getDate();
+            if (date < 10) {
+                date = "0" + date;
             }
-            $("#selectcoupon").append(item);
+            $("#startDate").attr("min", `${year}-${month}-${date}`);
+           /* $("#endDate").attr("min", `${year}/${month}${date}`);*/
+        });
+        $("#endDate").click(function () {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            let date = today.getDate();
+            if (date < 10) {
+                date = "0" + date;
+            }
+            $("#endDate").attr("min", `${year}/${month}${date}`);
+        });
+
+
+
+        //免運劵按鈕
+        $("#check").change(function () {
+            if ($("#check").is(":checked")) {
+                $("#text1").val("免運劵");
+                $("#text1").attr("disabled", "disabled");
+                $("#text2").val("freeshiper");
+                $("#text2").attr("disabled", "disabled");
+                $("#text3").val(10);
+                $("#text3").attr("disabled", "disabled");
+            }
+            else {
+                $("#text1").val("");
+                $("#text1").attr("disabled",false);
+                $("#text2").val("");
+                $("#text2").attr("disabled", false);
+                $("#text3").val("");
+                $("#text3").attr("disabled", false);
+            }
         })
-    })
-</script>
+
+        $(".btnnew").click(function (data) {
+            data.preventDefault(); //取消原本action的預設值
+            clickValue();//清空值
+        })
+
+
+        //清空model值
+        function clickValue() {
+            document.getElementById("text1").value = '';
+            document.getElementById("text2").value = '';
+            document.getElementById("text3").value = '';
+            document.getElementById("startDate").value = '';
+            document.getElementById("endDate").value = '';
+        }
+
+
+
+        let couponlist = [];//拿來儲存取到的值
+
+        save.addEventListener("click", async function () {
+
+            let fullup = $("#text0").val();
+            let name = document.getElementById("text1").value;
+            let core = document.getElementById("text2").value;
+            let sale = document.getElementById("text3").value;
+            let startdate = document.getElementById("startDate").value;
+            let enddate = document.getElementById("endDate").value;
+            let check=false;
+            if ($("#check").is(":checked")) {
+                check = true;
+            }
+            let coupon = {
+                "CouponName": name,
+                "CouponCode": core,
+                "Discount": parseFloat(sale*0.1),  //字串轉Float 不然json物件轉型會失敗
+                "StartDate": startdate,
+                "ExpiredDate": enddate,
+                "ReceiveStartDate": startdate,
+                "ReceiveEndDate": enddate,
+                "IsFreeDelivery": check,
+                "MinimumOrder": Number(fullup)
+            };
+            ;
+            let json = JSON.stringify(coupon);
+           let response = await fetch("@Url.Content("~/Seller/Couponresponse")" + `?jsonString=${json}`);
+
+            var myModalEl = document.getElementById('exampleModal');
+            var modal = bootstrap.Modal.getInstance(myModalEl);
+           modal.hide();
+
+            location.href = "/Seller/Coupon";//跳回Coupon頁面
+        })
+
+        let couponid;
+        $(".btnEdit").click(function () {
+            $("#text00").val($(this).closest("#viewmodel").find(".Minimum").html());
+            $("#text11").val($(this).closest("#viewmodel").find(".couponName").html());
+            $("#text22").val($(this).closest("#viewmodel").find(".couponCode").html());
+            $("#text33").val($(this).closest("#viewmodel").find(".discount").html());
+            $("#startDate11").val($(this).closest("#viewmodel").find(".startDate").html().replace("/", "-").replace("/", "-"));
+            $("#endDate11").val($(this).closest("#viewmodel").find(".endDate").html().replace("/", "-").replace("/", "-"));
+            couponid = $(this).closest("#viewmodel").find("#couponid").val();
+            if ($(this).closest("#viewmodel").find(".isfree").attr("id") == "true") {
+                $("#checkEdit").prop("checked", true);
+            }
+            else {
+                $("#checkEdit").prop("checked", false);
+            }
+        });
+
+
+
+        $("#saveEdit").click(async function () {
+            let fullup = $("#text00").val();
+            let name = document.getElementById("text11").value;
+            let core = document.getElementById("text22").value;
+            let sale = document.getElementById("text33").value;
+            let startdate = document.getElementById("startDate11").value;
+            let enddate = document.getElementById("endDate11").value;
+            let check=false;
+            if ($("#checkEdit").is(":checked")) {
+                check = true;
+            }
+            let coupon = {
+                "CouponName": name,
+                "CouponCode": core,
+                "Discount": parseFloat(sale*0.1),  //字串轉Float 不然json物件轉型會失敗
+                "StartDate": startdate,
+                "ExpiredDate": enddate,
+                "ReceiveStartDate": startdate,
+                "ReceiveEndDate": enddate,
+                "IsFreeDelivery": check,
+                "MinimumOrder": Number(fullup),
+                "CouponId": couponid
+            };
+            ;
+            let json = JSON.stringify(coupon);
+           let response = await fetch("@Url.Content("~/Seller/EditCoupon")" + `?jsonString=${json}`);
+
+            var myModalEl = document.getElementById('ExampleModal');
+            var modal = bootstrap.Modal.getInstance(myModalEl);
+           modal.hide();
+
+            location.href = "/Seller/Coupon";//跳回Coupon頁面
+
+        });
+
+
+
+        //=======Demo鍵=================================
+        demo.addEventListener("click", async function () {
+            document.getElementById("text1").value="Demo優惠";
+            document.getElementById("text2").value=6666;
+            document.getElementById("text3").value =6;
+        })
+
+
+        //===============搜尋=========================
+        $("#selectbtn").click(function () {
+            $("#selectcoupon").html("");
+            let selectname = $("#selectname").val();
+            jQuery.postJSON = function (url, data, callback) {
+                jQuery.post(url, data, callback, "json");
+            };
+            $.postJSON("/Seller/SelectCoupon", { select: selectname }, function (dataname) {
+                console.log(1)
+                console.log(dataname)
+                let item = "";
+                for (var i = 0; i < dataname.length; i++)
+                {
+                    item = item +
+                        `<tr>
+                            <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
+                            <td class="置中 col" align="center">${dataname[i].couponName}</td>
+                            <td class="置中 col" align="center">${dataname[i].couponCode}</td>
+                            <td class="置中 col" align="center">${dataname[i].discount}</td>
+                            <td class="置中 col" align="center">${dataname[i].startDate}<br />|<br />${dataname[i].expiredDate}</td>
+                            <td class="置中 col" align="center">${dataname[i].receiveStartDate}<br />|<br />${dataname[i].receiveEndDate}</td>
+                            <td class="置中 col" align="center">${dataname[i].isFreeDelivery}</td>
+                            <td class="置中 col" align="center">${dataname[i].minimumOrder}</td>
+                            <td class="置中 col" align="center">
+                                <div>
+                                    <button class="btnEdit btn btn-secondary">編輯</button>
+                                </div>
+                                <div>
+                                    <a class="btn btn-danger my-2" href="/Seller/DeleteProduct/${dataname[i].couponId}" onclick="return confirm('確定要刪除嗎?')">刪除</a>
+                                </div>
+                            </td>
+                        </tr>`
+                }
+                $("#selectcoupon").append(item);
+            })
+        })
+    </script>
 }

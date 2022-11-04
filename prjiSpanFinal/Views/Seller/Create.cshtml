@@ -667,11 +667,11 @@
             }
            
             
-            console.log($("#smallType").children("option:selected").val())
+            console.log($("#smallType").children("option:selected").text())
             let pushData = {
                 暫存規格:alldata,
                 ProductName: document.getElementById("ProductName").value,
-                smalltype: $("#smallType").children("option:selected").val(),
+                smalltype: $("#smallType").children("option:selected").text(),
                 Description: document.getElementById("Description").value,
                 CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,

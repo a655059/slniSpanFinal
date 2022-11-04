@@ -19,7 +19,7 @@ namespace prjiSpanFinal.ViewModels.seller
 
         //傳出去的屬性
         public string ProductName { get; set; }
-        public int smalltype { get; set; }
+        public string smalltype { get; set; }
         public List<string> Style { get; set; }
         public List<int> Quantity { get; set; }
         public List<decimal> UnitPrice { get; set; }
