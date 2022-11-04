@@ -343,12 +343,132 @@ namespace prjiSpanFinal.Controllers
             int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
             return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
         }
-        public IActionResult SearchLike(string[] filter, int priceMin, int priceMax, int SortOrder, int pages,string keyword)
+        public IActionResult SearchLike(string[] filter, int priceMin, int priceMax, int SortOrder,string keyword)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
             int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
-            return Json(new LikeSortReq().LikeSearchItem(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID, keyword));
+            return Json(new LikeSortReq().LikeSearchItem(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, memID, keyword));
+        }
+        //按讚換頁
+        public IActionResult Page(int priceMin, int priceMax, int SortOrder, string keyword,int pages, int eachpage, int[] PdID)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+            List<Product> LikeProduct = new List<Product>();
+            LikeProduct = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p =>p.Product).ToList();
+            List<MyLikeShowItem> res = new List<MyLikeShowItem>();
+
+            foreach (var item in LikeProduct)//將所有like LikeProduct做viewmodel需要內容的填入
+            {
+                decimal x = dbcontext.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
+                decimal y = dbcontext.ProductDetails.Where(p => p.Quantity > 0 && p.ProductId == item.ProductId).OrderByDescending(p => p.UnitPrice).Select(p => p.UnitPrice).FirstOrDefault();
+                byte[] pic = dbcontext.ProductPics.Where(p => p.ProductId == item.ProductId).Select(p => p.Pic).FirstOrDefault();
+                int sales = dbcontext.OrderDetails.Where(o => o.Order.StatusId == 7 && o.ProductDetail.ProductId ==item.ProductId).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
+                List<decimal> dlist = new List<decimal>();
+                if (x == y)
+                    dlist.Add(x);
+                else
+                {
+                    dlist.Add(x);
+                    dlist.Add(y);
+                }
+                MyLikeShowItem a = new MyLikeShowItem();
+                //a.Like.Product.ProductId = item.ProductId;
+                a.Product = item;
+                a.Price = dlist;
+                if (pic != null)
+                    a.Pic = pic;
+                a.salesVolume = sales;
+
+                res.Add(a);//viewmodel res現在有值了(list)
+
+            }
+            #region
+            //LikeProduct = dbcontext.Likes.Where(p => p.MemberId == memID).Select(p => new MyLikeShowItem() { salesVolume = sales }).ToList();
+            //List<Product> ListPD = new List<Product>();
+            //if (!String.IsNullOrWhiteSpace(keyword))
+            //{
+            //    //keyword.Trim();
+            //    //string[] keys = keyword.Split(" ");
+            //    foreach (var item in res)
+            //    {
+            //        if (item.Product.ProductName.Contains(keyword) || item.Product.Description.Contains(keyword))
+            //        {
+            //            ListPD.Add(item);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (var item in LikeProduct)
+            //    {
+            //        ListPD.Add(item);
+            //    }
+            //}//有關鍵字或全部的lispd
+            #endregion
+            if (SortOrder == 1)
+            {
+                res = res.ToList();
+            }
+            else if (SortOrder == 3) { res = res.OrderByDescending(s => s.salesVolume).ToList(); }
+            else if (SortOrder == 4) { res = res.OrderByDescending(p => p.Price.Max()).ToList(); }
+            else if(SortOrder== 5) { res = res.OrderBy(p => p.Price.Min()).ToList(); }
+            else { res = res.ToList(); }
+            #region
+            //switch (SortOrder)
+            //{
+            //    case 1:
+            //        res=res.ToList();
+            //        break;
+            //    case 3:
+            //        //熱銷排序
+            //        res = res.OrderByDescending(s => s.salesVolume).ToList();
+            //        break;
+            //    case 4:
+            //        //價高排序
+            //        //list = (new MyLikeFactory()).SearchItem(ListPD);
+            //        res = res.OrderByDescending(p => p.Price.Max()).ToList();
+            //        break;
+            //    case 5:
+            //        //價低排序
+            //        //list = (new MyLikeFactory()).SearchItem(ListPD);
+            //        res = res.OrderBy(p => p.Price.Min()).ToList();
+            //        break;
+            //    default:
+            //        res = res.ToList();
+            //        break;
+            //}
+            #endregion
+            //價格排序
+            List<MyLikeShowItem> list1;
+            List<MyLikeShowItem> list2;
+            list1 = res.Where(p => p.Price.Count == 1).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax).ToList();
+            list2 = res.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
+            list1.AddRange(list2);
+            if (!String.IsNullOrWhiteSpace(keyword))
+            {
+                keyword.Trim();
+                string[] keys = keyword.Split(" ");
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    list1 = list1.Where(o => o.Product.ProductName.Contains(keys[i]) || o.Product.Description.Contains(keys[i])).Select(o => o).ToList();
+                }
+            }
+            if (PdID!= null) 
+            {
+                foreach (var item in PdID)
+                {
+                    var DeltlikeID = dbcontext.Likes.Where(p => p.ProductId == item).Select(p => p).FirstOrDefault();
+                    dbcontext.Likes.Remove(DeltlikeID);
+
+                }
+                //var mylikeID = dbcontext.Likes.Where(p => p.LikeId == likeID).Select(p => p.LikeId).ToList();
+                dbcontext.SaveChanges();
+            }
+            int count = list1.Count;
+            return Json(new { list1= list1.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
         }
 
         //public IActionResult SortOrder(int BigTypeId, string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
@@ -675,8 +795,13 @@ namespace prjiSpanFinal.Controllers
             //memberac = mem.memACC;
 
             //var mempass = "";
-            var memacc = db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).MemberAcc;//找到忘記會員
-
+            var memacc = db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).MemberAcc;//找到忘記會員帳號
+            var memEmail= db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).Email;//找到忘記會員信箱
+            var memName= db.MemberAccounts.FirstOrDefault(p => p.Email == mem.PhoneMail || p.Phone == mem.PhoneMail).Name;
+            if (String.IsNullOrWhiteSpace(memName)) 
+            {
+                memName = "會員";
+            }
             //驗證信箱或手機存不存在
             if (!String.IsNullOrEmpty(memacc))
             {
@@ -696,7 +821,7 @@ namespace prjiSpanFinal.Controllers
                 //=>內容
 
                 message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
-                message.To.Add(new MailboxAddress("王曉明", "Wang20221101@gmail.com"));
+                message.To.Add(new MailboxAddress(memName, memEmail));
                 message.Subject = "[C#蝦到爆商城(ShopDaoBao)]忘記密碼通知信"; //==>標題
                 message.Body = builder.ToMessageBody();
 
