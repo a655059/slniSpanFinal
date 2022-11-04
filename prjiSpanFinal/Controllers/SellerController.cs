@@ -233,7 +233,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult getADfilter()
         {
-            List<string> filters = _db.Ads.OrderBy(p=>p.AdId).Select(p => p.AdName).Distinct().ToList();
+            List<string> filters = new List<string>();/*_db.Ads.OrderBy(p=>p.AdId).Select(p => p.AdName).Distinct().ToList();*/
             if (!filters.Any())
                 filters = new List<string>();
             return Json(filters);

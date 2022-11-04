@@ -30,18 +30,18 @@ namespace prjiSpanFinal.ViewModels.seller
         }
         public List<Ad> fgetAD(List<Ad> res,int filter)
         {
-            switch (filter)
-            {
-                case 1:
-                    res = res.Where(a => a.AdName == "內容特效").ToList();
-                    break;
-                case 2:
-                    res = res.Where(a => a.AdName == "登上發燒").ToList();
-                    break;
-                default:
-                    res = res.Where(a => a.AdName == "標題高光").ToList();
-                    break;
-            }
+            //switch (filter)
+            //{
+            //    case 1:
+            //        res = res.Where(a => a.AdName == "內容特效").ToList();
+            //        break;
+            //    case 2:
+            //        res = res.Where(a => a.AdName == "登上發燒").ToList();
+            //        break;
+            //    default:
+            //        res = res.Where(a => a.AdName == "標題高光").ToList();
+            //        break;
+            //}
             return res;
         }
         public List<Ad> fgetResult(List<Ad> res ,int[] ADIDs)
