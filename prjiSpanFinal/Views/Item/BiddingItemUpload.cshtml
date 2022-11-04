@@ -25,9 +25,11 @@
         object-fit: contain;
     }
 </style>
+<div class="text-center fs-2 fw-bold">上架競標商品</div>
+<a href="@Url.Content("~/Seller/Center")">回賣家中心</a>
 
-<h1>上架競標商品</h1>
 <div class="w-50 m-auto">
+    
     <h3>商品資訊</h3>
 
     <form action="@Url.Content("~/Item/BiddingItemSave")" method="post" name="biddingItem" enctype="multipart/form-data">
@@ -55,18 +57,22 @@
             </select>
         </div>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">起標價格$NT</span>
+            <span class="input-group-text" style="width:28%" id="basic-addon1">起標價格<span>$NT</span></span>
             <input type="text" name="startPrice" class="form-control" placeholder="起標價格" aria-label="起標價格" aria-describedby="basic-addon1" required>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" style="width:28%" id="basic-addon1">最低加價金額<span>$NT</span></span>
+            <input type="text" name="stepPrice" class="form-control" placeholder="最低加價金額" aria-label="最低加價金額" aria-describedby="basic-addon1" required>
         </div>
         <div class="mb-3 d-flex justify-content-between">
             <label class="fs-5">開始時間</label>
-            <input type="date" name="startDate" class="startDate fs-5 rounded-2 border" style="width:40%" required/>
-            <input type="time" name="startTime" class="startTime fs-5 rounded-2 border" style="width:40%" required/>
+            <input type="date" name="startDate" class="startDate fs-5 rounded-2 border" style="width:40%" required />
+            <input type="time" name="startTime" class="startTime fs-5 rounded-2 border" style="width:40%" required />
         </div>
         <div class="mb-3 d-flex justify-content-between">
             <label class="fs-5">結束時間</label>
-            <input type="date" name="endDate" class="endDate fs-5 rounded-2 border" style="width:40%" required/>
-            <input type="time" name="endTime" class="endTime fs-5 rounded-2 border" style="width:40%" required/>
+            <input type="date" name="endDate" class="endDate fs-5 rounded-2 border" style="width:40%" required />
+            <input type="time" name="endTime" class="endTime fs-5 rounded-2 border" style="width:40%" required />
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">商品數量</span>
@@ -84,7 +90,7 @@
             <label class="addPhoto btn btn-outline-warning btn-sm" for="itemPhoto">
                 <i class="fa-solid fa-camera-retro me-2">新增照片</i>
             </label>
-            <input type="file" name="itemPhotos" value="" id="itemPhoto" class="itemPhoto" style="opacity:0" accept="image/*" multiple required/>
+            <input type="file" name="itemPhotos" value="" id="itemPhoto" class="itemPhoto" style="opacity:0" accept="image/*" multiple required />
 
         </div>
         <div class="d-flex justify-content-center">
@@ -122,19 +128,22 @@
             });
             const data = await response.text();
             if (data == "1") {
+                ClearAll();
                 Swal.fire("商品儲存成功");
             }
             else {
                 Swal.fire("起標價格式為整數，請檢查是否錯誤");
             }
         });
-
-
-        $(".clearAll").click(function () {
+        function ClearAll() {
             $("input").not("input[name='count']").val("");
             $("input[name='startDate']").val(GetToday());
             $(".previewItemPhoto").empty();
             $("textarea").val("");
+        };
+
+        $(".clearAll").click(function () {
+            ClearAll();
         });
 
         $(".itemPhoto").change(function () {
@@ -154,7 +163,6 @@
             const response = await fetch("@Url.Content("~/Item/GetSmallType")" + `?bigTypeID=${bigTypeID}`);
             const data = await response.json();
             if (data != null) {
-                console.log(data);
                 $(".smallType").empty();
                 let str = "";
                 data.forEach(function (value, idx) {

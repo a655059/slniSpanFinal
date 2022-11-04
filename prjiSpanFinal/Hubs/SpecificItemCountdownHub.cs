@@ -12,7 +12,6 @@ namespace prjiSpanFinal.Hubs
     {
         public async Task SpecificItemCountdown(int biddingID)
         {
-            
             if (biddingID > 0)
             {
                 iSpanProjectContext dbContext = new iSpanProjectContext();

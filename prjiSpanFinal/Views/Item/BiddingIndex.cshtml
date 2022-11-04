@@ -78,7 +78,7 @@
     </div>
     <div class="itemInfo">
         <h4>@Model.product.ProductName</h4>
-        <div class="d-flex border rounded-1">
+        <div class="d-flex align-items-center border rounded-1">
             <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
                 <img src="@Url.Content("~/img/clock.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
@@ -86,7 +86,67 @@
                 <img src="@Url.Content("~/img/calender.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
-                <div class="remainingTime"></div>
+                <div class="remainingTime ps-2"></div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div style="width:100px">目前出價</div>
+            @{
+                if (Model.biddingDetailWithMember.Count > 0)
+                {
+                    <div class="col-9 fs-3 fw-bold text-danger">$<span class="currentPrice">@Model.biddingDetailWithMember[0].biddingDetail.Price</span></div>
+                }
+                else
+                {
+                    <div class="col-9 fs-3 fw-bold text-danger">$<span class="currentPrice">@Model.bidding.StartPrice</span></div>
+                }
+            }
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px"></div>
+            <div class="text-black opacity-50"><spng class="biddingCount">@Model.biddingDetailWithMember.Count</spng>次出價</div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">出價增額</div>
+            <div>$<span class="stepPrice">@Model.bidding.StepPrice</span></div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">最高出價者</div>
+            @{
+                if (@Model.biddingDetailWithMember.Count > 0)
+                {
+                    <div class="topMember text-success">@Model.biddingDetailWithMember[0].member.MemberAcc</div>
+                }
+                else
+                {
+                    <div class="topMember text-success">尚無人出價</div>
+                }
+            }
+
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">數量</div>
+            <div>1件</div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px"></div>
+            <div class="rounded-1 bg-black bg-opacity-10 p-2">
+                <div>
+                    <input type="radio" name="biddingType" id="autoBidding" value="" />
+                    <label for="autoBidding">自動出價</label>
+                    <input type="radio" name="biddingType" id="directBidding" value="" />
+                    <label for="directBidding">直接出價</label>
+                </div>
+                <div class="d-flex align-items-center">
+                    <input type="number" name="biddingPrice" class="fs-5 me-2" step="@Model.bidding.StepPrice" min="" value="" placeholder="請直接輸入出價金額" />
+
+                    <input class="bidSubmit btn btn-warning rounded-2" type="button" name="" value="我要出價" />
+                </div>
+                <div class="topPriceDiv d-none">
+                    <input type="number" name="topPrice" class="fs-5 me-2" step="@Model.bidding.StepPrice" min="" value="" placeholder="自動出價最高金額" />
+                    <label class="text-black opacity-50" style="font-size:12px">自動出價最高金額</label>
+                </div>
+                <div class="suggestedPriceDiv text-dark opacity-50 d-none">建議最低出價$<span class="suggestedPrice"></span></div>
             </div>
         </div>
     </div>
@@ -96,4 +156,69 @@
 
 @section Scripts{
     <script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>
+    <script>
+        $(function () {
+            const currentPrice = $(".currentPrice").html();
+            const stepPrice = $(".stepPrice").html();
+            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+            $("input[type='number']").attr("min", suggestedPrice);
+        });
+        $("input[name='biddingPrice']").focus(function () {
+            const currentPrice = $(".currentPrice").html();
+            const stepPrice = $(".stepPrice").html();
+            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+            $(".suggestedPrice").html(suggestedPrice);
+            $("input[type='number']").val(suggestedPrice);
+            $(".suggestedPriceDiv").removeClass("d-none");
+        })
+        $("#autoBidding").change(function () {
+            if ($("#autoBidding").prop("checked") == true) {
+                $(".topPriceDiv").removeClass("d-none");
+            }
+            else {
+                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+            }
+        })
+        $("#directBidding").change(function () {
+            if ($("#directBidding").prop("checked") == true) {
+                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+            }
+            else {
+                $(".topPriceDiv").removeClass("d-none");
+            }
+        });
+        $(".bidSubmit").click(function () {
+            const biddingID = Number($(".biddingItemCountdown").attr("id"));
+            const biddingType = $("input:checked").attr("id");
+            
+            const suggestedPrice = Number($(".suggestedPrice").html());
+            const price = Number($("input[name='biddingPrice']").val());
+            
+            const topPrice = Number($("input[name='topPrice']").val());
+            if (biddingType == null) {
+                Swal.fire("請選擇自動出價或直接出價");
+            }
+            else if (price < suggestedPrice) {
+                Swal.fire("出價金額有誤");
+            }
+            else if (biddingType == "autoBidding" && topPrice < price) {
+                Swal.fire("自動出價最高金額小於出價金額");
+            }
+            $.ajax({
+                url: "@Url.Content("~/Item/Bid")",
+                type: "POST",
+                data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice},
+            }).done(function (data) {
+                if (data == "0") {
+                    Swal.fire("請先登入再出價");
+                }
+                else {
+                    $(".currentPrice").html(data[0]);
+                    $(".biddingCount").html(data[1]);
+                    $(".topMember").html(data[2]);
+                    Swal.fire("恭喜您成功出價");
+                }
+            })
+        });
+    </script>
 }

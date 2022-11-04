@@ -4,7 +4,6 @@ let connection3 = new signalR.HubConnectionBuilder().withUrl("/selectedBiddingIt
 connection3.on("ShowItemCountdown", function (remainingTimes) {
     $(".biddingItemLayout").each(function (index,element) {
         $(this).find(".remainingTime").html(remainingTimes[index]);
-        console.log(remainingTimes[index])
     });
 });
 
@@ -18,4 +17,5 @@ connection3.start().then(function () {
 }).catch(function (err) {
     console.log(err);
 });
+
 

@@ -1,4 +1,4 @@
-﻿////let connection2 = new signalR.HubConnectionBuilder().withUrl("/countdownHub").build();
+﻿let connection2 = new signalR.HubConnectionBuilder().withUrl("/countdownHub").build();
 
 //connection2.on("ShowItemCountdown", function (time) {
 //    $(".remainingTime").html(time);

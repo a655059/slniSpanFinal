@@ -13,11 +13,8 @@ namespace prjiSpanFinal.Hubs
         public async Task Countdown()
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
-            //DateTime endTime = dbContext.Biddings.Where(i => i.BiddingId == 3).Select(i => i.EndTime).FirstOrDefault();
-            
             while (true)
             {
-                Thread.Sleep(1000);
                 var biddings = dbContext.Biddings.Select(i => new 
                 {
                     bidding = i,
@@ -42,10 +39,7 @@ namespace prjiSpanFinal.Hubs
                         await Clients.All.SendAsync("ShowPullItem", productName);
                     }
                 }
-                //TimeSpan remainingTime = endTime - DateTime.Now;
-                //string time = remainingTime.Days + "天" + remainingTime.Hours + "時" + remainingTime.Minutes + "分" + remainingTime.Seconds + "秒";
-                
-                //await Clients.All.SendAsync("ShowUploadAndPull", );
+                Thread.Sleep(1000);
             }
 
             
