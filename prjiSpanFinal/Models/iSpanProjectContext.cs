@@ -20,6 +20,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<Ad> Ads { get; set; }
         public virtual DbSet<AddBiddingCalendar> AddBiddingCalendars { get; set; }
         public virtual DbSet<AdtoProduct> AdtoProducts { get; set; }
+        public virtual DbSet<Adtype> Adtypes { get; set; }
         public virtual DbSet<ArguePic> ArguePics { get; set; }
         public virtual DbSet<Argument> Arguments { get; set; }
         public virtual DbSet<ArgumentReason> ArgumentReasons { get; set; }
@@ -95,10 +96,13 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.AdFee).HasColumnType("money");
 
-                entity.Property(e => e.AdName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasDefaultValueSql("('廣告1')");
+                entity.Property(e => e.AdTypeId).HasColumnName("AdTypeID");
+
+                entity.HasOne(d => d.AdType)
+                    .WithMany(p => p.Ads)
+                    .HasForeignKey(d => d.AdTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AD_ADType");
             });
 
             modelBuilder.Entity<AddBiddingCalendar>(entity =>
@@ -149,6 +153,22 @@ namespace prjiSpanFinal.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ADToProduct_Product");
+            });
+
+            modelBuilder.Entity<Adtype>(entity =>
+            {
+                entity.ToTable("ADType");
+
+                entity.Property(e => e.AdTypeId).HasColumnName("AdTypeID");
+
+                entity.Property(e => e.AdTyepDescription)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.AdType1)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("AdType");
             });
 
             modelBuilder.Entity<ArguePic>(entity =>
@@ -636,11 +656,6 @@ namespace prjiSpanFinal.Models
                     .HasMaxLength(100)
                     .HasDefaultValueSql("('Add')");
 
-                entity.Property(e => e.AfterSales)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
-
                 entity.Property(e => e.BackUpEmail)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -693,26 +708,6 @@ namespace prjiSpanFinal.Models
                     .HasDefaultValueSql("('09xxxxxxxx')");
 
                 entity.Property(e => e.RegionId).HasColumnName("RegionID");
-
-                entity.Property(e => e.RenewProduct)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.SellerCaution)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.SellerType)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.ServiceTime)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasDefaultValueSql("('')");
 
                 entity.HasOne(d => d.MemStatus)
                     .WithMany(p => p.MemberAccounts)

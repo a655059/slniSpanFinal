@@ -10,6 +10,7 @@ namespace prjiSpanFinal.Models
         public int AutoBiddingId { get; set; }
         public int BiddingId { get; set; }
         public int MemberId { get; set; }
+        public int TopPrice { get; set; }
 
         public virtual Bidding Bidding { get; set; }
         public virtual MemberAccount Member { get; set; }

@@ -49,11 +49,6 @@ namespace prjiSpanFinal.Models
         public int Gender { get; set; }
         public int Balance { get; set; }
         public string Description { get; set; }
-        public string ServiceTime { get; set; }
-        public string SellerCaution { get; set; }
-        public string AfterSales { get; set; }
-        public string RenewProduct { get; set; }
-        public string SellerType { get; set; }
         public int ReportedTime { get; set; }
         public bool IsAcceptAd { get; set; }
 
