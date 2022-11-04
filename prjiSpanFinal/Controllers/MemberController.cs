@@ -39,38 +39,46 @@ namespace prjiSpanFinal.Controllers
             _context = context;
         }
         //將有點連結信的會員變成正式會員
-        public IActionResult MemstChange(int? memberID)
+        public IActionResult MemstChange()
         {
-            iSpanProjectContext db = new iSpanProjectContext();
-            //string nowtime = DateTime.Now.ToString("yyyy/MM/dd hh:mm");
-            //TimeSpan TS = new System.TimeSpan(DateTime.Now.Ticks - dResetTime.Ticks);
-            //string min = nowtime.Split("/")[2].Split(" ")[1].Split(":")[1];//將目前時間(分鐘)取出
-            //string mailtimemin= time.Split("/")[2].Split(" ")[1].Split(":")[1];//將信件連結時間(分鐘)取出
-            //int nowmin= Convert.ToInt32(min);
-            //int mailtime = Convert.ToInt32(mailtimemin);
+            //iSpanProjectContext db = new iSpanProjectContext();
+            //string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            //int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
 
-            if (memberID != null)
-            {
-            var q = db.MemberAccounts.FirstOrDefault(p => p.MemberId == memberID);
-            q.MemStatusId = 2;
-            db.SaveChanges();
+            //if (memberID != null)
+            //{
+            //var q = db.MemberAccounts.FirstOrDefault(p => p.MemberId == memberID);
+            //q.MemStatusId = 2;
+            //db.SaveChanges();
             
-            }
+            //}
             return View();
             
         }
         //超過30分鐘後失效頁面
-        //public IActionResult MemstChangeFalse(int? time)
-        //{
-        //    iSpanProjectContext db = new iSpanProjectContext();
-        //    if (time>30)
-        //    {
+        public IActionResult MemstChangeFalse(int? memberID)
+        {
+            iSpanProjectContext db = new iSpanProjectContext();
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_MAILCHECK); //拿出寄信的session
+            if (!String.IsNullOrWhiteSpace(jsonstring))
+            {
+                if (memberID != null)
+                {
+                    var q = db.MemberAccounts.FirstOrDefault(p => p.MemberId == memberID);
+                    q.MemStatusId = 2;
+                    db.SaveChanges();
+                    return Content("1", "text/plain", Encoding.UTF8);
+                }
+                else
+                {
+                    return Content("2", "text/plain", Encoding.UTF8);
+                }
+            }
+            else {
+                return Content("2", "text/plain", Encoding.UTF8);
+            }
 
-
-        //    }
-        //    return View();
-
-        //}
+        }
         //public IActionResult productShow()
         //{
         //    return PartialView("cshtml");
@@ -276,10 +284,19 @@ namespace prjiSpanFinal.Controllers
             //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
             //==>這裡可以放入圖片路徑
             var memID = db.MemberAccounts.FirstOrDefault(p => p.MemberAcc == memberac.MemberAcc).MemberId;
-            //var time = DateTime.Now.ToString("yyyy/MM/dd hh:mm");
+            string s = "0123456789zxcvbnmasdfghjklqwertyuiop";
+            StringBuilder sb = new StringBuilder();
+            Random rand = new Random();
+            int index;
+            for (int i = 0; i < 5; i++)
+            {
+                index = rand.Next(0, s.Length);
+                sb.Append(s[index]);
+            }
+            HttpContext.Session.SetString(CDictionary.SK_MAILCHECK, sb.ToString());            
             string urll = $"{Request.Scheme}://{Request.Host}/Member/MemstChange/id?key={memID}";
             //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br>" +
+            builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。請於20分鐘內驗證完成。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br>" +
                                $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>" +
                                $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
 
@@ -595,6 +612,7 @@ namespace prjiSpanFinal.Controllers
                     return Json(999);
             }
         }
+        //驗證碼
         private string RandomCode(int length)
         {
             string s = "0123456789zxcvbnmasdfghjklqwertyuiop";
