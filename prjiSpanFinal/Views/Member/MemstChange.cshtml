@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "MemstChange";
+}
+
+<h1>MemstChange</h1>
+@section Scripts{
+    <script>
+        let memID = 0;
+         window.onload = function () {
+             memID = location.href.split("=")[1]
+             $.post('@Url.Content("~/Member/MemstChange")', { memberID: memID}, function () {
+                 Swal.fire(
+                     '恭喜!',
+                     "您已是正式會員",
+                     'success'
+                 ).then(function () { window.location = "/member/login"; });
+
+             })
+        }
+    </script>
+}
