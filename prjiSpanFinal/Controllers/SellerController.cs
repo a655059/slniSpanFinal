@@ -828,11 +828,24 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("Coupon");
         }
 
-        public void EditCoupon(Coupon jsonString)
+        public void EditCoupon(string jsonString)
         {
-            var Coupon = _db.Coupons.Where(n => n.CouponId == jsonString.CouponId).Select(n => n).FirstOrDefault();
+            Coupon result = JsonSerializer.Deserialize<Coupon>(jsonString);
+            var Coupon = _db.Coupons.Where(n => n.CouponId == result.CouponId).Select(n => n).FirstOrDefault();
 
+            Coupon.CouponName = result.CouponName;
+            Coupon.CouponCode = result.CouponCode;
+            Coupon.Discount = result.Discount;
+            Coupon.StartDate = result.StartDate;
+            Coupon.ExpiredDate = result.ExpiredDate;
+            Coupon.ReceiveStartDate = result.ReceiveStartDate;
+            Coupon.ReceiveEndDate = result.ReceiveEndDate;
+            Coupon.IsFreeDelivery = result.IsFreeDelivery;
+            Coupon.MinimumOrder = result.MinimumOrder;
+
+            _db.SaveChanges();
         }
+        
 
         public IActionResult seller跑條(int page)
         {

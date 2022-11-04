@@ -318,10 +318,12 @@
             let sale = document.getElementById("text33").value;
             let startdate = document.getElementById("startDate11").value;
             let enddate = document.getElementById("endDate11").value;
-            let check=false;
+            let check = false;
+            console.log($("#checkEdit").is(":checked"))
             if ($("#checkEdit").is(":checked")) {
                 check = true;
             }
+            console.log(check)
             let coupon = {
                 "CouponName": name,
                 "CouponCode": core,
@@ -332,9 +334,10 @@
                 "ReceiveEndDate": enddate,
                 "IsFreeDelivery": check,
                 "MinimumOrder": Number(fullup),
-                "CouponId": couponid
+                "CouponId": Number(couponid)
             };
-            ;
+            console.log(check)
+            console.log(coupon)
             let json = JSON.stringify(coupon);
            let response = await fetch("@Url.Content("~/Seller/EditCoupon")" + `?jsonString=${json}`);
 
