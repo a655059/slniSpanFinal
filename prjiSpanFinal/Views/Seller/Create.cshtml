@@ -84,10 +84,6 @@
             margin: 0 auto;
         }
 
-        td {
-            margin-left: 1.5px;
-        }
-
         .btntype物流 {
             width: 550px;
             margin-left: 2px;
@@ -328,52 +324,33 @@
         <h2 class="mt-4 mb-2">蝦到爆廣告</h2>
         <div>
             <div class="">
-                <table class="">
-                    <tr class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-1 置中"><h5>優先曝光</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />420  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />690  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />860  元 /  30天
-                            <p>於分類頁、搜尋結果頁的商品列表中，此項商品將顯示於上方的優先曝光專區。購買後30分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row py-3 border-bottom 背色">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-1 置中"><h5>重點標題</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />50  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />70  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />100  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以粗體方式突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="row bg-light py-3 border-bottom">
-                        <td class="col-1 置中"><input type="checkbox" /></td>
-                        <td class="col-1 置中"><h5>亮眼底色</h5></td>
-                        <td class="col-6 pt-3">
-                            <input class="form-check-input mx-3" type="radio" />150  元 /  10天
-                            <input class="form-check-input mx-3" type="radio" />250  元 /  20天
-                            <input class="form-check-input mx-3" type="radio" />350  元 /  30天
-                            <p>於分類頁、搜尋結果頁及您的賣場中，此項商品名稱將以顯著底色突顯效果。購買後5分鐘內生效。</p>
-                        </td>
-                        <td class="col-3">
-                            <input id="startDate" class="form-control orderdatepicker w-75" type="date"> ~
-                            <input id="endDate" class="form-control orderdatepicker w-75" type="date">
-                        </td>
-                    </tr>
-                    <tr class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></tr>
-                </table>
+                <div class="findche">
+                    <div class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></div>
+                    @{
+                        for (int i = 0; i < Model.ADName.Count; i++)
+                        {
+                            <div class="row bg-light py-3 border-bottom">
+                                <div class="col-1 置中"><input type="checkbox" /></div>
+                                <div class="col-2 置中"><h5>@Model.ADName[i]</h5></div>
+                                <div class="col-6 pt-3 checkes">
+                                    @{
+                                        for (int j = 0; j < Model.ADId[i].Count; j++)
+                                        {
+                                            <input type="hidden" id="@Model.ADId[i][j]" />
+                                            <input class="form-check-input mx-3 radio" type="radio" />
+                                            <span>@Model.AdPeriod[i][j] 天</span><span> / </span><span> @Model.AdFee[i][j].ToString("0") 元</span>
+                                        }
+                                    }
+                                    <p>@Model.AdTyepDescription[i]</p>
+                                </div>
+                                <div class="col-3">
+                                    開始日期：<input id="startDate" class="form-control orderdatepicker w-75" type="date">
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="text-center row 高度 背色 pt-4"><td class=""><h3>此次廣告消費0元</h3></td></div>
+                </div>
                 <div class="row">
                     <div class="col-5"></div>
                     <div class="col-7">
@@ -734,6 +711,9 @@
                 $("#checkdes").html("");
             }
         });
+
+
+        /*$(".findche").find(".checkes").*/
 
     </script>
 }

@@ -32,7 +32,14 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<CSellerCreateToViewViewModel> 暫存規格 { get; set; }
         public List<byte[]> DBtoPic { get; set; }
 
-        public string AD { get; set; }
+        //AD區
+        public List<string> ADName { get; set; }
+        public List<List<int>> ADId { get; set; }
+        public List<string> AdTyepDescription { get; set; }
+        public List<List<decimal>> AdFee { get; set; }
+        public List<List<int>> AdPeriod { get; set; }
+
+
 
         //規格區
         public string StyleStr { get; set; }
