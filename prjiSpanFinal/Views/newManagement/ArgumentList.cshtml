@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "ArgumentList";
     var pagedList = (IPagedList)ViewBag.Prods;
-     if(ViewBag.pageSize==null){ ViewBag.pageSize = 5; }
+    if (ViewBag.pageSize == null) { ViewBag.pageSize = 5; }
 }
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
@@ -16,43 +16,44 @@
         }
     </style>
 }
-    <h1>消費糾紛</h1>
-    <form>
-        <input type="search" name="keyword" placeholder="輸入內容進行搜尋,或不輸入回到列表" class="form-control" />
-        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
-    </form>
-    <form>
-        依類型篩選
-       <select id="filter" name="filter">
-             <option value="">選擇類型</option>
-           @foreach(var i in ViewBag.ArgumentType){
-                <option value="@i.ArgumentTypeName">@i.ArgumentTypeName</option>
-           }
-       </select> 
-        <input type="submit" value="全部" class="btn btn-outline-secondary" />
-    </form>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                  ID
-                </th>
-                <th>
-               訂單ID(點擊以查看詳情)
-                </th>
-                <th>
-                   消費糾紛類型
-                </th>
-                <th>
-                    爭議原因
-                </th>
-                <th>
-                    內容
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+<h1>消費糾紛</h1>
+<form>
+    <input type="search" name="keyword" placeholder="輸入內容進行搜尋,或不輸入回到列表" class="form-control" />
+    <input type="submit" value="搜尋" class="btn btn-outline-secondary mt-1" />
+</form>
+<form>
+    依類型篩選
+    <select id="filter" name="filter">
+        <option value="">選擇類型</option>
+        @foreach (var i in ViewBag.ArgumentType)
+        {
+            <option value="@i.ArgumentTypeName">@i.ArgumentTypeName</option>
+        }
+    </select>
+    <input id="filtersubmit" type="submit" value="全部" class="btn btn-outline-secondary" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                訂單ID(點擊以查看詳情)
+            </th>
+            <th>
+                消費糾紛類型
+            </th>
+            <th>
+                爭議原因
+            </th>
+            <th>
+                內容
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -60,7 +61,7 @@
                     <input value="@item.Argument.ArgumentId" class="form-control-plaintext" readonly>
                 </td>
                 <td>
-                    @Html.ActionLink($"{item.Argument.OrderId}","OrderDetailList","newManagement",new{id=item.Argument.OrderId},new{@class="form-control-plaintext text"})
+                    @Html.ActionLink($"{item.Argument.OrderId}", "OrderDetailList", "newManagement", new { id = item.Argument.OrderId }, new { @class = "btn btn-outline-info" })
                 </td>
                 <td>
                     <input value="@item.ArgumentTypeName" class="statusname form-control-plaintext" readonly>
@@ -75,9 +76,9 @@
                     @{
                         if (item.Argument.ArgumentTypeId == 5)
                         {
-                          <a name="@item.Argument.ArgumentId" class="Delete btn btn-outline-secondary">未成案</a>
-                          <a name="@item.Argument.ArgumentId" class="Approve btn btn-outline-primary">停權買家帳號</a>
-                          <a name="@item.Argument.ArgumentId" class="Approve2 btn btn-outline-primary">停權賣家帳號</a>
+                            <a name="@item.Argument.ArgumentId" class="Delete btn btn-outline-secondary">未成案</a>
+                            <a name="@item.Argument.ArgumentId" class="Approve btn btn-outline-primary">停權買家帳號</a>
+                            <a name="@item.Argument.ArgumentId" class="Approve2 btn btn-outline-primary">停權賣家帳號</a>
                         }
                     }
                 </td>
@@ -87,34 +88,39 @@
 </table>
 @*分頁導覽*@
 <div style="align-content:center" class="paginations">
-    @{int ps = 3;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
-      @Html.Pager(pagedList).Url(page => Url.Action("ArgumentList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
-        
+    @{int ps = 3; if (ViewBag.pageSize != null) { ps = ViewBag.pageSize; }}
+    @Html.Pager(pagedList).Url(page => Url.Action("ArgumentList", new { pageSize = ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
+
     每頁
-    <select id="pagesize">
+    <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
-            if (ViewBag.pageSize != 3) {
-                    <option value=3>3</option>
+            if (ViewBag.pageSize != 3)
+            {
+                <option value=3>3</option>
             }}
-            @{
-            if (ViewBag.pageSize != 5) {
-                  <option value=5>5</option>
+        @{
+            if (ViewBag.pageSize != 5)
+            {
+                <option value=5>5</option>
             }}
-            @{
-            if (ViewBag.pageSize != 10) {
-               <option value=10>10</option>
+        @{
+            if (ViewBag.pageSize != 10)
+            {
+                <option value=10>10</option>
             }}
-            @{
-            if (ViewBag.pageSize != 20) {
-                  <option value=20>20</option>
+        @{
+            if (ViewBag.pageSize != 20)
+            {
+                <option value=20>20</option>
             }}
-            @{
-            if (ViewBag.pageSize != 100) {
-                    <option value=100>100</option>
+        @{
+            if (ViewBag.pageSize != 100)
+            {
+                <option value=100>100</option>
             }}
-     </select>
-     筆
+    </select>
+    筆
 </div>
 @*分頁導覽*@
 
@@ -187,7 +193,7 @@
                 }
             })
         }
-            //選取一頁幾筆
+         //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
@@ -196,15 +202,22 @@
             let link="@Url.Content("~/newManagement/ArgumentList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-
-       //篩選
+        //選取全部商品
+            let filtersubmit = document.getElementById("filtersubmit");
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/ArgumentList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+        //篩選ProductStauts
         let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            Filter=filter.options[filter.selectedIndex].value
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
             let link="@Url.Content("~/newManagement/ArgumentList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })
     </script>
-    }
+}

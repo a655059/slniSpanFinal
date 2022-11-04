@@ -29,25 +29,46 @@ namespace prjiSpanFinal.Controllers
             {
                 FilterId = -1;
             }
-            if (keyword == null && FilterId < 0)
+            if (keyword == null )
             {
-                Prods = db.Products.Select(i => i);
-            }
-            else if (keyword == null)
-            {
-                Prods = db.Products.Where(i => i.ProductStatusId == FilterId).Select(i => i);
+                if (FilterId < 0)
+                {
+                    Prods = db.Products.Select(i => i);
+                }
+                else
+                {
+                    Prods = db.Products.Where(i => i.ProductStatusId == FilterId).Select(i => i);
+                }
             }
             else if (int.TryParse(keyword, out int key))
             {
-                Prods = db.Products.
-                     Where(i => i.ProductId == key && i.ProductStatusId == FilterId).
-                     Select(e => e);
+                if (FilterId > 0)
+                {
+                    Prods = db.Products.
+                         Where(i => i.ProductId == key && i.ProductStatusId == FilterId).
+                         Select(e => e);
+                }
+                else
+                {
+                    Prods = db.Products.
+                  Where(i => i.ProductId == key).
+                  Select(e => e);
+                }
             }
             else
             {
-                Prods = db.Products.
-                    Where(i => i.ProductName.Contains(keyword) && i.ProductStatusId == FilterId).
-                    Select(e => e); ;
+                if (FilterId > 0)
+                {
+                    Prods = db.Products.
+                        Where(i => i.ProductName.Contains(keyword) && i.ProductStatusId == FilterId).
+                        Select(e => e);
+                }
+                else
+                {
+                    Prods = db.Products.
+                      Where(i => i.ProductName.Contains(keyword)).
+                      Select(e => e);
+                }
             }
             var MemberAcc = (from i in db.MemberAccounts select i).ToList();
             var ProductStatusName = (from i in db.ProductStatuses select i).ToList();
@@ -202,7 +223,7 @@ namespace prjiSpanFinal.Controllers
                 FilterId = -1;
             }
 
-            if (String.IsNullOrEmpty(keyword) && FilterId < 0)
+            if (String.IsNullOrEmpty(keyword))
             {
                 if (FilterId < 0)
                 {
@@ -277,6 +298,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult MemberList(string keyword, string filter, int? pageSize, int? page = 1)
         {
+            ViewBag.MemberStatus = (new iSpanProjectContext()).MemStatuses.ToList();
             ViewBag.pageSize = pageSize;
             //每頁幾筆
             pageSize ??= 5;//if null的寫法
@@ -492,7 +514,7 @@ namespace prjiSpanFinal.Controllers
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
-            D.First().StatusId = 8;
+            D.First().StatusId = 7;
             D.First().FinishDate = DateTime.Now;
             db.SaveChanges();
             return Content("1");
@@ -504,8 +526,16 @@ namespace prjiSpanFinal.Controllers
                     where d.OrderId == id
                     select d;
             D.First().StatusId = 9;
-            db.SaveChanges();
-            return RedirectToAction("OrderList", new { id });
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+
         }
 
         //視情形決定要不要用第二張List
@@ -1213,6 +1243,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult EventCouponList(int id, string keyword, int? pageSize, int? page = 1)
         {
             ViewBag.pageSize = pageSize;
+            ViewBag.ID = id;
             //每頁幾筆
             pageSize ??= 5;//if null的寫法
             page ??= 1;
@@ -1222,6 +1253,7 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
+       
         #endregion
         #region subEventRegion
         public IActionResult subEventList(int id)
@@ -1518,10 +1550,18 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region FAQRegion
-        public IActionResult FAQList()
+        public IActionResult FAQList(int? filter)
         {
             iSpanProjectContext db = new();
-            var FAQ = db.Faqs.ToList();
+            List<Faq> FAQ = null;
+            if (filter == null)
+            {
+                FAQ = db.Faqs.ToList();
+            }
+            else
+            {
+                FAQ = db.Faqs.Where(i => i.FaqtypeId == filter).ToList();
+            }
             var FAQType = db.Faqtypes.ToList();
             List<FAQViewModel> list = new();
             foreach (var f in FAQ)
@@ -1533,6 +1573,7 @@ namespace prjiSpanFinal.Controllers
                 };
                 list.Add(fAQ);
             }
+            ViewBag.FAQTypes =FAQType.ToList();
             return View(list);
         }
         public IActionResult FAQCreate()

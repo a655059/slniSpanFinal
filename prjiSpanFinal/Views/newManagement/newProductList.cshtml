@@ -19,17 +19,17 @@
     <h1>商品</h1>
     <form>
         <input type="search" name="keyword" placeholder="輸入產品名稱或ID進行搜尋,或不輸入回到列表" class="form-control" />
-        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary mt-1" />
     </form>
     <form>
         依商品狀態篩選
        <select id="filter" name="filter">
-           <option value="">選擇商品狀態</option>
+           <option value=" ">選擇商品狀態</option>
            <option value="上架中">上架中</option>
            <option value="已下架">已下架</option>
            <option value="已刪除">已刪除</option>
        </select> 
-        <input type="submit" value="全部商品" class="btn btn-outline-secondary" />
+        <input id="filtersubmit" type="submit" value="列出全部狀態商品" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
@@ -122,12 +122,12 @@
     </tfoot>
 </table>
 @*分頁導覽*@
-<div style="align-content:center" class="paginations">
+<div style="align-content:center" class="paginations mt-1">
     @{int ps = 3;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
       @Html.Pager(pagedList).Url(page => Url.Action("newProductList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
-    <select id="pagesize">
+    <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
@@ -156,7 +156,7 @@
 
 
     @section Scripts{
-    <script>
+        <script>
         let BTNdel = document.querySelectorAll(".ProdDele");
         let BTNundo = document.querySelectorAll(".ProdUndo");
         let BTNdown = document.querySelectorAll(".ProdDown");
@@ -200,13 +200,13 @@
         let pagess = document.querySelectorAll(".paginations ul");
         for(let a of page){
             a.classList.add('page-link');
-        }      
+        }
         for(let a of pagesss){
             a.classList.add('page-link');
         }
         for(let a of pages){
             a.classList.add('page-item')
-        } 
+        }
         for (let a of pagess) {
             a.classList.add('pagination');
         }
@@ -220,7 +220,15 @@
             let link="@Url.Content("~/newManagement/newProductList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-
+            //選取全部商品
+            let filtersubmit = document.getElementById("filtersubmit");
+            let FFilter = "";
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/newProductList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
         //篩選ProductStauts
         let filter=document.getElementById("filter");
         let Filter="";
@@ -230,5 +238,5 @@
             let link="@Url.Content("~/newManagement/newProductList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })
-    </script>
+        </script>
     }
