@@ -30,18 +30,18 @@ namespace prjiSpanFinal.ViewModels.seller
         }
         public List<Ad> fgetAD(List<Ad> res,int filter)
         {
-            switch (filter)
-            {
-                case 1:
-                    res = res.Where(a => a.AdName == "內容特效").ToList();
-                    break;
-                case 2:
-                    res = res.Where(a => a.AdName == "登上發燒").ToList();
-                    break;
-                default:
-                    res = res.Where(a => a.AdName == "標題高光").ToList();
-                    break;
-            }
+            //switch (filter)
+            //{
+            //    case 1:
+            //        res = res.Where(a => a.AdName == "內容特效").ToList();
+            //        break;
+            //    case 2:
+            //        res = res.Where(a => a.AdName == "登上發燒").ToList();
+            //        break;
+            //    default:
+            //        res = res.Where(a => a.AdName == "標題高光").ToList();
+            //        break;
+            //}
             return res;
         }
         public List<Ad> fgetResult(List<Ad> res ,int[] ADIDs)
@@ -85,6 +85,23 @@ namespace prjiSpanFinal.ViewModels.seller
                 a.salesVolume = sales;
                 a.starCount = stars;
                 res.Add(a);
+            }
+            return res;
+        }
+
+        public List<CADSubviewmodel> fgetSubList(int memID)
+        {
+            List<CADSubviewmodel> res = new List<CADSubviewmodel>();
+            List<AdtoProduct> list = db.AdtoProducts.Where(p => p.Product.MemberId == memID).ToList();
+            if (list.Any())
+            {
+                foreach(var item in list) {
+                    CADSubviewmodel subs = new CADSubviewmodel
+                    {
+                        ADtoProd = item
+                    };
+                    res.Add(subs);
+                }
             }
             return res;
         }

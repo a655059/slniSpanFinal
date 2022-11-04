@@ -299,16 +299,16 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 關於我(int id)
         {
+            if(id.ToString().Equals(""))      getid();
 
-            MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+            //MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
-            //if (x != null) return RedirectToAction("修改關於我");
 
-            var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
+            //var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
             //string[] words = servicetime.ServiceTime.Split('/');
 
             C關於我ViewModel me = new C關於我ViewModel();
-
+            #region
             //抓賣場服務時間內容  
             //foreach (var word in words)
             //{
@@ -352,16 +352,11 @@ namespace prjiSpanFinal.Controllers
             //    }
 
             //}
-
+            #endregion
 
             C關於我ViewModel outp = new C關於我ViewModel
             {
-                Memberid = /*x.MemberId*/1,
-                weekDown = /*me.weekDown*/"1",
-                weekUp = /*me.weekUp*/"1",
-                timeDown = /*me.timeDown*/"1",
-                timeUp = /*me.timeUp*/"1",
-                takebreak = /*me.takebreak*/"1"
+                Memberid = id,
             };
 
             return View(outp);
@@ -398,45 +393,7 @@ namespace prjiSpanFinal.Controllers
             };
 
             //如果有要新增或修改賣場服務時間的欄位    就要先把內容清空  再把值加入
-            if (ServiceTime[0] == "on" || ServiceTime[1] == "on" || ServiceTime[2] == "on")
-            {
-                add.ServiceTime = "";
-                add.RenewProduct = "";
-                add.SellerType = "";
-                add.AfterSales = "";
-                add.SellerCaution = "";
-            }
-
-            if (ServiceTime[0] == "on")
-            {
-                add.ServiceTime += "0";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[0];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[1];
-                add.ServiceTime += "/";
-            }
-            if (ServiceTime[1] == "on")
-            {
-                add.ServiceTime += "1";
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[2];
-                add.ServiceTime += ",";
-                add.ServiceTime += me.SalesCourtServiceTime[3];
-                add.ServiceTime += "/";
-            }
-            if (ServiceTime[2] == "on")
-            {
-                add.ServiceTime += "2";
-                add.ServiceTime += ",";
-                add.ServiceTime += ServiceTime[3];
-                add.ServiceTime += "/";
-            }
-
-            add.RenewProduct += NewMe.NewProductOnLoad;
-            add.SellerType += NewMe.SellerCategory;
-            add.AfterSales += NewMe.ServiceAfterBuy;
-            add.SellerCaution += NewMe.Caution;
+        
 
 
             dbContext.SaveChanges();
@@ -517,14 +474,13 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 修改關於我(int Memberid,string asd)
         {
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
-            add.ServiceTime = asd;
+            add.Description = asd;
                       
           
             dbContext.SaveChanges();
 
 
-           // return RedirectToAction("關於我", new { id = Memberid });
-            return RedirectToAction("賣場");
+           return View("關於我", new { id = Memberid });
 
         }
 
@@ -666,7 +622,7 @@ namespace prjiSpanFinal.Controllers
         }
 
         public IActionResult GetAlterMe(int id) {
-            var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).ServiceTime;
+            var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).Description;
             return Json(q);
 
         }

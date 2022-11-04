@@ -27,6 +27,7 @@ namespace prjiSpanFinal.Models
         public int ProductStatusId { get; set; }
         public DateTime EditTime { get; set; }
         public int CustomizedCategoryId { get; set; }
+        public bool IsFeaturedProduct { get; set; }
 
         public virtual CustomizedCategory CustomizedCategory { get; set; }
         public virtual MemberAccount Member { get; set; }
