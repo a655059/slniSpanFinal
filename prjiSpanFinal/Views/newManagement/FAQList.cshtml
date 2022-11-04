@@ -1,0 +1,78 @@
+﻿@model IEnumerable<prjiSpanFinal.ViewModels.newManagement.FAQViewModel>
+
+@{
+    ViewData["Title"] = "FAQList";
+}
+
+<h1>常見問題</h1>
+
+<p>
+    <a asp-action="FAQCreate" class="btn btn-light">加入常見問題</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                問題類型
+            </th>
+            <th>
+                問題
+            </th>
+            <th>
+                答案
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Faq.Faqid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaqTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Faq.Question)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Faq.Answer)
+                </td>
+                <td>
+                    @Html.ActionLink("編輯", "FAQEdit", "newManagement", new { id = item.Faq.Faqid }, new { @class = "btn btn-outline-warning" })
+                    <a class="btn btn-outline-danger Dele" name="@item.Faq.Faqid">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        let Dele = document.querySelectorAll(".Dele");
+        for(var dele of Dele){
+            dele.addEventListener("click",async function(){
+                let d=event.currentTarget.name;
+                let conf=confirm("確定要刪除嗎?");
+                if(conf){
+                    let c=await fetch("@Url.Content("~/newManagement/FAQDelete")"+`?id=${d}`);
+                    let res=c.text();
+                    if(res!=null){
+                    $(this).closest("tr").remove();
+                    alert("已刪除!")
+                    }
+                    else{
+                        alert(res);
+                        return;
+                    }
+                }
+
+            })
+        }
+    </script>
+}

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.Shipper>
+
+@{
+    ViewData["Title"] = "ShipperList";
+}
+
+<h1>運送方式</h1>
+
+<p>
+    <a asp-action="ShipperCreate" class="btn btn-light">新增運送方式</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                運送方式
+            </th>
+            <th>
+                連絡電話
+            </th>
+            <th>
+                運費
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipperId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShipperName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fee)
+                </td>
+                <td>
+                    @Html.ActionLink("修改", "ShipperEdit","newManagement", new {  id=item.ShipperId },new{@class="btn btn-outline-warning"}) 
+                    <a class="Dele btn btn-danger" name="@item.ShipperId">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        let Dele = document.querySelectorAll(".Dele");
+        for(var dele of Dele){
+            dele.addEventListener("click",async function(){
+                let d=event.currentTarget.name;
+                let conf=confirm("確定要刪除嗎?");
+                if(conf){
+                    let c=await fetch("@Url.Content("~/newManagement/ShipperDelete")"+`?id=${d}`);
+                    let res=c.text();
+                    if(res!=null){
+                    $(this).closest("tr").remove();
+                    alert("已刪除!")
+                    }
+                    else{
+                        alert(res);
+                        return;
+                    }
+                }
+                
+            })
+        }
+    </script>
+}

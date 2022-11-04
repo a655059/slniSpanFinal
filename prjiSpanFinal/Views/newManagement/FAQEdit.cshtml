@@ -1,0 +1,57 @@
+﻿@model prjiSpanFinal.Models.Faq
+
+@{
+    ViewData["Title"] = "FAQEdit";
+}
+
+<h1>修改問答內容</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="FAQEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Faqid" type="hidden" />
+            </div> <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="FaqtypeId" class="control-label">問題類型</label>
+                    <select asp-for="FaqtypeId" class="form-control">
+                        @{ foreach (var faqtypes in ViewBag.FAQTypes)
+                            {
+                                <option value="@faqtypes.FaqtypeId">@faqtypes.FaqtypeName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <label asp-for="Question" class="control-label">問題</label>
+                <input asp-for="Question" class="form-control" />
+            </div> <div class="form-group">
+                <label asp-for="Answer" class="control-label">答案</label>
+                <textarea name="Answer" class="form-control">@Model.Answer</textarea>
+            </div>
+            <div class="form-group">
+                <input id="submit" type="submit" value="確認" class="btn btn-primary mt-1" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="FAQList" class="mt-1 btn btn-danger">取消</a>
+</div>
+
+@section Scripts {
+    <script>
+        let inputs = $(".form-control");
+        let submit = document.getElementById('submit');
+        submit.addEventListener("click", function (event) {
+            for (let inp of inputs) {
+                if (!(inp.value)) {
+                    event.preventDefault();
+                    alert("請完整填入內容!");
+                    break;
+                }
+            }
+        });
+    </script>
+}

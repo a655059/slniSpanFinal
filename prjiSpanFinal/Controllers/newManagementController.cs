@@ -74,7 +74,7 @@ namespace prjiSpanFinal.Controllers
                                               where i.CustomizedCategoryId == p.CustomizedCategoryId
                                               select i.CustomizedCategoryName).First(),
                 };
-              var Q = ProductPic.Where(i=>i.ProductId==model.Product.ProductId);
+                var Q = ProductPic.Where(i => i.ProductId == model.Product.ProductId);
                 if (Q.Any())
                 {
                     model.ProductPic = Q.First().Pic;
@@ -1066,7 +1066,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult EventCreate()
         {
             iSpanProjectContext db = new();
-            var Q=db.OfficialEventTypes.ToList();
+            var Q = db.OfficialEventTypes.ToList();
             ViewBag.EventType = Q;
             return View();
         }
@@ -1083,7 +1083,7 @@ namespace prjiSpanFinal.Controllers
                 OfficialEventListId = ofevent.OfficialEventListId,
                 StartDate = ofevent.StartDate,
                 SubOfficialEventLists = ofevent.SubOfficialEventLists,
-                OfficialEventTypeId=ofevent.OfficialEventTypeId
+                OfficialEventTypeId = ofevent.OfficialEventTypeId
             };
             using (var ms = new MemoryStream())
             {
@@ -1338,17 +1338,17 @@ namespace prjiSpanFinal.Controllers
                     Where(i => i.SubOfficialEventListId == id && (i.Product.ProductName.Contains(keyword) || i.SubOfficialEventList.SubEventName.Contains(keyword))).
                     Select(e => e); ;
             }
-            var ProductName =db.Products.ToList();
+            var ProductName = db.Products.ToList();
             var Verify = db.Verifies.ToList();
             var subEventName = db.SubOfficialEventLists.ToList();
             foreach (var EventToProds in EtoPs)
             {
                 subEventtoProductListViewModel model = new()
                 {
-                    SubOfficialEventToProduct= EventToProds,
-                    ProductName = ProductName.FirstOrDefault(I=>I.ProductId==EventToProds.ProductId).ProductName,
-                    subEventName= subEventName.FirstOrDefault(i=>i.SubOfficialEventListId== EventToProds.SubOfficialEventListId).SubEventName,
-                    Verify= Verify.FirstOrDefault(i=>i.VerifyId==EventToProds.VerifyId).VerifyName,
+                    SubOfficialEventToProduct = EventToProds,
+                    ProductName = ProductName.FirstOrDefault(I => I.ProductId == EventToProds.ProductId).ProductName,
+                    subEventName = subEventName.FirstOrDefault(i => i.SubOfficialEventListId == EventToProds.SubOfficialEventListId).SubEventName,
+                    Verify = Verify.FirstOrDefault(i => i.VerifyId == EventToProds.VerifyId).VerifyName,
                 };
                 list.Add(model);
             }
@@ -1401,6 +1401,196 @@ namespace prjiSpanFinal.Controllers
             var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
             db.SaveChanges();
             return Content($"{p}");
+        }
+        #endregion
+        #region PaymentRegion
+        public IActionResult PaymentList()
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Payments.ToList();
+            return View(pay);
+        }
+        public IActionResult PaymentEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Payments.FirstOrDefault(i => i.PaymentId == id);
+            return View(pay);
+        }
+        [HttpPost]
+        public IActionResult PaymentEdit(Payment payment)
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Payments.FirstOrDefault(i => i.PaymentId == payment.PaymentId);
+            pay.PaymentName = payment.PaymentName;
+            pay.Fee = payment.Fee;
+            db.SaveChanges();
+            return RedirectToAction("PaymentList");
+        }
+        public IActionResult PaymentCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult PaymentCreate(Payment payment)
+        {
+            iSpanProjectContext db = new();
+            Payment pay = new()
+            {
+                PaymentName = payment.PaymentName,
+                Fee = payment.Fee,
+            };
+            db.Payments.Add(pay);
+            db.SaveChanges();
+            return RedirectToAction("PaymentList");
+        }
+        public IActionResult PaymentDelete(int id)
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Payments.FirstOrDefault(i => i.PaymentId == id);
+            db.Payments.Remove(pay);
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+        }
+        #endregion
+        #region ShipperRegion
+        public IActionResult ShipperList()
+        {
+            iSpanProjectContext db = new();
+            var Shippers = db.Shippers.ToList();
+            return View(Shippers);
+        }
+        public IActionResult ShipperDelete(int id)
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Shippers.FirstOrDefault(i => i.ShipperId == id);
+            db.Shippers.Remove(pay);
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+        }
+        public IActionResult ShipperCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ShipperCreate(Shipper shipper)
+        {
+            iSpanProjectContext db = new();
+            Shipper ship = new()
+            {
+                ShipperName = shipper.ShipperName,
+                Phone = shipper.Phone,
+                Fee = shipper.Fee,
+            };
+            db.Shippers.Add(ship);
+            db.SaveChanges();
+            return RedirectToAction("ShipperList");
+        }
+        public IActionResult ShipperEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var pay = db.Shippers.FirstOrDefault(i => i.ShipperId == id);
+            return View(pay);
+        }
+        [HttpPost]
+        public IActionResult ShipperEdit(Shipper shipper)
+        {
+            iSpanProjectContext db = new();
+            var ship = db.Shippers.FirstOrDefault(i => i.ShipperId == shipper.ShipperId);
+            ship.ShipperName = shipper.ShipperName;
+            ship.Fee = shipper.Fee;
+            ship.Phone = shipper.Phone;
+            db.SaveChanges();
+            return RedirectToAction("ShipperList");
+        }
+        #endregion
+        #region FAQRegion
+        public IActionResult FAQList()
+        {
+            iSpanProjectContext db = new();
+            var FAQ = db.Faqs.ToList();
+            var FAQType = db.Faqtypes.ToList();
+            List<FAQViewModel> list = new();
+            foreach (var f in FAQ)
+            {
+                FAQViewModel fAQ = new()
+                {
+                    Faq = f,
+                    FaqTypeName = FAQType.FirstOrDefault(i => i.FaqtypeId == f.FaqtypeId).FaqtypeName,
+                };
+                list.Add(fAQ);
+            }
+            return View(list);
+        }
+        public IActionResult FAQCreate()
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            ViewBag.FAQTypes = FAQTypes;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult FAQCreate(Faq faq)
+        {
+            iSpanProjectContext db = new();
+            Faq F = new()
+            {
+                Answer = faq.Answer,
+                Question = faq.Question,
+                FaqtypeId = faq.FaqtypeId,
+            };
+            db.Faqs.Add(F);
+            db.SaveChanges();
+            return RedirectToAction("FAQList");
+        }
+
+        public IActionResult FAQEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            ViewBag.FAQTypes = FAQTypes;
+            var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == id);
+            return View(FAQ);
+        }
+        [HttpPost]
+        public IActionResult FAQEdit(Faq faq)
+        {
+            iSpanProjectContext db = new();
+            var FAQTypes = db.Faqtypes.ToList();
+            var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == faq.Faqid);
+            FAQ.Answer = faq.Answer;
+            FAQ.FaqtypeId = faq.FaqtypeId;
+            FAQ.Question = faq.Question;
+            db.SaveChanges();
+            return RedirectToAction("FAQList");
+        }
+        public IActionResult FAQDelete(int id)
+        {
+            iSpanProjectContext db = new();
+            var faq = db.Faqs.FirstOrDefault(i => i.Faqid == id);
+            db.Faqs.Remove(faq);
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
         }
         #endregion
     }
