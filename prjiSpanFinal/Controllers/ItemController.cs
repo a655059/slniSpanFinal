@@ -367,13 +367,39 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult BiddingItemHome()
         {
-
-            return View();
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            List<int> biddingIDs = dbContext.Biddings.Where(i => i.ProductDetail.Product.ProductStatusId == 4).Select(i => i.BiddingId).ToList();
+            return View(biddingIDs);
         }
         public IActionResult BiddingIndex(int id)
         {
-
-            return View();
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var infos = dbContext.Biddings.Where(i => i.BiddingId == id).Select(i => new CBiddingItemIndexViewModel
+            {
+                bidding = i,
+                productDetail = i.ProductDetail,
+                product = i.ProductDetail.Product,
+                seller = i.ProductDetail.Product.Member,
+                smallType = i.ProductDetail.Product.SmallType,
+                bigType = i.ProductDetail.Product.SmallType.BigType,
+                region = i.ProductDetail.Product.Member.Region,
+                country = i.ProductDetail.Product.Member.Region.Country,
+            }).FirstOrDefault();
+            infos.productPics = dbContext.ProductPics.Where(i => i.ProductId == infos.product.ProductId).Select(i => i.Pic).ToList();
+            infos.user = null;
+            infos.isLike = false;
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                infos.user = JsonSerializer.Deserialize<MemberAccount>(memberString);
+                if (dbContext.Likes.Any(i => i.ProductId == infos.product.ProductId && i.MemberId == infos.user.MemberId))
+                {
+                    infos.isLike = true;
+                }
+            }
+            
+            
+            return View(infos);
         }
     }
 }

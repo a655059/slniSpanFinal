@@ -69,6 +69,8 @@ namespace prjiSpanFinal
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatHub>("/chatHub");
                 endpoints.MapHub<CountdownHub>("/countdownHub");
+                endpoints.MapHub<SelectedBiddingItemsCountdownHub>("/selectedBiddingItemsCountdownHub");
+                endpoints.MapHub<SpecificItemCountdownHub>("/specificItemCountdownHub");
             });
         }
     }
