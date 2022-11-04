@@ -231,6 +231,20 @@ namespace prjiSpanFinal.Controllers
             List<Ad> ad = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
             return Json(ad);
         }
+        public IActionResult getADfilter()
+        {
+            List<string> filters = _db.Ads.OrderBy(p=>p.AdId).Select(p => p.AdName).Distinct().ToList();
+            if (!filters.Any())
+                filters = new List<string>();
+            return Json(filters);
+        }
+        public IActionResult getSubList()
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<CADSubviewmodel> res = new CSellerADFactory().fgetSubList(id);
+
+            return Json(res);
+        }
 
 
         public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功
