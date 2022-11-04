@@ -88,5 +88,22 @@ namespace prjiSpanFinal.ViewModels.seller
             }
             return res;
         }
+
+        public List<CADSubviewmodel> fgetSubList(int memID)
+        {
+            List<CADSubviewmodel> res = new List<CADSubviewmodel>();
+            List<AdtoProduct> list = db.AdtoProducts.Where(p => p.Product.MemberId == memID).ToList();
+            if (list.Any())
+            {
+                foreach(var item in list) {
+                    CADSubviewmodel subs = new CADSubviewmodel
+                    {
+                        ADtoProd = item
+                    };
+                    res.Add(subs);
+                }
+            }
+            return res;
+        }
     }
 }

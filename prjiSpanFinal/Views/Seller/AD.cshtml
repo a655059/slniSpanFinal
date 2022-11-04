@@ -123,19 +123,78 @@
                 </div>
             </div>
         </div>
-        <div id="SubListBox">
-            <div id="SubList">
-                <ul>
-                    <li>123</li>
-                    <li>456</li>
-                </ul>
-            </div>
-        </div>
+        <table class="table table-bordered text-center align-items-center" id="SubListBox">
+            <thead>
+                <tr class="Sub-header" style="vertical-align: middle" id="Sub-header">
+                    <td rowspan="2">
+                        <label>
+                            全選
+                        </label>
+                        <div>
+                            <input class="form-check-input checkboxAll" type="checkbox" value="" aria-label="...">
+                        </div>
+                    </td>
+                    <td rowspan="2">編號</td>
+                    <td rowspan="2">選擇效果</td>
+                    <td rowspan="2">訂閱商品</td>
+                    <td colspan="2">訂閱時間</td>
+                    <td rowspan="2">現在狀態</td>
+                    <td colspan="2">訂閱回饋</td>
+                    <td rowspan="2">
+                        <label>
+                            操作
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>推播期限</td>
+                    <td>剩餘時間</td>
+                    <td>曝光次數</td>
+                    <td>點閱次數</td>
+                </tr>
+            </thead>
+            <tbody id="SubList">
+                <tr class="Sub-item">
+                    <td class="item-ckbox">
+                        <div>
+                            <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
+                        </div>
+                    </td>
+                    <td class="item-num">1</td>
+                    <td class="item-effect">標題高光</td>
+
+                    <td class="item-prod">12 蘋果</td>
+                    <td class="item-date">
+                        2022-10-27
+                        14:07:34
+                        <br />
+                        ~
+                        <br />
+                        2022-10-27
+                        14:07:34
+                    </td>
+
+                    <td class="item-date">
+                        <label>12天 14:07:34</label>
+                    </td>
+
+                    <td class="item-status status-stop">已停止</td>
+                    <td class="item-times">2</td>
+                    <td class="item-times">2</td>
+                    <td class="item-action">
+                        <button class="btn btn-danger" disabled>
+                            中斷訂閱
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
+ </div>
 @section Scripts
 {
     <script>
+        //========================================== MODAL
         // Modal運作時當前勾選
         let ModelnowChecked;
         // 按下確認存取商品ID
@@ -148,6 +207,11 @@
         let ModelCheckBox;
         let ModelItemArea = $("#modal-Item-Box");
         let itemNowpage = 1;
+        //========================================== HEADER
+        let ADfilter = 0;
+        let ADnav = $("#nav-tab");
+        let eid = [];
+        let ADarea = $("#ADeffectArea");
 
         Model.on("show.bs.modal", function (evt) {
             itemNowpage = 1;
@@ -278,15 +342,12 @@
             getItem();
         })
 
-        let ADfilter = 0;
-        let ADnav = $(".nav-item");
-        let eid = [];
-        let ADarea = $("#ADeffectArea");
+        
+        //==============================================
+        loaddata();
 
-        getAD();
-
-        ADnav.click(function () {
-            ADnav.removeClass("active");
+        ADnav.on("click", ".nav-item", function () {
+            $(this).siblings().removeClass("active");
             $(this).addClass("active");
             ADfilter = parseInt($(this).attr("id"));
             getAD();
@@ -398,6 +459,7 @@
             $("#Result-CheckedeffectList").html(res);
             $("#Result-Total-Price").html(resPrice);
         }
+
         function Items(data) {
             $("#ShowArea").html("");
             let item = "";
@@ -444,6 +506,81 @@
             console.log(data);
             console.log(item);
             $("#ShowArea").html(item);
+        }
+
+        function fillADfilter(data) {
+            $("#nav-tab").html("");
+            let res = "";
+            if (data.length > 0) {
+                res += `<a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[0]}</a>`;
+                if (data.length > 1) {
+                    for (let i = 1; i < data.length; i++) {
+                        res += `<a class="nav-item nav-link" id="${i}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[i]}</a>`;
+                    }
+                }
+            }
+            else {
+                res =`<a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">請期待新廣告功能</a>`
+            }
+            $("#nav-tab").html(res);
+        }
+        function loaddata() {
+            $.post("getADfilter", function (data) {
+                //console.log(data);
+                fillADfilter(data);
+            })
+            getAD();
+            getSubList();
+        }
+        function getSubList() {
+            $.post("getSubList", function (data) {
+                console.log(data);
+            })
+        }
+        function fillSubList(data) {
+
+            let res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    res += `
+                    <tr class="Sub-item">
+                        <td class="item-ckbox">
+                            <div>
+                                <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
+                        </div>
+                    </td>
+                            <td class="item-num">1</td>`;
+                    res += `<td class="item-effect">標題高光</td>`;
+
+                           res+=` <td class="item-prod">12 蘋果</td>`
+                    res += `<td class="item-date">
+                                2022-10-27
+                                14:07:34
+                        <br />
+                        ~
+                        <br />
+                        2022-10-27
+                        14:07:34
+                    </td>`;
+
+                    res += ` <td class="item-date">
+                                <label>12天 14:07:34</label>
+                            </td>`;
+
+                    res += `<td class="item-status status-stop">已停止</td>`;
+                    res += `<td class="item-times">2</td>`;
+                    res += `<td class="item-times">2</td>`;
+                    res += `<td class="item-action">
+                                <button class="btn btn-danger" disabled>
+                                    中斷訂閱
+                                </button>
+                          </td>
+                </tr>`;
+                }
+            }
+            else {
+
+            }
         }
     </script>
 
