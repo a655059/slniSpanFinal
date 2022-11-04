@@ -223,19 +223,18 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult getAD(int ADfilter)
         {
-            List<Ad> ad = new CSellerADFactory().fgetAD(_db.Ads.ToList(), ADfilter);
-            return Json(ad);
+            List<CADeffectViewmodel> res = new CSellerADFactory().fgetAD(ADfilter);
+
+            return Json(res);
         }
         public IActionResult getResult(int[] ADIDs)
         {
-            List<Ad> ad = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
-            return Json(ad);
+            List<CADeffectViewmodel> res = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
+            return Json(res);
         }
         public IActionResult getADfilter()
         {
-            List<string> filters = new List<string>();/*_db.Ads.OrderBy(p=>p.AdId).Select(p => p.AdName).Distinct().ToList();*/
-            if (!filters.Any())
-                filters = new List<string>();
+            List<Adtype> filters = _db.Adtypes.OrderBy(p=>p.AdTypeId).ToList();
             return Json(filters);
         }
         public IActionResult getSubList()
@@ -245,7 +244,31 @@ namespace prjiSpanFinal.Controllers
 
             return Json(res);
         }
-
+        public IActionResult saveADSubs(int itemID,int[] ADIDs)
+        {
+            foreach(var ads in ADIDs)
+            {
+                int period = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdPeriod).FirstOrDefault();
+                AdtoProduct res = new AdtoProduct()
+                {
+                    AdId = ads,
+                    ProductId = itemID,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(period),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                };
+                _db.AdtoProducts.Add(res);
+            }
+            try { 
+                _db.SaveChanges();
+                return Json(1);
+            }
+            catch { 
+                return Json(0); 
+            }
+        }
 
         public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功
         {

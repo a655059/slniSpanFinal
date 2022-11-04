@@ -12,7 +12,7 @@ namespace prjiSpanFinal.ViewModels.seller
         iSpanProjectContext db;
         public CSellerADFactory()
         {
-            db= new iSpanProjectContext();
+            db = new iSpanProjectContext();
         }
 
         public List<CShowItem> fgetShowITem(List<Product> list, int nowpages)
@@ -28,25 +28,50 @@ namespace prjiSpanFinal.ViewModels.seller
             CShowItem res = ADgetShowItem(list).First();
             return res;
         }
-        public List<Ad> fgetAD(List<Ad> res,int filter)
+        public List<CADeffectViewmodel> fgetAD(int filter)
         {
-            //switch (filter)
-            //{
-            //    case 1:
-            //        res = res.Where(a => a.AdName == "內容特效").ToList();
-            //        break;
-            //    case 2:
-            //        res = res.Where(a => a.AdName == "登上發燒").ToList();
-            //        break;
-            //    default:
-            //        res = res.Where(a => a.AdName == "標題高光").ToList();
-            //        break;
-            //}
+            List<Ad> list = db.Ads.Where(a => a.AdTypeId == filter).OrderBy(a => a.AdId).ToList();
+            
+            List<CADeffectViewmodel> res = new List<CADeffectViewmodel>();
+            if (list.Any())
+            {
+                foreach (var item in list)
+                {
+                    Adtype type = db.Adtypes.Where(a => a.AdTypeId == item.AdTypeId).FirstOrDefault();
+                    CADeffectViewmodel r = new CADeffectViewmodel
+                    {
+                        //ADeffect = item,
+                        ADID=item.AdId,
+                        ADFee=item.AdFee,
+                        ADPeriod=item.AdPeriod,
+                        TypeName = type.AdType1,
+                        TypeNameDescription = type.AdTyepDescription,
+                    };
+                    res.Add(r);
+                }
+            }
             return res;
         }
-        public List<Ad> fgetResult(List<Ad> res ,int[] ADIDs)
+        public List<CADeffectViewmodel> fgetResult(List<Ad> list ,int[] ADIDs)
         {
-            res = res.Where(p => ADIDs.Contains(p.AdId)).ToList();
+            list = list.Where(p => ADIDs.Contains(p.AdId)).ToList();
+            List<CADeffectViewmodel> res = new List<CADeffectViewmodel>();
+            if (list.Any())
+            {
+                foreach(var item in list)
+                {
+                    Adtype type = db.Adtypes.Where(a => a.AdTypeId == item.AdTypeId).FirstOrDefault();
+                    CADeffectViewmodel r = new CADeffectViewmodel()
+                    {
+                        ADID = item.AdId,
+                        ADFee = item.AdFee,
+                        ADPeriod = item.AdPeriod,
+                        TypeName = type.AdType1,
+                        TypeNameDescription = type.AdTyepDescription,
+                    };
+                    res.Add(r);
+                }
+            }
             return res;
         }
         public List<CShowItem> ADgetShowItem(List<Product> list)
@@ -91,15 +116,23 @@ namespace prjiSpanFinal.ViewModels.seller
 
         public List<CADSubviewmodel> fgetSubList(int memID)
         {
+            iSpanProjectContext db2 = new iSpanProjectContext();
             List<CADSubviewmodel> res = new List<CADSubviewmodel>();
             List<AdtoProduct> list = db.AdtoProducts.Where(p => p.Product.MemberId == memID).ToList();
+
             if (list.Any())
             {
                 foreach(var item in list) {
+                    var prod = db2.Products.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
+                    var adtype = db2.Ads.Where(a => a.AdId == item.AdId).Select(a => a.AdType.AdType1).FirstOrDefault();
                     CADSubviewmodel subs = new CADSubviewmodel
                     {
-                        ADtoProd = item
+                        ADtoProd = item,
+                        prod = prod,
+                        adTypeName=adtype,
                     };
+                    
+                    //subs.adtype = adtype.Where(t => t.AdTypeId == subs.ads.AdTypeId).FirstOrDefault();
                     res.Add(subs);
                 }
             }

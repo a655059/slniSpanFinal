@@ -208,10 +208,16 @@
         let ModelItemArea = $("#modal-Item-Box");
         let itemNowpage = 1;
         //========================================== HEADER
-        let ADfilter = 0;
+        let ADfilter = 1;
         let ADnav = $("#nav-tab");
         let eid = [];
         let ADarea = $("#ADeffectArea");
+        let isItemSelect = false;
+        let isOKtoSub = false;
+        //==========================================
+
+
+
 
         Model.on("show.bs.modal", function (evt) {
             itemNowpage = 1;
@@ -245,6 +251,22 @@
             $.post("ADshowCheckItem", { itemID: itemID }, function (data) {
                 Items(data);
             })
+        })
+
+        $(document).on("click", ".orderpagenumclick", function () {
+            itemNowpage = $(this).html();
+            getItem();
+        })
+
+        $("#orderpagedown").click(function () {
+            let pagescount = $(".orderpagenumclicklist").length;
+            itemNowpage = Math.min(parseInt(itemNowpage) + 1, pagescount);
+            getItem();
+        })
+
+        $("#orderpageup").click(function () {
+            itemNowpage = Math.max(parseInt(itemNowpage) - 1, 1);
+            getItem();
         })
 
         function getItem() {
@@ -326,76 +348,65 @@
             }
         }
 
-        $(document).on("click", ".orderpagenumclick", function () {
-            itemNowpage = $(this).html();
-            getItem();
-        })
+        function Items(data) {
+            $("#ShowArea").html("");
+            let item = "";
+            if (data != null) {
 
-        $("#orderpagedown").click(function () {
-            let pagescount = $(".orderpagenumclicklist").length;
-            itemNowpage = Math.min(parseInt(itemNowpage) + 1, pagescount);
-            getItem();
-        })
+                    let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
+                    item += `<div class="sellsitem">
+                           <a class="linknoline" href="${productLink}">`;
+                    if (data.pic != null) {
 
-        $("#orderpageup").click(function () {
-            itemNowpage = Math.max(parseInt(itemNowpage) - 1, 1);
-            getItem();
-        })
+                        item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
+                    }
+                    else {
+                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`;
+                    }
+                item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
+                        <div class="cardTitle"> ${data.product.productName}</div></div>`;
+                    if (data.price.Count == 1) {
+                        item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`;
+                    }
+                    else {
+                        item += `<div class="cardPrice">$` + `${Math.round(data.price[0])} - $` + `${Math.round(data.price[1])}</div>`;
+                    }
 
-        
+                item +=
+                    `<div class="cardInfo d-flex justify-content-between flex-row">
+                    <div class="starBox mt-1">
+                        <div class="d-flex justify-content-start">
+                            <div class="starImg">
+                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                            </div>
+                            <div class="text-black">${data.starCount.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
+                </div>
+            </div>
+        </div>
+`;
+                isItemSelect = true;
+            }
+            else {
+                item = `<div id="CheckedItemAD"></div>`
+                isItemSelect = false;
+            }
+            console.log(data);
+            console.log(item);
+            $("#ShowArea").html(item);
+        }
+
         //==============================================
         loaddata();
 
         ADnav.on("click", ".nav-item", function () {
             $(this).siblings().removeClass("active");
             $(this).addClass("active");
-            ADfilter = parseInt($(this).attr("id"));
+            ADfilter = parseInt(($(this).attr("id")).substring(1));
             getAD();
         })
-
-        function getAD() {
-            $.post("getAD", { ADfilter: ADfilter }, function (data) {
-                fillAD(data);
-            })
-            $.post("getResult", { ADIDs: eid }, function (data) {
-                //console.log(data);
-                fillresult(data);
-            })
-            
-        }
-
-        function fillAD(data) {
-            ADarea.html("");
-            let res = "";
-            if (data.length > 0) {
-                for (let i = 0; i < data.length; i++) {
-                    if (eid.includes(data[i].adId)) {
-                        res += `<div class="ADeffect ADsensor-checked row" id="e${data[i].adId}">`;
-                    }
-                    else {
-                        res += `<div class="ADeffect ADsensor row" id="e${data[i].adId}">`;
-                    }
-
-                    res += `<div class="d-flex justify-content-between align-items-center ADe-Header">
-                            <div class="ADe-Title">`;
-                    res += data[i].adName;
-                    res += `</div>
-                            <div class="ADe-Price">`
-                    res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣/${data[i].adPeriod}天`;
-                    res += `</div>
-                        </div>
-                        <div class="ADe-Description">`
-                    //待更新
-                    res += `代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來`;
-                    res += `</div>
-                    </div>`
-                }
-            }
-            else {
-                res = `<div>暫待新增廣告訂閱內容</div>`
-            }
-            ADarea.html(res);
-        }
 
         ADarea.on("click", ".ADeffect", function (evt) {
             let hit = $(this);
@@ -423,8 +434,87 @@
                 })
                 eid.push(id);
             }
-            getAD();
+            getResult();
         })
+
+        $("#Result-btn").click(function (evt) {
+            if (isItemSelect || isOKtoSub) {
+                $.post("saveADSubs", { itemID:itemID, ADIDs:eid }, function (data) {
+                    if (data == 1) {
+                        console.log("存檔成功");
+                    }
+                    else {
+                        console.log("存檔失敗");
+                    }
+                })
+            }
+        })
+
+        function loaddata() {
+            getADfilter();
+            getAD();
+            getResult();
+            getSubList();
+        }
+
+        function getAD() {
+            console.log(ADfilter);
+            $.post("getAD", { ADfilter: ADfilter }, function (data) {
+                fillAD(data);
+            })
+        }
+
+        function getResult() {
+                        $.post("getResult", { ADIDs: eid }, function (data) {
+                fillresult(data);
+            })
+        }
+
+        function getSubList() {
+            $.post("getSubList", function (data) {
+                console.log(data);
+                fillSubList(data);
+            })
+        }
+
+        function getADfilter() {
+            $.post("getADfilter", function (data) {
+                fillADfilter(data);
+            })
+        }
+
+        function fillAD(data) {
+            ADarea.html("");
+            let res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    if (eid.includes(data[i].adid)) {
+                        res += `<div class="ADeffect ADsensor-checked row" id="e${data[i].adid}">`;
+                    }
+                    else {
+                        res += `<div class="ADeffect ADsensor row" id="e${data[i].adid}">`;
+                    }
+
+                    res += `<div class="d-flex justify-content-between align-items-center ADe-Header">
+                            <div class="ADe-Title">`;
+                    res += data[i].typeName;
+                    res += `</div>
+                            <div class="ADe-Price">`
+                    res += "$ " + data[i].totalCost + ` 蝦蝦幣/${data[i].adPeriod}天`;
+                    res += `</div>
+                        </div>
+                        <div class="ADe-Description">`
+                    //待更新
+                    res += `${data[i].typeNameDescription}`;
+                    res += `</div>
+                    </div>`
+                }
+            }
+            else {
+                res = `<div>暫待新增廣告訂閱內容</div>`
+            }
+            ADarea.html(res);
+        }
 
         function fillresult(data) {
             $("#Result-CheckedeffectList").html("");
@@ -437,16 +527,17 @@
 
                     res += `<div class="Result-Checkedeffect row" >
                                 <div class="text-start Result-Checkedeffect-Title">`;
-                    res += data[i].adName + " - " + data[i].adPeriod + " 日 ";
+                    res += data[i].typeName + " (" + data[i].adPeriod + " 日) ";
                     res += `</div>
                                 <div class="text-end Result-Checkedeffect-Price">`;
                     res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣`;
                     res += `</div>
                             </div>`;
-                    tottalprice += data[i].adFee * data[i].adPeriod;
+                    tottalprice += data[i].totalCost;
                 }
 
                 resPrice = `Total: $ ${tottalprice}`;
+                isOKtoSub = true;
             }
             else {
                 res = `<div class="Result-Checkedeffect row">
@@ -455,67 +546,20 @@
                                 </div>
                             </div>`
                 resPrice += `Total: $ 0`;
+                isOKtoSub = false;
             }
             $("#Result-CheckedeffectList").html(res);
             $("#Result-Total-Price").html(resPrice);
-        }
-
-        function Items(data) {
-            $("#ShowArea").html("");
-            let item = "";
-            if (data != null) {
-                
-                    let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
-                    item += `<div class="sellsitem">
-                           <a class="linknoline" href="${productLink}">`;
-                    if (data.pic != null) {
-
-                        item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
-                    }
-                    else {
-                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
-                    }
-                    item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
-                        <div class="cardTitle"> ${data.product.productName}</div></div>`
-                    if (data.price.Count == 1) {
-                        item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`
-                    }
-                    else {
-                        item += `<div class="cardPrice">$` + `${Math.round(data.price[0])} - $` + `${Math.round(data.price[1])}</div>`
-                    }
-
-                    item +=
-                        `<div class="cardInfo d-flex justify-content-between flex-row">
-                    <div class="starBox mt-1">
-                        <div class="d-flex justify-content-start">
-                            <div class="starImg">
-                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                            </div>
-                            <div class="text-black">${data.starCount.toFixed(1)}</div>
-                        </div>
-                    </div>
-                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
-                </div>
-            </div>
-        </div>
-`
-            }
-            else {
-                item =`<div id="CheckedItemAD"></div>`
-            }
-            console.log(data);
-            console.log(item);
-            $("#ShowArea").html(item);
         }
 
         function fillADfilter(data) {
             $("#nav-tab").html("");
             let res = "";
             if (data.length > 0) {
-                res += `<a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[0]}</a>`;
+                res += `<a class="nav-item nav-link active" id="F${data[0].adTypeId}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[0].adType1}</a>`;
                 if (data.length > 1) {
                     for (let i = 1; i < data.length; i++) {
-                        res += `<a class="nav-item nav-link" id="${i}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[i]}</a>`;
+                        res += `<a class="nav-item nav-link" id="F${data[i].adTypeId}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[i].adType1}</a>`;
                     }
                 }
             }
@@ -524,21 +568,9 @@
             }
             $("#nav-tab").html(res);
         }
-        function loaddata() {
-            $.post("getADfilter", function (data) {
-                //console.log(data);
-                fillADfilter(data);
-            })
-            getAD();
-            getSubList();
-        }
-        function getSubList() {
-            $.post("getSubList", function (data) {
-                console.log(data);
-            })
-        }
-        function fillSubList(data) {
 
+        function fillSubList(data) {
+            $("#SubList").html("");
             let res = "";
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
@@ -549,38 +581,48 @@
                                 <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
                         </div>
                     </td>
-                            <td class="item-num">1</td>`;
-                    res += `<td class="item-effect">標題高光</td>`;
+                            <td class="item-num">${i + 1}</td>`;
+                    res += `<td class="item-effect">${data[i].adTypeName}</td>`;
 
-                           res+=` <td class="item-prod">12 蘋果</td>`
+                    res += ` <td class="item-prod">${data[i].prod.productId} - ${data[i].prod.productName}</td>`
                     res += `<td class="item-date">
-                                2022-10-27
-                                14:07:34
+                                ${data[i].startdate}
                         <br />
                         ~
                         <br />
-                        2022-10-27
-                        14:07:34
+                        ${data[i].enddate}
                     </td>`;
 
                     res += ` <td class="item-date">
-                                <label>12天 14:07:34</label>
+                                <label>${data[i].remaining}</label>
                             </td>`;
-
-                    res += `<td class="item-status status-stop">已停止</td>`;
-                    res += `<td class="item-times">2</td>`;
-                    res += `<td class="item-times">2</td>`;
-                    res += `<td class="item-action">
-                                <button class="btn btn-danger" disabled>
+                    if (data[i].isSubActive) {
+                        res += `<td class="item-status status-active">運作中</td>`;
+                    }
+                    else {
+                        res += `<td class="item-status status-stop">已停止</td>`;
+                    }
+                    res += `<td class="item-times">${data[i].expoTimes}</td>`;
+                    res += `<td class="item-times">${data[i].clickTimes}</td>`;
+                    res += `<td class="item-action">`
+                    if (data[i].isSubActive) {
+                        res += `<button class="btn btn-danger" >
                                     中斷訂閱
-                                </button>
-                          </td>
+                                </button>`
+                    }
+                    else {
+                        res += `<button class="btn btn-danger" disabled>
+                                    中斷訂閱
+                                </button>`
+                    }
+                          res+=`</td>
                 </tr>`;
                 }
             }
             else {
-
+                res+=`<div> 尚無任何訂閱紀錄</div>`
             }
+            $("#SubList").html(res);
         }
     </script>
 
