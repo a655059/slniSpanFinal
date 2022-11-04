@@ -29,7 +29,7 @@ namespace prjiSpanFinal.Controllers
             {
                 FilterId = -1;
             }
-            if (keyword == null )
+            if (keyword == null)
             {
                 if (FilterId < 0)
                 {
@@ -1253,7 +1253,7 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
-       
+
         #endregion
         #region subEventRegion
         public IActionResult subEventList(int id)
@@ -1573,7 +1573,7 @@ namespace prjiSpanFinal.Controllers
                 };
                 list.Add(fAQ);
             }
-            ViewBag.FAQTypes =FAQType.ToList();
+            ViewBag.FAQTypes = FAQType.ToList();
             return View(list);
         }
         public IActionResult FAQCreate()
@@ -1632,6 +1632,96 @@ namespace prjiSpanFinal.Controllers
             {
                 return Content(null);
             }
+        }
+        #endregion
+        #region BigTypeRegion
+        public IActionResult BigTypeList()
+        {
+            iSpanProjectContext db = new();
+            var bigtypes = db.BigTypes.ToList();
+            List<BigTypeViewModel> list = new();
+            foreach (var bt in bigtypes)
+            {
+                int prodcount = 0;
+                var st = db.SmallTypes.Where(i => i.BigTypeId == bt.BigTypeId).ToList();
+                foreach (var o in st)
+                {
+                    var prod = db.Products.Where(i => i.SmallTypeId == o.SmallTypeId).ToList();
+                    int c = prod.Count;
+                    prodcount += c;
+                }
+                BigTypeViewModel model = new()
+                {
+                    BigType = bt,
+                    ProdCount = prodcount,
+                };
+                list.Add(model);
+            }
+            return View(list);
+        }
+        public IActionResult BigTypeCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult BigTypeCreate(BigType bigType)
+        {
+            iSpanProjectContext db = new();
+            BigType type = new()
+            {
+                BigTypeName = bigType.BigTypeName,
+            };
+            db.BigTypes.Add(type);
+            db.SaveChanges();
+            return RedirectToAction("BigTypeList");
+        }
+        public IActionResult BigTypeEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var type = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
+            return View(type);
+        }
+        [HttpPost]
+        public IActionResult BigTypeEdit(BigType type)
+        {
+            iSpanProjectContext db = new();
+            var target = db.BigTypes.FirstOrDefault(i => i.BigTypeId == type.BigTypeId);
+            target.BigTypeName = type.BigTypeName;
+            db.SaveChanges();
+            return RedirectToAction("BigTypeList");
+        }
+        public IActionResult BigTypeDelete(int id)
+        {
+            iSpanProjectContext db = new();
+            var target = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
+            var small = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
+            foreach (var o in small)
+            {
+                var prods = db.Products.Where(i => i.SmallTypeId == o.SmallTypeId).ToList();
+                foreach(var prod in prods)
+                {
+                    prod.SmallTypeId = 294;
+                }
+                db.SmallTypes.Remove(o);
+            }
+            db.BigTypes.Remove(target);
+            db.SaveChanges();
+            return RedirectToAction("BigTypeList");
+        }
+        #endregion
+        #region SmallTypeRegion
+        public IActionResult SmallTypeList(int id)
+        {
+            iSpanProjectContext db = new();
+            var st = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
+            ViewBag.BigTypeName = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id).BigTypeName;
+            return View(st);
+        }
+        public IActionResult SmallTypeCreate(int id)
+        {
+            iSpanProjectContext db = new();
+            ViewBag.BigTypeId = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id).BigTypeId;
+            return View();
         }
         #endregion
     }
