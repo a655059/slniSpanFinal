@@ -1,22 +1,18 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C關於我ViewModel
 @{
-    ViewData["Title"] = "新增關於我";
+    ViewData["Title"] = "修改關於我";
 }
 
 
 <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;background-color:burlywood">
-    <div>新增關於我</div>
+    <div>修改關於我</div>
 
 </div>
 
 <form class="outlook" method="post" enctype="multipart/form-data" name="newabme" id="newabme">
 </form>
 
-
-
-
-
-<form  method="post" enctype="multipart/form-data" name="newabme" id="newabme">
+<form  class="first" method="post" enctype="multipart/form-data" name="newabme" id="newabme">
     <div class="form-group row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
         <div class="bg-warning rounded">賣場描述</div>
 
@@ -276,8 +272,10 @@
 
 </form>
 
-    @section Scripts
-{
+
+
+@section Scripts
+{       @*check帶出值怪*@
         <script>
 
         jQuery.postJSON = function (url, data, callback) {
@@ -306,7 +304,7 @@
                                 <div class="text-danger">賣場服務時間(必填)</div>
                                 <div class="row my-2">
                                     <div class="col-1">
-                                        <input class="checklist" type="checkbox" name="ServiceTime" value="${data.checkbox[0]}">
+                                        <input class="checklist" type="checkbox" name="ServiceTime" value="${data.checkbox[0]}" id="week">
                                     </div>
                                     星期
                                     <div style="width:120px;">
@@ -348,7 +346,7 @@
                                     時間
                                     <div style="width:120px;">
                                         <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm">
-                                            <option value="none" selected disabled hidden>${data.selectopt[2]}</option>
+                                            <option value="none" selected disabled hidden>${data.selectopt[2]-1}</option>
                                             @{
                                                 for (int i = 0; i < 10; i++)
                                                 {
@@ -370,7 +368,7 @@
                                     </div>
                                     <div style="width:120px;">
                                         <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm">
-                                            <option value="none" selected disabled hidden>${data.selectopt[3]}</option>
+                                            <option value="none" selected disabled hidden>${data.selectopt[3]-1}</option>
                                             @{
                                                 for (int i = 0; i < 10; i++)
                                                 {
@@ -407,23 +405,170 @@
 
                             </div>
                             <div class="col">
+                                    <div class="text-success">賣家類型</div>
 
+                                    <textarea name="NewProductOnLoad" class="form-control asdf" style="height: 90px; width:570px;">${data.text[2]}</textarea>
+
+                                    <div class="text-success">新品上架時間</div>
+                                       
+
+                                    <label>
+                                        <input class="checklist" name="upload" type="radio" value="avday" />每天
+                                        <input class="checklist" name="upload" type="radio" value="onetothree" />1-3天
+                                        <input class="checklist" name="upload" type="radio" value="threeetofive" />3-5天
+                                        <input class="checklist" name="upload" type="radio" value="avweek" />每週
+                                        <input class="checklist" name="upload" type="radio" value="skipweek" />隔週
+                                        <input class="checklist" name="upload" type="radio" value="notsureperiod" />不定期
+                                     
+                                    </label>
                             </div>
                         </div>
 
+                      <div class="row">
+                            <div class="col">
+                                <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
+                                    <div class="bg-warning rounded-2">售後服務</div>                               
+
+                                    <div class="col">
+                                        <input type="hidden" name="Memberid" value="">
+
+                                        <div class="row my-2">
+                                            <div class="col-1">
+                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
+                                            </div>
+                                            是否接受退貨
+                                            <div style="width:120px;">
+                                                <select name="ServiceAfterBuy[]" size="1" class="scst form-select form-select-sm" style="width:90px;">
+                                                    <option value="none" selected disabled hidden></option>
+                                                    <option value="true">是</option>
+                                                    <option value="false">否</option>
+
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row my-2">
+                                            <div class="col-1">
+                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
+                                            </div>
+                                            享有
+                                            <div style="width:200px;">
+                                                <input class="checklist" name="returngood" type="radio" value="seven" />7天
+                                                <input class="checklist" name="returngood" type="radio" value="ten" />10天
+                                                <input class="checklist" name="returngood" type="radio" value="fourteen" />14天
+                                            </div>
+                                            天猶豫期退貨之權益
+                                        </div>
+
+                                        <div class="row my-2">
+                                            <div class="col-1">
+                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
+                                            </div>
+                                            商品退貨須為全新狀態且完整包裝
+
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-1">
+                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
+                                            </div>
+                                            商品退回需含贈品
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
+                                    <div class="bg-warning rounded-2">注意事項</div>
+
+                                  
+                                    <div class="row my-2">
+                                        <div class="col-1">
+                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
+                                        </div>
+                                        結帳後請於蝦蝦通提供
+                                        <div style="width:350px;">
+                                            <input class="checklist" type="checkbox" value="seven" />產品名稱或編號
+                                            <input class="checklist" type="checkbox" value="ten" />款式顏色
+                                            <input class="checklist" type="checkbox" value="fourteen" />數量
+                                        </div>
+
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-1">
+                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
+                                        </div>
+                                        請於
+                                        <div style="width:110px;">
+                                            <input type="text" name="ServiceCaution[]" class="asdf" value= "${data.text[3]}"  style="width:110px">
+                                        </div>
+
+                                        <div style="width:220px;" class="mx-1">
+                                            天內完成"結帳動作"
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-1">
+                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
+                                        </div>
+                                        結帳完成後
+                                        <div style="width:110px;">
+                                            <input type="text" name="ServiceCaution[]" class="asdf" value= "${data.text[4]}"  style="width:95px">
+                                        </div>
+                                        <div style="width:340px;" class="mx-1">
+                                            天內未完成"匯款"將發出蝦蝦通提醒
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group ">
+                            <input type="submit" value="送出" id="btnSubmit" class="btn btn-success" />
+                            <a role="button" class="btn btn-primary" id="demo1">console array</a>
+                            <a role="button" class="btn btn-primary" id="demo2">console string</a>
+                            <a role="button" class="btn btn-primary" id="demo3">console string</a>
+                        </div>
                     </div>
             `;
 
         }
 
+
+        function loadcheck(data) {
+            for (let i = 0; i < 22; i++) {
+                if (data.checkbox[i] == true) {
+                    $(".checklist")[i].checked = true;
+                }
+            }
+
+            if (data.selectopt[4] == 1) {       //要怎麼改selectopt選項的內容
+                $(".scst")[4].val() = "是";
+            }
+            if (data.selectopt[4] == 2) {
+                $(".scst")[4].val() = "否";
+            }
+        }
+
+
         load();
         function load() {
             $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
                 console.log(data);
-                var datas = JSON.parse(data);
-                $(".outlook").append(returncheck(datas));
+                if (data != null) {
+                    var datas = JSON.parse(data);
+                    $(".outlook").append(returncheck(datas));
 
-                $(".checklist").html(" ");
+                    loadcheck(datas);
+                    $(".first").html("");
+                }
+               
+
                 //console.log(datas.selectopt[0]);
                 //console.log(datas.text[0]);
                 /*console.log(datas.checkbox[0]);*/

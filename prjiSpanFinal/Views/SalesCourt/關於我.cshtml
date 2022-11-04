@@ -43,6 +43,13 @@
 
 }
 
+<div class="outlook">
+
+
+</div>
+
+
+
 <div class="ps-2">
     @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2">*@
         <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/賣場?id=@Model.Memberid"> 回賣場</a>
@@ -169,3 +176,123 @@
     </div>
 </div>
 
+@section Scripts{ 
+    <script>
+
+
+        load();
+
+        function load() {
+            $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
+                console.log(data);
+                var datas = JSON.parse(data);
+                console.log(datas);
+
+                $(".outlook").append(returnAbome(datas));
+
+                /*$(".outlook").append(returnabme(datas));*/
+            })
+
+
+        }
+
+
+        function returnAbome(datas) {
+            return `
+                <div class="container">
+                    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:bisque">
+                        <div class="col-md-6 px-0">
+                            <h1 class="display-4 fst-italic"> 賣場資訊</h1>
+                        </div>
+
+                        <div class="row m-5">
+                            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品數: &nbsp;</div>
+
+                            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:&nbsp;</div>
+                            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:</div>
+                                                                            </div>
+
+
+
+
+                            <div class="row m-5" style="font-size:1.4em">
+
+
+                            <div clals="col">
+
+
+                            <div class="bg-secondary">賣場服務時間</div>
+                                                                                  <p>
+
+
+                                    星期${datas.selectopt[0]}  - 星期${datas.selectopt[1]}
+                                </p>
+                                <p>
+                                    時間  ${datas.selectopt[2]}:00- ${datas.selectopt[3]}:00
+                                </p>
+                                <p>
+                                    國定例假日公休: ${datas.text[1]}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <div class="newProductOnload bg-secondary">新品上架時間</div>
+                                <p>
+
+                                </p>
+                            </div>
+                            <div class="col">
+                                <div class="bg-secondary">商品類型</div>
+
+                                @{
+                                    foreach (var item in custcategory)
+                                    {
+                                        <p>
+
+                                        </p>
+                                    }
+
+                                }
+                            </div>
+                            <div class="col">
+                                <div class="bg-secondary">賣家類型</div>
+                                <p>
+                                    ${datas.text[2]}
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
+                        <div class="col-md-6 px-0">
+                            <h1 class="display-4 fst-italic">注意事項及售後服務</h1>
+                            <div>注意事項:</div>
+                            <p class="lead my-3" style="font-size:1.4em">
+                                <div>是否接受退貨 </div>
+                                <div>享有天猶豫期退貨 </div>
+                                <div>商品退貨須為全新狀態且完整包裝 </div>
+                                <div>商品退回需含贈品 </div>
+                            </p>
+                            <div>售後服務:</div>
+                            <p class="lead my-3" style="font-size:1.4em">
+                                <div>結帳後請魚蝦蝦通提供 產品名稱或編號   款式顏色  數量</div>
+                                <div>請於  天內完成"結帳動作"</div>
+                                <div>結帳完成後  天內未完成"匯款"將發出蝦蝦通提醒</div>
+                            </p>
+                            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            `;
+
+        }
+
+    </script>
+
+}
