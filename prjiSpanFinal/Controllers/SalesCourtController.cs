@@ -299,16 +299,16 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 關於我(int id)
         {
+            if(id.ToString().Equals(""))      getid();
 
-            MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+            //MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
-            //if (x != null) return RedirectToAction("修改關於我");
 
-            var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
+            //var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
             //string[] words = servicetime.ServiceTime.Split('/');
 
             C關於我ViewModel me = new C關於我ViewModel();
-
+            #region
             //抓賣場服務時間內容  
             //foreach (var word in words)
             //{
@@ -352,16 +352,11 @@ namespace prjiSpanFinal.Controllers
             //    }
 
             //}
-
+            #endregion
 
             C關於我ViewModel outp = new C關於我ViewModel
             {
-                Memberid = /*x.MemberId*/1,
-                weekDown = /*me.weekDown*/"1",
-                weekUp = /*me.weekUp*/"1",
-                timeDown = /*me.timeDown*/"1",
-                timeUp = /*me.timeUp*/"1",
-                takebreak = /*me.takebreak*/"1"
+                Memberid = id,
             };
 
             return View(outp);
@@ -523,8 +518,7 @@ namespace prjiSpanFinal.Controllers
             dbContext.SaveChanges();
 
 
-           // return RedirectToAction("關於我", new { id = Memberid });
-            return RedirectToAction("賣場");
+           return View("關於我", new { id = Memberid });
 
         }
 

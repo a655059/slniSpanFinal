@@ -123,9 +123,9 @@
 
                         <h1 class="fw-bolder" style="font-size:3rem">@Model.SellerName 賣場相關資料</h1>
 
-                        <div class="board-text">
-                            @Model.CourtDescription
-
+                        <div class="board-text courtdescript">
+                            
+                            
                         </div>
 
                     </div>
@@ -305,7 +305,9 @@
 
     loadcustom();
     load();
-    
+    loaddescription();
+
+
     function returnCard(data) {
         return `<div class="sellsitem">
         <a class="linknoline" href="${data.link}">
@@ -341,7 +343,7 @@
     //    })
     //}
 
-    
+
 
     $(document).on("click", ".salescourtclick", function () {
         customname = $(this).html();
@@ -390,6 +392,22 @@
         })
      }
 
+    function returndescription(data) {
+        return `
+            ${data.text[0]}
+                `;
+
+    }
+
+    function loaddescription() {
+
+        $.getJSON("/SalesCourt/GetAlterMe", { id: SalesCourtSellerId.value }, function (data) {
+            console.log(data);
+            var datas = JSON.parse(data);
+            $(".courtdescript").append(returndescription(datas));
+        })
+
+    }
 
     //打開蝦蝦通
     $(document).on("click", ".orderopenmsg", function () {
