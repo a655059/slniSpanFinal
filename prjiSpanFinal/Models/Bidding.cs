@@ -19,6 +19,7 @@ namespace prjiSpanFinal.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int StartPrice { get; set; }
+        public int StepPrice { get; set; }
 
         public virtual ProductDetail ProductDetail { get; set; }
         public virtual ICollection<AddBiddingCalendar> AddBiddingCalendars { get; set; }

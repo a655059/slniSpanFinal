@@ -13,10 +13,11 @@ namespace prjiSpanFinal.Models
         }
 
         public int AdId { get; set; }
-        public string AdName { get; set; }
+        public int AdTypeId { get; set; }
         public decimal AdFee { get; set; }
         public int AdPeriod { get; set; }
 
+        public virtual Adtype AdType { get; set; }
         public virtual ICollection<AdtoProduct> AdtoProducts { get; set; }
     }
 }
