@@ -1,0 +1,43 @@
+﻿@model List<int>
+@{
+    int itemCount = Model.Count;
+    int totalPage = Convert.ToInt32(Math.Ceiling(itemCount / 5m));
+}
+
+<style>
+    .VCLayout {
+        width: 1060px;
+        height: 462px;
+        margin: 10px auto;
+        padding: 16px 0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .biddingItemLayout {
+        position: absolute;
+        top:21px;
+    }
+</style>
+
+<div class="VCLayout_">
+    <div class="VCLayout">
+        @{
+            foreach (var itemID in Model)
+            {
+                @await Component.InvokeAsync("BiddingItemCard", new { id = itemID });
+            }
+        }
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <button class="previousPage border-0 bg-transparent"><</button>
+        <div class="sellerProductPage fs-6 mx-3">
+            <span class="page me2">1</span>
+            <span class="mx-2">/</span>
+            <span class="totalPage ms-2">@totalPage</span>
+        </div>
+        <button class="nextPage border-0 bg-transparent">></button>
+    </div>
+</div>
+@*<script src="~/js/ShowSelectedBiddingItems.js"></script>*@
+

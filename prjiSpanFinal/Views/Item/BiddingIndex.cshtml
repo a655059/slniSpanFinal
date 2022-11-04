@@ -1,7 +1,99 @@
-﻿
+﻿@model prjiSpanFinal.ViewModels.Item.CBiddingItemIndexViewModel
 @{
     ViewData["Title"] = "BiddingIndex";
 }
 
-<h1>BiddingIndex</h1>
+@section Styles{
+    <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
+}
 
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
+        <li class="breadcrumb-item"><a href="#">@Model.bigType.BigTypeName</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.smallType.SmallTypeName</li>
+    </ol>
+</nav>
+<div class="d-flex justify-content-between">
+    <div class="productPhoto">
+        <div class="bigPhoto position-relative">
+            <div class="addItemLike">加入按讚好物</div>
+            @{
+                if (Model.isLike)
+                {
+                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50 text-danger"></i>
+                }
+                else
+                {
+                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
+                }
+                string imgSrc = "";
+                if (Model.productPics.Count > 0)
+                {
+                    string base64 = Convert.ToBase64String(Model.productPics[0]);
+                    imgSrc = $"data:image/gif;base64,{base64}";
+                }
+                else
+                {
+                    imgSrc = Url.Content("~/img/imageNotFound.png");
+                }
+                <img src="@imgSrc" />
+            }
+        </div>
+        <div class="smallPhoto d-flex justify-content-center">
+            @{
+                if (Model.productPics.Count > 0)
+                {
+                    foreach (var i in Model.productPics)
+                    {
+                        string base65 = Convert.ToBase64String(i);
+                        string imgSrc1 = $"data:image/gif;base64,{base65}";
+                        <div><img src="@imgSrc1" /></div>
+                    }
+                }
+            }
+        </div>
+        <div style="font-size:14px">
+            <div class="d-flex justify-content-between border-top border-bottom py-2">
+                <div>商品編號:<span class="ms-2">@Model.product.ProductId</span></div>
+                @{
+                    if (Model.user == null)
+                    {
+                        <label class="text-primary">登入後方可使用檢舉功能</label>
+                    }
+                    else
+                    {
+                        <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
+                    }
+                }
+            </div>
+            <div>
+                <div class="fs-6 fw-bold">商品備註</div>
+                <ul>
+                    <li>物品所在地:台灣，<span>@Model.country.CountryName</span><span>@Model.region.RegionName</span></li>
+                    <li>物品最新更新時間:<span>@Model.product.EditTime.ToString("yyyy-MM-dd")</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="itemInfo">
+        <h4>@Model.product.ProductName</h4>
+        <div class="d-flex border rounded-1">
+            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+                <img src="@Url.Content("~/img/clock.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+            </div>
+            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+                <img src="@Url.Content("~/img/calender.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+            </div>
+            <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
+                <div class="remainingTime"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>
+}
