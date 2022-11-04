@@ -183,6 +183,41 @@ namespace prjiSpanFinal.Controllers
 
             var Category = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryName).ToList();
             var CustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryId).ToList();
+
+            var ADtypeId = _db.Adtypes.Select(n => n.AdTypeId).ToList(); //所有方案ID
+            var ADtype = _db.Adtypes.Select(n => n).ToList();    //所有方案
+            var ADId = _db.Ads.Where(n => ADtypeId.Contains(n.AdTypeId)).Select(n => n).ToList(); //找出方案裡的內容
+
+            List<string> listName = new List<string>();
+            List<string> listDes = new List<string>();
+
+            List<List<decimal>> listFee = new List<List<decimal>>();
+            //  List<一個商品有兩個Style>  =   <一個商品有兩個Style>  <一個商品有兩個Style>  <一個商品有兩個Style>
+            List<List<int>> listPeriod = new List<List<int>>();
+            List<List<int>> listAdId = new List<List<int>>();
+
+            for(int i =0; i< ADtypeId.Count; i++)
+            {
+                List<decimal> subFee = new List<decimal>();
+                List<int> subPeriod = new List<int>();
+                List<int> subAdId = new List<int>();
+
+                listName.Add(ADtype[i].AdType1);
+                listDes.Add(ADtype[i].AdTyepDescription);
+
+                var ADprogram = ADId.Where(n => n.AdTypeId == ADtypeId[i]).Select(n => n).ToList();
+                for (int j=0;j< ADprogram.Count; j++)
+                {
+                    subFee.Add(ADprogram[j].AdFee);
+                    subPeriod.Add(ADprogram[j].AdPeriod);
+                    subAdId.Add(ADprogram[j].AdId);
+                }
+                listFee.Add(subFee);
+                listPeriod.Add(subPeriod);
+                listAdId.Add(subAdId);
+            }
+
+
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
@@ -193,7 +228,14 @@ namespace prjiSpanFinal.Controllers
                 shipID = shiperlist,
                 PaymentID = paylist,
                 mempay= mempay,
+                ADName= listName,
+                AdTyepDescription= listDes,
+                ADId= listAdId,
+                AdPeriod= listPeriod,
+                AdFee= listFee
             };
+
+
             return View(x);
         }
 
@@ -565,15 +607,9 @@ namespace prjiSpanFinal.Controllers
                     Pic = listPic,
                     ProductStatusId=liststatus
                 };
-
                     return View(x);
-
         }
 
-        //public IActionResult 測試()
-        //{
-        //    return View();
-        //}
 
         public IActionResult SelectIndex(string select)
         {
@@ -656,10 +692,6 @@ namespace prjiSpanFinal.Controllers
 
             var pName = _db.Products.Where(n => n.ProductId == id).Select(n => n.ProductName).FirstOrDefault();
             var pProductId = id;
-            //var pSmallTypeID = _db.Products.Where(n => n.ProductId == id).Select(n => n.SmallTypeId).FirstOrDefault();
-            //var pSmallTypeName = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.SmallTypeName).FirstOrDefault();
-            //var pBigTypeID = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.BigTypeId).FirstOrDefault();
-            //var pBigTypeName = _db.BigTypes.Where(n => n.BigTypeId == pBigTypeID).Select(n => n.BigTypeName);
             var pDBtoPic = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n.Pic).ToList();
             var pStyle = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Style).ToList();
             var PQuantity = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Quantity).ToList();
@@ -678,7 +710,6 @@ namespace prjiSpanFinal.Controllers
                 Category=pCategory,
                 CustomizedCategoryID=pCustomizedCategoryID,
                 ProductName = pName,
-                //smalltype= pSmallTypeName,
                 DBtoPic= pDBtoPic,
                 Style = pStyle,
                 Quantity = PQuantity,
@@ -737,7 +768,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-            public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
+        public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
         {
             var result = select;
             if (result != null)
@@ -763,53 +794,6 @@ namespace prjiSpanFinal.Controllers
                 _db.SaveChanges();
             }
             return RedirectToAction("NewIndex");
-            //if (id != null)
-            //{
-            //    List<ProductPic> productPic = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < productPic.Count; i++)  //刪=ProductId全部照片
-            //    {
-            //        if (productPic[i] != null)  //如果有資料
-            //        {
-            //            _db.ProductPics.Remove(productPic[i]);
-            //        }
-            //    }
-
-            //    List<PaymentToProduct> paymentToProducts = _db.PaymentToProducts.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < paymentToProducts.Count; i++) //刪=ProductId全部金流
-            //    {
-            //        if (paymentToProducts[i] != null)
-            //        {
-            //            _db.PaymentToProducts.Remove(paymentToProducts[i]);
-            //        }
-            //    }
-
-            //    List<ShipperToProduct> shipperToProducts = _db.ShipperToProducts.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < shipperToProducts.Count; i++) //刪=ProductId全部物流
-            //    {
-            //        if (shipperToProducts[i] != null)
-            //        {
-            //            _db.ShipperToProducts.Remove(shipperToProducts[i]);
-            //        }
-            //    }
-
-            //    List<ProductDetail> productDetails = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < productDetails.Count; i++)  //刪=ProductId全部Details
-            //    {
-            //        if (productDetails[i] != null)
-            //        {
-            //            _db.ProductDetails.Remove(productDetails[i]);
-            //        }
-            //    }
-
-            //    Product product = _db.Products.FirstOrDefault(n => n.ProductId == id);
-            //    if (product != null)
-            //    {
-            //        _db.Products.Remove(product); //刪Product
-            //    }
-
-            //    _db.SaveChanges();
-            //}
-
         }
 
         public IActionResult Coupon()
