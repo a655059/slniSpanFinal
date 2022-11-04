@@ -509,7 +509,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public IActionResult NewIndex()
+        public IActionResult NewIndex(int? pageSize, int? page)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -517,7 +517,7 @@ namespace prjiSpanFinal.Controllers
             }
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
-
+  
             var myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n.ProductId).ToList(); //賣家所有商品ID
             var q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n).ToList();//賣家所有商品
             var q2 = _db.ProductDetails.Where(n => myproductlist.Contains(n.ProductId)).Select(n => n).ToList(); //Contains是只把賣家所有商品ID全部挑出來
@@ -565,10 +565,16 @@ namespace prjiSpanFinal.Controllers
                     Pic = listPic,
                     ProductStatusId=liststatus
                 };
+
                     return View(x);
 
-
         }
+
+        //public IActionResult 測試()
+        //{
+        //    return View();
+        //}
+
         public IActionResult SelectIndex(string select)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -895,10 +901,10 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Event()
         {
-            var E = _db.SubOfficialEventLists.Select(i => i).ToList();
-            var P = _db.Products.Select(i => i).ToList();
+            var E = _db.SubOfficialEventLists.Select(i => i).ToList();  //所有子活動
+            var P = _db.Products.Select(i => i).ToList();     //賣家所有商品
            
-            var OE = _db.OfficialEventLists.Select(i => i).ToList();
+            var OE = _db.OfficialEventLists.Select(i => i).ToList(); //所有活動
             List<CSubEventToProductViewModel> list = new();
             foreach (var e in E)
             {
