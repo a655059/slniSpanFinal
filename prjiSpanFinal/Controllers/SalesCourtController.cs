@@ -470,8 +470,8 @@ namespace prjiSpanFinal.Controllers
             return View(me);
         }
 
-        [HttpPost]
-        public IActionResult 修改關於我(int Memberid,string asd)
+        
+        public IActionResult AlterMe(int Memberid,string asd)
         {
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
             add.Description = asd;
@@ -479,7 +479,7 @@ namespace prjiSpanFinal.Controllers
           
             dbContext.SaveChanges();
 
-
+            //return Json(add);
            return View("關於我", new { id = Memberid });
 
         }
@@ -615,6 +615,7 @@ namespace prjiSpanFinal.Controllers
                 sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
                 upload = p.EditTime,
                 customizename = p.CustomizedCategory.CustomizedCategoryName,
+                isfeatureproduct = p.IsFeaturedProduct,
 
             }).ToList();
 
@@ -700,11 +701,19 @@ namespace prjiSpanFinal.Controllers
             return Json(q.Skip((pages - 1) * 4).Take(4));
         }
 
+        public IActionResult GetChoice(int productid) {
 
-        public IActionResult WriteChoice(int productid)
+            var choice = dbContext.Products.FirstOrDefault(a => a.ProductId == productid).IsFeaturedProduct;
+            return Json(choice);
+        }
+
+
+        public IActionResult WriteChoice(int productid,bool change)
         {
-
-            return Json("1");
+            var choice = dbContext.Products.FirstOrDefault(a => a.ProductId == productid);
+            choice.IsFeaturedProduct = change;
+            dbContext.SaveChanges();
+            return Json(choice);
         }
 
 
