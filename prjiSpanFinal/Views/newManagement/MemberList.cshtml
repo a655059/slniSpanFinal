@@ -19,20 +19,18 @@
     <h1>會員</h1>
     <form>
         <input type="search" name="keyword" placeholder="輸入關鍵字或ID進行搜尋,或是不輸入回到列表" class="form-control" />
-        <input type="submit" value="搜尋" class="btn btn-outline-secondary" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary mt-1" />
     </form>
        <form>
         依會員狀態篩選
-       <select id="filter" name="filter">
-           <option value="">選擇會員狀態</option>
-           <option value="簡易會員">簡易會員</option>
-           <option value="正式會員">正式會員</option>
-           <option value="未註冊完整">未註冊完整</option>
-           <option value="停權中">停權中</option>
-           <option value="已刪除">已刪除</option>
-           <option value="管理員">管理員</option>
-       </select> 
-        <input type="submit" value="全部會員" class="btn btn-outline-secondary" />
+           <select id="filter" name="filter">
+               <option value="">選擇會員狀態</option>
+               @foreach (var i in ViewBag.MemberStatus)
+               {
+           <option value="@i.MemStatusName">@i.MemStatusName</option>
+               }
+           </select> 
+        <input id="filtersubmit" type="submit" value="顯示全部狀態會員" class="btn btn-outline-secondary" />
     </form>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
@@ -110,11 +108,11 @@
                         {
                             base64Image = Convert.ToBase64String(item.MemberAccount.MemPic);
                             source = String.Format("data:image/png;base64,{0}", base64Image);
-                                    <img src="@source" class="cardImg" alt="..." width="120" />
+                            <img src="@source" class="cardImg" alt="..." width="120" />
                         }
                         else
                         {
-                                    <img src="~/img/member/nopicmem.jpg" class="cardImg" alt="..." width="120" />
+                            <img src="~/img/member/nopicmem.jpg" class="cardImg" alt="..." width="120" />
                         }
                     }
                 </td>
@@ -142,10 +140,10 @@
                 </td>
             
                 <td>
-                    <a name="@item.MemberAccount.MemberId" class="Down btn btn-outline-secondary">停權</a>
-                    <a name="@item.MemberAccount.MemberId" class="Undo btn btn-outline-primary">復原</a>
-                    <a name="@item.MemberAccount.MemberId" class="Dele btn btn-outline-danger">刪除</a>
-                    @Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})
+                    <a name="@item.MemberAccount.MemberId" class="Down btn btn-outline-secondary mt-1">停權</a>
+                    <a name="@item.MemberAccount.MemberId" class="Undo btn btn-outline-primary mt-1">復原</a>
+                    <a name="@item.MemberAccount.MemberId" class="Dele btn btn-outline-danger mt-1">刪除</a>
+                    @Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class= "btn btn-primary mt-1" })
                     @*@Html.ActionLink("檢視細節", "ProductDetailList", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
                 </td>
             </tr>
@@ -166,7 +164,7 @@
       @Html.Pager(pagedList).Url(page => Url.Action("MemberList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
-    <select id="pagesize">
+    <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
@@ -249,7 +247,7 @@
             a.classList.add('pagination');
         }
 
-         //選取一頁幾筆
+        //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
@@ -258,13 +256,21 @@
             let link="@Url.Content("~/newManagement/MemberList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-
-         //篩選MemberStauts
-    let filter=document.getElementById("filter");
+            //選取全部
+            let filtersubmit = document.getElementById("filtersubmit");
+            let FFilter = "";
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/MemberList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+        //篩選ProductStauts
+        let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            Filter=filter.options[filter.selectedIndex].value
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
             let link="@Url.Content("~/newManagement/MemberList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })

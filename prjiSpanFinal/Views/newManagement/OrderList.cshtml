@@ -26,7 +26,11 @@
                 <option value="@i.OrderStatusName">@i.OrderStatusName</option>
            }
        </select> 
-        <input type="submit" value="全部訂單" class="btn btn-outline-secondary" />
+        <input id="filtersubmit" type="submit" value="全部訂單" class="btn btn-outline-secondary" />
+    </form>
+    <form>
+        <input type="search" name="keyword" placeholder="輸入訂單日期(日期格式為yyyy-mm-dd)或ID進行搜尋,或不輸入回到列表" class="form-control" />
+        <input type="submit" value="搜尋" class="btn btn-outline-secondary mt-1" />
     </form>
     <table class="table">
         <thead>
@@ -117,13 +121,17 @@
                     @Html.DisplayFor(modelItem => item.Order.OrderMessage)
                 </td>
                 <td>
-                    <a name="@item.Order.OrderId" class="Out btn btn-outline-secondary">出貨</a>
-                    <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary">到貨</a>
-                    <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger">完成</a>
-                    <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger">爭議處理中</a>
-                    @Html.ActionLink("取消並作廢訂單", "OrderDelete","newManagement" ,new { id=item.Order.OrderId  },new{@class="btn btn-outline-danger",onclick="really()"})
+                    @{ 
+                        if (item.Order.StatusId != 7)
+                        {
+                        <a name="@item.Order.OrderId" class="Out btn btn-outline-secondary mt-1">出貨</a>
+                        <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary mt-1">到貨</a>
+                        <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger mt-1">完成</a>
+                        <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger mt-1">爭議處理中</a>
+                        <a class="Dele btn btn-outline-danger" name="@item.Order.OrderId mt-1">取消並作廢訂單</a>}
+                        }
                     @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
-                    @Html.ActionLink("檢視細節", "OrderDetailList", new { id=item.Order.OrderId },new{@class="btn btn-primary"})
+                    @Html.ActionLink("檢視細節", "OrderDetailList", new { id=item.Order.OrderId },new{@class= "btn btn-primary mt-1 Detail" })
                 </td>
             </tr>
         }
@@ -143,7 +151,7 @@
       @Html.Pager(pagedList).Url(page => Url.Action("OrderList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
-    <select id="pagesize">
+    <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
@@ -176,6 +184,7 @@
         let Delivered = document.querySelectorAll(".Delivered");
         let Fin = document.querySelectorAll(".Fin");
         let Stop = document.querySelectorAll(".Stop");
+        let Dele = document.querySelectorAll(".Dele");
         let PSName = document.querySelectorAll(".statusname");
         for (var BTNdele of Out) {
             BTNdele.addEventListener("click", async function (event) {
@@ -185,6 +194,22 @@
                 let data = await response.text();
                 if (data == 1) {
                     $(this).closest("td").siblings().find(".statusname").val("已出貨");
+                }
+            })
+        }
+        for (var BTNdele of Dele) {
+            BTNdele.addEventListener("click", async function (event) {
+                let c = confirm("確定要刪除嗎?");
+                c;
+                if (c) {
+                    let response = await fetch("@Url.Content("~/newManagement/OrderDelete")" + `?id=${event.currentTarget.name}`);
+                    let data = await response.text();
+                    if (data == 1) {
+                        $(this).closest("td").siblings().find(".statusname").val("已取消");
+                    }
+                    else {
+                        alert("操作失敗，請聯繫蝦到爆客服人員");
+                    }
                 }
             })
         }
@@ -204,10 +229,16 @@
             BTNdow.addEventListener("click", async function (event) {
                 event.preventDefault();
                 console.log(event.currentTarget.name);
-                let response = await fetch("@Url.Content("~/newManagement/OrderFin")" + `?id=${event.currentTarget.name}`)
-                let data = await response.text();
-                if (data == 1) {
-                    $(this).closest("td").siblings().find(".statusname").val("已完成");
+                let c = confirm("完成訂單後將不可修改，確定要完成訂單嗎?");
+                c;
+                if (c) {
+                    let response = await fetch("@Url.Content("~/newManagement/OrderFin")" + `?id=${event.currentTarget.name}`);
+                    let data = await response.text();
+                    if (data == 1) {
+                        $(this).closest("td").siblings().find(".statusname").val("已完成");
+                        $(this).siblings().not(".Detail").remove();
+                        $(this).remove();
+                    }
                 }
             })
         }
@@ -238,17 +269,9 @@
         for (let a of pagess) {
             a.classList.add('pagination');
         }
-        function really() {
-            var yes = confirm('你確定要刪除嗎？');
-            return yes;
-            if (yes) {
-                return confirm("真的會從資料庫刪除喔?確定嗎?");
-            } else {
-                return;
-            }
-        }
 
-      //選取一頁幾筆
+
+     //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
@@ -257,12 +280,21 @@
             let link="@Url.Content("~/newManagement/OrderList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-
+      //選取全部商品
+            let filtersubmit = document.getElementById("filtersubmit");
+            let FFilter = "";
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/OrderList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+        //篩選ProductStauts
         let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            Filter=filter.options[filter.selectedIndex].value
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
             let link="@Url.Content("~/newManagement/OrderList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })

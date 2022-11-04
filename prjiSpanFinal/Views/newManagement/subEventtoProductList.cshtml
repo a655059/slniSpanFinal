@@ -59,17 +59,54 @@
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 <td class="statusname">
-                       @Html.DisplayFor(modelItem => item.Verify)
+                    @Html.DisplayFor(modelItem => item.Verify)
                 </td>
                 <td>
-                    <a class="Approve btn btn-primary"  name="@item.SubOfficialEventToProduct.SubOfficialEventToProductId/@item.ProductName">通過</a>
+                    <a class="Approve btn btn-primary" name="@item.SubOfficialEventToProduct.SubOfficialEventToProductId/@item.ProductName">通過</a>
                     <a class="Deny btn btn-primary" name="@item.SubOfficialEventToProduct.SubOfficialEventToProductId/@item.ProductName">不通過</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-@Html.ActionLink("回到子活動","subEventList","newManagement",new{id=ViewBag.subEvent},new{@class="btn btn-outline-danger"})
+@*分頁導覽*@
+<div style="align-content:center" class="paginations">
+    @{int ps = 3; if (ViewBag.pageSize != null) { ps = ViewBag.pageSize; }}
+    @Html.Pager(pagedList).Url(page => Url.Action("subEventtoProductList", new { pageSize = ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
+
+    每頁
+    <select id="pagesize" class="mt-1">
+        <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
+        @{
+            if (ViewBag.pageSize != 3)
+            {
+                <option value=3>3</option>
+            }}
+        @{
+            if (ViewBag.pageSize != 5)
+            {
+                <option value=5>5</option>
+            }}
+        @{
+            if (ViewBag.pageSize != 10)
+            {
+                <option value=10>10</option>
+            }}
+        @{
+            if (ViewBag.pageSize != 20)
+            {
+                <option value=20>20</option>
+            }}
+        @{
+            if (ViewBag.pageSize != 100)
+            {
+                <option value=100>100</option>
+            }}
+    </select>
+    筆
+</div>
+@*分頁導覽*@
+@Html.ActionLink("回到子活動", "subEventList", "newManagement", new { id = ViewBag.subEvent }, new { @class = "btn btn-outline-danger" })
 @section Scripts{
     <script>
         let Approve=document.querySelectorAll(".Approve");

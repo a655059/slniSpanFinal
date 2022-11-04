@@ -29,7 +29,7 @@
                 <option value="@i">@i</option>
            }
        </select> 
-        <input type="submit" value="全部狀態" class="btn btn-outline-secondary" />
+        <input id="filtersubmit" type="submit" value="全部狀態" class="btn btn-outline-secondary" />
     </form>
     <table class="table">
         <thead>
@@ -116,7 +116,7 @@
       @Html.Pager(pagedList).Url(page => Url.Action("ReportList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
-    <select id="pagesize">
+    <select id="pagesize"class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
@@ -149,9 +149,9 @@
         let Undo = document.querySelectorAll(".Undo");
         let Process = document.querySelectorAll(".Process");
         let Delete = document.querySelectorAll(".Delete");
-        let Warning = document.querySelectorAll(".Warning"); 
-        let Servere = document.querySelectorAll(".Servere"); 
-        let Stop = document.querySelectorAll(".Stop"); 
+        let Warning = document.querySelectorAll(".Warning");
+        let Servere = document.querySelectorAll(".Servere");
+        let Stop = document.querySelectorAll(".Stop");
         let PSName = document.querySelectorAll(".statusname");
         for (var BTNdele of Undo) {
             BTNdele.addEventListener("click", async function (event) {
@@ -206,7 +206,7 @@
                 if(c){
                 let response = await fetch("@Url.Content("~/newManagement/ReportServere")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
-                if (data == 1) 
+                if (data == 1)
                    {
                     $(this).closest("td").siblings().find(".statusname").val("情節嚴重，下架該產品");
                     }
@@ -221,7 +221,7 @@
                 if(c){
                 let response = await fetch("@Url.Content("~/newManagement/ReportStop")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
-                if (data == 1) 
+                if (data == 1)
                 {
                     $(this).closest("td").siblings().find(".statusname").val("屢次違反，停權該賣家帳戶");
                 }
@@ -244,7 +244,7 @@
         for (let a of pagess) {
             a.classList.add('pagination');
         }
-         //選取一頁幾筆
+      //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
@@ -253,13 +253,21 @@
             let link="@Url.Content("~/newManagement/ReportList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-
-         //篩選MemberStauts
-    let filter=document.getElementById("filter");
+            //選取全部商品
+            let filtersubmit = document.getElementById("filtersubmit");
+            let FFilter = "";
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/ReportList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+        //篩選ProductStauts
+        let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value
-            Filter=filter.options[filter.selectedIndex].value
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
             let link="@Url.Content("~/newManagement/ReportList")"+`?filter=${Filter}&pageSize=${pageSize}`;
        document.location.href=link;
         })

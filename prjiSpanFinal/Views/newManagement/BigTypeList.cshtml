@@ -1,0 +1,65 @@
+﻿@using prjiSpanFinal.ViewModels.newManagement
+@model IEnumerable<BigTypeViewModel>
+    @{
+        ViewData["Title"] = "BigTypeList";
+    }
+@section Styles{ 
+<style>
+    table{
+        table-layout:fixed;
+        width:100%;
+    }
+</style>
+}
+    <h1>所有大類別</h1>
+
+    <p>
+        <a asp-action="BigTypeCreate" class="btn btn-danger btn-lg">新增大類別</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    大類別名稱
+                </th>
+                <th>
+                    產品數
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="tr">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BigType.BigTypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BigType.BigTypeName)
+                    </td>
+                    <td class="td">
+                        @Html.DisplayFor(modelItem => item.ProdCount)
+                    </td>
+                    <td>
+                        @Html.ActionLink("修改", "BigTypeEdit", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "btn btn-warning" })
+                        @Html.ActionLink("刪除", "BigTypeDelete", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "Dele btn btn-danger" })
+                        @Html.ActionLink("檢視內部小分類", "SmallTypeList", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "btn btn-secondary" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @section Scripts{
+        <script>
+            let Dele = document.querySelectorAll(".Dele");
+            for (let dele of Dele) {
+                dele.addEventListener("click", function () {
+                    confirm("確定要將此大類別刪除嗎?內容商品將會移至未分類類別，請進入該分類進行修改");
+                });
+            }
+        </script>
+    }
