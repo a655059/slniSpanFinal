@@ -21,7 +21,7 @@
 
 <div class="messageLayout bg-warning bg-opacity-10 py-3" id="@messageLayout">
     <div class="productID d-none">@productID</div>
-    <div class="messageBox w-75 m-auto">
+    <div class="messageBox m-auto" style="width:600px">
         @{
             if (Model.cMessageBoardList.Count > 0)
             {
@@ -137,7 +137,7 @@
         }
         
     </div>
-    <div class="w-75 m-auto">
+    <div class="m-auto" style="width:600px">
         <div class="d-flex align-items-baseline">
             <div class="me-1" style="width:50px;aspect-ratio:1/1;">
                 <img src="@userImgSrc" alt="Alternate Text" style="width:60%;aspect-ratio:1/1;object-fit:contain;border-radius:50%" />
@@ -148,5 +148,43 @@
     </div>
 </div>
 <script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>
+<script>
+    $(".collapseMessage").click(function () {
+        const thisLayerNumber = Number($(this).closest(".messageBoardID").attr("class").split(' ')[0].substring(5));
+        if ($(this).closest(".messageBoardID").nextAll(".messageBoardID").length > 0) {
+            if ($(this).html() == "收合") {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function (event) {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none").addClass("d-none");
+                        console.log($(this).attr("class"));
+                    }
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("展開");
+            }
+            else {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function () {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none");
+                        console.log($(this).attr("class"));
+                        if ($(this).has(".collapseMessage").length > 0) {
+                            $(this).find(".collapseMessage").html("收合");
+                        }
+                    }
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("收合");
+            }
+        }
+    })
+</script>
 
 

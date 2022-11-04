@@ -267,5 +267,113 @@ namespace prjiSpanFinal.Controllers
             return ViewComponent("ShowMessageBoard", productID);
         }
 
+        public IActionResult BiddingItemUpload()
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var bigTypes = dbContext.BigTypes.ToList();
+            var smallTypes = dbContext.SmallTypes.Where(i => i.BigTypeId == bigTypes[0].BigTypeId).ToList();
+            CBiddingItemUploadViewModel x = new CBiddingItemUploadViewModel
+            {
+                bigTypes = bigTypes,
+                smallTypes = smallTypes,
+            };
+            return View(x);
+        }
+        
+        public IActionResult GetSmallType(int bigTypeID)
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var smallTypes = dbContext.SmallTypes.Where(i => i.BigTypeId == bigTypeID).ToList();
+            return Json(smallTypes);
+        }
+
+        public IActionResult BiddingItemSave(CBiddingItemSaveViewModel x, List<IFormFile> itemPhotos)
+        {
+            decimal startPrice = 0;
+            if (Decimal.TryParse(x.startPrice, out startPrice))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount seller = JsonSerializer.Deserialize<MemberAccount>(memberString);
+                string productName = x.itemName;
+                int bigTypeID = x.bigType;
+                int smallTypeID = x.smallType;
+                Product product = new Product
+                {
+                    ProductName = productName,
+                    SmallTypeId = smallTypeID,
+                    MemberId = seller.MemberId,
+                    RegionId = seller.RegionId,
+                    Description = x.description,
+                    ProductStatusId = 3,
+                    EditTime = DateTime.Now,
+                    CustomizedCategoryId = 1
+                };
+                dbContext.Products.Add(product);
+                dbContext.SaveChanges();
+                int newProductID = dbContext.Products.Where(i => i.MemberId == seller.MemberId && i.ProductName == productName).OrderByDescending(i => i.ProductId).Select(i => i.ProductId).FirstOrDefault();
+                ProductDetail productDetail = new ProductDetail
+                {
+                    ProductId = newProductID,
+                    Style = "樣式一",
+                    Quantity = 1,
+                    UnitPrice = startPrice,
+                };
+                dbContext.ProductDetails.Add(productDetail);
+                dbContext.SaveChanges();
+                if (itemPhotos.Count > 0)
+                {
+                    foreach (var a in itemPhotos)
+                    {
+                        if (a.Length > 0)
+                        {
+                            byte[] fileByte;
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                a.CopyTo(ms);
+                                fileByte = ms.GetBuffer();
+                            }
+                            ProductPic productPic = new ProductPic
+                            {
+                                ProductId = newProductID,
+                                Pic = fileByte,
+                            };
+                            dbContext.ProductPics.Add(productPic);
+                        }
+                    }
+                    dbContext.SaveChanges();
+                }
+                int newProductDetailID = dbContext.ProductDetails.Where(i => i.ProductId == newProductID).OrderByDescending(i => i.ProductDetailId).Select(i => i.ProductDetailId).FirstOrDefault();
+
+
+
+                Bidding bidding = new Bidding
+                {
+                    ProductDetailId = newProductDetailID,
+                    StartTime = Convert.ToDateTime(x.startDate.ToString("yyyy-MM-dd") + " " + x.startTime.TimeOfDay),
+                    EndTime = Convert.ToDateTime(x.endDate.ToString("yyyy-MM-dd") + " " + x.endTime.TimeOfDay),
+                    StartPrice = Convert.ToInt32(startPrice),
+                };
+                dbContext.Biddings.Add(bidding);
+                dbContext.SaveChanges();
+
+                return Content("1");
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+
+        public IActionResult BiddingItemHome()
+        {
+
+            return View();
+        }
+        public IActionResult BiddingIndex(int id)
+        {
+
+            return View();
+        }
     }
 }

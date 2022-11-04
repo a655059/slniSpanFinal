@@ -10,12 +10,12 @@
             height: 100px;
         }
 
-            .itemImgDiv img {
-                width: 100%;
-                aspect-ratio: 1/1;
-                object-fit: contain;
-                display: block;
-            }
+        .itemImgDiv img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            display: block;
+        }
 
         .star:hover {
             cursor: pointer;
@@ -235,20 +235,20 @@
                         });
                     }
                 });
-                $(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
-                    $(this).children("i").css("opacity", "0.3");
-                });
-                $(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
-                    $(this).children("i").css("opacity", "0");
-                });
-                $(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
-                    $(this).css("cursor", "pointer");
-                });
-                $(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
-                    $(this).css("cursor", "none");
-                });
-                $(".previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
-                    $(this).closest(".deleteCommentPhoto").remove();
-                });
+                //$(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto", function () {
+                //    $(this).children("i").css("opacity", "0.3");
+                //});
+                //$(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto", function () {
+                //    $(this).children("i").css("opacity", "0");
+                //});
+                //$(".previewCommentPhoto").on("mouseenter", ".deleteCommentPhoto>i", function () {
+                //    $(this).css("cursor", "pointer");
+                //});
+                //$(".previewCommentPhoto").on("mouseleave", ".deleteCommentPhoto>i", function () {
+                //    $(this).css("cursor", "none");
+                //});
+                //$(".previewCommentPhoto").on("click", ".deleteCommentPhoto>i", function () {
+                //    $(this).closest(".deleteCommentPhoto").remove();
+                //});
             </script>
         }
