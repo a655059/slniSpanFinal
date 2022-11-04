@@ -539,6 +539,48 @@
         }
         function fillSubList(data) {
 
+            let res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    res += `
+                    <tr class="Sub-item">
+                        <td class="item-ckbox">
+                            <div>
+                                <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
+                        </div>
+                    </td>
+                            <td class="item-num">1</td>`;
+                    res += `<td class="item-effect">標題高光</td>`;
+
+                           res+=` <td class="item-prod">12 蘋果</td>`
+                    res += `<td class="item-date">
+                                2022-10-27
+                                14:07:34
+                        <br />
+                        ~
+                        <br />
+                        2022-10-27
+                        14:07:34
+                    </td>`;
+
+                    res += ` <td class="item-date">
+                                <label>12天 14:07:34</label>
+                            </td>`;
+
+                    res += `<td class="item-status status-stop">已停止</td>`;
+                    res += `<td class="item-times">2</td>`;
+                    res += `<td class="item-times">2</td>`;
+                    res += `<td class="item-action">
+                                <button class="btn btn-danger" disabled>
+                                    中斷訂閱
+                                </button>
+                          </td>
+                </tr>`;
+                }
+            }
+            else {
+
+            }
         }
     </script>
 
