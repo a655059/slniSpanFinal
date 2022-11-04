@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "測試";
+}
+
+<h1>測試</h1>
+
+
+
+<table width="500" id="idData">
+
+    String user_id, user_name, user_sex, user_phone, user_age;
+    while (sqlRst.next()) {
+    user_id = sqlRst.getString(1);
+    user_name = sqlRst.getString(2);
+    user_sex = sqlRst.getString(3);
+    user_phone = sqlRst.getString(4);
+    user_age = sqlRst.getString(5);
+    <tr>
+        <td>user_id</td>
+        <td>user_name</td>
+        <td>user_sex</td>
+        <td>user_phone</td>
+        <td>user_age</td>
+    </tr>  
+    }
+</table>
+<br />
+<table width="60%" align="right">
+    <tr>
+        <td>
+            <div id="changePages" name="changePages">
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+<script type="text/javascript">
+
+    function goPage(pno, psize) {
+        var itable = document.getElementById("idData");//獲取table
+        var num = itable.rows.length;//得到記錄總數
+        var totalPage = 0;
+        var pageSize = psize;//一頁顯示pageSize條記錄
+        //計算總頁數
+        if (num / pageSize > parseInt(num / pageSize)) {
+            totalPage = parseInt(num / pageSize) + 1;
+        } else {
+            totalPage = parseInt(num / pageSize);
+        }
+        //當前頁數
+        var currentPage = pno;
+        //獲取當前頁第一條、最後一條記錄的行號
+        var startRow = (currentPage - 1) * pageSize + 1;
+        var endRow = currentPage * pageSize;
+        endRow = (endRow > num) ? num : endRow;
+        //修改table中當前頁對應的行的屬性為顯示，非本頁的記錄為隱藏
+        for (var i = 1; i < (num + 1); i++) {
+            var irow = itable.rows[i - 1];
+
+            if (i >= startRow && i <= endRow) {
+                irow.style.display = "block";
+            } else {
+                irow.style.display = "none";
+            }
+        }
+        //分頁頁碼列表
+        var tempStr = "共" + num + "條記錄 分" + totalPage + "頁 當前第" + currentPage + "頁";
+        if (currentPage > 1) {
+            tempStr += "<a href=\"#\" onClick=\"goPage(" + (1) + "," + psize + ")\">首頁</a>";
+            tempStr += "<a href=\"#\" onClick=\"goPage(" + (currentPage - 1) + "," + psize + ")\"><上一頁</a>"
+        } else {
+            tempStr += "首頁";
+            tempStr += "<上一頁";
+        }
+        if (currentPage < totalPage) {
+            tempStr += "<a href=\"#\" onClick=\"goPage(" + (currentPage + 1) + "," + psize + ")\">下一頁></a>";
+            tempStr += "<a href=\"#\" onClick=\"goPage(" + (totalPage) + "," + psize + ")\">尾頁</a>";
+        } else {
+            tempStr += "下一頁>";
+            tempStr += "尾頁";
+        }
+        document.getElementById("changePages").innerHTML = tempStr;
+    }
+</script>
+
