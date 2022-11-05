@@ -1714,14 +1714,55 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext db = new();
             var st = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
+            List<SmallTypeViewModel> list = new();
+            var ProdCount = db.Products.ToList();
+            foreach (var i in st) {
+                SmallTypeViewModel model = new()
+                {
+                    SmallType = i,
+                    ProdCount = ProdCount.Where(o=> o.SmallTypeId == i.SmallTypeId).Count(),
+                };
+                list.Add(model);
+            }
+            ViewBag.BigTypeId = id;
             ViewBag.BigTypeName = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id).BigTypeName;
-            return View(st);
+            return View(list);
         }
         public IActionResult SmallTypeCreate(int id)
         {
             iSpanProjectContext db = new();
-            ViewBag.BigTypeId = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id).BigTypeId;
+            ViewBag.BigType= db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             return View();
+        }
+        [HttpPost]
+        public IActionResult SmallTypeCreate(SmallType type)
+        {
+            iSpanProjectContext db = new();
+            SmallType st = new()
+            {
+                SmallTypeName = type.SmallTypeName,
+                BigTypeId = type.BigTypeId,
+            };
+            db.SmallTypes.Add(st);
+            db.SaveChanges();
+            return RedirectToAction("SmallTypeList");
+        }
+        public IActionResult SmallTypeEdit(int id)
+        {
+            iSpanProjectContext db = new();
+            var ST = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == id);
+            ViewBag.BigTypeName = db.BigTypes.FirstOrDefault(i => i.BigTypeId == ST.BigTypeId).BigTypeName;
+            return View(ST);
+        }
+        [HttpPost]
+        public IActionResult SmallTypeEdit(SmallType type)
+        {
+            iSpanProjectContext db = new();
+            var st = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == type.SmallTypeId);
+            st.SmallTypeName = type.SmallTypeName;
+            st.BigTypeId = type.BigTypeId;
+            db.SaveChanges();
+            return RedirectToAction("SmallTypeList");
         }
         #endregion
     }
