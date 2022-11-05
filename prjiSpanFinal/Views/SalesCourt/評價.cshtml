@@ -177,10 +177,10 @@
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#">賣場評價</a>
+                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#">對賣場商品評價</a>
                 </li>
                 <li class="nav-item">
-                    <a id="buyercomment" class="nav-link" href="#">買家評價</a>
+                    <a id="buyercomment" class="nav-link" href="#">對買家的評價</a>
                 </li>
 
             </ul>
@@ -271,6 +271,26 @@
                 }
                 return card;
             }
+            function cmsellerCard(data) {
+                let card = "";
+                for (let i = 0; i < data.length; i++) {
+                    card = card + `
+                                    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                                    <div>
+                                        <img src="~/img/greencircle.png" width="20" />
+                                        <span class="text-dark" style="font-size:1.5em">賣家:${data[i].sellername}</span>
+                                    </div>
+                                    <div class="dashed-divider"></div>
+                                    <div class="ps-2" style="font-size:1.5em">
+                                    <a class="linknoline text-primary" href="">${data[i].buyername}</a>
+                                    </div>
+
+                                    <div class="my-2 text-dark" style="font-size:1.5em"></div>
+                                    </div>`
+                }
+                return card;
+            }
+
             load();
             function load() {
                 $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode ,pages:nowpages, eachpage:eachpage,buyerorseller:buyerorseller}, function (data) {
@@ -280,8 +300,14 @@
                     //    $("#commentlist").append(cmCard(data[i]));
                     //}
                     if (data.list.length > 0) {
-                        $("#commentlist").append(cmCard(data.list));
-                        PageNumFill(data.count);
+                        if (buyerorseller == 1) {
+                            $("#commentlist").append(cmCard(data.list));
+                            PageNumFill(data.count);
+                        }
+                        else {
+                            $("#commentlist").append(cmsellerCard(data.list));
+                            PageNumFill(data.count);
+                        }
                     }
                     else {
                         PageNumFill(0);
@@ -304,6 +330,14 @@
                     }
                 }
             }
+
+            
+            $("#sellercomment").click(function () {
+                buyerorseller = 1;
+            })
+            $("#buyercomment").click(function () {
+                buyerorseller = 2;
+            })
 
             $("#pagecountselect").change(function () {
                 eachpage = $("#pagecountselect option:selected").val();

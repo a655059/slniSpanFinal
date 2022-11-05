@@ -489,34 +489,34 @@
      }
 
 
-        $(document).on("click", ".orderpagenumclick", function () {
-            nowpages = $(this).html();
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $(document).on("click", ".orderpagenumclick", function () {
+        nowpages = $(this).html();
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
 
-        $("#pagecountselect").change(function () {
-            eachpage = $("#pagecountselect option:selected").val();
-            nowpages = 1;
-            load();
-        });
-
-
-        $("#orderpagedown").click(function () {
-            /*let pagescount = $(".orderpagenumclicklist").length;*/
-            nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
-            /*nowpages = 2;*/
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $("#pagecountselect").change(function () {
+        eachpage = $("#pagecountselect option:selected").val();
+        nowpages = 1;
+        load();
+    });
 
 
-        $("#orderpageup").click(function () {
-            nowpages = Math.max(parseInt(nowpages) - 1, 1);
-            /*nowpages = 1;*/
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $("#orderpagedown").click(function () {
+        /*let pagescount = $(".orderpagenumclicklist").length;*/
+        nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
+        /*nowpages = 2;*/
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
+
+
+    $("#orderpageup").click(function () {
+        nowpages = Math.max(parseInt(nowpages) - 1, 1);
+        /*nowpages = 1;*/
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
 
 
     function returndescription(data) {
