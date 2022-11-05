@@ -1,5 +1,5 @@
-﻿@model IEnumerable<SmallTypeViewModel>
-@using prjiSpanFinal.ViewModels.newManagement
+﻿@model IEnumerable<prjiSpanFinal.Models.SmallType>
+
 @{
     ViewData["Title"] = "SmallTypeList";
 }
@@ -25,9 +25,6 @@
             <th>
                小類別名稱
             </th>
-            <th>
-               產品數
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -35,24 +32,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SmallType.SmallTypeId)
+                @Html.DisplayFor(modelItem => item.SmallTypeId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SmallType.SmallTypeName)
-            </td>  
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdCount)
+                @Html.DisplayFor(modelItem => item.SmallTypeName)
             </td>
             <td>
-                @Html.ActionLink("修改", "SmallTypeEdit", "newManagement",new {  id=item.SmallType.SmallTypeId },new { @class = "btn btn-warning" }) 
-                @Html.ActionLink("刪除", "SmallTypeDelete", "newManagement", new { id = item.SmallType.SmallTypeId }, new { @class = "Dele btn btn-danger" })
+                @Html.ActionLink("修改", "SmallTypeEdit", "newManagement",new {  id=item.SmallTypeId },new { @class = "btn btn-warning" }) 
+                @Html.ActionLink("刪除", "SmallTypeDelete", "newManagement", new { id = item.SmallTypeId }, new { @class = "Dele btn btn-danger" })
             </td>
         </tr>
 }
     </tbody>
 </table>
-@Html.ActionLink("回到大分類列表","BigTypeList","newManagement",new{id=Model.First().SmallType.BigTypeId},new{@class="btn btn-danger mt-1"})
-
 @section Scripts{ 
 <script>
     let Dele = document.querySelectorAll(".Dele");
