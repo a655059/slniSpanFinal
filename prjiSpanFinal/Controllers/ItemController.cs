@@ -404,7 +404,18 @@ namespace prjiSpanFinal.Controllers
                     infos.isLike = true;
                 }
             }
+            infos.sellerShippers = dbContext.ShipperToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Shipper).ToList();
+            infos.sellerPayments = dbContext.PaymentToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Payment).ToList();
+            infos.sellerProductCount = dbContext.Products.Where(i => i.MemberId == infos.seller.MemberId).Count();
             
+            var sellerComments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.Product.MemberId == infos.seller.MemberId).ToList();
+            infos.sellerCommentCount = 0;
+            infos.avgSellerCommentStar = 0;
+            if (sellerComments.Count > 0)
+            {
+                infos.sellerCommentCount = sellerComments.Count;
+                infos.avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
+            }
             
             return View(infos);
         }

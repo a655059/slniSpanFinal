@@ -19,6 +19,7 @@ namespace prjiSpanFinal.Hubs
                 while (true)
                 {
                     List<string> remainingTimes = new List<string>();
+
                     foreach (var a in biddingIDs)
                     {
                         DateTime endTime = biddings.Where(i => i.BiddingId == a).Select(i => i.EndTime).FirstOrDefault();
@@ -26,7 +27,7 @@ namespace prjiSpanFinal.Hubs
                         string time = remainingTime.Days + "天" + remainingTime.Hours + "時" + remainingTime.Minutes + "分" + remainingTime.Seconds + "秒";
                         remainingTimes.Add(time);
                     }
-                    await Clients.All.SendAsync("ShowItemCountdown", remainingTimes);
+                    await Clients.All.SendAsync("ShowItemCountdown", remainingTimes, biddingIDs);
                     Thread.Sleep(1000);
                 }
             }

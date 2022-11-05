@@ -14,6 +14,7 @@
     <link href="@Url.Content("~/css/Item/ShowItemComment.css")" rel="stylesheet" />
 }
 <div class="memberID d-none">@memberID</div>
+<div class="sellerID d-none">@Model.seller.MemberId</div>
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
@@ -240,8 +241,8 @@
                 </div>
             </div>
             <div class="col-4" style="font-size:14px">
-                <div class="bg-secondary text-white fw-bold ps-2">買家資訊</div>
-                <div class="ps-2">@Model.seller.MemberAcc<span class="ms-3"><a href="#"><i class="talkToSeller fa-solid fa-comment-dots text-warning"></i></a></span></div>
+                <div class="bg-secondary text-white fw-bold ps-2">賣家資訊</div>
+                <div class="ps-2 fs-6">@Model.seller.MemberAcc<span class="ms-3"><a href="#"><i class="talkToSeller fa-solid fa-comment-dots text-warning"></i></a></span></div>
                 <div class="d-flex align-items-center ps-2">
                     <div>全部商品:</div>
                     <div class="ms-3"><a href="@Url.Content("~/SalesCourt/賣場?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@Model.sellerProductIDs.Count</a></div>
@@ -252,7 +253,7 @@
                         @{
                             if (Model.sellerCommentCount > 0)
                             {
-                                string sellerComment = Model.avgSellerCommentStar.ToString("0.0") + "  " + (Model.sellerCommentCount);
+                                string sellerComment = Model.avgSellerCommentStar.ToString("0.0") + "  " + "(" + Model.sellerCommentCount + ")";
                                 <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@sellerComment</a>
                             }
                             else
@@ -375,14 +376,26 @@
         $(function () {
             const productID = $("#ProductId").val();
             $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+
+            userIsSeller();
         });
+
+        function userIsSeller() {
+            const userID = $(".memberID").html();
+            const sellerID = $(".sellerID").html();
+            if (userID == sellerID) {
+                $(".addToCart").prop("disabled", true);
+                $(".buyDirectly").prop("disabled", true);
+            }
+        }
+
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
             let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
             let response = await fetch(requestUrl);
             let data = await response.text();
             if (data == "0") {
-                alert("請先登入方可加入我的最愛");
+                Swal.fire("請先登入方可加入我的最愛");
                 return;
             }
             else if (data == "1") {
@@ -397,11 +410,11 @@
         $(".buyDirectly").click(function () {
             const maxQuantity = Number($("input[name='purchaseCount']").attr("max"));
             if ($("input[name='purchaseStyle']:checked").length != 1) {
-                alert("請選擇一個規格");
+                Swal.fire("請選擇一個規格");
                 return false;
             }
             else if (Number($("input[name='purchaseCount']").val()) <= 0 || Number($("input[name='purchaseCount']").val()) > maxQuantity) {
-                alert("你選的數量有誤");
+                Swal.fire("你選的數量有誤");
                 return false;
             }
             else {
@@ -415,15 +428,15 @@
             const memberID = @memberID;
             const maxQuantity = Number($("input[name='purchaseCount']").attr("max"));
             if (memberID <= 1) {
-                alert("請先登入再加入購物車");
+                Swal.fire("請先登入再加入購物車");
                 return false;
             }
             else if ($("input[name='purchaseStyle']:checked").length != 1) {
-                alert("請選擇一個規格");
+                Swal.fire("請選擇一個規格");
                 return false;
             }
             else if (Number($("input[name='purchaseCount']").val()) <= 0 || Number($("input[name='purchaseCount']").val()) > maxQuantity) {
-                alert("你選的數量有誤");
+                Swal.fire("你選的數量有誤");
                 return false;
             }
             else {
@@ -457,7 +470,7 @@
                     $("#itemCountInCart").html(data[0]);
                 }
                 else {
-                    alert("輸入商品數量有誤");
+                    Swal.fire("輸入商品數量有誤");
                     return false;
                 }
             }
@@ -487,9 +500,10 @@
                 $("input[name='purchaseCount']").prop("disabled", false);
                 $(".addToCart").prop("disabled", false);
                 $(".buyDirectly").prop("disabled", false);
-                $(this).prop("disabled", fales);
+                $(this).prop("disabled", false);
+                userIsSeller();
             }
-
+            
         });
 
         //檢舉功能圖片預覽
@@ -551,7 +565,6 @@
             happy_popup(sellerAcc);
         });
 
-
         $(".messageBoardVC").on("click", ".messageSubmit", async function () {
             const message = $(this).siblings(".message").val();
             if (message == "") {
@@ -581,8 +594,8 @@
             const response = await fetch("@Url.Content("~/Item/LikeMessageBoard")" + `?messageBoardID=${messageParentID}`);
             const data = await response.text();
             if (data == "1") {
-                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
-                }
+                $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+            }
             else {
                 Swal.fire("請先登入再按讚");
             }
@@ -609,6 +622,8 @@
                 }
             });
         });
-        
+
+
+
     </script>
 }
