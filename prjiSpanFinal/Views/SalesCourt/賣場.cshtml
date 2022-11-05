@@ -6,7 +6,7 @@
     ViewData["Title"] = "賣場";
 
     iSpanProjectContext dbContext = new iSpanProjectContext();
-    var bestsell = dbContext.Products.Where(a => a.MemberId == Model.SellerId).Select(p => new {
+    var bestsell = dbContext.Products.Where(a => a.MemberId == Model.SellerId && a.IsFeaturedProduct == true).Select(p => new {
         link = "/Item/Index?id=" + p.ProductId,
         pic = p.ProductPics.FirstOrDefault().Pic,
         name = p.ProductName,
@@ -124,8 +124,8 @@
                         <h1 class="fw-bolder" style="font-size:3rem">@Model.SellerName 賣場相關資料</h1>
 
                         <div class="board-text courtdescript">
-                            
-                            
+
+
                         </div>
 
                     </div>
@@ -143,7 +143,7 @@
 
                         @for (int i = 0; i < bestsell.Count(); i++)
                         {
-                            
+
                             <div class="sellsitem">
                                 <a class="linknoline" href="@bestsell[i].link">
                                     <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
@@ -249,7 +249,7 @@
 
                     <nav aria-label="Page navigation example" class="justify-content-center d-flex">
                         <ul class="pagination">
-                            <li class="page-item" id="orderpageup">
+                            @*<li class="page-item" id="orderpageup">
                                 <a class="page-link" href="#salescourtcardbody" aria-label="Previous">
                                     <span aria-hidden="true">«</span>
                                 </a>
@@ -264,10 +264,41 @@
                                 <a class="page-link" href="#salescourtcardbody" aria-label="Next">
                                     <span aria-hidden="true">»</span>
                                 </a>
-                            </li>
+                            </li>*@
                         </ul>
                     </nav>
 
+
+
+                    <div class="row " id="divPage">
+                        <div class="d-flex justify-content-center">
+                            <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                                <option value="1">每頁1個</option>
+                                <option value="5" selected>每頁5個</option>
+                                <option value="10">每頁10個</option>
+                                <option value="20">每頁20個</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item" id="orderpageup">
+                                        <a class="page-link" href="#salescourtcardbody" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" id="orderpagedown">
+                                        <a class="page-link" href="#salescourtcardbody" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <span id="totalpagesdisplay"></span>
+                        </div>
+                    </div>
 
                 </div>
             </section>
@@ -292,8 +323,10 @@
     <script>
     let mode = 0;
     let ccc = 0;
-    let eachpages = 1;
+    let eachpage = 5;
     let nowpages = 1;
+    let pagecount = 1;
+    const pagecountselect = document.querySelector("#divPage");
     let searchflag = false;
     let followFlag = false;
     /*類別按下去就會一直保留限制 直到按下未分類*/
@@ -308,29 +341,36 @@
     loaddescription();
 
 
-    function returnCard(data) {
-        return `<div class="sellsitem">
-        <a class="linknoline" href="${data.link}">
-                <img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />
-        </a>
-        <div class="px-1 d-flex flex-column justify-content-between">
-            <div class="cardTitleBox">
-                <div class="cardTitle">${data.name}</div>
-            </div>
-                    <div class="cardPrice">${data.price1} - ${data.price2}</div>
-            <div class="cardInfo d-flex justify-content-between flex-row">
-                <div class="starBox mt-1">
-                    <div class="d-flex justify-content-start">
-                        <div class="starImg">
-                            <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+        function returnCard(data) {
+            let card = "";
+
+            for (let i = 0; i < data.length; i++) {
+                card = card+ `<div class="sellsitem">
+                        <a class="linknoline" href="${data[i].link}">
+                                <img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />
+                        </a>
+                        <div class="px-1 d-flex flex-column justify-content-between">
+                            <div class="cardTitleBox">
+                                <div class="cardTitle">${data[i].name}</div>
+                            </div>
+                                    <div class="cardPrice">${data[i].price1} - ${data[i].price2}</div>
+                            <div class="cardInfo d-flex justify-content-between flex-row">
+                                <div class="starBox mt-1">
+                                    <div class="d-flex justify-content-start">
+                                        <div class="starImg">
+                                            <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                        </div>
+                                        <div class="text-black">${data[i].star}</div>
+                                    </div>
+                                </div>
+                                <div class="text-end text-black-50 sells">已賣出<span>${data[i].sales}</span></div>
+                            </div>
                         </div>
-                        <div class="text-black">${data.star}</div>
-                    </div>
-                </div>
-                <div class="text-end text-black-50 sells">已賣出<span>${data.sales}</span></div>
-            </div>
-        </div>
-    </div>`
+                    </div>`
+
+            }
+
+            return card;
         }
 
     /*    let aa = $.map($(".check"),*/
@@ -356,7 +396,7 @@
 
         return `
            <div class=" salescourtclicklist" >
-                <a role="button" class="salescourtclick linknoline text-primary" >${data.name}</a>
+                <a role="button" class="salescourtclick linknoline text-primary" href="#salescourtcardbody">${data.name}</a>
             </div>`;
     }
 
@@ -382,21 +422,78 @@
             keyword = "";
         }
 
-        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, keyword: keyword, customname: customname}, function (data) {
+        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, eachpage: eachpage, keyword: keyword, customname: customname}, function (data) {
 
             $("#salescourtcardbody").html("");
-            for (let i = 0; i < data.length; i++) {
-                /*$(".check").eq(i).a*/
-                $("#salescourtcardbody").append(returnCard(data[i]));
+            console.log("1");
+            console.log(data.count);
+            //for (let i = 0; i < data.length; i++) {
+            //    /*$(".check").eq(i).a*/
+            //    $("#salescourtcardbody").append(returnCard(data[i]));
+            //}
+
+            if (data.list.length > 0) {
+                $("#salescourtcardbody").append(returnCard(data.list));
+                PageNumFill(data.count);
+            }
+            else {
+                PageNumFill(0);
             }
         })
      }
+
+
+    function PageNumFill(c) {
+        pagecount = Math.ceil(Math.max(1, c) / eachpage);
+        $("#totalpagesdisplay").html(`共${pagecount}頁，${c}筆資料`);
+        let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+        let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+        $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+        for (let i = startpage; i <= endpage; i++) {
+            if (i == nowpages) {
+                $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+            }
+            else {
+                $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+            }
+        }
+     }
+
+
+        $(document).on("click", ".orderpagenumclick", function () {
+            nowpages = $(this).html();
+            /*$("#salescourtcardbody").empty();*/
+            load();
+        })
+
+        $("#pagecountselect").change(function () {
+            eachpage = $("#pagecountselect option:selected").val();
+            nowpages = 1;
+            load();
+        });
+
+
+        $("#orderpagedown").click(function () {
+            /*let pagescount = $(".orderpagenumclicklist").length;*/
+            nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
+            /*nowpages = 2;*/
+            /*$("#salescourtcardbody").empty();*/
+            load();
+        })
+
+
+        $("#orderpageup").click(function () {
+            nowpages = Math.max(parseInt(nowpages) - 1, 1);
+            /*nowpages = 1;*/
+            /*$("#salescourtcardbody").empty();*/
+            load();
+        })
+
 
     function returndescription(data) {
         return `
             ${data.text[0]}
                 `;
-
     }
 
     function loaddescription() {
@@ -466,22 +563,7 @@
         load();
     })
 
-    $("#orderpagedown").click(function () {
-        let pagescount = $(".orderpagenumclicklist").length;
-        nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
-        /*nowpages = 2;*/
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-
-    $("#orderpageup").click(function () {
-        nowpages = Math.max(parseInt(nowpages) - 1, 1);
-        /*nowpages = 1;*/
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
+   
 
     $("#SortOrder1").click(function () {
         mode = 1;
