@@ -248,5 +248,50 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             return Json(dbcontext.Notifications.Where(n => n.MemberId == id && n.HaveRead == false).OrderByDescending(o => o.Time).Select(n => new CNotification(){ NotificationId = n.NotificationId, Text = n.Text, Time = n.Time, TextContent= n.TextContent}).ToList());
         }
+
+        public IActionResult GetBigtypeItems(int memid, int id, int page)
+        {
+            int eachpage = 10;
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            List<ViewModels.App.CShowItem> q = dbcontext.Products.Where(n => n.SmallType.BigTypeId == id && (n.ProductStatusId != 1 && n.ProductStatusId != 2)).Select(n => new ViewModels.App.CShowItem()
+            {
+                id = n.ProductId,
+                Name = n.ProductName,
+                Pic = n.ProductPics.FirstOrDefault().Pic,
+                Price1 = n.ProductDetails.Select(a => a.UnitPrice).Min(),
+                Price2 = n.ProductDetails.Select(a => a.UnitPrice).Max(),
+                salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.Quantity).Sum(),
+                starCount = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count,
+                IsFavourite = n.Likes.Where(k=>k.MemberId == memid).Any(),
+                stID = n.SmallTypeId,
+                st = n.SmallType.SmallTypeName,
+            }).ToList();
+
+            var temp = new List<ViewModels.App.CShowItem>(q);
+            temp.OrderBy(t => (t.Price1 + t.Price2) / 2).ToList();
+            for(int i = 0; i < temp.Count; i++)
+            {
+
+            }
+
+
+
+            foreach(var item in q)
+            {
+                item.stList = q.Select(a => a.st).Distinct().ToList();
+                item.stIDList = q.Select(a => a.stID).Distinct().ToList();
+            }
+            q = q.Skip((page - 1) * eachpage).Take(page * eachpage).ToList();
+            foreach(var item in q)
+            {
+                if(item.Pic == null)
+                {
+                    string pName = "/img/imageNotFound.png";
+                    string path = _enviro.WebRootPath + pName;
+                    item.Pic = System.IO.File.ReadAllBytes(path);
+                }
+            }
+            return Json(q);
+        }
     }
 }
