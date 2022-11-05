@@ -211,101 +211,105 @@
 
 
 
-        @*<nav aria-label="Page navigation example" class="justify-content-center d-flex m-5">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">«</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">»</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>*@
-        <div class="d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item" id="orderpageup">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" id="orderpagedown">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="row " id="divPage">
+            <div class="d-flex justify-content-center">
+                <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
+                    <option value="1">每頁1個</option>
+                    <option value="5" selected>每頁5個</option>
+                    <option value="10">每頁10個</option>
+                    <option value="20">每頁20個</option>
+                </select>
+            </div>
+            <div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" id="orderpageup">
+                            <a class="page-link" href="#commentlist" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="orderpagedown">
+                            <a class="page-link" href="#commentlist" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="d-flex justify-content-center">
+                <span id="totalpagesdisplay"></span>
+            </div>
         </div>
 
-        <div class="d-flex justify-content-center">
-            <span id="totalpagesdisplay"></span>
-        </div>
     </div>
 
     @section Scripts{
         <script>
             let mode = 0;
-            let eachpage = 2;
+            let eachpage = 5;
             let nowpages = 1;
+            let pagecount = 1;
+            let buyerorseller = 1;
+            const pagecountselect = document.querySelector("#divPage");
             /*let switch = 0;*/
             function cmCard(data) {
-                return `
+                let card = "";
+                for (let i = 0; i < data.length; i++) {
+                    card = card + `
                                     <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
                                     <div>
                                         <img src="~/img/greencircle.png" width="20" />
-                                        <span class="text-dark" style="font-size:1.5em">買家:${data.buyername}</span>
+                                        <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
                                     </div>
                                     <div class="dashed-divider"></div>
                                     <div class="ps-2" style="font-size:1.5em">
-                                    <a class="linknoline text-primary" href="${data.link}">${data.productname}</a>
+                                    <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
                                     </div>
 
-                                    <div class="my-2 text-dark" style="font-size:1.5em">${data.commentcontent}</div>
+                                    <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
                                     </div>`
+                }
+                return card;
             }
             load();
             function load() {
-                $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode ,pages:nowpages, eachpage:eachpage}, function (data) {
+                $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode ,pages:nowpages, eachpage:eachpage,buyerorseller:buyerorseller}, function (data) {
                     console.log(data);
-                    $("#commentlist").html();
-                    for (let i = 0; i < data.length; i++) {
-                        $("#commentlist").append(cmCard(data[i]));
-                    }
-                    if (data.length > 0) {
-                        PageNumFill(data.length);
+                    $("#commentlist").html("");
+                    //for (let i = 0; i < data.length; i++) {
+                    //    $("#commentlist").append(cmCard(data[i]));
+                    //}
+                    if (data.list.length > 0) {
+                        $("#commentlist").append(cmCard(data.list));
+                        PageNumFill(data.count);
                     }
                     else {
-                        PageNumFill(1);
+                        PageNumFill(0);
                     }
                 })
             }
 
             function PageNumFill(c) {
-                let pagecount = Math.ceil(c / eachpage);
+                pagecount = Math.ceil(c / eachpage);
                 $("#totalpagesdisplay").html(`共${pagecount}頁，${c}筆資料`);
                 let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
                 let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
                 $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
                 for (let i = startpage; i <= endpage; i++) {
                     if (i == nowpages) {
-                        $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                        $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#commentlist">${i}</a></li>`);
                     }
                     else {
-                        $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                        $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#commentlist">${i}</a></li>`);
                     }
                 }
             }
+
+            $("#pagecountselect").change(function () {
+                eachpage = $("#pagecountselect option:selected").val();
+                nowpages = 1;
+                load();
+            });
 
             $(document).on("click", ".orderpagenumclick", function () {
                 nowpages = $(this).html();
@@ -313,8 +317,8 @@
             })
 
             $("#orderpagedown").click(function () {
-                let pagescount = $(".orderpagenumclicklist").length;
-                nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+                
+                nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
                 load();
             })
 
