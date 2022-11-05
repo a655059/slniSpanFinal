@@ -628,7 +628,7 @@ namespace prjiSpanFinal.Controllers
 
         }
 
-        public IActionResult GetItems(int id, int mode, int pages, string keyword, string customname)
+        public IActionResult GetItems(int id, int mode, int pages, int eachpage, string keyword, string customname)
         {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
@@ -697,8 +697,8 @@ namespace prjiSpanFinal.Controllers
             {
                 q = q.Where(a => a.customizename == customname).ToList();
             }
-
-            return Json(q.Skip((pages - 1) * 4).Take(4));
+            int count = q.Count();
+            return Json(new { list = q.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
         }
 
         public IActionResult GetChoice(int productid) {
