@@ -38,8 +38,10 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<string> AdTyepDescription { get; set; }
         public List<List<decimal>> AdFee { get; set; }
         public List<List<int>> AdPeriod { get; set; }
-
-
+        //存入AD的ID
+        public List<int> SelectADId { get; set; }
+        public List<DateTime> StartDate { get; set; }
+        //public List<int> DateNum { get; set; }
 
         //規格區
         public string StyleStr { get; set; }

@@ -344,6 +344,24 @@ namespace prjiSpanFinal.Controllers
                 _db.ProductPics.Add(productPic);
             }
 
+            for (int i = 0; i < result.SelectADId.Count; i++)
+            {
+                if (result.SelectADId[i] != 0)
+                {
+                    var daynum = _db.Ads.Where(n => n.AdId == result.SelectADId[i]).Select(n => n.AdPeriod).FirstOrDefault();
+                    AdtoProduct adtoProduct = new AdtoProduct()
+                    {
+                        AdId = Convert.ToInt32(result.SelectADId[i]),
+                        ProductId = Convert.ToInt32(product.ProductId),
+                        StartDate = result.StartDate[i],
+                        EndDate = result.StartDate[i].AddDays(daynum),
+                        IsSubActive = true,
+                        ExpoTimes = 0,
+                        ClickTimes = 0  ///抱錯
+                    };
+                }
+            }
+
             //if (!_db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n).Any())
             //{
             //    CustomizedCategory customizedCategory = new CustomizedCategory()
@@ -620,8 +638,18 @@ namespace prjiSpanFinal.Controllers
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
 
-            var myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2&&n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n.ProductId).ToList(); //賣家所有商品ID
-            var q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 && n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n).ToList();//賣家所有商品
+            List<int> myproductlist = new List<int>();
+            List<Product> q1 = new List<Product>();
+            if (string.IsNullOrEmpty(select))//傳回來是空值或沒東西
+            {
+                 myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 ).Select(n => n.ProductId).ToList(); //賣家所有商品ID
+                 q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n).ToList();//賣家所有商品
+            }
+            else
+            {
+                 myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2&&n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n.ProductId).ToList(); //賣家所有商品ID
+                 q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 && n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n).ToList();//賣家所有商品
+            }
             var q2 = _db.ProductDetails.Where(n => myproductlist.Contains(n.ProductId)).Select(n => n).ToList(); //Contains是只把賣家所有商品ID全部挑出來
             List<string> listName = new List<string>();
             List<int> listproductId = new List<int>();
