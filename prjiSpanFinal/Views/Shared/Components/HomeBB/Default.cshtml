@@ -9,7 +9,7 @@
                     <div class="swiper-slide">
                         @{string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;}
                         <div class="FSitem">
-                            <a class="linknoline" href="@productLink">
+                            <a class="linknoline FSimgBox" href="@productLink">
                                 @if (item.Pic != null)
                                 {
                                     var base64Image = Convert.ToBase64String(item.Pic);

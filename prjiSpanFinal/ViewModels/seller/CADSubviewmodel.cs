@@ -49,24 +49,30 @@ namespace prjiSpanFinal.ViewModels.seller
         {
             get
             {
-                TimeSpan ts = (ADtoProd.EndDate).Subtract(DateTime.Now);
-                string hh = ts.Hours.ToString();
-                if (ts.Hours < 10)
+                if (DateTime.Compare(ADtoProd.EndDate, DateTime.Now) >= 0)
                 {
-                    hh = "0" + ts.Hours;
+                    TimeSpan ts = (ADtoProd.EndDate).Subtract(DateTime.Now);
+                    string hh = ts.Hours.ToString();
+                    if (ts.Hours < 10)
+                    {
+                        hh = "0" + ts.Hours;
+                    }
+                    string mm = ts.Minutes.ToString();
+                    if (ts.Minutes < 10)
+                    {
+                        mm = "0" + ts.Minutes;
+                    }
+                    string ss = ts.Seconds.ToString();
+                    if (ts.Seconds < 10)
+                    {
+                        ss = "0" + ts.Seconds;
+                    }
+                    return string.Format("{0}天 {1}:{2}:{3}", ts.Days, hh, mm, ss);
                 }
-                string mm = ts.Minutes.ToString();
-                if (ts.Minutes < 10)
+                else
                 {
-                    mm = "0" + ts.Minutes;
+                    return "0天 00:00:00";
                 }
-                string ss =ts.Seconds.ToString();
-                if (ts.Seconds < 10)
-                {
-                    ss = "0" + ts.Seconds;
-                }
-                return string.Format("{0}天 {1}:{2}:{3}",
-    ts.Days, hh, mm, ss); ;
             }
         }
     }
