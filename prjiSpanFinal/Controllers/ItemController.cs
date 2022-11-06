@@ -463,5 +463,9 @@ namespace prjiSpanFinal.Controllers
                 return Content("0");
             }
         }
+        public IActionResult ShowBiddingDetail(int id)
+        {
+            return ViewComponent("BiddingDetail", id);
+        }
     }
 }

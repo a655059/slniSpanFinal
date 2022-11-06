@@ -6,7 +6,7 @@ let connection4 = new signalR.HubConnectionBuilder().withUrl("/specificItemCount
 
 connection4.on("ShowSpecificItemCountdown", function (remainingTime, id) {
     if (id == biddingID) {
-        $(".biddingItemCountdown").find(".remainingTime").html(remainingTime);
+        $(".biddingItemCountdown").find(".remainingTime2").html(remainingTime);
     }
 });
 

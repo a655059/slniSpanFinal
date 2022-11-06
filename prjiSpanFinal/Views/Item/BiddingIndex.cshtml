@@ -6,6 +6,7 @@
     {
         memberID = Model.user.MemberId;
     }
+    string endTime = Model.bidding.EndTime.ToString("yyyy/MM/dd HH:mm:ss");
 }
 
 @section Styles{
@@ -86,14 +87,15 @@
     <div class="itemInfo">
         <h4>@Model.product.ProductName</h4>
         <div class="d-flex align-items-center border rounded-1">
-            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+            <div class="showRemainingTime p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
                 <img src="@Url.Content("~/img/clock.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
-            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+            <div class="showEndTime p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
                 <img src="@Url.Content("~/img/calender.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
-                <div class="remainingTime ps-2"></div>
+                <div class="remainingTime ps-2">剩<span class="remainingTime2 ms-2"></span></div> 
+                <div class="endTime ps-2 d-none"><span class="me-2">@endTime</span>結束</div>
             </div>
         </div>
         <div class="d-flex align-items-center">
@@ -214,7 +216,7 @@
 <div>
     <div class="list-group list-group-horizontal mb-3">
         <button type="button" class="list-group-item-warning list-group-item list-group-item-action active" id="description" aria-current="true">商品說明</button>
-        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">出價紀錄 (<span>@Model.biddingDetailWithMember.Count</span>)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">出價紀錄 (<span class="biddingCount">@Model.biddingDetailWithMember.Count</span>)</button>
         <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="messageBoard">留言板</button>
     </div>
     <div class="itemDescription rounded-2">
@@ -263,6 +265,7 @@
             if (userID == sellerID) {
                 $(".bidSubmit").prop("disabled", true);
             }
+            $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
         });
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
@@ -288,6 +291,17 @@
             const suggestedPrice = Number(currentPrice) + Number(stepPrice);
             $("input[type='number']").attr("min", suggestedPrice);
         });
+
+        $(".showRemainingTime").click(function () {
+            $(".remainingTime").removeClass("d-none");
+            $(".endTime").removeClass("d-none").addClass("d-none");
+        });
+        $(".showEndTime").click(function () {
+            $(".remainingTime").removeClass("d-none").addClass("d-none");
+            $(".endTime").removeClass("d-none");
+        });
+
+
         $("input[name='biddingPrice']").focus(function () {
             const currentPrice = $(".currentPrice").html();
             const stepPrice = $(".stepPrice").html();
@@ -315,35 +329,37 @@
         $(".bidSubmit").click(function () {
             const biddingID = Number($(".biddingItemCountdown").attr("id"));
             const biddingType = $("input:checked").attr("id");
-
             const suggestedPrice = Number($(".suggestedPrice").html());
             const price = Number($("input[name='biddingPrice']").val());
-
             const topPrice = Number($("input[name='topPrice']").val());
             if (biddingType == null) {
                 Swal.fire("請選擇自動出價或直接出價");
             }
-            else if (price < suggestedPrice) {
+            else if (price < suggestedPrice || price <= 0) {
                 Swal.fire("出價金額有誤");
             }
             else if (biddingType == "autoBidding" && topPrice < price) {
                 Swal.fire("自動出價最高金額小於出價金額");
             }
-            $.ajax({
-                url: "@Url.Content("~/Item/Bid")",
-                type: "POST",
-                data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice},
-            }).done(function (data) {
-                if (data == "0") {
-                    Swal.fire("請先登入再出價");
-                }
-                else {
-                    $(".currentPrice").html(data[0]);
-                    $(".biddingCount").html(data[1]);
-                    $(".topMember").html(data[2]);
-                    Swal.fire("恭喜您成功出價");
-                }
-            })
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/Item/Bid")",
+                    type: "POST",
+                    data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice },
+                }).done(function (data) {
+                    if (data == "0") {
+                        Swal.fire("請先登入再出價");
+                    }
+                    else {
+                        $(".currentPrice").html(data[0]);
+                        $(".biddingCount").html(data[1]);
+                        $(".topMember").html(data[2]);
+                        Swal.fire("恭喜您成功出價");
+
+                        $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+                    }
+                })
+            }
         });
 
         $(".messageBoardVC").on("click", ".messageSubmit", async function () {
