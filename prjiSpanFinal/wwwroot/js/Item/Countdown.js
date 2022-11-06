@@ -4,7 +4,6 @@
 let connection2 = new signalR.HubConnectionBuilder().withUrl("/countdownHub").build();
 
 let upload = 0;
-
 connection2.on("ShowUploadItem", function (productName, sellerID) {
     if (upload == 0) {
         upload = 1;
@@ -12,7 +11,6 @@ connection2.on("ShowUploadItem", function (productName, sellerID) {
     }
     
 });
-
 
 let pull = 0;
 connection2.on("ShowPullItem", function (productName, sellerID) {

@@ -10,7 +10,7 @@ namespace prjiSpanFinal.Hubs
 {
     public class CountdownHub : Hub
     {
-        public async Task Countdown()
+        public async Task Countdown(/*int specificBiddingID*/)
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
             while (true)
@@ -33,12 +33,7 @@ namespace prjiSpanFinal.Hubs
                         await Clients.All.SendAsync("ShowUploadItem", productName, sellerID);
                     }
 
-                    //if (DateTime.Now < a.bidding.EndTime && DateTime.Now >= a.bidding.StartTime)
-                    //{
-                    //    var autoBiddings = dbContext.AutoBiddings.Where(i => i.BiddingId == a.bidding.BiddingId).ToList();
-
-                    //}
-
+                    
                     if (DateTime.Now >= a.bidding.EndTime && a.product.ProductStatusId == 4)
                     {
                         var product = dbContext.Products.Where(i => i.ProductId == a.product.ProductId).Select(i => i).FirstOrDefault();

@@ -22,9 +22,3 @@ connection4.start().then(function () {
 });
 
 
-//window.document.body.onbeforeunload = function () {
-//    connection4.stop().then(function () {
-//        connection4 = null;
-//    });
-//    return "確定要離開嗎?"
-//};

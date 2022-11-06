@@ -437,15 +437,54 @@ namespace prjiSpanFinal.Controllers
                 dbContext.SaveChanges();
                 if (biddingType == "autoBidding")
                 {
-                    AutoBidding autoBidding = new AutoBidding
+                    var isExistAutoBidding = dbContext.AutoBiddings.Where(i => i.BiddingId == biddingID && i.MemberId == user.MemberId).FirstOrDefault();
+                    if (isExistAutoBidding == null)
                     {
-                        BiddingId = biddingID,
-                        MemberId = user.MemberId,
-                        TopPrice = topPrice
-                    };
-                    dbContext.AutoBiddings.Add(autoBidding);
-                    dbContext.SaveChanges();
+                        AutoBidding autoBidding = new AutoBidding
+                        {
+                            BiddingId = biddingID,
+                            MemberId = user.MemberId,
+                            TopPrice = topPrice
+                        };
+                        dbContext.AutoBiddings.Add(autoBidding);
+                        dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        isExistAutoBidding.TopPrice = topPrice;
+                        dbContext.SaveChanges();
+                    }
                 }
+                var bidding1 = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i).FirstOrDefault();
+                var autoBiddings = dbContext.AutoBiddings.Where(i => i.BiddingId == biddingID).Select(i => i).ToList();
+                bool isEnd = true;
+                while (isEnd)
+                {
+                    var originBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                    foreach (var a in autoBiddings)
+                    {
+                        var originBiddingDetail1 = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                        int currentPrice = originBiddingDetail1[0].Price;
+                        if (a.MemberId != originBiddingDetail[0].MemberId && a.TopPrice >= currentPrice + bidding1.StepPrice)
+                        {
+                            BiddingDetail biddingDetail1 = new BiddingDetail
+                            {
+                                BiddingId = biddingID,
+                                MemberId = a.MemberId,
+                                Price = currentPrice + bidding1.StepPrice
+                            };
+                            dbContext.BiddingDetails.Add(biddingDetail1);
+                            dbContext.SaveChanges();
+                        }
+                    }
+                    var newBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                    if (originBiddingDetail.Count == newBiddingDetail.Count)
+                    {
+                        isEnd = false;
+                    }
+                }
+
+
                 var bidding = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => new
                 {
                     biddingDetail = i,

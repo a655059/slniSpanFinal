@@ -15,7 +15,8 @@ namespace prjiSpanFinal.Hubs
             if (biddingID > 0)
             {
                 iSpanProjectContext dbContext = new iSpanProjectContext();
-                DateTime endTime = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i.EndTime).FirstOrDefault();
+                var bidding = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i).FirstOrDefault();
+                DateTime endTime = bidding.EndTime;
                 while (true)
                 {
                     TimeSpan remainingTime = endTime - DateTime.Now;
