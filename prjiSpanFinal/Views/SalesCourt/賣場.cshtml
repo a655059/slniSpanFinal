@@ -17,8 +17,22 @@
         upload = p.EditTime,
     }).OrderByDescending(a => a.sales).ToList();
 
+    var coupon = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == Model.SellerId).Select(p => new
+    {
+        name = p.Order.Coupon.CouponName,
+        startdate = p.Order.Coupon.StartDate,
+        enddate = p.Order.Coupon.ExpiredDate,
+        receivestartdate = p.Order.Coupon.ReceiveStartDate,
+        receiveenddate = p.Order.Coupon.ReceiveEndDate,
 
-    
+        code = p.Order.Coupon.CouponCode,
+        discount = p.Order.Coupon.Discount,
+        isfreedelivery = p.Order.Coupon.IsFreeDelivery,
+        minimunorder = p.Order.Coupon.MinimumOrder,
+
+    }).ToList();
+
+
 }
 @section Styles{
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
@@ -129,6 +143,47 @@
                         </div>
 
                     </div>
+
+                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
+                        <span>賣場優惠券</span>
+                        <a class="link-secondary" href="#" aria-label="Add a new report">
+                            <span data-feather="plus-circle" class="align-text-bottom"></span>
+                        </a>
+                    </h6>
+
+                    <div class="row" id="sellercoupon">
+
+                        @for (int i = 0; i < coupon.Count(); i++) {
+                        
+                        <div class="sellsitem">
+                            <div>
+                                <img src="~/img/coupon.jpg" class="w-100" />
+                            </div>
+                            <div class="px-1 d-flex flex-column justify-content-between">
+                                <div class="cardTitle">@coupon[i].name</div>
+                                <div class="cardPrice">可使用：@coupon[i].startdate</div>
+                                <div class="cardPrice">失效日：@coupon[i].enddate</div>
+                                <div class="cardInfo d-flex justify-content-between align-items-end">
+                                    <div class="d-flex justify-content-start flex-column mt-1">
+                                        @*if (data[i].isOverExpDate) {
+                                            <div class="text-black-50">已失效</div>
+                                        }
+                                        else if (data[i].isNearExpDate) {
+                                            <div class="text-black-50">即將失效</div>
+                                        }
+                                        else{
+                                            <div class="text-black-50">把握效期！盡快使用！</div>
+                                        }*@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                                               
+                    </div>
+
+
 
 
 
@@ -247,29 +302,6 @@
                     </div>
 
 
-                    <nav aria-label="Page navigation example" class="justify-content-center d-flex">
-                        <ul class="pagination">
-                            @*<li class="page-item" id="orderpageup">
-                                <a class="page-link" href="#salescourtcardbody" aria-label="Previous">
-                                    <span aria-hidden="true">«</span>
-                                </a>
-                            </li>
-                            <li class="page-item orderpagenumclicklist"><a id="page1" class=" page-link" href="#salescourtcardbody">1</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page2" class=" page-link" href="#salescourtcardbody">2</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page3" class=" page-link" href="#salescourtcardbody">3</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page4" class=" page-link" href="#salescourtcardbody">4</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page5" class=" page-link" href="#salescourtcardbody">5</a></li>
-                            <li class="page-item orderpagenumclicklist"><a id="page6" class=" page-link" href="#salescourtcardbody">6</a></li>
-                            <li class="page-item" id="orderpagedown">
-                                <a class="page-link" href="#salescourtcardbody" aria-label="Next">
-                                    <span aria-hidden="true">»</span>
-                                </a>
-                            </li>*@
-                        </ul>
-                    </nav>
-
-
-
                     <div class="row " id="divPage">
                         <div class="d-flex justify-content-center">
                             <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
@@ -321,11 +353,13 @@
   
     
     <script>
+
     let mode = 0;
     let ccc = 0;
     let eachpage = 5;
     let nowpages = 1;
     let pagecount = 1;
+    
     const pagecountselect = document.querySelector("#divPage");
     let searchflag = false;
     let followFlag = false;
@@ -425,13 +459,8 @@
         $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, eachpage: eachpage, keyword: keyword, customname: customname}, function (data) {
 
             $("#salescourtcardbody").html("");
-            console.log("1");
-            console.log(data.count);
-            //for (let i = 0; i < data.length; i++) {
-            //    /*$(".check").eq(i).a*/
-            //    $("#salescourtcardbody").append(returnCard(data[i]));
-            //}
-
+           
+           
             if (data.list.length > 0) {
                 $("#salescourtcardbody").append(returnCard(data.list));
                 PageNumFill(data.count);
@@ -460,34 +489,34 @@
      }
 
 
-        $(document).on("click", ".orderpagenumclick", function () {
-            nowpages = $(this).html();
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $(document).on("click", ".orderpagenumclick", function () {
+        nowpages = $(this).html();
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
 
-        $("#pagecountselect").change(function () {
-            eachpage = $("#pagecountselect option:selected").val();
-            nowpages = 1;
-            load();
-        });
-
-
-        $("#orderpagedown").click(function () {
-            /*let pagescount = $(".orderpagenumclicklist").length;*/
-            nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
-            /*nowpages = 2;*/
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $("#pagecountselect").change(function () {
+        eachpage = $("#pagecountselect option:selected").val();
+        nowpages = 1;
+        load();
+    });
 
 
-        $("#orderpageup").click(function () {
-            nowpages = Math.max(parseInt(nowpages) - 1, 1);
-            /*nowpages = 1;*/
-            /*$("#salescourtcardbody").empty();*/
-            load();
-        })
+    $("#orderpagedown").click(function () {
+        /*let pagescount = $(".orderpagenumclicklist").length;*/
+        nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
+        /*nowpages = 2;*/
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
+
+
+    $("#orderpageup").click(function () {
+        nowpages = Math.max(parseInt(nowpages) - 1, 1);
+        /*nowpages = 1;*/
+        /*$("#salescourtcardbody").empty();*/
+        load();
+    })
 
 
     function returndescription(data) {
