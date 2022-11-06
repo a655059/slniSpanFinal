@@ -334,21 +334,25 @@ namespace prjiSpanFinal.Controllers
                 _db.ProductDetails.Add(productDetail);
             }
 
-            for (int i = 0; i < result.BodyPic.Count; i++)
+            if (result.BodyPic!= null)
             {
-                ProductPic productPic = new ProductPic()
+                for (int i = 0; i < result.BodyPic.Count; i++)
                 {
-                    Pic = result.BodyPic[i],
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.ProductPics.Add(productPic);
+                    ProductPic productPic = new ProductPic()
+                    {
+                        Pic = result.BodyPic[i],
+                        ProductId = Convert.ToInt32(product.ProductId)
+                    };
+                    _db.ProductPics.Add(productPic);
+                }
             }
 
-            for (int i = 0; i < result.SelectADId.Count; i++)
+            if (result.SelectADId != null)
             {
-                if (result.SelectADId[i] != 0)
+                for (int i = 0; i < result.SelectADId.Count; i++)
                 {
                     var daynum = _db.Ads.Where(n => n.AdId == result.SelectADId[i]).Select(n => n.AdPeriod).FirstOrDefault();
+
                     AdtoProduct adtoProduct = new AdtoProduct()
                     {
                         AdId = Convert.ToInt32(result.SelectADId[i]),
@@ -357,10 +361,12 @@ namespace prjiSpanFinal.Controllers
                         EndDate = result.StartDate[i].AddDays(daynum),
                         IsSubActive = true,
                         ExpoTimes = 0,
-                        ClickTimes = 0  ///抱錯
+                        ClickTimes = 0
                     };
+                    _db.AdtoProducts.Add(adtoProduct);
                 }
             }
+
 
             //if (!_db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n).Any())
             //{
@@ -781,7 +787,7 @@ namespace prjiSpanFinal.Controllers
             }
 
             var ProductPic = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
-            if (jsonString.BodyPic.Count > 0)
+            if (jsonString.BodyPic !=null)
             {
                 for (int i = 0; i < jsonString.BodyPic.Count; i++)
                 {
@@ -845,10 +851,15 @@ namespace prjiSpanFinal.Controllers
             }
             string logindata = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
-
-            var x = _db.Coupons.Where(n => n.MemberId == memId&&n.CouponName==select).Select(n => n).ToList();
-
-
+            List<Coupon> x = new List<Coupon>();
+            if (!string.IsNullOrEmpty(select))
+            {
+                 x = _db.Coupons.Where(n => n.MemberId == memId&&n.CouponName==select).Select(n => n).ToList();
+            }
+            else
+            {
+                 x = _db.Coupons.Where(n => n.MemberId == memId).Select(n => n).ToList();
+            }
             return Json(x);
         }
 

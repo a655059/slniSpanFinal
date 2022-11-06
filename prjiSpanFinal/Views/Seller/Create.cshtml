@@ -494,7 +494,7 @@
                 }
                 let td1 = document.createElement('td');
                 //src="data:image;base64,${stylephoto}"  將二進位檔轉成圖片檔
-                td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
+                    td1.innerHTML = `<img src="data:image;base64,${stylephoto}" width="30" height="30" />`;
                 tr.appendChild(td1);
 
                 let td = document.createElement('td');
@@ -540,12 +540,6 @@
             console.log($(".checkship").children())
             if ($("#ProductName").val() == "") {
                 alert("名稱請填寫完整");
-            }
-            else if ($("#styleqty").val() == "") {
-                alert("數量請填寫完整");
-            }
-            else if ($("#styleup").val() == "") {
-                alert("價格請填寫完整");
             }
             else if ($("#Description").val() == "") {
                 alert("描述請填寫完整");
@@ -613,17 +607,16 @@
 
         //========廣告區===================================
 
-        let selectADId = [0, 0, 0];//存選到的廣告ID
-        //let selectADDaynum = [0, 0, 0];//存選到的天數
+        let selectADId = [];//存選到的廣告ID
         let selectADFee = [0, 0, 0];//存選到的價格
-        let selectADTm = ["","",""];//存選到的廣告開始時間
+        let selectADTm = [];//存選到的廣告開始時間
 
         for (let i = 0; i < 3; i++) {
             $(`input[name=radioname${i}]`).click(function () {
                 selectADId[i] = $(this).attr("id"); 
-                //selectADDaynum[i]=$(this).next().html().split(" ")[0];
                 selectADFee[i] = $(this).next().next().next().html().split(" ")[1];//價格前面有一個空白所以找[1]
                 $("#dollarall").html(`<span class="totalcolorsize"> ${parseInt(selectADFee[0]) + parseInt(selectADFee[1]) + parseInt(selectADFee[2])} </span>`);
+                console.log(selectADId)
             })
             
             $(`#startDate${i}`).change(function () {
@@ -638,18 +631,28 @@
                 else {
                     $(this).closest(".checkedparent").find(`input[name=radioname${i}]`).prop("checked", false);
                     $(`#startDate${i}`).val("");
-                    selectADId[i] = 0;
-                    //selectADDaynum[i] = 0;
-                    selectADTm[i] = "";
+                    selectADId[i] = null;
+                    selectADTm[i] = null;
                     selectADFee[i] = 0;
                     $("#dollarall").html(`<span class="totalcolorsize"> ${parseInt(selectADFee[0]) + parseInt(selectADFee[1]) + parseInt(selectADFee[2])} </span>`);
                     $(this).closest(".checkedparent").find("input").attr("disabled", true);
                     $(this).attr("disabled", false);
                 }
             })
+
+                // 日期過期不能選
+            $(`#startDate${i}`).click(function () {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth() + 1;
+                let date = today.getDate();
+                if (date < 10) {
+                    date = "0" + date;
+                }
+                $(`#startDate${i}`).attr("min", `${year}-${month}-${date}`);
+            });
+
         }
-        
-        
 
 
 //====================================================================
@@ -708,8 +711,8 @@
                 PaymentID: payment,
                 SelectADId: selectADId,
                 StartDate: selectADTm,
-                //DateNum: selectADDaynum
             }
+            console.log(pushData)
 
             jQuery.postJSON = function (url, data, callback) {
                 jQuery.post(url, data, callback, "json");
@@ -717,15 +720,15 @@
 
             $.postJSON("/Seller/CreateSuccess", { jsonString: pushData }, function () { });
 
-            //Swal.fire(
-            //    '成功!',
-            //    '您已新增成功!',
-            //    'success'
-            //);
+            Swal.fire(
+                '成功!',
+                '您已新增成功!',
+                'success'
+            );
 
-            //setTimeout(function () {
-            //    location.href = "/Seller/NewIndex"
-            //}, 2000);
+            setTimeout(function () {
+                location.href = "/Seller/NewIndex"
+            }, 2000);
            
         })
         //============防呆=====================
