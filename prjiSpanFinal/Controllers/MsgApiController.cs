@@ -12,6 +12,7 @@ using prjiSpanFinal.ViewModels;
 using System.Text;
 using System.Text.Json;
 using prjiSpanFinal.ViewModels.App;
+using Newtonsoft.Json;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -249,9 +250,14 @@ namespace prjiSpanFinal.Controllers
             return Json(dbcontext.Notifications.Where(n => n.MemberId == id && n.HaveRead == false).OrderByDescending(o => o.Time).Select(n => new CNotification(){ NotificationId = n.NotificationId, Text = n.Text, Time = n.Time, TextContent= n.TextContent}).ToList());
         }
 
-        public IActionResult GetBigtypeItems(int memid, int id, int page)
+        public IActionResult GetBigtypeItems(int memid, int id, int page, string st, string ship, string pay, string price1, string price2)
         {
-            int eachpage = 10;
+            List<int> nst = JsonConvert.DeserializeObject<List<int>>(st);
+            List<int> nship = JsonConvert.DeserializeObject<List<int>>(ship);
+            List<int> npay = JsonConvert.DeserializeObject<List<int>>(pay);
+            List<int> nprice1 = JsonConvert.DeserializeObject<List<int>>(price1);
+            List<int> nprice2 = JsonConvert.DeserializeObject<List<int>>(price2);
+            int eachpage = 2;
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             List<ViewModels.App.CShowItem> q = dbcontext.Products.Where(n => n.SmallType.BigTypeId == id && (n.ProductStatusId != 1 && n.ProductStatusId != 2)).Select(n => new ViewModels.App.CShowItem()
             {
@@ -262,26 +268,55 @@ namespace prjiSpanFinal.Controllers
                 Price2 = n.ProductDetails.Select(a => a.UnitPrice).Max(),
                 salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.Quantity).Sum(),
                 starCount = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count,
-                IsFavourite = n.Likes.Where(k=>k.MemberId == memid).Any(),
+                IsFavourite = n.Likes.Where(k => k.MemberId == memid).Any(),
                 stID = n.SmallTypeId,
                 st = n.SmallType.SmallTypeName,
+                shipIDList = n.Member.ShipperToSellers.Select(s => s.ShipperId).ToList(),
+                payIDList = n.Member.PaymentToSellers.Select(s => s.PaymentId).ToList(),
             }).ToList();
 
-            var temp = new List<ViewModels.App.CShowItem>(q);
-            temp.OrderBy(t => (t.Price1 + t.Price2) / 2).ToList();
-            for(int i = 0; i < temp.Count; i++)
+            if(nst.Count > 0)
             {
-
+                q=q.Where(p => nst.Contains(p.stID)).ToList();
             }
 
+            if(nship.Count > 0)
+            {
+                q=q.Where(p => p.shipIDList.Intersect(nship).Any()).ToList();
+            }
 
+            if (npay.Count > 0)
+            {
+                q=q.Where(p => p.payIDList.Intersect(npay).Any()).ToList();
+            }
+
+            if (nprice1.Count > 0)
+            {
+                List<ViewModels.App.CShowItem> q1 = new List<ViewModels.App.CShowItem>();
+                for(int i=0;i< nprice1.Count;i++)
+                {
+                    q1 = q1.Union(q.Where(p => p.Price1 >= nprice1[i] && p.Price1 <= nprice2[i] || p.Price2 >= nprice1[i] && p.Price2 <= nprice2[i]).ToList()).ToList();
+                }
+                q = q1;
+            }
+
+            List<int> quantiles = new List<int>();
+            if(q.Count >0)
+            {
+                var temp = q.Select(t => (t.Price1 + t.Price2) / 2).OrderBy(y => y).ToList();
+                quantiles.Add(Convert.ToInt32(Math.Round(temp[Convert.ToInt32(Math.Floor((decimal)temp.Count / (decimal)4))])));
+                quantiles.Add(Convert.ToInt32(Math.Round(temp[Convert.ToInt32(Math.Floor((decimal)temp.Count * 2 / (decimal)4))])));
+                quantiles.Add(Convert.ToInt32(Math.Round(temp[Convert.ToInt32(Math.Floor((decimal)temp.Count * 3 / (decimal)4))])));
+                quantiles.Add(Convert.ToInt32(Math.Ceiling(temp.Max())));
+            }
 
             foreach(var item in q)
             {
                 item.stList = q.Select(a => a.st).Distinct().ToList();
                 item.stIDList = q.Select(a => a.stID).Distinct().ToList();
+                item.quantiles = quantiles;
             }
-            q = q.Skip((page - 1) * eachpage).Take(page * eachpage).ToList();
+            q = q.Skip((page - 1) * eachpage).Take(eachpage).ToList();
             foreach(var item in q)
             {
                 if(item.Pic == null)

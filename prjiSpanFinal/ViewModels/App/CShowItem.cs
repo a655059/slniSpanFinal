@@ -22,5 +22,8 @@ namespace prjiSpanFinal.ViewModels.App
         public bool IsFavourite { get; set; }
 
         public List<int> quantiles { get; set; }
+
+        public List<int> shipIDList { get; set; }
+        public List<int> payIDList { get; set; }
     }
 }
