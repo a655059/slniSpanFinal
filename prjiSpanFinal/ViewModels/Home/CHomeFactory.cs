@@ -8,6 +8,11 @@ namespace prjiSpanFinal.ViewModels.Home
 {
     public class CHomeFactory
     {
+        iSpanProjectContext db;
+        public CHomeFactory()
+        {
+            db = new iSpanProjectContext();
+        }
         public List<Product> rdnProd(List<Product> list)
         {
             if (list == null)
@@ -17,7 +22,7 @@ namespace prjiSpanFinal.ViewModels.Home
         }
         public List<CShowItem> toShowItem(List<Product> list)
         {
-            iSpanProjectContext db = new iSpanProjectContext();
+            //iSpanProjectContext db = new iSpanProjectContext();
             List<CShowItem> res = new List<CShowItem>();
             if (list == null)
             {
@@ -25,7 +30,7 @@ namespace prjiSpanFinal.ViewModels.Home
             }
             foreach (var item in list)
             {
-                if (item.ProductStatusId != 0)
+                if (item.ProductStatusId == 1|| item.ProductStatusId == 2)
                 {
                     continue;
                 }
@@ -66,7 +71,7 @@ namespace prjiSpanFinal.ViewModels.Home
         }
         public List<SmallType> searchTypeSmall(BigType search)
         {
-            iSpanProjectContext db = new iSpanProjectContext();
+            //iSpanProjectContext db = new iSpanProjectContext();
             List<SmallType> res = db.SmallTypes.Where(t => t.BigTypeId == search.BigTypeId).ToList();
             return res;
         }
@@ -79,6 +84,78 @@ namespace prjiSpanFinal.ViewModels.Home
             List<WebAd> res = list.OrderBy(p => Guid.NewGuid()).ToList();
             return res;
         }
+        public List<CShowFSItem> toShowFSItem(List<Product> list)
+        {
+            List<CShowFSItem> res = new List<CShowFSItem>();
+            if (!list.Any())
+            {
+                return res;
+            }
+            foreach(var prod in list)
+            {
+                if (prod.ProductStatusId == 1 || prod.ProductStatusId==2)
+                {
+                    continue;
+                }
+                CShowFSItem obj = new CShowFSItem();
+                float Discount = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault();
+                DateTime StartDate = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId&&e.VerifyId==2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
+                int Sale = db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o=> (o.Order.FinishDate).CompareTo(StartDate)>0).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
+                byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
+                var Detail = db.ProductDetails.Where(p => p.ProductId == prod.ProductId);
+                var Price = Detail.Select(p => p.UnitPrice);
+                List<decimal> PriceList = new List<decimal>();
+                if (Price.Min() == Price.Max()) { 
+                    PriceList.Add(Price.Max());
+                }
+                else
+                {
+                    PriceList.Add(Price.Max());
+                    PriceList.Add(Price.Min());
+                }
+                int Stock = Detail.Select(p => p.Quantity).Sum(q => q);
+
+                obj.product = prod;
+                obj.price = PriceList;
+                if(Pic!=null)
+                    obj.pic = Pic;
+                obj.discount = Discount;                
+                obj.stock = Stock;
+                obj.sale = Sale;
+
+                res.Add(obj);
+            }
+
+            return res;
+        }
+        public List<CShowBBItem> toShowBBItem(List<Product> list)
+        {
+            List<CShowBBItem> res = new List<CShowBBItem>();
+            if (!list.Any())
+            {
+                return res;
+            }
+            //var a = db.AdtoProducts.Where(a => a.IsSubActive == true && a.Ad.AdTypeId == 3).Select(a => a.Product);
+            foreach(var prod in list)
+            {
+                if (prod.ProductStatusId == 1 || prod.ProductStatusId == 2)
+                {
+                    continue;
+                }
+                CShowBBItem b = new CShowBBItem();
+                byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
+                if (Pic != null)
+                {
+                    b.pic = Pic;
+                }
+                b.product = prod;
+                var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId);
+
+                res.Add(b);
+            }
+            return res;
+        }
+
 
     }
 }
