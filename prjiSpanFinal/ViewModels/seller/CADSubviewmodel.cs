@@ -75,5 +75,23 @@ namespace prjiSpanFinal.ViewModels.seller
                 }
             }
         }
+        public double RemainingForSort
+        {
+            get
+            {
+                if (DateTime.Compare(ADtoProd.EndDate, DateTime.Now) >= 0)
+                {
+                    TimeSpan ts = (ADtoProd.EndDate).Subtract(DateTime.Now);
+
+                    return ts.TotalSeconds;
+                }
+                else
+                {
+                    return 0;
+                }
+
+            }
+        }
+        public int dataCount { get; set; }
     }
 }

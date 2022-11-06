@@ -51,8 +51,6 @@
     padding:0;
 }
 
-
-
 .drop-lab {
     width: 100%;
     padding: 0px 10px;
@@ -62,6 +60,11 @@
 }
 .drop-checkbox {
     margin-right: 10px;
+}
+.sorting {
+    user-select: none;
+    color:red;
+    font-weight:900;
 }
 /*=============================*/
 .nav-item {

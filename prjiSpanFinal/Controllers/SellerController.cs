@@ -213,7 +213,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getItem(int nowpage)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CShowItem> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
             return Json(res);
         }
         public IActionResult ADshowCheckItem(int itemID)
@@ -237,10 +237,11 @@ namespace prjiSpanFinal.Controllers
             List<Adtype> filters = _db.Adtypes.OrderBy(p=>p.AdTypeId).ToList();
             return Json(filters);
         }
-        public IActionResult getSubList(string keyword,int[] filter1,int[] filter2, int Sort, int page)
+        public IActionResult getSubList(int[] filter1,int[] filter2, int Sort, int page, string key)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             List<CADSubviewmodel> res = new CSellerADFactory().fgetSubList(id);
+            res = new CSellerADFactory().fgetSubList(res, key, filter1, filter2, Sort, page);
 
             return Json(res);
         }

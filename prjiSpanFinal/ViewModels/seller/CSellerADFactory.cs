@@ -15,12 +15,22 @@ namespace prjiSpanFinal.ViewModels.seller
             db = new iSpanProjectContext();
         }
 
-        public List<CShowItem> fgetShowITem(List<Product> list, int nowpages)
+        public List<CADProdViewModel> fgetShowITem(List<Product> list, int nowpages)
         {
-            List<CShowItem> res = ADgetShowItem(list);
-
+            List<CADProdViewModel> res = new List<CADProdViewModel>();
             if (!list.Any())
                 return res;
+            List<CShowItem> listtrans = ADgetShowItem(list);
+            
+            foreach (var item in listtrans)
+            {
+                CADProdViewModel r = new CADProdViewModel
+                {
+                    item = item,
+                    dataCount = listtrans.Count()
+                };
+                res.Add(r);
+            }
             return res.Skip((nowpages - 1) * 15).Take(15).ToList();
         }
         public CShowItem fgetCheckedshowItem(List<Product> list)
@@ -146,37 +156,73 @@ namespace prjiSpanFinal.ViewModels.seller
             if (keyword != null)
             {
                 keyword.Trim();
-                res.Where(r => r.prod.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
+                res=res.Where(r => r.prod.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
             }
 
             if (filter1.Any())
             {
-
+                List<string> keys = new List<string>();
+                foreach(var item in filter1)
+                {
+                    keys.Add(db.Adtypes.Where(t => t.AdTypeId == item).Select(t => t.AdType1).FirstOrDefault());
+                }
+                res=res.Where(r => keys.Contains(r.adTypeName)).ToList();
             }
             if (filter2.Any())
             {
-
+                if (filter2.Length == 1)
+                {
+                    if (filter2[0] == 0)
+                    {
+                        res=res.Where(r => !r.isSubActive).ToList();
+                    }
+                    else if (filter2[0] == 1)
+                    {
+                        res=res.Where(r => r.isSubActive).ToList();
+                    }
+                }                
             }
-
+            
             switch (Sort)
             {
-
+                //單 desc 雙asc
+                //編號 
                 case 1:
+                    res = res.OrderByDescending(r => r.ADtoProd.AdtoProductId).ToList();
                     break;
                 case 2:
+                    res = res.OrderBy(r => r.ADtoProd.AdtoProductId).ToList();
                     break;
+                //剩餘時間
                 case 3:
+                    res = res.OrderByDescending(r => r.RemainingForSort).ToList();
                     break;
                 case 4:
+                    res = res.OrderBy(r => r.RemainingForSort).ToList();
                     break;
+                //曝光
                 case 5:
+                    res = res.OrderByDescending(r => r.ExpoTimes).ToList();
                     break;
                 case 6:
+                    res = res.OrderBy(r => r.ExpoTimes).ToList();
                     break;
+                //點擊
+                case 7:
+                    res = res.OrderByDescending(r => r.ClickTimes).ToList();
+                    break;
+                case 8:
+                    res = res.OrderBy(r => r.ClickTimes).ToList();
+                    break;
+
                 default:
                     break;
             }
 
+            foreach(var item in res)
+            {
+                item.dataCount = res.Count();
+            }
 
             return res.Skip((page - 1) * 10).Take(10).ToList();
         }
