@@ -47,8 +47,8 @@ namespace prjiSpanFinal.Controllers
         public IActionResult SortOrder(int BigTypeId, string[] filter, int pages, int eachpage, int priceMin, int priceMax, int SortOrder)
         {
             iSpanProjectContext db = new iSpanProjectContext();
-            int[] filterint = Array.ConvertAll(filter, a => int.Parse(a));
             var prodlist = new List<Product>();
+            int[] filterint = Array.ConvertAll(filter, a => int.Parse(a));
             #region Filter (List<Product>)
             //Filter
             if (filter.Length > 0)
@@ -98,20 +98,15 @@ namespace prjiSpanFinal.Controllers
 
             #region  Price Min/Max
             //Price Min/Max
-            List<CShowItem> list1;
-            List<CShowItem> list2;
-            list1 = list.Where(p => p.Price.Count == 1).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax).ToList();
-            list2 = list.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
-            list1.AddRange(list2);
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
             #endregion
 
             //Pages #todo
             //TBC
-
-            int count = list1.Count();
+           
+            int count = list.Count();
             
-
-            return Json(new {list = list1.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
+            return Json(new {list = list.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
 
             //return Json(new SortRequest().SortItems(BigTypeId,filter.Select(o=>Convert.ToInt32(o)).ToArray(), pages, eachpage,priceMin, priceMax, SortOrder));
         }
