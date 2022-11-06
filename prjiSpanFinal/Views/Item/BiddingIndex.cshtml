@@ -91,7 +91,7 @@
                 <img src="@Url.Content("~/img/clock.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="showEndTime p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
-                <img src="@Url.Content("~/img/calender.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+                <img src="@Url.Content("~/img/calender.png")" class="d-block opacity-50" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
                 <div class="remainingTime ps-2">剩<span class="remainingTime2 ms-2"></span></div> 
@@ -295,10 +295,14 @@
         $(".showRemainingTime").click(function () {
             $(".remainingTime").removeClass("d-none");
             $(".endTime").removeClass("d-none").addClass("d-none");
+            $(".showRemainingTime img").removeClass("opacity-50");
+            $(".showEndTime img").removeClass("opacity-50").addClass("opacity-50");
         });
         $(".showEndTime").click(function () {
             $(".remainingTime").removeClass("d-none").addClass("d-none");
             $(".endTime").removeClass("d-none");
+            $(".showRemainingTime img").removeClass("opacity-50").addClass("opacity-50");
+            $(".showEndTime img").removeClass("opacity-50");
         });
 
 
