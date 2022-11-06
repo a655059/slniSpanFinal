@@ -571,15 +571,15 @@
 
              $.postJSON("/Seller/EditProductSuccess", { jsonString: pushData }, function () { });
 
-            //Swal.fire(
-            //    '成功!',
-            //    '您已修改成功!',
-            //    'success'
-            //);
+            Swal.fire(
+                '成功!',
+                '您已修改成功!',
+                'success'
+            );
 
-            //setTimeout(function () {
-            //    location.href = "/Seller/NewIndex"
-            //}, 2000);
+            setTimeout(function () {
+                location.href = "/Seller/NewIndex"
+            }, 2000);
 
         })
     </script>
