@@ -21,8 +21,12 @@
     var payingFee = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.Fee).ToList();
 
 
+    object[] images = { "~/img/payment5.png", "~/img/payment6.png", "~/img/payment7.png", "~/img/payment8.png", "~/img/payment9.jpg", "~/img/payment10.png", "~/img/payment11.png", "~/img/payment12.png", "~/img/payment2.png", };
+    //byte[] images = {"~/img/payment5.png", "~/img/payment6.png" , "~/img/payment7.png" , "~/img/payment8.png" };
+
+
     //var SalesCourtServiceTime   想說像修改關於我先把服務時間切分 再帶入viewmodel中的個別變數
-   
+
 }
 
 @section Styles{
@@ -33,37 +37,46 @@
             padding-bottom: 0.625rem;
             flex: none;
         }
+
+        .info-section {
+            font-size: 15px;
+            margin: 30px 0;
+            padding: 45px 30px 20px;
+            border: 11px solid #f78f1c;
+            border-radius: 4px;
+            /*background: url(/images/about_me_border_style.png) repeat-x;*/
+            background: url(/img/蝦到爆.png);
+            background-repeat: repeat-x;
+            /*height:90px;*/
+            background-size: 85px 100px;
+        }
     </style>
 
 
 }
 
-<div class="outlook">
-
-
-</div>
-
-
 
 <div class="ps-2">
     @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2">*@
-        <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/賣場?id=@Model.Memberid"> 回賣場</a>
+    <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/賣場?id=@Model.Memberid"> 回賣場</a>
     @*</button>*@
     @*<button class="btn btn-outline-success rounded-2 btn-sm ms-2">*@
-        <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/評價?id=@Model.Memberid"> 評價</a>
+    <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/評價?id=@Model.Memberid"> 評價</a>
     @*</button>*@
     <input type="hidden" value="@Model.Memberid" id="abmeID" />
 </div>
 
-<div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
+
+<div class="container info-section">
+    <div class="p-4 p-md-5 mb-4 rounded  " >
         <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">付款與運送的方式</h1>
+            <h1 style="font-size:3em">付款與運送的方式</h1>
         </div>
 
         <div class="row" style="font-size:1.4em">
             <div class="col-6">
-                <div class="text-secondary" style="font-size:1.5em">付款方式</div>
+                <div class="text-warning" style="font-size:1.5em">付款方式</div>
+                @*想要先有寫死的圖片再根據對應到的陣列位置抓取直*@
 
                 @{
                     foreach (var item in shippingmethod)
@@ -74,12 +87,14 @@
 
             </div>
             <div class="col-6">
-                <div class="text-secondary" style="font-size:1.5em">運送方式</div>
+                <div class="text-warning" style="font-size:1.5em">運送方式</div>
 
 
                 @{
                     for (int i = 0; i < payingName.Count(); i++)
                     {
+                        <img src="~/img/payment@(i).png" width="40" height="40" class="mx-2" />
+                        //-<img src="@images[i]" class="cardImg rounded-circle" alt="..." width="120" />
                         <span>@payingName[i]</span>
                         <span>:</span>
                         <span>@payingFee[i]</span>
@@ -93,98 +108,115 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:bisque">
-        <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">@me.NickName 賣場資訊</h1>
-        </div>
 
-        <div class="row m-5">
-            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品數:@productcount &nbsp;</div>
-            @*<div class="col"><i class="fa-solid fa-box-taped" style="width:15px"></i> 商品:&nbsp;</div>*@
 
-            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:@followcount&nbsp;</div>
-            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:@avgstar.ToString("0.00")&nbsp;</div>
-        </div>
+<div class="outlook">
+</div>
 
-        <div class="row m-5" style="font-size:1.4em">
-            <div class="col">
-                <div class="bg-secondary">賣場服務時間</div>
-                <p>
-                    星期 @Model.weekDown - 星期 @Model.weekUp                                      
-                </p>
-                <p>
-                    時間  @Model.timeDown:00- @Model.timeUp:00
-                </p>
-                <p>
-                    國定例假日公休: @Model.takebreak
-                </p>
+<div class="first">
+
+    <div class="container info-section">
+        <div class="p-4 p-md-5 mb-4 rounded  ">
+            <div class="col-md-6 px-0">
+                <h1 style="font-size:3em">@me.NickName 賣場資訊</h1>
             </div>
-            <div class="col">
-                <div class="bg-secondary">新品上架時間</div>
-                <p>
-                   
-                </p>
+                               
+
+            <div class="row m-5">
+                <div class="col" style="font-size:2em"><i class="fa-sharp fa-solid fa-box"></i> 商品數:@productcount &nbsp;</div>
+                @*<div class="col"><i class="fa-solid fa-box-taped" style="width:15px"></i> 商品:&nbsp;</div>*@
+
+                <div class="col" style="font-size:2em"><i class="fa-regular fa-heart"></i>關注中:@followcount&nbsp;</div>
+                <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:@avgstar.ToString("0.00")&nbsp;</div>
             </div>
-            <div class="col">
-                <div class="bg-secondary">商品類型</div>
+
+            <div class="row" style="font-size:2em">
+                <div class="col">
+                    <div class="text-warning">賣場服務時間</div>
+                    <p>
+                        星期 @Model.weekDown - 星期 @Model.weekUp
+                    </p>
+                    <p>
+                        時間  @Model.timeDown:00- @Model.timeUp:00
+                    </p>
+                    <p>
+                        國定例假日公休: @Model.takebreak
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="text-warning">新品上架時間</div>
+                    <p>
+
+                    </p>
+                </div>
+                <div class="col">
+                    <div class="text-warning">商品類型</div>
 
 
-                @{
-                    foreach (var item in custcategory)
-                    {
-                        <p>
-                            @item.CustomizedCategoryName
-                        </p>
+                    @{
+                        foreach (var item in custcategory)
+                        {
+                            <p>
+                                @item.CustomizedCategoryName
+                            </p>
+
+                        }
 
                     }
+                </div>
+                <div class="col">
+                    <div class="text-warning">賣家類型</div>
+                    <p>
 
-                }
+                    </p>
+                </div>
             </div>
-            <div class="col">
-                <div class="bg-secondary">賣家類型</div>
-                <p>
-                    
-                </p>
-            </div>
-        </div>
 
-        <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
-    </div>
-</div>
-
-<div class="container">
-    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
-        <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">注意事項及售後服務</h1>
-            <div>注意事項:</div>
-            <p class="lead my-3" style="font-size:1.4em">
-               
-            </p>
-            <div>售後服務:</div>
-            <p class="lead my-3" style="font-size:1.4em">
-               
-            </p>
             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
-
-
     </div>
+
+    <div class="container info-section">
+        <div class="p-4 p-md-5 mb-4 rounded  ">
+            <div class="col-md-6 px-0">
+                <h1 style="font-size:3em">注意事項及售後服務</h1>
+                <div>注意事項:</div>
+                <p class="lead my-3" style="font-size:2em">
+
+                </p>
+                <div>售後服務:</div>
+                <p class="lead my-3" style="font-size:2em">
+
+                </p>
+                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+            </div>
+
+
+        </div>
+    </div>
+
 </div>
 
-@section Scripts{ 
+@section Scripts{
     <script>
-
+        let image = ["/img/product.png", "~/img/follow.png", "~/img/star_null.png"];
 
         load();
 
         function load() {
             $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
                 console.log(data);
-                var datas = JSON.parse(data);
+
                 console.log(datas);
 
-                $(".outlook").append(returnAbome(datas));
+
+                if (data != null) {
+                    var datas = JSON.parse(data);
+                    $(".outlook").append(returnAbome(datas));
+
+                    $(".first").html("");
+                }
+
 
                 /*$(".outlook").append(returnabme(datas));*/
             })
@@ -195,89 +227,94 @@
 
         function returnAbome(datas) {
             return `
-                <div class="container">
-                    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color:bisque">
+                <div class="container info-section">
+                    <div class="p-4 p-md-5 mb-4 rounded  ">
                         <div class="col-md-6 px-0">
-                            <h1 class="display-4 fst-italic"> 賣場資訊</h1>
+                            <h1 style="font-size:3em"> 賣場資訊</h1>
                         </div>
 
                         <div class="row m-5">
-                            <div class="col" style="font-size:2em"><img src="~/img/product.png" width="20" /> 商品數: &nbsp;</div>
 
-                            <div class="col" style="font-size:2em"><img src="~/img/follow.png" width="20" />關注中:&nbsp;</div>
-                            <div class="col" style="font-size:2em"><img src="~/img/star_null.png" width="20" />評價:</div>
-                                                                            </div>
+                            <div class="col" style="font-size:2em">
 
-
+                            <i class="fa-sharp fa-solid fa-box"></i>
+                            商品數: &nbsp;</div>
 
 
-                            <div class="row m-5" style="font-size:1.4em">
+                            <div class="col" style="font-size:2em">
+                            <i class="fa-regular fa-heart"></i>
+                            關注中:&nbsp;</div>
 
+                            <div class="col" style="font-size:2em">
+                            <i class="fa-regular fa-comment"></i>
+                            評價:</div>
+                       </div>
 
-                            <div clals="col">
-
-
-                            <div class="bg-secondary">賣場服務時間</div>
-                                                                                  <p>
-
-
-                                    星期${datas.selectopt[0]}  - 星期${datas.selectopt[1]}
+                        <div class="row" style="font-size:2em">
+                            <div class="col">
+                                <div class="text-warning">賣場服務時間</div>
+                                <p>
+                                    星期 @Model.weekDown - 星期 @Model.weekUp
                                 </p>
                                 <p>
-                                    時間  ${datas.selectopt[2]}:00- ${datas.selectopt[3]}:00
+                                    時間  @Model.timeDown:00- @Model.timeUp:00
                                 </p>
                                 <p>
-                                    國定例假日公休: ${datas.text[1]}
+                                    國定例假日公休: @Model.takebreak
                                 </p>
                             </div>
                             <div class="col">
-                                <div class="newProductOnload bg-secondary">新品上架時間</div>
+                                <div class="text-warning">新品上架時間</div>
                                 <p>
 
                                 </p>
                             </div>
                             <div class="col">
-                                <div class="bg-secondary">商品類型</div>
+                                <div class="text-warning">商品類型</div>
+
 
                                 @{
                                     foreach (var item in custcategory)
                                     {
                                         <p>
-
+                                            @item.CustomizedCategoryName
                                         </p>
+
                                     }
 
                                 }
                             </div>
                             <div class="col">
-                                <div class="bg-secondary">賣家類型</div>
+                                <div class="text-warning">賣家類型</div>
                                 <p>
-                                    ${datas.text[2]}
+
                                 </p>
                             </div>
                         </div>
+
+
 
                         <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="p-4 p-md-5 mb-4 rounded  " style="background-color: bisque">
+                <div class="container info-section">
+                    <div class="p-4 p-md-5 mb-4 rounded  " >
                         <div class="col-md-6 px-0">
-                            <h1 class="display-4 fst-italic">注意事項及售後服務</h1>
-                            <div>注意事項:</div>
-                            <p class="lead my-3" style="font-size:1.4em">
+                            <h1 style="font-size:3em">注意事項及售後服務</h1>
+                            <div style="font-size:1.8em">注意事項:</div>
+                            <div class="lead my-3" style="font-size:1.4em">
                                 <div>是否接受退貨 </div>
                                 <div>享有天猶豫期退貨 </div>
                                 <div>商品退貨須為全新狀態且完整包裝 </div>
                                 <div>商品退回需含贈品 </div>
-                            </p>
-                            <div>售後服務:</div>
-                            <p class="lead my-3" style="font-size:1.4em">
+                            </div>
+                            <div style="font-size:1.8em">售後服務:</div>
+                            <div class="lead my-3" style="font-size:1.4em">
                                 <div>結帳後請魚蝦蝦通提供 產品名稱或編號   款式顏色  數量</div>
                                 <div>請於  天內完成"結帳動作"</div>
                                 <div>結帳完成後  天內未完成"匯款"將發出蝦蝦通提醒</div>
-                            </p>
+                            </div>
                             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
                         </div>
 
