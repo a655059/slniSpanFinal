@@ -279,23 +279,13 @@
             $.postJSON(`/Category/SortOrder`, { BigTypeId: BigtypeId, filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("") ;
                 if (data.length > 0) {
-                    //console.log(data);
                     $("#OriginShowItem").append(Items(data));
-                    //ItemsComponent(data);
                 }
                 else {
                     $("#OriginShowItem").html("<div>暫待新增商品</div>") ;
                 }
             })
         }
-
-        //function ItemsComponent(data) {
-        //    //console.log(data);
-        //    $.postJSON('/Category/CallItemComponent', { data: data }, function (data) {
-        //        //console.log(data);
-        //        //$("#OriginShowItem").load(data);
-        //    })
-        //}
 
         function Items(data) {
             let item = "";

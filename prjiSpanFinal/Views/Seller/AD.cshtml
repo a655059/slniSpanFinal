@@ -121,6 +121,34 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex justify-content-between" id="ADfilterBody">
+            <div id="ADfilterArea" class="d-flex">
+                <div>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdownbar" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="">123</span>
+                    </button>
+                    <div class="dropdown-menu droplist">
+                        <label class="drop-lab" for="TWO">
+                            <input id="TWO" class="drop-checkbox" data-value="2" tabIndex="-1" type="checkbox" />Option 2
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdownbar" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="">123</span>
+                    </button>
+                    <div class="dropdown-menu droplist">
+                        <label class="drop-lab" for="CC">
+                            <input id="CC" class="drop-checkbox" data-value="2" tabIndex="-1" type="checkbox" />Option 2
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="ADSearchArea">
+                <input type="text" placeholder="商品關鍵字..." id="ListSearchText" />
+                <div class="btn btn-dark btn-sm" id="ListSearchBtn">搜尋</div>
+            </div>
+        </div>
         <table class="table table-bordered text-center align-items-center" id="SubListBox">
             <thead>
                 <tr class="Sub-header" style="vertical-align: middle" id="Sub-header">
@@ -230,9 +258,26 @@
         //========================================== LIST
         let SubList = $("#SubList");
         let CheckListItemNum = [];
+        let sorted = 0;
         let CheckID = 0;
+        let filter1 = [];
+        let filter2 = [];
+        let nowpage = 0;
+        let searchtext = "";
 
 
+        function ListClearAll() {
+            CheckListItemNum = [];
+            sorted = 0;
+            CheckID = 0;
+            filter1 = [];
+            filter2 = [];
+            nowpage = 0;
+            searchtext = "";
+            getSubList();
+            $("#checkboxAll").prop("checked", false)
+            AllUnSubActive();
+        }
 
 
         Model.on("show.bs.modal", function (evt) {
@@ -849,6 +894,30 @@
                 $("#AllUnSubBtn").prop("disabled", true);
             }
         }
+
+
+        var options = [];
+
+        $('.dropdown-menu .drop-lab').on('click', function (event) {
+
+            var $target = $(event.currentTarget),
+                val = $target.find('input').attr('id'),
+                $inp = $target.find('input'),
+                idx;
+
+            if ((idx = options.indexOf(val)) > -1) {
+                options.splice(idx, 1);
+                setTimeout(function () { $inp.prop('checked', false) }, 0);
+            } else {
+                options.push(val);
+                setTimeout(function () { $inp.prop('checked', true) }, 0);
+            }
+
+            //$(event.target).blur();
+
+            console.log(options);
+            return false;
+        })
     </script>
 
 }

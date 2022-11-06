@@ -237,7 +237,7 @@ namespace prjiSpanFinal.Controllers
             List<Adtype> filters = _db.Adtypes.OrderBy(p=>p.AdTypeId).ToList();
             return Json(filters);
         }
-        public IActionResult getSubList()
+        public IActionResult getSubList(string keyword,int[] filter1,int[] filter2, int Sort, int page)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             List<CADSubviewmodel> res = new CSellerADFactory().fgetSubList(id);

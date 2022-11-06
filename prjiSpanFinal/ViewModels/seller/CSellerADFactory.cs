@@ -138,5 +138,47 @@ namespace prjiSpanFinal.ViewModels.seller
             }
             return res;
         }
+
+        public List<CADSubviewmodel> fgetSubList(List<CADSubviewmodel> res,string keyword, int[] filter1, int[] filter2,int Sort, int page)
+        {
+
+            //keyword
+            if (keyword != null)
+            {
+                keyword.Trim();
+                res.Where(r => r.prod.ProductName.ToUpper().Contains(keyword.ToUpper())).ToList();
+            }
+
+            if (filter1.Any())
+            {
+
+            }
+            if (filter2.Any())
+            {
+
+            }
+
+            switch (Sort)
+            {
+
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                default:
+                    break;
+            }
+
+
+            return res.Skip((page - 1) * 10).Take(10).ToList();
+        }
     }
 }

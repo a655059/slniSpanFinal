@@ -36,6 +36,34 @@
     color: black;
     text-overflow: ellipsis;
 }
+/*=============================*/
+#ADfilterBody {
+    margin: 20px 0;
+}
+.dropdownbar {
+    width: 160px;
+    margin-left: 30px;
+    border-color: red;
+    --bs-btn-hover-border-color: blue;
+}
+.droplist{
+    width:100px;
+    padding:0;
+}
+
+
+
+.drop-lab {
+    width: 100%;
+    padding: 0px 10px;
+}
+.drop-lab:hover{
+    background-color:yellow;
+}
+.drop-checkbox {
+    margin-right: 10px;
+}
+/*=============================*/
 .nav-item {
     color: #FF5809;
 }
@@ -53,6 +81,7 @@
 .Item-check {
     width: 100%;
 }
+/*===============================*/
 #PagesArea{
     margin:20px 0;
 }
