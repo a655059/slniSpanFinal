@@ -55,8 +55,8 @@
                     </div>
                     <!-- /MemberCenter -->
                     <!-- Cart -->
-                    <div class="searchcart-Cart">
-                        <a href="#" class="linknoline">
+                    <div class="searchcart-Cart1" style="cursor:pointer">
+                        <div>
                             <i class="fa fa-shopping-cart searchcart-Cart-icon">
                                 @if (getCarts > 0)
                                 {
@@ -70,16 +70,9 @@
                             <div class="text-center">
                                 <span>購物車</span>
                             </div>
-                        </a>
-                    </div>
-                    <div class="noItemInCart" style="display:none;width:200px">
-                        <div class="d-flex flex-column justify-content-center align-items-center">
-                            <div style="width:50px;aspect-ratio:1/1">
-                                <img src="@Url.Content("~/img/emptyBasket.png")" alt="Alternate Text" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
-                            </div>
-                            <div>購物車裡沒有商品，快去購物吧!</div>
                         </div>
                     </div>
+                    
                     <!-- /Cart -->
                     <a href="@Url.Content("~/Item/BiddingItemHome")"><button class="uploadBiddingItem btn btn-primary btn-sm">馬上競標</button></a>
                 </div>
@@ -92,19 +85,6 @@
 </div>
 @section Scripts{
     <script>
-        $(".searchcart-Cart").click(async function () {
-            const response = await fetch("@Url.Content("~/Delivery/ShowcartCondition")");
-            const data = await response.text();
-            if (data == "0") {
-                Swal.fire("請先登入再查看購物車");
-                location.href = "@Url.Content("~/Member/Login")";
-            }
-            else if (data == "2") {
-                $(".noItemInCart").slideToggle();
-            }
-            else {
-                location.href = "@Url.Content("~/Delivery/ShowCart")";
-            }
-        });
+        
     </script>
 }

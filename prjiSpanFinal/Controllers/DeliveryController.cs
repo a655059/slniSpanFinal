@@ -164,8 +164,6 @@ namespace prjiSpanFinal.Controllers
             {
                 return Content("0");
             }
-
-            
         }
 
 

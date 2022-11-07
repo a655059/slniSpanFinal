@@ -6,7 +6,14 @@ let connection4 = new signalR.HubConnectionBuilder().withUrl("/specificItemCount
 
 connection4.on("ShowSpecificItemCountdown", function (remainingTime, id) {
     if (id == biddingID) {
-        $(".biddingItemCountdown").find(".remainingTime2").html(remainingTime);
+        if (remainingTime.substring(0, 1) != "-") {
+            $(".biddingItemCountdown").find(".remainingTime2").html(remainingTime);
+        }
+        else {
+            $(".biddingItemCountdown").find(".remainingTime").html("競標已結束");
+            $(".bidSubmit").prop("disabled", true);
+        }
+        
     }
 });
 

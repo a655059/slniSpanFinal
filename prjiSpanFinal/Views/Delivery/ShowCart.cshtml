@@ -180,15 +180,19 @@
                     orderDetailIDInfo.push(object);
                 });
                 const data = JSON.stringify(orderDetailIDInfo);
-                const response = await fetch("@Url.Content("~/Delivery/SetItemToCheckoutSession")" + `?purchaseItemInfo=${data}`);
-                const result = await response.text();
-                if (result == 0) {
-                    alert("請再點一次去結帳");
-                    return;
-                }
-                else {
-                    window.location.href = "@Url.Content("~/Delivery/Checkout")"
-                }
+                $.ajax({
+                    url: "@Url.Content("~/Delivery/SetItemToCheckoutSession")",
+                    type: "POST",
+                    data: { purchaseItemInfo: data},
+                }).done(function (result) {
+                    if (result == "0") {
+                        alert("請再點一次去結帳");
+                        return;
+                    }
+                    else {
+                        window.location.href = "@Url.Content("~/Delivery/Checkout")"
+                    }
+                })
             }
             else {
                 alert("請選取至少一個商品");

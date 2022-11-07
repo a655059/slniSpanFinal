@@ -21,7 +21,12 @@ namespace prjiSpanFinal.Hubs
                 {
                     TimeSpan remainingTime = endTime - DateTime.Now;
                     string time = remainingTime.Days + "天" + remainingTime.Hours + "時" + remainingTime.Minutes + "分" + remainingTime.Seconds + "秒";
+                    if (DateTime.Now >= endTime)
+                    {
+                        time = "-" + time;
+                    }
                     await Clients.All.SendAsync("ShowSpecificItemCountdown", time, biddingID);
+
                     Thread.Sleep(1000);
                 }
             }
