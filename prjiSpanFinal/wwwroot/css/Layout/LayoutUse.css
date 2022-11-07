@@ -267,15 +267,39 @@ align-items:center;
 }
 .loschbar > .input-group {
     border: 3px solid white;
-    border-radius: 10px
+    border-radius: 10px;
+    background:white;
 }
     .loschbar > .input-group > .input-text {
         padding-top: 3px;
         padding-bottom: 3px;
         font-size: 20px;
+        height: 55px;
+        width: 100%;
+        outline: none;
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
     }
+    .loschbar .resultBox{
+        /*padding:10px 8px;*/
+        max-height:280px;
+        overflow-y:auto;
+        width:100%;
+        opacity:0;
+        pointer-events:none;
+    }
+.loschbar li{
+    list-style:none;
+    padding:5px 12px; 
+    width:100%;
+    cursor:default;
+    border-radius:3px;
+    display:none;
+}
+.loschbar li:hover{
+    background:#efefef;
+}
 .loschbar > .input-group > .input-text:focus {
-    box-shadow: 0px 0px 0px;
+    /*box-shadow: 0px 0px 0px;*/
     border-color: #f8c146;
     outline: 0px;
 }
@@ -283,11 +307,19 @@ align-items:center;
         
         border: 0px;
     }
+#SearchInputbtn {
+    top: 4px;
+    right: 0;
+    position: absolute;
+    background: #ffc107;
+    color: white;
+    z-index:5;
+}
 .searchkeyspace {
     margin-top: 5px;
     max-height: 24px;
     overflow: hidden;
-    width:100%;
+    width: 100%;
 }
 .searchkeywordbox {
     width: 80px;
