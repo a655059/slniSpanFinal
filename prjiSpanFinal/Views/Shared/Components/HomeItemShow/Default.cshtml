@@ -9,7 +9,8 @@
     {
         string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;
         <div class="sellsitem">
-            <a class="linknoline" href="@productLink">
+            <a class="linknoline sellsitem-imgbox" href="#!">
+                <input type="hidden" value="@item.Product.ProductId"/>
                 @if (item.Pic != null)
                 {
                     var base64Image = Convert.ToBase64String(item.Pic);
@@ -40,10 +41,10 @@
                             <div class="starImg">
                                 <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                             </div>
-                            <div class="text-black">@item.starCount.ToString("0.0")</div>
+                            <div class="">@item.starCount.ToString("0.0")</div>
                         </div>
                     </div>
-                    <div class="text-end text-black-50 sells">已賣出<span>@item.salesVolume</span></div>
+                    <div class="text-end sells">已賣出<span>@item.salesVolume</span></div>
 
                 </div>
             </div>

@@ -54,7 +54,7 @@ namespace prjiSpanFinal.Controllers
         {
             return View();
         }
-        public IActionResult redirectLink(int id)
+        public IActionResult redirectProdLink(int id)
         {
             var a = _db.AdtoProducts.Where(a => a.IsSubActive && a.ProductId == id).FirstOrDefault();
             if (a != null) {

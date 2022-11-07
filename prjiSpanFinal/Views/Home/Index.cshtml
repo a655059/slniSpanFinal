@@ -318,6 +318,19 @@
         <script src="~/js/Homepage/Index.js"></script>
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <script>
+            $(".HP-Item").on("click", ".BBimgBox", getItemClicked)
+            $(".HP-Item").on("click", ".FSimgBox", getItemClicked)
+            $("#itemcol").on("click", ".sellsitem-imgbox", getItemClicked)
+
+            function getItemClicked() {
+                let ItemValue = $(this).find('input').val();
+                var url = '@Url.Content("~/Item/Index")' + "?id=" + ItemValue;
+                $.post('redirectProdLink', { id: ItemValue }, function () {
+                    window.location.href = url;
+                })
+            }
+        </script>
+        <script>
             var swiper = new Swiper(".mySwiper", {
                 slidesPerView: 5,
                 spaceBetween: -20,

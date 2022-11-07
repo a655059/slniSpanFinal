@@ -9,7 +9,8 @@
                     <div class="swiper-slide">
                         @{string productLink = Url.Content("~/Item/Index") + "?id=" + item.product.ProductId;}
                         <div class="BBIterm">
-                            <a class="linknoline BBimgBox" href="@productLink">
+                            <a class="linknoline BBimgBox" href="#!">
+                                <input type="hidden" value="@item.product.ProductId" />
                                 @if (item.pic != null)
                                 {
                                     var base64Image = Convert.ToBase64String(item.pic);
