@@ -79,9 +79,11 @@
                 @*想要先有寫死的圖片再根據對應到的陣列位置抓取直*@
 
                 @{
-                    foreach (var item in shippingmethod)
-                    {
-                        <div>@item</div>
+                    
+                    for (int i = 0; i < shippingmethod.Count(); i++) { 
+                        <img src="~/img/payment@(i).png" width="40" height="40" class="mx-2" />
+                        <span>@shippingmethod[i]</span>
+                        <br/>
                     }
                 }
 
@@ -212,8 +214,11 @@
 
                 if (data != null) {
                     var datas = JSON.parse(data);
+                    
                     $(".outlook").append(returnAbome(datas));
-
+                    detail(datas);
+                    cotion(datas);
+                    serviceafterbuy(datas);
                     $(".first").html("");
                 }
 
@@ -224,6 +229,87 @@
 
         }
 
+        function serviceafterbuy(data) {
+            let afterserve = "";
+
+            if (data.checkbox[9] == true) {
+                afterserve = afterserve + `是否接受退貨:${data.selectopt[4]}<br/>`;
+            }
+            if (data.checkbox[10] == true) {
+                afterserve = afterserve + `享有`;
+            }
+            if (data.checkbox[11] == true) {
+                afterserve = afterserve + `7`;
+            }
+            if (data.checkbox[12] == true) {
+                afterserve = afterserve + `10`;
+            }
+            if (data.checkbox[13] == true) {
+                afterserve = afterserve + `14`;
+            }
+            afterserve = afterserve + `天猶豫期退貨權益<br/>`;
+            if (data.checkbox[14] == true) {
+                afterserve = afterserve + `商品退貨須為全新狀態且完整包裝<br/>`;
+            }
+            if (data.checkbox[15] == true) {
+                afterserve = afterserve + `商品退回需含贈品<br/>`;                
+            }
+
+            $(".afterservice").append(afterserve);
+        }
+
+        function cotion(data) {
+            let caution = "";
+
+            if (data.checkbox[16] == true) {
+                caution = caution + `結帳後請於蝦蝦通提供`;
+            }
+
+            if (data.checkbox[17] == true) {
+                caution = caution + `產品名稱或編號`;
+            }
+            if (data.checkbox[18] == true) {
+                caution = caution + `款式顏色`;
+            }
+            if (data.checkbox[19] == true) {
+                caution = caution + `數量<br/>`;
+            }
+            if (data.checkbox[20] == true) {
+                caution = caution + `請於${data.text[3]}天內完成"結帳動作"<br/>`;
+            }
+            if (data.checkbox[21] == true) {
+                caution = caution + `結帳完成後${data.text[4]}天內未完成"匯款"將發出蝦蝦通提醒`;
+            }
+
+            $(".cautiondetail").append(caution);
+        }
+
+
+        function detail(data) { /*會有checkbox3~8要判別 假設為*/
+           
+
+            if (data.checkbox[3] == true) {
+                $(".newproductonload").html("每天");
+            }
+            else if (data.checkbox[4] == true) {
+                $(".newproductonload").html("1~3天");
+            }
+            else if (data.checkbox[5] == true) {
+                $(".newproductonload").html("3~5天");
+            }
+            else if (data.checkbox[6] == true) {
+                $(".newproductonload").html("每週");
+            }
+            else if (data.checkbox[7] == true) {
+                $(".newproductonload").html("隔週");
+            }
+            else if (data.checkbox[8] == true) {
+                $(".newproductonload").html("不定期");
+            }
+
+          
+            /*$(".cautiondetail").val("caution");*/
+        }
 
         function returnAbome(datas) {
             return `
@@ -238,36 +324,35 @@
                             <div class="col" style="font-size:2em">
 
                             <i class="fa-sharp fa-solid fa-box"></i>
-                            商品數: &nbsp;</div>
+                            商品數: @productcount &nbsp;</div>
 
 
                             <div class="col" style="font-size:2em">
                             <i class="fa-regular fa-heart"></i>
-                            關注中:&nbsp;</div>
+                            關注中:@followcount&nbsp;</div>
 
                             <div class="col" style="font-size:2em">
                             <i class="fa-regular fa-comment"></i>
-                            評價:</div>
+                            評價:@avgstar.ToString("0.00")</div>
                        </div>
 
                         <div class="row" style="font-size:2em">
                             <div class="col">
                                 <div class="text-warning">賣場服務時間</div>
                                 <p>
-                                    星期 @Model.weekDown - 星期 @Model.weekUp
+                                    星期 ${datas.selectopt[0]} - 星期 ${datas.selectopt[1]}
                                 </p>
                                 <p>
-                                    時間  @Model.timeDown:00- @Model.timeUp:00
+                                    時間  ${datas.selectopt[2]-1}:00- ${datas.selectopt[3]-1}:00
                                 </p>
                                 <p>
-                                    國定例假日公休: @Model.takebreak
+                                    國定例假日公休: ${datas.text[1]}
                                 </p>
                             </div>
                             <div class="col">
                                 <div class="text-warning">新品上架時間</div>
-                                <p>
-
-                                </p>
+                               <div class="newproductonload">
+                                </div>
                             </div>
                             <div class="col">
                                 <div class="text-warning">商品類型</div>
@@ -287,11 +372,10 @@
                             <div class="col">
                                 <div class="text-warning">賣家類型</div>
                                 <p>
-
+                                    ${datas.text[2]}
                                 </p>
                             </div>
                         </div>
-
 
 
                         <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
@@ -302,19 +386,19 @@
                     <div class="p-4 p-md-5 mb-4 rounded  " >
                         <div class="col-md-6 px-0">
                             <h1 style="font-size:3em">注意事項及售後服務</h1>
-                            <div style="font-size:1.8em">注意事項:</div>
-                            <div class="lead my-3" style="font-size:1.4em">
-                                <div>是否接受退貨 </div>
-                                <div>享有天猶豫期退貨 </div>
-                                <div>商品退貨須為全新狀態且完整包裝 </div>
-                                <div>商品退回需含贈品 </div>
+                            <div style="font-size:2.3em">注意事項:</div>
+                            <div class="cautiondetail" style="font-size:1.6em">
+
                             </div>
-                            <div style="font-size:1.8em">售後服務:</div>
-                            <div class="lead my-3" style="font-size:1.4em">
-                                <div>結帳後請魚蝦蝦通提供 產品名稱或編號   款式顏色  數量</div>
-                                <div>請於  天內完成"結帳動作"</div>
-                                <div>結帳完成後  天內未完成"匯款"將發出蝦蝦通提醒</div>
+                           
+                            
+                            <div style="font-size:2.3em">售後服務:</div>
+                                                                
+                            <div class="afterservice" style="font-size:1.6em">
+
                             </div>
+                                                                                                   
+                            
                             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
                         </div>
 
