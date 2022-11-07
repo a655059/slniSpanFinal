@@ -101,9 +101,8 @@
         let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
-            pageSize=pagesize.options[pagesize.selectedIndex].value;
             Filter=filter.options[filter.selectedIndex].value;
-            let link="@Url.Content("~/newManagement/FAQList")"+`?filter=${Filter}&pageSize=${pageSize}`;
+            let link="@Url.Content("~/newManagement/FAQList")"+`?filter=${Filter}`;
        document.location.href=link;
         })
     </script>
