@@ -191,19 +191,15 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ProductDetailDelete(int id)
         {
-            var db = (new iSpanProjectContext());
-            var D = from d in db.ProductDetails
-                    where d.ProductDetailId == id
-                    select d;
-            var X = D.First();
-            var G = from g in db.Products
-                    where g.ProductId == D.First().ProductId
-                    select g;
-            var K = from k in db.ProductDetails
-                    where k.ProductId == G.First().ProductId
-                    select k;
-
-            return RedirectToAction("ProductDetailList", new { id = X.ProductId });
+            iSpanProjectContext db = new();
+            var pd = db.ProductDetails.FirstOrDefault(i => i.ProductDetailId == id);
+            if (pd != null)
+            {
+                pd.Quantity = 0;
+                db.SaveChanges();
+                return Content("1");
+            }
+            else { return Content(null); }
         }
         #endregion
         #region MemberRegion
@@ -271,16 +267,11 @@ namespace prjiSpanFinal.Controllers
                 CMemberListViewModel model = new()
                 {
                     MemberAccount = p,
-                    MemStatusName = (from i in MemStatuses
-                                     where i.MemStatusId == p.MemStatusId
-                                     select i.MemStatusName).First(),
-                    RegionName = (from i in RegionLists
-                                  where i.RegionId == p.RegionId
-                                  select i.RegionName).First(),
+                    MemStatusName = MemStatuses.FirstOrDefault(i => i.MemStatusId == p.MemStatusId).MemStatusName,
+                    RegionName = RegionLists.FirstOrDefault(i => i.RegionId == p.RegionId).RegionName,
                 };
                 list.Add(model);
             }
-
             return list;
         }
         protected IPagedList<CMemberListViewModel> GetMemPagedProcess(int? page, int? pageSize, string keyword, string filter)
@@ -311,38 +302,40 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult MemberList2(int? id)
         {
-            var Q = from u in new iSpanProjectContext().MemberAccounts
-                    where u.MemberId == id
-                    select u;
+            iSpanProjectContext db = new();
+            var Q = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
             return View(Q);
         }
         public IActionResult MemberDelete(int id)
         {
             var db = (new iSpanProjectContext());
-            var D = from d in db.MemberAccounts
-                    where d.MemberId == id
-                    select d;
-            D.First().MemStatusId = 5;
+            var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
+            if (D.MemStatusId != 5)
+            {
+                D.MemStatusId = 5;
+            }
             db.SaveChanges();
             return Content("1");
         }
         public IActionResult MemberUndo(int id)
         {
             var db = (new iSpanProjectContext());
-            var D = from d in db.MemberAccounts
-                    where d.MemberId == id
-                    select d;
-            D.First().MemStatusId = 2;
+            var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
+            if (D.MemStatusId == 5)
+            {
+                D.MemStatusId = 2;
+            }
             db.SaveChanges();
             return Content("1");
         }
         public IActionResult MemberStop(int id)
         {
             var db = (new iSpanProjectContext());
-            var D = from d in db.MemberAccounts
-                    where d.MemberId == id
-                    select d;
-            D.First().MemStatusId = 4;
+            var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
+            if (D.MemStatusId != 4)
+            {
+                D.MemStatusId = 4;
+            }
             db.SaveChanges();
             return Content("1");
         }
@@ -430,6 +423,7 @@ namespace prjiSpanFinal.Controllers
             var SmallTypeName = (from i in db.SmallTypes select i).ToList();
             var PaymentName = (from i in db.Payments select i).ToList();
             var CouponName = (from i in db.Coupons select i).ToList();
+            var MemberAcc = db.MemberAccounts.ToList();
             foreach (var p in Orders)
             {
                 COrderListViewModel model = new()
@@ -447,6 +441,7 @@ namespace prjiSpanFinal.Controllers
                     CouponName = (from i in CouponName
                                   where i.CouponId == p.CouponId
                                   select i.CouponName).First(),
+                    MemberAcc=MemberAcc.FirstOrDefault(i=>i.MemberId==p.MemberId).MemberAcc,
                 };
                 list.Add(model);
             }
@@ -1137,8 +1132,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult EventEdit(int? id)
         {
             iSpanProjectContext db = new();
-            var G = from g in db.OfficialEventLists where g.OfficialEventListId == id select g;
-            var ofevent = G.First();
+            var ofevent = db.OfficialEventLists.FirstOrDefault(g => g.OfficialEventListId == id);
             return View(ofevent);
         }
         [HttpPost]
@@ -1698,7 +1692,7 @@ namespace prjiSpanFinal.Controllers
             foreach (var o in small)
             {
                 var prods = db.Products.Where(i => i.SmallTypeId == o.SmallTypeId).ToList();
-                foreach(var prod in prods)
+                foreach (var prod in prods)
                 {
                     prod.SmallTypeId = 294;
                 }
@@ -1716,11 +1710,12 @@ namespace prjiSpanFinal.Controllers
             var st = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
             List<SmallTypeViewModel> list = new();
             var ProdCount = db.Products.ToList();
-            foreach (var i in st) {
+            foreach (var i in st)
+            {
                 SmallTypeViewModel model = new()
                 {
                     SmallType = i,
-                    ProdCount = ProdCount.Where(o=> o.SmallTypeId == i.SmallTypeId).Count(),
+                    ProdCount = ProdCount.Where(o => o.SmallTypeId == i.SmallTypeId).Count(),
                 };
                 list.Add(model);
             }
@@ -1731,7 +1726,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult SmallTypeCreate(int id)
         {
             iSpanProjectContext db = new();
-            ViewBag.BigType= db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
+            ViewBag.BigType = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             return View();
         }
         [HttpPost]
@@ -1765,5 +1760,6 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("SmallTypeList");
         }
         #endregion
+
     }
 }

@@ -338,7 +338,11 @@
                             string checkad = "checkad" + i;
 
                             <div class="row bg-light py-3 border-bottom checkedparent">
-                                <div class="col-1 置中"><input type="checkbox" class="@checkad"/></div>
+                                <div class="col-1 置中">
+                                    <div class="form-check form-switch 靠右">
+                                        <input type="checkbox" class="@checkad paymentID form-check-input" align="center" />
+                                    </div>
+                                </div>
                                 <div class="col-2 置中"><h5>@Model.ADName[i]</h5></div>
                                 <div class="col-6 pt-3 checkes">
                                     @{

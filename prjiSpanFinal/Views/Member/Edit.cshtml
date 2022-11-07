@@ -86,6 +86,7 @@
         bool gender_other = false;
         bool? MYTW=false;
         bool? MYFORIEN = false;
+        bool? CheckEmail = false;
         //string countryName = "";
         //int countryID = 0;
         //count
@@ -102,6 +103,7 @@
             countryNameList = db.CountryLists.OrderBy(o => o.CountryId).Select(r => r.CountryName).ToList();
             Mygender = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).Gender;
             MYTW = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).IsTw;
+            CheckEmail = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).IsAcceptAd;
             if (Mygender == 2)
             {
                 gender_female = true;
@@ -149,7 +151,7 @@
                                         <label asp-for="NickName" class="p1">暱稱</label>
                                         <input asp-for="NickName" class="form-control" />
                                     </div>
-                                  
+
                                     <div class="st1">
                                         <label asp-for="Birthday" class="p1">生日</label>
                                         <input asp-for="Birthday" type="date" name="Birthday" class="form-control" />
@@ -159,13 +161,13 @@
                                         <label class="p1">性別</label><br /><br />
                                         <div class="input-group has-validation">
                                             <label class="p1">
-                                                <input  asp-for="Gender" type="radio" name="gender" value="male" checked="@gender_male" />男生
+                                                <input asp-for="Gender" type="radio" name="gender" value="male" checked="@gender_male" />男生
                                             </label>
                                             <label class="p1">
-                                                <input  asp-for="Gender" type="radio" name="gender" value="female" checked="@gender_female" />女生
+                                                <input asp-for="Gender" type="radio" name="gender" value="female" checked="@gender_female" />女生
                                             </label>
                                             <label class="p1">
-                                                <input  asp-for="Gender" type="radio" name="gender" value="other" checked="@gender_other"/>其他
+                                                <input asp-for="Gender" type="radio" name="gender" value="other" checked="@gender_other" />其他
                                             </label>
                                         </div>
                                     </div>
@@ -174,10 +176,10 @@
                                         <label class="p1">國籍</label><br /><br />
                                         <div class="input-group has-validation">
                                             <label class="p1">
-                                                <input  asp-for="IsTw" type="radio" name="TW" value="tw" checked="@MYTW"/>台灣
+                                                <input asp-for="IsTw" type="radio" name="TW" value="tw" checked="@MYTW" />台灣
                                             </label>
                                             <label class="p1">
-                                                <input  asp-for="IsTw" type="radio" name="TW" value="foreign" checked="@MYFORIEN"/>外國
+                                                <input asp-for="IsTw" type="radio" name="TW" value="foreign" checked="@MYFORIEN" />外國
                                             </label>
                                         </div>
                                     </div>
@@ -238,14 +240,20 @@
                                     <label asp-for="Address" class="p1">完整地址</label>
                                     <input asp-for="Address" class="form-control" type="text" name="Address" size="40" />
                                 </div>
+
+                                <div class="st1">
+                                    <label class="p1">訂閱電子報</label>
+                                    <input asp-for="IsAcceptAd" type="checkbox" name="IsAcceptAd" style="float:left;">
+                                </div>
                             </fieldset>
                         </div>
                         <div class="col">
                             <img src="@Url.Action("showPhoto","Member", new {id= Model.MemberId })" id="memphoto" class="img-thumbnail w-100" />
                             <br /><br />
                             <label class="p1" for="formFile" id="labfile">上傳照片</label>
-                            <input class="form-control" type="file" name="File1" id="photofile" multiple />
+                            <input class="form-control" type="file" name="File1" id="photofile" multiple/>
                         </div>
+
                     </div>
                 </div>
 
@@ -255,9 +263,8 @@
                 <div class="justify-content-around">
                     <div class="st2 justify-content-around">
                         @*<a role="button" class="btn btn-primary" id="submit" href="/">送出</a>*@
-                        <button class="btn btn-primary" type="submit">確認</button>
+                        <button class="btn btn-primary" type="submit" id="ok">確認</button>
                         @*@Html.ActionLink("送出", "Edit", "Member", "", new { @class = "btn btn-primary" })*@
-                        <button class="btn btn-secondary" id="clear">登出</button>
                     </div>
                 </div>
 
@@ -280,6 +287,15 @@
         //    //    'success'
         //    //)
         //})
+        /*const CheckEmail = false;*/
+        //$("#ok").click(function () {
+        //    let dataAll = document.querySelectorAll(".democheck:checked")
+        //    if (dataAll.length != 0) {
+        //        CheckEmail = true;
+        //        $.post(`/member/Subscription`, { CheckEmail: CheckEmail })
+        //    }
+        //})
+
 
         $("#country").on("change", function () {
             const selCity = document.querySelector("#country")
@@ -311,12 +327,38 @@
         })
 
         $(document).ready(function () {
+            //var form = $('#myform')[0];
+            //var formData = new FormData(form);
             $('#myform').on('submit', function (e) {
+                //console.log($(this).serialize());
                 e.preventDefault();
+
+                var fdata = new FormData();
+
+                var fileInput = $('#photofile')[0];
+                var file = fileInput.files[0];
+                fdata.append("File1", file);
+
+                // You can update the jquery selector to use a css class if you want
+                $("input[type='text']").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                });
+                $("input[type='radio']").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                }); 
+                $("select").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                }); 
+                $("input[type='checkbox']").each(function (x, y) {
+                    fdata.append($(y).attr("name"), y.checked);
+                }); 
+
                 $.ajax({
                     url: $(this).attr('action') || window.location.pathname,
                     type: "POST",
-                    data: $(this).serialize(),
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         Swal.fire(
                             '成功',
