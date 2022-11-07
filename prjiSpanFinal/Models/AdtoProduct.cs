@@ -15,6 +15,7 @@ namespace prjiSpanFinal.Models
         public bool IsSubActive { get; set; }
         public int ExpoTimes { get; set; }
         public int ClickTimes { get; set; }
+        public string AdSlogan { get; set; }
 
         public virtual Ad Ad { get; set; }
         public virtual Product Product { get; set; }

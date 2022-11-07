@@ -137,6 +137,10 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.AdId).HasColumnName("AdID");
 
+                entity.Property(e => e.AdSlogan)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
