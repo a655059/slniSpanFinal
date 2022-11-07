@@ -931,20 +931,40 @@ namespace prjiSpanFinal.Controllers
             List<CSubEventToProductViewModel> list = new();
             foreach (var e in E)
             {
-                var A = from a in OE
-                        where a.OfficialEventListId == e.OfficialEventListId
-                        select a;
+                //var A = from a in OE
+                //        where a.OfficialEventListId == e.OfficialEventListId
+                //        select a;
+                var B = E.Where(n => n.OfficialEventListId == e.OfficialEventListId).Select(n => n).ToList();
                 CSubEventToProductViewModel C = new()
                 {
                     Products = P,
                     SubOfficialEventID = e,
-                    OfficialEventList = A.First(),
+                    OfficialEventList = OE,
+                    SubOfficialEventList=B
                 };
                 list.Add(C);
             }
-
             return View(list);
         }
+
+        public void EventJoin(CSubEventToProductViewModel jsonString)
+        {
+            SubOfficialEventToProduct subOfficialEventToProducts = new SubOfficialEventToProduct()
+            {
+                ProductId= jsonString.ProductID,
+                SubOfficialEventListId=jsonString.SubOfficialEventIDBack,
+                VerifyId=1
+            };
+            _db.SubOfficialEventToProducts.Add(subOfficialEventToProducts);
+            _db.SaveChanges();
+        }
+
+        public IActionResult Smalleve(int bigeveid)
+        {
+            var a = _db.SubOfficialEventLists.Where(s => s.OfficialEventListId == bigeveid).Select(s => new { id = s.SubOfficialEventListId, name = s.SubEventName }).ToList();
+            return Json(a);
+        }
+
     }
 }
 

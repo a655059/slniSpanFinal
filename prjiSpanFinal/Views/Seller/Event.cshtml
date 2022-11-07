@@ -26,25 +26,36 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">選擇商品</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">參加活動</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label>商品名稱:</label>
+                    <label>選擇子活動</label>
+                    <select id="SubOfficialEventListId" class="form-select" aria-label="Default select example">
+                        @{
+                            foreach (var i in Model.FirstOrDefault().SubOfficialEventList)
+                            {
+                                <option value="@i.SubOfficialEventListId">@i.SubEventName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="modal-body">
+                    <label>選擇商品</label>
                     <select id="ProductId" class="form-select" aria-label="Default select example">
                         @{
-                        foreach (var i in Model.First().Products)
-                        {
-                            <option value="@i.ProductId">@i.ProductName</option>
+                            foreach (var i in Model.First().Products)
+                            {
+                                <option value="@i.ProductId">@i.ProductName</option>
+                            }
                         }
-                    }
-                </select>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button id="save" type="button" class="btn btn-warning">新增</button>
+                    <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button id="save" type="button" class="btn btn-warning">新增</button>
-                <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -69,7 +80,7 @@
                 <div class="mx-2 input-group mb-3 w-50">
                     <span class="input-group-text">活動名稱</span>
                     <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    <button class="btn btn-outline-secondary" type="button">確定</button>
+                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
                 </div>
             </div>
             <div class="">
@@ -80,31 +91,31 @@
                         <td class="col-2"></td>
                     </tr>
                     @{
-                        foreach (var ev in Model)
+                        foreach (var ev in Model.FirstOrDefault().OfficialEventList)
                         {
                             <tr>
                                 <td class="col-3">
                                     @{
-                                        var base64Image = Convert.ToBase64String(ev.OfficialEventList.EventPic);
+                                        var base64Image = Convert.ToBase64String(ev.EventPic);
                                         var source = String.Format("data:image/png;base64,{0}", base64Image);
                                     }
                                     <img src="@source" alt="..." height="100" width="300" />
                                 </td>
                                 <td class="置中 col-6">
-                                    @ev.SubOfficialEventID.SubEventName
+                                    @ev.EventName
                                     @{
-                                        if (ev.OfficialEventList.StartDate < DateTime.Now && ev.OfficialEventList.EndDate > DateTime.Now)
+                                        if (ev.StartDate < DateTime.Now && ev.EndDate > DateTime.Now)
                                         {
-                                            int Days = (ev.OfficialEventList.EndDate - DateTime.Now).Days;
-                                            int Hrs = (ev.OfficialEventList.EndDate - DateTime.Now).Hours - Days;
-                                            <p>報名:子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
+                                            int Days = (ev.EndDate - DateTime.Now).Days;
+                                            int Hrs = (ev.EndDate - DateTime.Now).Hours - Days;
+                                            <p>報名:<span style="color:red;"> @ev.SubOfficialEventLists.Count </span>個子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
                                         }
                                     }
-                                    <p>@ev.OfficialEventList.StartDate 到 @ev.OfficialEventList.EndDate</p>
+                                    <p>@ev.StartDate 到 @ev.EndDate</p>
                                 </td>
                                 <td class="置中 col-3">
                                     <div>
-                                        <button class="btn btn-warning float-end w-50 建立按鈕" data-bs-toggle="modal" data-bs-target="#exampleModal">參加活動</button>
+                                        <button class="btn btn-warning float-end w-50 建立按鈕 btnjoin" data-bs-toggle="modal" data-bs-target="#exampleModal" id="@ev.OfficialEventListId">參加活動</button>
                                     </div>
                                 </td>
                             </tr>
@@ -118,4 +129,53 @@
 </div>
 @section Scripts
     {
+<script>
+
+    $(".btnjoin").click(async function () {
+        const bigeveId = $(this).attr("id");
+       
+        $.getJSON("/Seller/Smalleve", { bigeveid: bigeveId }, function (data) {
+            $("#SubOfficialEventListId").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#SubOfficialEventListId").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+                }
+            });
+
+    })
+    
+
+
+
+
+    $("#save").click(function () {
+
+        let Data = {
+            ProductID: $("#ProductId").children("option:selected").val(),
+            SubOfficialEventIDBack: $("#SubOfficialEventListId").children("option:selected").val()
+        };
+
+        jQuery.postJSON = function (url, data, callback) {
+            jQuery.post(url, data, callback, "json");
+        };
+
+        $.postJSON("/Seller/EventJoin", { jsonString: Data }, function () { });
+
+        $("#SubOfficialEventListId")[0].selectedIndex = 0;
+        $("#ProductId")[0].selectedIndex = 0;
+        
+        var myModalEl = document.getElementById('exampleModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl);
+        modal.hide();
+
+        Swal.fire(
+            '完成!',
+            '完成參加!',
+            'success'
+        );
+
+        setTimeout(function () {
+            location.href = "/Seller/Event"
+        }, 1000);
+    })
+</script>
 }
