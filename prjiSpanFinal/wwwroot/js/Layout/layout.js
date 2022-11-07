@@ -2,6 +2,8 @@
 let header2exist = $("#header2").length != 0;
 let searchAutoComplete = [];
 
+getShoppingCart();
+
 //回到頂端
 $(function () {
     $(window).scroll(function () {
@@ -30,6 +32,19 @@ if (header2exist) {
     function loadHeight() {
         h2.style.marginTop = 53 + "px";
     }
+}
+
+//ShoppingCart
+function getShoppingCart() {
+    $.post("/Home/ShoppingCartStockDisplay", function (data) {
+        if (data == 0) {
+            $("#ShoppingCartIcon").html("");
+        }
+        else {
+            res = `<span class="qty" id="itemCountInCart">${data}</span>`;
+            $("#ShoppingCartIcon").html(res);
+        }
+    })
 }
 
 //搜尋

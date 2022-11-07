@@ -493,6 +493,7 @@
                         $("input:checked").attr("disabled", true);
                         $("input[name='purchaseCount']").val(Number(data[1]));
                     }
+                    getShoppingCart();
                     $("#itemCountInCart").html(data[0]);
                 }
                 else {
