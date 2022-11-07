@@ -20,6 +20,7 @@ namespace prjiSpanFinal.Models
         public int ShipperStar { get; set; }
         public string Comment2 { get; set; }
         public string Comment3 { get; set; }
+        public string MoreComment { get; set; }
 
         public virtual OrderDetail OrderDetail { get; set; }
         public virtual ICollection<CommentPic> CommentPics { get; set; }
