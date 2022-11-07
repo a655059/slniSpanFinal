@@ -9,26 +9,32 @@
     border: 1px solid #FF8040;
     border-radius: 5px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
-    transition: all .5s
+    transition: all .5s;
+    background: white;
+    position: relative
 }
-
     .sellsitem:hover {
         transform: scale(1.05);
         box-shadow: 0 0 6px rgba(255, 102, 0, 1);
         top: 0px;
     }
-
-
+    
+.cardImgBox {
+    
+}
 .cardImg {
     display: block;
     width: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 5px;
-    object-fit:cover;
+    object-fit: cover;
 }
-
-.cardTitleBox{
-    height:65px;
+.cardInfoArea {
+    margin-top:1px;
+    border-radius:3px;
+}
+.cardTitleBox {
+    height: 65px;
 }
 .cardTitle {
     display: -webkit-box;
@@ -74,17 +80,3 @@
     font-weight: bold;
 }
 
-/*.buybtn {
-    font-size: 12px;
-    padding: 3px;
-    text-align: center;
-    width: 100px;
-    color: black;
-    font-weight: bold;
-}
-
-    .buybtn:hover {
-        color: red;
-        --bs-btn-hover-color: red;
-        opacity: 80%;
-    }*/

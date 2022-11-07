@@ -1,0 +1,92 @@
+﻿
+/* 添加在 sellsitem */
+.SubAD2{
+    position:relative!important;
+        z-index:0!important;
+}
+    .SubAD2:before, .SubAD2:after {
+        content: '';
+        position: absolute;
+        left: -2px;
+        top: -2px;
+        background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000);
+        background-size: 400%;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        z-index: -1;
+        animation: steam 20s linear infinite;
+    }
+
+@keyframes steam {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.SubAD2:after {
+    filter: blur(5px);
+}
+        /* 加在 cardInfoArea*/
+.SubAD2BG {
+    background: linear-gradient(0deg, #000, #272727) !important;
+}
+/* 添加在 cardTitle cardPrice cardStar sells 文字類*/
+.SubAD1 {
+    -webkit-animation: colorchange 10s infinite alternate;
+    font-weight: bold;
+}
+
+@-webkit-keyframes colorchange {
+    0% {
+        color: #FF0000;
+    }
+
+    20% {
+        color: #FF9224;
+    }
+
+    40% {
+        color: #EEBC1D;
+    }
+
+    55% {
+        color: #8CEA00;
+    }
+
+    70% {
+        color: #00FFFF;
+    }
+
+    85% {
+        color: #FF00FF;
+    }
+
+    100% {
+        color: #FF0000;
+    }
+}
+.SubAD1BG {
+    background: linear-gradient(0deg, #000, #272727)!important;
+}
+/*         SUBAD3 新增  <img src="/img/Homepage/SellCrown.png" class="SubAD3" /></div> 在SELLISITEM後        */
+.SubAD3 {
+    width: 70%;
+}
+.SubAD3BGBox {
+    background-image: url('file:///C:\Major\f\prjiSpanFinal\wwwroot\img\Homepage\SellCrown.png');
+    width: 60%;
+    position: absolute;
+    z-index: 2;
+    top: -2.5rem;
+    left: -1.8rem;
+    transform: rotate(342deg);
+}
+

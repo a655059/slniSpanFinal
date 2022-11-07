@@ -8,6 +8,7 @@
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/SellerUI/SellerAD.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/ADitem.css" rel="stylesheet" />
     <link href="~/css/DataTable/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <style>
     </style>
@@ -165,7 +166,7 @@
                     <td rowspan="2" id="S1" class="th-sm sorting">編號</td>
                     <td rowspan="2">選擇效果</td>
                     <td rowspan="2">訂閱商品</td>
-                    <td colspan="2" >訂閱時間</td>
+                    <td colspan="2">訂閱時間</td>
                     <td rowspan="2">現在狀態</td>
                     <td colspan="2">訂閱回饋</td>
                     <td rowspan="2">
@@ -190,7 +191,7 @@
                     </td>
                     <td class="item-num">1</td>
                     <td class="item-effect">標題高光</td>
-
+                    
                     <td class="item-prod">12 蘋果</td>
                     <td class="item-date">
                         2022-10-27
@@ -329,7 +330,7 @@
                 getCheckedItems();
             }
         })
-
+            
         $(document).on("click", ".modalpagenumclick", function () {
             itemNowpage = $(this).html();
             getItem();
@@ -425,7 +426,7 @@
             ModelItemArea.html(res);
         }
 
-        
+
         function getCheckedItems() {
             $.post("ADshowCheckItem", { itemID: itemID }, function (data) {
                 Items(data);
@@ -438,8 +439,8 @@
             if (data != null) {
 
                     let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
-                    item += `<div class="sellsitem">
-                           <a class="linknoline" href="${productLink}">`;
+                item += `<div class="sellsitem"><div class="SubAD3BGBox"><img src="/img/Homepage/SellCrown.png" class="SubAD3" /></div>
+                           <a class="linknoline cardImgBox" href="${productLink}">`;
                     if (data.pic != null) {
 
                         item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
@@ -447,7 +448,7 @@
                     else {
                         item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`;
                     }
-                item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
+                item += `</a><div class="px-1 d-flex flex-column justify-content-between cardInfoArea" ><div class="cardTitleBox">
                         <div class="cardTitle"> ${data.product.productName}</div></div>`;
                     if (data.price.Count == 1) {
                         item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`;
@@ -463,10 +464,10 @@
                             <div class="starImg">
                                 <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                             </div>
-                            <div class="text-black cardStar">${data.starCount.toFixed(1)}</div>
+                            <div class="cardStar">${data.starCount.toFixed(1)}</div>
                         </div>
                     </div>
-                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
+                    <div class="text-end sells">已賣出<span>${data.salesVolume}</span></div>
                 </div>
             </div>
         </div>
@@ -481,7 +482,7 @@
         }
 
         //==============================================
-        
+
 
         ADnav.on("click", ".nav-item", function () {
             $(this).siblings().removeClass("active");
@@ -745,7 +746,7 @@
                 </tr>`;
                 }
                 SubPageFill(data[0].dataCount);
-                
+
             }
             else {
                 res += `<div> 尚無任何訂閱紀錄</div>`;
@@ -756,26 +757,30 @@
 
         function Seteffect() {
             if (eid.includes(1) || eid.includes(2) || eid.includes(3)) {
-                if (!$(".cardTitle").hasClass("Title-Highlight")) {
-                    $(".cardTitle").addClass("Title-Highlight");
-                    $(".cardPrice").addClass("Title-Highlight");
-                    $(".cardStar").addClass("Title-Highlight");
-                    $(".sells").addClass("Title-Highlight");
+                if (!$(".cardTitle").hasClass("SubAD1")) {
+                    $(".cardTitle").addClass("SubAD1");
+                    $(".cardPrice").addClass("SubAD1");
+                    $(".cardStar").addClass("SubAD1");
+                    $(".sells").addClass("SubAD1");
+                    $(".sellsitem").addClass("SubAD1BG")
                 }
             }
             else {
-                $(".cardTitle").removeClass("Title-Highlight");
-                $(".cardPrice").removeClass("Title-Highlight");
-                $(".cardStar").removeClass("Title-Highlight");
-                $(".sells").removeClass("Title-Highlight");
+                $(".cardTitle").removeClass("SubAD1");
+                $(".cardPrice").removeClass("SubAD1");
+                $(".cardStar").removeClass("SubAD1");
+                $(".sells").removeClass("SubAD1");
+                $(".sellsitem").removeClass("SubAD1BG");
             }
             if (eid.includes(4) || eid.includes(5) || eid.includes(6)) {
-                if (!$(".sellsitem").hasClass("Cool-Description")) {
-                    $(".sellsitem").addClass("Cool-Description")
+                if (!$(".sellsitem").hasClass("SubAD2")) {
+                    $(".sellsitem").addClass("SubAD2")
+                    $(".cardInfoArea").addClass("SubAD2BG")
                 }
             }
             else {
-                $(".sellsitem").removeClass("Cool-Description");
+                $(".sellsitem").removeClass("SubAD2");
+                $(".cardInfoArea").removeClass("SubAD2BG")
             }
             //if (eid.includes(7) || eid.includes(8) || eid.includes(9)) {
             //    if (!$(".cardTitle").hasClass("Title-Highlight")) {
@@ -1044,7 +1049,6 @@
             let pagecount = Math.ceil(data / 10);
             let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(listNowpage) - 2));
             let endpage = Math.min(pagecount, Math.max(5, parseInt(listNowpage) + 2));
-            console.log(pagecount, startpage, endpage, listNowpage);
             $("#SubListpagedown").siblings(".SubListpagenumclicklist").remove();
             for (let i = startpage; i <= endpage; i++) {
                 if (i == listNowpage) {
