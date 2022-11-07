@@ -49,6 +49,7 @@ namespace prjiSpanFinal.Models.OrderReq
                 Style = o.OrderDetails.Select(o => o.ProductDetail.Style).ToList(),
                 Pic = o.OrderDetails.Select(o => o.ProductDetail.Pic).ToList(),
                 ProductName = o.OrderDetails.Select(o => o.ProductDetail.Product.ProductName).ToList(),
+                SellerisComment = o.CommentForCustomers.Any(),
             }).ToList();
             if (tab == 0)
             {

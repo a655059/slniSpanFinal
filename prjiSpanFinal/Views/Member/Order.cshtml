@@ -354,11 +354,15 @@
             if (data.isFreeDelivery == false) {
                 total = total + data.shipperFee;
             }
-            item = item + `</td>
-                                            <td class="ordertotalprice">$${total}</td>
-                                            <td>${data.orderStatusName}</td>
-                                            <td style="text-align:center">
-                                                <a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
+            item = item + `</td><td class="ordertotalprice">$${total}</td>`;
+            if (data.shipperStatusId == 6 && !data.buyerCommentId.includes(0)) {
+                item = item + `<td>等待<br />賣家評價</td>`;
+            }
+            else
+            {
+                item = item + `<td>${data.orderStatusName}</td>`;
+            }
+            item = item +`<td style="text-align:center"><a href="/Member/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
             if (data.shipperStatusId == 6 && data.buyerCommentId.includes(0)) {
                 item = item + ` <a href="/Delivery/AddComment?id=${data.orderId}" role="button" class="btn btn-secondary orderbuttonco my-1">評價</a><br /><a class="btn btn-warning orderbuttonre my-1" data-bs-toggle="modal" href="#staticBackdrop1" role="button">申訴</a>`;
             }
