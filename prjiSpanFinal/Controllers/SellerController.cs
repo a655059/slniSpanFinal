@@ -924,6 +924,11 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Event()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
             var E = _db.SubOfficialEventLists.Select(i => i).ToList();  //所有子活動
             var P = _db.Products.Select(i => i).ToList();     //賣家所有商品
            
@@ -965,6 +970,42 @@ namespace prjiSpanFinal.Controllers
             return Json(a);
         }
 
+        public IActionResult JoinEventChi()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+
+            string logindata = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
+
+            
+
+            var toproduct = _db.SubOfficialEventToProducts.Select(n => n).ToList();
+            var toproductID = toproduct.Select(n => n.ProductId).FirstOrDefault();
+            var toproducteve = toproduct.Select(n => n.SubOfficialEventListId).FirstOrDefault();
+            var toproductver = toproduct.Select(n => n.VerifyId).FirstOrDefault();
+
+            var productname = _db.Products.Where(n => n.ProductId == toproductID).Select(n => n.ProductName).ToList();
+            var 審核結果 = _db.Verifies.Where(n => n.VerifyId == toproductver).Select(n => n.VerifyName).ToList();
+            var evename = _db.SubOfficialEventLists.Where(n => n.SubOfficialEventListId == toproducteve).Select(n => n.SubEventName).ToList();
+
+            List<string> listproductname = new List<string>();
+            List<string> list審核結果 = new List<string>();
+            List<string> listevename = new List<string>();
+            
+
+            //CSubEventToProductViewModel cSubEventToProductViewModel = new()
+            //{
+            //    productname= listproductname,
+            //    審核結果= list審核結果,
+            //    evename= listevename
+            //};
+
+
+            return View(/*cSubEventToProductViewModel*/);
+        }
     }
 }
 

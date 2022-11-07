@@ -11,6 +11,12 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<SubOfficialEventList> SubOfficialEventList { get; set; }
 
 
+        //已參加活動
+        public List<string> productname { get; set; }
+        public List<string> 審核結果 { get; set; }
+        public List<string> evename { get; set; }
+
+
         //回傳參加資料
         public int ProductID { get; set; }
         public int SubOfficialEventIDBack { get; set; }
