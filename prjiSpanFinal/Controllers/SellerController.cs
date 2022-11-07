@@ -255,7 +255,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getItem(int nowpage)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CShowItem> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
             return Json(res);
         }
         public IActionResult ADshowCheckItem(int itemID)
@@ -265,29 +265,108 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult getAD(int ADfilter)
         {
-            List<Ad> ad = new CSellerADFactory().fgetAD(_db.Ads.ToList(), ADfilter);
-            return Json(ad);
-        }
-        public IActionResult getResult(int[] ADIDs)
-        {
-            List<Ad> ad = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
-            return Json(ad);
-        }
-        public IActionResult getADfilter()
-        {
-            List<string> filters = new List<string>();/*_db.Ads.OrderBy(p=>p.AdId).Select(p => p.AdName).Distinct().ToList();*/
-            if (!filters.Any())
-                filters = new List<string>();
-            return Json(filters);
-        }
-        public IActionResult getSubList()
-        {
-            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CADSubviewmodel> res = new CSellerADFactory().fgetSubList(id);
+            List<CADeffectViewmodel> res = new CSellerADFactory().fgetAD(ADfilter);
 
             return Json(res);
         }
+        public IActionResult getResult(int[] ADIDs)
+        {
+            List<CADeffectViewmodel> res = new CSellerADFactory().fgetResult(_db.Ads.ToList(), ADIDs);
+            return Json(res);
+        }
+        public IActionResult getADfilter()
+        {
+            List<Adtype> filters = _db.Adtypes.OrderBy(p=>p.AdTypeId).ToList();
+            return Json(filters);
+        }
+        public IActionResult getSubList(int[] filter1,int[] filter2, int Sort, int page, string key)
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<CADSubviewmodel> res = new CSellerADFactory().fgetSubList(id);
+            res = new CSellerADFactory().fgetSubList(res, key, filter1, filter2, Sort, page);
 
+            return Json(res);
+        }
+        public IActionResult saveADSubs(int itemID,int[] ADIDs)
+        {
+            List<int> ADhas = new List<int>();
+            foreach (var ads in ADIDs)
+            {
+                if (_db.AdtoProducts.Where(p => p.ProductId == itemID).Where(p => p.IsSubActive == true).Where(a => Math.Truncate(Convert.ToDecimal((a.AdId-1)/3)) == Math.Truncate(Convert.ToDecimal(ads-1)/3)).Any())
+                {
+                    return Json(2);
+                }
+                else
+                {
+                    int period = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdPeriod).FirstOrDefault();
+                    AdtoProduct res = new AdtoProduct()
+                    {
+                        AdId = ads,
+                        ProductId = itemID,
+                        StartDate = DateTime.Now,
+                        EndDate = DateTime.Now.AddDays(period),
+                        IsSubActive = true,
+                        ExpoTimes = 0,
+                        ClickTimes = 0,
+                    };
+                    _db.AdtoProducts.Add(res);
+                }
+            }
+            try {
+                _db.SaveChanges();
+                return Json(1);
+            }
+            catch { 
+                //儲存失敗
+                return Json(0); 
+            }
+        }
+        public IActionResult UnSubAction(int? id, int[] ids)
+        {
+            if (id != null)
+            {
+                AdtoProduct ad = _db.AdtoProducts.Where(a => a.AdtoProductId == id && a.IsSubActive == true).FirstOrDefault();
+                if (ad != null)
+                {
+                    ad.EndDate = DateTime.Now;
+                    ad.IsSubActive = false;
+                }
+                try {
+                    _db.SaveChanges();
+                    return Json(1);
+                }
+                catch {
+                    return Json(10);
+                }
+            }
+            else if (ids.Any())
+            {
+                try {
+                    foreach (var i in ids) {
+                        AdtoProduct ad = _db.AdtoProducts.Where(a => a.AdtoProductId == i && a.IsSubActive == true).FirstOrDefault();
+                        if (ad != null)
+                        {
+                            ad.EndDate = DateTime.Now;
+                            ad.IsSubActive = false;
+                            try { 
+                                _db.SaveChanges();
+                            }
+                            catch {
+                                return Json(21);
+                            }
+                        }
+                    }
+                    return Json(2);
+                }
+                catch {
+                    return Json(20);
+                }
+            }
+            else
+            {
+                return Json(0);
+            }
+        }
 
         public void CreateSuccess(CSellerCreateToViewViewModel jsonString) //新增商品畫面成功
         {

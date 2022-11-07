@@ -13,5 +13,6 @@ namespace prjiSpanFinal.ViewModels.Home
         public byte[] Pic { get; set; }
         public int salesVolume { get; set; }
         public double starCount { get; set; }
+        public List<int> effects { get; set; }
     }
 }

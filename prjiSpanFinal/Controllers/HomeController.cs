@@ -15,39 +15,83 @@ namespace prjiSpanFinal.Controllers
 {
     public class HomeController : Controller
     {
-        iSpanProjectContext _db = new iSpanProjectContext();
-        List<BigType> listBigType;
+        iSpanProjectContext _db;
         private readonly ILogger<HomeController> _logger;
-        List<Product> listProd;
-        List<CShowItem> listItem;
-        List<SmallType> listSmallType;
-        public HomeController(ILogger<HomeController> logger)
+        
+        public HomeController(ILogger<HomeController> logger, iSpanProjectContext db)
         {
+            _db = db;
             _logger = logger;
-            listBigType = _db.BigTypes.Select(p => p).ToList();
-            listProd = (new CHomeFactory()).rdnProd(_db.Products.Select(p => p).ToList());
-            listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(48).ToList();
-            listSmallType = _db.SmallTypes.Select(p => p).ToList();
         }
 
         public IActionResult Index()
         {
+            List<Product> listProd = (new CHomeFactory()).rdnProd(_db.Products.Select(p => p).ToList());
+            List<CShowItem> listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(48).ToList();
+            listProd = new CHomeFactory().rdnProd(_db.AdtoProducts.Where(p => p.IsSubActive && p.Ad.AdTypeId == 3).Select(p=>p.Product).ToList());
+            List<CShowBBItem> listBB = new CHomeFactory().toShowBBItem(listProd.Take(15).ToList());
+            listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(p => p.VerifyId==2).Select(p => p.Product).ToList());
+            List<CShowFSItem> listFS = new CHomeFactory().toShowFSItem(listProd.Take(15).ToList());
             var webAds = _db.WebAds.Where(a => a.IsPublishing == true);
             
             CHomeIndex home = new CHomeIndex()
             {
-                lSmallType = listSmallType,
-                lBigType = listBigType,
+                lSmallType = _db.SmallTypes.Select(p => p).ToList(),
+                lBigType = _db.BigTypes.Select(p => p).ToList(),
                 cShowItem = listItem,
                 WebADCarousel = webAds.Where(a => a.WebAdimageTypeId == 1).ToList(),
                 WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a=>a.WebAdimageTypeId==2).ToList()),
                 WebADBig = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 3).ToList()),
+                cShowBB= listBB,
+                cShowFS= listFS,
             };
+
+            isExpo(listBB);
             return View(home);
         }
+
         public IActionResult FlashSales()
         {
             return View();
+        }
+        public IActionResult redirectLink(int id)
+        {
+            var a = _db.AdtoProducts.Where(a => a.IsSubActive && a.ProductId == id).FirstOrDefault();
+            if (a != null) {
+                if (Request.Cookies["Click" +a.ProductId]!=null)
+                {
+                    return Json(0);
+                }
+                else
+                {
+                    TimeSpan TS = TimeSpan.FromMinutes(10);
+                    Response.Cookies.Append("Click" + a.ProductId, "ClickClicked", new CookieOptions { MaxAge = TS, });
+                    a.ClickTimes += 1;
+                    _db.SaveChanges();
+                }
+            }
+            return Json(0);
+        }
+        private void isExpo(List<CShowBBItem> list)
+        {
+            if (list.Any())
+            {
+                foreach(var item in list)
+                {
+                    if (Request.Cookies["Expo"+item.product.ProductId] != null)
+                    {
+                        continue;
+                    }
+                    TimeSpan TS = TimeSpan.FromMinutes(10);
+                    Response.Cookies.Append("Expo"+item.product.ProductId,"ExpoClicked",new CookieOptions { MaxAge=TS,});
+                    AdtoProduct p = _db.AdtoProducts.Where(p => p.ProductId == item.product.ProductId&&p.IsSubActive).FirstOrDefault();
+                    if (p != null)
+                    {
+                        p.ExpoTimes += 1;
+                    }
+                    _db.SaveChanges();
+                }
+            }
         }
 
         //  測試用 //

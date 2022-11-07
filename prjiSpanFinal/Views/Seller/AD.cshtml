@@ -8,6 +8,7 @@
     <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
     <link href="~/css/SellerUI/SellerAD.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/DataTable/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <style>
     </style>
 }
@@ -24,22 +25,20 @@
 
                 </div>
             </div>
-            <div class="d-flex justify-content-center" id="PagesArea">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item" id="orderpageup">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item" id="orderpagedown">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <nav aria-label="ItemModal Pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" id="modalitempageup">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" id="modalitempagedown">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
             <div class="modal-footer">
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
@@ -123,7 +122,36 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered text-center align-items-center" id="SubListBox">
+        <div class="d-flex justify-content-between" id="ADfilterBody">
+            <div id="ADfilterArea" class="d-flex">
+                <div>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdownbar" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="drop-filter1-title" class="">效果</span>
+                    </button>
+                    <div class="dropdown-menu droplist" id="drop-filter1">
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle dropdownbar" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="drop-filter2-title" class="">狀態</span>
+                    </button>
+                    <div class="dropdown-menu droplist " id="drop-filter2">
+                        <label class="drop-lab drop-itemf2" for="DF99">
+                            <input id="DF99" class="drop-checkbox" data-value="1" tabIndex="-1" type="checkbox" />
+                            啟動
+                        </label>
+                        <label class="drop-lab drop-itemf2" for="DF100">
+                            <input id="DF100" class="drop-checkbox" data-value="0" tabIndex="-1" type="checkbox" />
+                            停止
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="ADSearchArea">
+                <input type="text" placeholder="商品關鍵字..." id="ListSearchText" />
+            </div>
+        </div>
+        <table class="table  table-hover dataTable table-bordered text-center align-items-center" id="SubListBox">
             <thead>
                 <tr class="Sub-header" style="vertical-align: middle" id="Sub-header">
                     <td rowspan="2">
@@ -131,26 +159,26 @@
                             全選
                         </label>
                         <div>
-                            <input class="form-check-input checkboxAll" type="checkbox" value="" aria-label="...">
+                            <input class="form-check-input" id="checkboxAll" type="checkbox" value="" aria-label="...">
                         </div>
                     </td>
-                    <td rowspan="2">編號</td>
+                    <td rowspan="2" id="S1" class="th-sm sorting">編號</td>
                     <td rowspan="2">選擇效果</td>
                     <td rowspan="2">訂閱商品</td>
-                    <td colspan="2">訂閱時間</td>
+                    <td colspan="2" >訂閱時間</td>
                     <td rowspan="2">現在狀態</td>
                     <td colspan="2">訂閱回饋</td>
                     <td rowspan="2">
-                        <label>
-                            操作
-                        </label>
+                        <button class="btn btn-danger" id="AllUnSubBtn" disabled>
+                            選取中斷
+                        </button>
                     </td>
                 </tr>
                 <tr>
                     <td>推播期限</td>
-                    <td>剩餘時間</td>
-                    <td>曝光次數</td>
-                    <td>點閱次數</td>
+                    <td id="S3" class="th-sm sorting sorting_desc">剩餘時間</td>
+                    <td id="S5" class="th-sm sorting">曝光次數</td>
+                    <td id="S7" class="th-sm sorting">點閱次數</td>
                 </tr>
             </thead>
             <tbody id="SubList">
@@ -189,8 +217,23 @@
                 </tr>
             </tbody>
         </table>
+        <nav aria-label="SubList Pagination">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" id="SubListpageup">
+                    <a class="page-link" href="#!" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" id="SubListpagedown">
+                    <a class="page-link" href="#!" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
- </div>
+</div>
+
 @section Scripts
 {
     <script>
@@ -208,11 +251,49 @@
         let ModelItemArea = $("#modal-Item-Box");
         let itemNowpage = 1;
         //========================================== HEADER
-        let ADfilter = 0;
+        let ADfilter = 1;
         let ADnav = $("#nav-tab");
         let eid = [];
         let ADarea = $("#ADeffectArea");
+        let isItemSelect = false;
+        let isOKtoSub = false;
+        //========================================== LIST & FILTER
+        let SubList = $("#SubList");
+        let CheckListItemNum = [];
+        let sorted = 3;
+        let filter1 = [];
+        let filter2 = [];
+        let listNowpage = 1;
+        let isSearch = false;
+        let ele2 = [], ele1 = [];
+        //==========================================
+        loaddata();
 
+        function loaddata() {
+            getADfilter();
+            getAD();
+            getResult();
+            getFilter1();
+            activeFilter();
+        }
+
+        function ListClearAll() {
+            CheckListItemNum = [];
+            $("#checkboxAll").prop("checked", false)
+            AllUnSubActive();
+        }
+        function FilterClearAll() {
+            listNowpage = 1;
+            sorted = 3;
+            isSearch = false;
+            filter1 = [];
+            filter2 = [];
+            ele1 = [];
+            ele2 = [];
+            CheckFilterArea();
+        }
+
+        //=======================================
         Model.on("show.bs.modal", function (evt) {
             itemNowpage = 1;
             getItem();
@@ -220,9 +301,6 @@
 
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
-            //if (itemID != null) {
-
-            //}
         })
 
         ModelItemArea.on("click", ".Item-check",function (evt) {
@@ -237,15 +315,51 @@
         })
 
         $("#save").click(function (evt) {
+            let last = itemID;
             if (ModelCheckBox.is(":checked")) {
                 temp = ModelnowChecked;
                 itemID = ModelnowChecked.val();
                 Model.modal('hide');
             }
-            $.post("ADshowCheckItem", { itemID: itemID }, function (data) {
-                Items(data);
-            })
+            if (last != itemID) {
+            isOKtoSub = false;
+            eid.length = 0;
+            getAD();
+            getResult();
+                getCheckedItems();
+            }
         })
+
+        $(document).on("click", ".modalpagenumclick", function () {
+            itemNowpage = $(this).html();
+            getItem();
+        })
+
+        $("#modalitempagedown").click(function () {
+            let pagescount = $(".modalpagenumclicklist").length;
+            itemNowpage = Math.min(parseInt(itemNowpage) + 1, pagescount);
+            getItem();
+        })
+
+        $("#modalitempageup").click(function () {
+            itemNowpage = Math.max(parseInt(itemNowpage) - 1, 1);
+            getItem();
+        })
+
+        function ModelPageFill(data) {
+            let pagecount = Math.ceil(data / 15);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(itemNowpage) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(itemNowpage) + 2));
+            $("#modalitempagedown").siblings(".modalpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == itemNowpage) {
+                    $("#modalitempagedown").before(`<li class="page-item active modalpagenumclicklist"><a class="page-link modalpagenumclick" href="#">${i}</a></li>`);
+                }
+                else {
+                    $("#modalitempagedown").before(`<li class="page-item modalpagenumclicklist"><a class="page-link modalpagenumclick" href="#">${i}</a></li>`);
+                }
+            }
+        }
 
         function getItem() {
             $.post("getItem", { nowpage: itemNowpage }, function (data) {
@@ -260,12 +374,12 @@
             if (data.length > 0) {
                 for (let i = 0; i < data.length;i++)
                         {
-                    let productLink = `@Url.Content("~/Item/Index")` + "?id=" + data[i].product.productId;
+                    let productLink = `@Url.Content("~/Item/Index")` + "?id=" + data[i].item.product.productId;
                     res+=`  <div class="modal-Prod">
                                 <div class="modal-Prod-Body">`
-                                    if (data[i].pic != null)
+                    if (data[i].item.pic != null)
                                     {
-                                        res += `<img src="data:image;base64,${data[i].pic}" class="modal-Prod-Pic" alt="" />`
+                        res += `<img src="data:image;base64,${data[i].item.pic}" class="modal-Prod-Pic" alt="" />`
                                     }
                                     else
                                     {
@@ -273,159 +387,247 @@
                                     }
                     res +=`<div class="modal-Prod-ItemTilte">
                                         <a class="linknoline" href="${productLink}">
-                                            ${data[i].product.productId} -
-                                            ${data[i].product.productName}
+                                            ${data[i].item.product.productId} -
+                                            ${data[i].item.product.productName}
                                         </a>
                                     </div>`
-                    if (data[i].price.length == 1)
+                    if (data[i].item.price.length == 1)
                                         {
-                        res +=`<div class="Item-Price">$` + `${Math.round(data[i].price[0])}</div>`
+                        res += `<div class="Item-Price">$` + `${Math.round(data[i].item.price[0])}</div>`
                     }
-                    else if (data[i].price.length == 2)
+                    else if (data[i].item.price.length == 2)
                     {
-                        res += `<div class="Item-Price">$` + `${Math.round(data[i].price[0])} - $` + `${Math.round(data[i].price[1])}</div>`
+                        res += `<div class="Item-Price">$` + `${Math.round(data[i].item.price[0])} - $` + `${Math.round(data[i].item.price[1])}</div>`
                     }
                     res +=`<div class="Item-Checkbox">`
-                    if (data[i].product.productStatusId != 0)
+                    if (data[i].item.product.productStatusId != 0)
                     {
-                        res += `<input type="checkbox" class="Item-check" disabled value="${data[i].product.productId}" />`
+                        res += `<input type="checkbox" class="Item-check" disabled value="${data[i].item.product.productId}" />`
                     }
                     else
                     {
-                        if (data[i].product.productId == itemID) {
-                            res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" checked/>`
+                        if (data[i].item.product.productId == itemID) {
+                            res += `<input type="checkbox" class="Item-check" value="${data[i].item.product.productId}" checked/>`
                         }
                         else {
-                            res += `<input type="checkbox" class="Item-check" value="${data[i].product.productId}" />`
+                            res += `<input type="checkbox" class="Item-check" value="${data[i].item.product.productId}" />`
                         }
                     }
                     res += `</div>
                                 </div>
                             </div>`
                 }
-                PageFill(itemNowpage);
+                ModelPageFill(data[0].dataCount);
             } else {
                 res = `<div>無可訂閱廣告的商品！</div>`
-                PageFill(1);
+                ModelPageFill(0);
             }
             ModelItemArea.html(res);
         }
 
-        function PageFill(data) {
-            let pagecount = Math.ceil(data / 10);
-            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(itemNowpage) - 2));
-            let endpage = Math.min(pagecount, Math.max(5, parseInt(itemNowpage) + 2));
-            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
-            for (let i = startpage; i <= endpage; i++) {
-                if (i == itemNowpage) {
-                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
-                }
-                else {
-                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
-                }
-            }
+        
+        function getCheckedItems() {
+            $.post("ADshowCheckItem", { itemID: itemID }, function (data) {
+                Items(data);
+            })
         }
 
-        $(document).on("click", ".orderpagenumclick", function () {
-            itemNowpage = $(this).html();
-            getItem();
-        })
+        function Items(data) {
+            $("#ShowArea").html("");
+            let item = "";
+            if (data != null) {
 
-        $("#orderpagedown").click(function () {
-            let pagescount = $(".orderpagenumclicklist").length;
-            itemNowpage = Math.min(parseInt(itemNowpage) + 1, pagescount);
-            getItem();
-        })
+                    let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
+                    item += `<div class="sellsitem">
+                           <a class="linknoline" href="${productLink}">`;
+                    if (data.pic != null) {
 
-        $("#orderpageup").click(function () {
-            itemNowpage = Math.max(parseInt(itemNowpage) - 1, 1);
-            getItem();
-        })
+                        item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
+                    }
+                    else {
+                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`;
+                    }
+                item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
+                        <div class="cardTitle"> ${data.product.productName}</div></div>`;
+                    if (data.price.Count == 1) {
+                        item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`;
+                    }
+                    else {
+                        item += `<div class="cardPrice">$` + `${Math.round(data.price[0])} - $` + `${Math.round(data.price[1])}</div>`;
+                    }
 
-        
+                item +=
+                    `<div class="cardInfo d-flex justify-content-between flex-row">
+                    <div class="starBox mt-1">
+                        <div class="d-flex justify-content-start">
+                            <div class="starImg">
+                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                            </div>
+                            <div class="text-black cardStar">${data.starCount.toFixed(1)}</div>
+                        </div>
+                    </div>
+                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
+                </div>
+            </div>
+        </div>
+`;
+                isItemSelect = true;
+            }
+            else {
+                item = `<div id="CheckedItemAD"></div>`
+                isItemSelect = false;
+            }
+            $("#ShowArea").html(item);
+        }
+
         //==============================================
-        loaddata();
+        
 
         ADnav.on("click", ".nav-item", function () {
             $(this).siblings().removeClass("active");
             $(this).addClass("active");
-            ADfilter = parseInt($(this).attr("id"));
+            ADfilter = parseInt(($(this).attr("id")).substring(1));
             getAD();
         })
+
+        ADarea.on("click", ".ADeffect", function (evt) {
+            if (isItemSelect) {
+                let hit = $(this);
+                let id = parseInt($(this).attr("id").substring(1));
+                if (hit.hasClass("ADsensor-checked")) {
+                    hit.removeClass("ADsensor-checked");
+                    hit.addClass("ADsensor");
+                    let targetindex = eid.indexOf(id);
+                    if (targetindex > -1) {
+                        eid.splice(targetindex, 1);
+                    }
+                }
+                else if (hit.hasClass("ADsensor")) {
+                    hit.siblings().removeClass("ADsensor-checked");
+                    hit.siblings().addClass("ADsensor");
+                    hit.removeClass("ADsensor");
+                    hit.addClass("ADsensor-checked");
+                    eid.forEach(function (target) {
+                        if (Math.floor((id - 1) / 3) == Math.floor((target - 1) / 3)) {
+                            let targetindex = eid.indexOf(target);
+                            if (targetindex > -1) {
+                                eid.splice(targetindex, 1);
+                            }
+                        }
+                    })
+                    eid.push(id);
+                }
+                getResult();
+                Seteffect();
+            }
+            else {
+                Swal.fire({
+                    icon: 'question',
+                    title: '沒有選擇產品',
+                    text: '沒有商品將無法看出變化，請選擇一樣上架商品',
+                })
+            }
+        })
+        $("#Result-btn").click(function (evt) {
+            Swal.fire({
+                title: '確認訂閱？',
+                text:'按下同時即開啟推送與扣款',
+                icon: 'question',
+                showDenyButton: true,
+                confirmButtonText: '確認',
+                denyButtonText: `取消`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    addSub();
+                }
+            })
+
+        })
+        function addSub() {
+            if (isItemSelect || isOKtoSub) {
+                //#todo　判斷要寫在SAVEADSUBS
+                //要做儲值金確認功能
+                $.post("saveADSubs", { itemID: itemID, ADIDs: eid }, function (data) {
+                    if (data == 2) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '重複訂閱',
+                            text: '此項產品已有運行中的訂閱！',
+                            footer:'如果你願意...<br />我們可以改變規則收兩倍的錢！',
+                        })
+                    }
+                    else if (data == 1) {
+                        Swal.fire('已成功訂閱', '', 'success').then(() => { location.reload()});
+
+                    }
+                    else if (data == 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '訂閱失敗...',
+                            text: '請重新檢查訂閱項目！',
+                            footer: '這不該發生的...<br />如果再次發生，請聯繫我們！',
+                        })
+                    }
+                })
+            }
+            else if (!isItemSelect) {
+                Swal.fire({
+                    icon: 'question',
+                    title: '沒有選擇產品',
+                    text: '我們總不能為了空氣而收您的錢吧？',
+                })
+            }
+            else if (!isOKtoSub) {
+                Swal.fire({
+                    icon: 'question',
+                    title: '沒有訂閱項目',
+                    text: '也許您喜歡做慈善，還請您直接聯繫我們',
+                })
+            }
+        }
 
         function getAD() {
             $.post("getAD", { ADfilter: ADfilter }, function (data) {
                 fillAD(data);
             })
-            $.post("getResult", { ADIDs: eid }, function (data) {
-                //console.log(data);
-                fillresult(data);
-            })
-            
         }
-
         function fillAD(data) {
             ADarea.html("");
             let res = "";
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
-                    if (eid.includes(data[i].adId)) {
-                        res += `<div class="ADeffect ADsensor-checked row" id="e${data[i].adId}">`;
+                    if (eid.includes(data[i].adid)) {
+                        res += `<div class="ADeffect ADsensor-checked row" id="e${data[i].adid}">`;
                     }
                     else {
-                        res += `<div class="ADeffect ADsensor row" id="e${data[i].adId}">`;
+                        res += `<div class="ADeffect ADsensor row" id="e${data[i].adid}">`;
                     }
 
                     res += `<div class="d-flex justify-content-between align-items-center ADe-Header">
                             <div class="ADe-Title">`;
-                    res += data[i].adName;
+                    res += data[i].typeName;
                     res += `</div>
-                            <div class="ADe-Price">`
-                    res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣/${data[i].adPeriod}天`;
+                            <div class="ADe-Price">`;
+                    res += "$ " + data[i].totalCost + ` 蝦蝦幣/${data[i].adPeriod}天`;
                     res += `</div>
                         </div>
-                        <div class="ADe-Description">`
-                    //待更新
-                    res += `代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來`;
+                        <div class="ADe-Description">`;
+                    res += `${data[i].typeNameDescription}`;
                     res += `</div>
-                    </div>`
+                    </div>`;
                 }
             }
             else {
-                res = `<div>暫待新增廣告訂閱內容</div>`
+                res = `<div>暫待新增廣告訂閱內容</div>`;
             }
             ADarea.html(res);
         }
 
-        ADarea.on("click", ".ADeffect", function (evt) {
-            let hit = $(this);
-            let id = parseInt($(this).attr("id").substring(1));
-            if (hit.hasClass("ADsensor-checked")) {
-                hit.removeClass("ADsensor-checked");
-                hit.addClass("ADsensor");
-                let targetindex = eid.indexOf(id);
-                if (targetindex > -1) {
-                    eid.splice(targetindex, 1);
-                }
-            }
-            else if (hit.hasClass("ADsensor")) {
-                hit.siblings().removeClass("ADsensor-checked");
-                hit.siblings().addClass("ADsensor");
-                hit.removeClass("ADsensor");
-                hit.addClass("ADsensor-checked");
-                eid.forEach(function (target) {
-                    if (Math.floor((id - 1) / 3) == Math.floor((target - 1) / 3)) {
-                        let targetindex = eid.indexOf(target);
-                        if (targetindex > -1) {
-                            eid.splice(targetindex, 1);
-                        }
-                    }
-                })
-                eid.push(id);
-            }
-            getAD();
-        })
-
+        function getResult() {
+            $.post("getResult", { ADIDs: eid }, function (data) {
+                fillresult(data);
+            })
+        }
         function fillresult(data) {
             $("#Result-CheckedeffectList").html("");
             $("#Result-Total-Price").html("");
@@ -437,85 +639,44 @@
 
                     res += `<div class="Result-Checkedeffect row" >
                                 <div class="text-start Result-Checkedeffect-Title">`;
-                    res += data[i].adName + " - " + data[i].adPeriod + " 日 ";
+                    res += data[i].typeName + " (" + data[i].adPeriod + " 日) ";
                     res += `</div>
                                 <div class="text-end Result-Checkedeffect-Price">`;
                     res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣`;
                     res += `</div>
                             </div>`;
-                    tottalprice += data[i].adFee * data[i].adPeriod;
+                    tottalprice += data[i].totalCost;
                 }
 
                 resPrice = `Total: $ ${tottalprice}`;
+                isOKtoSub = true;
             }
             else {
                 res = `<div class="Result-Checkedeffect row">
                                 <div class="text-end Result-Checkedeffect-Title">
                                     尚未選擇任何方案
                                 </div>
-                            </div>`
+                            </div>`;
                 resPrice += `Total: $ 0`;
+                isOKtoSub = false;
             }
             $("#Result-CheckedeffectList").html(res);
             $("#Result-Total-Price").html(resPrice);
         }
 
-        function Items(data) {
-            $("#ShowArea").html("");
-            let item = "";
-            if (data != null) {
-                
-                    let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
-                    item += `<div class="sellsitem">
-                           <a class="linknoline" href="${productLink}">`;
-                    if (data.pic != null) {
-
-                        item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
-                    }
-                    else {
-                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
-                    }
-                    item += `</a><div class="px-1 d-flex flex-column justify-content-between" ><div class="cardTitleBox">
-                        <div class="cardTitle"> ${data.product.productName}</div></div>`
-                    if (data.price.Count == 1) {
-                        item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`
-                    }
-                    else {
-                        item += `<div class="cardPrice">$` + `${Math.round(data.price[0])} - $` + `${Math.round(data.price[1])}</div>`
-                    }
-
-                    item +=
-                        `<div class="cardInfo d-flex justify-content-between flex-row">
-                    <div class="starBox mt-1">
-                        <div class="d-flex justify-content-start">
-                            <div class="starImg">
-                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                            </div>
-                            <div class="text-black">${data.starCount.toFixed(1)}</div>
-                        </div>
-                    </div>
-                    <div class="text-end text-black-50 sells">已賣出<span>${data.salesVolume}</span></div>
-                </div>
-            </div>
-        </div>
-`
-            }
-            else {
-                item =`<div id="CheckedItemAD"></div>`
-            }
-            console.log(data);
-            console.log(item);
-            $("#ShowArea").html(item);
+        function getADfilter() {
+            $.post("getADfilter", function (data) {
+                fillADfilter(data);
+            })
         }
-
         function fillADfilter(data) {
             $("#nav-tab").html("");
             let res = "";
             if (data.length > 0) {
-                res += `<a class="nav-item nav-link active" id="0" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[0]}</a>`;
+                res += `<a class="nav-item nav-link active" id="F${data[0].adTypeId}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[0].adType1}</a>`;
                 if (data.length > 1) {
                     for (let i = 1; i < data.length; i++) {
-                        res += `<a class="nav-item nav-link" id="${i}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[i]}</a>`;
+                        res += `<a class="nav-item nav-link" id="F${data[i].adTypeId}" data-toggle="tab" href="#!" role="tab" aria-controls="nav-total" aria-selected="true">${data[i].adType1}</a>`;
                     }
                 }
             }
@@ -524,62 +685,374 @@
             }
             $("#nav-tab").html(res);
         }
-        function loaddata() {
-            $.post("getADfilter", function (data) {
-                //console.log(data);
-                fillADfilter(data);
-            })
-            getAD();
-            getSubList();
-        }
-        function getSubList() {
-            $.post("getSubList", function (data) {
-                console.log(data);
-            })
-        }
-        function fillSubList(data) {
 
+        function fillSubList(data) {
+            $("#SubList").html("");
             let res = "";
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
+                    //let date = new Date(data[i].startdate);
+                    //let date2 = new Date(data[i].enddate);
+                    //console.log(date);
+                    //console.log(date2);
+                    //console.log(date2 - date);
+                    let dataid = data[i].aDtoProd.adtoProductId;
                     res += `
                     <tr class="Sub-item">
                         <td class="item-ckbox">
-                            <div>
-                                <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
-                        </div>
+                            <div>`;
+                    if (data[i].isSubActive) {
+                        res += `<input class="form-check-input checkboxitem" type="checkbox" value="${data[i].aDtoProd.adtoProductId}" aria-label="...">`;
+                    }
+                    else {
+                        res += `<input class="form-check-input unsubcheckboxitem" disabled type="checkbox" value="${data[i].aDtoProd.adtoProductId}" aria-label="...">`;
+                    }
+                        res +=`</div>
                     </td>
-                            <td class="item-num">1</td>`;
-                    res += `<td class="item-effect">標題高光</td>`;
+                            <td class="item-num">${data[i].aDtoProd.adtoProductId}</td>`;
+                    res += `<td class="item-effect">${data[i].adTypeName}</td>`;
 
-                           res+=` <td class="item-prod">12 蘋果</td>`
+                    res += ` <td class="item-prod">${data[i].prod.productId} - ${data[i].prod.productName}</td>`;
                     res += `<td class="item-date">
-                                2022-10-27
-                                14:07:34
+                                ${data[i].startdate}
                         <br />
-                        ~
-                        <br />
-                        2022-10-27
-                        14:07:34
+                        ${data[i].enddate}
                     </td>`;
 
                     res += ` <td class="item-date">
-                                <label>12天 14:07:34</label>
+                                <label>${data[i].remaining}</label>
                             </td>`;
-
-                    res += `<td class="item-status status-stop">已停止</td>`;
-                    res += `<td class="item-times">2</td>`;
-                    res += `<td class="item-times">2</td>`;
-                    res += `<td class="item-action">
-                                <button class="btn btn-danger" disabled>
-                                    中斷訂閱
-                                </button>
-                          </td>
+                    if (data[i].isSubActive) {
+                        res += `<td class="item-status status-active">運作中</td>`;
+                    }
+                    else {
+                        res += `<td class="item-status status-stop">已停止</td>`;
+                    }
+                    res += `<td class="item-times">${data[i].expoTimes}</td>`;
+                    res += `<td class="item-times">${data[i].clickTimes}</td>`;
+                    res += `<td class="item-action">`;
+                    if (data[i].isSubActive) {
+                        res += `<button class="btn btn-danger UnSubBtn" >
+                                    中斷推送
+                                </button><input type="hidden" value="${dataid}"/>`;
+                    }
+                    else {
+                        res += `<button class="btn btn-danger" disabled>
+                                    中斷推送
+                                </button>`;
+                    }
+                          res+=`</td>
                 </tr>`;
+                }
+                SubPageFill(data[0].dataCount);
+                
+            }
+            else {
+                res += `<div> 尚無任何訂閱紀錄</div>`;
+                SubPageFill(0);
+            }
+            $("#SubList").html(res);
+        }
+
+        function Seteffect() {
+            if (eid.includes(1) || eid.includes(2) || eid.includes(3)) {
+                if (!$(".cardTitle").hasClass("Title-Highlight")) {
+                    $(".cardTitle").addClass("Title-Highlight");
+                    $(".cardPrice").addClass("Title-Highlight");
+                    $(".cardStar").addClass("Title-Highlight");
+                    $(".sells").addClass("Title-Highlight");
                 }
             }
             else {
+                $(".cardTitle").removeClass("Title-Highlight");
+                $(".cardPrice").removeClass("Title-Highlight");
+                $(".cardStar").removeClass("Title-Highlight");
+                $(".sells").removeClass("Title-Highlight");
+            }
+            if (eid.includes(4) || eid.includes(5) || eid.includes(6)) {
+                if (!$(".sellsitem").hasClass("Cool-Description")) {
+                    $(".sellsitem").addClass("Cool-Description")
+                }
+            }
+            else {
+                $(".sellsitem").removeClass("Cool-Description");
+            }
+            //if (eid.includes(7) || eid.includes(8) || eid.includes(9)) {
+            //    if (!$(".cardTitle").hasClass("Title-Highlight")) {
+            //    }
+            //}
+            //else {
+            //    $(".cardTitle").removeClass("Title-Highlight");
+            //}
+        }
+        //======================================列表相關
+        $("#checkboxAll").click(function () {
+            if ($(this).is(":checked")) {
+                $(".checkboxitem").prop("checked", true);
+                $(".checkboxitem").each(function () {
+                    let idx = CheckListItemNum.indexOf($(this).val());
+                    if (idx == -1) {
+                        CheckListItemNum.push($(this).val());
+                    }
+                });
+            }
+            else {
+                $(".checkboxitem").prop("checked", false);
+                $(".checkboxitem").each(function () {
+                    let idx = CheckListItemNum.indexOf($(this).val());
+                    if (idx > -1) {
+                        CheckListItemNum.splice(idx,1);
+                    }
+                });
+            }
+            AllUnSubActive();
+        })
+        SubList.on("click", ".checkboxitem", function (evt) {
+            let obj = $(this);
+            let idx = CheckListItemNum.indexOf(obj.val());
+            if (obj.is(":checked")) {
+                if (idx == -1) {
+                    CheckListItemNum.push(obj.val());
+                }
+            }
+            else {
+                if (idx > -1) {
+                    CheckListItemNum.splice(idx, 1);
+                }
+            }
+            AllUnSubActive();
+        })
 
+        $("#AllUnSubBtn").click(function () {
+            ConfirmUnSub(2);
+        })
+        SubList.on("click", ".UnSubBtn", function (evt) {
+            let CheckID = $(this).siblings("input").val();
+            ConfirmUnSub(1, CheckID);
+        })
+
+        function ConfirmUnSub(type, CheckID) {
+            Swal.fire({
+                icon: 'warning',
+                title: '取消推送',
+                text: '即將取消選取的推送項目',
+                showDenyButton: true,
+                confirmButtonText: '確認',
+                denyButtonText: `取消`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (type == 1) {
+                        $.post("UnSubAction", { id: CheckID }, function (data) {
+                            ReturnUnSubData(data);
+                        })
+                    }
+                    else if (type == 2) {
+                        $.post("UnSubAction", { ids: CheckListItemNum },function (data) {
+                            ReturnUnSubData(data);
+                        })
+                    }
+                }
+            })
+        }
+        function ReturnUnSubData(num) {
+            if (num == 1 || num == 2) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '成功取消訂閱！',
+                    text:'我們永遠歡迎您再次使用此功能！',
+                }).then(function () {
+                    location.reload();
+                })
+            }
+            else if (num == 10) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '失敗了...怎麼會？',
+                    text: '請重新整理頁面後再次試試！',
+                    footer: '若重複失敗請盡快聯繫我們！(err:AD.SL.10)',
+                })
+            }
+            else if (num == 20) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '失敗了...怎麼會？',
+                    text: '請重新整理頁面後再次試試！',
+                    footer:'若重複失敗請盡快聯繫我們！(err:AD.SL.20)',
+                })
+            }
+            else if (num == 21) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '失敗了...怎麼會？',
+                    text: '查詢到選取的其中一項訂閱發生錯誤！請重新整理頁面後再確認！',
+                    footer:'若重複失敗請盡快聯繫我們！(err:AD.SL.21)',
+                })
+            }
+        }
+        function AllUnSubActive() {
+            if (CheckListItemNum.length > 0) {
+                $("#AllUnSubBtn").prop("disabled", false);
+            }
+            else {
+                $("#AllUnSubBtn").prop("disabled", true);
+            }
+        }
+        $('#ListSearchText').on('input',function (evt) {
+            let val = $(this).val();
+            if (val.trim() == "") {
+                isSearch = false;
+            }
+            else {
+                isSearch = true;
+            }
+            activeFilter(filter1, filter2, sorted);
+        })
+
+        //取得Filter1
+        function getFilter1() {
+            $.post('getADfilter', function (data) {
+                fillFilter1(data);
+            })
+        }
+        //填入Filter1選項
+        function fillFilter1(data) {
+            $("#drop-filter1").html("");
+            res = "";
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    res += `<label class="drop-lab drop-itemf1" for="DF${i}"><input id="DF${i}" class="drop-checkbox" data-value="${data[i].adTypeId}" tabIndex="-1" type="checkbox" />${data[i].adType1}</label>`;
+                }
+            }
+            $("#drop-filter1").html(res);
+        }
+        //點Filter1
+        $('.dropdown-menu').on('click','.drop-itemf1', function (event) {
+
+            let $target = $(event.currentTarget),
+                val = $target.find('input').data('value'),
+                $inp = $target.find('input'),
+                idx,
+                text = ($target.text()).substring(0,2);
+
+
+            if ((idx = filter1.indexOf(val)) > -1) {
+                filter1.splice(idx, 1);
+                ele1.splice(idx, 1)
+                setTimeout(function () { $inp.prop('checked', false) }, 0);
+            } else {
+                ele1.push(text);
+                filter1.push(val);
+                setTimeout(function () { $inp.prop('checked', true) }, 0);
+            }
+            if (ele1.length > 0) {
+                $("#drop-filter1-title").text(ele1.join());
+            }
+            else {
+                $("#drop-filter1-title").text('效果');
+            }
+            activeFilter(filter1, filter2, sorted);
+            return false;
+        })
+        //點Filter2
+        $('.drop-itemf2').click(function (evt) {
+            let $target = $(event.currentTarget),
+                val = $target.find('input').data('value'),
+                text = $target.text(),
+                $inp = $target.find('input'),
+                idx;
+
+            if ((idx = filter2.indexOf(val)) > -1) {
+                filter2.splice(idx, 1);
+                ele2.splice(idx, 1)
+                setTimeout(function () { $inp.prop('checked', false) }, 0);
+            } else {
+                ele2.push(text);
+                filter2.push(val);
+                setTimeout(function () { $inp.prop('checked', true) }, 0);
+            }
+            if (ele2.length > 0) {
+                $("#drop-filter2-title").text(ele2.join());
+            }
+            else {
+                $("#drop-filter2-title").text('狀態');
+            }
+            activeFilter(filter1, filter2, sorted);
+            return false;
+        })
+        //重置FILTER勾選狀態
+        function CheckFilterArea() {
+            if (filter1.length <= 0) {
+                $('.drop-itemf1').forEach(function (evt) {
+                    $(this).prop('checked', false);
+                })
+            }
+            if (filter2.length <= 0) {
+                $('.drop-itemf2').forEach(function (evt) {
+                    $(this).prop('checked', false);
+                })
+            }
+        }
+        function activeFilter(f1 = filter1, f2 = filter2, sr = sorted, page = listNowpage) {
+            ListClearAll();
+            let key = "";
+            if (isSearch) {
+                key = $('#ListSearchText').val();
+            }
+            else {
+                key = "";
+            }
+
+            $.post(`getSubList`, { filter1: f1, filter2: f2, Sort: sr, page: page, key: key }, function (data) {
+                fillSubList(data);
+            })
+        }
+
+        function sortctrl(event) {
+            if (!$(event.target).hasClass("sorting_asc")) {
+                $(".sorting_desc").removeClass("sorting_desc");
+                $(".sorting_asc").removeClass("sorting_asc");
+                $(event.target).addClass("sorting_asc");
+                sorted = parseInt(($(event.target).attr('id')).substring(1)) + 1;
+            }
+            else {
+                $(".sorting_desc").removeClass("sorting_desc");
+                $(".sorting_asc").removeClass("sorting_asc");
+                $(event.target).addClass("sorting_desc");
+                sorted = parseInt(($(event.target).attr('id')).substring(1));
+            }
+            activeFilter(filter1, filter2,sorted);
+        }
+        $(".sorting").click(sortctrl);
+
+        $(document).on("click", ".SubListpagenumclick", function () {
+            listNowpage = parseInt($(this).html());
+            activeFilter(filter1, filter2, sorted, listNowpage);
+        })
+
+        $("#SubListpagedown").click(function () {
+            let pagescount = $(".SubListpagenumclicklist").length;
+            listNowpage = Math.min(parseInt(listNowpage) + 1, pagescount);
+            activeFilter(filter1, filter2, sorted, listNowpage);
+        })
+
+        $("#SubListpageup").click(function () {
+            listNowpage = Math.max(parseInt(listNowpage) - 1, 1);
+            activeFilter(filter1, filter2, sorted, listNowpage);
+        })
+
+        function SubPageFill(data) {
+            let pagecount = Math.ceil(data / 10);
+            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(listNowpage) - 2));
+            let endpage = Math.min(pagecount, Math.max(5, parseInt(listNowpage) + 2));
+            console.log(pagecount, startpage, endpage, listNowpage);
+            $("#SubListpagedown").siblings(".SubListpagenumclicklist").remove();
+            for (let i = startpage; i <= endpage; i++) {
+                if (i == listNowpage) {
+                    $("#SubListpagedown").before(`<li class="page-item active SubListpagenumclicklist"><a class="page-link SubListpagenumclick" href="#!">${i}</a></li>`);
+                }
+                else {
+                    $("#SubListpagedown").before(`<li class="page-item SubListpagenumclicklist"><a class="page-link SubListpagenumclick" href="#!">${i}</a></li>`);
+                }
             }
         }
     </script>
