@@ -141,3 +141,26 @@ else {
         $(".notificationqty").remove();
     })
 }
+
+$(".searchcart-Cart1").click(async function () {
+    const response = await fetch("/Delivery/ShowcartCondition");
+    const data = await response.text();
+    if (data == "0") {
+        Swal.fire({
+            title: "請先登入再查看購物車",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "登入",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = "/Member/Login";
+            }
+        })
+    }
+    else if (data == "2") {
+        Swal.fire("購物車裡沒有東西喔!", "快去購物吧!")
+    }
+    else {
+        location.href = "/Delivery/ShowCart";
+    }
+});

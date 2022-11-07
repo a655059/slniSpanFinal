@@ -290,7 +290,8 @@ namespace prjiSpanFinal.Controllers
         public IActionResult BiddingItemSave(CBiddingItemSaveViewModel x, List<IFormFile> itemPhotos)
         {
             decimal startPrice = 0;
-            if (Decimal.TryParse(x.startPrice, out startPrice))
+            int stepPrice = 0;
+            if (Decimal.TryParse(x.startPrice, out startPrice) && Int32.TryParse(x.stepPrice, out stepPrice))
             {
                 iSpanProjectContext dbContext = new iSpanProjectContext();
                 string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
@@ -353,6 +354,7 @@ namespace prjiSpanFinal.Controllers
                     StartTime = Convert.ToDateTime(x.startDate.ToString("yyyy-MM-dd") + " " + x.startTime.TimeOfDay),
                     EndTime = Convert.ToDateTime(x.endDate.ToString("yyyy-MM-dd") + " " + x.endTime.TimeOfDay),
                     StartPrice = Convert.ToInt32(startPrice),
+                    StepPrice = stepPrice
                 };
                 dbContext.Biddings.Add(bidding);
                 dbContext.SaveChanges();
@@ -386,6 +388,11 @@ namespace prjiSpanFinal.Controllers
                 country = i.ProductDetail.Product.Member.Region.Country,
             }).FirstOrDefault();
             infos.productPics = dbContext.ProductPics.Where(i => i.ProductId == infos.product.ProductId).Select(i => i.Pic).ToList();
+            infos.biddingDetailWithMember = dbContext.BiddingDetails.Where(i => i.BiddingId == infos.bidding.BiddingId).OrderByDescending(i=>i.Price).Select(i => new CBiddingDetailWithMemberViewModel
+            {
+                biddingDetail = i,
+                member = i.Member
+            }).ToList();
             infos.user = null;
             infos.isLike = false;
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -397,9 +404,107 @@ namespace prjiSpanFinal.Controllers
                     infos.isLike = true;
                 }
             }
+            infos.sellerShippers = dbContext.ShipperToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Shipper).ToList();
+            infos.sellerPayments = dbContext.PaymentToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Payment).ToList();
+            infos.sellerProductCount = dbContext.Products.Where(i => i.MemberId == infos.seller.MemberId).Count();
             
+            var sellerComments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.Product.MemberId == infos.seller.MemberId).ToList();
+            infos.sellerCommentCount = 0;
+            infos.avgSellerCommentStar = 0;
+            if (sellerComments.Count > 0)
+            {
+                infos.sellerCommentCount = sellerComments.Count;
+                infos.avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
+            }
             
             return View(infos);
+        }
+
+        public IActionResult Bid(int biddingID, string biddingType, int price, int topPrice)
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount user = JsonSerializer.Deserialize<MemberAccount>(memberString);
+                BiddingDetail biddingDetail = new BiddingDetail
+                {
+                    BiddingId = biddingID,
+                    MemberId = user.MemberId,
+                    Price = price
+                };
+                dbContext.BiddingDetails.Add(biddingDetail);
+                dbContext.SaveChanges();
+                if (biddingType == "autoBidding")
+                {
+                    var isExistAutoBidding = dbContext.AutoBiddings.Where(i => i.BiddingId == biddingID && i.MemberId == user.MemberId).FirstOrDefault();
+                    if (isExistAutoBidding == null)
+                    {
+                        AutoBidding autoBidding = new AutoBidding
+                        {
+                            BiddingId = biddingID,
+                            MemberId = user.MemberId,
+                            TopPrice = topPrice
+                        };
+                        dbContext.AutoBiddings.Add(autoBidding);
+                        dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        isExistAutoBidding.TopPrice = topPrice;
+                        dbContext.SaveChanges();
+                    }
+                }
+                var bidding1 = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i).FirstOrDefault();
+                var autoBiddings = dbContext.AutoBiddings.Where(i => i.BiddingId == biddingID).Select(i => i).ToList();
+                bool isEnd = true;
+                while (isEnd)
+                {
+                    var originBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                    foreach (var a in autoBiddings)
+                    {
+                        var originBiddingDetail1 = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                        int currentPrice = originBiddingDetail1[0].Price;
+                        if (a.MemberId != originBiddingDetail[0].MemberId && a.TopPrice >= currentPrice + bidding1.StepPrice)
+                        {
+                            BiddingDetail biddingDetail1 = new BiddingDetail
+                            {
+                                BiddingId = biddingID,
+                                MemberId = a.MemberId,
+                                Price = currentPrice + bidding1.StepPrice
+                            };
+                            dbContext.BiddingDetails.Add(biddingDetail1);
+                            dbContext.SaveChanges();
+                        }
+                    }
+                    var newBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
+                    if (originBiddingDetail.Count == newBiddingDetail.Count)
+                    {
+                        isEnd = false;
+                    }
+                }
+
+
+                var bidding = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => new
+                {
+                    biddingDetail = i,
+                    member = i.Member,
+                });
+                int biddingCount = bidding.Count();
+                string topMember = bidding.FirstOrDefault().member.MemberAcc;
+
+                List<string> result = new List<string> { bidding.FirstOrDefault().biddingDetail.Price.ToString(), biddingCount.ToString(), topMember };
+
+                return Json(result);
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+        public IActionResult ShowBiddingDetail(int id)
+        {
+            return ViewComponent("BiddingDetail", id);
         }
     }
 }

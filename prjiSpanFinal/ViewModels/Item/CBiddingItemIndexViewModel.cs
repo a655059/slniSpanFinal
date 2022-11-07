@@ -18,6 +18,13 @@ namespace prjiSpanFinal.ViewModels.Item
         public RegionList region { get; set; }
         public CountryList country { get; set; }
         public List<byte[]> productPics { get; set; }
+        public List<CBiddingDetailWithMemberViewModel> biddingDetailWithMember { get; set; }
+
+        public List<Shipper> sellerShippers { get; set; }
+        public List<Payment> sellerPayments { get; set; }
+        public int sellerProductCount { get; set; }
+        public int sellerCommentCount { get; set; }
+        public double avgSellerCommentStar { get; set; }
 
         public Boolean isLike { get; set; }
     }

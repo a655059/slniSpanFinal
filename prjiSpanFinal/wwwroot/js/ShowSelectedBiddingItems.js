@@ -31,13 +31,13 @@ function ControlPage() {
 $(".nextPage").click(function () {
     const page = Number($(this).siblings("div").find(".page").html()) + 1;
     $(this).siblings("div").find(".page").html(page);
-    $(this).closest("div").siblings(".VCLayout").find(".productCardLayout").animate({ left: "-=1050px" });
+    $(this).closest("div").siblings(".VCLayout").find(".biddingItemLayout").animate({ left: "-=1050px" });
     ControlPage();
 });
 
 $(".previousPage").click(function () {
     const page = Number($(this).siblings("div").find(".page").html()) - 1;
     $(this).siblings("div").find(".page").html(page);
-    $(this).closest("div").siblings(".VCLayout").find(".productCardLayout").animate({ left: "+=1050px" });
+    $(this).closest("div").siblings(".VCLayout").find(".biddingItemLayout").animate({ left: "+=1050px" });
     ControlPage();
 });

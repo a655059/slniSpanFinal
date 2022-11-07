@@ -12,6 +12,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public int bigType { get; set; }
         public int smallType { get; set; }
         public string startPrice { get; set; }
+        public string stepPrice { get; set; }
         public DateTime startDate { get; set; }
         public DateTime startTime { get; set; }
         public DateTime endDate { get; set; }

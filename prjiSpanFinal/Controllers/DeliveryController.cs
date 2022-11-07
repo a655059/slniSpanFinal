@@ -142,6 +142,30 @@ namespace prjiSpanFinal.Controllers
             }
             return remainingQty.ToString();
         }
+        public IActionResult ShowcartCondition()
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string memberJson = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount memberAccount = JsonSerializer.Deserialize<MemberAccount>(memberJson);
+                var itemCountInCart = dbContext.OrderDetails.Where(i => i.Order.StatusId == 1 && i.Order.MemberId == memberAccount.MemberId).Count();
+                if (itemCountInCart > 0)
+                {
+                    return Content("1");
+                }
+                else
+                {
+                    return Content("2");
+                }
+                
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
+
 
         public IActionResult ShowCart()
         {

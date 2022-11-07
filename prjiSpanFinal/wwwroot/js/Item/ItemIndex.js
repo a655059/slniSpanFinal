@@ -11,8 +11,6 @@ $(".purchaseStyle").mouseenter(function () {
     $(".bigPhoto img").attr("src", imgSrc);
 });
 
-
-
 $("#description").click(function () {
     $(this).attr("aria-current", true).removeClass("active").addClass("active").siblings().attr("aria-current", false).removeClass("active");
     $(".itemDescription").removeClass("d-none");

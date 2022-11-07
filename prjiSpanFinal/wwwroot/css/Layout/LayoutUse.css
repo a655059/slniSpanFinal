@@ -331,6 +331,18 @@ align-items:center;
             opacity: 80%;
             color: red;
         }
+
+.searchcart-Cart1 {
+    display: block;
+    color: white;
+    width: var(--SCAwidth);
+}
+
+        .searchcart-Cart1:hover {
+            opacity: 80%;
+            color: red;
+        }
+
         .searchcart-Cart-icon {
             position: relative;
             display: flex;

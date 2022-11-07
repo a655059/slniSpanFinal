@@ -1,12 +1,20 @@
 ﻿@model prjiSpanFinal.ViewModels.Item.CBiddingItemIndexViewModel
 @{
     ViewData["Title"] = "BiddingIndex";
+    int memberID = 0;
+    if (Model.user != null)
+    {
+        memberID = Model.user.MemberId;
+    }
+    string endTime = Model.bidding.EndTime.ToString("yyyy/MM/dd HH:mm:ss");
 }
 
 @section Styles{
     <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
 }
 
+<div class="memberID d-none">@memberID</div>
+<div class="sellerID d-none">@Model.seller.MemberId</div>
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
@@ -78,22 +86,344 @@
     </div>
     <div class="itemInfo">
         <h4>@Model.product.ProductName</h4>
-        <div class="d-flex border rounded-1">
-            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+        <div class="d-flex align-items-center border rounded-1">
+            <div class="showRemainingTime p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
                 <img src="@Url.Content("~/img/clock.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
-            <div class="p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
-                <img src="@Url.Content("~/img/calender.png")" class="d-block" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
+            <div class="showEndTime p-2 border-end" style="width:40px;aspect-ratio:1/1;cursor:pointer">
+                <img src="@Url.Content("~/img/calender.png")" class="d-block opacity-50" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
-                <div class="remainingTime"></div>
+                <div class="remainingTime ps-2">剩<span class="remainingTime2 ms-2"></span></div> 
+                <div class="endTime ps-2 d-none"><span class="me-2">@endTime</span>結束</div>
             </div>
         </div>
+        <div class="d-flex align-items-center">
+            <div style="width:100px">目前出價</div>
+            @{
+                if (Model.biddingDetailWithMember.Count > 0)
+                {
+                    <div class="col-9 fs-3 fw-bold text-danger">$<span class="currentPrice">@Model.biddingDetailWithMember[0].biddingDetail.Price</span></div>
+                }
+                else
+                {
+                    <div class="col-9 fs-3 fw-bold text-danger">$<span class="currentPrice">@Model.bidding.StartPrice</span></div>
+                }
+            }
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px"></div>
+            <div class="text-black opacity-50"><spng class="biddingCount">@Model.biddingDetailWithMember.Count</spng>次出價</div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">出價增額</div>
+            <div>$<span class="stepPrice">@Model.bidding.StepPrice</span></div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">最高出價者</div>
+            @{
+                if (@Model.biddingDetailWithMember.Count > 0)
+                {
+                    <div class="topMember text-success">@Model.biddingDetailWithMember[0].member.MemberAcc</div>
+                }
+                else
+                {
+                    <div class="topMember text-success">尚無人出價</div>
+                }
+            }
+
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px">數量</div>
+            <div>1件</div>
+        </div>
+        <div class="d-flex mb-2">
+            <div style="width:100px"></div>
+            <div class="rounded-1 bg-black bg-opacity-10 p-2">
+                <div>
+                    <input type="radio" name="biddingType" id="autoBidding" value="" />
+                    <label for="autoBidding">自動出價</label>
+                    <input type="radio" name="biddingType" id="directBidding" value="" />
+                    <label for="directBidding">直接出價</label>
+                </div>
+                <div class="d-flex align-items-center">
+                    <input type="number" name="biddingPrice" class="fs-5 me-2" step="@Model.bidding.StepPrice" min="" value="" placeholder="請直接輸入出價金額" />
+
+                    <input class="bidSubmit btn btn-warning rounded-2" type="button" name="" value="我要出價" />
+                </div>
+                <div class="topPriceDiv d-none">
+                    <input type="number" name="topPrice" class="fs-5 me-2" step="@Model.bidding.StepPrice" min="" value="" placeholder="自動出價最高金額" />
+                    <label class="text-black opacity-50" style="font-size:12px">自動出價最高金額</label>
+                </div>
+                <div class="suggestedPriceDiv text-dark opacity-50 d-none">建議最低出價$<span class="suggestedPrice"></span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8" style="font-size:14px">
+                <div class="d-flex justify-content-start">
+                    <div class="me-5">付款方式:</div>
+                    <div>
+                        @{
+                            foreach (var i in Model.sellerPayments)
+                            {
+                                <div>@i.PaymentName<span class="mx-2 text-danger" style="font-size:12px"><span>手續費:</span>@i.Fee</span></div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="me-5">運送方式:</div>
+                    <div>
+                        @{
+                            foreach (var i in Model.sellerShippers)
+                            {
+                                <div>@i.ShipperName<span class="mx-2 text-danger" style="font-size:12px">$<span>@i.Fee</span></span></div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" style="font-size:14px">
+                <div class="bg-secondary text-white fw-bold ps-2">賣家資訊</div>
+                <div class="ps-2 fs-6">@Model.seller.MemberAcc<span class="ms-3"><a href="#"><i class="talkToSeller fa-solid fa-comment-dots text-warning"></i></a></span></div>
+                <div class="d-flex align-items-center ps-2">
+                    <div>全部商品:</div>
+                    <div class="ms-3"><a href="@Url.Content("~/SalesCourt/賣場?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@Model.sellerProductCount</a></div>
+                </div>
+                <div class="d-flex align-items-center ps-2">
+                    <div>賣場評價:</div>
+                    <div class="ms-3">
+                        @{
+                            if (Model.sellerCommentCount > 0)
+                            {
+                                string sellerComment = Model.avgSellerCommentStar.ToString("0.0") + "  " + "(" + Model.sellerCommentCount + ")";
+                                <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@sellerComment</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="opacity-50 text-primary" style="font-size:14px">尚無賣場評價</a>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="ps-2"><a href="@Url.Content("~/SalesCourt/關於我?id="+Model.seller.MemberId)" class="text-primary">關於我</a></div>
+                <div class="ps-2"><a href="@Url.Content("~/SalesCourt/賣場?id="+Model.seller.MemberId)" class="text-primary">追蹤賣家</a></div>
+            </div>
+        </div>
+        
     </div>
 </div>
-
-
+<div>
+    <div class="list-group list-group-horizontal mb-3">
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action active" id="description" aria-current="true">商品說明</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="buyerCount">出價紀錄 (<span class="biddingCount">@Model.biddingDetailWithMember.Count</span>)</button>
+        <button type="button" class="list-group-item-warning list-group-item list-group-item-action" id="messageBoard">留言板</button>
+    </div>
+    <div class="itemDescription rounded-2">
+        <div class="sellerName bg-warning bg-opacity-50 fs-3 fw-bold ps-2" id="@Model.seller.MemberAcc">@Model.seller.MemberAcc<span>的商店</span></div>
+        <div class="w-100 bg-warning bg-opacity-10 pb-3">
+            <div class="description">
+                @Model.product.Description;
+            </div>
+            @{
+                foreach (var i in Model.productPics)
+                {
+                    string imgSrc1 = "";
+                    try
+                    {
+                        string base64 = Convert.ToBase64String(i);
+                        imgSrc1 = $"data:image/gif;base64,{base64}";
+                    }
+                    catch
+                    {
+                        imgSrc1 = Url.Content("~/img/imageNotFound.png");
+                    }
+                    <div class="productImg"><img src="@imgSrc1" /></div>
+                }
+            }
+        </div>
+    </div>
+    <div class="buyerCountVC d-none">
+        @*@await Component.InvokeAsync("BiddingDetail", new { id = Model.bidding.BiddingId })*@
+    </div>
+    <div class="messageBoardVC d-none">
+        @*@await Component.InvokeAsync("ShowMessageBoard", new { productID = Model.product.ProductId })*@
+    </div>
+</div>
+<div class="d-none" id="ProductId">@Model.product.ProductId</div>
 
 @section Scripts{
+    <script src="@Url.Content("~/js/Item/ItemIndex.js")"></script>
     <script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>
+    <script>
+        $(function () {
+            const productID = $("#ProductId").html();
+            $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+
+            const userID = $(".memberID").html();
+            const sellerID = $(".sellerID").html();
+            if (userID == sellerID) {
+                $(".bidSubmit").prop("disabled", true);
+            }
+            $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+        });
+        $(".bigPhoto .itemHeart").click(async function () {
+            const memberID = Number($(".memberID").html());
+            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
+            let response = await fetch(requestUrl);
+            let data = await response.text();
+            if (data == "0") {
+                Swal.fire("請先登入方可加入我的最愛");
+                return;
+            }
+            else if (data == "1") {
+                $(this).removeClass("text-danger").addClass("text-danger");
+            }
+            else {
+                $(this).removeClass("text-danger");
+            }
+        });
+
+
+        $(function () {
+            const currentPrice = $(".currentPrice").html();
+            const stepPrice = $(".stepPrice").html();
+            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+            $("input[type='number']").attr("min", suggestedPrice);
+        });
+
+        $(".showRemainingTime").click(function () {
+            $(".remainingTime").removeClass("d-none");
+            $(".endTime").removeClass("d-none").addClass("d-none");
+            $(".showRemainingTime img").removeClass("opacity-50");
+            $(".showEndTime img").removeClass("opacity-50").addClass("opacity-50");
+        });
+        $(".showEndTime").click(function () {
+            $(".remainingTime").removeClass("d-none").addClass("d-none");
+            $(".endTime").removeClass("d-none");
+            $(".showRemainingTime img").removeClass("opacity-50").addClass("opacity-50");
+            $(".showEndTime img").removeClass("opacity-50");
+        });
+
+
+        $("input[name='biddingPrice']").focus(function () {
+            const currentPrice = $(".currentPrice").html();
+            const stepPrice = $(".stepPrice").html();
+            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+            $(".suggestedPrice").html(suggestedPrice);
+            $("input[type='number']").val(suggestedPrice);
+            $(".suggestedPriceDiv").removeClass("d-none");
+        })
+        $("#autoBidding").change(function () {
+            if ($("#autoBidding").prop("checked") == true) {
+                $(".topPriceDiv").removeClass("d-none");
+            }
+            else {
+                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+            }
+        })
+        $("#directBidding").change(function () {
+            if ($("#directBidding").prop("checked") == true) {
+                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+            }
+            else {
+                $(".topPriceDiv").removeClass("d-none");
+            }
+        });
+        $(".bidSubmit").click(function () {
+            const biddingID = Number($(".biddingItemCountdown").attr("id"));
+            const biddingType = $("input:checked").attr("id");
+            const suggestedPrice = Number($(".suggestedPrice").html());
+            const price = Number($("input[name='biddingPrice']").val());
+            const topPrice = Number($("input[name='topPrice']").val());
+            if (biddingType == null) {
+                Swal.fire("請選擇自動出價或直接出價");
+            }
+            else if (price < suggestedPrice || price <= 0) {
+                Swal.fire("出價金額有誤");
+            }
+            else if (biddingType == "autoBidding" && topPrice < price) {
+                Swal.fire("自動出價最高金額小於出價金額");
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/Item/Bid")",
+                    type: "POST",
+                    data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice },
+                }).done(function (data) {
+                    if (data == "0") {
+                        Swal.fire("請先登入再出價");
+                    }
+                    else {
+                        $(".currentPrice").html(data[0]);
+                        $(".biddingCount").html(data[1]);
+                        $(".topMember").html(data[2]);
+                        Swal.fire("恭喜您成功出價");
+
+                        $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+                    }
+                })
+            }
+        });
+
+        $(".messageBoardVC").on("click", ".messageSubmit", async function () {
+            const message = $(this).siblings(".message").val();
+            if (message == "") {
+                Swal.fire("請輸入留言內容");
+            }
+            else {
+                const messageType = $(this).siblings(".message").attr("placeholder");
+                const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+                let messageParentID = 0;
+                if (messageType == "回覆......") {
+                    messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+                }
+                const response = await fetch("@Url.Content("~/Item/AddMessage")" + `?messageParentID=${messageParentID}&message=${message}&productID=${productID}`);
+                const data = await response.text();
+                if (data == "1") {
+                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                }
+                else {
+                    Swal.fire("請先登入再留言");
+                }
+            }
+        });
+
+        $(".messageBoardVC").on("click", ".messageLikeBtn", async function () {
+            const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+            const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+            const response = await fetch("@Url.Content("~/Item/LikeMessageBoard")" + `?messageBoardID=${messageParentID}`);
+            const data = await response.text();
+            if (data == "1") {
+                $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+            }
+            else {
+                Swal.fire("請先登入再按讚");
+            }
+        });
+
+        $(".messageBoardVC").on("click", ".deleteReplyBtn", function () {
+            Swal.fire({
+                title: "確定要收回留言嗎?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "確定",
+                denyButtonText: "取消",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+                    const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+                    const response = await fetch("@Url.Content("~/Item/DeleteMessage")" + `?messageBoardID=${messageParentID}`);
+                    const data = await response.text();
+                    if (data == "1") {
+                        $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                    }
+                } else if (result.isDenied) {
+
+                }
+            });
+        });
+
+
+    </script>
 }

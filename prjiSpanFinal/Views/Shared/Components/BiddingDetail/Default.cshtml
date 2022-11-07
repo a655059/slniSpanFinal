@@ -1,0 +1,86 @@
+﻿@model List<prjiSpanFinal.ViewModels.Item.CBiddingDetailWithMemberViewModel>
+
+
+<div>
+    <div class="d-flex fs-4 text-black mb-2">
+        <div class="me-3" id="showBiddingSummary" style="cursor:pointer">瀏覽摘要</div>
+        <div class="opacity-50" id="showBiddingDetail" style="cursor:pointer">詳細記錄</div>
+    </div>
+    <div>
+        @{
+            if (Model.Count <= 0)
+            {
+                <div class="text-center">尚無人出價</div>
+            }
+            else
+            {
+                <table class="table table-hover table-striped">
+                    <thead class="bg-black bg-opacity-10">
+                        <tr>
+                            <th scope="col">出價者</th>
+                            @*<th scope="col">出價形式</th>*@
+                            <th scope="col">出價金額</th>
+                            <th scope="col">數量</th>
+                            @*<th scope="col">出價時間</th>*@
+                        </tr>
+                    </thead>
+                    @{
+                        <tbody class="showBiddingSummary">
+                            @{
+                                var q = Model.GroupBy(i => i.member).Select(g => new
+                                {
+                                    member = g.Key,
+                                    count = g.Count(),
+                                    price = g.OrderByDescending(i => i.biddingDetail.BiddingId).Select(i => i.biddingDetail.Price).FirstOrDefault(),
+
+                                });
+                                foreach (var i in q)
+                                {
+                                    <tr>
+                                        <td>@i.member.MemberAcc<span class="ms-2">(</span>@i.count<span>)</span></td>
+                                        @*<td></td>*@
+                                        <td class="topBiddingPrice">$<span>@i.price</span></td>
+                                        <td>1</td>
+                                        @*<td></td>*@
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                        <tbody class="showBiddingDetail d-none">
+                            @foreach (var i in Model)
+                            {
+                                <tr>
+                                    <td>@i.member.MemberAcc</td>
+                                    @*<td></td>*@
+                                    <td class="topBiddingPrice">$<span>@i.biddingDetail.Price</span></td>
+                                    <td>1</td>
+                                    @*<td></td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(".showBiddingSummary .topBiddingPrice").eq(0).addClass("text-danger");
+        $(".showBiddingDetail .topBiddingPrice").eq(0).addClass("text-danger");
+    });
+    $("#showBiddingSummary").click(function () {
+        $("#showBiddingSummary").removeClass("opacity-50");
+        $("#showBiddingDetail").removeClass("opacity-50").addClass("opacity-50");
+        $(".showBiddingSummary").removeClass("d-none");
+        $(".showBiddingDetail").removeClass("d-none").addClass("d-none");
+    });
+    $("#showBiddingDetail").click(function () {
+        $("#showBiddingSummary").removeClass("opacity-50").addClass("opacity-50");
+        $("#showBiddingDetail").removeClass("opacity-50");
+        $(".showBiddingSummary").removeClass("d-none").addClass("d-none");
+        $(".showBiddingDetail").removeClass("d-none");
+    });
+</script>

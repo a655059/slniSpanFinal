@@ -55,8 +55,8 @@
                     </div>
                     <!-- /MemberCenter -->
                     <!-- Cart -->
-                    <div class="searchcart-Cart ">
-                        <a href="@Url.Content("~/Delivery/Showcart")" class="linknoline">
+                    <div class="searchcart-Cart1" style="cursor:pointer">
+                        <div>
                             <i class="fa fa-shopping-cart searchcart-Cart-icon">
                                 @if (getCarts > 0)
                                 {
@@ -70,10 +70,11 @@
                             <div class="text-center">
                                 <span>購物車</span>
                             </div>
-                            <a href="@Url.Content("~/Item/BiddingItemHome")"><button class="uploadBiddingItem btn btn-primary btn-sm">馬上競標</button></a>
-                        </a>
+                        </div>
                     </div>
+                    
                     <!-- /Cart -->
+                    <a href="@Url.Content("~/Item/BiddingItemHome")"><button class="uploadBiddingItem btn btn-primary btn-sm">馬上競標</button></a>
                 </div>
             </div>
             <!-- /Searchcart -->
@@ -84,5 +85,6 @@
 </div>
 @section Scripts{
     <script>
+        
     </script>
 }
