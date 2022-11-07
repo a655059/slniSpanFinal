@@ -340,12 +340,18 @@
                 fdata.append("File1", file);
 
                 // You can update the jquery selector to use a css class if you want
-                $("input[type='text'").each(function (x, y) {
+                $("input[type='text']").each(function (x, y) {
                     fdata.append($(y).attr("name"), $(y).val());
                 });
-                //$("input[type='text'").each(function (x, y) {
-                //    fdata.append($(y).attr("name"), $(y).val());
-                //}); radio & others
+                $("input[type='radio']").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                }); 
+                $("select").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                }); 
+                $("input[type='checkbox']").each(function (x, y) {
+                    fdata.append($(y).attr("name"), y.checked);
+                }); 
 
                 $.ajax({
                     url: $(this).attr('action') || window.location.pathname,
