@@ -661,6 +661,8 @@ namespace prjiSpanFinal.Controllers
             var ProductName = (from i in db.Products select i).ToList();
             var ReportTypeName = (from i in db.ReportTypes select i).ToList();
             var ReportStatusName = (from i in db.ReportStatuses select i).ToList();
+            var ReporterName = db.MemberAccounts.ToList();
+
             foreach (var p in Reps)
             {
                 CReportListViewModel model = new()
@@ -676,6 +678,7 @@ namespace prjiSpanFinal.Controllers
                     ReportStatusName = (from i in ReportStatusName
                                         where i.ReportStatusId == p.ReportStatusId
                                         select i.ReportStatusName).First(),
+                    ReporterAcc=ReporterName.FirstOrDefault(i=>i.MemberId==p.ReporterId).MemberAcc,
                 };
                 list.Add(model);
             }
