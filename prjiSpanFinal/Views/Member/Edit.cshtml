@@ -332,13 +332,27 @@
             $('#myform').on('submit', function (e) {
                 //console.log($(this).serialize());
                 e.preventDefault();
+
+                var fdata = new FormData();
+
+                var fileInput = $('#photofile')[0];
+                var file = fileInput.files[0];
+                fdata.append("File1", file);
+
+                // You can update the jquery selector to use a css class if you want
+                $("input[type='text'").each(function (x, y) {
+                    fdata.append($(y).attr("name"), $(y).val());
+                });
+                //$("input[type='text'").each(function (x, y) {
+                //    fdata.append($(y).attr("name"), $(y).val());
+                //}); radio & others
+
                 $.ajax({
                     url: $(this).attr('action') || window.location.pathname,
                     type: "POST",
-                    data: $(this).serialize(),
-                    //data: formData,
-                    //processData: false,
-                    //contentType: false,
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         Swal.fire(
                             '成功',
