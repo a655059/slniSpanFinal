@@ -290,15 +290,37 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult saveADSubs(int itemID,int[] ADIDs)
         {
-            List<int> ADhas = new List<int>();
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            MemberAccount acc = _db.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+            
+            List<int> result = new List<int>();
+            int cost = 0;
+            int balance = acc.Balance;
+
+            foreach(var ads in ADIDs)
+            {
+                if (_db.AdtoProducts.Where(p => p.ProductId == itemID).Where(p => p.IsSubActive == true).Where(a => Math.Truncate(Convert.ToDecimal((a.AdId - 1) / 3)) == Math.Truncate(Convert.ToDecimal(ads - 1) / 3)).Any())
+                {
+                    result = new List<int> { 2, Array.IndexOf(ADIDs, ads)+1 };
+                    return Json(result);
+                }
+            }
+
+            //=======
+            foreach (var item in ADIDs)
+            {
+                cost += Convert.ToInt32(_db.Ads.Where(a => a.AdId == item).Select(a => a.AdFee * a.AdPeriod).FirstOrDefault());                
+            }
+            if (balance - cost < 0)
+            {
+                result = new List<int>() { 3, balance, cost };
+                return Json(result);
+            }
+            //==========================
             foreach (var ads in ADIDs)
             {
-                if (_db.AdtoProducts.Where(p => p.ProductId == itemID).Where(p => p.IsSubActive == true).Where(a => Math.Truncate(Convert.ToDecimal((a.AdId-1)/3)) == Math.Truncate(Convert.ToDecimal(ads-1)/3)).Any())
-                {
-                    return Json(2);
-                }
-                else
-                {
+
+                decimal adscost = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdFee * a.AdPeriod).FirstOrDefault();
                     int period = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdPeriod).FirstOrDefault();
                     AdtoProduct res = new AdtoProduct()
                     {
@@ -311,13 +333,22 @@ namespace prjiSpanFinal.Controllers
                         ClickTimes = 0,
                     };
                     _db.AdtoProducts.Add(res);
-                }
+
+                BalanceRecord res2 = new BalanceRecord
+                {
+                    MemberId = id,
+                    Reason = "訂閱廣告",
+                    Record = DateTime.Now,
+                    Amount = Convert.ToInt32(0 - adscost)
+                };
+                _db.BalanceRecords.Add(res2);
             }
             try {
+                acc.Balance -= cost;
                 _db.SaveChanges();
                 return Json(1);
             }
-            catch { 
+            catch {
                 //儲存失敗
                 return Json(0); 
             }

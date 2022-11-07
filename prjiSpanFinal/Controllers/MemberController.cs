@@ -1113,11 +1113,10 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult BalanceCharge(string pay)
         {
-            iSpanProjectContext db = new iSpanProjectContext();
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             int money = Convert.ToInt32(pay);
 
-            MemberAccount user = db.MemberAccounts.Where(m => m.MemberId == id).FirstOrDefault();
+            MemberAccount user = _context.MemberAccounts.Where(m => m.MemberId == id).FirstOrDefault();
             user.Balance += money;
             BalanceRecord record = new BalanceRecord()
             {
@@ -1126,8 +1125,8 @@ namespace prjiSpanFinal.Controllers
                 Reason = "網頁儲值",
                 Record = DateTime.Now,
             };
-            db.BalanceRecords.Add(record);
-            db.SaveChanges();
+            _context.BalanceRecords.Add(record);
+            _context.SaveChanges();
             return Json(user.Balance);
         }
         public IActionResult BalanceInfo(int status,int nowpages)
@@ -1148,11 +1147,11 @@ namespace prjiSpanFinal.Controllers
             int totalAmount = Convert.ToInt32(checkoutItems[1]);
             
             itemName = itemName.TrimEnd('#');
-            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";
+            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Member/IsExistBalanceRecordSession";
             NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
             parameters["HashKey"] = "5294y06JbISpM5x9";
             parameters["ChoosePayment"] = "Credit";
-            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";    //完成後跳回去的頁面
+            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Member/IsExistBalanceRecordSession";    //完成後跳回去的頁面
             parameters["CreditInstallment"] = "";
             parameters["EncryptType"] = "1";
             parameters["InstallmentAmount"] = "";
@@ -1184,6 +1183,41 @@ namespace prjiSpanFinal.Controllers
                 checkMacValue = checkMacValue
             };
             return Json(cOPayParameters);
+        }
+        public IActionResult SetBalanceRecordToSession(string Balance)
+        {
+            HttpContext.Session.SetString(CDictionary.SK_BALANCE, Balance);
+            return Content("1");
+        }
+
+        public IActionResult IsExistBalanceRecordSession()
+        {
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_BALANCE))
+            {
+                int money = Convert.ToInt32(HttpContext.Session.GetString(CDictionary.SK_BALANCE));
+                int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+                MemberAccount user = _context.MemberAccounts.Where(m => m.MemberId == id).FirstOrDefault();
+                user.Balance += money;
+
+                BalanceRecord data = new BalanceRecord()
+                {
+                    MemberId = id,
+                    Amount = money,
+                    Reason = "網頁儲值",
+                    Record = DateTime.Now,
+                };
+                _context.BalanceRecords.Add(data);
+                _context.SaveChanges();
+
+
+                HttpContext.Session.Remove(CDictionary.SK_BALANCE);
+                return RedirectToAction("Balance", "Member");
+            }
+            else
+            {
+                return RedirectToAction("Balance", "Member");
+            }
         }
     }
 }
