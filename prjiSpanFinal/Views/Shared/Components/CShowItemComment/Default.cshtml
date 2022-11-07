@@ -30,7 +30,29 @@
                     }
                 </div>
                 <div class="text-black-50 mb-1"><span class="me-1">規格:</span>@i.style</div>
-                <div class="mb-1">值得推薦的好賣家!!!</div>
+                <div class="my-1">
+                    @*<div class="mb-1">值得推薦的好賣家!!!</div>*@
+                    @{
+                        if (i.comment.Comment1 != "未輸入")
+                        {
+                            <div class="me-2">品質:<span>@i.comment.Comment1</span> </div>
+                        }
+                        if (i.comment.Comment2 != "未輸入")
+                        {
+                            <div class="me-2">色差:<span>@i.comment.Comment2</span></div>
+                        }
+                        if (i.comment.Comment3 != "未輸入")
+                        {
+                            <div class="me-2">與圖片相符:<span>@i.comment.Comment3</span></div>
+                        }
+                        if (i.comment.MoreComment != "")
+                        {
+                            <div class="me-2">更多評論:<span>@i.comment.MoreComment</span></div>
+                        }
+
+                    }
+                </div>
+
                 <div class="d-flex justify-content-start align-items-center mb-1">
                     @{
                         foreach (var j in i.commentPic)
@@ -49,7 +71,7 @@
                         }
                     }
                 </div>
-                <div>@i.comment.CommentTime.ToString("yyyy-MM-dd")</div>
+                <div class="me-2">評論時間:<span>@i.comment.CommentTime.ToString("yyyy-MM-dd HH:mm:ss")</span></div>
             </div>
         }
     }
@@ -63,7 +85,7 @@
         }
         else
         {
-            <div class="d-flex justify-content-center fs-6">
+            @*<div class="d-flex justify-content-center fs-6">
                 <button id="commentPrevioustPage"><i class="fa-solid fa-angle-left"></i>上一頁</button>
                 <div id="commentPage">
                     <span class="currentCommentPage">@Model[0].page</span>
@@ -71,7 +93,7 @@
                     <span class="totalCommentPage">@totalPage</span>
                 </div>
                 <button id="commentNextPage">下一頁<i class="fa-solid fa-angle-right"></i></button>
-            </div>
+            </div>*@
         }
     }
 

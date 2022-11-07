@@ -31,7 +31,7 @@
 
 
 <h1>花錢囉</h1>
-
+<a href="@Url.Content("~/Delivery/Order")">回會員中心</a>
 @{
     foreach (var i in orderList)
     {
@@ -72,7 +72,7 @@
                     }
                 }
             </div>
-            <button class="goOPayCheckout btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCheckout">付款</button>
+            <button class="goOPayCheckout btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCheckout" id="@i.OrderId">付款</button>
         </div>
 
     }
@@ -115,7 +115,7 @@
                     <input type="hidden" name="CheckMacValue" value="" />
                     <div class="form-group">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">確認付款</button>
+                        <button type="submit" class="submit btn btn-primary">確認付款</button>
                     </div>
                 </form>
             </div>
@@ -127,7 +127,10 @@
 
 @section Scripts{ 
     <script>
+
+        let orderID = "";
         $(".goOPayCheckout").click(async function () {
+            orderID = $(this).attr("id");
             let checkoutItems = [];
             $(this).siblings().find(".purchaseCount").each(function () {
                 const productName = $(this).closest("div").siblings().find(".productName").html();
@@ -149,6 +152,10 @@
             $("input[name='ItemName']").val(data.itemName);
             $("input[name='ClientBackURL']").val(data.clientBackURL);
             $("input[name='CheckMacValue']").val(data.checkMacValue);
+        });
+        $(".submit").click(async function () {
+            let response = await fetch("@Url.Content("~/Delivery/SetPaidOrderToSession")" + `?orderID=${orderID}`);
+            let data = response.text();
         });
     </script>
 }

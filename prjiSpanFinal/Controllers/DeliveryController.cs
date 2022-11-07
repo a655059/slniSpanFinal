@@ -553,14 +553,23 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
-                string commentString = $"品質: {cSubmitComment.quality}, 色差: {cSubmitComment.colorDifference}, 和圖片相符: {cSubmitComment.picMatch}, 更多評論: {cSubmitComment.other}";
+                //string commentString = $"品質: {cSubmitComment.quality}, 色差: {cSubmitComment.colorDifference}, 和圖片相符: {cSubmitComment.picMatch}, 更多評論: {cSubmitComment.other}";
+               
+                string moreComment = "";
+                if (cSubmitComment.other != null)
+                {
+                    moreComment = cSubmitComment.other;
+                }
                 Comment comment = new Comment
                 {
                     OrderDetailId = cSubmitComment.orderDetailID,
-                    Comment1 = commentString,
+                    Comment1 = cSubmitComment.quality,
                     CommentStar = (byte)cSubmitComment.commentStar,
                     CommentTime = DateTime.Now,
-                    ShipperStar = cSubmitComment.shipperStar
+                    ShipperStar = cSubmitComment.shipperStar,
+                    Comment2 = cSubmitComment.colorDifference,
+                    Comment3 = cSubmitComment.picMatch,
+                    MoreComment = moreComment
                 };
                 dbContext.Comments.Add(comment);
                 dbContext.SaveChanges();
@@ -764,24 +773,36 @@ namespace prjiSpanFinal.Controllers
             return View(cDeliveryCheckout.buyer);
         }
 
-        public IActionResult ShowOrderedOrder()
+        public IActionResult ShowOrderedOrder(int? id)
         {
-            
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 string buyerString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
                 iSpanProjectContext dbContext = new iSpanProjectContext();
-                var orderedOrders = dbContext.OrderDetails.Where(i => i.Order.MemberId == buyer.MemberId && i.Order.StatusId == 2).Select(i => new COrderedOrderViewModel
+                List<COrderedOrderViewModel> orderedOrders = new List<COrderedOrderViewModel>();
+                if (id > 0)
                 {
-                    orderDetail = i,
-                    order = i.Order,
-                    seller = i.ProductDetail.Product.Member,
-                    productDetail = i.ProductDetail,
-                    productName = i.ProductDetail.Product.ProductName,
-                }).ToList();
-
-                
+                    orderedOrders = dbContext.OrderDetails.Where(i => i.OrderId == id).Select(i => new COrderedOrderViewModel
+                    {
+                        orderDetail = i,
+                        order = i.Order,
+                        seller = i.ProductDetail.Product.Member,
+                        productDetail = i.ProductDetail,
+                        productName = i.ProductDetail.Product.ProductName
+                    }).ToList();
+                }
+                else
+                {
+                    orderedOrders = dbContext.OrderDetails.Where(i => i.Order.MemberId == buyer.MemberId && i.Order.StatusId == 2).Select(i => new COrderedOrderViewModel
+                    {
+                        orderDetail = i,
+                        order = i.Order,
+                        seller = i.ProductDetail.Product.Member,
+                        productDetail = i.ProductDetail,
+                        productName = i.ProductDetail.Product.ProductName,
+                    }).ToList();
+                }
                 return View(orderedOrders);
             }
             else
@@ -804,11 +825,11 @@ namespace prjiSpanFinal.Controllers
                 totalAmount += i.productPrice;
             }
             itemName = itemName.TrimEnd('#');
-            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";
+            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/IsExistPaidOrderSession";
             NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
             parameters["HashKey"] = "5294y06JbISpM5x9";
             parameters["ChoosePayment"] = "Credit";
-            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";    //完成後跳回去的頁面
+            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/IsExistPaidOrderSession";    //完成後跳回去的頁面
             parameters["CreditInstallment"] = "";
             parameters["EncryptType"] = "1";
             parameters["InstallmentAmount"] = "";
@@ -840,6 +861,32 @@ namespace prjiSpanFinal.Controllers
                 checkMacValue = checkMacValue
             };
             return Json(cOPayParameters);
+        }
+
+        public IActionResult SetPaidOrderToSession(string orderID)
+        {
+            HttpContext.Session.SetString(CDictionary.SK_PAIDORDER, orderID);
+            return Content("1");
+        }
+
+        public IActionResult IsExistPaidOrderSession()
+        {
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PAIDORDER))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                int orderID = Convert.ToInt32(HttpContext.Session.GetString(CDictionary.SK_PAIDORDER));
+                Order paidOrder = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                paidOrder.StatusId = 3;
+                paidOrder.PaymentDate = DateTime.Now;
+                dbContext.SaveChanges();
+                HttpContext.Session.Remove(CDictionary.SK_PAIDORDER);
+                return RedirectToAction("Order", "Member");
+            }
+            else
+            {
+                return RedirectToAction("Order", "Member");
+            }
         }
     }
 }
