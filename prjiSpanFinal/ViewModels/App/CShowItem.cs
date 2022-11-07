@@ -25,5 +25,10 @@ namespace prjiSpanFinal.ViewModels.App
 
         public List<int> shipIDList { get; set; }
         public List<int> payIDList { get; set; }
+        public DateTime time { get; set; }
+
+        public List<string> styles {get; set; }
+
+        public string selleracc { get; set; }
     }
 }

@@ -13,6 +13,8 @@ using System.Text;
 using System.Text.Json;
 using prjiSpanFinal.ViewModels.App;
 using Newtonsoft.Json;
+using System.Xml.Linq;
+using prjiSpanFinal.Models.App;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -250,32 +252,59 @@ namespace prjiSpanFinal.Controllers
             return Json(dbcontext.Notifications.Where(n => n.MemberId == id && n.HaveRead == false).OrderByDescending(o => o.Time).Select(n => new CNotification(){ NotificationId = n.NotificationId, Text = n.Text, Time = n.Time, TextContent= n.TextContent}).ToList());
         }
 
-        public IActionResult GetBigtypeItems(int memid, int id, int page, string st, string ship, string pay, string price1, string price2)
+        public IActionResult GetBigtypeItems(int memid, int id, int page, string st, string ship, string pay, string price1, string price2, int sort, string keyword)
         {
             List<int> nst = JsonConvert.DeserializeObject<List<int>>(st);
             List<int> nship = JsonConvert.DeserializeObject<List<int>>(ship);
             List<int> npay = JsonConvert.DeserializeObject<List<int>>(pay);
             List<int> nprice1 = JsonConvert.DeserializeObject<List<int>>(price1);
             List<int> nprice2 = JsonConvert.DeserializeObject<List<int>>(price2);
-            int eachpage = 2;
+            int eachpage = 10;
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            List<ViewModels.App.CShowItem> q = dbcontext.Products.Where(n => n.SmallType.BigTypeId == id && (n.ProductStatusId != 1 && n.ProductStatusId != 2)).Select(n => new ViewModels.App.CShowItem()
+            List<ViewModels.App.CShowItem> q;
+            if (id==0)
             {
-                id = n.ProductId,
-                Name = n.ProductName,
-                Pic = n.ProductPics.FirstOrDefault().Pic,
-                Price1 = n.ProductDetails.Select(a => a.UnitPrice).Min(),
-                Price2 = n.ProductDetails.Select(a => a.UnitPrice).Max(),
-                salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.Quantity).Sum(),
-                starCount = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count,
-                IsFavourite = n.Likes.Where(k => k.MemberId == memid).Any(),
-                stID = n.SmallTypeId,
-                st = n.SmallType.SmallTypeName,
-                shipIDList = n.Member.ShipperToSellers.Select(s => s.ShipperId).ToList(),
-                payIDList = n.Member.PaymentToSellers.Select(s => s.PaymentId).ToList(),
-            }).ToList();
-
-            if(nst.Count > 0)
+                q = dbcontext.Products.Where(n => (n.ProductStatusId != 1 && n.ProductStatusId != 2)).Select(n => new ViewModels.App.CShowItem()
+                {
+                    id = n.ProductId,
+                    Name = n.ProductName,
+                    Pic = n.ProductPics.FirstOrDefault().Pic,
+                    Price1 = n.ProductDetails.Select(a => a.UnitPrice).Min(),
+                    Price2 = n.ProductDetails.Select(a => a.UnitPrice).Max(),
+                    salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == n.ProductId && (a.Order.StatusId == 6 || a.Order.StatusId == 7)).Select(a => a.Quantity).Sum(),
+                    starCount = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count,
+                    IsFavourite = n.Likes.Where(k => k.MemberId == memid).Any(),
+                    stID = n.SmallTypeId,
+                    st = n.SmallType.SmallTypeName,
+                    shipIDList = n.Member.ShipperToSellers.Select(s => s.ShipperId).ToList(),
+                    payIDList = n.Member.PaymentToSellers.Select(s => s.PaymentId).ToList(),
+                    time = n.EditTime,
+                    styles = n.ProductDetails.Select(p => p.Style).ToList(),
+                    selleracc = n.Member.MemberAcc,
+                }).ToList();
+            }
+            else
+            {
+                q = dbcontext.Products.Where(n => n.SmallType.BigTypeId == id && (n.ProductStatusId != 1 && n.ProductStatusId != 2)).Select(n => new ViewModels.App.CShowItem()
+                {
+                    id = n.ProductId,
+                    Name = n.ProductName,
+                    Pic = n.ProductPics.FirstOrDefault().Pic,
+                    Price1 = n.ProductDetails.Select(a => a.UnitPrice).Min(),
+                    Price2 = n.ProductDetails.Select(a => a.UnitPrice).Max(),
+                    salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == n.ProductId && (a.Order.StatusId == 6 || a.Order.StatusId == 7)).Select(a => a.Quantity).Sum(),
+                    starCount = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == n.ProductId).Select(a => a.CommentStar).ToList().Count,
+                    IsFavourite = n.Likes.Where(k => k.MemberId == memid).Any(),
+                    stID = n.SmallTypeId,
+                    st = n.SmallType.SmallTypeName,
+                    shipIDList = n.Member.ShipperToSellers.Select(s => s.ShipperId).ToList(),
+                    payIDList = n.Member.PaymentToSellers.Select(s => s.PaymentId).ToList(),
+                    time = n.EditTime,
+                    styles = n.ProductDetails.Select(p => p.Style).ToList(),
+                    selleracc = n.Member.MemberAcc,
+                }).ToList();
+            }
+            if (nst.Count > 0)
             {
                 q=q.Where(p => nst.Contains(p.stID)).ToList();
             }
@@ -300,6 +329,57 @@ namespace prjiSpanFinal.Controllers
                 q = q1;
             }
 
+            if (sort == 1)
+            {
+                q = q.OrderByDescending(p => p.time).ToList();
+            }
+            else if (sort == 2)
+            {
+                q = q.OrderBy(p => p.time).ToList();
+            }
+            else if (sort == 3)
+            {
+                q = q.OrderByDescending(p => p.Price2).ToList();
+            }
+            else if (sort == 4)
+            {
+                q = q.OrderBy(p => p.Price2).ToList();
+            }
+            else if (sort == 5)
+            {
+                q = q.OrderByDescending(p => p.Price1).ToList();
+            }
+            else if (sort == 6)
+            {
+                q = q.OrderBy(p => p.Price1).ToList();
+            }
+            else if (sort == 7)
+            {
+                q = q.OrderByDescending(p => p.salesVolume).ToList();
+            }
+            else if (sort == 8)
+            {
+                q = q.OrderBy(p => p.salesVolume).ToList();
+            }
+            else if (sort == 9)
+            {
+                q = q.OrderByDescending(p => p.starCount).ToList();
+            }
+            else if (sort == 10)
+            {
+                q = q.OrderBy(p => p.starCount).ToList();
+            }
+
+            if (keyword != null)
+            {
+                keyword.Trim();
+                string[] keys = keyword.Split(" ");
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    q = q.Where(o =>  o.Name.Contains(keys[i]) || o.selleracc.Contains(keys[i]) || o.styles.Any(str => str.Contains(keys[i]))).Select(o => o).ToList();
+                }
+            }
+
             List<int> quantiles = new List<int>();
             if(q.Count >0)
             {
@@ -316,6 +396,7 @@ namespace prjiSpanFinal.Controllers
                 item.stIDList = q.Select(a => a.stID).Distinct().ToList();
                 item.quantiles = quantiles;
             }
+
             q = q.Skip((page - 1) * eachpage).Take(eachpage).ToList();
             foreach(var item in q)
             {
@@ -326,7 +407,85 @@ namespace prjiSpanFinal.Controllers
                     item.Pic = System.IO.File.ReadAllBytes(path);
                 }
             }
+
             return Json(q);
         }
+
+        public IActionResult GetProductDetail(int memid, int id)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            CItemIndexViewModel q = new CItemIndexViewModel() {
+                product = dbcontext.Products.Where(p => p.ProductId == id).Select(p=> new Models.App.CProduct() {Description = p.Description, ProductName = p.ProductName, ProductId = p.ProductId, MemberId = p.MemberId }).FirstOrDefault(),
+                productDetails = dbcontext.ProductDetails.Where(p => p.ProductId == id).Select(p=> new Models.App.CProductDetail() { Pic = p.Pic, Quantity= p.Quantity, UnitPrice= p.UnitPrice, Style= p.Style,ProductDetailId= p.ProductDetailId }).ToList(),
+                comments = dbcontext.Comments.Where(c=>c.OrderDetail.ProductDetail.ProductId == id).Select(p=> new Models.App.CComment() {cpics = dbcontext.CommentPics.Where(c => c.CommentId == p.CommentId).Select(p => p.CommentPic1).ToList(), commentacc = p.OrderDetail.Order.Member.MemberAcc,Comment1 = p.Comment1,Comment2=p.Comment2,Comment3=p.Comment3,CommentStar=p.CommentStar,CommentTime=p.CommentTime, memPic = p.OrderDetail.Order.Member.MemPic }).ToList(),
+                commentCount = dbcontext.Comments.Where(c => c.OrderDetail.ProductDetail.ProductId == id).ToList().Count,
+                avgCommentStar = (dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == id).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == id).Select(a => (int)a.CommentStar).Sum() / dbcontext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == id).Select(a => a.CommentStar).ToList().Count,
+                Islike = dbcontext.Likes.Where(k => k.MemberId == memid && k.ProductId == id).Any(),
+                productPics = dbcontext.ProductPics.Where(p=>p.ProductId == id).Select(p=>p.Pic).ToList(),
+                salesVolume = dbcontext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == id && (a.Order.StatusId == 6 || a.Order.StatusId == 7)).Select(a => a.Quantity).Sum(),
+                seller = dbcontext.Products.Where(p => p.ProductId == id).Select(p=> new Models.App.CMemberAccount() {MemberAcc= p.Member.MemberAcc,MemberId=p.Member.MemberId,MemPic= p.Member.MemPic }).FirstOrDefault(),
+                buyer = dbcontext.MemberAccounts.Where(m=>m.MemberId == memid).Select(p => new Models.App.CMemberAccount() { MemberAcc = p.MemberAcc, MemberId = p.MemberId, MemPic = p.MemPic }).FirstOrDefault(),
+                sellerPayment = dbcontext.PaymentToSellers.Where(p=>p.MemberId == memid).Select(p=> new CSellerPaymentViewModel() { fee = p.Payment.Fee,payment= p.Payment.PaymentName,id=p.PaymentId}).ToList(),
+                sellerShipper = dbcontext.ShipperToSellers.Where(p => p.MemberId == memid).Select(p => new CSellerShipperViewModel() { fee = p.Shipper.Fee, shipper = p.Shipper.ShipperName, id = p.ShipperId }).ToList(),
+                cartcount = dbcontext.OrderDetails.Where(o => o.Order.StatusId == 1 && o.Order.MemberId == memid && o.ProductDetail.Product.MemberId == dbcontext.Products.Where(r=>r.ProductId == id).FirstOrDefault().MemberId).ToList().Count,
+            };
+
+            if (q.productPics.Count == 0)
+            {
+                string pName = "/img/imageNotFound.png";
+                string path = _enviro.WebRootPath + pName;
+                q.productPics.Add(System.IO.File.ReadAllBytes(path));
+            }
+            foreach (var item in q.comments)
+            {
+                if (item.memPic == null)
+                {
+                    string pName = "/img/Member/nopicmem.jpg";
+                    string path = _enviro.WebRootPath + pName;
+                    item.memPic = System.IO.File.ReadAllBytes(path);
+                }
+            }
+            if (q.seller.MemPic == null)
+            {
+                string pName = "/img/Member/nopicmem.jpg";
+                string path = _enviro.WebRootPath + pName;
+                q.seller.MemPic = System.IO.File.ReadAllBytes(path);
+            }
+            return Json(q);
+        }
+        //od = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1).FirstOrDefault();
+        public IActionResult AddCart(int memid, int id,int qty)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            int orderid = 0;
+            if(!dbcontext.Orders.Where(o=>o.MemberId == memid && o.StatusId == 1 && o.OrderDetails.Where(d=>d.ProductDetail.Product.Member.MemberId == dbcontext.ProductDetails.Where(p=>p.ProductDetailId == id).Select(p=>p.Product.MemberId).FirstOrDefault()).Any()).Any())
+            {
+                Order od = new Order() { CouponId = 1,MemberId=memid, StatusId=1,PaymentId=1,ShipperId=1, };
+                dbcontext.Orders.Add(od);
+                dbcontext.SaveChanges();
+                orderid = od.OrderId;
+            }
+            else
+            {
+                orderid = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1).FirstOrDefault().OrderId;
+            }
+
+
+            if(dbcontext.OrderDetails.Where(o=>o.OrderId == orderid && o.ProductDetailId == id && o.Order.StatusId == 1).Any())
+            {
+                dbcontext.OrderDetails.Where(o => o.OrderId == orderid && o.ProductDetailId == id && o.Order.StatusId == 1).FirstOrDefault().Quantity += qty;
+                dbcontext.SaveChanges();
+            }
+            else
+            {
+                OrderDetail orderDetail = new OrderDetail() { OrderId = orderid, ProductDetailId = id, Quantity = qty, ShippingStatusId = 1, Unitprice = dbcontext.ProductDetails.Where(p => p.ProductDetailId == id).FirstOrDefault().UnitPrice };
+                dbcontext.OrderDetails.Add(orderDetail);
+                dbcontext.SaveChanges();
+                
+            }
+            return Json(dbcontext.OrderDetails.Where(o=>o.OrderId == orderid).ToList().Count);
+        }
+
+
     }
 }
