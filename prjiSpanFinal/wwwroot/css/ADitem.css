@@ -36,7 +36,7 @@
 }
         /* 加在 cardInfoArea*/
 .SubAD2BG {
-    background: linear-gradient(0deg, #000, #272727) !important;
+    background: white;
 }
 /* 添加在 cardTitle cardPrice cardStar sells 文字類*/
 .SubAD1 {

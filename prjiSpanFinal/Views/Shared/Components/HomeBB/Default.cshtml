@@ -2,37 +2,66 @@
 @using prjiSpanFinal.ViewModels.Home
 @model List<CShowBBItem>
 
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-            @{foreach (var item in Model)
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        @{foreach (var item in Model)
+            {
+                var sub1 = "";
+                var sub1BG = "";
+                if (item.effects.Contains(1))
                 {
-                    <div class="swiper-slide">
-                        @{string productLink = Url.Content("~/Item/Index") + "?id=" + item.product.ProductId;}
-                        <div class="BBIterm">
-                            <a class="linknoline BBimgBox" href="#!">
-                                <input type="hidden" value="@item.product.ProductId" />
-                                @if (item.pic != null)
-                                {
-                                    var base64Image = Convert.ToBase64String(item.pic);
-                                    var source = String.Format("data:image/png;base64,{0}", base64Image);
-                                    <img src="@source" class="BBitemImg" alt="" />
+                    sub1 = "SubAD1";
+                    sub1BG = "SubAD1BG";
+                }
+                var sub2 = "";
+                var sub2BG = "";
+                if (item.effects.Contains(2))
+                {
+                    sub2 = "SubAD2";
+                    sub2BG = "SubAD2BG";
+                }
+                var sub3 = "";
+                var sub3BGbox = "";
+                if (item.effects.Contains(3))
+                {
+                    sub3 = "SubAD3";
+                    sub3BGbox = "SubAD3BGBox";
+                }
+                <div class="swiper-slide">
+                            <div class="BBIterm @sub1BG @sub2">
+                                @{ if (item.effects.Contains(3))
+                                    {
+                                        <div class="@sub3BGbox">
+                                            <img src="/img/Homepage/SellCrown.png" class="@sub3" />
+                                        </div>
+                                    }
                                 }
-                                else
-                                {
-                                    <img src="#" class="BBitemImg" alt="此商品沒有圖片" />
-                                }
-                            </a>
-                            <div class="px-1 d-flex flex-column justify-content-between">
-                                <div class="BBitemTitleBox">
-                                    <div class="BBitemTitle">@item.product.ProductName</div>
+                                <a class="linknoline BBimgBox" href="#!">
+                                    <input type="hidden" value="@item.product.ProductId" />
+                                    @if (item.pic != null)
+                                    {
+                                        var base64Image = Convert.ToBase64String(item.pic);
+                                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                                        <img src="@source" class="BBitemImg" alt="" />
+                                    }
+                                    else
+                                    {
+                                        <img src="#" class="BBitemImg" alt="此商品沒有圖片" />
+                                    }
+                                </a>
+                                <div class="px-1 d-flex flex-column justify-content-between cardInfoArea @sub1BG @sub2BG">
+                                    <div class="BBitemTitleBox">
+                                        <div class="BBitemTitle @sub1">@item.product.ProductName</div>
+                                    </div>
+                                    <div class="BBitemDescription">
+                                        <div></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                }
+                </div>
             }
-        </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        }
     </div>
-    
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>

@@ -439,7 +439,7 @@
             if (data != null) {
 
                     let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data.product.productId;
-                item += `<div class="sellsitem"><div class="SubAD3BGBox"><img src="/img/Homepage/SellCrown.png" class="SubAD3" /></div>
+                item += `<div class="sellsitem"><div class="Sub3empty"></div>
                            <a class="linknoline cardImgBox" href="${productLink}">`;
                     if (data.pic != null) {
 
@@ -782,13 +782,17 @@
                 $(".sellsitem").removeClass("SubAD2");
                 $(".cardInfoArea").removeClass("SubAD2BG")
             }
-            //if (eid.includes(7) || eid.includes(8) || eid.includes(9)) {
-            //    if (!$(".cardTitle").hasClass("Title-Highlight")) {
-            //    }
-            //}
-            //else {
-            //    $(".cardTitle").removeClass("Title-Highlight");
-            //}
+            if (eid.includes(7) || eid.includes(8) || eid.includes(9)) {
+                if (!$(".Sub3empty").hasClass("SubAD3BGBox")) {
+                    let res = `<img src="/img/Homepage/SellCrown.png" class="SubAD3" />`;
+                    $(".Sub3empty").addClass("SubAD3BGBox");
+                    $(".Sub3empty").prepend(res);
+                }
+            }
+            else {
+                $(".Sub3empty").empty();
+                $(".Sub3empty").removeClass("SubAD3BGBox");
+            }
         }
         //======================================列表相關
         $("#checkboxAll").click(function () {
