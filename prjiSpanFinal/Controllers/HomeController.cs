@@ -10,6 +10,7 @@ using prjiSpanFinal.ViewModels.Home;
 using prjiSpanFinal.Models.LayOutReq;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Text.Json;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -164,6 +165,26 @@ namespace prjiSpanFinal.Controllers
                 }
             }
             return Json(keywordList.ToArray());
+        }
+
+        public IActionResult ShoppingCartStockDisplay()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return Json(0);
+            }
+            MemberAccount acc = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            int CardCount = _db.OrderDetails.Where(o => o.Order.MemberId == acc.MemberId && o.Order.StatusId == 1).Count();
+            
+            if (CardCount == 0)
+            {
+                return Json(0);
+            }
+            else
+            {
+                return Json(CardCount);
+            }
+                
         }
         //  EndLayOutUse  //
         
