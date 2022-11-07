@@ -27,7 +27,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult Index()
         {
             List<Product> listProd = (new CHomeFactory()).rdnProd(_db.Products.Select(p => p).ToList());
-            List<CShowItem> listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(48).ToList();
+            List<CShowItem> listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(36).ToList();
             listProd = new CHomeFactory().rdnProd(_db.AdtoProducts.Where(p => p.IsSubActive && p.Ad.AdTypeId == 3).Select(p=>p.Product).ToList());
             List<CShowBBItem> listBB = new CHomeFactory().toShowBBItem(listProd.Take(15).ToList());
             listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(p => p.VerifyId==2).Select(p => p.Product).ToList());

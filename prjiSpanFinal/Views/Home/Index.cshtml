@@ -9,6 +9,7 @@
     <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
     <link href="~/css/Home/FSItem.css" rel="stylesheet" />
     <link href="~/css/Home/BBItem.css" rel="stylesheet" />
+    <link href="~/css/ADitem.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         .swiper {
@@ -129,10 +130,10 @@
                                                     }
                                                 </a>
                                             </div>
-                                                        if (Model.WebADCarousel.Count > 1)
-                                                        {
-                                                            for (int i = 1; i < Model.WebADCarousel.Count; i++)
-                                                            {
+                                            if (Model.WebADCarousel.Count > 1)
+                                            {
+                                                for (int i = 1; i < Model.WebADCarousel.Count; i++)
+                                                {
                                                     <div class="carousel-item">
                                                         <a href="">
                                                             @{ base64Image = Convert.ToBase64String(Model.WebADCarousel[i].WebAdimage);
@@ -141,11 +142,11 @@
                                                             }
                                                         </a>
                                                     </div>
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
                                             <div class="carousel-item active">
                                                 <a href="@Url.Content("~/FAQ/Index")">
                                                     <img src="~/img/Homepage/DM-1HP_Mention.png" />
@@ -153,7 +154,7 @@
                                             </div>
 
 
-                                                                }
+                                        }
                                     }
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -183,12 +184,12 @@
                                                 }
                                             </a>
                                         </div>
-                                                        }
-                                                    }
-                                                    else if (Model.WebADSmall.Count == 1)
-                                                    {
-                                                        for (int i = 0; i < 2; i++)
-                                                        {
+                                    }
+                                }
+                                else if (Model.WebADSmall.Count == 1)
+                                {
+                                    for (int i = 0; i < 2; i++)
+                                    {
                                         <div class="col-6">
                                             <a href="" class="img-fluid d-block rounded-2">
                                                 @{var base64Image = Convert.ToBase64String(Model.WebADSmall[0].WebAdimage);
@@ -197,10 +198,10 @@
                                                 }
                                             </a>
                                         </div>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
+                                    }
+                                }
+                                else
+                                {
                                     <div class="col-6">
                                         <a href="@Url.Content("~/Event/Discount")" class="img-fluid d-block rounded-2">
                                             <img src="~/img/Homepage/DM-2HP.png" class="w-100" />
@@ -211,7 +212,7 @@
                                             <img src="~/img/Homepage/DM-2HP2.png" class="w-100" />
                                         </a>
                                     </div>
-                                                    }
+                                }
                             }
                         </div>
                     </div>
@@ -240,7 +241,7 @@
         <div class="HP-Item">
             @{ if (Model.cShowFS.Any())
                 {
-                     @await Component.InvokeAsync("HomeFS", new { list = Model.cShowFS })
+                    @await Component.InvokeAsync("HomeFS", new { list = Model.cShowFS })
                 }
                 else
                 {
@@ -325,7 +326,7 @@
             function getItemClicked() {
                 let ItemValue = $(this).find('input').val();
                 var url = '@Url.Content("~/Item/Index")' + "?id=" + ItemValue;
-                $.post('redirectProdLink', { id: ItemValue }, function () {
+                $.post('/home/redirectProdLink', { id: ItemValue }, function () {
                     window.location.href = url;
                 })
             }

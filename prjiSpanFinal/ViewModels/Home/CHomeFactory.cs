@@ -63,6 +63,10 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     a.effects=Effect;
                 }
+                else
+                {
+                    a.effects = new List<int>();
+                }
                 res.Add(a);
             }
             return res;
@@ -137,7 +141,10 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     obj.effects=Effect;
                 }
-
+                else
+                {
+                    obj.effects = new List<int>();
+                }
                 res.Add(obj);
             }
 
@@ -169,7 +176,10 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     obj.effects = Effect;
                 }
-
+                else
+                {
+                    obj.effects = new List<int>();
+                }
                 res.Add(obj);
             }
             return res;

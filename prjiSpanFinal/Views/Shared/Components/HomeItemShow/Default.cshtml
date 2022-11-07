@@ -7,87 +7,75 @@
 @{
     foreach (var item in Model)
     {
-        string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;
-        <div class="sellsitem">
-            <a class="linknoline sellsitem-imgbox" href="#!">
-                <input type="hidden" value="@item.Product.ProductId"/>
-                @if (item.Pic != null)
-                {
-                    var base64Image = Convert.ToBase64String(item.Pic);
-                    var source = String.Format("data:image/png;base64,{0}", base64Image);
-                    <img src="@source" class="cardImg" alt="..." />
-                }
-                else
-                {
-                    <img src="#" class="cardImg" alt="此商品沒有圖片" />
-                }
-            </a>
-            <div class="px-1 d-flex flex-column justify-content-between">
-                <div class="cardTitleBox">
-                    <div class="cardTitle">@item.Product.ProductName</div>
-                </div>
-                @{ if (item.Price.Count == 1)
+        var sub1 = "";
+        var sub1BG = "";
+        if (item.effects.Contains(1))
+        {
+            sub1 = "SubAD1";
+            sub1BG = "SubAD1BG";
+        }
+        var sub2 = "";
+        var sub2BG = "";
+        if (item.effects.Contains(2))
+        {
+            sub2 = "SubAD2";
+            sub2BG = "SubAD2BG";
+        }
+        var sub3 = "";
+        var sub3BGbox = "";
+        if (item.effects.Contains(3))
+        {
+            sub3 = "SubAD3";
+            sub3BGbox = "SubAD3BGBox";
+        }
+            <div class="sellsitem @sub1BG @sub2">
+                @{ if (item.effects.Contains(3))
                     {
-                        <div class="cardPrice">$@decimal.Round(item.Price[0])</div>
+                        <div class="@sub3BGbox">
+                            <img src="/img/Homepage/SellCrown.png" class="@sub3" />
+                        </div>
+                    }
+                }
+                <a class="linknoline sellsitem-imgbox" href="#!">
+                    <input type="hidden" value="@item.Product.ProductId" />
+                    @if (item.Pic != null)
+                    {
+                        var base64Image = Convert.ToBase64String(item.Pic);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                        <img src="@source" class="cardImg" alt="..." />
                     }
                     else
                     {
-                        <div class="cardPrice">$@decimal.Round(item.Price[0]) - $@decimal.Round(item.Price[1])</div>
+                        <img src="" class="cardImg" alt="此商品沒有圖片" />
                     }
-                }
-                <div class="cardInfo d-flex justify-content-between flex-row">
-                    <div class="starBox mt-1">
-                        <div class="d-flex justify-content-start">
-                            <div class="starImg">
-                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                            </div>
-                            <div class="">@item.starCount.ToString("0.0")</div>
-                        </div>
+                </a>
+                <div class="px-1 d-flex flex-column justify-content-between cardInfoArea @sub1BG @sub2BG">
+                    <div class="cardTitleBox">
+                        <div class="cardTitle @sub1">@item.Product.ProductName</div>
                     </div>
-                    <div class="text-end sells">已賣出<span>@item.salesVolume</span></div>
+                    @{ if (item.Price.Count == 1)
+                        {
+                            <div class="cardPrice @sub1">$@decimal.Round(item.Price[0])</div>
+                        }
+                        else
+                        {
+                            <div class="cardPrice @sub1">$@decimal.Round(item.Price[0]) - $@decimal.Round(item.Price[1])</div>
+                        }
+                    }
+                    <div class="cardInfo d-flex justify-content-between flex-row">
+                        <div class="starBox mt-1">
+                            <div class="d-flex justify-content-start">
+                                <div class="starImg">
+                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                </div>
+                                <div class="@sub1">@item.starCount.ToString("0.0")</div>
+                            </div>
+                        </div>
+                        <div class="text-end sells @sub1">已賣出<span>@item.salesVolume</span></div>
 
+                    </div>
                 </div>
             </div>
-        </div>
+        
     }
 }
-
-
-@*@model prjiSpanFinal.ViewModels.Home.CShowItem
-@{
-                <link href="~/css/Home/ItemCard.css" rel="stylesheet" /> string productLink = Url.Content("~/Item/Index") + "?id=" + Model.Product.ProductId; }
-<div class="sellsitem">
-    <a class="linknoline" href="@productLink">
-        @if (Model.Pic != null)
-        {
-            var base64Image = Convert.ToBase64String(Model.Pic);
-            var source = String.Format("data:image/png;base64,{0}", base64Image);
-<img src="@source" class="cardImg" alt="..." /> }
-            else
-            {
-<img src="#" class="cardImg" alt="此商品沒有圖片" />}
-    </a>
-    <div class="px-1 d-flex flex-column justify-content-between">
-        <div class="cardTitleBox">
-            <div class="cardTitle">@Model.Product.ProductName</div>
-        </div>
-        @{ if (Model.Price.Count == 1)
-            {
-<div class="cardPrice">$@decimal.Round(Model.Price[0])</div> }
-            else
-            {
-<div class="cardPrice">$@decimal.Round(Model.Price[0]) - $@decimal.Round(Model.Price[1])</div> } }
-        <div class="cardInfo d-flex justify-content-between flex-row">
-            <div class="starBox mt-1">
-                <div class="d-flex justify-content-start">
-                    <div class="starImg">
-                        <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
-                    </div>
-                    <div class="text-black">@Model.starCount.ToString("0.0")</div>
-                </div>
-            </div>
-            <div class="text-end text-black-50 sells">已賣出<span>@Model.salesVolume</span></div>
-
-        </div>
-    </div>
-</div>*@
