@@ -66,7 +66,7 @@
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">
                         <div id="ADeffectArea" class="d-flex flex-wrap align-content-center align-items-center justify-content-center">
-                            <div class="ADeffect ADsensor row" id="e1">
+                            @*<div class="ADeffect ADsensor row" id="e1">
                                 <div class="d-flex justify-content-between align-items-center ADe-Header">
                                     <div class="ADe-Title">
                                         代名字近來
@@ -78,7 +78,7 @@
                                 <div class="ADe-Description">
                                     代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,6 @@
                 <div class="row justify-content-center ">
                     <div class="d-flex justify-content-evenly align-items-center align-content-center" id="ShowArea">
                         <div id="CheckedItemAD">
-
                         </div>
                     </div>
                     <button type="button" id="addItemBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addADItem">
@@ -546,14 +545,20 @@
         })
         function addSub() {
             if (isItemSelect || isOKtoSub) {
-                //#todo　判斷要寫在SAVEADSUBS
-                //要做儲值金確認功能
                 $.post("saveADSubs", { itemID: itemID, ADIDs: eid }, function (data) {
-                    if (data == 2) {
+                    if (data[0] == 3) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '蝦蝦幣不足',
+                            text: '結帳需求為 $' + data[2]+' ，目前持有蝦蝦幣： '+data[1]+'',
+                            footer: '有需要請移至<a style="color:red;" href="/Member/Balance">儲值區</a>！',
+                        })
+                    }
+                    else if (data[0] == 2) {
                         Swal.fire({
                             icon: 'warning',
                             title: '重複訂閱',
-                            text: '此項產品已有運行中的訂閱！',
+                            text: '此項產品已有運行中的訂閱！（重複的項目為' + data[1] + '項）',
                             footer:'如果你願意...<br />我們可以改變規則收兩倍的錢！',
                         })
                     }
@@ -566,7 +571,7 @@
                             icon: 'error',
                             title: '訂閱失敗...',
                             text: '請重新檢查訂閱項目！',
-                            footer: '這不該發生的...<br />如果再次發生，請聯繫我們！',
+                            footer: '這不該發生的...<br />如果重複發生，請聯繫我們！',
                         })
                     }
                 })
@@ -692,11 +697,6 @@
             let res = "";
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
-                    //let date = new Date(data[i].startdate);
-                    //let date2 = new Date(data[i].enddate);
-                    //console.log(date);
-                    //console.log(date2);
-                    //console.log(date2 - date);
                     let dataid = data[i].aDtoProd.adtoProductId;
                     res += `
                     <tr class="Sub-item">
@@ -763,6 +763,7 @@
                     $(".cardStar").addClass("SubAD1");
                     $(".sells").addClass("SubAD1");
                     $(".sellsitem").addClass("SubAD1BG")
+                    $(".cardInfoArea").addClass("SubAD1BG")
                 }
             }
             else {
@@ -771,6 +772,7 @@
                 $(".cardStar").removeClass("SubAD1");
                 $(".sells").removeClass("SubAD1");
                 $(".sellsitem").removeClass("SubAD1BG");
+                $(".cardInfoArea").removeClass("SubAD1BG")
             }
             if (eid.includes(4) || eid.includes(5) || eid.includes(6)) {
                 if (!$(".sellsitem").hasClass("SubAD2")) {

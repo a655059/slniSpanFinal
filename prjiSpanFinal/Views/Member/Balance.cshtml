@@ -102,7 +102,7 @@
                     <input type="hidden" name="CheckMacValue" value="" />
                     <div class="form-group">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">確認付款</button>
+                        <button type="submit" class="btn btn-primary" id="BalanceRequestSubmit">確認付款</button>
                     </div>
                 </form>
             </div>
@@ -121,7 +121,6 @@
 
                         $("#chargebtn").click(function () {
                             if (parseInt(charge.val()) > 0) {
-                                
                                 //$.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
                                 //    if (data != null) {
                                 //        $("#balanceHave").text(data);
@@ -131,7 +130,7 @@
                                 let checkoutItems = [];
                                 const productName = "儲值金：" + charge.val();
                                 const productPrice = charge.val();
-                                
+
                                 checkoutItems.push(productName);
                                 checkoutItems.push(productPrice);
                                 console.log(checkoutItems);
@@ -156,6 +155,9 @@
                                 RefreshRecord();
                             }
                         })
+                        $("#BalanceRequestSubmit").click(async function () {
+                            $.getJSON('/Member/SetBalanceRecordToSession', { Balance: charge.val() })
+                        });
 
                         item.click(function (event) {
                             item.removeClass("active");
