@@ -40,9 +40,9 @@ namespace prjiSpanFinal.Controllers
                 lSmallType = _db.SmallTypes.Select(p => p).ToList(),
                 lBigType = _db.BigTypes.Select(p => p).ToList(),
                 cShowItem = listItem,
-                WebADCarousel = webAds.Where(a => a.WebAdimageTypeId == 1).ToList(),
-                WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a=>a.WebAdimageTypeId==2).ToList()),
-                WebADBig = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 3).ToList()),
+                WebADCarousel = webAds.Where(a => a.WebAdimageTypeId == 1 && a.IsPublishing).ToList(),
+                WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a=>a.WebAdimageTypeId== 2 && a.IsPublishing).ToList()),
+                WebADBig = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 3 && a.IsPublishing).ToList()),
                 cShowBB= listBB,
                 cShowFS= listFS,
             };

@@ -1,5 +1,6 @@
 ﻿let mymemid = $("#msgmemid").val();
 let header2exist = $("#header2").length != 0;
+let searchAutoComplete = [];
 
 getShoppingCart();
 
@@ -69,14 +70,19 @@ if (header2exist) {
     })
 }
         //搜尋紀錄
+
 GetSearchDetail();
 function GetSearchDetail() {
     $.post(`/Home/GetSearchDetail`, { key: searchkeyword }, function (data) {
-        $("#searchkeyspace").html("");
         if (data.length > 0) {
             $("#searchkeyspace").html("");
             $("#searchkeyspace").append(SearchKeyWord(data))
         }
+        //if (data.length > 0) {
+        //    searchAutoComplete = data;
+        //    console.log(searchAutoComplete);
+        //}
+
     })
 }
 function SearchKeyWord(data) {
