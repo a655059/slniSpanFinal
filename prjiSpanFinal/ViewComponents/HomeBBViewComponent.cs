@@ -11,7 +11,7 @@ namespace prjiSpanFinal.ViewComponents
 {
     public class HomeBBViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(List<CShowItem> list)
+        public async Task<IViewComponentResult> InvokeAsync(List<CShowBBItem> list)
         {
            
             return View(list);

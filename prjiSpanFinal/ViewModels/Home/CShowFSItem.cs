@@ -20,5 +20,11 @@ namespace prjiSpanFinal.ViewModels.Home
                 return (sale / stock + sale) * 100;
             }
         }
+        public List<int> effects { get; set; }
+        public bool isDeliveryFree
+        {
+            get;
+            set;
+        }
     }
 }

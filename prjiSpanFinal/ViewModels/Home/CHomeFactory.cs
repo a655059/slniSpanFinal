@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace prjiSpanFinal.ViewModels.Home
 {
@@ -17,7 +16,7 @@ namespace prjiSpanFinal.ViewModels.Home
         {
             if (list == null)
                 return list;
-            var randowlist = list.OrderBy(p => Guid.NewGuid()).ToList();
+            var randowlist = list.Where(p=>p.ProductStatusId!=1|| p.ProductStatusId == 2).OrderBy(p => Guid.NewGuid()).ToList();
             return randowlist;
         }
         public List<CShowItem> toShowItem(List<Product> list)
@@ -59,6 +58,11 @@ namespace prjiSpanFinal.ViewModels.Home
                     a.Pic = pic;
                 a.salesVolume = sales;
                 a.starCount = stars;
+                var Effect = db.AdtoProducts.Where(p => p.ProductId == item.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
+                if (Effect.Any())
+                {
+                    a.effects=Effect;
+                }
                 res.Add(a);
             }
             return res;
@@ -99,6 +103,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 }
                 CShowFSItem obj = new CShowFSItem();
                 float Discount = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault();
+                bool DeliveryFree = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.IsFreeDelivery).FirstOrDefault();
                 DateTime StartDate = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId&&e.VerifyId==2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
                 int Sale = db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o=> (o.Order.FinishDate).CompareTo(StartDate)>0).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
                 byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
@@ -122,6 +127,16 @@ namespace prjiSpanFinal.ViewModels.Home
                 obj.discount = Discount;                
                 obj.stock = Stock;
                 obj.sale = Sale;
+                if (DeliveryFree)
+                    obj.isDeliveryFree = true;
+                else if (!DeliveryFree)
+                    obj.isDeliveryFree = false;
+
+                var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
+                if (Effect.Any())
+                {
+                    obj.effects=Effect;
+                }
 
                 res.Add(obj);
             }
@@ -135,23 +150,27 @@ namespace prjiSpanFinal.ViewModels.Home
             {
                 return res;
             }
-            //var a = db.AdtoProducts.Where(a => a.IsSubActive == true && a.Ad.AdTypeId == 3).Select(a => a.Product);
             foreach(var prod in list)
             {
                 if (prod.ProductStatusId == 1 || prod.ProductStatusId == 2)
                 {
                     continue;
                 }
-                CShowBBItem b = new CShowBBItem();
+                CShowBBItem obj = new CShowBBItem();
                 byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
                 if (Pic != null)
                 {
-                    b.pic = Pic;
+                    obj.pic = Pic;
                 }
-                b.product = prod;
-                var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId);
+                obj.product = prod;
 
-                res.Add(b);
+                var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
+                if (Effect.Any())
+                {
+                    obj.effects = Effect;
+                }
+
+                res.Add(obj);
             }
             return res;
         }

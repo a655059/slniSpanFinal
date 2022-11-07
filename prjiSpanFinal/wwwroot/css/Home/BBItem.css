@@ -1,4 +1,4 @@
-﻿.FSitem {
+﻿.BBIterm {
     width: 200px;
     height: 270px;
     margin: 4px 5px 4px 5px;
@@ -10,7 +10,7 @@
     transition: all .5s
 }
 
-.FSimgBox {
+.BBimgBox {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,11 +18,11 @@
     height: 190px;
 }
 
-.FSitem:hover {
+.BBitem:hover {
     opacity: 80%;
 }
 
-.FSitemImg {
+.BBitemImg {
     display: block;
     width: 90%;
     aspect-ratio: 1 / 1;
@@ -30,11 +30,11 @@
     object-fit: cover;
 }
 
-.FSitemTitleBox {
+.BBitemTitleBox {
     height: 40px;
 }
 
-.FSitemTitle {
+.BBitemTitle {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -44,15 +44,4 @@
     font-weight: bold;
     color: black;
     text-overflow: ellipsis;
-}
-
-.FSitemPrice {
-    color: red;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-.FSitemInfo {
-    font-size: 1em;
-    flex-wrap: nowrap;
 }

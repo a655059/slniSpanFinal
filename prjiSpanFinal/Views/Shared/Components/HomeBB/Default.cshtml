@@ -1,31 +1,30 @@
 ﻿@using System.Collections.Generic;
 @using prjiSpanFinal.ViewModels.Home
-@model List<CShowItem>
+@model List<CShowBBItem>
 
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             @{foreach (var item in Model)
                 {
                     <div class="swiper-slide">
-                        @{string productLink = Url.Content("~/Item/Index") + "?id=" + item.Product.ProductId;}
-                        <div class="FSitem">
-                            <a class="linknoline FSimgBox" href="@productLink">
-                                @if (item.Pic != null)
+                        @{string productLink = Url.Content("~/Item/Index") + "?id=" + item.product.ProductId;}
+                        <div class="BBIterm">
+                            <a class="linknoline BBimgBox" href="@productLink">
+                                @if (item.pic != null)
                                 {
-                                    var base64Image = Convert.ToBase64String(item.Pic);
+                                    var base64Image = Convert.ToBase64String(item.pic);
                                     var source = String.Format("data:image/png;base64,{0}", base64Image);
-                                    <img src="@source" class="FSitemImg" alt="" />
+                                    <img src="@source" class="BBitemImg" alt="" />
                                 }
                                 else
                                 {
-                                    <img src="#" class="FSitemImg" alt="此商品沒有圖片" />
+                                    <img src="#" class="BBitemImg" alt="此商品沒有圖片" />
                                 }
                             </a>
                             <div class="px-1 d-flex flex-column justify-content-between">
-                                <div class="FSitemTitleBox">
-                                    <div class="FSitemTitle">@item.Product.ProductName</div>
+                                <div class="BBitemTitleBox">
+                                    <div class="BBitemTitle">@item.product.ProductName</div>
                                 </div>
-                                <div class="FSitemPrice">$@decimal.Round(item.Price[0])</div>
                             </div>
                         </div>
                     </div>
