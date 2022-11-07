@@ -1148,11 +1148,11 @@ namespace prjiSpanFinal.Controllers
             int totalAmount = Convert.ToInt32(checkoutItems[1]);
             
             itemName = itemName.TrimEnd('#');
-            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";
+            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Member/IsExistBalanceRecordSession";
             NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
             parameters["HashKey"] = "5294y06JbISpM5x9";
             parameters["ChoosePayment"] = "Credit";
-            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";    //完成後跳回去的頁面
+            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Member/IsExistBalanceRecordSession";    //完成後跳回去的頁面
             parameters["CreditInstallment"] = "";
             parameters["EncryptType"] = "1";
             parameters["InstallmentAmount"] = "";
@@ -1184,6 +1184,31 @@ namespace prjiSpanFinal.Controllers
                 checkMacValue = checkMacValue
             };
             return Json(cOPayParameters);
+        }
+        public IActionResult SetBalanceRecordToSession(string BalanceRecord)
+        {
+            HttpContext.Session.SetString(CDictionary.SK_BALANCE, BalanceRecord);
+            return Content("1");
+        }
+
+        public IActionResult IsExistBalanceRecordSession()
+        {
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_PAIDORDER))
+            {
+                //iSpanProjectContext dbContext = new iSpanProjectContext();
+                //int orderID = Convert.ToInt32(HttpContext.Session.GetString(CDictionary.SK_PAIDORDER));
+                //Order paidOrder = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
+                //paidOrder.StatusId = 3;
+                //paidOrder.PaymentDate = DateTime.Now;
+                //dbContext.SaveChanges();
+                //HttpContext.Session.Remove(CDictionary.SK_PAIDORDER);
+                return RedirectToAction("Balance", "Member");
+            }
+            else
+            {
+                return RedirectToAction("Balance", "Member");
+            }
         }
     }
 }
