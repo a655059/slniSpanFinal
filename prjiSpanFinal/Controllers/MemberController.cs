@@ -25,6 +25,7 @@ using prjiSpanFinal.ViewModels.Category;
 using prjiSpanFinal.ViewModels.Header;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
+using MimeKit.Utils;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -235,24 +236,35 @@ namespace prjiSpanFinal.Controllers
                 //return View(acc);
             }
         }
-        public IActionResult SendNewspaper(string memName,string memEmail, IFormFile newsimgphoto)
+        public IActionResult SendNewspaper(IFormFile newsimgphoto)
         {
-            //後台新增發送電子報，另做一個view裡面可以輸入抓到會員名字，email，與電子報要附的圖片
+            //後台新增發送電子報，另做一個view裡面可以輸入電子報要附的圖片
             try
             {
+                iSpanProjectContext db = new iSpanProjectContext();
+                var memName = db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Name);
+                var memEmail= db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Email);
                 MimeMessage message = new MimeMessage();
                 BodyBuilder builder = new BodyBuilder();
-                //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+
+                var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
                 //==>這裡可以放入圖片路徑
 
-                builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/Subscription.cshtml");
-                //builder.HtmlBody = $"<p>尊敬的會員您好：您新的密碼為{Newpassword}。<br>請以新密碼登入並修改您的舊密碼。如果未有忘記密碼的需求，請忽略此信件。</p><br>" +
-                //                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>" +
-                //                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
+                string urll = $"{Request.Scheme}://{Request.Host}";
+                //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/Subscription.cshtml");
+
+                builder.HtmlBody = $"<h1>瘋蝦Shoppping:雙11重量出擊</h1><h3>限定1111加碼超值優惠趁早!</h3><br/>" +$"<a href='{urll}'>請點選以下連結進入賣場</a><br/>" +
+                                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>" +
+                                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
                 //=>內容
 
+
                 message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
-                message.To.Add(new MailboxAddress(memName, memEmail));
+                //foreach (var item in memEmail)
+                //{
+                //        message.To.Add(new MailboxAddress("會員",item));
+                //}
+                message.To.Add(new MailboxAddress("會員", "Wang20221101@gmail.com"));
                 message.Subject = "[C#蝦到爆商城(ShopDaoBao)]最爆都在這"; //==>標題
                 message.Body = builder.ToMessageBody();
 
@@ -276,6 +288,11 @@ namespace prjiSpanFinal.Controllers
             }
 
         }
+        public IActionResult Newspaper()
+        {
+            return View();
+        }
+
 
         public IActionResult Create()
         {
@@ -352,9 +369,9 @@ namespace prjiSpanFinal.Controllers
             HttpContext.Session.SetString(CDictionary.SK_MAILCHECK, sb.ToString());            
             string urll = $"{Request.Scheme}://{Request.Host}/Member/MemstChange/id?key={memID}";
             //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。請於20分鐘內驗證完成。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br>" +
-                               $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>" +
-                               $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
+            builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。請於20分鐘內驗證完成。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br/>" +
+                               $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>" +
+                               $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
 
             //=>內容
 
@@ -961,9 +978,9 @@ namespace prjiSpanFinal.Controllers
                 //==>這裡可以放入圖片路徑
 
                 //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-                builder.HtmlBody = $"<p>尊敬的會員您好：您新的密碼為{Newpassword}。<br>請以新密碼登入並修改您的舊密碼。如果未有忘記密碼的需求，請忽略此信件。</p><br>"+
-                                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>"+
-                                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
+                builder.HtmlBody = $"<p>尊敬的會員您好：您新的密碼為{Newpassword}。<br/>請以新密碼登入並修改您的舊密碼。如果未有忘記密碼的需求，請忽略此信件。</p><br/>"+
+                                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>"+
+                                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
                 //=>內容
 
                 message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Subscription";
+    ViewData["Title"] = "Newspaper";
 }
 
 <h1 style="margin-top: 0.5em; font-weight: bold">發送電子報</h1>
@@ -17,14 +17,13 @@
         <img style="height:40%;width:30%;margin-top:0.5em;" id="newsimg" />
     </div>
 </form>
-
-
 @section Scripts{
     <script>
     //預覽圖片
         let file = null;
         let arraybuffer = null;
         let hasPic = false;
+        
     $("#newsfile").on("change", function (eve) {
         file = this.files[0];
         let reader = new FileReader();
@@ -39,7 +38,7 @@
     //送信
         $("#sendmail").click(() => {
             let formdata = new FormData(document.newsinfo);
-            fetch('@Url.Content("~/Member/SendNewspaper")', {
+            fetch('@Url.Content("~/member/SendNewspaper")', {
                 method: "POST",
                 body: formdata
             }).then(response => response.text())
