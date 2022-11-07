@@ -1765,5 +1765,6 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("SmallTypeList");
         }
         #endregion
+
     }
 }
