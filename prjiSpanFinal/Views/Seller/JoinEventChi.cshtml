@@ -1,0 +1,79 @@
+﻿@addTagHelper *, prjiSpanFinal
+@model List<prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel>
+@{
+    ViewData["Title"] = "Event";
+}
+@section Styles
+    {
+    <link href="~/css/SellerUI/sidebar.css" rel="stylesheet" />
+    <style>
+        .建立按鈕 {
+            font-weight: 700;
+        }
+
+        .內文優惠劵 {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .置中 {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
+    <div class="col-9 ">
+        <h2 class="d-flex justify-content-center">蝦爆活動</h2>
+        <div class="">
+            <div class="my-3 mx-2 內文優惠劵">已參加活動列表</div>
+        </div>
+        <div class="mx-2">
+            <p>
+                雙12一日下殺📢12.12 當日，娛樂收藏店家商品折扣報名活動！<br />
+                通過商品即有資格娛樂收藏專屬折扣碼(屆時設定於娛樂分會場)<br />
+                折扣時間：12/12 12:12 - 12/12 23:12<br />
+                主推商品: 不限商品<br />
+                注意事項：<br />
+                1. 關於審核狀況，通過後即可獲得參加資格，蝦到爆將不另行通知。<br />
+                2. 一旦商品審核通過，恕不接受更改或退出活動等事宜。
+            </p>
+        </div>
+        <div class="">
+            <table class="table border rounded-2">
+                    <tr class="text-bg-light p-3">
+                        <td scope="col" align="center"><input type="checkbox" id="checkall"/></td>
+                        <td scope="col" align="center">商品名稱</td>
+                        <td scope="col" align="center">參加活動名稱</td>
+                        <td scope="col" align="center">審核結果</td>
+                        <td scope="col" align="center">退出活動</td>
+                    </tr>
+                <tbody id="selectcoupon">
+                    @{
+                        //foreach (var jo in Model) { 
+                            <tr class=" p-3">
+                                <td scope="col" align="center"><input type="checkbox" id="" /></td>
+                                <td scope="col" align="center">商品名稱</td>
+                                <td scope="col" align="center">參加活動名稱</td>
+                                <td scope="col" align="center">審核結果</td>
+                                <td scope="col" align="center">
+                                    @Html.ActionLink("取消參加", "", "Seller", new { @*id = Model.productId[i]*@},
+                                                                new { onclick = "return confirm('確定要取消嗎?')", @class = "btn btn-danger my-2" })
+                                </td>
+                            </tr>
+                        //}
+                        }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+@section Scripts
+{
+<script>
+
+</script>
+}
+
