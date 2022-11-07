@@ -137,7 +137,7 @@
             <div class="col">
                 <div class="text-success">賣家類型</div>
 
-                <textarea name="NewProductOnLoad" class="form-control asdf" style="height: 90px; width:570px;"></textarea>
+                <textarea name="NewProductOnLoad" class="form-control asdf" value ="" style="height: 90px; width:570px;"></textarea>
 
                 <div class="text-success">新品上架時間</div>
 
@@ -225,9 +225,9 @@
                     </div>
                     結帳後請於蝦蝦通提供
                     <div style="width:350px;">
-                        <input type="checkbox" value="seven" />產品名稱或編號
-                        <input type="checkbox" value="ten" />款式顏色
-                        <input type="checkbox" value="fourteen" />數量
+                        <input class="checklist" type="checkbox" value="seven" />產品名稱或編號
+                        <input class="checklist" type="checkbox" value="ten" />款式顏色
+                        <input class="checklist" type="checkbox" value="fourteen" />數量
                     </div>
 
                 </div>
@@ -265,9 +265,7 @@
 
     <div class="form-group ">
         <input type="submit" value="送出" id="btnSubmit" class="btn btn-success" />
-        <a role="button" class="btn btn-primary" id="demo1">console array</a>
-        <a role="button" class="btn btn-primary" id="demo2">console string</a>
-        <a role="button" class="btn btn-primary" id="demo3">console string</a>
+        
     </div>
 
 
@@ -280,441 +278,93 @@
 {       @*check帶出值怪*@
 <script>
 
-        jQuery.postJSON = function (url, data, callback) {
-            jQuery.post(url, data, callback, "json");
-        };
+    jQuery.postJSON = function (url, data, callback) {
+        jQuery.post(url, data, callback, "json");
+    };
 
+    function loadcheck(data) {
+       
+        $(".asdf")[0].textContent = data.text[0];
+        $(".asdf")[2].textContent = data.text[2];
 
-        function returncheck(data){
-            return `
-
-                    <div class="form-group row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
-                        <div class="bg-warning rounded">賣場描述</div>
-
-                        <div class="row">
-                            <textarea name="salescourtdescription" class="form-control asdf" style="height: 90px; width:2030px;">${data.text[0]}</textarea>
-                        </div>
-
-                    </div>
-
-                 <div class="form-group row d-flex justify-content-start align-items-center  text-muted  py-1 rounded-2" style="font-size:1.1em">
-                        <div class="bg-warning rounded">賣場資訊</div>
-
-                        <div class="row">
-                            <div class="col">
-                                <input type="hidden" name="Memberid">
-                                <div class="text-danger">賣場服務時間(必填)</div>
-                                <div class="row my-2">
-                                    <div class="col-1">
-                                        <input class="checklist" type="checkbox" name="ServiceTime" value="${data.checkbox[0]}" id="week">
-                                    </div>
-                                    星期
-                                    <div style="width:120px;">
-                                        <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm" style="width:90px;">
-                                            <option value="none" selected disabled hidden>${data.selectopt[0]}</option>
-                                            @{
-                                                for (int i = 0; i < 7; i++)
-                                                {
-                                                    <option value="@(i+1)">@(i+1)</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                    <div style="width:1px;">
-                                        ~
-                                    </div>
-                                    <div style="width:1px;">
-                                        星
-                                    </div>
-                                    <div style="width:1px;">
-                                        期
-                                    </div>
-                                    <div style="width:120px;">
-                                        <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm" style="width:90px;">
-                                            <option value="none" selected disabled hidden>${data.selectopt[1]}</option>
-                                            @{
-                                                for (int i = 0; i < 7; i++)
-                                                {
-                                                    <option value="@(i+1)" >@(i+1)</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
-                                    <div class="col-1">
-                                        <input class="checklist" type="checkbox" name="ServiceTime" value="${data.checkbox[1]}">
-                                    </div>
-                                    時間
-                                    <div style="width:120px;">
-                                        <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm">
-                                            <option value="none" selected disabled hidden>${data.selectopt[2]-1}</option>
-                                            @{
-                                                for (int i = 0; i < 10; i++)
-                                                {
-                                                    <option value="@(i)" >0@(i):00</option>
-                                                }
-
-                                                for (int i = 10; i < 24; i++)
-                                                {
-                                                    <option value="@(i)" >@(i):00</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                    <div style="width:3px;">
-                                        點
-                                    </div>
-                                    <div style="width:3px;">
-                                        ~
-                                    </div>
-                                    <div style="width:120px;">
-                                        <select name="SalesCourtServiceTime" size="1" class="scst form-select form-select-sm">
-                                            <option value="none" selected disabled hidden>${data.selectopt[3]-1}</option>
-                                            @{
-                                                for (int i = 0; i < 10; i++)
-                                                {
-                                                    <option value="@(i)" >0@(i):00</option>
-                                                }
-
-                                                for (int i = 10; i < 24; i++)
-                                                {
-                                                    <option value="@(i)">@(i):00</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                    <div style="width:3px;">
-                                        點
-                                    </div>
-
-                                </div>
-
-                                <div class="row my-1">
-                                    <div class="col-1">
-                                        <input class="checklist" type="checkbox" name="ServiceTime[]" value="${data.checkbox[2]}">
-                                    </div>
-                                    每週
-                                    <div style="width:110px;">
-                                        <input type="text" name="ServiceTime[]" class="asdf" value="${data.text[1]}" style="width:110px">
-                                    </div>
-
-                                    <div style="width:100px;" class="mx-2">
-                                        公休
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div class="col">
-                                    <div class="text-success">賣家類型</div>
-
-                                    <textarea name="NewProductOnLoad" class="form-control asdf" style="height: 90px; width:570px;">${data.text[2]}</textarea>
-
-                                    <div class="text-success">新品上架時間</div>
-
-
-                                    <label>
-                                        <input class="checklist" name="upload" type="radio" value="avday" />每天
-                                        <input class="checklist" name="upload" type="radio" value="onetothree" />1-3天
-                                        <input class="checklist" name="upload" type="radio" value="threeetofive" />3-5天
-                                        <input class="checklist" name="upload" type="radio" value="avweek" />每週
-                                        <input class="checklist" name="upload" type="radio" value="skipweek" />隔週
-                                        <input class="checklist" name="upload" type="radio" value="notsureperiod" />不定期
-
-                                    </label>
-                            </div>
-                        </div>
-
-                      <div class="row">
-                            <div class="col">
-                                <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;">
-                                    <div class="bg-warning rounded-2">售後服務</div>
-
-                                    <div class="col">
-                                        <input type="hidden" name="Memberid" value="">
-
-                                        <div class="row my-2">
-                                            <div class="col-1">
-                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
-                                            </div>
-                                            是否接受退貨
-                                            <div style="width:120px;">
-                                                <select name="ServiceAfterBuy[]" size="1" class="scst form-select form-select-sm" style="width:90px;">
-                                                    <option value="none" selected disabled hidden></option>
-                                                    <option value="true">是</option>
-                                                    <option value="false">否</option>
-
-                                                </select>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row my-2">
-                                            <div class="col-1">
-                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
-                                            </div>
-                                            享有
-                                            <div style="width:200px;">
-                                                <input class="checklist" name="returngood" type="radio" value="seven" />7天
-                                                <input class="checklist" name="returngood" type="radio" value="ten" />10天
-                                                <input class="checklist" name="returngood" type="radio" value="fourteen" />14天
-                                            </div>
-                                            天猶豫期退貨之權益
-                                        </div>
-
-                                        <div class="row my-2">
-                                            <div class="col-1">
-                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
-                                            </div>
-                                            商品退貨須為全新狀態且完整包裝
-
-                                        </div>
-                                        <div class="row my-2">
-                                            <div class="col-1">
-                                                <input class="checklist" type="checkbox" name="ServiceAfterBuy[]" value="" >
-                                            </div>
-                                            商品退回需含贈品
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2 " style="font-size: 1.1em;">
-                                    <div class="bg-warning rounded-2">注意事項</div>
-
-
-                                    <div class="row my-2">
-                                        <div class="col-1">
-                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
-                                        </div>
-                                        結帳後請於蝦蝦通提供
-                                        <div style="width:350px;">
-                                            <input class="checklist" type="checkbox" value="seven" />產品名稱或編號
-                                            <input class="checklist" type="checkbox" value="ten" />款式顏色
-                                            <input class="checklist" type="checkbox" value="fourteen" />數量
-                                        </div>
-
-                                    </div>
-                                    <div class="row my-1">
-                                        <div class="col-1">
-                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
-                                        </div>
-                                        請於
-                                        <div style="width:110px;">
-                                            <input type="text" name="ServiceCaution[]" class="asdf" value= "${data.text[3]}"  style="width:110px">
-                                        </div>
-
-                                        <div style="width:220px;" class="mx-1">
-                                            天內完成"結帳動作"
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row my-1">
-                                        <div class="col-1">
-                                            <input class="checklist" type="checkbox" name="ServiceCaution[]" value="" >
-                                        </div>
-                                        結帳完成後
-                                        <div style="width:110px;">
-                                            <input type="text" name="ServiceCaution[]" class="asdf" value= "${data.text[4]}"  style="width:95px">
-                                        </div>
-                                        <div style="width:340px;" class="mx-1">
-                                            天內未完成"匯款"將發出蝦蝦通提醒
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group ">
-                            <input type="submit" value="送出" id="btnSubmit" class="btn btn-success" />
-                            <a role="button" class="btn btn-primary" id="demo1">console array</a>
-                            <a role="button" class="btn btn-primary" id="demo2">console string</a>
-                            <a role="button" class="btn btn-primary" id="demo3">console string</a>
-                        </div>
-                    </div>
-            `;
-
+        for (let i = 0; i < 5; i++) {
+            $(".asdf")[i].setAttribute("value", data.text[i]);
         }
 
-
-        function loadcheck(data) {
-            for (let i = 0; i < 22; i++) {
-                if (data.checkbox[i] == true) {
-                    $(".checklist")[i].checked = true;
-                }
-            }
-
-            if (data.selectopt[4] == 1) {       //要怎麼改selectopt選項的內容
-                $(".scst")[4].text("是");
-            }
-            if (data.selectopt[4] == 2) {
-                $(".scst")[4].text("否");
+        for (let i = 0; i < 22; i++) {
+            if (data.checkbox[i] == true) {
+                $(".checklist")[i].checked = true;
             }
         }
+        for (let i = 0; i < 5; i++) {
+            $(".scst")[i].selectedIndex = data.selectopt[i];
+        }    
+     
+    }
 
 
-        load();
-        function load() {
-            $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
-                console.log(data);
-                if (data != null) {
-                    var datas = JSON.parse(data);
-                    $(".outlook").append(returncheck(datas));
+    function load() {
+        $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
+            console.log(data);
+            if (data != null) {
+                var datas = JSON.parse(data);
+                loadcheck(datas);
+                //$(".outlook").append(returncheck(datas));
 
-                    loadcheck(datas);
-                    $(".first").html("");
-                }
-
-
-                //console.log(datas.selectopt[0]);
-                //console.log(datas.text[0]);
-                /*console.log(datas.checkbox[0]);*/
-
-
-                //for (let i = 0; i < datas.checkbox.length; i++) {
-                //    console.log(datas.checkbox[i]);
-                //}
-
-                //for (let j = 0; j < data.selectopt.length; j++) {
-                //    console.log(datas.selectopt[j]);
-                //}
-
-                //for (let k = 0; k < data.text.length; k++) {
-                //    console.log(datas.text[k]);
-                //}
-
-
-                //console.log(data.checkbox);
-
-                //for (let i = 0; i < data.length; i++){
-                //    console.log(data[i]);
-
-                //}
-
-                //$.map($(".checklist"), function (data) {        /*物件變json checkbox  要怎麼限制*/
-
-                //    console.log();
-                //    //console.log($(data));
-                //    //console.log($(data).val());
-
-                //    /*return $(data).val();*/
-                //    /*return $(data).is(":checked");*/
-                //})
-
-            })
-        }
-
-
-
-        $("#btnSubmit").click(function () {
-            loadpost();
-            $.postJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function () {
-            });
-        })
-
-        let aaa1 = "";
-        let bbb1 = "";
-        let ccc1 = "";           //這邊陣列假裝是資料庫
-        let asd = "";
-
-        function loadpost() {
-
-            let aaa = $.map($(".checklist"), function (data) {        /*物件變json checkbox  要怎麼限制*/
-
-                /*return $(data).val();*/
-                return $(data).is(":checked");
-                /*return $(data).checked;*/
-            });
-            let ddd = $.map($(".scst"), function (data) {        /*把所有  被選到的預設為0  物件變json  select option*/
-                return data.selectedIndex;
-            });
-            let ccc = $.map($(".asdf"), function (data) {        /*物件變json    輸入text框*/
-                return $(data).val();
-            });
-
-            aaa1 = aaa;                              /*json變物件   可以分開來詳細看*/
-            bbb1 = ddd;
-            ccc1 = ccc;
-
-            asd = JSON.stringify({ checkbox: aaa1, selectopt: bbb1, text: ccc1 });
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-        $("#demo2").click(function () {             /*儲存進去    根據所定的class name*/
-
-            //let aaa = $.map($(".checklist"), function (data) {        /*物件變json checkbox  要怎麼限制*/
-
-            //    /*return $(data).val();*/
-            //    return $(data).is(":checked");
-            //    /*return $(data).checked;*/
-            //});
-            //let ddd = $.map($(".scst"), function (data) {        /*把所有  被選到的預設為0  物件變json  select option*/
-            //    return data.selectedIndex;
-            //});
-            //let ccc = $.map($(".asdf"), function (data) {        /*物件變json    輸入text框*/
-            //    return $(data).val();
-            //});
-
-            //aaa1 = aaa;                              /*json變物件   可以分開來詳細看*/
-            //bbb1 = ddd;
-            //ccc1 = ccc;
-            ////console.log(aaa1);
-            ////console.log(bbb1);
-            ////console.log(ccc1);
-            //asd = JSON.stringify({ checkbox: aaa1, selectopt: bbb1, text: ccc1 });
-        })
-
-        $("#demo3").click(function () {     /*印出來*/
-            let ccc = $(".checklist");
-            let aaa = $(".scst");
-            let bbb = $(".asdf");
-            console.log(ccc);
-            console.log(aaa);
-            console.log(bbb);
-            for (let i =0; i < ccc.length; i++) {
-                ccc.eq(i).val(aaa1[i]);
-            }
-            for (let i = 0; i < aaa.length; i++) {
-                ccc.eq(i).val(bbb1[i]);
-            }
-            for (let i = 0; i < bbb.length; i++) {
-                ccc.eq(i).val(ccc1[i]);
+                
+                //$(".first").html("");
             }
         })
-
-
-
-
-
-
-
-        //------------------------------------------------------------------------------------------------------------
-         /*這邊是做按鈕自動換狀態*/
-        $(function () {
-            $('input[type="radio"]').on('mousedown', function (evt) {
-                evt.preventDefault();
-                this.checked = !this.checked;
-            }).on('mouseup', function (evt) {
-                evt.preventDefault();
-            }).on('click', function (evt) {
-                evt.preventDefault();
-            });
+    }
+    load();
+      
+    $("#btnSubmit").click(function () {
+        loadpost();
+        $.postJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function () {
         });
+    })
+
+    let aaa1 = "";
+    let bbb1 = "";
+    let ccc1 = "";           //這邊陣列假裝是資料庫
+    let asd = "";
+
+    function loadpost() {
+
+        let aaa = $.map($(".checklist"), function (data) {        /*物件變json checkbox  要怎麼限制*/
+
+            /*return $(data).val();*/
+            return $(data).is(":checked");
+            /*return $(data).checked;*/
+        });
+        let ddd = $.map($(".scst"), function (data) {        /*把所有  被選到的預設為0  物件變json  select option*/
+            return data.selectedIndex;
+        });
+        let ccc = $.map($(".asdf"), function (data) {        /*物件變json    輸入text框*/
+            return $(data).val();
+        });
+
+        aaa1 = aaa;                              /*json變物件   可以分開來詳細看*/
+        bbb1 = ddd;
+        ccc1 = ccc;
+
+        asd = JSON.stringify({ checkbox: aaa1, selectopt: bbb1, text: ccc1 });
+
+    }
+
+
+    //------------------------------------------------------------------------------------------------------------
+        /*這邊是做按鈕自動換狀態*/
+    $(function () {
+        $('input[type="radio"]').on('mousedown', function (evt) {
+            evt.preventDefault();
+            this.checked = !this.checked;
+        }).on('mouseup', function (evt) {
+            evt.preventDefault();
+        }).on('click', function (evt) {
+            evt.preventDefault();
+        });
+    });
 
 </script>
 
