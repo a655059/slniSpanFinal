@@ -9,17 +9,18 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button id="demo" class="btn btn-success">demo</button>
         <form asp-action="CouponCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="CouponId" class="form-control" type="hidden" />
             </div>
             <div class="form-group">
-                優惠券名稱<input asp-for="CouponName" class="form-control" />
+                優惠券名稱<input asp-for="CouponName" class="form-control" id="CouponName" />
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" />
+                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" id="" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,15 +28,15 @@
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                折扣<input asp-for="Discount" class="form-control" />
+                折扣<input asp-for="Discount" class="form-control" id="Discount" />
                 <span asp-validation-for="Discount" class="text-danger fs-6">ex:若為8折優惠券則填入0.8</span>
             </div>
             <div class="form-group">
-                優惠券代碼<input asp-for="CouponCode" class="form-control" />
+                優惠券代碼<input asp-for="CouponCode" class="form-control" id="CouponCode" />
                 <span asp-validation-for="CouponCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="MemberId" class="form-control plaintext" value="1" type="hidden" />
+                <input asp-for="MemberId" value="1" type="hidden" />
             </div>
             <div class="form-group">
                 可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local" />
@@ -46,17 +47,17 @@
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
-                是否為免運券<input class="form-check-input" asp-for="IsFreeDelivery" />
+                是否為免運券<input class="form-check-input" asp-for="IsFreeDelivery" id="IsFreeDelivery" />
             </div>
             <div class="form-group">
-                最低消費金額 <input asp-for="MinimumOrder" class="form-control" />
+                最低消費金額 <input asp-for="MinimumOrder" class="form-control" id="MinimumOrder" />
                 <span asp-validation-for="MinimumOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input asp-for="OfficialEventListId" value="@ViewBag.Id" class="form-control" type="hidden" />
             </div>
             <div class="form-group">
-                <input type="submit" value="確認" class="btn btn-primary mb-2" />
+                <input id="confirms" type="submit" value="確認" class="btn btn-primary mb-2" />
             </div>
         </form>
     </div>
@@ -65,3 +66,51 @@
 <div>
     <a asp-action="EventList" class="btn btn-danger">取消並回到活動列表</a>
 </div>
+
+@section Scripts{
+    <script>
+        var IsFreeDelivery = document.getElementById("IsFreeDelivery");
+        var confirms = document.getElementById("confirms");
+        var Discount = $("#Discount");
+        let Discounts = document.getElementById("Discount");
+        var Inputs = document.querySelectorAll(".form-control");
+        IsFreeDelivery.addEventListener("change", function () {
+            if (IsFreeDelivery.checked == true) {
+                Discount.prop('readonly', true);
+                Discounts.value = 1;
+            }
+            else {
+                Discounts.value = "";
+                Discount.prop('readonly', false);
+            }
+        });
+        Discounts.addEventListener("blur", function (event) {
+            console.log(Number(Discounts.value));
+            if (isNaN(Number(Discounts.value)) || Number(Discounts.value) > 1) {
+                alert("折扣欄位請輸入小於或等於1的小數!");
+                return;
+            }
+        });
+
+
+
+        let demo = document.getElementById("demo");
+        let CouponName = document.getElementById("CouponName");
+        let StartDate = document.getElementById("StartDate");
+        let ExpiredDate = document.getElementById("ExpiredDate");
+        let CouponCode = document.getElementById("CouponCode");
+        let ReceiveStartDate = document.getElementById("ReceiveStartDate");
+        let MinimumOrder = document.getElementById("MinimumOrder");
+        let Datas = [CouponName, CouponCode ,MinimumOrder, Discounts];
+        demo.addEventListener("click", function () {
+            Datas[0].value = "主辦開心發優惠";
+            Datas[1].value = "USDPKR";
+            Datas[2].value = "0.5";
+            Discounts.value = "0.5";
+        })
+    </script>
+
+
+
+
+}

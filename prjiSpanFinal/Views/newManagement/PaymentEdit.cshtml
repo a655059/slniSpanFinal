@@ -11,7 +11,7 @@
         <form asp-action="PaymentEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="PaymentId" class="form-control" type="hidden" value="@Model.PaymentId"/>
+                <input asp-for="PaymentId"  type="hidden" value="@Model.PaymentId"/>
             </div>
             <div class="form-group">
                 <label asp-for="PaymentName" class="control-label">付款方式名稱</label>
@@ -24,7 +24,7 @@
                 <span asp-validation-for="Fee" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="儲存" class="btn btn-primary mt-1" />
+                <input id="submit" type="submit" value="儲存" class="btn btn-primary mt-1" />
             </div>
         </form>
     </div>
@@ -36,12 +36,10 @@
 
 @section Scripts {
     <script>
-       let submit=document.getElementById("submit");
+      let submit=document.getElementById("submit");
+      let inputs = document.querySelectorAll(".form-control");
         submit.addEventListener("click",function(){
-             let inputs = document.querySelectorAll(".form-control");
             for(let i of inputs){
-                let v=i.value
-                console.log(`  |${v}|  `)
                 if(!(i.value)){
                     event.preventDefault();
                     alert("請完整填入內容!");

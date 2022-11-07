@@ -16,7 +16,7 @@
             </div> <div class="form-group">
                 <div class="form-group">
                     <label asp-for="FaqtypeId" class="control-label">問題類型</label>
-                    <select asp-for="FaqtypeId" class="form-control">
+                    <select asp-for="FaqtypeId" class="form-control form-select-lg">
                         @{ foreach (var faqtypes in ViewBag.FAQTypes)
                             {
                                 <option value="@faqtypes.FaqtypeId">@faqtypes.FaqtypeName</option>
