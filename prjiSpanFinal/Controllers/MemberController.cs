@@ -25,6 +25,10 @@ using prjiSpanFinal.ViewModels.Category;
 using prjiSpanFinal.ViewModels.Header;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
+using prjiSpanFinal.ViewModels.Delivery;
+using System.Collections.Specialized;
+using System.Web;
+using System.Security.Cryptography;
 
 namespace prjiSpanFinal.Controllers
 {
@@ -1054,6 +1058,53 @@ namespace prjiSpanFinal.Controllers
             res = (new BalanceFactory()).fBalanceRecordFilter( id, status, nowpages);
             
             return Json(res);
+        }
+        public IActionResult OPayCheckout(string[] checkoutItems)
+        {
+            string[] stringArr = Guid.NewGuid().ToString().Split('-');
+            string tradeNo = stringArr[2] + stringArr[3] + stringArr[4];
+            string tradeDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+
+            string itemName = checkoutItems[0];
+            int totalAmount = Convert.ToInt32(checkoutItems[1]);
+            
+            itemName = itemName.TrimEnd('#');
+            string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";
+            NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["HashKey"] = "5294y06JbISpM5x9";
+            parameters["ChoosePayment"] = "Credit";
+            parameters["ClientBackURL"] = $"{Request.Scheme}://{Request.Host}/Delivery/ShowOrderedOrder";    //完成後跳回去的頁面
+            parameters["CreditInstallment"] = "";
+            parameters["EncryptType"] = "1";
+            parameters["InstallmentAmount"] = "";
+            parameters["ItemName"] = itemName;
+            parameters["MerchantID"] = "2000132";
+            parameters["MerchantTradeDate"] = tradeDate;
+            parameters["MerchantTradeNo"] = tradeNo;
+            parameters["PaymentType"] = "aio";
+            parameters["Redeem"] = "";
+            parameters["ReturnURL"] = "https://developers.opay.tw/AioMock/MerchantReturnUrl";
+            parameters["StoreID"] = "";
+            parameters["TotalAmount"] = totalAmount.ToString();
+            parameters["TradeDesc"] = "建立信用卡測試訂單";
+            parameters["HashIV"] = "v77hoKGq4kWxNNIS";
+            string checkMacValue = parameters.ToString();
+            checkMacValue = checkMacValue.Replace("=", "%3d").Replace("&", "%26");
+            using var hash = SHA256.Create();
+            var byteArray = hash.ComputeHash(Encoding.UTF8.GetBytes(checkMacValue.ToLower()));
+            checkMacValue = Convert.ToHexString(byteArray).ToUpper();
+
+
+            COPayParametersViewModel cOPayParameters = new COPayParametersViewModel
+            {
+                tradeNO = tradeNo,
+                tradeDate = tradeDate,
+                totalAmount = totalAmount,
+                itemName = itemName,
+                clientBackURL = clientBackURL,
+                checkMacValue = checkMacValue
+            };
+            return Json(cOPayParameters);
         }
     }
 }
