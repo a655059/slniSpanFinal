@@ -423,6 +423,7 @@ namespace prjiSpanFinal.Controllers
             var SmallTypeName = (from i in db.SmallTypes select i).ToList();
             var PaymentName = (from i in db.Payments select i).ToList();
             var CouponName = (from i in db.Coupons select i).ToList();
+            var MemberAcc = db.MemberAccounts.ToList();
             foreach (var p in Orders)
             {
                 COrderListViewModel model = new()
@@ -440,6 +441,7 @@ namespace prjiSpanFinal.Controllers
                     CouponName = (from i in CouponName
                                   where i.CouponId == p.CouponId
                                   select i.CouponName).First(),
+                    MemberAcc=MemberAcc.FirstOrDefault(i=>i.MemberId==p.MemberId).MemberAcc,
                 };
                 list.Add(model);
             }

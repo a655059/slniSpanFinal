@@ -39,7 +39,7 @@
                     訂單ID
                 </th>
                 <th>
-                    買家ID
+                    買家
                 </th>
                 <th>
                     下訂日期
@@ -85,7 +85,7 @@
                     @Html.DisplayFor(modelItem => item.Order.OrderId)
                 </td>
                 <td >
-                    @Html.DisplayFor(modelItem => item.Order.MemberId)
+                    @Html.DisplayFor(modelItem => item.MemberAcc)
                 </td>
                 <td >
                     <input value="@item.Order.OrderDatetime.ToString(" yyyy /MM/dd")" class="form-control-plaintext">
