@@ -1,0 +1,57 @@
+﻿@model IEnumerable<prjiSpanFinal.Models.SmallType>
+
+@{
+    ViewData["Title"] = "SmallTypeList";
+}
+@section Styles{ 
+<style>
+    table{
+        table-layout:fixed;
+        width:100%;
+    }
+</style>
+}
+<h1>@ViewBag.BigTypeName</h1>
+
+<p>
+    @Html.ActionLink("新增小類別", "SmallTypeCreate","newManagement",new { id = ViewBag.BigTypeId },new { @class = "btn btn-secondary" })
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               ID
+            </th>
+            <th>
+               小類別名稱
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SmallTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SmallTypeName)
+            </td>
+            <td>
+                @Html.ActionLink("修改", "SmallTypeEdit", "newManagement",new {  id=item.SmallTypeId },new { @class = "btn btn-warning" }) 
+                @Html.ActionLink("刪除", "SmallTypeDelete", "newManagement", new { id = item.SmallTypeId }, new { @class = "Dele btn btn-danger" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts{ 
+<script>
+    let Dele = document.querySelectorAll(".Dele");
+    for (let dele of Dele) {
+        dele.addEventListener("click", function () {
+            confirm("確定要將此類別刪除嗎?內容商品將會移至未分類類別，請進入該分類進行修改");
+        })
+    }
+</script>
+}

@@ -129,7 +129,7 @@
                                         }
                                         else
                                         {
-                                            break;
+                                            <div class="row align-content-center justify-content-center 置中 內容文字大小" ><img src="~/img/問號圖.png"/></div>
                                         }
                                     }
                                 }
@@ -157,143 +157,174 @@
     </div>
 </div>
 
-
-
-<div class="row ">
-    <div class="col-6"></div>
-    <div class="col-6">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+<div class="row mb-2">
+    <div class="col-1"></div>
+    <div class="col-11 d-flex justify-content-center" id="changePages">
     </div>
 </div>
+
+<div class="row ">
+        <div class="col-5"></div>
+        <div class="col-7">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="newpage">
+                </ul>
+            </nav>
+        </div>
+    </div>
 @section Scripts
 {
-    <script>
-        $("#selectbtn").click(function () {
-            $("#returndata").html("");
-            let selectname = $("#selectname").val();
-            console.log(selectname)
-            jQuery.postJSON = function (url, data, callback) {
-                jQuery.post(url, data, callback, "json");
-            };
-            $.postJSON("/Seller/SelectIndex", { select: selectname }, function (dataname) {
-                console.log(dataname)
-                let item = "";
+            <script>
+                $("#selectbtn").click(function () {
+                    $("#returndata").html("");
+                    let selectname = $("#selectname").val();
+                    console.log(selectname)
+                    jQuery.postJSON = function (url, data, callback) {
+                        jQuery.post(url, data, callback, "json");
+                    };
+                    $.postJSON("/Seller/SelectIndex", { select: selectname }, function (dataname) {
+                        console.log(dataname)
+                        let item = "";
 
-                for (let i = 0; i < dataname.productName.length; i++) {
-                    item =item +
-                        `<div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
-                            <div class="row col-1 align-content-center justify-content-center 內容文字大小">${(i + 1)}</div>
-                            <div class="row col-2 align-content-center justify-content-center 內容文字大小">${dataname.productName[i]}</div>
-                            <div class="row col-2 align-content-center justify-content-center">`
-                    console.log(dataname.style[0])
-                    for (let j = 0; j < dataname.style[i].length; j++) {
-                        item = item +
-                            `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.style[i][j]}</div>`
-                    }
-                    item = item +
-                    `</div>
-                      <div class="row col-2 align-content-center justify-content-center">`
-
-                    for (let j = 0; j < dataname.quantity[i].length; j++)
-                    {
-                        item = item +
-                            `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.quantity[i][j]}</div>`
-                    }
-                    item = item +
-                    `</div>
-                      <div class="row col-2 align-content-center justify-content-center">`
-
-                    for (let j = 0; j < dataname.unitPrice[i].length; j++)
-                        {
+                        for (let i = 0; i < dataname.productName.length; i++) {
                             item = item +
-                                `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.unitPrice[i][j]}</div>`
-                        }
-                     item = item +
-                    `</div>
-                      <div class="row col-2 align-content-center justify-content-center">`
-
-                    for (let j = 0; j < dataname.pic[i].length; j++)
-                    {            
-                        if (dataname.pic != null) {
+                                `<div class="border rounded-2 my-2 row shadow-sm mb-3 bg-body rounded">
+                                        <div class="row col-1 align-content-center justify-content-center 內容文字大小">${(i + 1)}</div>
+                                        <div class="row col-2 align-content-center justify-content-center 內容文字大小">${dataname.productName[i]}</div>
+                                        <div class="row col-2 align-content-center justify-content-center">`
+                            console.log(dataname.style[0])
+                            for (let j = 0; j < dataname.style[i].length; j++) {
+                                item = item +
+                                    `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.style[i][j]}</div>`
+                            }
                             item = item +
-                                `<div class="row align-content-center justify-content-center 置中 內容文字大小"><img src="data:image;base64,${dataname.pic[i][j]}" height="55" /></div>`
+                                `</div>
+                                  <div class="row col-2 align-content-center justify-content-center">`
+
+                            for (let j = 0; j < dataname.quantity[i].length; j++) {
+                                item = item +
+                                    `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.quantity[i][j]}</div>`
+                            }
+                            item = item +
+                                `</div>
+                                  <div class="row col-2 align-content-center justify-content-center">`
+
+                            for (let j = 0; j < dataname.unitPrice[i].length; j++) {
+                                item = item +
+                                    `<div class="row align-content-center justify-content-center 置中 內容文字大小">${dataname.unitPrice[i][j]}</div>`
+                            }
+                            item = item +
+                                `</div>
+                                  <div class="row col-2 align-content-center justify-content-center">`
+
+                            for (let j = 0; j < dataname.pic[i].length; j++) {
+                                if (dataname.pic != null) {
+                                    item = item +
+                                        `<div class="row align-content-center justify-content-center 置中 內容文字大小"><img src="data:image;base64,${dataname.pic[i][j]}" height="55" /></div>`
+                                }
+                                else {
+                                    item = item +
+                                    `<div class="row align-content-center justify-content-center 置中 內容文字大小" ><img src="~/img/問號圖.png"/></div>`
+                                }
+                            }
+                            item = item +
+                                `</div>
+                                  <div class=" row align-content-center col-1 justify-content-center mx-2"><a class="btn btn-primary mt-2" href="/Seller/EditProduct/${dataname.productId[i]}">編輯</a><br />`
+
+                            if (dataname.productStatusId == 0) {
+                                item = item +
+                                    `<button class="btn btn-info mt-2 takedown " id="${dataname.productId[i]}">下架</button><br />`
+                            }
+                            else {
+                                item = item +
+                                    `<button class="btn btn-success mt-2 takedown " id="${dataname.productId[i]}">上架</button><br />`
+                            }
+                            item = item +
+                                `<a class="btn btn-danger my-2" href="/Seller/DeleteProduct/${dataname.productId[i]}" onclick="return confirm('確定要刪除嗎?')">刪除</a></div>
+                                      </div>`
                         }
-                        else {
-                            break;
+
+                        $("#returndata").append(item);
+
+                    });
+                })
+
+
+
+
+                //=============上下架==============
+                $(".takedown").on("click", function () {
+                    if ($(this).text() == "上架") {
+                        if (isConfirm("確認要上架嗎?")) {
+                            $(this).text("下架");
+                            $(this).removeClass("btn-success");
+                            $(this).addClass("btn-warning");
+                            let data = { productId: $(this).attr("id"), ProductStatusId: 0 }
+                            jQuery.postJSON = function (url, data, callback) {
+                                jQuery.post(url, data, callback, "json");
+                            };
+                            $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
                         }
-                    }
-                    item = item +
-                    `</div>
-                      <div class=" row align-content-center col-1 justify-content-center mx-2"><a class="btn btn-primary mt-2" href="/Seller/EditProduct/${dataname.productId[i]}">編輯</a><br />`
-        
-                    if (dataname.productStatusId == 0) {
-                        item = item +
-                        `<button class="btn btn-info mt-2 takedown " id="${dataname.productId[i]}">下架</button><br />`
                     }
                     else {
-                        item = item +
-                            `<button class="btn btn-success mt-2 takedown " id="${dataname.productId[i]}">上架</button><br />`
+                        if (isConfirm("確認要下架嗎?")) {
+                            $(this).text("上架");
+                            $(this).removeClass("btn-warning");
+                            $(this).addClass("btn-success");
+                            let data = { productId: $(this).attr("id"), ProductStatusId: 1 }
+                            jQuery.postJSON = function (url, data, callback) {
+                                jQuery.post(url, data, callback, "json");
+                            };
+                            $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
+                        }
                     }
-                    item = item +
-                        `<a class="btn btn-danger my-2" href="/Seller/DeleteProduct/${dataname.productId[i]}" onclick="return confirm('確定要刪除嗎?')">刪除</a></div>
-                          </div>`
+                });
+
+                function isConfirm(message) {
+                    let res = confirm(message);
+                    return res;
                 }
-        
-                $("#returndata").append(item);
 
-            });
-        })
+                function goPage(pno, psize) {
+                    var itable = $("#returndata");//獲取顯示地方
+                    var num = itable.children().length;//得到幾筆資料
+                    console.log(itable.children().length)
+                    var totalPage = 0;
+                    var pageSize = psize;//一頁顯示pageSize條記錄
+                    //計算總頁數
+                    if (num / pageSize > parseInt(num / pageSize)) {
+                        totalPage = parseInt(num / pageSize) + 1;
+                    } else {
+                        totalPage = parseInt(num / pageSize);
+                    }
+                    //當前頁數
+                    var currentPage = pno;
+                    //獲取當前頁第一條、最後一條記錄的行號
+                    var startRow = (currentPage - 1) * pageSize + 1;
+                    var endRow = currentPage * pageSize;
+                    endRow = (endRow > num) ? num : endRow;
+                    //修改table中當前頁對應的行的屬性為顯示，非本頁的記錄為隱藏
+                    for (var i = 1; i < (num + 1); i++) {
+                        var irow = itable.children()[i - 1];
 
+                        if (i >= startRow && i <= endRow) {
+                            irow.style.display = "flex";
+                        } else {
+                            irow.style.display = "none";
+                        }
+                    }
+                    //分頁頁碼列表
+                    var pagenumber = "<div class=" + "text-muted" + ">共" + num + "筆</div>，<div class=" + "text-muted" +">當前第" + currentPage + "頁</div>";
+                    var tempStr = "";
+                        tempStr += "<li class=" + "page-item" + "><a class=" +"page-link"+" href=\"#\" onClick=\"goPage(" + (1) + "," + psize + ")\">首頁</a></li>";
+                        tempStr += "<li class=" + "page-item" + "><a class=" +"page-link"+" href=\"#\" onClick=\"goPage(" + (currentPage - 1) + "," + psize + ")\"><上一頁</a></li>"
+                        tempStr += "<li class=" + "page-item" + "><a class=" +"page-link"+" href=\"#\" onClick=\"goPage(" + (currentPage + 1) + "," + psize + ")\">下一頁></a></li>";
+                        tempStr += "<li class=" + "page-item" + "><a class=" +"page-link"+" href=\"#\" onClick=\"goPage(" + (totalPage) + "," + psize + ")\">尾頁</a></li>";
 
-
-
-    //=============上下架==============
-    $(".takedown").on("click", function () {
-        if ($(this).text() == "上架") {
-            if (isConfirm("確認要上架嗎?")) {
-                $(this).text("下架");
-                $(this).removeClass("btn-success");
-                $(this).addClass("btn-warning");
-                let data = { productId: $(this).attr("id"), ProductStatusId: 0 }
-                jQuery.postJSON = function (url, data, callback) {
-                    jQuery.post(url, data, callback, "json");
-                };
-                $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
-            }
+                    document.getElementById("newpage").innerHTML = tempStr;
+                    document.getElementById("changePages").innerHTML = pagenumber;
+                }
+                goPage(1, 5);
+                
+            </script>
         }
-        else {
-            if (isConfirm("確認要下架嗎?")) {
-                $(this).text("上架");
-                $(this).removeClass("btn-warning");
-                $(this).addClass("btn-success");
-                let data = { productId: $(this).attr("id"), ProductStatusId: 1 }
-                jQuery.postJSON = function (url, data, callback) {
-                    jQuery.post(url, data, callback, "json");
-                };
-                $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
-            }
-        }
-    });
-
-    function isConfirm(message) {
-        let res = confirm(message);
-        return res;
-    }
-    </script>
-}

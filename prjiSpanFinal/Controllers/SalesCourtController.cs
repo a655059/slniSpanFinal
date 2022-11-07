@@ -470,8 +470,8 @@ namespace prjiSpanFinal.Controllers
             return View(me);
         }
 
-        [HttpPost]
-        public IActionResult 修改關於我(int Memberid,string asd)
+        
+        public IActionResult AlterMe(int Memberid,string asd)
         {
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
             add.Description = asd;
@@ -479,7 +479,7 @@ namespace prjiSpanFinal.Controllers
           
             dbContext.SaveChanges();
 
-
+            //return Json(add);
            return View("關於我", new { id = Memberid });
 
         }
@@ -522,69 +522,93 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public IActionResult GetComment(int id, int mode, int pages, int eachpage)
+        public IActionResult GetComment(int id, int mode, int pages, int eachpage,int buyerorseller)
         {
             // 買家對  訂單評價    
 
-
-            var q = dbContext.Comments.Where(a => a.OrderDetail.Order.MemberId == id).Select(p => new
+            if (buyerorseller == 1)
             {
-                link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
-                buyername = p.OrderDetail.Order.Member.MemberAcc,
-                productname = p.OrderDetail.ProductDetail.Product.ProductName,
-                commentcontent = p.Comment1,
-                commentstar = p.CommentStar,
-                count = 0,
-            }).ToList();
+                var q = dbContext.Comments.Where(a => a.OrderDetail.Order.MemberId == id).Select(p => new
+                {
+                    link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
+                    buyername = p.OrderDetail.Order.Member.MemberAcc,
+                    productname = p.OrderDetail.ProductDetail.Product.ProductName,
+                    commentcontent = p.Comment1,
+                    commentstar = p.CommentStar,
+                }).ToList();
 
 
-            if (mode == 0)
-            {
+                if (mode == 0)
+                {
+                }
+
+                else if (mode == 1)
+                {
+                    q = q.ToList();
+                }
+                //優良
+                else if (mode == 2)
+                {
+                    q = q.Where(a => a.commentstar == 5).ToList();
+                }
+                //普通
+                else if (mode == 3)
+                {
+                    q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
+                }
+                //差勁
+                else
+                {
+                    q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
+                }
+
+                int count = q.Count();
+
+                return Json(new { list = q.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
+
             }
 
-            else if (mode == 1)
-            {
-                q = q.ToList();
+            //賣家對買家的評價
+            else {
+                
+                var q = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(p => new
+                {
+                    //link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
+                    buyername = p.Order.Member.MemberAcc,
+                    sellername = p.ProductDetail.Product.Member.MemberAcc,
+                    commentcontent = p.Order.CommentForCustomers.Select(b => b.Comment).ToList(),
+                    commentstar = p.Order.CommentForCustomers.Select(b => b.CommentStar).ToList(),
+                }).ToList();
+
+                if (mode == 0)
+                {
+                }
+
+                else if (mode == 1)
+                {
+                    q = q.ToList();
+                }
+                //優良
+                else if (mode == 2)
+                {
+                    //foreach(var item in q)
+                    //q = q.Where(a => a.commentstar.c).ToList();
+                }
+                //普通
+                else if (mode == 3)
+                {
+                    //q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
+                }
+                //差勁
+                else
+                {
+                    //q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
+                }
+
+                int count = q.Count();
+
+                return Json(new { list = q.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
             }
-            //優良
-            else if (mode == 2)
-            {
-                q = q.Where(a => a.commentstar == 5).ToList();
-            }
-            //普通
-            else if (mode == 3)
-            {
-                q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
-            }
-            //差勁
-            else
-            {
-                q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
-            }
-
-            //foreach (var item in q) {
-            //var lenth = q.Count;
-            //foreach (var item in q) {
-            //    item.count = lenth;
-            //}
-            //}
-            return Json(q.Skip((pages - 1) * eachpage).Take(eachpage));
-
-            //賣家對買家平價
-            //else
-            //{
-            //    var q = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(p => new
-            //    {
-            //        link = "/Item/Index?id=" + p.ProductDetail.Product.ProductId,
-            //        sellername = p.ProductDetail.Product.Member.MemberAcc,
-            //        buyername = p.Order.Member.MemberAcc,
-            //        commentforcustomer = p.Order.CommentForCustomers.Select(a => a.Comment),
-            //    }).ToList();
-
-            //    return Json(q);
-            //}
-
-
         }
 
 
@@ -615,6 +639,7 @@ namespace prjiSpanFinal.Controllers
                 sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
                 upload = p.EditTime,
                 customizename = p.CustomizedCategory.CustomizedCategoryName,
+                isfeatureproduct = p.IsFeaturedProduct,
 
             }).ToList();
 
@@ -627,7 +652,7 @@ namespace prjiSpanFinal.Controllers
 
         }
 
-        public IActionResult GetItems(int id, int mode, int pages, string keyword, string customname)
+        public IActionResult GetItems(int id, int mode, int pages, int eachpage, string keyword, string customname)
         {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
             {
@@ -696,15 +721,23 @@ namespace prjiSpanFinal.Controllers
             {
                 q = q.Where(a => a.customizename == customname).ToList();
             }
+            int count = q.Count();
+            return Json(new { list = q.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
+        }
 
-            return Json(q.Skip((pages - 1) * 4).Take(4));
+        public IActionResult GetChoice(int productid) {
+
+            var choice = dbContext.Products.FirstOrDefault(a => a.ProductId == productid).IsFeaturedProduct;
+            return Json(choice);
         }
 
 
-        public IActionResult WriteChoice(int productid)
+        public IActionResult WriteChoice(int productid,bool change)
         {
-
-            return Json("1");
+            var choice = dbContext.Products.FirstOrDefault(a => a.ProductId == productid);
+            choice.IsFeaturedProduct = change;
+            dbContext.SaveChanges();
+            return Json(choice);
         }
 
 

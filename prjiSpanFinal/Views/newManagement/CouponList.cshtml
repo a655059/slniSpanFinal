@@ -116,7 +116,7 @@
       @Html.Pager(pagedList).Url(page => Url.Action("CouponList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
-    <select id="pagesize">
+    <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {

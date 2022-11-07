@@ -8,7 +8,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 {
     public class SortRequest
     {
-        public List<CShowItem> SortItems(int BigTypeId, int[] filter, int priceMin,int priceMax, int SortOrder, int pages)
+        public List<CShowItem> SortItems(int BigTypeId, int[] filter, int pages, int eachpage, int priceMin,int priceMax, int SortOrder)
         {
             iSpanProjectContext db = new iSpanProjectContext();
             var prodlist = new List<Product>();
@@ -66,6 +66,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
             //Pages #todo
             //TBC
             return list;
+
         }
         public List<CShowItem> SearchSortItem(string keyword, int priceMin, int priceMax, int SortOrder, int pages)
         {

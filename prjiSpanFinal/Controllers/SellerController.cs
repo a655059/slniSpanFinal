@@ -183,6 +183,41 @@ namespace prjiSpanFinal.Controllers
 
             var Category = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryName).ToList();
             var CustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryId).ToList();
+
+            var ADtypeId = _db.Adtypes.Select(n => n.AdTypeId).ToList(); //所有方案ID
+            var ADtype = _db.Adtypes.Select(n => n).ToList();    //所有方案
+            var ADId = _db.Ads.Where(n => ADtypeId.Contains(n.AdTypeId)).Select(n => n).ToList(); //找出方案裡的內容
+
+            List<string> listName = new List<string>();
+            List<string> listDes = new List<string>();
+
+            List<List<decimal>> listFee = new List<List<decimal>>();
+            //  List<一個商品有兩個Style>  =   <一個商品有兩個Style>  <一個商品有兩個Style>  <一個商品有兩個Style>
+            List<List<int>> listPeriod = new List<List<int>>();
+            List<List<int>> listAdId = new List<List<int>>();
+
+            for(int i =0; i< ADtypeId.Count; i++)
+            {
+                List<decimal> subFee = new List<decimal>();
+                List<int> subPeriod = new List<int>();
+                List<int> subAdId = new List<int>();
+
+                listName.Add(ADtype[i].AdType1);
+                listDes.Add(ADtype[i].AdTyepDescription);
+
+                var ADprogram = ADId.Where(n => n.AdTypeId == ADtypeId[i]).Select(n => n).ToList();
+                for (int j=0;j< ADprogram.Count; j++)
+                {
+                    subFee.Add(ADprogram[j].AdFee);
+                    subPeriod.Add(ADprogram[j].AdPeriod);
+                    subAdId.Add(ADprogram[j].AdId);
+                }
+                listFee.Add(subFee);
+                listPeriod.Add(subPeriod);
+                listAdId.Add(subAdId);
+            }
+
+
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
@@ -193,7 +228,14 @@ namespace prjiSpanFinal.Controllers
                 shipID = shiperlist,
                 PaymentID = paylist,
                 mempay= mempay,
+                ADName= listName,
+                AdTyepDescription= listDes,
+                ADId= listAdId,
+                AdPeriod= listPeriod,
+                AdFee= listFee
             };
+
+
             return View(x);
         }
 
@@ -371,15 +413,39 @@ namespace prjiSpanFinal.Controllers
                 _db.ProductDetails.Add(productDetail);
             }
 
-            for (int i = 0; i < result.BodyPic.Count; i++)
+            if (result.BodyPic!= null)
             {
-                ProductPic productPic = new ProductPic()
+                for (int i = 0; i < result.BodyPic.Count; i++)
                 {
-                    Pic = result.BodyPic[i],
-                    ProductId = Convert.ToInt32(product.ProductId)
-                };
-                _db.ProductPics.Add(productPic);
+                    ProductPic productPic = new ProductPic()
+                    {
+                        Pic = result.BodyPic[i],
+                        ProductId = Convert.ToInt32(product.ProductId)
+                    };
+                    _db.ProductPics.Add(productPic);
+                }
             }
+
+            if (result.SelectADId != null)
+            {
+                for (int i = 0; i < result.SelectADId.Count; i++)
+                {
+                    var daynum = _db.Ads.Where(n => n.AdId == result.SelectADId[i]).Select(n => n.AdPeriod).FirstOrDefault();
+
+                    AdtoProduct adtoProduct = new AdtoProduct()
+                    {
+                        AdId = Convert.ToInt32(result.SelectADId[i]),
+                        ProductId = Convert.ToInt32(product.ProductId),
+                        StartDate = result.StartDate[i],
+                        EndDate = result.StartDate[i].AddDays(daynum),
+                        IsSubActive = true,
+                        ExpoTimes = 0,
+                        ClickTimes = 0
+                    };
+                    _db.AdtoProducts.Add(adtoProduct);
+                }
+            }
+
 
             //if (!_db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n).Any())
             //{
@@ -588,7 +654,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-        public IActionResult NewIndex()
+        public IActionResult NewIndex(int? pageSize, int? page)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -596,7 +662,7 @@ namespace prjiSpanFinal.Controllers
             }
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
-
+  
             var myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n.ProductId).ToList(); //賣家所有商品ID
             var q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n).ToList();//賣家所有商品
             var q2 = _db.ProductDetails.Where(n => myproductlist.Contains(n.ProductId)).Select(n => n).ToList(); //Contains是只把賣家所有商品ID全部挑出來
@@ -645,9 +711,9 @@ namespace prjiSpanFinal.Controllers
                     ProductStatusId=liststatus
                 };
                     return View(x);
-
-
         }
+
+
         public IActionResult SelectIndex(string select)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -657,8 +723,18 @@ namespace prjiSpanFinal.Controllers
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
 
-            var myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2&&n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n.ProductId).ToList(); //賣家所有商品ID
-            var q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 && n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n).ToList();//賣家所有商品
+            List<int> myproductlist = new List<int>();
+            List<Product> q1 = new List<Product>();
+            if (string.IsNullOrEmpty(select))//傳回來是空值或沒東西
+            {
+                 myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 ).Select(n => n.ProductId).ToList(); //賣家所有商品ID
+                 q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2).Select(n => n).ToList();//賣家所有商品
+            }
+            else
+            {
+                 myproductlist = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2&&n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n.ProductId).ToList(); //賣家所有商品ID
+                 q1 = _db.Products.Where(n => n.MemberId == id && n.ProductStatusId != 2 && n.ProductName.ToUpper().Contains(select.ToUpper())).Select(n => n).ToList();//賣家所有商品
+            }
             var q2 = _db.ProductDetails.Where(n => myproductlist.Contains(n.ProductId)).Select(n => n).ToList(); //Contains是只把賣家所有商品ID全部挑出來
             List<string> listName = new List<string>();
             List<int> listproductId = new List<int>();
@@ -729,10 +805,6 @@ namespace prjiSpanFinal.Controllers
 
             var pName = _db.Products.Where(n => n.ProductId == id).Select(n => n.ProductName).FirstOrDefault();
             var pProductId = id;
-            //var pSmallTypeID = _db.Products.Where(n => n.ProductId == id).Select(n => n.SmallTypeId).FirstOrDefault();
-            //var pSmallTypeName = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.SmallTypeName).FirstOrDefault();
-            //var pBigTypeID = _db.SmallTypes.Where(n => n.SmallTypeId == pSmallTypeID).Select(n => n.BigTypeId).FirstOrDefault();
-            //var pBigTypeName = _db.BigTypes.Where(n => n.BigTypeId == pBigTypeID).Select(n => n.BigTypeName);
             var pDBtoPic = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n.Pic).ToList();
             var pStyle = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Style).ToList();
             var PQuantity = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Quantity).ToList();
@@ -751,7 +823,6 @@ namespace prjiSpanFinal.Controllers
                 Category=pCategory,
                 CustomizedCategoryID=pCustomizedCategoryID,
                 ProductName = pName,
-                //smalltype= pSmallTypeName,
                 DBtoPic= pDBtoPic,
                 Style = pStyle,
                 Quantity = PQuantity,
@@ -795,7 +866,7 @@ namespace prjiSpanFinal.Controllers
             }
 
             var ProductPic = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
-            if (jsonString.BodyPic.Count > 0)
+            if (jsonString.BodyPic !=null)
             {
                 for (int i = 0; i < jsonString.BodyPic.Count; i++)
                 {
@@ -810,7 +881,7 @@ namespace prjiSpanFinal.Controllers
 
 
 
-            public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
+        public IActionResult TakeDownProduct(CSellerNewIndexToViewViewModel select) //下架商品
         {
             var result = select;
             if (result != null)
@@ -836,53 +907,6 @@ namespace prjiSpanFinal.Controllers
                 _db.SaveChanges();
             }
             return RedirectToAction("NewIndex");
-            //if (id != null)
-            //{
-            //    List<ProductPic> productPic = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < productPic.Count; i++)  //刪=ProductId全部照片
-            //    {
-            //        if (productPic[i] != null)  //如果有資料
-            //        {
-            //            _db.ProductPics.Remove(productPic[i]);
-            //        }
-            //    }
-
-            //    List<PaymentToProduct> paymentToProducts = _db.PaymentToProducts.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < paymentToProducts.Count; i++) //刪=ProductId全部金流
-            //    {
-            //        if (paymentToProducts[i] != null)
-            //        {
-            //            _db.PaymentToProducts.Remove(paymentToProducts[i]);
-            //        }
-            //    }
-
-            //    List<ShipperToProduct> shipperToProducts = _db.ShipperToProducts.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < shipperToProducts.Count; i++) //刪=ProductId全部物流
-            //    {
-            //        if (shipperToProducts[i] != null)
-            //        {
-            //            _db.ShipperToProducts.Remove(shipperToProducts[i]);
-            //        }
-            //    }
-
-            //    List<ProductDetail> productDetails = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n).ToList();
-            //    for (int i = 0; i < productDetails.Count; i++)  //刪=ProductId全部Details
-            //    {
-            //        if (productDetails[i] != null)
-            //        {
-            //            _db.ProductDetails.Remove(productDetails[i]);
-            //        }
-            //    }
-
-            //    Product product = _db.Products.FirstOrDefault(n => n.ProductId == id);
-            //    if (product != null)
-            //    {
-            //        _db.Products.Remove(product); //刪Product
-            //    }
-
-            //    _db.SaveChanges();
-            //}
-
         }
 
         public IActionResult Coupon()
@@ -906,10 +930,15 @@ namespace prjiSpanFinal.Controllers
             }
             string logindata = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
-
-            var x = _db.Coupons.Where(n => n.MemberId == memId&&n.CouponName==select).Select(n => n).ToList();
-
-
+            List<Coupon> x = new List<Coupon>();
+            if (!string.IsNullOrEmpty(select))
+            {
+                 x = _db.Coupons.Where(n => n.MemberId == memId&&n.CouponName==select).Select(n => n).ToList();
+            }
+            else
+            {
+                 x = _db.Coupons.Where(n => n.MemberId == memId).Select(n => n).ToList();
+            }
             return Json(x);
         }
 
@@ -974,10 +1003,10 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult Event()
         {
-            var E = _db.SubOfficialEventLists.Select(i => i).ToList();
-            var P = _db.Products.Select(i => i).ToList();
+            var E = _db.SubOfficialEventLists.Select(i => i).ToList();  //所有子活動
+            var P = _db.Products.Select(i => i).ToList();     //賣家所有商品
            
-            var OE = _db.OfficialEventLists.Select(i => i).ToList();
+            var OE = _db.OfficialEventLists.Select(i => i).ToList(); //所有活動
             List<CSubEventToProductViewModel> list = new();
             foreach (var e in E)
             {

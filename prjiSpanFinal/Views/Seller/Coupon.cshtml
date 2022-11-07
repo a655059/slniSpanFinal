@@ -158,8 +158,8 @@
                                     <td class="couponName 置中 col" align="center">@Model[i].CouponName</td>
                                     <td class="couponCode 置中 col" align="center">@Model[i].CouponCode</td>
                                     <td class="discount 置中 col" align="center">@Model[i].Discount</td>
-                                    <td class="置中 col" align="center"><div class="startDate">@Model[i].StartDate.ToString("yyyy/MM/dd")</div>|<br /><div class="endDate">@Model[i].ExpiredDate.ToString("yyyy/MM/dd")</div></td>
-                                    <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy/MM/dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="置中 col" align="center"><div class="startDate">@Model[i].StartDate.ToString("yyyy-MM-dd")</div>|<br /><div class="endDate">@Model[i].ExpiredDate.ToString("yyyy-MM-dd")</div></td>
+                                    <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy-MM-dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy-MM-dd")</td>
                                     @{
                                         if (Model[i].IsFreeDelivery == true)
                                         {
@@ -204,7 +204,6 @@
                 date = "0" + date;
             }
             $("#startDate").attr("min", `${year}-${month}-${date}`);
-           /* $("#endDate").attr("min", `${year}/${month}${date}`);*/
         });
         $("#endDate").click(function () {
             const today = new Date();
@@ -345,7 +344,17 @@
             var modal = bootstrap.Modal.getInstance(myModalEl);
            modal.hide();
 
-            location.href = "/Seller/Coupon";//跳回Coupon頁面
+
+            Swal.fire(
+                '成功!',
+                '您已新增成功!',
+                'success'
+            );
+
+            setTimeout(function () {
+                location.href = "/Seller/Coupon";//跳回Coupon頁面
+            }, 2000);
+            
 
         });
 
@@ -370,18 +379,29 @@
                 console.log(1)
                 console.log(dataname)
                 let item = "";
-                for (var i = 0; i < dataname.length; i++)
-                {
+                for (var i = 0; i < dataname.length; i++) {
+                    let startDate = dataname[i].startDate.split("T")[0];
+                    let expiredDate = dataname[i].expiredDate.split("T")[0];
+                    let receiveStartDate = dataname[i].receiveStartDate.split("T")[0];
+                    let receiveEndDate = dataname[i].receiveEndDate.split("T")[0];
                     item = item +
                         `<tr>
                             <td class="col-1" align="center"><img src="/img/sellercoupon.png" /></td>
                             <td class="置中 col" align="center">${dataname[i].couponName}</td>
                             <td class="置中 col" align="center">${dataname[i].couponCode}</td>
                             <td class="置中 col" align="center">${dataname[i].discount}</td>
-                            <td class="置中 col" align="center">${dataname[i].startDate}<br />|<br />${dataname[i].expiredDate}</td>
-                            <td class="置中 col" align="center">${dataname[i].receiveStartDate}<br />|<br />${dataname[i].receiveEndDate}</td>
-                            <td class="置中 col" align="center">${dataname[i].isFreeDelivery}</td>
-                            <td class="置中 col" align="center">${dataname[i].minimumOrder}</td>
+                            <td class="置中 col" align="center">${startDate}<br />|<br />${expiredDate}</td>
+                            <td class="置中 col" align="center">${receiveStartDate}<br />|<br />${receiveEndDate}</td>`
+                    if (dataname[i].isFreeDelivery == true) {
+                        item = item +
+                            `<td class="isfree 置中 col" align="center" id="true"><img src="/img/check.png" /></td>`
+                    }
+                    else {
+                        item = item +
+                            `<td class="isfree 置中 col" align="center" id="false"></td>`
+                    }
+                    item = item +
+                    ` <td class="置中 col" align="center">${dataname[i].minimumOrder}</td>
                             <td class="置中 col" align="center">
                                 <div>
                                     <button class="btnEdit btn btn-secondary">編輯</button>

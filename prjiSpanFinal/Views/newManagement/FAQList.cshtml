@@ -9,6 +9,18 @@
 <p>
     <a asp-action="FAQCreate" class="btn btn-light">加入常見問題</a>
 </p>
+<form>
+    依問答類型篩選
+    <br />
+    <select id="filter" name="filter">
+        <option value="">選擇問答類型</option>
+        @foreach(var i in ViewBag.FAQTypes)
+            {
+                <option value="@i.FaqtypeId">@i.FaqtypeName</option>
+            }
+    </select>
+    <input id="filtersubmit" type="submit" value="列出全部類型問答" class="btn btn-outline-secondary" />
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -74,5 +86,23 @@
 
             })
         }
+       //選取全部
+            let filtersubmit = document.getElementById("filtersubmit");
+            let FFilter = "";
+            filtersubmit.addEventListener("click", function () {
+            event.preventDefault();
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/FAQList")"+`?pageSize=${pageSize}`;
+       document.location.href=link;
+        })
+        //篩選ProductStauts
+        let filter=document.getElementById("filter");
+        let Filter="";
+        filter.addEventListener("change",function(){
+            pageSize=pagesize.options[pagesize.selectedIndex].value;
+            Filter=filter.options[filter.selectedIndex].value;
+            let link="@Url.Content("~/newManagement/FAQList")"+`?filter=${Filter}&pageSize=${pageSize}`;
+       document.location.href=link;
+        })
     </script>
 }

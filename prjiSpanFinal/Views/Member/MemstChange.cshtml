@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "MemstChange";
+}
+
+<h1>MemstChange</h1>
+@section Scripts{
+    <script>
+        let memID = 0;
+        
+         window.onload = function () {
+             memID = location.href.split("=")[1]
+             
+             $.post('@Url.Content("~/Member/MemstChangeFalse")', { memberID: memID}, function (data) {
+                 if (data == 1) {
+                     Swal.fire(
+                         '恭喜!',
+                         "您已是正式會員",
+                         'success'
+                     ).then(function () { window.location = "/member/login"; });
+                 }
+                 else if (data == 2) {
+                     Swal.fire(
+                         '失敗',
+                         "驗證過期",
+                         'error'
+                     ).then(function () { window.location = "/member/login"; });
+                 }
+                 else {
+                     Swal.fire(
+                         '失敗',
+                         "異常錯誤,請聯繫客服",
+                         'error'
+                     ).then(function () { window.location = "/member/login"; });
+                 }
+             })
+        }
+    </script>
+}
