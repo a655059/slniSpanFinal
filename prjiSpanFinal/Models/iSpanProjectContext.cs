@@ -139,7 +139,8 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.AdSlogan)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("(N'(\"\")')");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
@@ -711,7 +712,7 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.MemberAcc)
                     .IsRequired()
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .HasDefaultValueSql("('Acc1')");
 
                 entity.Property(e => e.MemberPw)
