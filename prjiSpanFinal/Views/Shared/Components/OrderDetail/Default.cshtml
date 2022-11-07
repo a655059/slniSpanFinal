@@ -1,4 +1,9 @@
 ﻿@model prjiSpanFinal.ViewModels.OrderDetailViewModel
+
+
+
+
+
 <div class="row noprintArea">
     <div class="col-1"></div>
     <div class="col-11 ">
@@ -7,7 +12,7 @@
             <div class="card border-light">
                 <article class="card-header">
                     <div class="card-body row">
-                        <div class="col"> <strong>付款成功日:</strong> <br>@Model.PaymentDate </div>
+                        <div class="col"> <strong>付款成功日:</strong> <br>@(Model.PaymentDate < new DateTime(2000, 12, 30) ? "等待中" : Model.PaymentDate) </div>
                         <div class="col"> <strong>付款方式:</strong> <br> @Model.PaymentName </div>
                         <div class="col"> <strong>貨運:</strong> <br> @Model.ShipperName<br /><i class="fa fa-phone"></i> @Model.ShipperPhone </div>
                         <div class="col"> <strong>狀態:</strong> <br> @Model.OrderStatusName </div>
@@ -21,13 +26,17 @@
                     string arrived = "";
                     if (Model.ShipperStatusId <= 8)
                     {
-                        if (Model.ShipperStatusId >= 3)
+                        if (Model.ShipperStatusId >= 2)
                         {
                             pay = "active";
                         }
-                        if (Model.ShipperStatusId >= 4)
+                        if (Model.ShipperStatusId >= 3)
                         {
                             ship = "active";
+                            
+                        }
+                        if(Model.ShipperStatusId >= 4)
+                        {
                             shipping = "active";
                         }
                         if (Model.ShipperStatusId >= 6)
@@ -35,12 +44,12 @@
                             arrived = "active";
                         }
                     }
-                    <div class="track">
-                        <div class="step @pay"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立<br />@Model.OrderDatetime</span> </div>
-                        <div class="step @ship"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">完成付款<br />@Model.PaymentDate</span> </div>
-                        <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">已出貨<br />@Model.ShippingDate</span> </div>
-                        <div class="step @arrived"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已領收<br />@Model.ReceiveDate</span> </div>
-                    </div>
+                        <div class="track">
+                            <div class="step @pay"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立<br />@(Model.OrderDatetime < new DateTime(2000, 12, 30) ? "等待中" : Model.OrderDatetime)</span> </div>
+                            <div class="step @ship"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">完成付款<br />@(Model.PaymentDate < new DateTime(2000, 12, 30) ? "等待中" : Model.PaymentDate)</span> </div>
+                            <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">已出貨<br />@(Model.ShippingDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ShippingDate)</span> </div>
+                            <div class="step @arrived"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已領收<br />@(Model.ReceiveDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ReceiveDate)</span> </div>
+                        </div>
 
 
                 }
@@ -73,7 +82,12 @@
                                         string ship2 = "";
                                         string receive = "";
 
-                                        if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
+                                        if (ship == "active")
+                                        {
+                                            procbar = "33%";
+
+                                        }
+                                        else if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
                                         {
                                             procbar = "66%";
                                             ship2 = "active";
@@ -85,17 +99,17 @@
                                             ship2 = "active";
                                         }
 
-                                        <div class="row">
-                                            <div class="col-md-3 mb-3 odrefresh"> <small> 更新進度 <span><input type="hidden" value="@Model.OrderDetailId[i]" /><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
-                                            <div class="col mt-auto">
-                                                <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: @procbar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
-                                                <div class="media row justify-content-between ">
-                                                    <div class="col"><span> <small class="text-right mr-sm-2">已付款</small> <i class="fa fa-circle @ship"></i> </span></div>
-                                                    <div class="col"><span> <small class="text-right mr-sm-2">運送中</small><i class="fa fa-circle @ship2"></i></span></div>
-                                                    <div class="col"><span> <small class="text-right mr-sm-2">已到貨</small><i class="fa fa-circle @receive"></i></span></div>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3 odrefresh"> <small> 更新進度 <span><input type="hidden" value="@Model.OrderDetailId[i]" /><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
+                                                <div class="col mt-auto">
+                                                    <div class="progress my-auto"> <div class="progress-bar progress-bar rounded" style="width: @procbar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>
+                                                    <div class="media row justify-content-between ">
+                                                        <div class="col"><span> <small class="text-right mr-sm-2">已付款</small> <i class="fa fa-circle @ship"></i> </span></div>
+                                                        <div class="col"><span> <small class="text-right mr-sm-2">運送中</small><i class="fa fa-circle @ship2"></i></span></div>
+                                                        <div class="col"><span> <small class="text-right mr-sm-2">已到貨</small><i class="fa fa-circle @receive"></i></span></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                     }
                                 </div>
                             </div>

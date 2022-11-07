@@ -129,7 +129,7 @@
                     @{
                         for (int i = 1; i <= 5; i++)
                         {
-                                    <i class="star itemQualityStar fa-regular fa-star me-1"></i>
+                                                    <i class="star itemQualityStar fa-regular fa-star me-1"></i>
                         }
                     }
                 </div>
@@ -418,12 +418,19 @@
             if (data.isFreeDelivery == false) {
                 total = total + data.shipperFee;
             }
-            item = item + `</td>
-                                    <td class="ordertotalprice">$${total}</td>
-                                    <td>${data.orderStatusName}</td>
-                                    <td style="text-align:center">
+            item = item + `</td><td class="ordertotalprice">$${total}</td>`;
+
+            if(data.shipperStatusId == 6 && data.sellerisComment)
+            {
+                item = item + `<td>等待<br />買家評價</td>`;
+            }
+            else{
+                item = item + `<td>${data.orderStatusName}</td>`;
+            }
+
+            item = item + `<td style="text-align:center">
                                         <a href="/Seller/OrderDetail?id=${data.orderId}" role="button" class="btn btn-primary orderbuttonde my-1">詳情</a><br />`;
-            if (data.shipperStatusId == 6 && data.sellerCommentId == 0) {
+            if (data.shipperStatusId == 6 && !data.sellerisComment && data.sellerCommentId == 0) {
                 item = item + ` <a role="button" data-bs-toggle="modal" href="#staticBackdrop1" class="btn btn-secondary orderbuttonco my-1">評價</a><br />`;
             }
             if (data.shipperStatusId == 3) {
