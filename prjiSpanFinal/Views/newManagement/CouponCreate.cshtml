@@ -9,21 +9,22 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button id="demo" class="btn btn-success">demo</button>
         <form asp-action="CouponCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="CouponId" type="hidden" />
             </div>
             <div class="form-group">
-                優惠券名稱<input asp-for="CouponName" class="form-control" />
+                優惠券名稱<input asp-for="CouponName" class="form-control" id="CouponName" />
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" />
+                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" id="StartDate" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime-local" />
+                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime-local" id="ExpiredDate" />
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,18 +32,18 @@
                 <span asp-validation-for="Discount" class="text-danger fs-6">ex:若為8折優惠券則填入0.8</span>
             </div>
             <div class="form-group">
-                優惠券代碼<input asp-for="CouponCode" class="form-control" />
+                優惠券代碼<input asp-for="CouponCode" class="form-control" id="CouponCode" />
                 <span asp-validation-for="CouponCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input asp-for="MemberId" class="form-control plaintext" value="1" type="hidden" />
             </div>
             <div class="form-group">
-                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local" />
+                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local" id="ReceiveStartDate" />
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime-local" />
+                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime-local" id="ReceiveEndDate" />
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -50,21 +51,21 @@
                 <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" />
             </div>
             <div class="form-group">
-                最低消費金額 <input asp-for="MinimumOrder" class="form-control" />
+                最低消費金額 <input asp-for="MinimumOrder" class="form-control" id="MinimumOrder" />
                 <span asp-validation-for="MinimumOrder" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input asp-for="OfficialEventListId" value="1" type="hidden" />
             </div>
             <div class="form-group">
-                <input type="submit" value="確認" class="btn btn-primary mb-2" />
+                <input id="confirms" type="submit" value="確認" class="btn btn-primary mt-1" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="CouponList" class="btn btn-danger">取消並回到優惠券列表</a>
+    <a asp-action="CouponList" class="btn btn-danger mt-1">取消並回到優惠券列表</a>
 </div>
 @section Scripts{
     <script>
@@ -100,5 +101,20 @@
             }
         }
         );
+
+        let demo = document.getElementById("demo");
+        let CouponName = document.getElementById("CouponName");
+        let StartDate = document.getElementById("StartDate");
+        let ExpiredDate = document.getElementById("ExpiredDate");
+        let CouponCode = document.getElementById("CouponCode");
+        let ReceiveStartDate = document.getElementById("ReceiveStartDate");
+        let MinimumOrder = document.getElementById("MinimumOrder");
+        let Datas = [CouponName, StartDate, ExpiredDate, CouponCode, ReceiveStartDate, MinimumOrder, Discounts];
+        demo.addEventListener("click", function () {
+            Datas[0].value = "站主開心發優惠";
+            Datas[3].value = "USDPKR";
+            Datas[5].value = "0.5";
+            Discounts.value = "0.5";
+        })
     </script>
 }

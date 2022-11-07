@@ -83,11 +83,11 @@
                         {
                             var base64Image = Convert.ToBase64String(item.ProductPic);
                             var source = String.Format("data:image/png;base64,{0}", base64Image);
-                            <img src="@source" class="cardImg" alt="找不到圖片" width="120" />
+                                    <img src="@source" class="cardImg" alt="找不到圖片" width="120" />
                         }
                         else
                         {
-                            <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
+                                    <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
                         }
                     }
                     
@@ -131,23 +131,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                                                        <option value=3>3</option>
+                                                                <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                                                      <option value=5>5</option>
+                                                              <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-                                                   <option value=10>10</option>
+                                                           <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                                                      <option value=20>20</option>
+                                                              <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                                                        <option value=100>100</option>
+                                                                <option value=100>100</option>
             }}
      </select>
      筆
@@ -164,11 +164,16 @@
         for (var BTNdele of BTNdel) {
             BTNdele.addEventListener("click", async function (event) {
                 event.preventDefault();
+                let c=confirm("確定要刪除嗎?");
+                c;
+                if(c)
+                {
                 console.log(event.currentTarget.name);
                 let response = await fetch("@Url.Content("~/newManagement/ProductDelete")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data == 1) {
                     $(this).closest("td").siblings().find(".psname").val("已刪除");
+                }
                 }
             })
         }

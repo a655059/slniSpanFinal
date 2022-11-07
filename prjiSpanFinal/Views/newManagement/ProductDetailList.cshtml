@@ -57,48 +57,40 @@
                         {
                             var base64Image = Convert.ToBase64String(item.Pic);
                             var source = String.Format("data:image/png;base64,{0}", base64Image);
-                            <img src="@source" class="cardImg" alt="..." width="120" />
+                                                                                                    <img src="@source" class="cardImg" alt="..." width="120" />
                         }
                         else{
-                            <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
+                                                                                                    <img src="~/img/imageNotFound.png" alt="找不到圖片" width="120">
                         }
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("刪除產品細項", "ProductDetailDelete","newManagement" ,new { id=item.ProductDetailId},new{onclick="return confirm('確定要刪除嗎?若商品細項少於一項則無法刪除')",@class="btn btn-primary deles"})
+                    <a class="btn btn-primary deles" name="@item.ProductDetailId">刪除產品細項</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <script>
-    function really() {
-        let trs = document.querySelectorAll(".rowsss");
-        let dels = document.querySelectorAll(".deles");
-        
-        var yes = confirm('你確定要刪除嗎？');
-        if (yes){
-            return;
-        }
-        else{
-            alert("商品細項不可少於一項");
-            return;
-        }
-        if(trs.length-1<=0){
+    let dels=document.querySelectorAll(".deles");
             for(let e of dels){
-                e.addEventListener("click",()=>{
-                    alert("商品細項不可少於一項");
-                    return;
-                })
-            } 
-        }
-        else{
-            for(let e of dels){
-                e.addEventListener("click",()=>{
-            $(this).closest("tr").remove();
-                    return;
+                e.addEventListener("click",async function(event){
+                    let c=confirm("確定要刪除嗎?該類型庫存將會歸零無法選購");
+                    c;
+                    if(c){
+                        let s=event.currentTarget.name;
+                        console.log(s);
+                        let data=await fetch("@Url.Content("~/newManagement/ProductDetailDelete")"+`?id=${s}`);
+                        let res=await data.text();
+                        if(res!=null)
+                        {
+                           alert("已刪除");
+                        }
+                        else{
+                            return;
+                        }
+                    }
                 })
             }
-        }
-     }
+   
 </script>

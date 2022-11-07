@@ -12,7 +12,7 @@
         <form asp-action="EventCreate" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="OfficialEventListId" class="form-control" type="hidden" />
+                <input asp-for="OfficialEventListId"  type="hidden" />
             </div>
             <div class="form-group">
                 活動名稱
@@ -52,7 +52,7 @@
                  <img id="Preview" style="max-height:200px;" />
             </div>
             <div class="form-group">
-                <input type="submit" value="確認" class="btn btn-primary" />
+                <input id="submit" type="submit" value="確認" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -71,5 +71,21 @@
             $('#Preview').attr('src', objectURL);
             console.log()
         });
+
+        let submit=document.getElementById("submit");
+        let Inputs=document.querySelectorAll(".form-control");
+        submit.addEventListener("click",function(event){
+            for(var l of Inputs){
+            if(!(l.value)){
+            event.preventDefault();
+            alert("每個欄位皆是必填");
+            break;
+                        }
+                                               }
+         }
+     )
+
+
+
     </script>
     }

@@ -5,15 +5,13 @@
 }
 
 <h1>修改活動</h1>
-
-
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EventEdit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="OfficialEventListId" class="form-control" type="hidden"/>
+                <input asp-for="OfficialEventListId" type="hidden"/>
             </div>
             <div class="form-group">
                 <label asp-for="EventName" class="control-label">活動名稱</label>
@@ -77,6 +75,17 @@
            return;
         }
         })
-        
+        let submit=document.getElementById("submit");
+        let Inputs=document.querySelectorAll(".form-control");
+        submit.addEventListener("click",function(){
+         for(let I of Inputs){
+            if(!I.values){
+             event.preventDefault();
+             alert("所有欄位皆是必填!")
+             return;
+            }
+        }
+        })
+       
     </script>
 }
