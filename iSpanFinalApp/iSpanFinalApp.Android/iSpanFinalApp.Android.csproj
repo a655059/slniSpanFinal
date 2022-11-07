@@ -90,12 +90,6 @@
     <AndroidResource Include="Resources\drawable\LOGO_Long2.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\iSpanFinalApp\iSpanFinalApp.csproj">
-      <Project>{75FFAB6D-7351-4D95-A537-EF204042DF6B}</Project>
-      <Name>iSpanFinalApp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\randommall.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
