@@ -95,14 +95,14 @@
                         <div class="form-group col-12">
                             <label asp-for="MemberPw" class="form-label"><span style="color:red;">*</span>密碼</label>
                             <input asp-for="MemberPw" class="form-control" id="MemPw" required />
-                            
+
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
                         </div>
                         <div class="form-group col-12">
                             <label asp-for="Email" class="control-label"><span style="color:red;">*</span>信箱</label>
-                            <input asp-for="Email" class="form-control" id="MemEmail" required />
+                            <input asp-for="Email" class="form-control" id="MemEmail" type="email" required />
                             <small id="Emailhelp" class="form-text text-muted"></small>
 
                             <div class="invalid-feedback">
@@ -133,20 +133,24 @@
                             </select>
 
                         </div>
+
+
+
                         <div class="col-md-4">
                             <select class="form-select" id="state" style="display:none;">
                             </select>
                         </div>
 
                         @*<div class="form-group">
-                <label asp-for="RegionId" class="control-label">居住地</label>
-                <input asp-for="RegionId" class="form-control" />
-                <span asp-validation-for="RegionId" class="text-danger"></span>
-            </div>*@
+            <label asp-for="RegionId" class="control-label">居住地</label>
+            <input asp-for="RegionId" class="form-control" />
+            <span asp-validation-for="RegionId" class="text-danger"></span>
+        </div>*@
                         <div class="form-group col-12">
                             <label asp-for="Address" class="control-label">地址</label>
                             <input asp-for="Address" id="Memadd" class="form-control" />
                         </div>
+
                         <div class="col-12">
                             <label class="form-label">國籍</label>
                             <div class="input-group has-validation">
@@ -161,7 +165,7 @@
 
                         <div class="form-group">
                             <label asp-for="BackUpEmail" class="control-label">備用信箱</label>
-                            <input asp-for="BackUpEmail" class="form-control" />
+                            <input asp-for="BackUpEmail" class="form-control"/>
                             <span asp-validation-for="BackUpEmail" class="text-danger"></span>
                         </div>
 
@@ -199,16 +203,21 @@
                     <div class="col-12">
                         <br />
                     </div>
+
                     <div class="col-12">
                         <label class="form-label">上傳照片</label>
                         <label>
-                            <input asp-for="MemPic" class="form-control" type="file" name="File1" multiple />
+                            <input asp-for="MemPic" class="form-control" type="file" name="File1" id="memfile" multiple />
                         </label>
                     </div>
+                    <div class="col-12">
+                        <img style="height:40%;width:30%;margin-top:0.5em;" id="newsimg" />
+                    </div>
+
                     <hr class="my-4">
                     <button class="btn btn-primary" type="submit" id="creat">註冊</button>
                     <button class="btn btn-secondary" id="clear">清除</button>
-                    
+                    @*<button id="test">test</button>*@
                 </form>
             </div>
         </div>
@@ -226,7 +235,7 @@
         const selSite = document.querySelector("#state")
         const selregion = document.querySelector("#region")
         const Demo = document.querySelector("#Demo")
-        const create = document.querySelector("#creat")
+/*        const create = document.querySelector("#creat")*/
 
         const help = document.querySelector("#NameHelp")
         const Acchelp = document.querySelector("#Acchelp")
@@ -237,16 +246,26 @@
         const textAcc = document.querySelector("#MemAc")
         const textEmail = document.querySelector("#MemEmail")
         const textPhone = document.querySelector("#MemPhone")
-        
+
         let nameCheck = true
         let AccCheck = true
         let EmailCheck = true
         let PhoneCheck=true
 
+        let file = null;
+        let arraybuffer = null;
+        let hasPic = false;
+        //預覽圖片
+        $("#memfile").on("change", function (eve) {
+            file = this.files[0];
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                arraybuffer = this.result;
+                $("#newsimg").attr("src", e.target.result);
+            }
+            reader.readAsDataURL(file);
+        })
 
-        //create.addEventListener("click", function () {
-        //    myFunctionName();
-        //})
 
         function myFunctionName(){
             if (nameCheck && AccCheck && EmailCheck && PhoneCheck) {

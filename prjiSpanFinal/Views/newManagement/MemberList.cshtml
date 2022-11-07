@@ -32,6 +32,9 @@
            </select> 
         <input id="filtersubmit" type="submit" value="顯示全部狀態會員" class="btn btn-outline-secondary" />
     </form>
+       <a class="btn btn-info d-inline-flex align-items-center me-2" href="/member/Newspaper" id="emailNews">
+           <i class="fa-solid fa-paper-plane me-2"></i>發送電子報
+       </a>
     <table class="table" width="120%" style="table-layout:auto">
         <thead>
             <tr>
@@ -197,6 +200,7 @@
         let BTNundo = document.querySelectorAll(".Undo");
         let BTNdown = document.querySelectorAll(".Down");
         let PSName = document.querySelectorAll(".statusname");
+
         for (var BTNdele of BTNdel) {
             BTNdele.addEventListener("click", async function (event) {
                 event.preventDefault();
