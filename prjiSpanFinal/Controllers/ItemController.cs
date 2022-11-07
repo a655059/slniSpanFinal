@@ -73,7 +73,8 @@ namespace prjiSpanFinal.Controllers
                     sellerCommentCount = sellerComments.Count();
                     avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
                 }
-
+                var sellerCoupons = dbContext.Coupons.Where(i => i.MemberId == product.seller.MemberId).ToList();
+                var sellerCouponIDs = sellerCoupons.Select(i => i.CouponId).ToList();
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 CItemIndexViewModel itemIndex = new();
                 itemIndex.product = product.product;
@@ -93,11 +94,13 @@ namespace prjiSpanFinal.Controllers
                 itemIndex.buyerCount = buyerCount;
                 itemIndex.avgSellerCommentStar = avgSellerCommentStar;
                 itemIndex.sellerCommentCount = sellerCommentCount;
+                itemIndex.sellerCoupons = sellerCoupons;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                     MemberAccount user = System.Text.Json.JsonSerializer.Deserialize<MemberAccount>(memberString);
                     var like = dbContext.Likes.Where(i => i.MemberId == user.MemberId && i.ProductId == id).Select(i => i).FirstOrDefault();
+                    var userCouponWallet = dbContext.CouponWallets.Where(i => i.MemberId == user.MemberId && sellerCouponIDs.Contains(i.CouponId)).ToList();
                     if (like != null)
                     {
                         itemIndex.Islike = true;
@@ -108,6 +111,7 @@ namespace prjiSpanFinal.Controllers
                     }
                     itemIndex.IsLogin = true;
                     itemIndex.user = user;
+                    itemIndex.userCouponWallet = userCouponWallet;
                 }
                 else
                 {
@@ -279,7 +283,7 @@ namespace prjiSpanFinal.Controllers
             };
             return View(x);
         }
-        
+
         public IActionResult GetSmallType(int bigTypeID)
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
@@ -388,7 +392,7 @@ namespace prjiSpanFinal.Controllers
                 country = i.ProductDetail.Product.Member.Region.Country,
             }).FirstOrDefault();
             infos.productPics = dbContext.ProductPics.Where(i => i.ProductId == infos.product.ProductId).Select(i => i.Pic).ToList();
-            infos.biddingDetailWithMember = dbContext.BiddingDetails.Where(i => i.BiddingId == infos.bidding.BiddingId).OrderByDescending(i=>i.Price).Select(i => new CBiddingDetailWithMemberViewModel
+            infos.biddingDetailWithMember = dbContext.BiddingDetails.Where(i => i.BiddingId == infos.bidding.BiddingId).OrderByDescending(i => i.Price).Select(i => new CBiddingDetailWithMemberViewModel
             {
                 biddingDetail = i,
                 member = i.Member
@@ -407,7 +411,7 @@ namespace prjiSpanFinal.Controllers
             infos.sellerShippers = dbContext.ShipperToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Shipper).ToList();
             infos.sellerPayments = dbContext.PaymentToSellers.Where(i => i.MemberId == infos.seller.MemberId).Select(i => i.Payment).ToList();
             infos.sellerProductCount = dbContext.Products.Where(i => i.MemberId == infos.seller.MemberId).Count();
-            
+
             var sellerComments = dbContext.Comments.Where(i => i.OrderDetail.ProductDetail.Product.MemberId == infos.seller.MemberId).ToList();
             infos.sellerCommentCount = 0;
             infos.avgSellerCommentStar = 0;
@@ -416,7 +420,7 @@ namespace prjiSpanFinal.Controllers
                 infos.sellerCommentCount = sellerComments.Count;
                 infos.avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
             }
-            
+
             return View(infos);
         }
 
@@ -506,5 +510,37 @@ namespace prjiSpanFinal.Controllers
         {
             return ViewComponent("BiddingDetail", id);
         }
+
+        public IActionResult GetCoupon(int id)
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                iSpanProjectContext dbContext = new iSpanProjectContext();
+                string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(memberString);
+                var isExist = dbContext.CouponWallets.Where(i => i.CouponId == id && i.MemberId == member.MemberId).FirstOrDefault();
+                if (isExist == null)
+                {
+                    CouponWallet couponWallet = new CouponWallet
+                    {
+                        MemberId = member.MemberId,
+                        CouponId = id,
+                        IsExpired = false,
+                    };
+                    dbContext.CouponWallets.Add(couponWallet);
+                    dbContext.SaveChanges();
+                    return Content("1");
+                }
+                else
+                {
+                    return Content("2");
+                }
+            }
+            else
+            {
+                return Content("0");
+            }
+        }
     }
+
 }

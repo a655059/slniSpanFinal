@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using prjiSpanFinal.HostedService;
 using prjiSpanFinal.Hubs;
 using prjiSpanFinal.Models;
 using System;
@@ -39,6 +40,7 @@ namespace prjiSpanFinal
                 o.EnableDetailedErrors = true;
                 o.MaximumReceiveMessageSize = 10240000;
             });
+            services.AddHostedService<Countdown>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

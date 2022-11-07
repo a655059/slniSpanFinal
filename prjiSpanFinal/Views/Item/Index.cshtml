@@ -198,32 +198,68 @@
                 </div>
             </form>
         </div>
-        <div class="my-2 py-4 d-flex border-top border-bottom">
-            <div class="d-flex me-2" style="font-size:14px">
-                <div class="border py-4 px-2">
-                    <div class="bg-danger text-white rounded-5 w-50 px-1 my-1 text-center">限時限量</div>
-                    <div class="fs-6 fw-bold my-1">滿$799<span class="ms-2">現折$50</span></div>
-                    <div class="my-1">
-                        <div>限時優惠滿799折50<span>限量輸碼PO50</span></div>
-                        <div>2022/08/30<span class="ms-1">18:00</span>-2022/11/29<span class="ms-1">00:00</span></div>
-                    </div>
-                </div>
-                <button class="btn btn-warning rounded-0 fw-bold">領取</button>
-            </div>
-            <div class="d-flex" style="font-size:14px">
-                <div class="couponDiv">
-                    <img src="~/img/Event/Coupon_Jacob.png" />
-                </div>
-                <div class="border py-4 px-2">
-                    <div class="bg-danger text-white rounded-5 w-50 px-1 my-1 text-center">限時限量</div>
-                    <div class="fs-6 fw-bold my-1">滿$799<span class="ms-2">現折$50</span></div>
-                    <div class="my-1">
-                        <div>限時優惠滿799折50<span>限量輸碼PO50</span></div>
-                        <div>2022/08/30<span class="ms-1">18:00</span>-2022/11/29<span class="ms-1">00:00</span></div>
-                    </div>
-                </div>
-                @*<button class="btn btn-warning rounded-0 fw-bold">領取</button>*@
-            </div>
+        <div class="sellerCouponLayout position-relative mb-2" style="width:640px;height:120px;overflow:hidden">
+
+            @{
+                if (Model.sellerCoupons.Count > 0)
+                {
+                    <div class="sellerCouponCount d-none">@Model.sellerCoupons.Count</div>
+                    <button class="couponLeft btn btn-light position-absolute bg-transparent" style="left:0px;width:10px;height:120px;z-index:10"></button>
+                    foreach (var i in Model.sellerCoupons)
+                    {
+                        <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:305px;height:120px;margin-right:10px">
+                            <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                <div>@i.CouponName</div>
+                                @{
+                                    if (i.IsFreeDelivery)
+                                    {
+                                        if (i.MinimumOrder > 0)
+                                        {
+                                            <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                        }
+                                        else
+                                        {
+                                            <div>不限金額都免運費</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string discount = (i.Discount * 10).ToString("0.0");
+                                        if (discount.Split('.')[1] == "0")
+                                        {
+                                            discount = discount.Split('.')[0];
+                                        }
+                                        if (i.MinimumOrder > 0)
+                                        {
+
+                                            <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                        }
+                                        else
+                                        {
+                                            <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                        }
+                                    }
+                                }
+                                <div>折扣碼:<span>@i.CouponCode</span></div>
+                                @{
+                                    string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                }
+
+                                <div>活動期間:<span>@period</span></div>
+                                @{
+                                    if (i.ExpiredDate != i.ReceiveEndDate)
+                                    {
+                                        <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                    }
+                                }
+                            </div>
+                            <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                        </div>
+                    }
+                    <button class="couponRight btn btn-light position-absolute bg-transparent" style="right:0px;width:10px;height:120px;z-index:10"></button>
+                }
+            }
+
         </div>
         <div class="row">
             <div class="col-8" style="font-size:14px">
@@ -313,7 +349,7 @@
         <div class="sellerName bg-warning bg-opacity-50 fs-3 fw-bold ps-2" id="@Model.seller.MemberAcc">@Model.seller.MemberAcc<span>的商店</span></div>
         <div class="w-100 bg-warning bg-opacity-10 pb-3">
             <div class="description">
-                @Model.product.Description;
+                @Model.product.Description
             </div>
             @{
                 foreach (var i in Model.productPics)
@@ -399,12 +435,24 @@
     <script src="@Url.Content("~/js/Item/ShowItemComment.js")"></script>
     @*<script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>*@
     <script>
+        let couponPosition = 10;
+        let couponCount = Number($(".sellerCouponCount").html());
         $(function () {
             const productID = $("#ProductId").val();
             $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
-
             userIsSeller();
+
+            $(".sellerCoupon").each(function () {
+                $(this).css("left", couponPosition);
+                couponPosition += 315;
+            });
+            $(".couponLeft").prop("disabled", true);
+            if (couponCount <= 2) {
+                $(".couponRight").prop("disabled", true);
+            }
         });
+
+        
 
         function userIsSeller() {
             const userID = $(".memberID").html();
@@ -414,6 +462,10 @@
                 $(".buyDirectly").prop("disabled", true);
             }
         }
+
+        $(".couponRight").click(function () {
+            $(".sellerCoupon").animate("left", "-315px");
+        });
 
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
@@ -432,6 +484,32 @@
             }
             console.log(data);
         })
+        $(".getCoupon").click(async function () {
+            const couponID = Number($(this).attr("id"));
+            const response = await fetch("@Url.Content("~/Item/GetCoupon")" + `?id=${couponID}`);
+            const data = await response.text();
+            if (data == "1") {
+                Swal.fire("領取優惠券成功");
+                $(this).closest(".sellerCoupon").addClass("opacity-50");
+                $(this).prop("disabled", true);
+            }
+            else if (data == "0") {
+                Swal.fire({
+                    title: "請先登入再領取優惠券",
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: "登入",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.href = "@Url.Content("~/Member/Login")";
+                    }
+                })
+            }
+            else {
+                Swal.fire("你已經領過此優惠券了");
+            }
+        });
+        
 
         $(".buyDirectly").click(function () {
             const maxQuantity = Number($("input[name='purchaseCount']").attr("max"));
