@@ -130,10 +130,4 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\iSpanFinalApp\iSpanFinalApp.csproj">
-      <Project>{75FFAB6D-7351-4D95-A537-EF204042DF6B}</Project>
-      <Name>iSpanFinalApp</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
