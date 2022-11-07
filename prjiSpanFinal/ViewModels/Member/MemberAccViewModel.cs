@@ -96,6 +96,11 @@ namespace prjiSpanFinal.ViewModels.Member
             get { return _MemAcc.Gender; }
             set { _MemAcc.Gender = value; }
         }
+        public bool IsAcceptAd
+        {
+            get { return _MemAcc.IsAcceptAd; }
+            set { _MemAcc.IsAcceptAd = value; }
+        }
         public int Balance { get; set; }
         public string ServiceTime { get; set; }
         public string SellerCaution { get; set; }

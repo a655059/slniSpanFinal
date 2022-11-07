@@ -41,19 +41,7 @@ namespace prjiSpanFinal.Controllers
         //將有點連結信的會員變成正式會員
         public IActionResult MemstChange()
         {
-            //iSpanProjectContext db = new iSpanProjectContext();
-            //string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
-            //int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件
-
-            //if (memberID != null)
-            //{
-            //var q = db.MemberAccounts.FirstOrDefault(p => p.MemberId == memberID);
-            //q.MemStatusId = 2;
-            //db.SaveChanges();
-            
-            //}
             return View();
-            
         }
         //超過30分鐘後失效頁面
         public IActionResult MemstChangeFalse(int? memberID)
@@ -155,6 +143,33 @@ namespace prjiSpanFinal.Controllers
                 MemberAccount acc = db.MemberAccounts.FirstOrDefault(p => p.MemberId == mem.MemberId);
                 //acc = mem.memACC;
                 acc.Birthday = mem.Birthday;
+                if (mem.IsAcceptAd==true) {
+                    #region
+                    ////如果訂閱則寄信
+                    //MimeMessage message = new MimeMessage();
+                    //BodyBuilder builder = new BodyBuilder();
+                    ////var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+                    ////==>這裡可以放入圖片路徑
+
+                    //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/Subscription.cshtml");
+                    ////=>內容
+                    //message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
+                    //message.To.Add(new MailboxAddress(mem.Name,mem.Email));
+                    //message.Subject = "[C#蝦到爆商城(ShopDaoBao)]最爆的商品都在這"; //==>標題
+                    //message.Body = builder.ToMessageBody();
+                    //using (SmtpClient client = new SmtpClient())
+                    //{
+                    //    client.Connect("smtp.outlook.com", 25, MailKit.Security.SecureSocketOptions.StartTls);
+                    //    client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
+                    //    client.Send(message);
+                    //    client.Disconnect(true);
+                    //}
+                    #endregion
+                    acc.IsAcceptAd = true;
+                }
+                else {
+                    acc.IsAcceptAd = false;
+                }
                 if (mem.gender == "female")
                 {
                     acc.Gender = 2;
@@ -219,8 +234,49 @@ namespace prjiSpanFinal.Controllers
                 //HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json); //塞新資料到session
                 //return View(acc);
             }
+        }
+        public IActionResult SendNewspaper(string memName,string memEmail, IFormFile newsimgphoto)
+        {
+            //後台新增發送電子報，另做一個view裡面可以輸入抓到會員名字，email，與電子報要附的圖片
+            try
+            {
+                MimeMessage message = new MimeMessage();
+                BodyBuilder builder = new BodyBuilder();
+                //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+                //==>這裡可以放入圖片路徑
+
+                builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/Subscription.cshtml");
+                //builder.HtmlBody = $"<p>尊敬的會員您好：您新的密碼為{Newpassword}。<br>請以新密碼登入並修改您的舊密碼。如果未有忘記密碼的需求，請忽略此信件。</p><br>" +
+                //                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br>" +
+                //                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br>Regards,<br>ShopDaoBao(蝦到爆) Customer Service";
+                //=>內容
+
+                message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
+                message.To.Add(new MailboxAddress(memName, memEmail));
+                message.Subject = "[C#蝦到爆商城(ShopDaoBao)]最爆都在這"; //==>標題
+                message.Body = builder.ToMessageBody();
+
+
+                using (SmtpClient client = new SmtpClient())
+                {
+                    client.Connect("smtp.outlook.com", 25, MailKit.Security.SecureSocketOptions.StartTls);
+                    //第二個參數是port
+                    //outlook.com smtp.outlook.com port:25
+                    //yahoo smtp.mail.yahoo.com.tw port:465
+                    //gmail smtp.gmail.com port:587
+                    client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+                return Content("OK", "text/plain", Encoding.UTF8);
+            }
+            catch
+            {
+                return Content("Err", "text/plain", Encoding.UTF8);
+            }
 
         }
+
         public IActionResult Create()
         {
             return View();
@@ -323,6 +379,12 @@ namespace prjiSpanFinal.Controllers
             //return Content("OK", "text/plain", Encoding.UTF8);
             return RedirectToAction("LoginSuccess");
         }
+        //訂閱電子報
+        public IActionResult Subscription()
+        {
+            return View();
+        }
+
         public IActionResult CheckName(string name)
         {
             var exists = _context.MemberAccounts.Any(m => m.Name == name);

@@ -95,7 +95,7 @@
                         <div class="form-group col-12">
                             <label asp-for="MemberPw" class="form-label"><span style="color:red;">*</span>密碼</label>
                             <input asp-for="MemberPw" class="form-control" id="MemPw" required />
-                            
+
                             <div class="invalid-feedback">
                                 必填欄位
                             </div>
@@ -133,20 +133,24 @@
                             </select>
 
                         </div>
+
+
+
                         <div class="col-md-4">
                             <select class="form-select" id="state" style="display:none;">
                             </select>
                         </div>
 
                         @*<div class="form-group">
-                <label asp-for="RegionId" class="control-label">居住地</label>
-                <input asp-for="RegionId" class="form-control" />
-                <span asp-validation-for="RegionId" class="text-danger"></span>
-            </div>*@
+            <label asp-for="RegionId" class="control-label">居住地</label>
+            <input asp-for="RegionId" class="form-control" />
+            <span asp-validation-for="RegionId" class="text-danger"></span>
+        </div>*@
                         <div class="form-group col-12">
                             <label asp-for="Address" class="control-label">地址</label>
                             <input asp-for="Address" id="Memadd" class="form-control" />
                         </div>
+
                         <div class="col-12">
                             <label class="form-label">國籍</label>
                             <div class="input-group has-validation">
@@ -208,7 +212,7 @@
                     <hr class="my-4">
                     <button class="btn btn-primary" type="submit" id="creat">註冊</button>
                     <button class="btn btn-secondary" id="clear">清除</button>
-                    
+                    @*<button id="test">test</button>*@
                 </form>
             </div>
         </div>
@@ -226,7 +230,7 @@
         const selSite = document.querySelector("#state")
         const selregion = document.querySelector("#region")
         const Demo = document.querySelector("#Demo")
-        const create = document.querySelector("#creat")
+/*        const create = document.querySelector("#creat")*/
 
         const help = document.querySelector("#NameHelp")
         const Acchelp = document.querySelector("#Acchelp")
@@ -237,16 +241,26 @@
         const textAcc = document.querySelector("#MemAc")
         const textEmail = document.querySelector("#MemEmail")
         const textPhone = document.querySelector("#MemPhone")
-        
+
         let nameCheck = true
         let AccCheck = true
         let EmailCheck = true
         let PhoneCheck=true
 
-
-        //create.addEventListener("click", function () {
-        //    myFunctionName();
+        //常用地址
+        //let Address = [];
+        //    $("#creat").click(function () {
+        //    let dataAll = document.querySelectorAll(".democheck:checked")
+        //    /*console.log(dataAll.length)*/
+        //    if (dataAll.length != 0) {
+        //        /*console.log($("#country").val())*/
+        //        Address.push($("#country").val())
+        //        Address.push($("#region").val())
+        //        Address.push($("#Memadd").val())
+        //        $.post(`/member/OfftenAdd`, { add: Address})
+        //    }
         //})
+
 
         function myFunctionName(){
             if (nameCheck && AccCheck && EmailCheck && PhoneCheck) {
