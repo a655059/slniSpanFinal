@@ -29,6 +29,7 @@ namespace prjiSpanFinal.Models
         public virtual DbSet<BalanceRecord> BalanceRecords { get; set; }
         public virtual DbSet<Bidding> Biddings { get; set; }
         public virtual DbSet<BiddingDetail> BiddingDetails { get; set; }
+        public virtual DbSet<BiddingType> BiddingTypes { get; set; }
         public virtual DbSet<BigType> BigTypes { get; set; }
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
@@ -320,6 +321,10 @@ namespace prjiSpanFinal.Models
 
                 entity.Property(e => e.BiddingId).HasColumnName("BiddingID");
 
+                entity.Property(e => e.BiddingTime).HasColumnType("datetime");
+
+                entity.Property(e => e.BiddingTypeId).HasColumnName("BiddingTypeID");
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.HasOne(d => d.Bidding)
@@ -328,11 +333,28 @@ namespace prjiSpanFinal.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BiddingDetail_Bidding");
 
+                entity.HasOne(d => d.BiddingType)
+                    .WithMany(p => p.BiddingDetails)
+                    .HasForeignKey(d => d.BiddingTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BiddingDetail_BiddingType");
+
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.BiddingDetails)
                     .HasForeignKey(d => d.MemberId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BiddingDetail_MemberAccount");
+            });
+
+            modelBuilder.Entity<BiddingType>(entity =>
+            {
+                entity.ToTable("BiddingType");
+
+                entity.Property(e => e.BiddingTypeId).HasColumnName("BiddingTypeID");
+
+                entity.Property(e => e.BiddingTypeName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<BigType>(entity =>
@@ -393,6 +415,8 @@ namespace prjiSpanFinal.Models
                 entity.Property(e => e.CommentTime)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(((2000)-(1))-(1))");
+
+                entity.Property(e => e.MoreComment).IsRequired();
 
                 entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
