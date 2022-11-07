@@ -29,7 +29,7 @@
                     <input type="text" onkeypress="isNumberKey(event)" id="charge" />
                 </div>
                 <br />
-                <div class="btn btn-success" id="chargebtn">儲值</div>
+                <div class="btn btn-success" id="chargebtn" >儲值</div>
             </div>
 
             <nav>
@@ -64,141 +64,175 @@
     </div>
 </div>
 
-<form id="formCreditCard" method="post" accept-charset="UTF-8" action="https://payment-stage.opay.tw/Cashier/AioCheckOut/V5">
-    <div class="form-group">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-            <label class="form-check-label" for="invalidCheck">
-                我已確認訂購內容及寄送資訊無誤
-            </label>
-            <div class="invalid-feedback">
-                您必須在提交前同意
+<div class="modal" tabindex="-1" id="confirmCheckout">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCreditCard" method="post" accept-charset="UTF-8" action="https://payment-stage.opay.tw/Cashier/AioCheckOut/V5">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label" for="invalidCheck">
+                                我已確認訂購內容及寄送資訊無誤
+                            </label>
+                            <div class="invalid-feedback">
+                                您必須在提交前同意
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="MerchantID" value="2000132" />
+                    <input type="hidden" name="MerchantTradeNo" value="" />
+                    <input type="hidden" name="MerchantTradeDate" value="" />
+                    <input type="hidden" name="PaymentType" value="aio" />
+                    <input type="hidden" name="TotalAmount" value="" />
+                    <input type="hidden" name="TradeDesc" value="建立信用卡測試訂單" />
+                    <input type="hidden" name="ItemName" value="" />
+                    <input type="hidden" name="ReturnURL" value="https://developers.opay.tw/AioMock/MerchantReturnUrl" />
+                    <input type="hidden" name="ChoosePayment" value="Credit" />
+                    <input type="hidden" name="StoreID" value="" />
+                    <input type="hidden" name="ClientBackURL" value="" />
+                    <input type="hidden" name="CreditInstallment" value="" />
+                    <input type="hidden" name="InstallmentAmount" value="" />
+                    <input type="hidden" name="Redeem" value="" />
+                    <input type="hidden" name="EncryptType" value="1" />
+                    <input type="hidden" name="CheckMacValue" value="" />
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">確認付款</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <input type="hidden" name="MerchantID" value="2000132" />
-    <input type="hidden" name="MerchantTradeNo" value="" />
-    <input type="hidden" name="MerchantTradeDate" value="" />
-    <input type="hidden" name="PaymentType" value="aio" />
-    <input type="hidden" name="TotalAmount" value="" />
-    <input type="hidden" name="TradeDesc" value="建立信用卡測試訂單" />
-    <input type="hidden" name="ItemName" value="" />
-    <input type="hidden" name="ReturnURL" value="https://developers.opay.tw/AioMock/MerchantReturnUrl" />
-    <input type="hidden" name="ChoosePayment" value="Credit" />
-    <input type="hidden" name="StoreID" value="" />
-    <input type="hidden" name="ClientBackURL" value="" />
-    <input type="hidden" name="CreditInstallment" value="" />
-    <input type="hidden" name="InstallmentAmount" value="" />
-    <input type="hidden" name="Redeem" value="" />
-    <input type="hidden" name="EncryptType" value="1" />
-    <input type="hidden" name="CheckMacValue" value="" />
-    <div class="form-group">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">確認付款</button>
-    </div>
-</form>
-@section Scripts{
-    <script>
-        let currentFilter = 0;
-        let nowpages = 1;
-        const charge = $("#charge")
-        const item = $(".nav-item");
-        const pane = $(".tab-pane");
+</div>
+                @section Scripts{
+                    <script>
+                        let currentFilter = 0;
+                        let nowpages = 1;
+                        const charge = $("#charge")
+                        const item = $(".nav-item");
+                        const pane = $(".tab-pane");
 
-        RefreshRecord();
+                        RefreshRecord();
 
-        $("#chargebtn").click(function () {
-            if (parseInt(charge.val()) > 0) {
-                $.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
-                    if (data != null) {
-                        $("#balanceHave").text(data);
-                    }
-                    charge.val("");
-                })
-                item.removeClass("active");
-                $("#0").addClass("active");
-                currentFilter = 0;
-                nowpages = 1;
-                RefreshRecord();
-            }
-        })
+                        $("#chargebtn").click(function () {
+                            if (parseInt(charge.val()) > 0) {
+                                
+                                //$.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
+                                //    if (data != null) {
+                                //        $("#balanceHave").text(data);
+                                //    }
+                                //    charge.val("");
+                                //})
+                                let checkoutItems = [];
+                                const productName = "儲值金：" + charge.val();
+                                const productPrice = charge.val();
+                                
+                                checkoutItems.push(productName);
+                                checkoutItems.push(productPrice);
+                                console.log(checkoutItems);
 
-        item.click(function (event) {
-            item.removeClass("active");
-            $(this).addClass("active");
-            currentFilter = parseInt($(this).attr("id"));
-            nowpages = 1;
-            RefreshRecord();
-        })
+                                $.post("/Member/OPayCheckout", { checkoutItems: checkoutItems }, function (data) {
+                                    if (data != null) {
+                                        $("input[name='MerchantTradeNo']").val(data.tradeNO);
+                                        $("input[name='MerchantTradeDate']").val(data.tradeDate);
+                                        $("input[name='TotalAmount']").val(data.totalAmount);
+                                        $("input[name='ItemName']").val(data.itemName);
+                                        $("input[name='ClientBackURL']").val(data.clientBackURL);
+                                        $("input[name='CheckMacValue']").val(data.checkMacValue);
+                                    }
+                                })
 
-        function PageFill(data) {
-            let pagecount = Math.ceil(data / 10);
-            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
-            let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
-            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
-            for (let i = startpage; i <= endpage; i++) {
-                if (i == nowpages) {
-                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
-                }
-                else {
-                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
-                }
-            }
-        }
+                                $('#confirmCheckout').modal('show');
 
-        $(document).on("click", ".orderpagenumclick", function () {
-            nowpages = $(this).html();
-            RefreshRecord();
-            console.log(nowpages);
-        })
+                                item.removeClass("active");
+                                $("#0").addClass("active");
+                                currentFilter = 0;
+                                nowpages = 1;
+                                RefreshRecord();
+                            }
+                        })
 
-        $("#orderpagedown").click(function () {
-            let pagescount = $(".orderpagenumclicklist").length;
-            nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
-            RefreshRecord();
-            console.log(nowpages);
-        })
+                        item.click(function (event) {
+                            item.removeClass("active");
+                            $(this).addClass("active");
+                            currentFilter = parseInt($(this).attr("id"));
+                            nowpages = 1;
+                            RefreshRecord();
+                        })
 
-        $("#orderpageup").click(function () {
-            nowpages = Math.max(parseInt(nowpages) - 1, 1);
-            RefreshRecord();
-            console.log(nowpages);
-        })
-
-        function RefreshRecord() {
-            $.post(`BalanceInfo`, { status: currentFilter, nowpages: nowpages}, function (data) {
-                $("#nav-tabContent").html("");
-                res = "";
-                if (data.length>0) {
-                    for (let i = 0; i < data.length; i++) {
-                        res += `
-                    <div class="d-flex justify-content-between" id="nav-tabItemBox">
-                        <div class="row" id="nav-tabItemBody">
-                            <div id="nav-tabItemTitle">`;
-                        res += data[i].recordReason;
-                        res += `</div>
-                            <div id="nav-tabItemDate">`;
-                        res += data[i].recordDate;
-                        res += `</div>
-                        </div>
-                        <div class="d-flex justify-content-start align-items-center" id="nav-tabItemAmount">
-                            <img src="/img/ShaShaCoin.png" />
-                            <div class="d-flex">`;
-                        if (data[i].recordMoney > 0) {
-                            res+="+"
+                        function PageFill(data) {
+                            let pagecount = Math.ceil(data / 10);
+                            let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+                            let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+                            $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+                            for (let i = startpage; i <= endpage; i++) {
+                                if (i == nowpages) {
+                                    $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                                }
+                                else {
+                                    $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
+                                }
+                            }
                         }
-                        res += data[i].recordMoney;
-                        res += `</div></div></div>`;
-                    }
-                    PageFill(data[0].balanceCount);
-                }
-                else {
-                    res = `<div class="d-flex justify-content-between">尚無交易紀錄</div>`;
-                    PageFill(1);
-                }
-                $("#nav-tabContent").html(res);
-            })
-        }
-    </script>
 
-}
+                        $(document).on("click", ".orderpagenumclick", function () {
+                            nowpages = $(this).html();
+                            RefreshRecord();
+                            console.log(nowpages);
+                        })
+
+                        $("#orderpagedown").click(function () {
+                            let pagescount = $(".orderpagenumclicklist").length;
+                            nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
+                            RefreshRecord();
+                            console.log(nowpages);
+                        })
+
+                        $("#orderpageup").click(function () {
+                            nowpages = Math.max(parseInt(nowpages) - 1, 1);
+                            RefreshRecord();
+                            console.log(nowpages);
+                        })
+
+                        function RefreshRecord() {
+                            $.post(`BalanceInfo`, { status: currentFilter, nowpages: nowpages }, function (data) {
+                                $("#nav-tabContent").html("");
+                                res = "";
+                                if (data.length > 0) {
+                                    for (let i = 0; i < data.length; i++) {
+                                        res += `
+                                        <div class="d-flex justify-content-between" id="nav-tabItemBox">
+                                            <div class="row" id="nav-tabItemBody">
+                                                <div id="nav-tabItemTitle">`;
+                                        res += data[i].recordReason;
+                                        res += `</div>
+                                                <div id="nav-tabItemDate">`;
+                                        res += data[i].recordDate;
+                                        res += `</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start align-items-center" id="nav-tabItemAmount">
+                                                <img src="/img/ShaShaCoin.png" />
+                                                <div class="d-flex">`;
+                                        if (data[i].recordMoney > 0) {
+                                            res += "+"
+                                        }
+                                        res += data[i].recordMoney;
+                                        res += `</div></div></div>`;
+                                    }
+                                    PageFill(data[0].balanceCount);
+                                }
+                                else {
+                                    res = `<div class="d-flex justify-content-between">尚無交易紀錄</div>`;
+                                    PageFill(1);
+                                }
+                                $("#nav-tabContent").html(res);
+                            })
+                        }
+                    </script>
+
+                }
