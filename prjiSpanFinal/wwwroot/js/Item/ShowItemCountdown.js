@@ -1,5 +1,5 @@
 ﻿
-let biddingIDs = [];
+
 
 let connection3 = new signalR.HubConnectionBuilder().withUrl("/selectedBiddingItemsCountdownHub").build();
 
@@ -14,6 +14,8 @@ connection3.on("ShowItemCountdown", function (remainingTimes, ids) {
     });
 });
 
+
+let biddingIDs = [];
 connection3.start().then(function () {
     console.log("connect3 start");
     $(".biddingItemLayout").each(function () {

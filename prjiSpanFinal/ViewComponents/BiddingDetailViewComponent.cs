@@ -17,6 +17,7 @@ namespace prjiSpanFinal.ViewComponents
             {
                 biddingDetail = i,
                 member = i.Member,
+                biddingType = i.BiddingType
             }).ToList();
 
             return View(biddingDetails);
