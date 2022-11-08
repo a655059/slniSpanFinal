@@ -42,18 +42,6 @@
 
 @section Scripts {
     <script>
-        let submit=document.getElementById("submit");
-        submit.addEventListener("click",function(){
-             let inputs = document.querySelectorAll(".form-control");
-            for(let i of inputs){
-                let v=i.value
-                console.log(`  |${v}|  `)
-                if(!(i.value)){
-                    event.preventDefault();
-                    alert("請完整填入內容!");
-                    break;
-                }
-            }
-        })
+       
     </script>
 }
