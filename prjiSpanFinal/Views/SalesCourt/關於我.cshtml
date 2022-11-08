@@ -12,6 +12,7 @@
     var allstarcount = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == Model.Memberid).Count();
 
     var avgstar = allstar / allstarcount;
+    
 
     var custcategory = dbContext.CustomizedCategories.Where(a => a.MemberId == Model.Memberid).ToList();
 
@@ -75,13 +76,13 @@
 
         <div class="row" style="font-size:1.4em">
             <div class="col-6">
-                <div class="text-warning" style="font-size:1.5em">付款方式</div>
+                <div class="text-warning" style="font-size:1.5em">運送方式</div>
                 @*想要先有寫死的圖片再根據對應到的陣列位置抓取直*@
 
                 @{
                     
-                    for (int i = 0; i < shippingmethod.Count(); i++) { 
-                        <img src="~/img/payment@(i).png" width="40" height="40" class="mx-2" />
+                    for (int i = 0; i < 5; i++) { 
+                        <img src="~/img/salescourt/shipping@(i+1).png" width="40" height="40" class="mx-2" />
                         <span>@shippingmethod[i]</span>
                         <br/>
                     }
@@ -89,13 +90,13 @@
 
             </div>
             <div class="col-6">
-                <div class="text-warning" style="font-size:1.5em">運送方式</div>
+                <div class="text-warning" style="font-size:1.5em">付款方式</div>
 
 
                 @{
                     for (int i = 0; i < payingName.Count(); i++)
                     {
-                        <img src="~/img/payment@(i).png" width="40" height="40" class="mx-2" />
+                        <img src="~/img/salescourt/paying@(i+1).png" width="40" height="40" class="mx-2" />
                         //-<img src="@images[i]" class="cardImg rounded-circle" alt="..." width="120" />
                         <span>@payingName[i]</span>
                         <span>:</span>
@@ -247,6 +248,7 @@
             if (data.checkbox[13] == true) {
                 afterserve = afterserve + `14`;
             }
+            if (data.checkbox[11] == true || data.checkbox[12] == true || data.checkbox[13] == true)
             afterserve = afterserve + `天猶豫期退貨權益<br/>`;
             if (data.checkbox[14] == true) {
                 afterserve = afterserve + `商品退貨須為全新狀態且完整包裝<br/>`;
