@@ -32,16 +32,5 @@
 
 @section Scripts {
     <script>
-        let inputs = $(".form-control");
-        let submit = document.getElementById('submit');
-        submit.addEventListener("click", function (event) {
-            for (let inp of inputs) {
-                if (!(inp.value)) {
-                    event.preventDefault();
-                    alert("請完整填入內容!");
-                    break;
-                }
-            }
-        });
     </script>
 }
