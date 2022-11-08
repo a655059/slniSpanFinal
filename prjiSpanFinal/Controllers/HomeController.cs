@@ -57,20 +57,23 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult redirectProdLink(int id)
         {
-            var a = _db.AdtoProducts.Where(a => a.IsSubActive && a.ProductId == id).FirstOrDefault();
-            if (a != null) {
-                if (Request.Cookies["Click" +a.ProductId]!=null)
+            var a = _db.AdtoProducts.Where(a => a.IsSubActive && a.ProductId == id);
+            if (a.Any()) {
+                if (Request.Cookies["Click" +a.First().ProductId]!=null)
                 {
                     return Json(0);
                 }
                 else
                 {
                     TimeSpan TS = TimeSpan.FromMinutes(10);
-                    Response.Cookies.Append("Click" + a.ProductId, "ClickClicked", new CookieOptions { MaxAge = TS, });
-                    a.ClickTimes += 1;
-                    _db.SaveChanges();
+                    Response.Cookies.Append("Click" + a.First().ProductId, "ClickClicked", new CookieOptions { MaxAge = TS, });
+                    foreach(var ads in a)
+                    {
+                        ads.ClickTimes += 1;
+                    }
                 }
             }
+            _db.SaveChanges();
             return Json(0);
         }
         private void isExpo(List<CShowBBItem> list)
@@ -85,13 +88,17 @@ namespace prjiSpanFinal.Controllers
                     }
                     TimeSpan TS = TimeSpan.FromMinutes(10);
                     Response.Cookies.Append("Expo"+item.product.ProductId,"ExpoClicked",new CookieOptions { MaxAge=TS,});
-                    AdtoProduct p = _db.AdtoProducts.Where(p => p.ProductId == item.product.ProductId&&p.IsSubActive).FirstOrDefault();
-                    if (p != null)
+                    List<AdtoProduct> p = _db.AdtoProducts.Where(p => p.ProductId == item.product.ProductId&&p.IsSubActive).ToList();
+                    if (p.Any())
                     {
-                        p.ExpoTimes += 1;
+                        foreach(var ads in p)
+                        {
+                            ads.ExpoTimes += 1;
+                        }
                     }
-                    _db.SaveChanges();
+                    
                 }
+                _db.SaveChanges();
             }
         }
 
