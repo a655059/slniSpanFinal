@@ -1117,6 +1117,20 @@ namespace prjiSpanFinal.Controllers
 
             return View(/*cSubEventToProductViewModel*/);
         }
+
+        public IActionResult AddMoreProduct()
+        {
+            string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(memberString);
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var products = dbContext.Products.Where(i => i.MemberId == 26);
+            foreach (var a in products)
+            {
+                a.MemberId = member.MemberId;
+            }
+            dbContext.SaveChanges();
+            return Content("1");
+        }
     }
 }
 
