@@ -1172,19 +1172,7 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region EventCouponRegion
-        public IActionResult EventCouponCreate(int id)
-        {
-            ViewBag.Id = id;
-            return View();
-        }
-        [HttpPost]
-        public IActionResult EventCouponCreate(Coupon coupon)
-        {
-            iSpanProjectContext db = new();
-            db.Coupons.Add(coupon);
-            db.SaveChanges();
-            return RedirectToAction("CouponList");
-        }
+      
         public List<CouponViewModel> GetEventCouponsFromDatabase(int id, string keyword)
         {
             var db = new iSpanProjectContext();
@@ -1250,7 +1238,19 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
-
+        public IActionResult EventCouponCreate(int id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EventCouponCreate(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("EventCouponList", new { id = coupon.OfficialEventListId });
+        }
         #endregion
         #region subEventRegion
         public IActionResult subEventList(int id)
