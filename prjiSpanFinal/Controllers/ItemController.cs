@@ -435,7 +435,9 @@ namespace prjiSpanFinal.Controllers
                 {
                     BiddingId = biddingID,
                     MemberId = user.MemberId,
-                    Price = price
+                    Price = price,
+                    BiddingTime = DateTime.Now,
+                    BiddingTypeId = 2
                 };
                 dbContext.BiddingDetails.Add(biddingDetail);
                 dbContext.SaveChanges();
@@ -475,7 +477,9 @@ namespace prjiSpanFinal.Controllers
                             {
                                 BiddingId = biddingID,
                                 MemberId = a.MemberId,
-                                Price = currentPrice + bidding1.StepPrice
+                                Price = currentPrice + bidding1.StepPrice,
+                                BiddingTime = DateTime.Now,
+                                BiddingTypeId = 1,
                             };
                             dbContext.BiddingDetails.Add(biddingDetail1);
                             dbContext.SaveChanges();

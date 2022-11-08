@@ -10,5 +10,6 @@ namespace prjiSpanFinal.ViewModels.Item
     {
         public BiddingDetail biddingDetail { get; set; }
         public MemberAccount member { get; set; }
+        public BiddingType biddingType { get; set; }
     }
 }
