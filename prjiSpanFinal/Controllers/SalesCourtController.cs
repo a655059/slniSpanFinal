@@ -576,8 +576,8 @@ namespace prjiSpanFinal.Controllers
                     //link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
                     buyername = p.Order.Member.MemberAcc,
                     sellername = p.ProductDetail.Product.Member.MemberAcc,
-                    commentcontent = p.Order.CommentForCustomers.Select(b => b.Comment).ToList(),
-                    commentstar = p.Order.CommentForCustomers.Select(b => b.CommentStar).ToList(),
+                    commentcontent = p.Order.CommentForCustomers.Select(b => b.Comment).FirstOrDefault(),
+                    commentstar = p.Order.CommentForCustomers.Select(b => b.CommentStar).FirstOrDefault(),
                 }).ToList();
 
                 if (mode == 0)
@@ -591,17 +591,20 @@ namespace prjiSpanFinal.Controllers
                 //優良
                 else if (mode == 2)
                 {
+                    q = q.Where(a => a.commentstar == 5).ToList();
                     //foreach(var item in q)
                     //q = q.Where(a => a.commentstar.c).ToList();
                 }
                 //普通
                 else if (mode == 3)
                 {
+                    q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
                     //q = q.Where(a => a.commentstar == 4 || a.commentstar == 3).ToList();
                 }
                 //差勁
                 else
                 {
+                    q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
                     //q = q.Where(a => a.commentstar == 2 || a.commentstar == 1).ToList();
                 }
 

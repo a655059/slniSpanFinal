@@ -278,14 +278,14 @@
                                     <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
                                     <div>
                                         <img src="~/img/greencircle.png" width="20" />
-                                        <span class="text-dark" style="font-size:1.5em">賣家:${data[i].sellername}</span>
+                                        <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
                                     </div>
                                     <div class="dashed-divider"></div>
                                     <div class="ps-2" style="font-size:1.5em">
-                                    <a class="linknoline text-primary" href="">${data[i].buyername}</a>
+                                    <a class="linknoline text-primary" href="">${data[i].sellername}</a>
                                     </div>
 
-                                    <div class="my-2 text-dark" style="font-size:1.5em"></div>
+                                    <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
                                     </div>`
                 }
                 return card;
@@ -302,12 +302,13 @@
                     if (data.list.length > 0) {
                         if (buyerorseller == 1) {
                             $("#commentlist").append(cmCard(data.list));
-                            PageNumFill(data.count);
+                            
                         }
                         else {
                             $("#commentlist").append(cmsellerCard(data.list));
-                            PageNumFill(data.count);
+                            
                         }
+                        PageNumFill(data.count);
                     }
                     else {
                         PageNumFill(0);
