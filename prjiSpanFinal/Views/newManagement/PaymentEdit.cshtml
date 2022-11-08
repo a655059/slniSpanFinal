@@ -36,16 +36,5 @@
 
 @section Scripts {
     <script>
-      let submit=document.getElementById("submit");
-      let inputs = document.querySelectorAll(".form-control");
-        submit.addEventListener("click",function(){
-            for(let i of inputs){
-                if(!(i.value)){
-                    event.preventDefault();
-                    alert("請完整填入內容!");
-                    break;
-                }
-            }
-        })
      </script>
 }

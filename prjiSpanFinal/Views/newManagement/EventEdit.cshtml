@@ -66,7 +66,6 @@
         });
 
         document.getElementById("submit").addEventListener("click",function(){
-         
         const ABC = $('#EventPic').val();
         console.log($('#EventPic').val());
         if(!ABC){
@@ -75,17 +74,5 @@
            return;
         }
         })
-        let submit=document.getElementById("submit");
-        let Inputs=document.querySelectorAll(".form-control");
-        submit.addEventListener("click",function(){
-         for(let I of Inputs){
-            if(!I.values){
-             event.preventDefault();
-             alert("所有欄位皆是必填!")
-             return;
-            }
-        }
-        })
-       
     </script>
 }

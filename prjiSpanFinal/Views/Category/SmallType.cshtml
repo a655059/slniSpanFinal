@@ -5,6 +5,7 @@
 
 }
 @section Styles{
+    <link href="~/css/ADitem.css" rel="stylesheet" />
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link href="~/css/WebAD/LargeAD.css" rel="stylesheet" />
@@ -149,6 +150,7 @@
         let SmalltypeId = parseInt("@Model.SearchSmallType.SmallTypeId");
         let menu = document.getElementById("dropdownMenuLink");
 
+        CallgetJSON();
         $(".SortOrder").click(function (event) {
 
             let target = $(event.target);
@@ -188,11 +190,9 @@
                 CallgetJSON();
             }
         })
-        jQuery.postJSON = function (url, data, callback) {
-            jQuery.post(url, data, callback, "json");
-        };
+
         function CallgetJSON() {
-            $.postJSON(`/Category/SmallTypeSort`, { id: SmalltypeId, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
+            $.post(`/Category/SmallTypeSort`, { id: SmalltypeId, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("") ;
                 if (data.length > 0) {
                     $("#OriginShowItem").append(Items(data));
@@ -206,45 +206,69 @@
         function Items(data) {
             let item = "";
             for (let i = 0; i < data.length; i++) {
+                var sub1 = "";
+                var sub1BG = "";
+                if (data[i].effects.includes(1)) {
+                    sub1 = "SubAD1";
+                    sub1BG = "SubAD1BG";
+                }
+                var sub2 = "";
+                var sub2BG = "";
+                if (data[i].effects.includes(2)) {
+                    sub2 = "SubAD2";
+                    sub2BG = "SubAD2BG";
+                }
+                var sub3 = "";
+                var sub3BGbox = "";
+                if (data[i].effects.includes(3)) {
+                    sub3 = "SubAD3";
+                    sub3BGbox = "SubAD3BGBox";
+                }
+
                 let productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
-                item = item+  `<div class="sellsitem">
-                           <a class="linknoline" href="${productLink}">`;
+                item += `<div class="sellsitem ${sub1BG} ${sub2}">`
+                if (data[i].effects.includes(3)) {
+                    item += `<div class="${sub3BGbox}">
+                            <img src="/img/Homepage/SellCrown.png" class="${sub3}" />
+                        </div>`
+                }
+                item += `<a class="linknoline sellsitem-imgbox" href="${productLink}">`;
+
                 if (data[i].pic != null)
                 {
 
-                    item = item + `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
+                    item += `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
                 }
                 else
                 {
-                    item = item +` <img src="#" class="cardImg" alt="此商品沒有圖片" />`
+                    item +=`<img src="/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />`
                 }
-                item = item + `</a><div class="px-1 d-flex flex-column justify-content-between" >
-<div class="cardTitleBox">
-                        <div class="cardTitle"> ${ data[i].product.productName}</div></div>`
+                item += `<div class="px-1 d-flex flex-column justify-content-between cardInfoArea ${sub1BG} ${sub2BG}"><div class="cardTitleBox">
+    <div class="cardTitle ${sub1}">${ data[i].product.productName}</div></div>`
                 if (data[i].price.length == 1)
                     {
-                    item = item + `<div class="cardPrice">$` +`${Math.round(data[i].price[0])}</div>`
+                    item += `<div class="cardPrice ${sub1}">$` +`${Math.round(data[i].price[0])}</div>`
                     }
                     else
                     {
-                        item = item + `<div class="cardPrice">$`+`${Math.round(data[i].price[0])} - $`+`${Math.round(data[i].price[1])}</div>`
-                    }
+                    item += `<div class="cardPrice ${sub1}">$`+`${Math.round(data[i].price[0])} - $`+`${Math.round(data[i].price[1])}</div>`
+                }
 
-            item = item +
-                `<div class="cardInfo d-flex justify-content-between flex-row">
-                    <div class="starBox mt-1">
-                        <div class="d-flex justify-content-start">
-                            <div class="starImg">
-                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                item += `<div class="cardInfo d-flex justify-content-between flex-row">
+                        <div class="starBox mt-1">
+                            <div class="d-flex justify-content-start">
+                                <div class="starImg">
+                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                </div>
+                                <div class="${sub1}">${data[i].starCount.toFixed(1)}</div>
                             </div>
-                            <div class="text-black">${data[i].starCount.toFixed(1)}</div>
                         </div>
+                        <div class="text-end sells ${sub1}">已賣出<span>${data[i].salesVolume}</span></div>
+
                     </div>
-                    <div class="text-end text-black-50 sells">已賣出<span>${data[i].salesVolume}</span></div>
                 </div>
-            </div>
-        </div>
-    `}
+            </div>`;
+            }
             return item;
         }
 

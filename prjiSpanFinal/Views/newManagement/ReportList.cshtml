@@ -92,13 +92,13 @@
                         if (item.Report.ReportStatusId == 1||item.Report.ReportStatusId==6)
                         {
                                 @Html.ActionLink("未違反規定", "ReportDelete", "newManagement",new {  id=item.Report.ReportId},
-                new{name=item.Report.ReportId,@class="btn btn-outline-danger Delete mt-1"})
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Delete mt-1 me-1"})
                                     @Html.ActionLink("給予賣家警告", "ReportWarning", "newManagement",new {  id=item.Report.ReportId},
-                new{name=item.Report.ReportId,@class="btn btn-outline-danger Warning mt-1"})
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Warning mt-1 me-1"})
                                     @Html.ActionLink("下架該產品", "ReportServere", "newManagement",new {  id=item.Report.ReportId},
-                new{name=item.Report.ReportId,@class="btn btn-outline-danger Servere mt-1"})
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Servere mt-1 me-1"})
                                     @Html.ActionLink("停權該賣家帳戶", "ReporStop", "newManagement",new {  id=item.Report.ReportId},
-                new{name=item.Report.ReportId,@class="btn btn-outline-danger Stop mt-1"})
+                new{name=item.Report.ReportId,@class="btn btn-outline-danger Stop mt-1 me-1"})
                         }
                         else
                         {

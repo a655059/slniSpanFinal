@@ -80,4 +80,12 @@
     color: black;
     font-weight: bold;
 }
+.sellsitem .SubAD3BGBox {
+    transform: rotate(0deg);
+    top: -1rem;
+    left: -0.8rem;
+}
+.sellsitem .SubAD3 {
+    width:50%;
+}
 

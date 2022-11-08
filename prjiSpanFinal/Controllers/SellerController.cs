@@ -1118,6 +1118,7 @@ namespace prjiSpanFinal.Controllers
             return View(/*cSubEventToProductViewModel*/);
         }
 
+
         public IActionResult AddMoreProduct()
         {
             string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
@@ -1130,6 +1131,79 @@ namespace prjiSpanFinal.Controllers
             }
             dbContext.SaveChanges();
             return Content("1");
+
+        public IActionResult ADdemo1() {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            for (int i= 1; i < 6; i++)
+            {
+                Product prod = new Product
+                {
+                    ProductName = "牛角麵包" + i,
+                    SmallTypeId = 90,
+                    MemberId = memId,
+                    RegionId = 362,
+                    Description = "好吃好吃麵包",
+                    ProductStatusId = 0,
+                    EditTime = DateTime.Now,
+                    CustomizedCategoryId = 1
+                };
+                _db.Products.Add(prod);
+                _db.SaveChanges();
+                ProductDetail prode = new ProductDetail
+                {
+                    ProductId = prod.ProductId,
+                    Style = "大紅",
+                    Quantity = 777,
+                    UnitPrice = 100,
+                };
+                _db.ProductDetails.Add(prode);
+                _db.SaveChanges();
+            }
+            return Json(0);
+        }
+        public IActionResult ADdemo2()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            var prod = _db.Products.Where(p => p.MemberId == memId).OrderByDescending(p => p.ProductId).Take(5);
+            foreach(var p in prod)
+            {
+                AdtoProduct ad = new AdtoProduct
+                {
+                    ProductId=p.ProductId,
+                    AdId = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                };
+                AdtoProduct ad2 = new AdtoProduct
+                {
+                    ProductId = p.ProductId,
+                    AdId = 4,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                };
+                AdtoProduct ad3 = new AdtoProduct
+                {
+                    ProductId = p.ProductId,
+                    AdId = 7,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                    AdSlogan="好吃的牛角族麵包！",
+                };
+                _db.AdtoProducts.Add(ad);
+                _db.AdtoProducts.Add(ad2);
+                _db.AdtoProducts.Add(ad3);
+            }
+            _db.SaveChanges();
+            return Json(0);
         }
     }
 }

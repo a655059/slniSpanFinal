@@ -9,6 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button id="demo" class="btn btn-success">demo</button>
         <form asp-action="FAQCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -20,19 +21,19 @@
                     @{
                         foreach (var i in ViewBag.FAQTypes)
                         {
-                            <option value="@i.FaqtypeId">@i.FaqtypeName</option>
+                                            <option value="@i.FaqtypeId">@i.FaqtypeName</option>
                         }
                     }
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="Question" class="control-label">問題</label>
-                <textarea name="Question" class="form-control"></textarea>
+                <textarea name="Question" class="form-control" id="Question"></textarea>
                 <span asp-validation-for="Question" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Answer" class="control-label">答案</label>
-                <textarea name="Answer" class="form-control"></textarea>
+                <textarea name="Answer" class="form-control" id="Answer"></textarea>
                 <span asp-validation-for="Answer" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -48,16 +49,12 @@
 
 @section Scripts {
     <script>
-    let inputs = $(".form-control");
-    let submit = document.getElementById('submit');
-    submit.addEventListener("click", function (event) {
-        for (let inp of inputs) {
-            if (!(inp.value)) {
-                event.preventDefault();
-                alert("請完整填入內容!");
-                break;
-            }
-        }
+    let demo=document.getElementById("demo");
+    demo.addEventListener("click",function(){
+        let Question=document.getElementById("Question");
+        let Answer = document.getElementById("Answer");
+        Question.value="我忘記帳號了怎麼辦?";
+        Answer.value="忘記帳號時請撥打客服電話，經身分比對後方可提供帳號給您。"
     })
     </script>
 }

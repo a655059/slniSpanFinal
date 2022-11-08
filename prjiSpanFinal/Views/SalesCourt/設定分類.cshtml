@@ -49,6 +49,15 @@
 <button type="button" id="btncreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     新增類別輸入框
 </button>
+
+<button type="button" id="btnDemo" class="btn btn-warning" >
+    Demo
+</button>
+
+<button type="button" id="btnProduct" class="btn btn-secondary">
+    DemoProduct
+</button>
+
 <form class="" method="post" enctype="multipart/form-data" name="setcat" id="setcat">
     <input type="hidden" name="Memberid" value="@Model.MemberId" id="@Model.MemberId">
     @*原本的欄位*@
@@ -113,6 +122,7 @@
     <script>
         /*let count = 0;*/
         let sortmax = 0;
+        let custname = [ "有機", "卷鬚", "葉菜" ,"熱火焰","茼蒿","雷夢"];
 
         let save = document.getElementById("save");
         /*let save_alter = document.getElementById("save");*/
@@ -138,6 +148,32 @@
         $("#btncreate").click(function () {   /*當modal打開要清空輸入欄位*/
             $("#text3").val("");
         })
+
+        $("#btnDemo").click(function () {
+            for (let i = 0; i < custname.length; i++) {
+                $("tbody").append(`
+                <tr class="custtr" draggable="true">
+                <td class="sortnum">${++sortmax}</td>
+                <td>${0}</td>
+                <td class="custtext">${custname[i]}</td>
+                <td>
+                <button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button>
+                </td>
+                </tr>`);
+
+            }
+
+
+        })
+
+        $("#btnProduct").click(function () {
+            $.getJSON("/SalesCourt/AddCustomProduct", { id: @Model.MemberId}, function (data) {
+                console.log(data);
+
+            });
+
+        })
+
 
         $("#save").click(function () {     /*當modal按下儲存會關掉*/
             $("tbody").append(`

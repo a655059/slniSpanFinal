@@ -113,6 +113,7 @@
             </div>
         </div>
         <button type="button" class="btn btn-light" id="deletMylike">編輯</button>
+        <button type="button" class="btn btn-success" id="randomLike">按讚50個商品</button>
         <button type="button" class="btn btn-info" id="subtn" style="display:none;">送出</button>
         <div class="itemcol" id="OriginShowItem">
 
@@ -133,6 +134,9 @@
             }
 
         </div>
+        <br />
+        <br />
+        <br />
         <div class="row " id="divPage">
             <div class="d-flex justify-content-center">
                 <select style="width:150px" class="form-select form-select-lg mb-3" id="pagecountselect" aria-label=".form-select-lg example">
@@ -185,7 +189,18 @@
         const subtn = document.querySelector("#subtn")
         const pagecountselect = document.querySelector("#divPage")
         let ArrpdID = [];
-
+        //按讚50個商品
+        $("#randomLike").click(function () {
+            $.post('/member/creat50Like', function (data) {
+                if (data == "OK") {
+                    alert("新增成功");
+                    reloaditem();
+                } else {
+                    alert("新增失敗");
+                    reloaditem();
+                }
+            })
+        })
 
         //換頁
         function reloaditem() {
@@ -319,7 +334,7 @@
                 }
 
             }
-            
+
             $.getJSON(`/Member/AllLike`, { filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
@@ -371,11 +386,7 @@
         jQuery.postJSON = function (url, data, callback) {
             jQuery.post(url, data, callback, "json");
         };
-        //$(".ordernavtabs").click(function (event) {
-        //    tabid = $(event.currentTarget).siblings("input").val();
-        //    $(event.currentTarget).addClass("active");
-        //    $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-        //})
+        //所有商品
         function CallgetJSON() {
             $.postJSON(`/Member/AllLike`, {filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
                 $("#OriginShowItem").html("");
@@ -387,7 +398,7 @@
                 }
             })
         }
-        
+
                 function Items(data) {
             let item = "";
             for (let i = 0; i < data.length; i++) {

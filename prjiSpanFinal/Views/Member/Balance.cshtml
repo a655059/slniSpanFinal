@@ -10,7 +10,11 @@
 }
 
 <vc:member-ui></vc:member-ui>
-<h2 class="d-flex justify-content-center">儲值金</h2>
+<h2 class="d-flex justify-content-center">
+    儲值金
+    <span class="btn btn-primary" id="BalanceDemo1">Demo紀錄</span>
+    <span class="btn btn-danger" id="BalanceDemo2">回到廣告</span>
+</h2>
 <div id="orderdetaildiv">
     <div class="row ">
         <div class="col-1"></div>
@@ -121,19 +125,12 @@
 
                         $("#chargebtn").click(function () {
                             if (parseInt(charge.val()) > 0) {
-                                //$.post(`BalanceCharge`, { pay: charge.val() }, function (data) {
-                                //    if (data != null) {
-                                //        $("#balanceHave").text(data);
-                                //    }
-                                //    charge.val("");
-                                //})
                                 let checkoutItems = [];
                                 const productName = "儲值金：" + charge.val();
                                 const productPrice = charge.val();
 
                                 checkoutItems.push(productName);
                                 checkoutItems.push(productPrice);
-                                console.log(checkoutItems);
 
                                 $.post("/Member/OPayCheckout", { checkoutItems: checkoutItems }, function (data) {
                                     if (data != null) {
@@ -185,20 +182,17 @@
                         $(document).on("click", ".orderpagenumclick", function () {
                             nowpages = $(this).html();
                             RefreshRecord();
-                            console.log(nowpages);
                         })
 
                         $("#orderpagedown").click(function () {
                             let pagescount = $(".orderpagenumclicklist").length;
                             nowpages = Math.min(parseInt(nowpages) + 1, pagescount);
                             RefreshRecord();
-                            console.log(nowpages);
                         })
 
                         $("#orderpageup").click(function () {
                             nowpages = Math.max(parseInt(nowpages) - 1, 1);
                             RefreshRecord();
-                            console.log(nowpages);
                         })
 
                         function RefreshRecord() {
@@ -235,6 +229,15 @@
                                 $("#nav-tabContent").html(res);
                             })
                         }
+                        $("#BalanceDemo1").click(function () {
+                            $.post('/Member/BalanceDemo1').then(function () {
+                                location.reload();
+                            })
+                        })
+
+                        $("#BalanceDemo2").click(function () {
+                            location.href = '@Url.Content("~/Seller/AD")';
+                        })
                     </script>
 
                 }

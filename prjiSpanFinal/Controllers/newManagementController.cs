@@ -1172,19 +1172,7 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region EventCouponRegion
-        public IActionResult EventCouponCreate(int id)
-        {
-            ViewBag.Id = id;
-            return View();
-        }
-        [HttpPost]
-        public IActionResult EventCouponCreate(Coupon coupon)
-        {
-            iSpanProjectContext db = new();
-            db.Coupons.Add(coupon);
-            db.SaveChanges();
-            return RedirectToAction("CouponList");
-        }
+      
         public List<CouponViewModel> GetEventCouponsFromDatabase(int id, string keyword)
         {
             var db = new iSpanProjectContext();
@@ -1250,7 +1238,19 @@ namespace prjiSpanFinal.Controllers
             //填入頁面資料
             return View(PList);
         }
-
+        public IActionResult EventCouponCreate(int id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult EventCouponCreate(Coupon coupon)
+        {
+            iSpanProjectContext db = new();
+            db.Coupons.Add(coupon);
+            db.SaveChanges();
+            return RedirectToAction("EventCouponList", new { id = coupon.OfficialEventListId });
+        }
         #endregion
         #region subEventRegion
         public IActionResult subEventList(int id)
@@ -1670,6 +1670,13 @@ namespace prjiSpanFinal.Controllers
             };
             db.BigTypes.Add(type);
             db.SaveChanges();
+            SmallType st = new()
+            {
+                BigTypeId = type.BigTypeId,
+                SmallTypeName = "預設子類別",
+            };
+            db.SmallTypes.Add(st);
+            db.SaveChanges();
             return RedirectToAction("BigTypeList");
         }
         public IActionResult BigTypeEdit(int id)
@@ -1743,7 +1750,7 @@ namespace prjiSpanFinal.Controllers
             };
             db.SmallTypes.Add(st);
             db.SaveChanges();
-            return RedirectToAction("SmallTypeList");
+            return RedirectToAction("SmallTypeList", new {id=st.BigTypeId});
         }
         public IActionResult SmallTypeEdit(int id)
         {
@@ -1763,6 +1770,5 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("SmallTypeList");
         }
         #endregion
-
     }
 }
