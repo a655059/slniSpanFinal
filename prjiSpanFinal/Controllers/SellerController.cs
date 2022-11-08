@@ -1123,7 +1123,7 @@ namespace prjiSpanFinal.Controllers
             string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
             MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(memberString);
             iSpanProjectContext dbContext = new iSpanProjectContext();
-            var products = dbContext.Products.Where(i => i.MemberId == 26);
+            var products = dbContext.Products.Where(i => i.MemberId == 28);
             foreach (var a in products)
             {
                 a.MemberId = member.MemberId;
