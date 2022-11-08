@@ -297,6 +297,57 @@ namespace prjiSpanFinal.Controllers
           
         }
 
+        public IActionResult AddCustomProduct(int id) {
+            var cust = dbContext.Products.Where(a => a.MemberId == id).ToList();
+
+            foreach (var item in cust) {
+                if (item.ProductName.Contains("食用花") || item.ProductName.Contains("無農藥新鮮薄荷葉")
+                    || item.ProductName.Contains("隨機綜合生菜") || item.ProductName.Contains("新鮮無農藥芝麻葉")) {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("有機")).CustomizedCategoryId;
+
+                    item.CustomizedCategoryId = name;
+                }
+
+
+                else if (item.ProductName.Contains("小葉紅酸膜 / 盒裝") || item.ProductName.Contains("平葉巴西里/義大利巴西里 / 歐芹 (500g/包）")
+                    || item.ProductName.Contains("苜蓿芽 盒裝") || item.ProductName.Contains("新鮮無農藥綠捲鬚"))
+                {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("卷鬚")).CustomizedCategoryId;
+                    item.CustomizedCategoryId = name;
+                }
+
+                else if (item.ProductName.Contains("新鮮捲葉巴西里") || item.ProductName.Contains("綜合生菜盒 /健康蔬菜盒")
+                   || item.ProductName.Contains("紅橡木生菜 500g") || item.ProductName.Contains("紅火焰生菜 300g"))
+                {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("葉菜")).CustomizedCategoryId;
+                    item.CustomizedCategoryId = name;
+                }
+
+                else if (item.ProductName.Contains("香茅 1000g&500g") || item.ProductName.Contains("無農藥紅捲鬚 300g")
+                   || item.ProductName.Contains("新鮮綠火焰生菜300g") || item.ProductName.Contains("香料新鮮無農藥咖喱葉50g/包"))
+                {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("熱火焰")).CustomizedCategoryId;
+                    item.CustomizedCategoryId = name;
+                }
+                else if (item.ProductName.Contains("無農藥茵陳蒿/絨蒿葉") || item.ProductName.Contains("香料奧勒岡 50g/包。下單前請先詢問")
+                   || item.ProductName.Contains("紅包生每份500g ± 20g") || item.ProductName.Contains("南薑"))
+                {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("茼蒿")).CustomizedCategoryId;
+                    item.CustomizedCategoryId = name;
+                }
+                else if (item.ProductName.Contains("泰國檸檬葉100g/包") || item.ProductName.Contains("無農藥貝比生菜（大盒）")
+                   || item.ProductName.Contains("皺葉萵苣（1000g/包）") || item.ProductName.Contains("櫻桃蘿蔔 1 盒裝 300g"))
+                {
+                    var name = dbContext.CustomizedCategories.FirstOrDefault(a => a.CustomizedCategoryName.Equals("雷夢")).CustomizedCategoryId;
+                    item.CustomizedCategoryId = name;
+                }
+            }
+
+            dbContext.SaveChanges();
+
+            return Json(cust);
+        }
+
         public IActionResult 關於我(int id)
         {
             if(id.ToString().Equals(""))      getid();

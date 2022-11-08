@@ -80,12 +80,16 @@
                 @*想要先有寫死的圖片再根據對應到的陣列位置抓取直*@
 
                 @{
-                    
-                    for (int i = 0; i < 5; i++) { 
-                        <img src="~/img/salescourt/shipping@(i+1).png" width="40" height="40" class="mx-2" />
-                        <span>@shippingmethod[i]</span>
-                        <br/>
+                    if (shippingmethod != null)
+                    {
+                        for (int i = 0; i < shippingmethod.Count(); i++)
+                        {
+                            <img src="~/img/salescourt/shipping@(i+1).png" width="40" height="40" class="mx-2" />
+                            <span>@shippingmethod[i]</span>
+                            <br />
+                        }
                     }
+
                 }
 
             </div>
@@ -94,15 +98,19 @@
 
 
                 @{
-                    for (int i = 0; i < payingName.Count(); i++)
+                    if (payingName != null && payingFee != null)
                     {
-                        <img src="~/img/salescourt/paying@(i+1).png" width="40" height="40" class="mx-2" />
-                        //-<img src="@images[i]" class="cardImg rounded-circle" alt="..." width="120" />
-                        <span>@payingName[i]</span>
-                        <span>:</span>
-                        <span>@payingFee[i]</span>
-                        <br />
+                        for (int i = 0; i < payingName.Count(); i++)
+                        {
+                            <img src="~/img/salescourt/paying@(i+1).png" width="40" height="40" class="mx-2" />
+                            //-<img src="@images[i]" class="cardImg rounded-circle" alt="..." width="120" />
+                            <span>@payingName[i]</span>
+                            <span>:</span>
+                            <span>@payingFee[i]</span>
+                            <br />
+                        }
                     }
+
                 }
             </div>
         </div>

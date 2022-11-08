@@ -10,6 +10,9 @@
 }
 
 @section Styles{
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
     <style>
         .dashed-divider {
             height: 1px;
@@ -34,15 +37,16 @@
                 <div class="row">
 
                     <div class="col-4">
-                        @*<img src="~/img/member.png" width="150" class="m-3" />*@
-                        @{
 
-                            var base64Image = Convert.ToBase64String(Model.SellerPhoto);
-                            var source = String.Format("data:image/png;base64,{0}", base64Image);
+                        @if (Model.SellerPhoto != null)
+                        {
 
+                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.SellerPhoto)" class="cardImg rounded-circle" alt="..." width="120" />
                         }
-                        <img src="@source" class="cardImg" alt="..." width="120" />
-
+                        else
+                        {
+                            <img src="~/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />
+                        }
 
 
                         <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
@@ -256,18 +260,18 @@
                 let card = "";
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
-                                    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                                    <div>
-                                        <img src="~/img/greencircle.png" width="20" />
-                                        <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
-                                    </div>
-                                    <div class="dashed-divider"></div>
-                                    <div class="ps-2" style="font-size:1.5em">
-                                    <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
-                                    </div>
+                                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                                            <div>
+                                                <img src="~/img/greencircle.png" width="20" />
+                                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                                            </div>
+                                            <div class="dashed-divider"></div>
+                                            <div class="ps-2" style="font-size:1.5em">
+                                            <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
+                                            </div>
 
-                                    <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                                    </div>`
+                                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
+                                            </div>`
                 }
                 return card;
             }
@@ -275,25 +279,25 @@
                 let card = "";
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
-                                    <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                                    <div>
-                                        <img src="~/img/greencircle.png" width="20" />
-                                        <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
-                                    </div>
-                                    <div class="dashed-divider"></div>
-                                    <div class="ps-2" style="font-size:1.5em">
-                                    <a class="linknoline text-primary" href="">${data[i].sellername}</a>
-                                    </div>
+                                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                                            <div>
+                                                <img src="~/img/greencircle.png" width="20" />
+                                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                                            </div>
+                                            <div class="dashed-divider"></div>
+                                            <div class="ps-2" style="font-size:1.5em">
+                                            <a class="linknoline text-primary" href="">${data[i].sellername}</a>
+                                            </div>
 
-                                    <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                                    </div>`
+                                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
+                                            </div>`
                 }
                 return card;
             }
 
             load();
             function load() {
-                $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode ,pages:nowpages, eachpage:eachpage,buyerorseller:buyerorseller}, function (data) {
+                $.getJSON("/SalesCourt/GetComment", { id: CommentId.value, mode: mode, pages: nowpages, eachpage: eachpage, buyerorseller: buyerorseller }, function (data) {
                     console.log(data);
                     $("#commentlist").html("");
                     //for (let i = 0; i < data.length; i++) {
@@ -302,11 +306,11 @@
                     if (data.list.length > 0) {
                         if (buyerorseller == 1) {
                             $("#commentlist").append(cmCard(data.list));
-                            
+
                         }
                         else {
                             $("#commentlist").append(cmsellerCard(data.list));
-                            
+
                         }
                         PageNumFill(data.count);
                     }
@@ -332,7 +336,7 @@
                 }
             }
 
-            
+
             $("#sellercomment").click(function () {
                 buyerorseller = 1;
             })
@@ -352,7 +356,7 @@
             })
 
             $("#orderpagedown").click(function () {
-                
+
                 nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
                 load();
             })
