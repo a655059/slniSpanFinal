@@ -1131,6 +1131,7 @@ namespace prjiSpanFinal.Controllers
             }
             dbContext.SaveChanges();
             return Content("1");
+        }
 
         public IActionResult ADdemo1() {
             int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
