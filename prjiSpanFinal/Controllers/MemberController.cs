@@ -525,9 +525,9 @@ namespace prjiSpanFinal.Controllers
                     like.MemberId = memID;
                     like.ProductId = item.ProductId;
                     db.Likes.Add(like);
-                    db.SaveChanges();
+                    //db.SaveChanges();
                 }
-
+                db.SaveChanges();
                 return Content("OK", "text/plain", Encoding.UTF8);
             }
             else {
