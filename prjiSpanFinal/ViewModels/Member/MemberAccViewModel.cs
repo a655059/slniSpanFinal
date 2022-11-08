@@ -121,7 +121,7 @@ namespace prjiSpanFinal.ViewModels.Member
             string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             Random crandom = new Random();
             int sub1 = crandom.Next(2);
-            int sub2 = crandom.Next(10);
+            int sub2 = crandom.Next(8);
             string newpw= afterhash.Substring(sub1, sub2) + number.Substring(sub1, sub2)+ABC.Substring(sub2, sub1);
             //using (SHA256 mysha256 = SHA256.Create())
             //{

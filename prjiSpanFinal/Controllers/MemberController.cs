@@ -240,7 +240,8 @@ namespace prjiSpanFinal.Controllers
                 //return View(acc);
             }
         }
-        public IActionResult SendNewspaper(IFormFile newsimgphoto)
+        [HttpPost]
+        public IActionResult Newspaper(IFormFile newsimgphoto)
         {
             //後台新增發送電子報，另做一個view裡面可以輸入電子報要附的圖片
             try
@@ -250,9 +251,9 @@ namespace prjiSpanFinal.Controllers
                 var memEmail= db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Email);
                 MimeMessage message = new MimeMessage();
                 BodyBuilder builder = new BodyBuilder();
-                string picture = _host.ContentRootPath;
+                string picture = _host.WebRootPath+@"\img\活動.png";
                 //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
-                var image = builder.LinkedResources.Add(picture + @"wwwroot\img\活動.png");
+                var image = builder.LinkedResources.Add(picture);
 
                 //==>這裡可以放入圖片路徑
 
