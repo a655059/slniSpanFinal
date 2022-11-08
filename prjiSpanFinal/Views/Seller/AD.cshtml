@@ -907,6 +907,7 @@
             else {
                 isSearch = true;
             }
+            listNowpage = 1;
             activeFilter(filter1, filter2, sorted);
         })
 
@@ -952,6 +953,7 @@
             else {
                 $("#drop-filter1-title").text('效果');
             }
+            listNowpage = 1;
             activeFilter(filter1, filter2, sorted);
             return false;
         })
@@ -978,6 +980,7 @@
             else {
                 $("#drop-filter2-title").text('狀態');
             }
+            listNowpage = 1;
             activeFilter(filter1, filter2, sorted);
             return false;
         })
