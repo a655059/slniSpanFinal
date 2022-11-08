@@ -93,9 +93,14 @@
             <input type="file" name="itemPhotos" value="" id="itemPhoto" class="itemPhoto" style="opacity:0" accept="image/*" multiple required />
 
         </div>
-        <div class="d-flex justify-content-center">
-            <button type="button" class="clearAll btn btn-outline-danger mx-2">清除</button>
-            <button class="submit btn btn-warning ms-2">送出</button>
+        <div class="d-flex justify-content-between">
+            <div>
+                <button type="button" class="biddingItemUploadDemo btn btn-outline-success mx-2">Demo</button>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="clearAll btn btn-outline-danger mx-2">清除</button>
+                <button class="submit btn btn-warning ms-2">送出</button>
+            </div>
         </div>
     </form>
 </div>
@@ -171,5 +176,106 @@
                 $(".smallType").html(str);
             }
         })
+        $(".biddingItemUploadDemo").click(async function () {
+            $("input[name='itemName']").val("Google Pixel Watch 4G LTE + 藍牙 /Wi-Fi");
+            $(".bigType option:contains('手機平板與周邊')").prop("selected", true);
+            const response = await fetch("@Url.Content("~/Item/GetSmallType")" + `?bigTypeID=16`)
+            const data = await response.json();
+            if (data != null) {
+                $(".smallType").empty();
+                let str = "";
+                data.forEach(function (value, idx) {
+                    str += `<option value="${value.smallTypeId}">${value.smallTypeName}</option>`;
+                });
+                $(".smallType").html(str);
+            }
+            $(".smallType option:contains('穿戴裝置')").prop("selected", true);
+            $("input[name='startPrice']").val("8900");
+            $("input[name='stepPrice']").val("200");
+            $("input[name='startDate']").val("2022-11-08");
+            $("input[name='startTime']").val("14:00:00");
+            $("input[name='endDate']").val("2022-11-15");
+            $("input[name='endTime']").val("14:00:00");
+            $("textarea[name='description']").val(`商品特色：
+
+˙精美圓形凸面設計
+
+˙全新Wear OS by Google介面
+
+˙抗刮Corning Gorilla保護玻璃
+
+˙24小時持久電池續航力
+
+˙掌握睡眠、心率及活動監測
+
+· 4G LTE 不帶手機也無妨
+
+
+
+型號：GBZ4S
+
+配件：
+
+運動錶帶(大、小兩種尺寸)
+
+USB-C磁吸充電線
+
+快速入門指南
+
+NCC：CCAF214G0360T6
+
+保固期：原廠保固12個月
+
+產地(國家)：Google設計越南製造
+
+
+
+⭐️退換貨須知：
+
+
+
+★商品到貨隔日享蝦皮15天鑑賞(猶豫)期之權益【鑑賞(猶豫)期非試用期】，辦理退貨商品必須是完好狀態且需以本公司或特約商所使用的外包裝(紙箱或包裝袋)，妥善包裝後交付給前往取件的物流公司；若本公司或特約商的外包裝已經遺失，請您在商品原廠外盒外，再以其他適當的外盒進行包裝，請勿於商品原廠外盒上直接黏貼任何單據或書寫文字，否則將會影響退貨權限，此外也可能依照損毀程度扣除為回復原狀所必要的費用。⚠如上述之規範無法達成者, 將造成整新費用產生，造成不便懇請見諒 ⚠請您在尚未確認是否要保留商品前，不要拆封開機使用。
+
+
+
+★若主張15日鑑賞期，請您不要拆封商品並保持原狀。
+
+(※含包裝、配件、贈品等；產品一經拆封、註冊，非新品瑕疵問題，會向您收取原價30%的整新費)
+
+
+
+★3C相關商品，為一次性包裝商品，請務必確認有購買需求後再拆封。
+
+網頁商品會因為使用不同的品牌螢幕以及解析度不同，造成圖片顏色呈現略有不同，請以實品顏色為準。
+
+外盒膠膜或封條一經拆封/保固啟用/序號經登入註冊，一經開機並連上網路，便開啟原廠保固服務，將無法恢復商品原始出貨狀態。該商品無法全額退款及退換貨；若仍需退貨，會向您收取原價30%的整新費；如商品另有刮傷、缺件情形，將由人員依商品回收實際狀況進行聯繫報價。
+
+
+
+★如有活動相關贈品，結帳時請勾選並確認您所想要贈品選項，若下單未選擇您想要的商品，系統無法出貨也無補寄或換貨。
+
+
+
+⭐️代理商台灣大哥大客戶服務專線:
+
+⋆本賣場為銷售通路，如有產品技術面問題還煩請聯繫Google Support；若您有產品相關問題需即時回覆，請致電台哥大服務專線 : 0809-000-852 (免費), 02-66062999(付費)
+
+⋆商品皆為原廠直營公司貨，發票統一由蝦皮代為開立
+
+⋆如有購物相關問題，歡迎使用聊聊與我們聯繫
+
+
+
+⭐️您確認已閱讀前述說明並同意於此頁面下單視同同意本條款，不便之處敬請見諒謝謝。
+
+
+
+
+
+親愛的買家，
+
+由於超商/蝦皮店到店有相關超材重量限制 (材積：需 ≦ 45cm*30cm*30cm，最長邊 ≦ 45cm，其他兩邊則需均 ≦ 30cm；重量不得超過10公斤)，故選擇超商/蝦皮店到店取件，建議您下單1件商品為主，若下單商品超過2件(含)，建議選擇「蝦皮宅配」物流方式，以避免訂單因超材超重無法成立配送。材積標準依照各超商公告規定、物流配送方式依照實際賣場提供為準`);
+
+        });
     </script>
 }

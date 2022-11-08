@@ -76,6 +76,7 @@ namespace prjiSpanFinal.Controllers
                 var sellerCoupons = dbContext.Coupons.Where(i => i.MemberId == product.seller.MemberId).ToList();
                 var sellerCouponIDs = sellerCoupons.Select(i => i.CouponId).ToList();
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
+                
                 CItemIndexViewModel itemIndex = new();
                 itemIndex.product = product.product;
                 itemIndex.bigType = product.bigType;
@@ -109,6 +110,19 @@ namespace prjiSpanFinal.Controllers
                     {
                         itemIndex.Islike = false;
                     }
+                    int remainingQty = 0;
+                    if (productDetails.Count <= 1)
+                    {
+                        var qty = productDetails[0].Quantity;
+                        var qtyInCart = dbContext.OrderDetails.Where(i => i.ProductDetailId == productDetails[0].ProductDetailId && i.Order.MemberId == user.MemberId && i.Order.StatusId == 1).Select(i => i.Quantity);
+                        remainingQty = qty;
+                        if (qtyInCart.Count() != 0)
+                        {
+                            remainingQty = qty - qtyInCart.FirstOrDefault();
+                        }
+                    }
+
+                    itemIndex.remainingQty = remainingQty;
                     itemIndex.IsLogin = true;
                     itemIndex.user = user;
                     itemIndex.userCouponWallet = userCouponWallet;

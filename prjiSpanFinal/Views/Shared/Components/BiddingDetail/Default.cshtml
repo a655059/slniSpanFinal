@@ -39,7 +39,18 @@
                                 {
                                     <tr>
                                         <td>@i.member.MemberAcc<span class="ms-2">(</span>@i.count<span>)</span></td>
-                                        <td>@i.type</td>
+                                        @{ 
+                                            string biddingType = "";
+                                            if (i.type == "autoBidding")
+                                            {
+                                                biddingType = "自動出價";
+                                            }
+                                            else
+                                            {
+                                                biddingType = "直接出價";
+                                            }
+                                        }
+                                        <td>@biddingType</td>
                                         <td class="topBiddingPrice">$<span>@i.price</span></td>
                                         <td>1</td>
                                         <td>@i.time.ToString("yyyy-MM-dd HH:mm:ss")</td>
@@ -51,9 +62,18 @@
                         <tbody class="showBiddingDetail d-none">
                             @foreach (var i in Model)
                             {
+                                string biddingType2 = "";
+                                if (i.biddingType.BiddingTypeName == "autoBidding")
+                                {
+                                    biddingType2 = "自動出價";
+                                }
+                                else
+                                {
+                                    biddingType2 = "直接出價";
+                                }
                                 <tr>
                                     <td>@i.member.MemberAcc</td>
-                                    <td>@i.biddingType.BiddingTypeName</td>
+                                    <td>@biddingType2</td>
                                     <td class="topBiddingPrice">$<span>@i.biddingDetail.Price</span></td>
                                     <td>1</td>
                                     <td>@i.biddingDetail.BiddingTime</td>

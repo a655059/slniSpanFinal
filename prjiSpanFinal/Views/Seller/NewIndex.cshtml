@@ -58,6 +58,7 @@
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10 ">
         <h2 class="d-flex justify-content-center">我的商品</h2>
+        <button class="addMoreProduct btn btn-outline-success">Demo</button>
         <div class="d-flex justify-content-start mb-1">
             <div class="mx-2 input-group my-3 w-50">
                 <span class="input-group-text">商品名稱</span>
@@ -325,6 +326,18 @@
                     document.getElementById("changePages").innerHTML = pagenumber;
                 }
                 goPage(1, 5);
-                
+
+                $(".addMoreProduct").click(async function () {
+                    const response = await fetch("@Url.Content("~/Seller/AddMoreProduct")");
+                    const data = await response.text();
+                    if (data == "1") {
+                        Swal.fire("Demo商品新增成功");
+                    }
+                    else {
+                        Swal.fire("再試一次Demo鍵");
+                    }
+                })
+
+
             </script>
         }
