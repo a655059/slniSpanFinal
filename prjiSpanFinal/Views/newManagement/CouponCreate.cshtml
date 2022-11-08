@@ -97,10 +97,15 @@
         let ExpiredDate = document.getElementById("ExpiredDate");
         let CouponCode = document.getElementById("CouponCode");
         let ReceiveStartDate = document.getElementById("ReceiveStartDate");
+        let ReceiveEndDate = document.getElementById("ReceiveEndDate");
         let MinimumOrder = document.getElementById("MinimumOrder");
         let Datas = [CouponName, StartDate, ExpiredDate, CouponCode, ReceiveStartDate, MinimumOrder, Discounts];
         demo.addEventListener("click", function () {
-            Datas[0].value = "站主開心發優惠";
+            CouponName.value = "站主開心發優惠";
+            StartDate.value = "2022-11-08T11:33";
+            ExpiredDate.value = "2022-12-01T11:33";
+            ReceiveStartDate.value = "2022-11-08T11:33";
+            ReceiveEndDate.value = "2022-12-01T11:33";
             Datas[3].value = "USDPKR";
             Datas[5].value = "20";
             Discounts.value = "0.5";
