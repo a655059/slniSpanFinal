@@ -235,7 +235,7 @@
         const selSite = document.querySelector("#state")
         const selregion = document.querySelector("#region")
         const Demo = document.querySelector("#Demo")
-/*        const create = document.querySelector("#creat")*/
+        const create = document.querySelector("#creat")
 
         const help = document.querySelector("#NameHelp")
         const Acchelp = document.querySelector("#Acchelp")
@@ -255,6 +255,7 @@
         let file = null;
         let arraybuffer = null;
         let hasPic = false;
+
         //預覽圖片
         $("#memfile").on("change", function (eve) {
             file = this.files[0];
@@ -266,38 +267,16 @@
             reader.readAsDataURL(file);
         })
 
-
+        
         function myFunctionName(){
-            if (nameCheck && AccCheck && EmailCheck && PhoneCheck) {
+            if (AccCheck && EmailCheck && PhoneCheck) {
                 return true;
             }
             else {
                 return false;
             }
         }
-
-        textname.addEventListener("blur", async () => {
-            let responce = await fetch("@Url.Content("/member/CheckName")" + `?name=${textname.value}`)
-            let data = await responce.text()
-            if (data == "True") {
-                help.textContent = "已註冊";
-                nameCheck = false;
-                myFunctionName();
-                Swal.fire({
-                    icon: 'error',
-                    title: '錯誤',
-                    text: '姓名已註冊',
-                })
-            }
-            else {
-                help.textContent = "";
-                nameCheck = true;
-                myFunctionName();
-            }
-
-            }
-
-        )
+        //判別是否註冊過
         textAcc.addEventListener("blur", async () => {
             let responce = await fetch("@Url.Content("/member/CheckAccount")" + `?acc=${textAcc.value}`)
             let data = await responce.text()

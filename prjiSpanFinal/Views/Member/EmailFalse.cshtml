@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "EmailFalse";
+}
+
+<h1>EmailFalse</h1>
+
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    @*setTimeout("location.href='@Url.Content("~/member/login")'", 3000);*@
+        Swal.fire({
+            icon: 'error',
+            title: '錯誤',
+            text: '註冊信箱無效!',
+            footer: '<a href="">若欲成為正式會員，請聯繫客服人員!</a>'
+        }).then(function (result) { window.location.href = "@Url.ActionLink("login","Member")";})
+    </script>
+}

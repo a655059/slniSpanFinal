@@ -250,8 +250,10 @@ namespace prjiSpanFinal.Controllers
                 var memEmail= db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Email);
                 MimeMessage message = new MimeMessage();
                 BodyBuilder builder = new BodyBuilder();
+                string picture = _host.ContentRootPath;
+                //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
+                var image = builder.LinkedResources.Add(picture + @"wwwroot\img\活動.png");
 
-                var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
                 //==>這裡可以放入圖片路徑
 
                 string urll = $"{Request.Scheme}://{Request.Host}";
@@ -311,7 +313,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext db = new iSpanProjectContext();
             MemberAccount memberac = new MemberAccount();
             memberac = mem.memACC;//將物件memberac指向mem.memACC才可以透過viewmodel的地區string抓到id
-                                  //將檔案轉成二進位
+            //將檔案轉成二進位
             if (mem.File1 != null) 
             {                
             byte[] imgByte = null;
@@ -356,60 +358,66 @@ namespace prjiSpanFinal.Controllers
             {
                 memberac.Name = "會員";
             }
-            MimeMessage message = new MimeMessage();
-            BodyBuilder builder = new BodyBuilder();
-            //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
-            //==>這裡可以放入圖片路徑
-            var memID = db.MemberAccounts.FirstOrDefault(p => p.MemberAcc == memberac.MemberAcc).MemberId;
-            string s = "0123456789zxcvbnmasdfghjklqwertyuiop";
-            StringBuilder sb = new StringBuilder();
-            Random rand = new Random();
-            int index;
-            for (int i = 0; i < 5; i++)
+            try
             {
-                index = rand.Next(0, s.Length);
-                sb.Append(s[index]);
+                MimeMessage message = new MimeMessage();
+                BodyBuilder builder = new BodyBuilder();
+                //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\蝦到爆.png");
+                //==>這裡可以放入圖片路徑
+                var memID = db.MemberAccounts.FirstOrDefault(p => p.MemberAcc == memberac.MemberAcc).MemberId;
+                string s = "0123456789zxcvbnmasdfghjklqwertyuiop";
+                StringBuilder sb = new StringBuilder();
+                Random rand = new Random();
+                int index;
+                for (int i = 0; i < 5; i++)
+                {
+                    index = rand.Next(0, s.Length);
+                    sb.Append(s[index]);
+                }
+                HttpContext.Session.SetString(CDictionary.SK_MAILCHECK, sb.ToString());
+                string urll = $"{Request.Scheme}://{Request.Host}/Member/MemstChange/id?key={memID}";
+                //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
+                builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。請於20分鐘內驗證完成。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br/>" +
+                                   $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>" +
+                                   $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
+
+                //=>內容
+
+                message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
+                message.To.Add(new MailboxAddress(memberac.Name, memberac.Email));
+                message.Subject = "[C#蝦到爆商城(ShopDaoBao)]正式會員驗證信"; //==>標題
+                message.Body = builder.ToMessageBody();
+
+
+                using (SmtpClient client = new SmtpClient())
+                {
+                    client.Connect("smtp.outlook.com", 25, MailKit.Security.SecureSocketOptions.StartTls);
+                    //第二個參數是port
+                    //outlook.com smtp.outlook.com port:25
+                    //yahoo smtp.mail.yahoo.com.tw port:465
+                    //gmail smtp.gmail.com port:587
+                    client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+
+                //return Content("OK", "text/plain", Encoding.UTF8);
+                return RedirectToAction("LoginSuccess");
+
             }
-            HttpContext.Session.SetString(CDictionary.SK_MAILCHECK, sb.ToString());            
-            string urll = $"{Request.Scheme}://{Request.Host}/Member/MemstChange/id?key={memID}";
-            //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/ChangePwMail.cshtml");
-            builder.HtmlBody = $"<p>尊敬的會員您好：此封為驗證信。請於20分鐘內驗證完成。<br/><a href='{urll}'>請點選以下連結</a>。如果未有成為正式會員的需求，請忽略此信件。</p><br/>" +
-                               $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>" +
-                               $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
-
-            //=>內容
-
-            message.From.Add(new MailboxAddress("蝦到爆商城", "ShopDaoBao@outlook.com"));
-            message.To.Add(new MailboxAddress(memberac.Name, memberac.Email));
-            message.Subject = "[C#蝦到爆商城(ShopDaoBao)]正式會員驗證信"; //==>標題
-            message.Body = builder.ToMessageBody();
-
-
-            using (SmtpClient client = new SmtpClient())
-            {
-                client.Connect("smtp.outlook.com", 25, MailKit.Security.SecureSocketOptions.StartTls);
-                //第二個參數是port
-                //outlook.com smtp.outlook.com port:25
-                //yahoo smtp.mail.yahoo.com.tw port:465
-                //gmail smtp.gmail.com port:587
-                client.Authenticate("ShopDaoBao@outlook.com", "SDB20221013");
-                client.Send(message);
-                client.Disconnect(true);
+            catch {
+                return RedirectToAction("EmailFalse"); ;
             }
 
-            //return Content("OK", "text/plain", Encoding.UTF8);
-            return RedirectToAction("LoginSuccess");
+        }
+        public IActionResult EmailFalse()
+        {
+            return View();
         }
         //訂閱電子報
         public IActionResult Subscription()
         {
             return View();
-        }
-
-        public IActionResult CheckName(string name)
-        {
-            var exists = _context.MemberAccounts.Any(m => m.Name == name);
-            return Content(exists.ToString(), "text/plain");
         }
         public IActionResult CheckAccount(string acc)
         {
@@ -500,6 +508,31 @@ namespace prjiSpanFinal.Controllers
             }
 
 
+        }
+        public IActionResult creat50Like() 
+        {
+            iSpanProjectContext db = new iSpanProjectContext();
+
+            string jsonsting = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            int memID = JsonSerializer.Deserialize<MemberAccViewModel>(jsonsting).MemberId;
+            Product pro = new Product();
+            if (memID!=0)
+            {
+                var pdID = db.Products.Where(p=>p.ProductStatusId==0).Take(50);
+                foreach(var item in pdID)
+                {
+                    Like like = new Like();
+                    like.MemberId = memID;
+                    like.ProductId = item.ProductId;
+                    db.Likes.Add(like);
+                    //db.SaveChanges();
+                }
+                db.SaveChanges();
+                return Content("OK", "text/plain", Encoding.UTF8);
+            }
+            else {
+                return Content("Err", "text/plain", Encoding.UTF8);
+            }
         }
 
         public IActionResult AllLike( string[] filter, int priceMin, int priceMax, int SortOrder, int pages)
