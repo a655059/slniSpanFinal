@@ -42,7 +42,6 @@
 }
 
 .BBitemTitleBox {
-    /*height: 20px;*/
 }
 
 .BBitemTitle {
@@ -58,5 +57,4 @@
     line-height:1.1;
 }
 .BBitemDescription{
-    height:45px;
 }
