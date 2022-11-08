@@ -99,10 +99,10 @@
         };
         $("#nextStore").click(async function () {
             if ($("#finalShipper").html() == "") {
-                alert("請選擇一種運送方式");
+                Swal.fire("請選擇一種運送方式");
             }
             else if ($(".payment:checked").length<1) {
-                alert("請選擇一種付款方式");
+                Swal.fire("請選擇一種付款方式");
             }
             else {
                 const sellerID = Number($(".sellerID:checked").attr("id").substring(6));

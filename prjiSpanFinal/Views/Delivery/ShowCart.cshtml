@@ -186,7 +186,7 @@
                     data: { purchaseItemInfo: data},
                 }).done(function (result) {
                     if (result == "0") {
-                        alert("請再點一次去結帳");
+                        Swal.fire("請再點一次去結帳");
                         return;
                     }
                     else {
@@ -195,7 +195,7 @@
                 })
             }
             else {
-                alert("請選取至少一個商品");
+                Swal.fire("請選取至少一個商品");
                 return;
             }
         });

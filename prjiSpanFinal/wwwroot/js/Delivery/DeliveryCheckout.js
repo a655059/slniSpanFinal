@@ -11,7 +11,7 @@ $(".cancel").click(() => {
 });
 $(".chose").click(() => {
     if ($("input[type='radio']:checked").length == 0) {
-        alert("請選擇一個折價券");
+        Swal.fire("請選擇一個折價券");
     }
     else {
         let couponID = $("input[type='radio']:checked").siblings().children().eq(4).children().html();
@@ -72,7 +72,7 @@ $(".ship").click(function () {
 $(".saveAddress").click(function () {
     let address = $(".inputAddress").val();
     if (address == "") {
-        alert("請輸入地址或門市");
+        Swal.fire("請輸入地址或門市");
         return false;
     }
     else {
@@ -82,7 +82,7 @@ $(".saveAddress").click(function () {
 $("#confirmedShip").click(function () {
     let address = $(".choseShip").find("div[class*='border-danger']").siblings(".address").html();
     if (address == "") {
-        alert("請輸入地址或門市");
+        Swal.fire("請輸入地址或門市");
     }
     else {
         let ship = $(".choseShip").find("div[class*='border-danger']").find(".shipperName").html();

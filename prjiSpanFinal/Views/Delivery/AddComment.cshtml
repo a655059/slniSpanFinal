@@ -182,11 +182,11 @@
                     const commentStar = $(this).closest(".orderDetailLayout").find(".commentStar").val();
                     const shipperStar = $(this).closest(".orderDetailLayout").find(".shipperStar").val();
                     if (commentStar == "") {
-                        alert("請給此商品評分");
+                        Swal.fire("請給此商品評分");
                         return false;
                     }
                     else if (shipperStar == "") {
-                        alert("請給此物流服務評分");
+                        Swal.fire("請給此物流服務評分");
                         return false;
                     }
                     else {
@@ -203,15 +203,15 @@
                             const count = @Model.cAddComments.Count;
                             console.log(count);
                             if ($(".submit:disabled").length >= count) {
-                                alert(`為  ${productName}  新增評論成功，已無商品需要評論`);
+                                Swal.fire(`為  ${productName}  新增評論成功，已無商品需要評論`);
                                 window.location.href = "@Url.Content("~/Member/Order")";
                             }
                             else {
-                                alert(`為  ${productName}  新增評論成功，繼續下一筆評論`);
+                                Swal.fire(`為  ${productName}  新增評論成功，繼續下一筆評論`);
                             }
                         }
                         else {
-                            alert("您已評論過此商品");
+                            Swal.fire("您已評論過此商品");
                         }
                     }
                 });
