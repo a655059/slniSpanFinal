@@ -41,7 +41,7 @@
       
       submit.addEventListener("click",function(){
           for(let I of Inputs){
-             if(!I.values){
+             if(!(I.value)){
               event.preventDefault();
               alert("所有欄位皆是必填!");
               return;
