@@ -1670,6 +1670,13 @@ namespace prjiSpanFinal.Controllers
             };
             db.BigTypes.Add(type);
             db.SaveChanges();
+            SmallType st = new()
+            {
+                BigTypeId = type.BigTypeId,
+                SmallTypeName = "預設子類別",
+            };
+            db.SmallTypes.Add(st);
+            db.SaveChanges();
             return RedirectToAction("BigTypeList");
         }
         public IActionResult BigTypeEdit(int id)
@@ -1743,7 +1750,7 @@ namespace prjiSpanFinal.Controllers
             };
             db.SmallTypes.Add(st);
             db.SaveChanges();
-            return RedirectToAction("SmallTypeList");
+            return RedirectToAction("SmallTypeList", new {id=st.BigTypeId});
         }
         public IActionResult SmallTypeEdit(int id)
         {

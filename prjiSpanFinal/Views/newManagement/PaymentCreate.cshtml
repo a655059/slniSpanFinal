@@ -8,6 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button id="demo" class="btn btn-success">demo</button>
         <form asp-action="PaymentCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -15,12 +16,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="PaymentName" class="control-label">付款方式</label>
-                <input asp-for="PaymentName" class="form-control" />
+                <input asp-for="PaymentName" class="form-control" id="PaymentName" />
                 <span asp-validation-for="PaymentName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Fee" class="control-label">手續費</label>
-                <input asp-for="Fee" class="form-control" />
+                <input asp-for="Fee" class="form-control" id="Fee" />
                 <span asp-validation-for="Fee" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -36,5 +37,12 @@
 
 @section Scripts {
     <script>
+        let demo = document.getElementById("demo");
+        demo.addEventListener("click",function(){
+            let PaymentName = document.getElementById("PaymentName");
+            let Fee = document.getElementById("Fee");
+            Fee.value="24";
+            PaymentName.value="8-12超商"
+        })
     </script>
 }
