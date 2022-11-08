@@ -36,17 +36,5 @@
 
 @section Scripts {
     <script>
-      let submit=document.getElementById("submit");
-      let Inputs = document.querySelectorAll(".form-control");
-      
-      submit.addEventListener("click",function(){
-          for(let I of Inputs){
-             if(!(I.value)){
-              event.preventDefault();
-              alert("所有欄位皆是必填!");
-              return;
-                }
-         }
-      })
     </script>
 }
