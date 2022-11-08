@@ -1252,5 +1252,32 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Balance", "Member");
             }
         }
+        public IActionResult BalanceDemo1()
+        {
+            int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            for (int i = 0; i < 10; i++)
+            {
+                BalanceRecord brA = new BalanceRecord
+                {
+                    MemberId = id,
+                    Amount = 1000,
+                    Reason = "Demo加錢",
+                    Record = DateTime.Now,
+                };
+                BalanceRecord brM = new BalanceRecord
+                {
+                    MemberId = id,
+                    Amount = -1000,
+                    Reason = "Demo扣錢",
+                    Record = DateTime.Now,
+                };
+                _context.BalanceRecords.Add(brA);
+                _context.BalanceRecords.Add(brM);
+            }
+            MemberAccount acc = _context.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+            acc.Balance += 10000;
+            _context.SaveChanges();
+            return Json(0);
+        }
     }
 }

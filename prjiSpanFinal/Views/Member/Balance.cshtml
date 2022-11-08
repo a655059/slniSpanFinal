@@ -10,7 +10,11 @@
 }
 
 <vc:member-ui></vc:member-ui>
-<h2 class="d-flex justify-content-center">儲值金</h2>
+<h2 class="d-flex justify-content-center">
+    儲值金
+    <span class="btn btn-primary" id="BalanceDemo1">Demo紀錄</span>
+    <span class="btn btn-danger" id="BalanceDemo2">回到廣告</span>
+</h2>
 <div id="orderdetaildiv">
     <div class="row ">
         <div class="col-1"></div>
@@ -235,6 +239,15 @@
                                 $("#nav-tabContent").html(res);
                             })
                         }
+                        $("#BalanceDemo1").click(function () {
+                            $.post('/Member/BalanceDemo1').then(function () {
+                                location.reload();
+                            })
+                        })
+
+                        $("#BalanceDemo2").click(function () {
+                            location.href = '@Url.Content("~/Seller/AD")';
+                        })
                     </script>
 
                 }

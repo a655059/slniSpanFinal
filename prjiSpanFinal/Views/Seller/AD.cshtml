@@ -53,7 +53,11 @@
 <div class="row ">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10 ">
-        <h2 class="d-flex justify-content-center">蝦到爆廣告</h2>
+        <h2 class="d-flex justify-content-center">
+            蝦到爆廣告
+            <span class="btn btn-success" id="ADdemo1">Demo商品</span>
+            <span class="btn btn-secondary" id="ADdemo2">Demo效果</span>
+        </h2>
         <div class="row" id="ShowAreaBox">
             <div class="col-4">
                 <nav style="margin-top:10px">
@@ -66,19 +70,7 @@
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-pane" role="tabpanel" aria-labelledby="nav-total-tab">
                         <div id="ADeffectArea" class="d-flex flex-wrap align-content-center align-items-center justify-content-center">
-                            @*<div class="ADeffect ADsensor row" id="e1">
-                                <div class="d-flex justify-content-between align-items-center ADe-Header">
-                                    <div class="ADe-Title">
-                                        代名字近來
-                                    </div>
-                                    <div class="ADe-Price">
-                                        代錢進來
-                                    </div>
-                                </div>
-                                <div class="ADe-Description">
-                                    代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來代敘述近來
-                                </div>
-                            </div>*@
+
                         </div>
                     </div>
                 </div>
@@ -175,46 +167,46 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>推播期限</td>
+                    <td>訂閱期限</td>
                     <td id="S3" class="th-sm sorting sorting_desc">剩餘時間</td>
                     <td id="S5" class="th-sm sorting">曝光次數</td>
                     <td id="S7" class="th-sm sorting">點閱次數</td>
                 </tr>
             </thead>
             <tbody id="SubList">
-                <tr class="Sub-item">
-                    <td class="item-ckbox">
-                        <div>
-                            <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
-                        </div>
-                    </td>
-                    <td class="item-num">1</td>
-                    <td class="item-effect">標題高光</td>
-                    
-                    <td class="item-prod">12 蘋果</td>
-                    <td class="item-date">
-                        2022-10-27
-                        14:07:34
-                        <br />
-                        ~
-                        <br />
-                        2022-10-27
-                        14:07:34
-                    </td>
+                @*<tr class="Sub-item">
+                        <td class="item-ckbox">
+                            <div>
+                                <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
+                            </div>
+                        </td>
+                        <td class="item-num">1</td>
+                        <td class="item-effect">標題高光</td>
 
-                    <td class="item-date">
-                        <label>12天 14:07:34</label>
-                    </td>
+                        <td class="item-prod">12 蘋果</td>
+                        <td class="item-date">
+                            2022-10-27
+                            14:07:34
+                            <br />
+                            ~
+                            <br />
+                            2022-10-27
+                            14:07:34
+                        </td>
 
-                    <td class="item-status status-stop">已停止</td>
-                    <td class="item-times">2</td>
-                    <td class="item-times">2</td>
-                    <td class="item-action">
-                        <button class="btn btn-danger" disabled>
-                            中斷訂閱
-                        </button>
-                    </td>
-                </tr>
+                        <td class="item-date">
+                            <label>12天 14:07:34</label>
+                        </td>
+
+                        <td class="item-status status-stop">已停止</td>
+                        <td class="item-times">2</td>
+                        <td class="item-times">2</td>
+                        <td class="item-action">
+                            <button class="btn btn-danger" disabled>
+                                中斷訂閱
+                            </button>
+                        </td>
+                    </tr>*@
             </tbody>
         </table>
         <nav aria-label="SubList Pagination">
@@ -367,7 +359,6 @@
             })
             ModelCheckBox = $(".Item-check");
         }
-
         function setItem(data) {
             ModelItemArea.html("");
             res = "";
@@ -383,7 +374,7 @@
                                     }
                                     else
                                     {
-                                        res +=`<img src="#" class="modal-Prod-Pic" alt="此商品沒有圖片" />`
+                        res +=`<img src="/img/imageNotFound.png" class="modal-Prod-Pic" alt="此商品沒有圖片" />`
                                     }
                     res +=`<div class="modal-Prod-ItemTilte">
                                         <a class="linknoline" href="${productLink}">
@@ -445,11 +436,11 @@
                         item += `<img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />`;
                     }
                     else {
-                        item += ` <img src="#" class="cardImg" alt="此商品沒有圖片" />`;
+                        item += `<img src="/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />`;
                     }
                 item += `</a><div class="px-1 d-flex flex-column justify-content-between cardInfoArea" ><div class="cardTitleBox">
                         <div class="cardTitle"> ${data.product.productName}</div></div>`;
-                    if (data.price.Count == 1) {
+                if (data.price.length == 1) {
                         item += `<div class="cardPrice">${Math.round(data.price[0])}</div>`;
                     }
                     else {
@@ -531,7 +522,7 @@
         $("#Result-btn").click(function (evt) {
             Swal.fire({
                 title: '確認訂閱？',
-                text:'按下同時即開啟推送與扣款',
+                text:'按下同時即開啟訂閱與扣款',
                 icon: 'question',
                 showDenyButton: true,
                 confirmButtonText: '確認',
@@ -734,12 +725,12 @@
                     res += `<td class="item-action">`;
                     if (data[i].isSubActive) {
                         res += `<button class="btn btn-danger UnSubBtn" >
-                                    中斷推送
+                                    中斷訂閱
                                 </button><input type="hidden" value="${dataid}"/>`;
                     }
                     else {
                         res += `<button class="btn btn-danger" disabled>
-                                    中斷推送
+                                    中斷訂閱
                                 </button>`;
                     }
                           res+=`</td>
@@ -845,8 +836,8 @@
         function ConfirmUnSub(type, CheckID) {
             Swal.fire({
                 icon: 'warning',
-                title: '取消推送',
-                text: '即將取消選取的推送項目',
+                title: '取消訂閱',
+                text: '即將取消選取的訂閱項目',
                 showDenyButton: true,
                 confirmButtonText: '確認',
                 denyButtonText: `取消`,
@@ -1065,6 +1056,18 @@
                 }
             }
         }
+
+        $("#ADdemo1").click(function () {
+            $.post("/Seller/ADdemo1").then(function () {
+                location.reload();
+            });
+
+        })
+        $("#ADdemo2").click(function () {
+            $.post("/Seller/ADdemo2").then(function () {
+                location.reload();
+            });
+        })
     </script>
 
 }
