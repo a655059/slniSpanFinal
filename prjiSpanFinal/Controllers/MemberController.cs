@@ -304,9 +304,9 @@ namespace prjiSpanFinal.Controllers
                 var memEmail= db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Email);
                 MimeMessage message = new MimeMessage();
                 BodyBuilder builder = new BodyBuilder();
-                string picture = _host.ContentRootPath;
+                string picture = _host.WebRootPath + @"\img\活動.png";
                 //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
-                var image = builder.LinkedResources.Add(picture + @"wwwroot\img\活動.png");
+                var image = builder.LinkedResources.Add(picture);
 
                 //==>這裡可以放入圖片路徑
 
