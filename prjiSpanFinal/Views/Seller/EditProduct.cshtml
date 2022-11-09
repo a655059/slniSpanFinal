@@ -155,6 +155,7 @@
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2">類別</label>
+                    <input type="hidden" value="@Model.bigTypealone" id="@Model.bigTypeIDalone" class="bigTypealone"/>
                     <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
                         @{
                             for (int i = 0; i < Model.bigType.Count; i++)
@@ -163,6 +164,7 @@
                             }
                         }
                     </select>
+                    <input type="hidden" value="@Model.smallTypealone" id="smallTypealone" />
                     <select class="form-select w-25 m-3" aria-label="Default select example" id="smallType">
                         @{
                             for (int i = 0; i < 17; i++)
@@ -175,6 +177,7 @@
 
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-3">自訂類別</label>
+                    <input type="hidden" class="Categoryalone" value="@Model.Categoryalone" />
                     <select class="form-select w-25 m-3" aria-label="Default select example" id="category">
                         <option value="1" selected>未分類</option>
                         @{
@@ -208,16 +211,24 @@
                                     string styleid = "";
                                     for (int i = 0; i < Model.Style.Count; i++)
                                     {
-
                                         styleid = ("styleid" + i);
                                         <tr id="@styleid">
+                                            <input type="hidden" id="detail" value="@Model.DetailID[i]" />
                                             <td class="col 規格列表">@Model.Style[i]</td>
                                             <td class="col 規格列表">@Model.Quantity[i]</td>
                                             <td class="col 規格列表">@Model.UnitPrice[i].ToString("0")</td>
-                                            <td class="col 規格列表"><img src="data:image;base64,@System.Convert.ToBase64String(@Model.BodyPic[i])" width="30" height="30" /></td>
+                                            @{
+                                                if (Model.BodyPic[i] != null)
+                                                {
+                                                    <td class="col 規格列表"><img src="data:image;base64,@System.Convert.ToBase64String(@Model.BodyPic[i])" width="30" height="30" /></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="col 規格列表"><img src="~/img/問號圖.png" width="30" height="30"/></td>
+                                                }
+                                            }
                                             <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
                                         </tr>
-
                                     }
                                 }
                             </tbody>
@@ -236,14 +247,15 @@
                         @*    大頭照相片1     *@
                         <label class="btn" for="commentPhoto1">
                             @{
-                                    if (Model.DBtoPic != null)
-                                    {
-                                    <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                    }
-                                    else
-                                    {
-                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
-                                    }
+                                if (Model.DBtoPic.Count>0)
+                                {
+                                    <input type="hidden" id="pic0" value="@Model.BodyPicID[0]" />
+                                <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                }
+                                else
+                                {
+                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                }
                             }
                         </label>
                         <input type="file" id="commentPhoto1" name="File1" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" />
@@ -255,6 +267,7 @@
                             for (int i = 0; i < 4; i++)
                             {
                                 string id = $"commentPhoto{i + 2}";
+                                string pic = $"pic{i + 1}";
                                 <div>
                                     <label class="btn" for="@id">
                                         @{
@@ -262,6 +275,7 @@
                                             {
                                                 if (Model.DBtoPic.Count > 1 && i + 1 < Model.DBtoPic.Count)
                                                 {
+                                                    <input type="hidden" id="@pic" value="@Model.BodyPicID[i+1]" />
                                                     <img width="100" height="100" class="border " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[i+1])'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                                 }
                                                 else
@@ -320,9 +334,10 @@
 @section Scripts{
     <script>
 
-
+        let detailid = [];
         $(document).on("click", ".delbtn", function () {   //刪除資料庫生成的規格
             $(this).parents("tr").remove();
+           detailid.push($(this).parents("tr").find("#detail").val());
         })
 
         /////////大類小類連接---------------------------------------------------------------------------------------------------------------
@@ -338,6 +353,19 @@
                 }
             });
         })
+
+        function load() {
+            $(`#bigType option:contains(${$(".bigTypealone").val()})`).prop("selected", true);    //把資料帶出來select在option裡
+            $(`#category option:contains(${$(".Categoryalone").val()})`).prop("selected", true); //把資料帶出來select在option裡
+            $.getJSON("/Seller/SmallType", { bigtype: $(".bigTypealone").attr("id") }, function (data) {
+                $("#smallType").html("");
+                for (let i = 0; i < data.length; i++) {
+                    $("#smallType").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+                }
+            });
+        }
+        load();
+
         //------------------------------------------------
 
         let alldata = [];
@@ -489,49 +517,26 @@
 //====================================================================
          good.addEventListener("click", function () {
 
-             //資料庫規格資料
-             for (let i = 0; i < $("#styletbody").children().length; i++) {
-                 var id = document.getElementById('styleid' + i);
-                 let stylephoto;
-                 if (id != null) {
-                     if (id.children[3].children[0] != null) {
-                         let src = id.children[3].children[0].getAttribute("src");
-                         stylephoto = src.split(",")[1];
-                     }
-                     let styleSpec = {
-                         StyleStr: id.children[0].textContent,
-                         QuantityStr: id.children[1].textContent,
-                         UnitPriceStr: id.children[2].textContent,
-                         BodyPicStr: stylephoto
-                     };
-                     alldata.push(styleSpec);
-                 }
-                 
-             }
-
              //資料庫照片資料
              if (!$("#commentPhoto1").change(function () { })) {
                  let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
                  dataphoto.push(hesdpic);
              }
 
-             console.log(2)
-             
-
              for (let i = 0; i < 4; i++){                
                  if (!$(`#commentPhoto${i}`).change(function () { })) {
                     if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
                         dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
-                        if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
-                            dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
-                            if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
-                                dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
-                                if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
-                                    dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
-                                }
-                            }
-                        }
-                    }
+                     }
+                     if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
+                         dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
+                     }
+                     if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
+                         dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
+                     }
+                     if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
+                         dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
+                     }
                 }
              }
              
@@ -552,6 +557,7 @@
                     payment.push("@item");
                     </text>
             }
+             console.log(8888)
              console.log($("#category").children("option:selected").val())
             let pushData = {
                 暫存規格: alldata,
@@ -562,7 +568,8 @@
                 BodyPic: dataphoto,
                 ShiperID: shiper,
                 PaymentID: payment,
-                ProductID:$("#pid").val()
+                ProductID: $("#pid").val(),
+                DetailID: detailid
             }
 
             jQuery.postJSON = function (url, data, callback) {

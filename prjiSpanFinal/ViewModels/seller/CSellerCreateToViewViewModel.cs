@@ -17,13 +17,19 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<int> shipID { get; set; }
         public List<int> PaymentID { get; set; }
 
+        public string bigTypealone { get; set; }
+        public int bigTypeIDalone { get; set; }
+        public string smallTypealone { get; set; }
+        public string Categoryalone { get; set; }
+
         //傳出去的屬性
         public string ProductName { get; set; }
         public string smalltype { get; set; }
+        public List<int> DetailID { get; set; }
         public List<string> Style { get; set; }
         public List<int> Quantity { get; set; }
         public List<decimal> UnitPrice { get; set; }
-        public byte HeadPic { get; set; }
+        public List<int> BodyPicID { get; set; }
         public List<byte[]> BodyPic { get; set; }
         public string Description { get; set; }
         public int ProductID { get; set; }
@@ -40,14 +46,13 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<List<int>> AdPeriod { get; set; }
         //存入AD的ID
         public List<int> SelectADId { get; set; }
-        public List<DateTime> StartDate { get; set; }
-        //public List<int> DateNum { get; set; }
 
         //規格區
         public string StyleStr { get; set; }
         public string QuantityStr { get; set; }
         public string UnitPriceStr { get; set; }
         public byte[] BodyPicStr { get; set; }
+        public int productDetailIDStr { get; set; }
 
     }
 }
