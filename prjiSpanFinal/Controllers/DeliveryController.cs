@@ -621,8 +621,14 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult CheckoutForm(int sellerIDIndex)
         {
-            return ViewComponent("DeliveryFillCheckoutForm", sellerIDIndex);
+            return ViewComponent("DeliveryFillCheckoutForm", new { sellerIDIndex = sellerIDIndex });
         }
+
+        public IActionResult ShowCalTotalPriceVC(int id, int? sellerIDIndex, int? sellerMemberID)
+        {
+            return ViewComponent("CalTotalPrice", new { id = id, sellerIDIndex = sellerIDIndex, sellerMemberID = sellerMemberID });
+        }
+
         public IActionResult CheckoutConfirm()
         {
             string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);

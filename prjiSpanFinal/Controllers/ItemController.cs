@@ -73,7 +73,7 @@ namespace prjiSpanFinal.Controllers
                     sellerCommentCount = sellerComments.Count();
                     avgSellerCommentStar = sellerComments.Average(i => i.CommentStar);
                 }
-                var sellerCoupons = dbContext.Coupons.Where(i => i.MemberId == product.seller.MemberId).ToList();
+                var sellerCoupons = dbContext.Coupons.Where(i => i.MemberId == product.seller.MemberId && (DateTime.Now >= i.StartDate || DateTime.Now >= i.ReceiveStartDate) && DateTime.Now < i.ExpiredDate).ToList();
                 var sellerCouponIDs = sellerCoupons.Select(i => i.CouponId).ToList();
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
                 

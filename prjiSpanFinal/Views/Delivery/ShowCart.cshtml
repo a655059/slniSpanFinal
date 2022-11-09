@@ -78,7 +78,6 @@
                                         <button class="btnDelete btn btn-sm" id="@i.orderDetail.OrderDetailId"><i class="fa-solid fa-trash-can text-danger"></i></button>
                                     </div>
                                 </div>
-
                             </div>
                         }
                     }
@@ -113,7 +112,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal" tabindex="-1" id="showNoItemInCart">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -130,30 +128,32 @@
     <script src="~/js/Delivery/DeliveryShowCart.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
     <script>
-        $(".btnDelete").click(async function () {
-            const yes = confirm("確定要刪除嗎?");
-            if (yes) {
-                const orderDetailID = $(this).attr("id");
-                let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
-                let data = await response.text();
-                console.log(data);
-                if (data == 0) {
-                    $(this).closest(".sellerLayout").remove();
+        $(".btnDelete").click(function () {
+            Swal.fire({
+                title: "確定要刪除嗎?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "刪除",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const orderDetailID = $(this).attr("id");
+                    let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
+                    let data = await response.text();
+                    if (data == 0) {
+                        $(this).closest(".sellerLayout").remove();
+                    }
+                    if (data == 1) {
+                        $(this).closest(".itemLayout").remove();
+                    }
+                    if ($(".sellerLayout").length < 1) {
+                        $(".progressBar").addClass("d-none");
+                        $(".layout").load("@Url.Action("ShowNoItemInCart", "Delivery")");
+                    }
+                    else {
+                        CalTotalPrice();
+                    }
                 }
-                if (data == 1) {
-                    $(this).closest(".itemLayout").remove();
-                }
-                if ($(".sellerLayout").length < 1) {
-                    $(".progressBar").addClass("d-none");
-                    $(".layout").load("@Url.Action("ShowNoItemInCart", "Delivery")");
-                }
-                else {
-                    CalTotalPrice();
-                }
-            }
-            else {
-                return;
-            }
+            });
         });
         $("#goCheckout").click(async function () {
             if ($(".selectItem:checked").length >= 1) {
