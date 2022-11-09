@@ -202,7 +202,7 @@
                                     <input asp-for="Email" class="form-control" type="text" name="Email" size="40" id="mail"/>
                                 </div>
                                 <div class="st1">
-                                    <label class="p1">發送驗證信</label>
+                                    <label class="p1">信箱驗證</label>
                                     <button type="button" class="btn btn-outline-info" style="float:left;" id="EmailCheck">發送驗證信</button>
                                 </div>
                                 <br />
@@ -299,7 +299,7 @@
             $(this).prop('disabled', true)
             $.post('/member/SentCheckMail', { memberName: memberName.value, memberMail: memberMail.value, memberID: memID.value}, function (data) {
                 if (data == "1") {
-                    alert("已成功發信")
+                    alert("已成功發信，請至信箱確認")
                 } else if(data="2")
                 {
                     alert("發信失敗，請聯繫客服")
@@ -364,8 +364,8 @@
                 $("input[type='text']").each(function (x, y) {
                     fdata.append($(y).attr("name"), $(y).val());
                 });
-                $("input[type='radio']").each(function (x, y) {
-                    fdata.append($(y).attr("name"), $(y).val());
+                $("input[type='radio']:checked").each(function (x, y) {
+                    fdata.append($(y).attr("name"), y.value);
                 }); 
                 $("select").each(function (x, y) {
                     fdata.append($(y).attr("name"), $(y).val());
