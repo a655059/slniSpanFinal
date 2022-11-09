@@ -59,9 +59,13 @@ namespace prjiSpanFinal.Controllers
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
             var aaa = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList();
-            if (!(aaa.Contains(0) || aaa.Count == 0))
+            if (aaa.Contains(0) || aaa.Count == 0)
+            {
+            }
+            else
             {
                 Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                b.FinishDate = DateTime.Now;
                 b.StatusId = 7;
             }
             dbcontext.SaveChanges();
