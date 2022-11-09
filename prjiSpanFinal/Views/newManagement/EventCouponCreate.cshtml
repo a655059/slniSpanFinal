@@ -1,7 +1,7 @@
 ﻿@model prjiSpanFinal.Models.Coupon
 
 @{
-    ViewData["Title"] = "CouponCreate";
+    ViewData["Title"] = "EventCouponCreate";
 }
 
 <h1>建立活動優惠券</h1>
@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-md-4">
         <button id="demo" class="btn btn-success">demo</button>
-        <form asp-action="CouponCreate">
+        <form asp-action="EventCouponCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="CouponId" class="form-control" type="hidden" />
@@ -20,11 +20,11 @@
                 <span asp-validation-for="CouponName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" id="" />
+                開始日期<input asp-for="StartDate" class="form-control" type="datetime-local" id="StartDate" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime-local" />
+                失效日期<input asp-for="ExpiredDate" class="form-control" type="datetime-local" id="ExpiredDate" />
                 <span asp-validation-for="ExpiredDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,11 +39,11 @@
                 <input asp-for="MemberId" value="1" type="hidden" />
             </div>
             <div class="form-group">
-                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local" />
+                可以領取日期<input asp-for="ReceiveStartDate" class="form-control" type="datetime-local" id="ReceiveStartDate" />
                 <span asp-validation-for="ReceiveStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime-local" />
+                結束領取日期 <input asp-for="ReceiveEndDate" class="form-control" type="datetime-local" id="ReceiveEndDate" />
                 <span asp-validation-for="ReceiveEndDate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -64,7 +64,7 @@
 </div>
 
 <div>
-    <a asp-action="EventList" class="btn btn-danger">取消並回到活動列表</a>
+    @Html.ActionLink("取消","EventCouponList","newManagement",new{id=ViewBag.Id},new{@class="btn btn-danger"})
 </div>
 
 @section Scripts{
@@ -100,12 +100,17 @@
         let ExpiredDate = document.getElementById("ExpiredDate");
         let CouponCode = document.getElementById("CouponCode");
         let ReceiveStartDate = document.getElementById("ReceiveStartDate");
+        let ReceiveEndDate = document.getElementById("ReceiveEndDate");
         let MinimumOrder = document.getElementById("MinimumOrder");
-        let Datas = [CouponName, CouponCode ,MinimumOrder, Discounts];
+        let Datas = [CouponName, StartDate, ExpiredDate, CouponCode, ReceiveStartDate, MinimumOrder, Discounts];
         demo.addEventListener("click", function () {
-            Datas[0].value = "主辦開心發優惠";
-            Datas[1].value = "USDPKR";
-            Datas[2].value = "0.5";
+            CouponName.value = "站主開心發優惠";
+            StartDate.value = "2022-11-08T11:33";
+            ExpiredDate.value = "2022-12-01T11:33";
+            ReceiveStartDate.value = "2022-11-08T11:33";
+            ReceiveEndDate.value = "2022-12-01T11:33";
+            Datas[3].value = "USDPKR";
+            Datas[5].value = "20";
             Discounts.value = "0.5";
         })
     </script>

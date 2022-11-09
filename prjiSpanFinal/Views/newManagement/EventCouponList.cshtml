@@ -13,7 +13,7 @@
 <h1>活動優惠券</h1>
 
 <p>
-    <a asp-action="EventCouponCreate" class="btn btn-light">新增活動優惠券</a>
+    @Html.ActionLink("新增活動優惠券","EventCouponCreate","newManagement",new{id=ViewBag.ID},new{@class="btn btn-light"})
 </p>
 
 <table class="table">

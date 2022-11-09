@@ -1,4 +1,4 @@
-﻿@model IEnumerable<prjiSpanFinal.Models.MemberAccount>
+﻿@model prjiSpanFinal.Models.MemberAccount
 
 @{
     ViewData["Title"] = "MemberList2";
@@ -42,25 +42,23 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
             <tr>
                 <td>
-                    <input class="form-control-plaintext" value="@item.Balance" readonly>
+                    <input class="form-control-plaintext" value="@Model.Balance" readonly>
                 </td>
                 <td>
-                    <input class="form-control-plaintext" value="@item.BackUpEmail" readonly>
+                    <input class="form-control-plaintext" value="@Model.BackUpEmail" readonly>
                 </td>
                 <td>
-                    <input class="form-control-plaintext" value="@item.NickName" readonly>
+                    <input class="form-control-plaintext" value="@Model.NickName" readonly>
                 </td>
                 <td >
-                    <input class="form-control-plaintext" value="@item.Description" readonly>
+                <input class="form-control-plaintext" value="@Model.Description" readonly>
                 </td>
                 <td>
                     @{
                         string IsTWs = "海外";
-                        if ((bool)item.IsTw)
+                    if ((bool)Model.IsTw)
                         {
                             IsTWs = "國內";
                         }
@@ -68,12 +66,11 @@
                     <input class="form-control-plaintext" value="@IsTWs" readonly>
                 </td>
                 <td>
-                    <input class="form-control-plaintext" value="@item.Birthday.ToString("yyyy/MM/dd")" readonly>
+                <input class="form-control-plaintext" value="@Model.Birthday.ToString("yyyy/MM/dd")" readonly>
                 </td>
                 <td >
                     @Html.ActionLink("回到會員列表", "MemberList","newManagement",null,new{@class="btn btn-primary"})
                 </td>
             </tr>
-        }
     </tbody>
 </table>

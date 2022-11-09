@@ -68,14 +68,16 @@
                 </a>
             </h6>
             <div class="row">
-
-                @{
-
-                    var base64Image = Convert.ToBase64String(Model.Picture);
-                    var source = String.Format("data:image/png;base64,{0}", base64Image);
-
+                @if (Model.Picture != null)
+                {
+                    
+                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Picture)" class="cardImg rounded-circle" alt="..." width="120" />
                 }
-                <img src="@source" class="cardImg rounded-circle" alt="..." width="120" />
+                else
+                {
+                    <img src="~/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />
+                }
+                           
             </div>
 
 

@@ -59,9 +59,13 @@ namespace prjiSpanFinal.Controllers
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
             var aaa = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList();
-            if (!(aaa.Contains(0) || aaa.Count == 0))
+            if (aaa.Contains(0) || aaa.Count == 0)
+            {
+            }
+            else
             {
                 Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                b.FinishDate = DateTime.Now;
                 b.StatusId = 7;
             }
             dbcontext.SaveChanges();
@@ -468,8 +472,8 @@ namespace prjiSpanFinal.Controllers
                     {
                         AdId = Convert.ToInt32(result.SelectADId[i]),
                         ProductId = Convert.ToInt32(product.ProductId),
-                        StartDate = result.StartDate[i],
-                        EndDate = result.StartDate[i].AddDays(daynum),
+                        StartDate =DateTime.Now,
+                        EndDate = DateTime.Now.AddDays(daynum),
                         IsSubActive = true,
                         ExpoTimes = 0,
                         ClickTimes = 0
@@ -834,32 +838,48 @@ namespace prjiSpanFinal.Controllers
             var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == memId).Select(n => n.ShipperId).ToList();
             var memship = _db.Shippers.Where(n => shiperlist.Contains(n.ShipperId)).Select(s => s.ShipperName).ToList();
             var mempay = _db.PaymentToSellers.Where(n => n.MemberId == memId).Select(n => n.PaymentId).ToList();
+            var Category = _db.CustomizedCategories.Where(n => n.MemberId == memId).Select(n => n.CustomizedCategoryName).ToList();
+            var CustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == memId).Select(n => n.CustomizedCategoryId).ToList();
+            
 
             var pName = _db.Products.Where(n => n.ProductId == id).Select(n => n.ProductName).FirstOrDefault();
             var pProductId = id;
+            var psmallTypeID = _db.Products.Where(n => n.ProductId == id).Select(n => n.SmallTypeId).FirstOrDefault();
+            var psmallTypeName = _db.SmallTypes.Where(n => n.SmallTypeId == psmallTypeID).Select(n => n.SmallTypeName).FirstOrDefault();
+            var pbigTypeID = _db.SmallTypes.Where(n=>n.SmallTypeId== psmallTypeID).Select(n=>n.BigTypeId).FirstOrDefault();
+            var pbigTypeName = _db.BigTypes.Where(n => n.BigTypeId == pbigTypeID).Select(n => n.BigTypeName).FirstOrDefault();
             var pDBtoPic = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n.Pic).ToList();
+            var pDetail = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.ProductDetailId).ToList();
             var pStyle = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Style).ToList();
             var PQuantity = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Quantity).ToList();
             var pUnitPrice = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.UnitPrice).ToList();
+            var pBodyPicID = _db.ProductPics.Where(n => n.ProductId == id).Select(n => n.ProductPicId).ToList();
             var pBodyPic = _db.ProductDetails.Where(n => n.ProductId == id).Select(n => n.Pic).ToList();
             var pDescription = _db.Products.Where(n => n.ProductId == id).Select(n => n.Description).FirstOrDefault();
-            var pCategory = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryName).ToList();
-            var pCustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == id).Select(n => n.CustomizedCategoryId).ToList();
+            var pCategory = _db.Products.Where(n => n.ProductId == id).Select(n => n.CustomizedCategoryId).FirstOrDefault();
+            var pCategoryName = _db.CustomizedCategories.Where(n=>n.CustomizedCategoryId== pCategory).Select(n=>n.CustomizedCategoryName).FirstOrDefault();
+
             CSellerCreateToViewViewModel x = new CSellerCreateToViewViewModel
             {
                 bigType = bigType,
+                bigTypealone= pbigTypeName,
+                bigTypeIDalone = pbigTypeID,
+                smallTypealone =psmallTypeName,
                 smallType = smallType,
                 memship = memship,
                 shipID = shiperlist,
                 PaymentID = mempay,
-                Category=pCategory,
-                CustomizedCategoryID=pCustomizedCategoryID,
+                Category=Category,
+                CustomizedCategoryID=CustomizedCategoryID,
+                Categoryalone= pCategoryName,
                 ProductName = pName,
                 DBtoPic= pDBtoPic,
+                DetailID=pDetail,
                 Style = pStyle,
                 Quantity = PQuantity,
                 UnitPrice = pUnitPrice,
-                BodyPic=pBodyPic,
+                BodyPicID= pBodyPicID,
+                BodyPic =pBodyPic,
                 Description = pDescription,
                 ProductID=Convert.ToInt32(pProductId)
             };
@@ -882,29 +902,66 @@ namespace prjiSpanFinal.Controllers
             Product.EditTime = DateTime.Now;
             Product.CustomizedCategoryId = jsonString.CategoryID;
 
+
             var ProductDetail = _db.ProductDetails.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
-            for (int i = 0; i < jsonString.暫存規格.Count; i++)
+
+            //if (jsonString.DetailID != null)//刪除規格
+            //{
+            //    for (int i = 0; i < jsonString.DetailID.Count; i++)
+            //    {
+            //        _db.Remove(_db.ProductDetails.Where(n => n.ProductDetailId == jsonString.DetailID[i]).Select(n => n).FirstOrDefault());
+            //    }
+            //}
+            //var proPic = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n.Pic).ToList();
+
+            if (jsonString.暫存規格 != null)//新增規格
             {
-                if (jsonString.暫存規格[i] != null)
+                foreach (var a in jsonString.暫存規格)
                 {
-                    ProductDetail[i].Style = jsonString.暫存規格[i].StyleStr;
-                    ProductDetail[i].Quantity = Convert.ToInt32(jsonString.暫存規格[i].QuantityStr);
-                    ProductDetail[i].UnitPrice = Convert.ToDecimal(jsonString.暫存規格[i].UnitPriceStr);
-                    if (jsonString.暫存規格[i].BodyPicStr != null)
+                    var q= _db.ProductDetails.Where(i => i.ProductDetailId == a.productDetailIDStr).FirstOrDefault();
+                    if (q == null)
                     {
-                        ProductDetail[i].Pic = jsonString.暫存規格[i].BodyPicStr;
+                        ProductDetail productDetail = new ProductDetail()
+                        {
+                            ProductId = Convert.ToInt32(jsonString.ProductID),
+                            Style = jsonString.暫存規格[0].StyleStr,
+                            Quantity = Convert.ToInt32(jsonString.暫存規格[0].QuantityStr),
+                            UnitPrice = Convert.ToInt32(jsonString.暫存規格[0].UnitPriceStr),
+                            Pic = jsonString.暫存規格[0].BodyPicStr    
+                        };
+                        _db.ProductDetails.Add(productDetail);
                     }
                 }
             }
 
-            var ProductPic = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
+            
             if (jsonString.BodyPic !=null)
             {
-                for (int i = 0; i < jsonString.BodyPic.Count; i++)
+                var ProductPics = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
+                
+
+
+                foreach (var i in jsonString.BodyPic)
                 {
-                    if (jsonString.BodyPic[i] != null)
+                    var ProductPic = _db.ProductPics.Where(n => n.Pic == i).FirstOrDefault();
+                    if (ProductPic == null)
                     {
-                        ProductPic[i].Pic = jsonString.BodyPic[i];
+                        ProductPic Pic = new ProductPic()
+                        {
+                            ProductId = Convert.ToInt32(jsonString.ProductID),
+                            Pic = jsonString.BodyPic[0]
+                        };
+                        _db.ProductPics.Add(Pic);
+                    }
+                    else
+                    {
+                        for (int o = 0; o < jsonString.BodyPic.Count; o++)
+                        {
+                            if (jsonString.BodyPic[o] != null)
+                            {
+                                ProductPics[o].Pic = jsonString.BodyPic[o];
+                            }
+                        }
                     }
                 }
             }
@@ -1094,12 +1151,15 @@ namespace prjiSpanFinal.Controllers
             
 
             var toproduct = _db.SubOfficialEventToProducts.Select(n => n).ToList();
-            var toproductID = toproduct.Select(n => n.ProductId).FirstOrDefault();
+            
             var toproducteve = toproduct.Select(n => n.SubOfficialEventListId).FirstOrDefault();
-            var toproductver = toproduct.Select(n => n.VerifyId).FirstOrDefault();
+            
 
-            var productname = _db.Products.Where(n => n.ProductId == toproductID).Select(n => n.ProductName).ToList();
-            var 審核結果 = _db.Verifies.Where(n => n.VerifyId == toproductver).Select(n => n.VerifyName).ToList();
+            var toproductID = toproduct.Select(n => n.ProductId).ToList();
+            var productname = _db.Products.Where(n => n.MemberId == memId&& toproductID.Contains(n.ProductId)).Select(n => n.ProductName).ToList();
+            var toproductver = toproduct.Select(n => n.VerifyId).ToList();
+            var 審核結果 = _db.Verifies.Where(n => toproductver.Contains(n.VerifyId)).Select(n => n.VerifyName).ToList();
+
             var evename = _db.SubOfficialEventLists.Where(n => n.SubOfficialEventListId == toproducteve).Select(n => n.SubEventName).ToList();
 
             List<string> listproductname = new List<string>();
@@ -1116,6 +1176,95 @@ namespace prjiSpanFinal.Controllers
 
 
             return View(/*cSubEventToProductViewModel*/);
+        }
+
+
+        public IActionResult AddMoreProduct()
+        {
+            string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            MemberAccount member = JsonSerializer.Deserialize<MemberAccount>(memberString);
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            var products = dbContext.Products.Where(i => i.MemberId == 28);
+            foreach (var a in products)
+            {
+                a.MemberId = member.MemberId;
+            }
+            dbContext.SaveChanges();
+            return Content("1");
+        }
+
+        public IActionResult ADdemo1() {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            for (int i= 1; i < 6; i++)
+            {
+                Product prod = new Product
+                {
+                    ProductName = "牛角麵包" + i,
+                    SmallTypeId = 90,
+                    MemberId = memId,
+                    RegionId = 362,
+                    Description = "好吃好吃麵包",
+                    ProductStatusId = 0,
+                    EditTime = DateTime.Now,
+                    CustomizedCategoryId = 1
+                };
+                _db.Products.Add(prod);
+                _db.SaveChanges();
+                ProductDetail prode = new ProductDetail
+                {
+                    ProductId = prod.ProductId,
+                    Style = "大紅",
+                    Quantity = 777,
+                    UnitPrice = 100,
+                };
+                _db.ProductDetails.Add(prode);
+                _db.SaveChanges();
+            }
+            return Json(0);
+        }
+        public IActionResult ADdemo2()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            var prod = _db.Products.Where(p => p.MemberId == memId).OrderByDescending(p => p.ProductId).Take(5);
+            foreach(var p in prod)
+            {
+                AdtoProduct ad = new AdtoProduct
+                {
+                    ProductId=p.ProductId,
+                    AdId = 1,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                };
+                AdtoProduct ad2 = new AdtoProduct
+                {
+                    ProductId = p.ProductId,
+                    AdId = 4,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                };
+                AdtoProduct ad3 = new AdtoProduct
+                {
+                    ProductId = p.ProductId,
+                    AdId = 7,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    IsSubActive = true,
+                    ExpoTimes = 0,
+                    ClickTimes = 0,
+                    AdSlogan="好吃的牛角族麵包！",
+                };
+                _db.AdtoProducts.Add(ad);
+                _db.AdtoProducts.Add(ad2);
+                _db.AdtoProducts.Add(ad3);
+            }
+            _db.SaveChanges();
+            return Json(0);
         }
     }
 }

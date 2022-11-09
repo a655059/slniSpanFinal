@@ -146,7 +146,13 @@
                 </div>
                 <div class="d-flex justify-content-between align-self-start mb-1">
                     <input type="hidden" name="purchaseProduct" value="2113" />
-                    <div class="itemKey">規格:</div>
+                    @{
+                        if (Model.productDetails.Count > 1)
+                        {
+                            <div class="itemKey">規格:</div>
+                        }
+                    }
+
                     <div class="itemStyleContent d-flex flex-wrap ms-3">
                         @{
                             foreach (var i in Model.productDetails)
@@ -189,7 +195,24 @@
                 <div class="d-flex justify-content-start align-items-center mb-3">
                     <label for="itemCount" class="itemKey">數量:</label>
                     <input type="number" value="1" name="purchaseCount" min="1" class="ms-3" id="itemCount" />
-                    <div class="itemRemainingQty ms-3">還剩件數</div>
+                    @{
+                        if (Model.productDetails.Count > 1)
+                        {
+                            <div class="ms-3">還剩<span class="itemRemainingQty"></span>件數</div>
+                        }
+                        else
+                        {
+                            if (Model.user == null)
+                            {
+                                <div class="ms-3">還剩<span class="itemRemainingQty">@Model.productDetails[0].Quantity</span>件數</div>
+                            }
+                            else
+                            {
+                                <div class="ms-3">還剩<span class="itemRemainingQty">@Model.remainingQty</span>件數</div>
+                            }
+                        }
+                    }
+
                 </div>
                 <div class="position-relative d-flex justify-content-start align-items-center ps-5">
                     <div class="dollarIcon position-absolute fs-3 fw-bold text-warning">+<span></span></div>
@@ -434,7 +457,7 @@
     <script src="@Url.Content("~/js/ShowSelectedProducts.js")"></script>
     <script src="@Url.Content("~/js/Item/ShowItemComment.js")"></script>
     @*<script src="@Url.Content("~/js/Item/ShowMessageBoard.js")"></script>*@
-    <script>
+<script>
         let couponPosition = 10;
         let couponCount = Number($(".sellerCouponCount").html());
         $(function () {
@@ -451,8 +474,15 @@
                 $(".couponRight").prop("disabled", true);
             }
         });
+        $(function () {
+            //const productDetailID = $("input[name='purchaseStyle']:checked").val();
+            console.log($("input[name='purchaseStyle']:checked"));
+            @*const response = await fetch("@Url.Content("~/Delivery/ShowQtyToSpecificMember")" + `?productDetailID=${5}`);
+            const data = await response.text();
+            $(".itemRemainingQty").html(data);*@
+        });
 
-        
+
 
         function userIsSeller() {
             const userID = $(".memberID").html();
@@ -509,7 +539,7 @@
                 Swal.fire("你已經領過此優惠券了");
             }
         });
-        
+
 
         $(".buyDirectly").click(function () {
             const maxQuantity = Number($("input[name='purchaseCount']").attr("max"));
@@ -562,7 +592,7 @@
                         top: "+=80",
                         zIndex: "-1"
                     });
-                    $(".itemRemainingQty").html("還剩" + data[1] + "件");
+                    $(".itemRemainingQty").html(data[1]);
                     $("input[name='purchaseCount']").attr("max", Number(data[1]))
                     if ($("input[name='purchaseCount']").val() > Number(data[1])) {
                         $("input[name='purchaseCount']").val(Number(data[1]));
@@ -588,7 +618,7 @@
             const requestUrl = "@Url.Content("~/Delivery/ShowQtyToSpecificMember")" + `?productDetailID=${productDetailID}`;
             const response = await fetch(requestUrl);
             const data = await response.text();
-            $(".itemRemainingQty").html("還剩" + data + "件");
+            $(".itemRemainingQty").html(data);
             if (Number(data) <= 0) {
                 $("input[name='purchaseCount']").attr("min", 0);
                 $("input[name='purchaseCount']").attr("max", 0);
@@ -608,7 +638,7 @@
                 $(this).prop("disabled", false);
                 userIsSeller();
             }
-            
+
         });
 
         //檢舉功能圖片預覽
@@ -730,5 +760,5 @@
 
 
 
-    </script>
+</script>
 }

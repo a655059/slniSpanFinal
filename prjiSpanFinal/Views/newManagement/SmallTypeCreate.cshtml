@@ -10,6 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button class="btn btn-success" id="demo">demo</button>
         <form asp-action="SmallTypeCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -17,11 +18,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="SmallTypeName" class="control-label">類別名稱</label>
-                <input asp-for="SmallTypeName" class="form-control" />
+                <input asp-for="SmallTypeName" class="form-control" id="SmallTypeName" />
                 <span asp-validation-for="SmallTypeName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="BigTypeId" class="form-control" type="hidden" value="ViewBag.BigType.BigTypeId" />
+                <input asp-for="BigTypeId" class="form-control" type="hidden" value="@ViewBag.BigType.BigTypeId" />
             </div>
             <div class="form-group">
                 <input id="submit" type="submit" value="確認" class="btn btn-primary mt-1" />
@@ -36,16 +37,11 @@
 
 @section Scripts {
     <script>
-        let inputs = $(".form-control");
-        let submit = document.getElementById('submit');
-        submit.addEventListener("click", function (event) {
-            for (let inp of inputs) {
-                if (!(inp.value)) {
-                    event.preventDefault();
-                    alert("請完整填入內容!");
-                    break;
-                }
-            }
-        });
+        let demo=document.getElementById("demo");
+        demo.addEventListener("click",function(){
+           let SmallTypeName=document.getElementById("SmallTypeName");
+           SmallTypeName.value="紙吸管"
+        })
     </script>
 }
+

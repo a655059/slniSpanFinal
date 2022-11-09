@@ -9,6 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <button class="btn btn-success" id="demo">demo</button>
         <form asp-action="EventCreate" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -16,25 +17,25 @@
             </div>
             <div class="form-group">
                 活動名稱
-                <input asp-for="EventName" class="form-control" />
+                <input asp-for="EventName" class="form-control" id="EventName"/>
                 <span asp-validation-for="EventName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 開始日期
-                <input asp-for="StartDate" class="form-control" type="date" />
+                <input asp-for="StartDate" class="form-control" type="date" id="StartDate"/>
             </div>
             <div class="form-group">
                 結束日期
-                <input asp-for="EndDate" class="form-control" type="date" />
+                <input asp-for="EndDate" class="form-control" type="date" id="EndDate"/>
             </div>
             <div class="form-group">
                 開放參加日期
-                <input asp-for="JoinStartDate" class="form-control" type="date" />
+                <input asp-for="JoinStartDate" class="form-control" type="date" id="JoinStartDate"/>
                 <span asp-validation-for="JoinStartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 截止參加日期
-                <input asp-for="JoinEndDate" class="form-control" type="date" />
+                <input asp-for="JoinEndDate" class="form-control" type="date" id="JoinEndDate"/>
                 <span asp-validation-for="JoinEndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -47,7 +48,7 @@
             </div>
             <div class="form-group">
                 活動照片
-                <input id="EventPic" asp-for="EventPic" class="form-control" type="file" />
+                <input id="EventPic" asp-for="EventPic" type="file" />
                  <p> 圖片預覽</p>
                  <img id="Preview" style="max-height:200px;" />
             </div>
@@ -71,20 +72,20 @@
             $('#Preview').attr('src', objectURL);
             console.log()
         });
-
-        let submit=document.getElementById("submit");
-        let Inputs=document.querySelectorAll(".form-control");
-        submit.addEventListener("click",function(event){
-            for(var l of Inputs){
-            if(!(l.value)){
-            event.preventDefault();
-            alert("每個欄位皆是必填");
-            break;
-                        }
-                                               }
-         }
-     )
-
+        let demo=document.getElementById("demo");
+        
+        demo.addEventListener("click",function(){
+            let EventName=document.getElementById("EventName");
+            let StartDate=document.getElementById("StartDate");
+            let EndDate=document.getElementById("EndDate");
+            let JoinStartDate=document.getElementById("JoinStartDate");
+            let JoinEndDate=document.getElementById("JoinEndDate");
+            EventName.value="站主開心辦活動";
+            StartDate.value="2022-11-08";
+            EndDate.value="2022-12-01";
+            JoinStartDate.value="2022-11-08";
+            JoinEndDate.value="2022-12-01";
+        })
 
 
     </script>

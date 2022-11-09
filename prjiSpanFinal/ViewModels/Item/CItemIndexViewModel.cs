@@ -30,6 +30,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public MemberAccount user { get; set; }
         public List<Coupon> sellerCoupons { get; set; }
         public List<CouponWallet> userCouponWallet { get; set; }
+        public int remainingQty { get; set; }
         
     }
 }
