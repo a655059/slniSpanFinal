@@ -1,0 +1,88 @@
+﻿@model IEnumerable<WebAdViewModel>
+@using prjiSpanFinal.ViewModels.newManagement
+@{
+    ViewData["Title"] = "WebAdList";
+}
+
+<h1>廣告圖片</h1>
+
+<p>
+    <a class="btn btn-outline-warning" asp-action="WebAdCreate">廣告圖片新增</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                廣告圖片
+            </th>
+            <th>
+                圖片類型
+            </th>
+            <th>
+                是否可以進入
+            </th>
+            <th>
+                連結
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.WebAd.WebAdid)
+            </td>
+            <td>
+                  @{
+                        var base64Image = Convert.ToBase64String(item.WebAd.WebAdimage);
+                        var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    }
+                    <img src="@source" class="cardImg" alt="..." width="120" />
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.WebAd.MemberId)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.ImageType)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.WebAd.IsPublishing)
+            </td>
+            <td>
+                <button class="btn btn-link" href="@item.WebAd.Path">點我前往</button>
+            </td>
+            <td>
+                    @Html.ActionLink("修改", "WebAdEdit","newManagement",new {  id=item.WebAd.WebAdid },new{@class="btn btn-warning"})
+                    <a class="Dele btn btn-danger" name="@item.WebAd.WebAdid">刪除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        let Dele = document.querySelectorAll(".Dele");
+        for(let i of Dele){
+            i.addEventListener("click",async function(){
+            let c=event.currentTarget.name;
+            let data=await fetch("@Url.Content("~/newManagement/WebAdDelete")" + `?id=${c}`)
+            let res=await data.text();
+                if (res) 
+                 {
+                    confirm("確定要刪除嗎?");
+                    if(confirm){
+                    $(this).closest("tr").remove();
+                    Swal.fire('刪除成功')
+                    }
+                 }
+            
+            })
+              
+            
+        }
+    </script>
+}

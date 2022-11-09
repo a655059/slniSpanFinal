@@ -1,0 +1,66 @@
+﻿@model prjiSpanFinal.Models.WebAd
+
+@{
+    ViewData["Title"] = "WebAdEdit";
+}
+
+<h1>修改廣告圖片</h1>
+
+<h4>WebAd</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="WebAdEdit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="WebAdid" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                活動照片
+                <input id="WebAdimage" name="WebAdimage" class="form-control" type="file" />
+                 <p> 圖片預覽</p>
+                 <img id="Preview" style="max-height:200px;" />
+            </div>
+            <div class="form-group">
+                <input asp-for="MemberId" class="form-control" type="hidden" value="1" />
+            </div>
+            <div class="form-group">
+                <label asp-for="WebAdimageTypeId" class="control-label">圖片類型</label>
+                <select asp-for="WebAdimageTypeId" class="form-select form-select-lg mb-3">
+                    @foreach (var i in ViewBag.WebADImageType)
+                    {
+                        <option value="@i.WebAdimageTypeId">@i.ImageType</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    是否發布
+                    <input class="form-check-input" asp-for="IsPublishing" />
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Path" class="control-label">連結網址</label>
+                <input asp-for="Path" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="確定" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="WebAdList" class="btn btn-danger">取消</a>
+</div>
+
+@section Scripts {
+    <script>
+        //圖片預覽
+        $('#WebAdimage').on('change', function (e) {
+            const file = this.files[0];
+            const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+            $('#Preview').attr('src', objectURL);
+        });
+    </script>
+}

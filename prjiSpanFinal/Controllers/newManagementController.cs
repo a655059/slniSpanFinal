@@ -1724,5 +1724,91 @@ namespace prjiSpanFinal.Controllers
             return RedirectToAction("SmallTypeList");
         }
         #endregion
+        #region WebAdRegion
+        public IActionResult WebAdList()
+        {
+            List<WebAdViewModel> list = new();
+            var li = db.WebAds.ToList();
+            var ImageType = db.WebAdimageTypes.ToList();
+            foreach (var item in li)
+            {
+                WebAdViewModel model = new()
+                {
+                    WebAd = item,
+                    ImageType = ImageType.FirstOrDefault(i => i.WebAdimageTypeId == item.WebAdimageTypeId).ImageType,
+                };
+                list.Add(model);
+            }
+            return View(list);
+        }
+
+        public IActionResult WebAdCreate()
+        {
+            ViewBag.WebADImageType = db.WebAdimageTypes.ToList();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WebAdCreate(WebAdCreateViewModel webAd)
+        {
+            WebAd newWebAd = new()
+            {
+                WebAdimageTypeId = webAd.WebAdimageTypeId,
+                MemberId = 1,
+                IsPublishing = false,
+                Path = webAd.Path,
+            };
+            using (var ms = new MemoryStream())
+            {
+                webAd.WebAdimage.CopyTo(ms);
+                var filbytes = ms.ToArray();
+                newWebAd.WebAdimage= filbytes;
+            }
+            db.WebAds.Add(newWebAd);
+            db.SaveChanges();
+            return RedirectToAction("WebAdList");
+        }
+        public IActionResult WebAdDelete(int id)
+        {
+            var webAd = db.WebAds.FirstOrDefault(i=>i.WebAdid==id);
+            if (webAd != null)
+            {
+                db.WebAds.Remove(webAd);
+            }
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch (Exception)
+            {
+                return Content(null);
+            }
+        }
+        public IActionResult WebAdEdit(int? id)
+        {
+            ViewBag.WebADImageType = db.WebAdimageTypes.ToList();
+            var ofevent = db.WebAds.FirstOrDefault(g => g.WebAdid == id);
+            return View(ofevent);
+        }
+        [HttpPost]
+        public IActionResult WebAdEdit(WebAdCreateViewModel Wbad)
+        {
+            WebAd Ev = db.WebAds.FirstOrDefault(i => i.WebAdid == Wbad.WebAdid);
+            Ev.WebAdimageTypeId=Wbad.WebAdimageTypeId;
+            Ev.Path = Wbad.Path;
+            Ev.IsPublishing=Wbad.IsPublishing;
+            Ev.MemberId=Wbad.MemberId;
+            using (var ms = new MemoryStream())
+            {
+                Wbad.WebAdimage.CopyTo(ms);
+                var filbytes = ms.ToArray();
+                Ev.WebAdimage = filbytes;
+            }
+            db.SaveChanges();
+            return RedirectToAction("WebAdList");
+        }
+
+
+        #endregion
     }
 }
