@@ -25,7 +25,7 @@
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
-<div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
+<div class="btn-group mb-3 position-relative" role="group" aria-label="Basic radio toggle button group" id="choseStore">
     <div class="sellerIDIndex d-none">0</div>
     <div class="sellerIDCount d-none">@sellerIDList.Count</div>
     @{
@@ -89,9 +89,7 @@
                 nextSellerIDIndex = NextOrPrevOrIndex;
             }
             let nextSellerIDNumber = $(".sellerIDNumber").eq(nextSellerIDIndex).html();
-            console.log(nextSellerIDIndex);
             const _url = "@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=${nextSellerIDIndex}`;
-            console.log(_url);
             const _CalTotalPriceUrl = "@Url.Content("~/Delivery/ShowCalTotalPriceVC")" + `?id=2&sellerIDIndex=${nextSellerIDIndex}&sellerMemberID=${nextSellerIDNumber}`;
             $(".checkoutFormVC").load(_url);
             $(".showCalTotalPriceVC").load(_CalTotalPriceUrl);
@@ -126,7 +124,7 @@
                 const address = $("#address").val();
                 const shipperID = Number($("#finalShipperID").html());
                 const shipperName = $("#finalShipper").html();
-                const shipperFee = Number($(".finalShipperFee").html());
+                const shipperFee = Number($("#finalShipperFee").html());
                 const paymentID = Number($(".payment:checked").attr("id").substring(7));
                 const paymentName = $(".payment:checked").siblings("label").html().split('<')[0];
                 const paymentFee = Number($(".payment:checked").siblings("label").find(".paymentFee").html());
@@ -160,19 +158,10 @@
                 }
             }
         })
-        $(".showCalTotalPriceVC").on("click", "#previousStore", function () {
-            changePage("Prev");
-        });
-
-
-
         $(".sellers").click(function () {
             changePage($(this).index("label"))
         });
-        $(".showCalTotalPriceVC").on("click", ".selectCoupon", function () {
-            $(".couponModal").slideToggle();
-        });
-
+        
         
     </script>
     @*<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>*@

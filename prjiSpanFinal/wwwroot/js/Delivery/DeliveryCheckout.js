@@ -1,48 +1,42 @@
 ﻿$(function () {
+    $("#finalShipperFee1").html($("#finalShipperFee").html());
     CalTotalPriceIncludeDiscountAndFee()
+    
 });
-$(".coupon").click(function () {
-    let discount = $(this).children().eq(0).children().html();
-    $(".discount").children().html(`-$${discount}`);
-});
-$(".cancel").click(() => {
-    $(".discount").children().html(`0`);
-    $("input[type='radio']").attr("checked", false);
-});
-$(".chose").click(() => {
-    if ($("input[type='radio']:checked").length == 0) {
-        Swal.fire("請選擇一個折價券");
-    }
-    else {
-        let couponID = $("input[type='radio']:checked").siblings().children().eq(4).children().html();
-        let discount = $("input[type='radio']:checked").siblings().children().eq(0).children().html();
-        $(".divDiscount").removeClass("d-none");
-        $(".selectedCouponID").children().html(`${couponID}`);
-        $("#discountPrice").html(`${discount}`);
-        let totalPrice = Number($("#smallPrice").html()) - Number(discount);
-        $("#totalPrice").html(totalPrice);
-    }
-});
-$(".divDiscount").mouseenter(function () {
+//$(".coupon").click(function () {
+//    let discount = $(this).children().eq(0).children().html();
+//    $(".discount").children().html(`-$${discount}`);
+//});
+
+$(".showCalTotalPriceVC").on("mouseenter", ".divDiscount", function () {
     $(".removeCoupon").removeClass("d-none");
 });
-$(".divDiscount").mouseleave(function () {
+$(".showCalTotalPriceVC").on("mouseleave", ".divDiscount", function () {
     $(".removeCoupon").addClass("d-none");
 });
-$(".removeCoupon").click(function () {
-    $(".divDiscount").toggleClass("d-none");
-    $("input[type='radio']").attr("checked", false);
-    $("#discountPrice").html("");
-    $(".selectedCouponID").children().html("");
-    $(".discount").children().html("0");
-    CalTotalPrice();
+$(".showCalTotalPriceVC").on("click", ".removeCoupon", function () {
+    $(".divDiscount").addClass("d-none");
+    $("input[class*='couponInput']:checked").prop("checked", false);
+    $(".discountPrice").html(0);
+    
+    CalTotalPriceIncludeDiscountAndFee();
 });
-$(".selectCoupon").click(function () {
-    $(".showCalTotalPriceVC").css("position", "relative");
-});
-$("#exampleModal").on("hidden.bs.modal", function () {
-    $(".showCalTotalPriceVC").css("position", "sticky").css("top", "80px");
-});
+
+//$(".divDiscount").mouseenter(function () {
+//    $(".removeCoupon").removeClass("d-none");
+//});
+//$(".divDiscount").mouseleave(function () {
+//    $(".removeCoupon").addClass("d-none");
+//});
+//$(".removeCoupon").click(function () {
+//    $(".divDiscount").toggleClass("d-none");
+//    $("input[type='radio']").attr("checked", false);
+//    $("#discountPrice").html("");
+//    $(".selectedCouponID").children().html("");
+//    $(".discount").children().html("0");
+//    CalTotalPrice();
+//});
+
 
 function CalTotalPriceIncludeDiscountAndFee() {
     let smallPrice = 0;
@@ -51,11 +45,22 @@ function CalTotalPriceIncludeDiscountAndFee() {
         let unitPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
         smallPrice += purchaseCount * unitPrice;
     })
-
     $("#smallPrice").html(smallPrice);
-    const shipperFee = Number($("#finalShipperFee").html());
+    const shipperFee = Number($("#finalShipperFee1").html());
     const paymentFee = Number($("#finalPaymentFee").html());
-    const totalPrice = smallPrice + shipperFee + paymentFee;
+    let totalPrice = smallPrice + shipperFee + paymentFee;
+    console.log(shipperFee);
+    console.log(paymentFee);
+    if ($(".couponInput:checked").length > 0) {
+        let isFreeShipperFee = $(".couponInput:checked").siblings().find(".isFreeShipperFee").attr("id");
+        if (isFreeShipperFee == "freeShipperFee") {
+            totalPrice = totalPrice - shipperFee;
+        }
+        else {
+            const discount = Number($(".discountPrice").html());
+            totalPrice = Number(totalPrice * discount / 10);
+        }
+    }
     $("#totalPrice").html(totalPrice);
 };
 
@@ -88,6 +93,7 @@ $("#confirmedShip").click(function () {
         let ship = $(".choseShip").find("div[class*='border-danger']").find(".shipperName").html();
         let shipperID = $(".choseShip").find("div[class*='border-danger']").attr("id").substring(7);
         let shipFee = $(".choseShip").find("div[class*='border-danger']").find(".shipperFee").html();
+        let isFreeShipperFee = $(".couponInput:checked").siblings().find(".isFreeShipperFee").attr("id");
         $("#finalShipper").html(ship);
         $("#finalShipperID").html(shipperID);
         $(".finalShipperFee").html(shipFee);
@@ -95,6 +101,9 @@ $("#confirmedShip").click(function () {
         $(".choseShip").slideToggle();
         $(".finalShipInfo").removeClass("d-none");
         $(".calFeePrice").removeClass("d-none");
+        if ($(".divDiscount").attr("class").split(' ').indexOf("d-none") < 0 && isFreeShipperFee == "freeShipperFee") {
+            $(".discountPrice").html(shipFee);
+        }
         CalTotalPriceIncludeDiscountAndFee();
     }
 });
@@ -103,4 +112,54 @@ $(".payment").change(function () {
     $("#finalPaymentFee").html(paymentFee);
     $(".calPaymentFeePrice").removeClass("d-none");
     CalTotalPriceIncludeDiscountAndFee();
+});
+
+$(".showCalTotalPriceVC").on("click", "#previousStore", function () {
+    changePage("Prev");
+});
+
+$(".showCalTotalPriceVC").on("click", ".selectCoupon", function () {
+    $(".showCalTotalPriceVC").css({ "position": "relative", "z-index": "1" });
+    $(".couponModal").show();
+});
+
+$(".showCalTotalPriceVC").on("click", ".cancel", function () {
+    $(".couponModal").hide();
+    $(".showCalTotalPriceVC").css({ "position": "sticky" });
+    $("input[class*='couponInput']:checked").prop("checked", false);
+});
+
+$(".showCalTotalPriceVC").on("click", ".chose", function () {
+    if ($(".couponInput:checked").length < 1) {
+        Swal.fire("請選擇一張折價券");
+    }
+    else {
+        let isZeroMinimum = $(".couponInput:checked").siblings(".coupon").find(".isZeroMinimum").attr("id");
+        if (isZeroMinimum == "notZeroMinimum") {
+            let smallPrice = Number($("#smallPrice").html());
+            let minimum = Number($(".couponInput:checked").siblings(".coupon").find(".isFreeShipperFee").html());
+            if (smallPrice < minimum) {
+                Swal.fire("消費金額不足，無法使用此優惠券");
+                return false;
+            }
+        }
+        $(".couponModal").hide();
+        $(".showCalTotalPriceVC").css({ "position": "sticky" });
+        $(".selectedCouponID").attr("id", $(".couponInput:checked").attr("id"));
+        $(".selectedCouponID").html($(".couponInput:checked").siblings().find(".couponCode").html());
+        $(".divDiscount").removeClass("d-none");
+        let isFreeShipperFee = $(".couponInput:checked").siblings().find(".isFreeShipperFee").attr("id");
+        if (isFreeShipperFee == "freeShipperFee") {
+            let shipperFee = $(".finalShipperFee").html();
+            $(".freeShipper").show();
+            $(".notFreeShipper").hide();
+            $(".discountPrice").html(shipperFee);
+        }
+        else {
+            $(".freeShipper").hide();
+            $(".notFreeShipper").show();
+            $(".discountPrice").html($(".goDiscount").html());
+        }
+        CalTotalPriceIncludeDiscountAndFee();
+    }
 });

@@ -10,6 +10,9 @@ namespace prjiSpanFinal.ViewModels.Delivery
     {
         public int isCheckoutPage { get; set; }
         public List<Coupon> buyerCoupons { get; set; }
-        
+        public CSaveShipperPaymentCoupon savedShipperPaymentCoupon { get; set; }
+
+        public Coupon selectedCoupon { get; set; }
+
     }
 }
