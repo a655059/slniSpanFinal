@@ -29,7 +29,7 @@ namespace prjiSpanFinal.Controllers
             pageSize ??= 5;
             List<CProductListViewModel> list = new();
             List<Product> Prods = null;
-            Prods = Prods = db.Products.Take(100).ToList();
+            Prods = Prods = db.Products.ToList();
 
             var MemberAcc = db.MemberAccounts.ToList();
             var ProductStatusName = db.ProductStatuses.ToList();
