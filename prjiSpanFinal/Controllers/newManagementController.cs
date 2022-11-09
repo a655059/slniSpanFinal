@@ -1,11 +1,14 @@
 ﻿using MailKit.Search;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Crypto.Engines;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
 using prjiSpanFinal.ViewModels.newManagement;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using X.PagedList;
@@ -14,12 +17,55 @@ namespace prjiSpanFinal.Controllers
 {
     public class newManagementController : Controller
     {
-        #region ProductRegion
-        public List<CProductListViewModel> GetProductsFromDatabase(string keyword, string filter)
+        private iSpanProjectContext db;
+        public newManagementController(iSpanProjectContext _db)
         {
-            var db = new iSpanProjectContext();
+            db = _db;
+        }
+        #region ProductRegion
+        public List<CProductListViewModel> GetProductsFromDatabase(int? page, int? pageSize)
+        {
+            page ??= 1;
+            pageSize ??= 5;
             List<CProductListViewModel> list = new();
-            IQueryable<Product> Prods = null;
+            List<Product> Prods = null;
+            Prods = Prods = db.Products.ToList();
+
+            var MemberAcc = db.MemberAccounts.ToList();
+            var ProductStatusName = db.ProductStatuses.ToList();
+            var RegionName = db.RegionLists.ToList();
+            var SmallTypeName = db.SmallTypes.ToList();
+            var CustomizedCategoryName = db.CustomizedCategories.ToList();
+            var ProductPic = db.ProductPics;
+            foreach (var p in Prods)
+            {
+                CProductListViewModel model = new()
+                {
+                    Product = p,
+                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == p.MemberId).MemberAcc,
+                    ProductStatusName = ProductStatusName.FirstOrDefault(i => i.ProductStatusId == p.ProductStatusId).ProductStatusName,
+                    RegionName = RegionName.FirstOrDefault(i => i.RegionId == p.RegionId).RegionName,
+                    SmallTypeName = SmallTypeName.FirstOrDefault(i => i.SmallTypeId == p.SmallTypeId).SmallTypeName,
+                    CustomizedCategoryName = CustomizedCategoryName.FirstOrDefault(i => i.CustomizedCategoryId == p.CustomizedCategoryId).CustomizedCategoryName
+                };
+                var Q = ProductPic.Where(i => i.ProductId == model.Product.ProductId);
+                if (Q.Any())
+                {
+                    model.ProductPic = Q.First().Pic;
+                }
+                list.Add(model);
+            }
+            return list;
+        }
+        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword, string filter)
+        {
+            // 過濾從client傳送過來有問題頁數
+            if (page.HasValue && page < 1)
+                return null;
+            // 從資料庫取得資料
+            var listUnpaged = GetProductsFromDatabase(page, pageSize);
+            IPagedList<CProductListViewModel> listUnpage = listUnpaged.ToPagedList(page ??= 1, pageSize);
+            IPagedList<CProductListViewModel> list = null;
             int FilterId;
             if (!String.IsNullOrEmpty(filter))
             {
@@ -33,96 +79,54 @@ namespace prjiSpanFinal.Controllers
             {
                 if (FilterId < 0)
                 {
-                    Prods = db.Products.Select(i => i);
+                    list = listUnpage;
                 }
                 else
                 {
-                    Prods = db.Products.Where(i => i.ProductStatusId == FilterId).Select(i => i);
+                    list = listUnpage.Where(i => i.Product.ProductStatusId == FilterId).Select(i => i).ToPagedList();
                 }
             }
             else if (int.TryParse(keyword, out int key))
             {
                 if (FilterId > 0)
                 {
-                    Prods = db.Products.
-                         Where(i => i.ProductId == key && i.ProductStatusId == FilterId).
-                         Select(e => e);
+                    list = listUnpage.
+                    Where(i => i.Product.ProductId == key && i.Product.ProductStatusId == FilterId).
+                    Select(e => e).ToPagedList();
                 }
                 else
                 {
-                    Prods = db.Products.
-                  Where(i => i.ProductId == key).
-                  Select(e => e);
+                    list = listUnpage.
+                  Where(i => i.Product.ProductId == key).
+                  Select(e => e).ToPagedList();
                 }
             }
             else
             {
                 if (FilterId > 0)
                 {
-                    Prods = db.Products.
-                        Where(i => i.ProductName.Contains(keyword) && i.ProductStatusId == FilterId).
-                        Select(e => e);
+                    list = listUnpage.
+                        Where(i => i.Product.ProductName.Contains(keyword) && i.Product.ProductStatusId == FilterId).
+                        Select(e => e).ToPagedList();
                 }
                 else
                 {
-                    Prods = db.Products.
-                      Where(i => i.ProductName.Contains(keyword)).
-                      Select(e => e);
+                    list = listUnpage.
+                      Where(i => i.Product.ProductName.Contains(keyword)).
+                      Select(e => e).ToPagedList();
                 }
             }
-            var MemberAcc = (from i in db.MemberAccounts select i).ToList();
-            var ProductStatusName = (from i in db.ProductStatuses select i).ToList();
-            var RegionName = (from i in db.RegionLists select i).ToList();
-            var SmallTypeName = (from i in db.SmallTypes select i).ToList();
-            var CustomizedCategoryName = (from i in db.CustomizedCategories select i).ToList();
-            var ProductPic = db.ProductPics.ToList();
-            foreach (var p in Prods)
-            {
-                CProductListViewModel model = new()
-                {
-                    Product = p,
-                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == p.MemberId).MemberAcc,
-                    ProductStatusName = (from i in ProductStatusName
-                                         where i.ProductStatusId == p.ProductStatusId
-                                         select i.ProductStatusName).First(),
-                    RegionName = (from i in RegionName
-                                  where i.RegionId == p.RegionId
-                                  select i.RegionName).First(),
-                    SmallTypeName = (from i in SmallTypeName
-                                     where i.SmallTypeId == p.SmallTypeId
-                                     select i.SmallTypeName).First(),
-                    CustomizedCategoryName = (from i in CustomizedCategoryName
-                                              where i.CustomizedCategoryId == p.CustomizedCategoryId
-                                              select i.CustomizedCategoryName).First(),
-                };
-                var Q = ProductPic.Where(i => i.ProductId == model.Product.ProductId);
-                if (Q.Any())
-                {
-                    model.ProductPic = Q.First().Pic;
-                }
-                list.Add(model);
-            }
-
-            return list;
-        }
-        protected IPagedList<CProductListViewModel> GetPagedProcess(int? page, int pageSize, string keyword, string filter)
-        {
-            // 過濾從client傳送過來有問題頁數
-            if (page.HasValue && page < 1)
-                return null;
-            // 從資料庫取得資料
-            var listUnpaged = GetProductsFromDatabase(keyword, filter);
-            IPagedList<CProductListViewModel> pagelist = listUnpaged.ToPagedList(page ??= 1, pageSize);
             // 過濾從client傳送過來有問題頁數，包含判斷有問題的頁數邏輯
-            if (pagelist.PageNumber != 1 && page.HasValue && page > pagelist.PageCount)
+            if (listUnpage.PageNumber != 1 && page.HasValue && page > listUnpage.PageCount)
                 return null;
-            return pagelist;
+            return list;
         }
         public IActionResult newProductList(string keyword, int? pageSize, int? page, string filter)
         {
+            ViewBag.Count = db.Products.Count();
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 5;//if null的寫法
+            pageSize ??= 100;//if null的寫法
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword, filter);
@@ -132,14 +136,11 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult newProductList2(int? id)
         {
-            var Q = from u in new iSpanProjectContext().Products
-                    where u.ProductId == id
-                    select u;
+            var Q = db.Products.Where(i => i.ProductId == id);
             return View(Q);
         }
         public IActionResult ProductDelete(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Products
                     where d.ProductId == id
                     select d;
@@ -150,7 +151,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ProductUndo(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Products
                     where d.ProductId == id
                     select d;
@@ -161,7 +161,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ProductDown(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Products
                     where d.ProductId == id
                     select d;
@@ -175,13 +174,9 @@ namespace prjiSpanFinal.Controllers
         #region ProductDetailRegion
         public IActionResult ProductDetailList(int? id)
         {
-            var db = new iSpanProjectContext();
             if (id != null)
             {
-                var Q = (from i in db.ProductDetails
-                         where i.ProductId == id
-                         select i);
-
+                var Q = db.ProductDetails.Where(i => i.ProductId == id);
                 return View(Q);
             }
             else
@@ -191,7 +186,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ProductDetailDelete(int id)
         {
-            iSpanProjectContext db = new();
             var pd = db.ProductDetails.FirstOrDefault(i => i.ProductDetailId == id);
             if (pd != null)
             {
@@ -205,7 +199,6 @@ namespace prjiSpanFinal.Controllers
         #region MemberRegion
         public List<CMemberListViewModel> GetMembersFromDatabase(string keyword, string filter)
         {
-            var db = new iSpanProjectContext();
             List<CMemberListViewModel> list = new();
             IQueryable<MemberAccount> mems = null;
 
@@ -302,13 +295,12 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult MemberList2(int? id)
         {
-            iSpanProjectContext db = new();
             var Q = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
             return View(Q);
         }
         public IActionResult MemberDelete(int id)
         {
-            var db = (new iSpanProjectContext());
+
             var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
             if (D.MemStatusId != 5)
             {
@@ -319,7 +311,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult MemberUndo(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
             if (D.MemStatusId == 5)
             {
@@ -330,7 +321,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult MemberStop(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
             if (D.MemStatusId != 4)
             {
@@ -349,7 +339,6 @@ namespace prjiSpanFinal.Controllers
         #region OrderRegion
         public List<COrderListViewModel> GetOrdersFromDatabase(string keyword, string filter)
         {
-            var db = new iSpanProjectContext();
             List<COrderListViewModel> list = new();
             IQueryable<Order> Orders = null;
             int FilterId;
@@ -441,7 +430,7 @@ namespace prjiSpanFinal.Controllers
                     CouponName = (from i in CouponName
                                   where i.CouponId == p.CouponId
                                   select i.CouponName).First(),
-                    MemberAcc=MemberAcc.FirstOrDefault(i=>i.MemberId==p.MemberId).MemberAcc,
+                    MemberAcc = MemberAcc.FirstOrDefault(i => i.MemberId == p.MemberId).MemberAcc,
                 };
                 list.Add(model);
             }
@@ -475,7 +464,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderOut(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
@@ -485,7 +473,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderStop(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
@@ -495,7 +482,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderDeliver(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
@@ -505,7 +491,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderFin(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
@@ -516,7 +501,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderDelete(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.Orders
                     where d.OrderId == id
                     select d;
@@ -545,7 +529,6 @@ namespace prjiSpanFinal.Controllers
         #region OrderDetailRegion
         public IActionResult OrderDetailList(int? id)
         {
-            var db = new iSpanProjectContext();
             if (id != null)
             {
                 var Qs = (from i in db.OrderDetails
@@ -583,7 +566,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult OrderDetailDelete(int id)
         {
-            var db = (new iSpanProjectContext());
             var D = from d in db.OrderDetails
                     where d.OrderDetailId == id
                     select d;
@@ -604,7 +586,6 @@ namespace prjiSpanFinal.Controllers
         #region ReportRegion
         public List<CReportListViewModel> GetReportsFromDatabase(string keyword, string filter)
         {
-            var db = new iSpanProjectContext();
             List<CReportListViewModel> list = new();
             IQueryable<Report> Reps = null;
             int FilterId;
@@ -678,7 +659,7 @@ namespace prjiSpanFinal.Controllers
                     ReportStatusName = (from i in ReportStatusName
                                         where i.ReportStatusId == p.ReportStatusId
                                         select i.ReportStatusName).First(),
-                    ReporterAcc=ReporterName.FirstOrDefault(i=>i.MemberId==p.ReporterId).MemberAcc,
+                    ReporterAcc = ReporterName.FirstOrDefault(i => i.MemberId == p.ReporterId).MemberAcc,
                 };
                 list.Add(model);
             }
@@ -712,7 +693,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportProcess(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             Q.ReportStatusId = 1;
             db.SaveChanges();
@@ -720,7 +700,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportDelete(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             Q.ReportStatusId = 2;
             db.SaveChanges();
@@ -728,7 +707,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportUndo(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             Q.ReportStatusId = 6;
             db.SaveChanges();
@@ -736,7 +714,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportWarning(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             Q.ReportStatusId = 3;
             db.SaveChanges();
@@ -744,7 +721,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportServere(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             var prod = from p in db.Products
                        where p.ProductId == Q.ProductId
@@ -757,7 +733,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ReportStop(int? id)
         {
-            var db = new iSpanProjectContext();
             var Q = db.Reports.FirstOrDefault(i => i.ReportId == id);
             var prod = from p in db.Products
                        join x in db.Reports on p.ProductId equals x.ProductId
@@ -774,7 +749,6 @@ namespace prjiSpanFinal.Controllers
         #region CouponRegion
         public List<CouponViewModel> GetCouponsFromDatabase(string keyword)
         {
-            var db = new iSpanProjectContext();
             List<CouponViewModel> list = new();
             IQueryable<Coupon> Coupons = null;
             if (keyword == null)
@@ -844,14 +818,13 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult CouponCreate(Coupon coupon)
         {
-            iSpanProjectContext db = new();
             db.Coupons.Add(coupon);
             db.SaveChanges();
             return RedirectToAction("CouponList");
         }
         public IActionResult CouponEdit(int? id)
         {
-            iSpanProjectContext db = new();
+
             var cps = (from i in db.Coupons
                        where i.CouponId == id
                        select i).First();
@@ -860,7 +833,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult CouponEdit(Coupon coupon)
         {
-            iSpanProjectContext db = new();
             var cp = db.Coupons.FirstOrDefault(i => i.CouponId == coupon.CouponId);
             cp.CouponName = coupon.CouponName;
             cp.MemberId = coupon.MemberId;
@@ -880,7 +852,6 @@ namespace prjiSpanFinal.Controllers
         #region ArgumentRegion
         public List<CArgumentViewModel> GetArgumentsFromDatabase(string keyword, string filter)
         {
-            var db = new iSpanProjectContext();
             List<CArgumentViewModel> list = new();
             IQueryable<Argument> Arguments = null;
             int FilterId;
@@ -980,7 +951,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ArgumentDelete(int? id)
         {
-            iSpanProjectContext db = new();
             var G = from i in db.Arguments
                     where i.ArgumentId == id
                     select i;
@@ -991,7 +961,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ArgumentApprove(int? id)
         {
-            iSpanProjectContext db = new();
             var G = from i in db.Arguments
                     where i.ArgumentId == id
                     select i;
@@ -1017,7 +986,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ArgumentApprove2(int? id)
         {
-            iSpanProjectContext db = new();
             var G = from i in db.Arguments
                     where i.ArgumentId == id
                     select i;
@@ -1046,7 +1014,6 @@ namespace prjiSpanFinal.Controllers
         #region EventRegion
         protected IQueryable<OfficialEventList> GetEventsFromDatabase(string keyword)
         {
-            var db = new iSpanProjectContext();
             IQueryable<OfficialEventList> Prods = null;
             if (keyword == null)
             {
@@ -1093,7 +1060,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EventCreate()
         {
-            iSpanProjectContext db = new();
             var Q = db.OfficialEventTypes.ToList();
             ViewBag.EventType = Q;
             return View();
@@ -1101,7 +1067,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult EventCreate(CCreateEventViewModel ofevent)
         {
-            iSpanProjectContext db = new();
             OfficialEventList Ev = new()
             {
                 EndDate = ofevent.EndDate,
@@ -1134,14 +1099,12 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EventEdit(int? id)
         {
-            iSpanProjectContext db = new();
             var ofevent = db.OfficialEventLists.FirstOrDefault(g => g.OfficialEventListId == id);
             return View(ofevent);
         }
         [HttpPost]
         public IActionResult EventEdit(CCreateEventViewModel ofevent)
         {
-            iSpanProjectContext db = new();
             OfficialEventList Ev = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == ofevent.OfficialEventListId);
             Ev.EndDate = ofevent.EndDate;
             Ev.EventName = ofevent.EventName;
@@ -1161,7 +1124,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EventDelete(int? id)
         {
-            iSpanProjectContext db = new();
             var E = from e in db.OfficialEventLists
                     where e.OfficialEventListId == id
                     select e;
@@ -1172,10 +1134,9 @@ namespace prjiSpanFinal.Controllers
         }
         #endregion
         #region EventCouponRegion
-      
+
         public List<CouponViewModel> GetEventCouponsFromDatabase(int id, string keyword)
         {
-            var db = new iSpanProjectContext();
             List<CouponViewModel> list = new();
             IQueryable<Coupon> Coupons = null;
             if (keyword == null)
@@ -1246,7 +1207,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult EventCouponCreate(Coupon coupon)
         {
-            iSpanProjectContext db = new();
             db.Coupons.Add(coupon);
             db.SaveChanges();
             return RedirectToAction("EventCouponList", new { id = coupon.OfficialEventListId });
@@ -1255,7 +1215,6 @@ namespace prjiSpanFinal.Controllers
         #region subEventRegion
         public IActionResult subEventList(int id)
         {
-            iSpanProjectContext db = new();
             List<CsubEventViewModel> list = new();
             var Q = from i in db.SubOfficialEventLists
                     where i.OfficialEventListId == id
@@ -1284,7 +1243,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult subEventCreate(SubOfficialEventList ofevent)
         {
-            iSpanProjectContext db = new();
             db.SubOfficialEventLists.Add(ofevent);
             try
             {
@@ -1298,7 +1256,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult subEventDelete(int? id)
         {
-            var db = (new iSpanProjectContext());
             var q = from i in db.SubOfficialEventLists
                     where i.SubOfficialEventListId == id
                     select i;
@@ -1323,7 +1280,6 @@ namespace prjiSpanFinal.Controllers
         public IActionResult subEventEdit(int? id)
         {
             ViewBag.Id = id;
-            iSpanProjectContext db = new();
             var q = from i in db.SubOfficialEventLists
                     where i.SubOfficialEventListId == id
                     select i;
@@ -1333,7 +1289,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult subEventEdit(SubOfficialEventList ofevent)
         {
-            iSpanProjectContext db = new();
             var ofeven = ofevent;
             var q = (from i in db.SubOfficialEventLists
                      where i.SubOfficialEventListId == ofevent.SubOfficialEventListId
@@ -1348,7 +1303,6 @@ namespace prjiSpanFinal.Controllers
 
         public List<subEventtoProductListViewModel> GetEtoPsFromDatabase(int id, string keyword)
         {
-            var db = new iSpanProjectContext();
             List<subEventtoProductListViewModel> list = new();
             IQueryable<SubOfficialEventToProduct> EtoPs = null;
             if (keyword == null)
@@ -1400,7 +1354,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult subEventtoProductList(int id, string keyword, int? pageSize, int? page = 1)
         {
-            iSpanProjectContext db = new();
+
             ViewBag.pageSize = pageSize;
             ViewBag.Verifies = db.Verifies.ToList();
             ViewBag.subEvent = db.SubOfficialEventLists.FirstOrDefault(i => i.SubOfficialEventListId == id).OfficialEventListId;
@@ -1415,7 +1369,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EtoPApprove(int id)
         {
-            iSpanProjectContext db = new();
+
             var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
             prod.VerifyId = 2;
             var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
@@ -1424,7 +1378,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EtoPDeny(int id)
         {
-            iSpanProjectContext db = new();
+
             var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
             prod.VerifyId = 3;
             var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
@@ -1435,20 +1389,20 @@ namespace prjiSpanFinal.Controllers
         #region PaymentRegion
         public IActionResult PaymentList()
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Payments.ToList();
             return View(pay);
         }
         public IActionResult PaymentEdit(int id)
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Payments.FirstOrDefault(i => i.PaymentId == id);
             return View(pay);
         }
         [HttpPost]
         public IActionResult PaymentEdit(Payment payment)
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Payments.FirstOrDefault(i => i.PaymentId == payment.PaymentId);
             pay.PaymentName = payment.PaymentName;
             pay.Fee = payment.Fee;
@@ -1462,7 +1416,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult PaymentCreate(Payment payment)
         {
-            iSpanProjectContext db = new();
+
             Payment pay = new()
             {
                 PaymentName = payment.PaymentName,
@@ -1474,7 +1428,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult PaymentDelete(int id)
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Payments.FirstOrDefault(i => i.PaymentId == id);
             db.Payments.Remove(pay);
             try
@@ -1491,13 +1445,13 @@ namespace prjiSpanFinal.Controllers
         #region ShipperRegion
         public IActionResult ShipperList()
         {
-            iSpanProjectContext db = new();
+
             var Shippers = db.Shippers.ToList();
             return View(Shippers);
         }
         public IActionResult ShipperDelete(int id)
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Shippers.FirstOrDefault(i => i.ShipperId == id);
             db.Shippers.Remove(pay);
             try
@@ -1517,7 +1471,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult ShipperCreate(Shipper shipper)
         {
-            iSpanProjectContext db = new();
+
             Shipper ship = new()
             {
                 ShipperName = shipper.ShipperName,
@@ -1530,14 +1484,14 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult ShipperEdit(int id)
         {
-            iSpanProjectContext db = new();
+
             var pay = db.Shippers.FirstOrDefault(i => i.ShipperId == id);
             return View(pay);
         }
         [HttpPost]
         public IActionResult ShipperEdit(Shipper shipper)
         {
-            iSpanProjectContext db = new();
+
             var ship = db.Shippers.FirstOrDefault(i => i.ShipperId == shipper.ShipperId);
             ship.ShipperName = shipper.ShipperName;
             ship.Fee = shipper.Fee;
@@ -1549,7 +1503,7 @@ namespace prjiSpanFinal.Controllers
         #region FAQRegion
         public IActionResult FAQList(int? filter)
         {
-            iSpanProjectContext db = new();
+
             List<Faq> FAQ = null;
             if (filter == null)
             {
@@ -1575,7 +1529,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult FAQCreate()
         {
-            iSpanProjectContext db = new();
+
             var FAQTypes = db.Faqtypes.ToList();
             ViewBag.FAQTypes = FAQTypes;
             return View();
@@ -1583,7 +1537,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult FAQCreate(Faq faq)
         {
-            iSpanProjectContext db = new();
+
             Faq F = new()
             {
                 Answer = faq.Answer,
@@ -1597,7 +1551,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult FAQEdit(int id)
         {
-            iSpanProjectContext db = new();
+
             var FAQTypes = db.Faqtypes.ToList();
             ViewBag.FAQTypes = FAQTypes;
             var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == id);
@@ -1606,7 +1560,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult FAQEdit(Faq faq)
         {
-            iSpanProjectContext db = new();
+
             var FAQTypes = db.Faqtypes.ToList();
             var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == faq.Faqid);
             FAQ.Answer = faq.Answer;
@@ -1617,7 +1571,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult FAQDelete(int id)
         {
-            iSpanProjectContext db = new();
+
             var faq = db.Faqs.FirstOrDefault(i => i.Faqid == id);
             db.Faqs.Remove(faq);
             try
@@ -1634,7 +1588,7 @@ namespace prjiSpanFinal.Controllers
         #region BigTypeRegion
         public IActionResult BigTypeList()
         {
-            iSpanProjectContext db = new();
+
             var bigtypes = db.BigTypes.ToList();
             List<BigTypeViewModel> list = new();
             foreach (var bt in bigtypes)
@@ -1663,7 +1617,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult BigTypeCreate(BigType bigType)
         {
-            iSpanProjectContext db = new();
+
             BigType type = new()
             {
                 BigTypeName = bigType.BigTypeName,
@@ -1681,14 +1635,14 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult BigTypeEdit(int id)
         {
-            iSpanProjectContext db = new();
+
             var type = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             return View(type);
         }
         [HttpPost]
         public IActionResult BigTypeEdit(BigType type)
         {
-            iSpanProjectContext db = new();
+
             var target = db.BigTypes.FirstOrDefault(i => i.BigTypeId == type.BigTypeId);
             target.BigTypeName = type.BigTypeName;
             db.SaveChanges();
@@ -1696,7 +1650,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult BigTypeDelete(int id)
         {
-            iSpanProjectContext db = new();
+
             var target = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             var small = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
             foreach (var o in small)
@@ -1716,7 +1670,7 @@ namespace prjiSpanFinal.Controllers
         #region SmallTypeRegion
         public IActionResult SmallTypeList(int id)
         {
-            iSpanProjectContext db = new();
+
             var st = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
             List<SmallTypeViewModel> list = new();
             var ProdCount = db.Products.ToList();
@@ -1735,14 +1689,14 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult SmallTypeCreate(int id)
         {
-            iSpanProjectContext db = new();
+
             ViewBag.BigType = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             return View();
         }
         [HttpPost]
         public IActionResult SmallTypeCreate(SmallType type)
         {
-            iSpanProjectContext db = new();
+
             SmallType st = new()
             {
                 SmallTypeName = type.SmallTypeName,
@@ -1750,11 +1704,11 @@ namespace prjiSpanFinal.Controllers
             };
             db.SmallTypes.Add(st);
             db.SaveChanges();
-            return RedirectToAction("SmallTypeList", new {id=st.BigTypeId});
+            return RedirectToAction("SmallTypeList", new { id = st.BigTypeId });
         }
         public IActionResult SmallTypeEdit(int id)
         {
-            iSpanProjectContext db = new();
+
             var ST = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == id);
             ViewBag.BigTypeName = db.BigTypes.FirstOrDefault(i => i.BigTypeId == ST.BigTypeId).BigTypeName;
             return View(ST);
@@ -1762,7 +1716,7 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult SmallTypeEdit(SmallType type)
         {
-            iSpanProjectContext db = new();
+
             var st = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == type.SmallTypeId);
             st.SmallTypeName = type.SmallTypeName;
             st.BigTypeId = type.BigTypeId;
