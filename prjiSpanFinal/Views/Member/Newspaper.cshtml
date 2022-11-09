@@ -5,13 +5,13 @@
 
 <h1 style="margin-top: 0.5em; font-weight: bold">發送電子報</h1>
 <br />
-<form name="newsinfo" method="post" enctype="multipart/form-data">
+<form name="newsinfo" method="post" enctype="multipart/form-data" id="myform">
     <div style="width:70%;">
         <div style="width:70%;display:inline-block;">
-            <input class="form-control" style="display:inline;" type="file" id="newsfile" name="newsimgphoto">
+            <input class="form-control" style="display:inline;" type="file" id="newsfile" name="newsimgphoto" multiple>
         </div>
         <div style="width:10%;display:inline-block;">
-            <button class="btn btn-secondary" type="button" id="sendmail" disabled>送出</button>
+            <button class="btn btn-secondary" type="submit" id="sendmail" disabled>送出</button>
         </div>
         <br />
         <img style="height:40%;width:30%;margin-top:0.5em;" id="newsimg" />
@@ -36,14 +36,41 @@
         $("#sendmail").removeAttr("disabled");
     })
     //送信
-        $("#sendmail").click(() => {
+        $(document).ready(function () {
+            $("#myform").on('submit', function (e) {
+                e.preventDefault();
+                var fdata = new FormData();
+                var fileInput = $('#newsfile')[0];
+                var file = fileInput.files[0];
+                fdata.append("newsimgphoto", file);
+                $.ajax({
+                    url: $(this).attr('action') || window.location.pathname,
+                    type: "POST",
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        Swal.fire(
+                            '成功',
+                            'success'
+                        );
+                    },
+                    error: function (jXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+
+
+                })
+            })
+        });
+        @*$("#sendmail").click(() => {
             let formdata = new FormData(document.newsinfo);
             fetch('@Url.Content("~/member/SendNewspaper")', {
                 method: "POST",
                 body: formdata
             }).then(response => response.text())
                 .then(data => { if (data == "OK") { alert("信件已寄出") } });
-        });
+        });*@
     </script>
 
 }

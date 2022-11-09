@@ -294,7 +294,8 @@ namespace prjiSpanFinal.Controllers
                 //return View(acc);
             }
         }
-        public IActionResult SendNewspaper(IFormFile newsimgphoto)
+        [HttpPost]
+        public IActionResult Newspaper(IFormFile newsimgphoto)
         {
             //後台新增發送電子報，另做一個view裡面可以輸入電子報要附的圖片
             try
@@ -304,16 +305,16 @@ namespace prjiSpanFinal.Controllers
                 var memEmail= db.MemberAccounts.Where(p => p.IsAcceptAd == true).Select(p=>p.Email);
                 MimeMessage message = new MimeMessage();
                 BodyBuilder builder = new BodyBuilder();
-                string picture = _host.WebRootPath + @"\img\活動.png";
+                string picture = _host.WebRootPath+@"\img\活動.png";
                 //var image = builder.LinkedResources.Add(@"C:\Users\Student\source\repos\slniSpanFinal\prjiSpanFinal\wwwroot\img\活動.png");
                 var image = builder.LinkedResources.Add(picture);
 
                 //==>這裡可以放入圖片路徑
-
+                image.ContentId = MimeUtils.GenerateMessageId();
                 string urll = $"{Request.Scheme}://{Request.Host}";
                 //builder.HtmlBody = System.IO.File.ReadAllText("./Views/Member/Subscription.cshtml");
 
-                builder.HtmlBody = $"<h1>瘋蝦Shoppping:雙11重量出擊</h1><h3>限定1111加碼超值優惠趁早!</h3><br/>" +$"<a href='{urll}'>請點選以下連結進入賣場</a><br/>" +
+                builder.HtmlBody = $"<h1>瘋蝦Shoppping:雙11重量出擊</h1><h3>限定1111加碼超值優惠趁早!</h3><br/>"+$"<img width:80px src='cid:{image.ContentId}'/><br/>" +$"<br/><a href='{urll}'>請點選以下連結進入賣場</a><br/>" +
                                    $"請注意，由於部分信箱可能有收不到站方通知信件的情況，所以也請您不吝多留意「垃圾郵件夾」。<br/>" +
                                    $"※此封郵件為系統自動發送，請勿直接回覆此郵件。 <br/>Regards,<br/>ShopDaoBao(蝦到爆) Customer Service";
                 //=>內容
