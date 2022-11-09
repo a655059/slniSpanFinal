@@ -60,7 +60,7 @@
         <h2 class="d-flex justify-content-center">我的商品</h2>
         <div class="d-flex justify-content-start mb-1">
             <div class="mx-2 input-group my-3 w-50">
-                <span class="input-group-text">商品名稱</span>
+                <span class="input-group-text">搜尋商品</span>
                 <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="selectname" />
                 <button class="btn btn-outline-secondary" type="button" id="selectbtn"><i class="fa fa-search"></i></button>
             </div>
@@ -264,6 +264,11 @@
                                 jQuery.post(url, data, callback, "json");
                             };
                             $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
+                            Swal.fire(
+                                '成功!',
+                                '您已上架成功!',
+                                'success'
+                            );
                         }
                     }
                     else {
@@ -276,6 +281,11 @@
                                 jQuery.post(url, data, callback, "json");
                             };
                             $.postJSON("/Seller/TakeDownProduct", { select: data }, function (dataname) { })
+                            Swal.fire(
+                                '成功!',
+                                '您已下架成功!',
+                                'success'
+                            );
                         }
                     }
                 });

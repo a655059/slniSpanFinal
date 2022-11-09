@@ -105,6 +105,9 @@
             color:red;
             font-size:40px;
         }
+        .背景色 {
+            background-color: #FFFAF0;
+        }
     </style>
 }
 
@@ -330,21 +333,20 @@
         <div>
             <div class="">
                 <div class="grandpa">
-                    <div class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：(新增的商品)</h4></td></div>
+                    <div class="row 高度 背色"><td><h4 class="m-3 pt-2">商品名稱：<span id="addnewpro"></span></h4></td></div>
                     @{
                         for (int i = 0; i < Model.ADName.Count; i++)
                         {
-                            string startDate = "startDate" + i;
                             string checkad = "checkad" + i;
 
-                            <div class="row bg-light py-3 border-bottom checkedparent">
-                                <div class="col-1 置中">
-                                    <div class="form-check form-switch 靠右">
-                                        <input type="checkbox" class="@checkad paymentID form-check-input" align="center" />
+                            <div class="row 背景色 py-3 border-bottom checkedparent">
+                                <div class="col-2 d-flex justify-content-center">
+                                    <div class="form-check form-switch d-flex align-items-center">
+                                        <input type="checkbox" class="@checkad paymentID form-check-input"  />
                                     </div>
                                 </div>
-                                <div class="col-2 置中"><h5>@Model.ADName[i]</h5></div>
-                                <div class="col-6 pt-3 checkes">
+                                <div class="col-2 d-flex justify-content-center"><h5 class="d-flex align-items-center">@Model.ADName[i]</h5></div>
+                                <div class="col-7 pt-3 checkes">
                                     @{
                                         string name = "radioname" + i;
                                         for (int j = 0; j < Model.ADId[i].Count; j++)
@@ -353,10 +355,9 @@
                                             <span id="daynum">@Model.AdPeriod[i][j] 天</span><span> / </span><span id="dollar"> @Model.AdFee[i][j].ToString("0") 元</span>
                                         }
                                     }
-                                    <p>@Model.AdTyepDescription[i]</p>
+                                    <p class="m-3">@Model.AdTyepDescription[i]</p>
                                 </div>
-                                <div class="col-3">
-                                    開始日期：<input id="@startDate" class="form-control orderdatepicker w-75" type="date" disabled>
+                                <div class="col-1">
                                 </div>
                             </div>
                         }
@@ -541,6 +542,8 @@
 
         next.addEventListener("click", function () {
 
+            $("#addnewpro").html(`${$("#ProductName").val()}`);
+            
             console.log($(".checkship").children())
             if ($("#ProductName").val() == "") {
                 alert("名稱請填寫完整");
@@ -613,7 +616,6 @@
 
         let selectADId = [];//存選到的廣告ID
         let selectADFee = [0, 0, 0];//存選到的價格
-        let selectADTm = [];//存選到的廣告開始時間
 
         for (let i = 0; i < 3; i++) {
             $(`input[name=radioname${i}]`).click(function () {
@@ -623,20 +625,13 @@
                 console.log(selectADId)
             })
             
-            $(`#startDate${i}`).change(function () {
-                selectADTm[i] = $(`#startDate${i}`).val();
-                console.log(selectADTm)
-            });
-            
             $(`.checkad${i}`).click(function () {
                 if ($(this).is(":checked")) {
                     $(this).closest(".checkedparent").find("input").attr("disabled", false);
                 }
                 else {
                     $(this).closest(".checkedparent").find(`input[name=radioname${i}]`).prop("checked", false);
-                    $(`#startDate${i}`).val("");
                     selectADId[i] = null;
-                    selectADTm[i] = null;
                     selectADFee[i] = 0;
                     $("#dollarall").html(`<span class="totalcolorsize"> ${parseInt(selectADFee[0]) + parseInt(selectADFee[1]) + parseInt(selectADFee[2])} </span>`);
                     $(this).closest(".checkedparent").find("input").attr("disabled", true);
@@ -644,17 +639,17 @@
                 }
             })
 
-                // 日期過期不能選
-            $(`#startDate${i}`).click(function () {
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = today.getMonth() + 1;
-                let date = today.getDate();
-                if (date < 10) {
-                    date = "0" + date;
-                }
-                $(`#startDate${i}`).attr("min", `${year}-${month}-${date}`);
-            });
+            //    // 日期過期不能選
+            //$(`#startDate${i}`).click(function () {
+            //    const today = new Date();
+            //    const year = today.getFullYear();
+            //    const month = today.getMonth() + 1;
+            //    let date = today.getDate();
+            //    if (date < 10) {
+            //        date = "0" + date;
+            //    }
+            //    $(`#startDate${i}`).attr("min", `${year}-${month}-${date}`);
+            //});
 
         }
 
@@ -714,7 +709,6 @@
                 ShiperID: shiper,
                 PaymentID: payment,
                 SelectADId: selectADId,
-                StartDate: selectADTm,
             }
             console.log(pushData)
 
