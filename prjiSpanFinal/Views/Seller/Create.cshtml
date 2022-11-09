@@ -108,6 +108,16 @@
         .背景色 {
             background-color: #FFFAF0;
         }
+
+        .物流寬{
+            width:200px;
+        }
+        .物流大寬{
+            width:300px;
+        }
+        .金流大寬 {
+            width: 450px;
+        }
     </style>
 }
 
@@ -134,7 +144,8 @@
                 <input type="file" id="text4" class="form-group" accept="image/*">
             </div>
             <div class="modal-footer">
-                <button id="demomodal" type="button" class="btn btn-info">Demo</button>
+                <button id="demomodal" type="button" class="btn btn-info">Demo1</button>
+                <button id="demomodal2" type="button" class="btn btn-info">Demo2</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
@@ -274,47 +285,47 @@
                     <textarea id="Description" class="form-control  描述欄位 mt-3 mx-3" aria-label="With textarea"></textarea><span style="color:red;margin:3px" id="checkdes"></span>
                 </div>
 
-
                 <div class="d-flex justify-content-start mt-1">
-                    <label class="名稱寬">物流方式</label><span style="color:red" id="addship"></span>
-                    <div class="col-1"></div>
-                    <div class="row py-2 m-3 d-flex justify-content-around col-6 checkship">
-                        @{
-                            for (int i = 0; i < Model.memship.Count; i++)
-                            {
-                                <div class="col-3"></div>
-                                <div class="col-6 my-1">
-                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
-                                </div><br />
-                                <div class="col-3"></div>
+                    <div class="">
+                        <label class="名稱寬">物流方式</label><span style="color:red" id="addship"></span>
+                        <div class="col-1"></div>
+                        <div class="row py-2 m-3 d-flex justify-content-start checkship 物流大寬">
+                            @{
+                                for (int i = 0; i < Model.memship.Count; i++)
+                                {
+                                    <div class="col-3"></div>
+                                    <div class="col-6 my-1">
+                                        <label class="d-flex justify-content-start 物流寬"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
+                                    </div><br />
+                                    <div class="col-3"></div>
+                                }
                             }
-                        }
+                        </div>
+                        <div class="col-2"></div><br />
                     </div>
-                    <div class="col-2"></div><br />
-                </div>
 
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬">付款方式</label><span style="color:red" id="addpay"></span>
-                    <div class="col-1"></div>
-                    <div class="row py-2 m-3 d-flex justify-content-around col-6  checkpay">
-                        @{
-                            foreach (var i in Model.mempay)
-                            {
-                                <div class="col-3"></div>
-                                <div class="col-6 my-1">
-                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i.PaymentId).png" width="40" height="40" class="mx-2" />@(i.PaymentName)</label>
-                                </div><br />
-                                <div class="col-3"></div>
+                    <div class="">
+                        <label class="名稱寬">付款方式</label><span style="color:red" id="addpay"></span>
+                        <div class="col-1"></div>
+                        <div class="row py-2 m-3 d-flex justify-content-around checkpay 金流大寬">
+                            @{
+                                foreach (var i in Model.mempay)
+                                {
+                                    <div class="col-3"></div>
+                                    <div class="col-6 my-1">
+                                        <label class="d-flex justify-content-start"><img src="~/img/payment@(i.PaymentId).png" width="40" height="40" class="mx-2" />@(i.PaymentName)</label>
+                                    </div><br />
+                                    <div class="col-3"></div>
+                                }
                             }
-                        }
+                        </div>
+                        <div class="col-2"></div><br />
                     </div>
-                    <div class="col-2"></div><br />
                 </div>
-
 
                 <div class="row ">
-                    <div class="col-4"></div>
-                    <div class="col-8">
+                    <div class="col-3"></div>
+                    <div class="col-9">
                         <input type="button" value="下一步" id="next" class="btn btn-warning m-3 nextwork" />
                         <input type="button" value="Demo" id="demo" class="btn btn-info m-3 nextwork" />
                     </div>
@@ -584,6 +595,12 @@
             document.getElementById("text2").value=2;
             document.getElementById("text3").value=5000;
         });
+        $("#demomodal2").click(function () {
+            $("#text1").val("圓形");
+            $("#text2").val("50");
+            $("#text3").val("6666");
+        });
+
 
         //=====================================================
         //表單照片轉二進位儲存
@@ -722,11 +739,11 @@
                 '成功!',
                 '您已新增成功!',
                 'success'
-            );
+            ).then(function () { location.href = "/Seller/NewIndex"; });
 
-            setTimeout(function () {
-                location.href = "/Seller/NewIndex"
-            }, 2000);
+            //setTimeout(function () {
+            //    location.href = "/Seller/NewIndex"
+            //}, 2000);
            
         })
         //============防呆=====================

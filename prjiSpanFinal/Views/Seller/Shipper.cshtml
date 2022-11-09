@@ -206,11 +206,11 @@
                 '成功!',
                 '您已修改成功!',
                 'success'
-            );
+            ).then(function () { location.href = "/Seller/Center"; });
 
-            setTimeout(function () {
-                location.href = "/Seller/Center"
-            }, 2000);
+            //setTimeout(function () {
+            //    location.href = "/Seller/Center"
+            //}, 2000);
         })
 
 

@@ -158,8 +158,18 @@
                                     <td class="couponName 置中 col" align="center">@Model[i].CouponName</td>
                                     <td class="couponCode 置中 col" align="center">@Model[i].CouponCode</td>
                                     <td class="discount 置中 col" align="center">@Model[i].Discount</td>
-                                    <td class="置中 col" align="center"><div class="startDate">@Model[i].StartDate.ToString("yyyy-MM-dd")</div>|<br /><div class="endDate">@Model[i].ExpiredDate.ToString("yyyy-MM-dd")</div></td>
-                                    <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy-MM-dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy-MM-dd")</td>
+                                    @{
+                                        if (Model[i].ExpiredDate > DateTime.Now)
+                                        {
+                                            <td class="置中 col" align="center"><div class="startDate">@Model[i].StartDate.ToString("yyyy-MM-dd")</div>|<br /><div class="endDate">@Model[i].ExpiredDate.ToString("yyyy-MM-dd")</div></td>
+                                            <td class="置中 col" align="center">@Model[i].ReceiveStartDate.ToString("yyyy-MM-dd")<br />|<br />@Model[i].ReceiveEndDate.ToString("yyyy-MM-dd")</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="置中 col" align="center">已過期</td>
+                                            <td class="置中 col" align="center">已過期</td>
+                                        }
+                                    }
                                     @{
                                         if (Model[i].IsFreeDelivery == true)
                                         {
@@ -287,8 +297,11 @@
             var myModalEl = document.getElementById('exampleModal');
             var modal = bootstrap.Modal.getInstance(myModalEl);
            modal.hide();
-
-            location.href = "/Seller/Coupon";//跳回Coupon頁面
+            Swal.fire(
+                '成功!',
+                '您已新增成功!',
+                'success'
+            ).then(function () { location.href = "/Seller/Coupon"; });
         })
 
         let couponid;
@@ -307,7 +320,6 @@
                 $("#checkEdit").prop("checked", false);
             }
         });
-
 
 
         $("#saveEdit").click(async function () {
@@ -339,21 +351,18 @@
             console.log(coupon)
             let json = JSON.stringify(coupon);
            let response = await fetch("@Url.Content("~/Seller/EditCoupon")" + `?jsonString=${json}`);
-
             var myModalEl = document.getElementById('ExampleModal');
             var modal = bootstrap.Modal.getInstance(myModalEl);
-           modal.hide();
-
+            modal.hide();
 
             Swal.fire(
                 '成功!',
-                '您已新增成功!',
+                '您已修改成功!',
                 'success'
-            );
-
-            setTimeout(function () {
-                location.href = "/Seller/Coupon";//跳回Coupon頁面
-            }, 2000);
+            ).then(function () { location.href = "/Seller/Coupon"; });
+            //setTimeout(function () {
+            //    location.href = "/Seller/Coupon";//跳回Coupon頁面
+            //}, 2000);
             
 
         });
@@ -364,9 +373,19 @@
         demo.addEventListener("click", async function () {
             document.getElementById("text1").value="Demo優惠";
             document.getElementById("text2").value=6666;
-            document.getElementById("text3").value =6;
+            document.getElementById("text3").value = 6;
+            $("#startDate").val("2022-11-17");
+            $("#endDate").val("2022-11-30");
+            $("#text0").val("6000");
         })
-
+        demoEdit.addEventListener("click", async function () {
+            document.getElementById("text11").value = "Demo編輯優惠";
+            document.getElementById("text22").value = 8888;
+            document.getElementById("text33").value = 8;
+            $("#startDate11").val("2022-11-17");
+            $("#endDate11").val("2022-11-30");
+            $("#text00").val("8000");
+        })
 
         //===============搜尋=========================
         $("#selectbtn").click(function () {

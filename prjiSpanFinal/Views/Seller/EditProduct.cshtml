@@ -104,6 +104,18 @@
         .按鈕大小 {
             font-size: 20px;
         }
+
+        .物流寬 {
+            width: 200px;
+        }
+
+        .物流大寬 {
+            width: 300px;
+        }
+
+        .金流大寬 {
+            width: 450px;
+        }
     </style>
 }
 
@@ -131,6 +143,7 @@
                 <img id="blah" src="#" alt="your image" />
             </div>
             <div class="modal-footer">
+                <button id="demomadal" type="button" class="btn btn-primary">Demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button id="close" type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
             </div>
@@ -147,7 +160,7 @@
             <div class="排版 mx-5">
                 <h4 class=" mb-4">商品資訊</h4>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" id="pid" value="@Model.ProductID"/>
+                <input type="hidden" id="pid" value="@Model.ProductID" />
                 <div class="d-flex justify-content-start">
                     <label class="名稱寬">名稱</label>
                     <input id="ProductName" type="text" class="form-control 名稱 mx-3 textval" value="@Model.ProductName" />
@@ -155,7 +168,7 @@
                 </div>
                 <div class="d-flex justify-content-start ">
                     <label class="名稱寬 mt-2">類別</label>
-                    <input type="hidden" value="@Model.bigTypealone" id="@Model.bigTypeIDalone" class="bigTypealone"/>
+                    <input type="hidden" value="@Model.bigTypealone" id="@Model.bigTypeIDalone" class="bigTypealone" />
                     <select class="form-select w-25 m-3 " aria-label="Default select example" id="bigType">
                         @{
                             for (int i = 0; i < Model.bigType.Count; i++)
@@ -181,7 +194,7 @@
                     <select class="form-select w-25 m-3" aria-label="Default select example" id="category">
                         <option value="1" selected>未分類</option>
                         @{
-                            if (Model.Category.Count >0)
+                            if (Model.Category.Count > 0)
                             {
                                 for (int i = 0; i < Model.Category.Count; i++)
                                 {
@@ -224,7 +237,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <td class="col 規格列表"><img src="~/img/問號圖.png" width="30" height="30"/></td>
+                                                    <td class="col 規格列表"><img src="~/img/問號圖.png" width="30" height="30" /></td>
                                                 }
                                             }
                                             <td class="col 規格列表"><p><button type="button" class="btn btn-danger  規格按鈕 delbtn"> X</button></p></td>
@@ -247,14 +260,14 @@
                         @*    大頭照相片1     *@
                         <label class="btn" for="commentPhoto1">
                             @{
-                                if (Model.DBtoPic.Count>0)
+                                if (Model.DBtoPic.Count > 0)
                                 {
                                     <input type="hidden" id="pic0" value="@Model.BodyPicID[0]" />
-                                <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    <img width="100" height="100" class="border  " style="background-image: url('data:image;base64,@System.Convert.ToBase64String(@Model.DBtoPic[0])') ; background-size: contain; background-repeat:no-repeat; background-position:center" />
                                 }
                                 else
                                 {
-                                <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
+                                    <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                 }
                             }
                         </label>
@@ -301,22 +314,42 @@
                 </div>
 
 
-                <div class="d-flex justify-content-start ">
-                    <label class="名稱寬">物流</label>
-                    <div class="col-1"></div>
-                    <div class="row py-2 m-3 d-flex justify-content-around col-6">
-                        @{
-                            for (int i = 0; i < Model.memship.Count; i++)
-                            {
-                                <div class="col-3"></div>
-                                <div class="col-6 my-1">
-                                    <label class="d-flex justify-content-start"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
-                                </div><br />
-                                <div class="col-3"></div>
+                <div class="d-flex justify-content-start mt-1">
+                    <div class="">
+                        <label class="名稱寬">物流方式</label><span style="color:red" id="addship"></span>
+                        <div class="col-1"></div>
+                        <div class="row py-2 m-3 d-flex justify-content-start checkship 物流大寬">
+                            @{
+                                for (int i = 0; i < Model.memship.Count; i++)
+                                {
+                                    <div class="col-3"></div>
+                                    <div class="col-6 my-1">
+                                        <label class="d-flex justify-content-start 物流寬"><img src="~/img/payment@(i+5).png" width="40" height="40" class="mx-2" id="@Model.shipID[i]" />@Model.memship[i]</label>
+                                    </div><br />
+                                    <div class="col-3"></div>
+                                }
                             }
-                        }
+                        </div>
+                        <div class="col-2"></div><br />
                     </div>
-                    <div class="col-2"></div><br />
+
+                    <div class="">
+                        <label class="名稱寬">付款方式</label><span style="color:red" id="addpay"></span>
+                        <div class="col-1"></div>
+                        <div class="row py-2 m-3 d-flex justify-content-around checkpay 金流大寬">
+                            @{
+                                foreach (var i in Model.mempay)
+                                {
+                                    <div class="col-3"></div>
+                                    <div class="col-6 my-1">
+                                        <label class="d-flex justify-content-start"><img src="~/img/payment@(i.PaymentId).png" width="40" height="40" class="mx-2" />@(i.PaymentName)</label>
+                                    </div><br />
+                                    <div class="col-3"></div>
+                                }
+                            }
+                        </div>
+                        <div class="col-2"></div><br />
+                    </div>
                 </div>
 
                 <div class="row ">
@@ -333,6 +366,12 @@
 </div>
 @section Scripts{
     <script>
+        $("#demomadal").click(function () {
+            $("#text1").val("橢圓形");
+            $("#text2").val("100");
+            $("#text3").val("9999");
+        });
+
 
         let detailid = [];
         $(document).on("click", ".delbtn", function () {   //刪除資料庫生成的規格
@@ -582,11 +621,11 @@
                 '成功!',
                 '您已修改成功!',
                 'success'
-            );
+             ).then(function () { location.href = "/Seller/NewIndex"; });
 
-            setTimeout(function () {
-                location.href = "/Seller/NewIndex"
-            }, 2000);
+            //setTimeout(function () {
+            //    location.href = "/Seller/NewIndex"
+            //}, 2000);
 
         })
     </script>

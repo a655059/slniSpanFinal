@@ -682,6 +682,18 @@ namespace prjiSpanFinal.Controllers
             {
                 return RedirectToAction("Login", "Member");
             }
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+
+            if (_db.MemberAccounts.Where(n=>n.MemberId== id && n.MemStatusId!=2).Select(n=>n).Any())
+            {
+                CLoginCheck cLoginCheck = new CLoginCheck()
+                {
+                    MemberId = id,
+                    MemStatusId = _db.MemberAccounts.Where(n => n.MemberId == id).Select(n => n.MemStatusId).FirstOrDefault()
+                };
+                return View(cLoginCheck);
+            }
             return View();
         }
 
@@ -837,7 +849,10 @@ namespace prjiSpanFinal.Controllers
             var smallType = _db.SmallTypes.Select(i => i.SmallTypeName).ToList();
             var shiperlist = _db.ShipperToSellers.Where(n => n.MemberId == memId).Select(n => n.ShipperId).ToList();
             var memship = _db.Shippers.Where(n => shiperlist.Contains(n.ShipperId)).Select(s => s.ShipperName).ToList();
-            var mempay = _db.PaymentToSellers.Where(n => n.MemberId == memId).Select(n => n.PaymentId).ToList();
+
+            var paylist = _db.PaymentToSellers.Where(n => n.MemberId == memId).Select(n => n.PaymentId).ToList();
+            var mempay = _db.Payments.Where(n => paylist.Contains(n.PaymentId)).Select(n => n).ToList();
+
             var Category = _db.CustomizedCategories.Where(n => n.MemberId == memId).Select(n => n.CustomizedCategoryName).ToList();
             var CustomizedCategoryID = _db.CustomizedCategories.Where(n => n.MemberId == memId).Select(n => n.CustomizedCategoryId).ToList();
             
@@ -868,8 +883,9 @@ namespace prjiSpanFinal.Controllers
                 smallType = smallType,
                 memship = memship,
                 shipID = shiperlist,
-                PaymentID = mempay,
-                Category=Category,
+                PaymentID = paylist,
+                mempay = mempay,
+                Category =Category,
                 CustomizedCategoryID=CustomizedCategoryID,
                 Categoryalone= pCategoryName,
                 ProductName = pName,
