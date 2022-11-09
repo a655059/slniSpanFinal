@@ -81,12 +81,14 @@
         int MyregionID = 0;
         int MycountryID = 0;
         int Mygender = 0;
+
         bool gender_male=false;
         bool gender_female = false;
         bool gender_other = false;
         bool? MYTW=false;
         bool? MYFORIEN = false;
         bool? CheckEmail = false;
+
         //string countryName = "";
         //int countryID = 0;
         //count
@@ -104,6 +106,7 @@
             Mygender = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).Gender;
             MYTW = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).IsTw;
             CheckEmail = db.MemberAccounts.FirstOrDefault(m => m.MemberId == loginMember.MemberId).IsAcceptAd;
+
             if (Mygender == 2)
             {
                 gender_female = true;
@@ -124,6 +127,7 @@
             {
                 MYFORIEN = true;
             }
+
         }
 }
 <div class="row " id="viewPage">
@@ -139,12 +143,14 @@
                                 <legend>基本資料</legend>
                                 <div>
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                    <input asp-for="MemberId" class="form-control" type="text" id="acount" name="MemberId" style="display:none;" />
+                                    <input asp-for="MemberId" class="form-control" type="text" id="MemberId" name="MemberId" style="display:none;" />
+                                    <input asp-for="MemStatusId" class="form-control" type="text" id="MemStatusId" name="MemStatusId" style="display:none;" />
+
 
 
                                     <div class="st1">
                                         <label asp-for="Name" class="p1">姓名</label>
-                                        <input asp-for="Name" class="form-control" type="text" id="acount" name="Name" autofocus placeholder="名字" size="40" autocomplete="off" />
+                                        <input asp-for="Name" class="form-control" type="text" id="memName" name="Name" autofocus placeholder="名字" size="40" autocomplete="off" />
                                     </div>
 
                                     <div class="st1">
@@ -193,8 +199,13 @@
                                 </div>
                                 <div class="st1">
                                     <label asp-for="Email" class="p1">信箱</label>
-                                    <input asp-for="Email" class="form-control" type="text" name="Email" size="40" />
+                                    <input asp-for="Email" class="form-control" type="text" name="Email" size="40" id="mail"/>
                                 </div>
+                                <div class="st1">
+                                    <label class="p1">發送驗證信</label>
+                                    <button type="button" class="btn btn-outline-info" style="float:left;" id="EmailCheck">發送驗證信</button>
+                                </div>
+                                <br />
                                 <div class="st1">
                                     <label asp-for="BackUpEmail" class="p1">備用信箱</label>
                                     <input asp-for="BackUpEmail" class="form-control" type="text" name="BackUpEmail" size="40" />
@@ -278,23 +289,24 @@
 
 @section Scripts{
     <script>
-        //const ok = document.querySelector("#ok")
-        //ok.addEventListener("click", function () {
-        //    alert("修改成功");
-        //    //Swal.fire(
-        //    //    '恭喜!',
-        //    //    '您已修改成功，請重新登入!',
-        //    //    'success'
-        //    //)
-        //})
-        /*const CheckEmail = false;*/
-        //$("#ok").click(function () {
-        //    let dataAll = document.querySelectorAll(".democheck:checked")
-        //    if (dataAll.length != 0) {
-        //        CheckEmail = true;
-        //        $.post(`/member/Subscription`, { CheckEmail: CheckEmail })
-        //    }
-        //})
+
+        //發送驗證信
+        const memberName = document.querySelector("#memName")
+        const memberMail = document.querySelector("#mail")
+        const memStausID = document.querySelector("#MemStatusId")
+        const memID = document.querySelector("#MemberId")
+        $("#EmailCheck").click(function () {
+            $(this).prop('disabled', true)
+            $.post('/member/SentCheckMail', { memberName: memberName.value, memberMail: memberMail.value, memberID: memID.value}, function (data) {
+                if (data == "1") {
+                    alert("已成功發信")
+                } else if(data="2")
+                {
+                    alert("發信失敗，請聯繫客服")
+                    }
+                else { alert("發信失敗，請聯繫客服")}
+            })
+        });
 
 
         $("#country").on("change", function () {
@@ -329,6 +341,15 @@
         $(document).ready(function () {
             //var form = $('#myform')[0];
             //var formData = new FormData(form);
+            
+            if (memStausID.value == 2) {
+                $('#EmailCheck').prop('disabled', true);
+            }
+            else {
+                $('#EmailCheck').prop('disabled', false);
+
+            }
+
             $('#myform').on('submit', function (e) {
                 //console.log($(this).serialize());
                 e.preventDefault();
