@@ -260,7 +260,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getItem(int nowpage)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).ToList(), nowpage);
+            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).Where(p=>p.ProductStatusId!=1||p.ProductStatusId!=2).ToList(), nowpage);
             return Json(res);
         }
         public IActionResult ADshowCheckItem(int itemID)

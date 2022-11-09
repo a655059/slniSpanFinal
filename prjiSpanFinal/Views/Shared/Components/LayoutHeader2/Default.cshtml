@@ -22,20 +22,11 @@
             <!-- /LOGO -->
             <!-- SEARCH BAR -->
             <div class="col-xl-7 align-self-center loschbar">
-                <div class="input-group mb-1">
+                <div class="input-group mb-1" id="LayoutSearchBar">
                     <input type="text" id="SearchInputTxT" class="form-control input-text" placeholder="搜尋好物前先領取折價券..." aria-label="SearchInputTxT" aria-describedby="basic-addon2">
-                    <div class="resultBox">
-                        @*<li>123</li>
-                        <li>123</li>
-                        <li>123</li>
-                        <li>123</li>
-                        <li>123</li>
-                        <li>123</li>*@
+                    <div class="resultBox" id="LayoutSearchSugBox">
                     </div>
                     <a id="SearchInputbtn" class="btn btn-outline-warning btn-lg" href="#"><i class="fa fa-search"></i></a>
-                </div>
-                <div class="searchkeyspace d-flex" id="searchkeyspace">
-                    <div class="searchkeywordbox"><a class="linknoline searchkeyword"></a>　　</div>
                 </div>
             </div>
             <!-- /SEARCH BAR -->
@@ -66,14 +57,6 @@
                     <div class="searchcart-Cart1" style="cursor:pointer">
                         <div>
                             <i class="fa fa-shopping-cart searchcart-Cart-icon" id="ShoppingCartIcon">
-                                @*@if (getCarts > 0)
-                                {
-                                    <span class="qty" id="itemCountInCart">@getCarts</span>
-                                }
-                                else
-                                {
-                                    <span class="qty" id="itemCountInCart">0</span>
-                                }*@
                             </i>
                             <div class="text-center">
                                 <span>購物車</span>

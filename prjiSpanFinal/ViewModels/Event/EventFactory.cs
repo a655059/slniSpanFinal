@@ -26,7 +26,7 @@ namespace prjiSpanFinal.ViewModels.Event
         {
             EventViewModel res = new EventViewModel();
             //活動為非預設活動
-            OfficialEventList Event = _db.OfficialEventLists.Where(e => e.OfficialEventListId != 1).FirstOrDefault();
+            OfficialEventList Event = _db.OfficialEventLists.Where(e => e.OfficialEventListId != 1&&e.OfficialEventListId==EventID).FirstOrDefault();
             if (Event == null)
             {
                 return res;

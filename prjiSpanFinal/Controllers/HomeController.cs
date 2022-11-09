@@ -146,30 +146,31 @@ namespace prjiSpanFinal.Controllers
         {
             List<string> keywordList = new List<string>();
             //No cookies
-            if (Request.Cookies["key"] == null)
+            if (Request.Cookies["LayoutSearchKeyword"] == null)
             {
                 if (!String.IsNullOrEmpty(key)) {
-                    Response.Cookies.Append("key", key);
+                    Response.Cookies.Append("LayoutSearchKeyword", key);
                     keywordList.Add(key);
                 }
             }
             //if cookies 
             else
             {
-                string keywordReq = Request.Cookies["key"];
+                string keywordReq = Request.Cookies["LayoutSearchKeyword"];
                 keywordList = (keywordReq.Split(",")).ToList();
                 if (!String.IsNullOrEmpty(key))
                 {
                     if (!keywordList.Contains(key)) { 
                         keywordList.Add(key);
-                        if (keywordList.Count == 8)
+                        if (keywordList.Count >5)
                         {
                             keywordList.RemoveAt(0);
                         }
                         keywordReq = String.Join(",", keywordList.ToArray());
-                        Response.Cookies.Append("key", keywordReq);
+                        Response.Cookies.Append("LayoutSearchKeyword", keywordReq);
                     }
                 }
+                keywordList.Reverse();
             }
             return Json(keywordList.ToArray());
         }

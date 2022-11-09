@@ -277,15 +277,21 @@ align-items:center;
         height: 55px;
         width: 100%;
         outline: none;
-        box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+        /*box-shadow: 0px 1px 5px rgba(0,0,0,0.1);*/
     }
-    .loschbar .resultBox{
-        /*padding:10px 8px;*/
-        max-height:280px;
-        overflow-y:auto;
-        width:100%;
-        opacity:0;
-        pointer-events:none;
+    .loschbar input:focus {
+        box-shadow: 0px 1px 5px rgba(0,0,0,0);
+    }
+    .loschbar .resultBox {
+        top: 55px;
+        background-color: white;
+        position: absolute;
+        max-height: 280px;
+        overflow-y: auto;
+        width: 100%;
+        z-index:4;
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+        display:none;
     }
 .loschbar li{
     list-style:none;
@@ -293,16 +299,17 @@ align-items:center;
     width:100%;
     cursor:default;
     border-radius:3px;
-    display:none;
 }
 .loschbar li:hover{
     background:#efefef;
 }
-.loschbar > .input-group > .input-text:focus {
-    /*box-shadow: 0px 0px 0px;*/
-    border-color: #f8c146;
-    outline: 0px;
-}
+    .loschbar li > i {
+        padding-right:10PX;
+    }
+    .loschbar > .input-group > .input-text:focus {
+        border-color: #f8c146;
+        outline: 0px;
+    }
     .loschbar > .input-group > .form-control {
         
         border: 0px;
