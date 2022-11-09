@@ -163,7 +163,7 @@
 </table>
 @*分頁導覽*@
 <div style="align-content:center" class="paginations">
-    @{int ps = 3;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
+    @{int ps = 5;if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}}
       @Html.Pager(pagedList).Url(page => Url.Action("MemberList", new {pageSize=ps, page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
         
     每頁
