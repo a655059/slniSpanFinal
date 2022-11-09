@@ -108,9 +108,6 @@ function loadactivemsg(scid) {
         $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
     }
     else {
-        $.ajaxSetup({
-            async: false
-        });
         $.getJSON(`/Msgapi/Getchat`, { scid: scid, sid: memacc }, function (data) {
             $("#messagebody").html("");
             activec = scid;
@@ -128,9 +125,6 @@ function loadactivemsg(scid) {
             $(`.msgcid[value="${activec}"]`).siblings("a").children().eq(1).children("span").remove();
             refreshtimestamp();
             $("#messagebody").scrollTop($("#messagebody").prop("scrollHeight"));
-        });
-        $.ajaxSetup({
-            async: true
         });
     }
 }
@@ -369,9 +363,6 @@ function CMessagePack(head, msg, time, multiid = "0") {
     }
     else if (head == "tyui") {
         getid = msg;
-        $.ajaxSetup({
-            async: false
-        });
         $.getJSON(`/Msgapi/GetProductbyId`, { id: getid }, function (data) {
             if (data == undefined) {
                 return;
@@ -392,9 +383,6 @@ function CMessagePack(head, msg, time, multiid = "0") {
                 </div>
             </a>`;
 
-        });
-        $.ajaxSetup({
-            async: true
         });
     }
     else if (head == "ghjk") {
@@ -482,9 +470,9 @@ function CMessageDialog(id, img, msg, time, acc, read = 1, head="qwer") {
     return str;
 }
 
-//$.ajaxSetup({
-//    async: false
-//});
+$.ajaxSetup({
+    async: false
+});
 
 $("#msgtextinput").on("keypress", function (e) {
     if (e.which == 13) {
