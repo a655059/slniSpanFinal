@@ -63,7 +63,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult Event(int? Eventid)
         {
-            if (Eventid > 1)
+            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).Any())
             {
                 EventViewModel EventVM = (new EventFactory()).fToEvent(Convert.ToInt32(Eventid));
                 MemberAccount evtLoggedAcc = new MemberAccount();
@@ -71,21 +71,18 @@ namespace prjiSpanFinal.Controllers
                 {
                     evtLoggedAcc = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
                 }
-                if (EventVM != null)
+                EventVM.LogingMember = evtLoggedAcc;
+                //開始一周前開放看
+                double evtPublishDay = (DateTime.Now).Subtract(EventVM.Event.StartDate).TotalDays;
+                //如果是管理員開放看
+                if (evtLoggedAcc!=null && evtLoggedAcc.MemberId == 1)
                 {
-                    EventVM.LogingMember = evtLoggedAcc;
-                    //開始一周前開放看
-                    double evtPublishDay = (DateTime.Now).Subtract(EventVM.Event.StartDate).TotalDays;
-                    //如果是管理員開放看
-                    if (evtLoggedAcc.MemberId == 1)
-                    {
-                        return View(EventVM);
-                    }
-                    //七天前開放瀏覽
-                    else if (evtPublishDay < 7)
-                    {
-                        return View(EventVM);
-                    }
+                    return View(EventVM);
+                }
+                //七天前開放瀏覽
+                else if (evtPublishDay > -7)
+                {
+                    return View(EventVM);
                 }
             }
             return RedirectToAction("Index", "Home");

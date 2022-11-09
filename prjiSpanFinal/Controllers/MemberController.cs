@@ -1252,6 +1252,34 @@ namespace prjiSpanFinal.Controllers
                 return RedirectToAction("Balance", "Member");
             }
         }
+
+        public IActionResult TakeTradeFee(int id)
+        {
+            int total = _context.OrderDetails.Where(o => o.OrderId == id).Select(p => Convert.ToInt32(Math.Ceiling(Convert.ToInt32(p.Unitprice) * p.Quantity*p.Order.Coupon.Discount))).Sum(p => p);
+            total += _context.Orders.Where(m => m.OrderId == id).Select(p => p.Payment.Fee + p.Shipper.Fee).FirstOrDefault();
+            int tradefee = Convert.ToInt32(Math.Ceiling(total * 0.05));
+
+            TradeFeeList fee = new TradeFeeList
+            {
+                Date = DateTime.Now,
+                OrderId = id,
+                Fee = tradefee,
+                Total = total,
+            };
+            _context.TradeFeeLists.Add(fee);
+            try 
+            {
+                _context.SaveChanges();
+                int sellerid = _context.OrderDetails.Where(m => m.OrderId == id).Select(m => m.ProductDetail.Product.MemberId).FirstOrDefault();
+                int[] res = { sellerid, total, tradefee };
+                return Json(res);
+            } 
+            catch 
+            {
+                return Json("error");
+            }
+            
+        }
         public IActionResult BalanceDemo1()
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;

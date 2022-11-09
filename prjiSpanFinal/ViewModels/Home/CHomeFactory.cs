@@ -109,7 +109,7 @@ namespace prjiSpanFinal.ViewModels.Home
                 float Discount = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault();
                 bool DeliveryFree = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.IsFreeDelivery).FirstOrDefault();
                 DateTime StartDate = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId&&e.VerifyId==2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
-                int Sale = db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o=> (o.Order.FinishDate).CompareTo(StartDate)>0).GroupBy(o => o.Quantity).Select(o => o.Key).Sum(o => o);
+                int Sale = db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o=> (o.Order.ReceiveDate).CompareTo(StartDate)>0).Select(o=>o.Quantity).Sum(o => o);
                 byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
                 var Detail = db.ProductDetails.Where(p => p.ProductId == prod.ProductId);
                 var Price = Detail.Select(p => p.UnitPrice);
@@ -135,6 +135,15 @@ namespace prjiSpanFinal.ViewModels.Home
                     obj.isDeliveryFree = true;
                 else if (!DeliveryFree)
                     obj.isDeliveryFree = false;
+
+                if (Sale > 0)
+                {
+                    decimal SaleD = Convert.ToDecimal(Sale);
+                    decimal a = Math.Round(((SaleD / (Stock + Sale)) * 100), 2);
+                    obj.Percentage = a + "%";
+                }
+                else
+                    obj.Percentage = "0%";
 
                 var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
                 if (Effect.Any())

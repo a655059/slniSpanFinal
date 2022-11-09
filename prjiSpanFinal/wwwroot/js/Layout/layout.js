@@ -1,8 +1,13 @@
 ﻿let mymemid = $("#msgmemid").val();
 let header2exist = $("#header2").length != 0;
-let searchAutoComplete = [];
 
-getShoppingCart();
+$(document).ready(function () {
+    if (header2exist) {
+        getShoppingCart();
+        GetSearchDetail();
+    }
+})
+
 
 //回到頂端
 $(function () {
@@ -48,10 +53,12 @@ function getShoppingCart() {
 }
 
 //搜尋
-let searchInput = document.querySelector("#SearchInputTxT");
-let searchBtn = document.querySelector("#SearchInputbtn");
 let searchkeyword = "";
+
 if (header2exist) {
+    let searchInput = document.querySelector("#SearchInputTxT");
+    let searchBtn = document.querySelector("#SearchInputbtn");
+    
     searchInput.addEventListener("input", () => {
         let searchkeyword = searchInput.value;
         let url = `/Category/SearchResult/?keyword=${searchkeyword}`;
@@ -65,36 +72,44 @@ if (header2exist) {
         }
     })
     searchBtn.addEventListener("click", () => {
-        searchkeyword=searchInput.value;
+        searchkeyword = searchInput.value;
         GetSearchDetail();
+    })
+
+    $(document).click(function (e) {
+        var inputFocused = $("#SearchInputTxT").is(':focus');
+        var clickedInsideAcDiv = $(e.target).closest('#LayoutSearchSugBox').length > 0;
+        if (inputFocused || clickedInsideAcDiv) {
+            $('#LayoutSearchSugBox').show();
+        }
+        if (!inputFocused && !clickedInsideAcDiv) {
+            $('#LayoutSearchSugBox').hide();
+        }
+    });
+
+    $("#LayoutSearchSugBox").on("click", ".LayoutSearchresult", function (evt) {
+        let Textvalue = $(this).text();
+        location.href=`/Category/SearchResult/?keyword=${Textvalue}`
     })
 }
         //搜尋紀錄
 
-GetSearchDetail();
+
 function GetSearchDetail() {
     $.post(`/Home/GetSearchDetail`, { key: searchkeyword }, function (data) {
+
         if (data.length > 0) {
-            $("#searchkeyspace").html("");
-            $("#searchkeyspace").append(SearchKeyWord(data))
+            searchAutoComplete = data;
+            $("#LayoutSearchSugBox").html("");
+            let SugsData = "";
+            for (let i = 0; i < data.length; i++) {
+                SugsData += `<li class="LayoutSearchresult"><i class="fa-regular fa-clock"></i>${data[i]}</li>`;
+            }
+            $("#LayoutSearchSugBox").html(SugsData);
         }
-        //if (data.length > 0) {
-        //    searchAutoComplete = data;
-        //    console.log(searchAutoComplete);
-        //}
 
     })
 }
-function SearchKeyWord(data) {
-    res = "";
-    if (data.length > 0) {
-        for (let i = 0; i < data.length; i++) {
-            res += `<div class="searchkeywordbox" ><a class="linknoline searchkeyword" href="/Category/SearchResult/?keyword=${data[i]}">${data[i]}</a></div>`;
-        }
-    }
-    return res;
-}
-
 
 //notification
 function ticktotimestamp(today) {

@@ -391,19 +391,13 @@
                         res += `<div class="Item-Price">$` + `${Math.round(data[i].item.price[0])} - $` + `${Math.round(data[i].item.price[1])}</div>`
                     }
                     res +=`<div class="Item-Checkbox">`
-                    if (data[i].item.product.productStatusId != 0)
-                    {
-                        res += `<input type="checkbox" class="Item-check" disabled value="${data[i].item.product.productId}" />`
-                    }
-                    else
-                    {
+                    
                         if (data[i].item.product.productId == itemID) {
                             res += `<input type="checkbox" class="Item-check" value="${data[i].item.product.productId}" checked/>`
                         }
                         else {
                             res += `<input type="checkbox" class="Item-check" value="${data[i].item.product.productId}" />`
                         }
-                    }
                     res += `</div>
                                 </div>
                             </div>`
