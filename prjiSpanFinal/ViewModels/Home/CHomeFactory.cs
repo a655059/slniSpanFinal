@@ -136,15 +136,6 @@ namespace prjiSpanFinal.ViewModels.Home
                 else if (!DeliveryFree)
                     obj.isDeliveryFree = false;
 
-                if (Sale > 0)
-                {
-                    decimal SaleD = Convert.ToDecimal(Sale);
-                    decimal a = Math.Round(((SaleD / (Stock + Sale)) * 100), 2);
-                    obj.Percentage = a + "%";
-                }
-                else
-                    obj.Percentage = "0%";
-
                 var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
                 if (Effect.Any())
                 {

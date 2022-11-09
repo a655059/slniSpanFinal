@@ -26,8 +26,13 @@
                             <div class="px-1 d-flex flex-column justify-content-between">
                                 <div class="FSitemPrice">$@decimal.Round(item.price[0])</div>
                                 <div class="FS-container">
-                                    <div class="FS-progress" style="width:@item.Percentage;"></div>
-                                    <div><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>                                    
+                                    @{
+                                        string percent = item.Percentage + "%";
+                                    }
+                                    <div class="FS-progress" style="width:@percent"></div>
+                                    @if (item.Percentage>50) { 
+                                        <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>                                    
+                                    }
                                     <div class="FS-soldbar">售出 @item.sale</div>
                                 </div>
                             </div>

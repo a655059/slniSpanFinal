@@ -14,9 +14,11 @@ namespace prjiSpanFinal.ViewModels.Home
         public float discount { get; set; }
         public int stock { get; set; }
         public int sale { get; set; }
-        public string Percentage {
-            get;
-            set;
+        public decimal Percentage {
+            get {
+                decimal SaleD = Convert.ToDecimal(sale);
+                return  Math.Round(((SaleD / (stock + sale)) * 100), 2);
+            }
         }
         public List<int> effects { get; set; }
         public bool isDeliveryFree

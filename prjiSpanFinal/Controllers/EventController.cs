@@ -61,11 +61,11 @@ namespace prjiSpanFinal.Controllers
             return Content("2", "text/plain", Encoding.UTF8);
             }
         }
-        public IActionResult Event(int? Eventid)
+        public IActionResult Event(int Eventid)
         {
-            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).Any())
+            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid&&e.OfficialEventTypeId==1).Any())
             {
-                EventViewModel EventVM = (new EventFactory()).fToEvent(Convert.ToInt32(Eventid));
+                EventViewModel EventVM = (new EventFactory()).fToEvent(Eventid);
                 MemberAccount evtLoggedAcc = new MemberAccount();
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
@@ -87,5 +87,14 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult FlashSales(int Eventid)
+        {
+            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid && e.OfficialEventTypeId == 2).Any())
+            {
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
+
