@@ -631,8 +631,16 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult CheckoutConfirm()
         {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
             string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);
             CDeliveryCheckoutViewModel cDeliveryCheckout = JsonSerializer.Deserialize<CDeliveryCheckoutViewModel>(jsonString);
+            foreach (var a in cDeliveryCheckout.sellerShipperPayments)
+            {
+                if (a.savedShipperPaymentCoupon.couponID > 0)
+                {
+                    a.savedShipperPaymentCoupon.selectedCoupon = dbContext.Coupons.Where(i => i.CouponId == a.savedShipperPaymentCoupon.couponID).FirstOrDefault();
+                }
+            }
             return View(cDeliveryCheckout);
         }
         public IActionResult OrderSuccess()

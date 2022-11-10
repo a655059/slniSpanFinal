@@ -33,7 +33,7 @@ namespace prjiSpanFinal.ViewComponents
                         x.savedShipperPaymentCoupon = a.savedShipperPaymentCoupon;
                     }
                 }
-                if (x.savedShipperPaymentCoupon != null)
+                if (x.savedShipperPaymentCoupon != null && x.savedShipperPaymentCoupon.couponID > 0)
                 {
                     x.selectedCoupon = dbContext.Coupons.Where(i => i.CouponId == x.savedShipperPaymentCoupon.couponID).FirstOrDefault();
                 }

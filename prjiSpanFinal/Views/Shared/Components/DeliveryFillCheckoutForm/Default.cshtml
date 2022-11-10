@@ -48,7 +48,17 @@
                     </div>
                     <div>
                         <div class="fs-5">@i.productName</div>
-                        <div>@i.productStyle</div>
+                        @{
+                            if (i.productStyle == "樣式一")
+                            {
+                                <div class="d-none">@i.productStyle</div>
+                            }
+                            else
+                            {
+                                <div>@i.productStyle</div>
+                            }
+                        }
+
                         <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
                     </div>
                 </div>

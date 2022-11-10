@@ -75,6 +75,8 @@
                 $("#nextStore").html("確認並前往下一筆");
             }
         });
+
+
         function changePage(NextOrPrevOrIndex) {
             const sellerCount = Number($(".sellerIDCount").html());
             const sellerIDIndex = Number($(".sellerIDIndex").html());
@@ -116,7 +118,6 @@
                 Swal.fire("請選擇一種付款方式");
             }
             else {
-                console.log($(this).html());
                 const sellerID = Number($(".sellerID:checked").attr("id").substring(6));
                 const recipient = $("#recipient").val();
                 const email = $("#email").val();

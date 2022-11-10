@@ -584,10 +584,6 @@
                 couponPosition += 365;
             });
             couponPageSelect();
-            //$(".couponLeft").prop("disabled", true);
-            //if (couponCount <= 2) {
-            //    $(".couponRight").prop("disabled", true);
-            //}
         });
 
         function userIsSeller() {
@@ -603,12 +599,12 @@
 
         $(".couponRight").click(function () {
             $(".sellerCoupon").animate({ left: "-=365px"});
-            couponPageClickCount += 2;
+            couponPageClickCount += 1;
             couponPageSelect();
         });
         $(".couponLeft").click(function () {
             $(".sellerCoupon").animate({ left: "+=365px" });
-            couponPageClickCount -= 2;
+            couponPageClickCount -= 1;
             couponPageSelect();
         });
         function couponPageSelect() {

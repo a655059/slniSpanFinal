@@ -3,7 +3,7 @@
 *@
 
 @model prjiSpanFinal.ViewModels.Delivery.CInfoForCalTotalPriceViewModel
-@{ 
+@{
     int shipperFee = 0;
     int paymentFee = 0;
     string couponID = "";
@@ -12,8 +12,12 @@
     {
         shipperFee = Model.savedShipperPaymentCoupon.shipperFee;
         paymentFee = Model.savedShipperPaymentCoupon.paymentFee;
-        couponID = "couponID" + Model.savedShipperPaymentCoupon.couponID;
-        couponName = Model.savedShipperPaymentCoupon.couponName;
+        if (Model.selectedCoupon != null)
+        {
+            couponID = "couponID" + Model.savedShipperPaymentCoupon.couponID;
+            couponName = Model.savedShipperPaymentCoupon.couponName;
+        }
+
     }
 }
 
@@ -83,14 +87,12 @@
             <div class="divDiscount d-flex justify-content-between mb-3 d-none">
                 <div>折扣碼:<span class="selectedCouponID text-danger" id="@couponID">@couponName</span></div>
                 <div class="d-flex justify-content-end align-items-center">
-                    @{
-                        <div class="freeShipper">
-                            <div class="text-danger">-$<span class="discountPrice">0</span></div>
-                        </div>
-                        <div class="notFreeShipper">
-                            <div class="text-danger"><span class="discountPrice">0</span>折</div>
-                        </div>
-                    }
+                    <div class="freeShipper">
+                        <div class="text-danger">-$<span class="discountPrice">0</span></div>
+                    </div>
+                    <div class="notFreeShipper">
+                        <div class="text-danger"><span class="discountPrice">0</span>折</div>
+                    </div>
 
                     <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
                 </div>
@@ -110,25 +112,53 @@
                     <div class="text-danger">+$<span class="finalPaymentFee" id="finalPaymentFee">@paymentFee</span></div>
                 </div>
             </div>
-            <div class="divDiscount d-flex justify-content-between mb-3">
-                <div>折扣碼:<span class="selectedCouponID text-danger" id="@couponID">@couponName</span></div>
-                <div class="d-flex justify-content-end align-items-center">
-                    @{
-                        if (Model.selectedCoupon.IsFreeDelivery)
-                        {
-                            <div class="freeShipper">
-                                <div class="text-danger">-$<span class="discountPrice">0</span></div>
-                            </div>
-                            <div class="notFreeShipper" style="display:none">
-                                <div class="text-danger"><span class="discountPrice">0</span>折</div>
-                            </div>
+            if (Model.selectedCoupon != null)
+            {
+                <div class="divDiscount d-flex justify-content-between mb-3">
+                    <div>折扣碼:<span class="selectedCouponID text-danger" id="@couponID">@couponName</span></div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        @{
+                            if (Model.selectedCoupon.IsFreeDelivery)
+                            {
+                                <div class="freeShipper">
+                                    <div class="text-danger">-$<span class="discountPrice">@Model.savedShipperPaymentCoupon.shipperFee</span></div>
+                                </div>
+                                <div class="notFreeShipper" style="display:none">
+                                    <div class="text-danger"><span class="discountPrice">@Model.savedShipperPaymentCoupon.shipperFee</span>折</div>
+                                </div>
+                            }
+                            else
+                            {
+                                string discount = (Model.selectedCoupon.Discount * 10).ToString("0");
+                                <div class="freeShipper" style="display:none">
+                                    <div class="text-danger">-$<span class="discountPrice">@discount</span></div>
+                                </div>
+                                <div class="notFreeShipper">
+                                    <div class="text-danger"><span class="discountPrice">@discount</span>折</div>
+                                </div>
+                            }
                         }
-
-                    }
-
-                    <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
+                        <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="divDiscount d-flex justify-content-between mb-3 d-none">
+                    <div>折扣碼:<span class="selectedCouponID text-danger" id="@couponID">@couponName</span></div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="freeShipper">
+                            <div class="text-danger">-$<span class="discountPrice">0</span></div>
+                        </div>
+                        <div class="notFreeShipper">
+                            <div class="text-danger"><span class="discountPrice">0</span>折</div>
+                        </div>
+                        <button class="removeCoupon bg-transparent border-0 d-none"><i class="fa-solid fa-xmark text-primary"></i></button>
+                    </div>
+                </div>
+            }
+
+
         }
     }
     <div class="d-flex justify-content-between mb-3 border-top">
@@ -162,55 +192,55 @@
                                 @foreach (var i in Model.buyerCoupons)
                                 {
                                     string idName = "couponID" + i.CouponId;
-                                <div class="text-center mb-2">
-                                    @{
-                                        if (Model.savedShipperPaymentCoupon != null && Model.savedShipperPaymentCoupon.couponID == i.CouponId)
-                                        {
-                                            <input type="radio" class="couponInput btn-check" name="options" id="@idName" autocomplete="off" checked>
-                                        }
-                                        else
-                                        {
-                                            <input type="radio" class="couponInput btn-check" name="options" id="@idName" autocomplete="off">
-                                        }
-                                    }
-                                    <label class="coupon btn btn-outline-warning text-black" for="@idName">
+                                    <div class="text-center mb-2">
                                         @{
-                                            if (i.IsFreeDelivery)
+                                            if (Model.savedShipperPaymentCoupon != null && Model.savedShipperPaymentCoupon.couponID == i.CouponId)
                                             {
-                                                if (i.MinimumOrder > 0)
-                                                {
-                                                    <div class="isZeroMinimum" id="notZeroMinimum">滿<span class="isFreeShipperFee" id="freeShipperFee">@i.MinimumOrder</span>即享免運費</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="isZeroMinimum" id="zeroMinimum"><span class="isFreeShipperFee" id="freeShipperFee">不限金額皆享免運費</span></div>
-                                                }
+                                                <input type="radio" class="couponInput btn-check" name="options" id="@idName" autocomplete="off" checked>
                                             }
                                             else
                                             {
-                                                string discount = (i.Discount * 10).ToString("0.0");
-                                                if (discount.Split('.')[1] == "0")
+                                                <input type="radio" class="couponInput btn-check" name="options" id="@idName" autocomplete="off">
+                                            }
+                                        }
+                                        <label class="coupon btn btn-outline-warning text-black" for="@idName">
+                                            @{
+                                                if (i.IsFreeDelivery)
                                                 {
-                                                    discount = discount.Split('.')[0];
-                                                }
-                                                if (i.MinimumOrder > 0)
-                                                {
-
-                                                    <div class="isZeroMinimum" id="notZeroMinimum">滿$<span class="isFreeShipperFee" id="notFreeShipperFee">@i.MinimumOrder</span>即享<span class="goDiscount">@discount</span>折優惠</div>
+                                                    if (i.MinimumOrder > 0)
+                                                    {
+                                                        <div class="isZeroMinimum" id="notZeroMinimum">滿<span class="isFreeShipperFee" id="freeShipperFee">@i.MinimumOrder</span>即享免運費</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="isZeroMinimum" id="zeroMinimum"><span class="isFreeShipperFee" id="freeShipperFee">不限金額皆享免運費</span></div>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <div class="isZeroMinimum" id="zeroMinimum">不限金額皆享<span class="isFreeShipperFee goDiscount" id="notFreeShipperFee">@discount</span>折優惠</div>
+                                                    string discount = (i.Discount * 10).ToString("0.0");
+                                                    if (discount.Split('.')[1] == "0")
+                                                    {
+                                                        discount = discount.Split('.')[0];
+                                                    }
+                                                    if (i.MinimumOrder > 0)
+                                                    {
+
+                                                        <div class="isZeroMinimum" id="notZeroMinimum">滿$<span class="isFreeShipperFee" id="notFreeShipperFee">@i.MinimumOrder</span>即享<span class="goDiscount">@discount</span>折優惠</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="isZeroMinimum" id="zeroMinimum">不限金額皆享<span class="isFreeShipperFee goDiscount" id="notFreeShipperFee">@discount</span>折優惠</div>
+                                                    }
                                                 }
                                             }
-                                        }
-                                        <div>折扣碼:<span class="couponCode">@i.CouponCode</span></div>
-                                        @{
-                                            string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
-                                        }
-                                        <div>活動期間:<span>@period</span></div>
-                                    </label>
-                                </div>
+                                            <div>折扣碼:<span class="couponCode">@i.CouponCode</span></div>
+                                            @{
+                                                string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                            }
+                                            <div>活動期間:<span>@period</span></div>
+                                        </label>
+                                    </div>
                                 }
                                 <div class="d-flex justify-content-center p-2">
                                     <button type="button" class="cancel btn btn-secondary me-2">取消</button>

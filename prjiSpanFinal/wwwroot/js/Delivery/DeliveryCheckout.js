@@ -3,10 +3,6 @@
     CalTotalPriceIncludeDiscountAndFee()
     
 });
-//$(".coupon").click(function () {
-//    let discount = $(this).children().eq(0).children().html();
-//    $(".discount").children().html(`-$${discount}`);
-//});
 
 $(".showCalTotalPriceVC").on("mouseenter", ".divDiscount", function () {
     $(".removeCoupon").removeClass("d-none");
@@ -14,7 +10,7 @@ $(".showCalTotalPriceVC").on("mouseenter", ".divDiscount", function () {
 $(".showCalTotalPriceVC").on("mouseleave", ".divDiscount", function () {
     $(".removeCoupon").addClass("d-none");
 });
-$(".showCalTotalPriceVC").on("click", ".removeCoupon", function () {
+$(".showCalTotalPriceVC").off("click", ".removeCoupon").on("click", ".removeCoupon", function () {
     $(".divDiscount").addClass("d-none");
     $("input[class*='couponInput']:checked").prop("checked", false);
     $(".discountPrice").html(0);
@@ -22,20 +18,7 @@ $(".showCalTotalPriceVC").on("click", ".removeCoupon", function () {
     CalTotalPriceIncludeDiscountAndFee();
 });
 
-//$(".divDiscount").mouseenter(function () {
-//    $(".removeCoupon").removeClass("d-none");
-//});
-//$(".divDiscount").mouseleave(function () {
-//    $(".removeCoupon").addClass("d-none");
-//});
-//$(".removeCoupon").click(function () {
-//    $(".divDiscount").toggleClass("d-none");
-//    $("input[type='radio']").attr("checked", false);
-//    $("#discountPrice").html("");
-//    $(".selectedCouponID").children().html("");
-//    $(".discount").children().html("0");
-//    CalTotalPrice();
-//});
+
 
 
 function CalTotalPriceIncludeDiscountAndFee() {
@@ -48,18 +31,19 @@ function CalTotalPriceIncludeDiscountAndFee() {
     $("#smallPrice").html(smallPrice);
     const shipperFee = Number($("#finalShipperFee1").html());
     const paymentFee = Number($("#finalPaymentFee").html());
-    let totalPrice = smallPrice + shipperFee + paymentFee;
-    console.log(shipperFee);
-    console.log(paymentFee);
+    let totalPrice = 0;
     if ($(".couponInput:checked").length > 0) {
         let isFreeShipperFee = $(".couponInput:checked").siblings().find(".isFreeShipperFee").attr("id");
         if (isFreeShipperFee == "freeShipperFee") {
-            totalPrice = totalPrice - shipperFee;
+            totalPrice = smallPrice + shipperFee + paymentFee - shipperFee;
         }
         else {
             const discount = Number($(".discountPrice").html());
-            totalPrice = Number(totalPrice * discount / 10);
+            totalPrice = Math.ceil(Number(smallPrice * discount / 10)) + shipperFee + paymentFee;
         }
+    }
+    else {
+        totalPrice = smallPrice + shipperFee + paymentFee;
     }
     $("#totalPrice").html(totalPrice);
 };
@@ -114,7 +98,7 @@ $(".payment").change(function () {
     CalTotalPriceIncludeDiscountAndFee();
 });
 
-$(".showCalTotalPriceVC").on("click", "#previousStore", function () {
+$(".showCalTotalPriceVC").off("click", "#previousStore").on("click", "#previousStore", function () {
     changePage("Prev");
 });
 
@@ -158,7 +142,7 @@ $(".showCalTotalPriceVC").on("click", ".chose", function () {
         else {
             $(".freeShipper").hide();
             $(".notFreeShipper").show();
-            $(".discountPrice").html($(".goDiscount").html());
+            $(".discountPrice").html($(".couponInput:checked").siblings().find(".goDiscount").html());
         }
         CalTotalPriceIncludeDiscountAndFee();
     }
