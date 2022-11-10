@@ -13,6 +13,7 @@
             orderList.Add(i.order);
         }
     }
+
 }
 
 @section Styles{
@@ -31,12 +32,12 @@
 }
 
 
-<h1>花錢囉</h1>
+<h1>前往付款</h1>
 <a href="@Url.Content("~/Delivery/Order")">回會員中心</a>
 @{
     foreach (var i in orderList)
     {
-        <div class="border px-3 py-2 my-3">
+        <div class="layout border px-3 py-2 my-3">
             @{
                 string sellerAcc = Model.Where(j => j.order == i).Select(j => j.seller.MemberAcc).FirstOrDefault();
             }
@@ -58,7 +59,7 @@
                                 imgSrc = Url.Content("~/img/imageNotFound.png");
                             }
 
-                            <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="itemLayout d-flex justify-content-between align-items-center mb-2">
                                 <div class="d-flex align-items-center">
                                     <div class="imgDiv me-3"><img src="@imgSrc" /></div>
                                     <div>
@@ -74,7 +75,7 @@
                                                     <div>@j.productDetail.Style</div>
                                                 }
                                             }
-                                            <div class="productPrice text-danger">$<span>@j.productDetail.UnitPrice.ToString("0")</span></div>
+                                            <div class="productPrice text-danger">$<span class="unitPrice">@j.productDetail.UnitPrice.ToString("0")</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -90,8 +91,8 @@
             
             <div class="border-bottom py-2 d-flex justify-content-between align-items-end">
                 <div>
-                    <div>物流方式:<span class="mx-2">@q.shipper.ShipperName</span><span class="text-danger me-2" style="font-size:14px">運費:<span class="ms-2">$</span><span>@q.shipper.Fee</span></span></div>
-                    <div>付款方式:<span class="mx-2">@q.payment.PaymentName</span><span class="text-danger me-2" style="font-size:14px">手續費:<span class="ms-2">$</span><span>@q.payment.Fee</span></span></div>
+                    <div>物流方式:<span class="mx-2">@q.shipper.ShipperName</span><span class="text-danger me-2" style="font-size:14px">運費:<span class="ms-2">$</span><span class="shipperFee">@q.shipper.Fee</span></span></div>
+                    <div>付款方式:<span class="mx-2">@q.payment.PaymentName</span><span class="text-danger me-2" style="font-size:14px">手續費:<span class="ms-2">$</span><span class="paymentFee">@q.payment.Fee</span></span></div>
                     @{
                         if (q.coupon.CouponId > 1)
                         {
@@ -99,11 +100,11 @@
                             {
                                 if (q.coupon.MinimumOrder > 0)
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span>免運費<span class="ms-2">-$</span><span>@q.shipper.Fee</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span>免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
                                 }
                                 else
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額免運費<span class="ms-2">-$</span><span>@q.shipper.Fee</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
                                 }
                             }
                             else
@@ -111,11 +112,11 @@
                                 string discount = (q.coupon.Discount * 10).ToString();
                                 if (q.coupon.MinimumOrder > 0)
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span><span class="ms-2">@discount</span><span>折</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span><span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
                                 }
                                 else
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額<span class="ms-2">@discount</span><span>折</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額<span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
                                 }
                             }
                         }
@@ -138,7 +139,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">請確認是否付款</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -184,6 +185,16 @@
 
 @section Scripts{
     <script>
+        $(".layout").each(function () {
+            let smallPrice = 0;
+            $(this).find(".itemLayout").each(function () {
+                smallPrice += Number($(this).find(".unitPrice").html()) * Number($(this).find(".purchaseCount").html());
+            });
+            let shipperFee = Number($(this).find(".shipperFee").html());
+            let paymentFee = Number($(this).find(".paymentFee").html());
+
+        });
+
 
         let orderID = "";
         $(".goOPayCheckout").click(async function () {
@@ -214,5 +225,6 @@
             let response = await fetch("@Url.Content("~/Delivery/SetPaidOrderToSession")" + `?orderID=${orderID}`);
             let data = response.text();
         });
+
     </script>
 }
