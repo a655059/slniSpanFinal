@@ -85,7 +85,7 @@ namespace prjiSpanFinal.ViewModels.Event
             }
             foreach (var item in list)
             {
-                if (item.ProductStatusId == 1 || item.ProductStatusId == 2)
+                if (item.ProductStatusId !=0)
                 {
                     continue;
                 }
@@ -129,7 +129,60 @@ namespace prjiSpanFinal.ViewModels.Event
                 res.Add(a);
             }
             return res;
+        }
+        public List<FreshSalesShowItem> ftoFSShowItem(List<Product> list) 
+        {
+            List<FreshSalesShowItem> res = new List<FreshSalesShowItem>();
+            if (!list.Any())
+            {
+                return res;
+            }
+            foreach (var prod in list)
+            {
+                if (prod.ProductStatusId !=0)
+                {
+                    continue;
+                }
+                FreshSalesShowItem obj = new FreshSalesShowItem();
+                decimal Discount = Convert.ToDecimal(_db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault());
 
+                DateTime StartDate = _db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
+                int Sale = _db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o => (o.Order.ReceiveDate).CompareTo(StartDate) > 0).Select(o => o.Quantity).Sum(o => o);
+                byte[] Pic = _db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
+                var Detail = _db.ProductDetails.Where(p => p.ProductId == prod.ProductId);
+                var Price = Detail.Select(p => p.UnitPrice);
+                List<decimal> PriceList = new List<decimal>();
+                if (Price.Min() == Price.Max())
+                {
+                    PriceList.Add(Price.Max());
+                }
+                else
+                {
+                    PriceList.Add(Price.Max());
+                    PriceList.Add(Price.Min());
+                }
+                int Stock = Detail.Select(p => p.Quantity).Sum(q => q);
+                bool isStart = false;
+                bool isOver = false;
+                SubOfficialEventToProduct prodstatus = _db.SubOfficialEventToProducts.Where(p => p.ProductId == prod.ProductId).Where(p => p.VerifyId == 2).FirstOrDefault();
+                
+
+                    if (_db.SubOfficialEventToProducts.Where(p => p.ProductId == prod.ProductId).Where(p => p.VerifyId == 2).Where(e => DateTime.Now.CompareTo(e.SubOfficialEventList.OfficialEventList.StartDate) >= 0 && DateTime.Now.CompareTo(e.SubOfficialEventList.OfficialEventList.EndDate) <= 0).Any())
+                        isStart = true;
+                    if (_db.SubOfficialEventToProducts.Where(p => p.ProductId == prod.ProductId).Where(p => p.VerifyId == 2).Where(e => DateTime.Now.CompareTo(e.SubOfficialEventList.OfficialEventList.EndDate) >= 0).Any())
+                        isOver = true;
+                obj.product = prod;
+                obj.price = PriceList;
+                if (Pic != null)
+                    obj.pic = Pic;
+                obj.stock = Stock;
+                obj.discount = Discount;
+                obj.isStart = isStart;
+                obj.isOver = isOver;
+
+                res.Add(obj);
+            }
+            return res;
         }
     }
 }

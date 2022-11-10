@@ -1,11 +1,4 @@
-﻿/*.Setionset {
-    background-color: #0072E3!important;
-}
-header {
-    background-color: #0072E3 !important;
-}*/
-
-.event-header {
+﻿.event-header {
     border-radius: 10px;
     overflow: hidden;
 }

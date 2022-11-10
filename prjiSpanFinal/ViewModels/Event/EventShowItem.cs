@@ -16,5 +16,6 @@ namespace prjiSpanFinal.ViewModels.Event
         public decimal discount { get; set; }
         public bool isDeliveryFree { get; set; }
 
+
     }
 }
