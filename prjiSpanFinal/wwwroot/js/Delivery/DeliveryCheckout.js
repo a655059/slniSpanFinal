@@ -39,7 +39,12 @@ function CalTotalPriceIncludeDiscountAndFee() {
         }
         else {
             const discount = Number($(".discountPrice").html());
-            totalPrice = Math.ceil(Number(smallPrice * discount / 10)) + shipperFee + paymentFee;
+            $(".purchaseCount").each(function () {
+                let purchaseCount = Number($(this).html());
+                let unitPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
+                totalPrice += purchaseCount * Math.ceil(Number(unitPrice * discount/10));
+            })
+            totalPrice = totalPrice + shipperFee + paymentFee;
         }
     }
     else {
@@ -47,6 +52,7 @@ function CalTotalPriceIncludeDiscountAndFee() {
     }
     $("#totalPrice").html(totalPrice);
 };
+
 
 //DeliveryFillCheckoutForm.js
 

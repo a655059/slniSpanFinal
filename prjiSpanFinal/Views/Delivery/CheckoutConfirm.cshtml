@@ -150,13 +150,15 @@
             let paymentFee = Number($(this).find(".paymentFee").html());
             let totalPrice = 0;
             if ($(this).find(".freeShipper").length > 0) {
-                
                 if ($(this).find(".freeShipper").attr("id") == "freeShipper") {
                     totalPrice = smallPrice + shipperFee + paymentFee - shipperFee;
                 }
                 else {
                     let discount = Number($(this).find(".freeShipper").html());
-                    totalPrice = Math.ceil(smallPrice * discount / 10) + shipperFee + paymentFee;
+                    $(this).find(".itemLayout").each(function () {
+                        totalPrice += Math.ceil(Number($(this).find(".unitPrice").html())*discount/10) * Number($(this).find(".purchaseCount").html());
+                    });
+                    totalPrice = totalPrice + shipperFee + paymentFee;
                 }
             }
             else {

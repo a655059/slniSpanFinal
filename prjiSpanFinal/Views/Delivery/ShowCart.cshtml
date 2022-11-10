@@ -57,11 +57,21 @@
                                         </div>
                                     </div>
                                     <div>
-                                        @{ 
+                                        @{
                                             string productLink = Url.Content("~/Item/Index") + "?id=" + i.product.ProductId;
-                                        } 
-                                        <a href="@productLink" class="productLink"><label class="productName form-check-label">@i.product.ProductName</label></a>
-                                        <div class="productStyle text-black-50">@i.productDetail.Style</div>
+                                        }
+                                        <a href="@productLink" class="productLink"><label class="productName form-check-label fs-5" style="cursor:pointer">@i.product.ProductName</label></a>
+                                        @{
+                                            if (i.productDetail.Style == "樣式一")
+                                            {
+                                                <div class="productStyle text-black-50 d-none">@i.productDetail.Style</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="productStyle text-black-50">@i.productDetail.Style</div>
+                                            }
+                                        }
+
                                         <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
                                     </div>
                                 </div>
