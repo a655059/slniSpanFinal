@@ -35,7 +35,7 @@
             @{
                 if (DateTime.Now.CompareTo(Model.Event.EndDate) < 0)
                 {
-                    <div class="card-body" id="ItemArea">
+                    <div class="card-body d-flex justify-content-center" id="ItemArea">
 
                     </div>
                 }
@@ -56,7 +56,8 @@
     let num = 1;
         let today = new Date();
         let time;
-
+        const toFixedWithoutZeros = (num, precision) =>
+            num.toFixed(precision).replace(/\.0+$/, '');
         let nowTime =
             [
                 [0, 11, "上午"],
@@ -79,44 +80,55 @@
             }
             num = $(this).find("input").val();
             getEventFSItems();
-    })
+        })
+
     function getEventFSItems() {
         $.post('/Event/getEventFSItem', { num: num, eid: eveid }, function (data) {
             //console.log(data);
             fillEventFSItems(data);
         })
     }
+
         function fillEventFSItems(data) {
             $("#ItemArea").html("");
         let res = "";
-        if (data.length > 0) {
+            if (data.length > 0) {
+                console.log(data)
             for (let ele of data) {
-
+                let discount = toFixedWithoutZeros(ele.discount * 10, 2);
+                let percent = ele.percentage + "%";
+                let productLink = `@Url.Content("~/Item/Index")`+"?id=" + ele.product.productId;
                 res += `<div class="sellsitem ">
-            <a class="linknoline sellsitem-imgbox" href="#!">`;
+            <a class="linknoline sellsitem-imgbox" href="${productLink}">`;
                 res += `<input type="hidden" value="${ele.product.ProductId}" />`;
+                if (num == 2 && time == "上午") {
+                    res += ` <div class="ItemIcon DiscountIcon">???</div>`;
+                }
+                else if (num == 1 && time == "下午") {
 
-                let discount = (ele.discount * 10).ToString("0.#");
-
-                   res+=` <div class="ItemIcon DiscountIcon">
+                    res += ` <div class="ItemIcon DiscountIcon">${discount} 折</div>`;
+                }
+                else {
+                res += ` <div class="ItemIcon DiscountIcon">
                 ${discount} 折
-                    </div>`
-
+                    </div>`;
+                }
                 if (ele.pic != null)
                 {
-
-                  res+= ` <img src="data:image;base64,${ele.pic}" class="cardImg" alt="..." />`
+                    res += ` <img src="data:image;base64,${ele.pic}" class="cardImg" alt="..." />`;
                 }
                 else
                 {
-                    res+=`<img src="~/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />`
+                    res += `<img src="/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />`;
                 }
-            res+=`</a>
+
+                res += `</a>
             <div class="px-1 d-flex flex-column justify-content-between cardInfoArea">
                 <div class="cardTitleBox">
-                    <div class="cardTitle ">${ele.product.ProductName}</div>
+                    <div class="cardTitle ">${ele.product.productName}</div>
                 </div>
-                <div class="cardInfo">`
+                <div class="cardInfo">`;
+
                 if (num == 2 && time=="上午")
                 {
                     res += `<div class="cardPrice">活動尚未開始...</div>`;
@@ -127,7 +139,7 @@
                 }
                 else
                 {
-                    if (ele.price.Count == 1)
+                    if (ele.price.length == 1)
                     {
 
                         res += `<div class="cardPriceDiscount">$${Math.round(ele.price[0])}</div>`;
@@ -136,16 +148,26 @@
                     {
                         res += `<div class="cardPriceDiscount">$${Math.round(ele.price[0])} - $${Math.round(ele.price[1])}</div>`;
                     }
-                    if (ele.price.Count == 1)
+                    if (ele.price.length == 1)
                     {
                         let discountPrice = Math.round(ele.price[0] * ele.discount);
-                        res += `<div class="cardPrice">$${discountPrice}</div>`;
-                    }
+                        res += `<div class="cardPrice">$${discountPrice}</div>
+                        <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                        if (ele.percentage > 50) {
+                            res += `< div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>`;
+                        }
+                        res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                    }   
                     else
                     {
                         let discountPrice = Math.round(ele.price[0] * ele.discount);
                         let discountPrice2 = Math.round(ele.price[1] * ele.discount);
-                        res += `<div class="cardPrice">$${discountPrice} - $${discountPrice2}</div>`;
+                        res += `<div class="cardPrice">$${discountPrice} - $${discountPrice2}</div>
+                        <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                        if (ele.percentage > 50) {
+                            res += `< div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>`;
+                        }
+                        res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
                     }
                 }
                 res += `</div></div></div>`;

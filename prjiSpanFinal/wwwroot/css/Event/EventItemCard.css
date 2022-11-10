@@ -27,7 +27,7 @@
 }
 .ItemIcon {
     position: absolute;
-    width: 20%;
+    width: 25%;
     text-align: start;
     color: white;
     padding-left: 8px;
@@ -54,7 +54,7 @@
 .cardInfoArea {
     margin: 5px 10px;
     border-radius: 3px;
-    height: 110px;
+    height: 145px;
 }
 
 .cardTitleBox {
@@ -92,3 +92,40 @@
     flex-wrap: nowrap;
 }
 
+.FS-container {
+    margin: 20px 15px 0px 15px;
+    position: relative;
+    /*width: 100%;*/
+    height: 18px;
+    border-radius: 25px;
+    background: #D0D0D0;
+}
+
+.FS-progress {
+    width: 30%;
+    height: inherit;
+    border-radius: 25px 0 0 25px;
+    background: #FF9224;
+}
+
+.FS-soldbar {
+    color: white;
+    text-shadow: 0 2px 2px 2px black;
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: -10%;
+    pointer-events: none;
+}
+
+.FS-onFireBOX {
+    TOP: -15px;
+    POSITION: absolute;
+    LEFT: 10px;
+    WIDTH: 15%;
+}
+
+.FS-onFire {
+    width: 100%;
+}
