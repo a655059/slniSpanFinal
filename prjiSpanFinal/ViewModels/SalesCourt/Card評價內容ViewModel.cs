@@ -8,9 +8,9 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
     public class Card評價內容ViewModel
     {
 
-        public string CommentBuyer { get; set; }
-        public string ProductName { get; set; }
-        public string CommentContent { get; set; }
+        public string? CommentBuyer { get; set; }
+        public string? ProductName { get; set; }
+        public string? CommentContent { get; set; }
 
     }
 }

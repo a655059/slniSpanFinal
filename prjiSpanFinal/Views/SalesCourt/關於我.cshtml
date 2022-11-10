@@ -6,7 +6,7 @@
     iSpanProjectContext dbContext = new iSpanProjectContext();
     var me = dbContext.MemberAccounts.Where(a => a.MemberId == Model.Memberid).FirstOrDefault();
     var productcount = dbContext.Products.Where(a => a.MemberId == Model.Memberid).Count();
-    var followcount = dbContext.Follows.Where(a => a.MemberId == Model.Memberid).Count();
+    var followcount = dbContext.Follows.Where(a => a.FollowedMemId == Model.Memberid).Count();
 
     var allstar = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == Model.Memberid).Select(a => (double)a.CommentStar).Sum();
     var allstarcount = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == Model.Memberid).Count();
@@ -22,7 +22,7 @@
     var payingFee = dbContext.PaymentToSellers.Where(a => a.MemberId == Model.Memberid).Select(a => a.Payment.Fee).ToList();
 
 
-    object[] images = { "~/img/payment5.png", "~/img/payment6.png", "~/img/payment7.png", "~/img/payment8.png", "~/img/payment9.jpg", "~/img/payment10.png", "~/img/payment11.png", "~/img/payment12.png", "~/img/payment2.png", };
+   
     //byte[] images = {"~/img/payment5.png", "~/img/payment6.png" , "~/img/payment7.png" , "~/img/payment8.png" };
 
 
@@ -68,50 +68,31 @@
 </div>
 
 
+
+
 <div class="container info-section">
-    <div class="p-4 p-md-5 mb-4 rounded  " >
+    <div class="p-4 p-md-5 mb-4 rounded  ">
         <div class="col-md-6 px-0">
             <h1 style="font-size:3em">付款與運送的方式</h1>
         </div>
+              
 
         <div class="row" style="font-size:1.4em">
             <div class="col-6">
                 <div class="text-warning" style="font-size:1.5em">運送方式</div>
                 @*想要先有寫死的圖片再根據對應到的陣列位置抓取直*@
+                <div id="outShip">
 
-                @{
-                    if (shippingmethod != null)
-                    {
-                        for (int i = 0; i < shippingmethod.Count(); i++)
-                        {
-                            <img src="~/img/salescourt/shipping@(i+1).png" width="40" height="40" class="mx-2" />
-                            <span>@shippingmethod[i]</span>
-                            <br />
-                        }
-                    }
-
-                }
+                </div>
+               
 
             </div>
             <div class="col-6">
                 <div class="text-warning" style="font-size:1.5em">付款方式</div>
+                <div id="outPay">
 
+                </div>
 
-                @{
-                    if (payingName != null && payingFee != null)
-                    {
-                        for (int i = 0; i < payingName.Count(); i++)
-                        {
-                            <img src="~/img/salescourt/paying@(i+1).png" width="40" height="40" class="mx-2" />
-                            //-<img src="@images[i]" class="cardImg rounded-circle" alt="..." width="120" />
-                            <span>@payingName[i]</span>
-                            <span>:</span>
-                            <span>@payingFee[i]</span>
-                            <br />
-                        }
-                    }
-
-                }
             </div>
         </div>
 
@@ -122,6 +103,7 @@
 
 
 <div class="outlook">
+
 </div>
 
 <div class="first">
@@ -138,7 +120,14 @@
                 @*<div class="col"><i class="fa-solid fa-box-taped" style="width:15px"></i> 商品:&nbsp;</div>*@
 
                 <div class="col" style="font-size:2em"><i class="fa-regular fa-heart"></i>關注中:@followcount&nbsp;</div>
-                <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:@avgstar.ToString("0.00")&nbsp;</div>
+                @if (avgstar > 0)
+                {
+                    <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:@avgstar.ToString("0.00")&nbsp;</div>
+                }
+                else
+                {
+                    <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:&nbsp;</div>
+                }
             </div>
 
             <div class="row" style="font-size:2em">
@@ -211,8 +200,79 @@
 @section Scripts{
     <script>
         let image = ["/img/product.png", "~/img/follow.png", "~/img/star_null.png"];
-
+        let shipPicture = ["/img/salescourt/shipping1.png ", "/img/salescourt/shipping2.png ", "/img/salescourt/shipping3.png "
+            , "/img/salescourt/shipping4.png ", "/img/salescourt/shipping5.png ", "/img/payment10.png", "/img/payment9.jpg"];
+        //1  2  3  4  5  6 7
+        //shipperid 8~12 不用給圖
+        let paymentPicture = ["/img/payment1.png ", "/img/salescourt/paying1.png ", "/img/salescourt/paying2.png ", "/img/salescourt/paying3.png "
+            , "/img/salescourt/paying4.png ", "/img/salescourt/paying5.png ", "/img/salescourt/paying6.png ",
+             "/img/salescourt/shipping4.png "];
+        //1~8
+        //paymentid 9~10不用給圖
         load();
+
+        function returnoutShip(data) {
+            let ship = "";
+            ship = ship + `<div>貨運</div>`;
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].shipid < 8) {
+                    ship = ship + `<img src = "${shipPicture[data[i].shipid - 1]}" width="40" height="40" class="mx-2" />
+                                <span>${data[i].shipname}</span>
+                                <br />`;
+                }
+                else {
+                    ship = ship + `
+                                <span>${data[i].shipname}</span>
+                                <br />`;
+                }
+            }
+
+            return ship;
+        }
+
+
+        function returnoutPay(data) {
+            let pay = "";
+            console.log(data);
+            pay = pay + `<div>付款</div>`;
+            //要抓一個對應的payid  跟  payname
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].payid < 9) {
+                    pay = pay + `<img src = "${paymentPicture[data[i].payid - 1]}" width="40" height="40" class="mx-2" />
+                            <span>${data[i].payname}</span>
+                            <br />`;
+                }
+                else {
+                    pay = pay + `
+                            <span>${data[i].payname}</span>
+                            <br />`;
+                }
+            }
+
+            return pay;
+        }
+
+        function payshow() {
+            $.getJSON("/SalesCourt/getPay", { id:@Model.Memberid}, function (data) {
+                /*for (let i = 0; i < data.length; i++) {*/
+                if (data.list.length > 0) {
+                    $("#outPay").append(returnoutPay(data.list));
+                }
+                    
+                //}
+            });
+
+        }
+
+        function shipshow() {
+            $.getJSON("/SalesCourt/getShip", { id:@Model.Memberid}, function (data) {
+                if (data.list.length > 0) {
+                    $("#outShip").append(returnoutShip(data.list));
+                }
+            });
+
+        }
+
 
         function load() {
             $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
@@ -223,7 +283,7 @@
 
                 if (data != null) {
                     var datas = JSON.parse(data);
-                    
+
                     $(".outlook").append(returnAbome(datas));
                     detail(datas);
                     cotion(datas);
@@ -231,7 +291,8 @@
                     $(".first").html("");
                 }
 
-
+                payshow();
+                shipshow();
                 /*$(".outlook").append(returnabme(datas));*/
             })
 
@@ -262,7 +323,7 @@
                 afterserve = afterserve + `商品退貨須為全新狀態且完整包裝<br/>`;
             }
             if (data.checkbox[15] == true) {
-                afterserve = afterserve + `商品退回需含贈品<br/>`;                
+                afterserve = afterserve + `商品退回需含贈品<br/>`;
             }
 
             $(".afterservice").append(afterserve);
@@ -296,7 +357,7 @@
 
 
         function detail(data) { /*會有checkbox3~8要判別 假設為*/
-           
+
 
             if (data.checkbox[3] == true) {
                 $(".newproductonload").html("每天");
@@ -317,7 +378,7 @@
                 $(".newproductonload").html("不定期");
             }
 
-          
+
             /*$(".cautiondetail").val("caution");*/
         }
 
@@ -400,15 +461,15 @@
                             <div class="cautiondetail" style="font-size:1.6em">
 
                             </div>
-                           
-                            
+
+
                             <div style="font-size:2.3em">售後服務:</div>
-                                                                
+
                             <div class="afterservice" style="font-size:1.6em">
 
                             </div>
-                                                                                                   
-                            
+
+
                             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
                         </div>
 

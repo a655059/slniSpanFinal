@@ -6,7 +6,8 @@
     ViewData["Title"] = "賣場";
 
     iSpanProjectContext dbContext = new iSpanProjectContext();
-    var bestsell = dbContext.Products.Where(a => a.MemberId == Model.SellerId && a.IsFeaturedProduct == true).Select(p => new {
+    var bestsell = dbContext.Products.Where(a => a.MemberId == Model.SellerId && a.IsFeaturedProduct == true).Select(p => new
+    {
         link = "/Item/Index?id=" + p.ProductId,
         pic = p.ProductPics.FirstOrDefault().Pic,
         name = p.ProductName,
@@ -33,11 +34,16 @@
     }).ToList();
 
 
+    var sellerCoupons = dbContext.Coupons.Where(a => a.MemberId == Model.SellerId).ToList();
+
 }
 @section Styles{
     <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
     <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
     <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
+    <link href="@Url.Content("~/css/ProductCard.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/Item/ShowItemComment.css")" rel="stylesheet" />
 
     <style>
         .dashed-divider {
@@ -70,19 +76,19 @@
             <div class="row">
                 @if (Model.Picture != null)
                 {
-                    
-                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Picture)" class="cardImg rounded-circle" alt="..." width="120" />
+
+                    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Picture)" class="cardImg rounded-circle" alt="..." width="120" />
                 }
                 else
                 {
                     <img src="~/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />
                 }
-                           
+
             </div>
 
 
             <div class="p-2">@Model.SellerName 的賣場</div>
-            
+
             <div class="ps-2"><a href="~/SalesCourt/評價?id=@Model.SellerId" class="text-primary linknoline">評價</a></div>
             <div class="ps-2"><a href="~/SalesCourt/關於我?id=@Model.SellerId" class="text-primary linknoline">關於我</a></div>
 
@@ -117,7 +123,7 @@
                     </a>
                 </li>
 
-                             
+
 
             </ul>
 
@@ -153,37 +159,71 @@
                         </a>
                     </h6>
 
-
-                    <div class="my-2 py-4 d-flex border-top border-bottom">
-                        <div class="d-flex me-2" style="font-size:14px">
-                            <div class="border py-4 px-2">
-                                <div class="bg-danger text-white rounded-5 w-50 px-1 my-1 text-center">限時限量</div>
-                                <div class="fs-6 fw-bold my-1">滿$799<span class="ms-2">現折$50</span></div>
-                                <div class="my-1">
-                                    <div>限時優惠滿799折50<span>限量輸碼PO50</span></div>
-                                    <div>2022/08/30<span class="ms-1">18:00</span>-2022/11/29<span class="ms-1">00:00</span></div>
-                                </div>
-                            </div>
-                            <div class="dollarIcon position-absolute fs-3 fw-bold text-warning">+<span></span></div>
-                            <button class="btn btn-warning rounded-0 fw-bold getcoupon">領取</button>
-                        </div>
-                        <div class="d-flex" style="font-size:14px">
-                            <div class="couponDiv">
-                                <img src="/img/Event/Coupon_Jacob.png">
-                            </div>
-                            <div class="border py-4 px-2">
-                                <div class="bg-danger text-white rounded-5 w-50 px-1 my-1 text-center">限時限量</div>
-                                <div class="fs-6 fw-bold my-1">滿$799<span class="ms-2">現折$50</span></div>
-                                <div class="my-1">
-                                    <div>限時優惠滿799折50<span>限量輸碼PO50</span></div>
-                                    <div>2022/08/30<span class="ms-1">18:00</span>-2022/11/29<span class="ms-1">00:00</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                   
+                    <div class="sellerCouponLayout position-relative mb-2" style="width:640px;height:120px;overflow:hidden">
+                        @{
+                            if (sellerCoupons.Count > 0)
+                            {
+                                <div class="sellerCouponCount d-none">@sellerCoupons.Count</div>
+                                <button class="couponLeft btn btn-light position-absolute bg-transparent" style="left:0px;width:10px;height:120px;z-index:10"></button>
+                                foreach (var i in sellerCoupons)
+                                {
+                                    <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:305px;height:120px;margin-right:10px">
+                                        <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                            <div>@i.CouponName</div>
+                                            @{
+                                                if (i.IsFreeDelivery)
+                                                {
+                                                    if (i.MinimumOrder > 0)
+                                                    {
+                                                        <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>不限金額都免運費</div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    string discount = (i.Discount * 10).ToString("0.0");
+                                                    if (discount.Split('.')[1] == "0")
+                                                    {
+                                                        discount = discount.Split('.')[0];
+                                                    }
+                                                    if (i.MinimumOrder > 0)
+                                                    {
 
+                                                        <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                    }
+                                                }
+                                            }
+                                            <div>折扣碼:<span>@i.CouponCode</span></div>
+                                            @{
+                                                string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                            }
+
+                                            <div>活動期間:<span>@period</span></div>
+                                            @{
+                                                if (i.ExpiredDate != i.ReceiveEndDate)
+                                                {
+                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                }
+                                            }
+                                        </div>
+
+                                        <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                                    </div>
+                                }
+                                <button class="couponRight btn btn-light position-absolute bg-transparent" style="right:0px;width:10px;height:120px;z-index:10"></button>
+
+                            }
+
+                        }
+                    </div>
 
 
 
@@ -201,7 +241,14 @@
 
                             <div class="sellsitem">
                                 <a class="linknoline" href="@bestsell[i].link">
-                                    <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
+                                    @if (bestsell[i].pic != null)
+                                    {
+                                        <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/imageNotFound.png" class="cardImg" alt="..." />
+                                    }
                                 </a>
                                 <div class="px-1 d-flex flex-column justify-content-between">
                                     <div class="cardTitleBox">
@@ -214,13 +261,21 @@
                                                 <div class="starImg">
                                                     <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
                                                 </div>
-                                                <div class="text-black">@bestsell[i].star.ToString("0.00")</div>
+                                                @if (bestsell[i].star > 0)
+                                                {
+                                                    <div class="text-black">@bestsell[i].star.ToString("0.00")</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-black"></div>
+                                                }
                                             </div>
                                         </div>
                                         <div class="text-end text-black-50 sells">已賣出<span>@bestsell[i].sales</span></div>
                                     </div>
                                 </div>
                             </div>
+                            <br>
                         }
 
                     </div>
@@ -333,7 +388,7 @@
                     </div>
 
                 </div>
-            </section>
+</section>
 
         </main>
 
@@ -349,319 +404,364 @@
 <div class="text-primary" style="color:deepskyblue">
 
 
-@section Scripts{
-  
-    
-    <script>
-
-    let mode = 0;
-    let ccc = 0;
-    let eachpage = 5;
-    let nowpages = 1;
-    let pagecount = 1;
-
-    const pagecountselect = document.querySelector("#divPage");
-    let searchflag = false;
-    let followFlag = false;
-    /*類別按下去就會一直保留限制 直到按下未分類*/
-    let customname = "";
-
-    jQuery.postJSON = function (url, data, callback) {
-        jQuery.post(url, data, callback, "json");
-    };
-
-    loadcustom();
-    load();
-    loaddescription();
+    @section Scripts{
 
 
-    function returnCard(data) {
-        let card = "";
+        <script>
 
-        for (let i = 0; i < data.length; i++) {
-            card = card+ `<div class="sellsitem">
-                    <a class="linknoline" href="${data[i].link}">
-                            <img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />
-                    </a>
-                    <div class="px-1 d-flex flex-column justify-content-between">
-                        <div class="cardTitleBox">
-                            <div class="cardTitle">${data[i].name}</div>
-                        </div>
-                                <div class="cardPrice">${data[i].price1} - ${data[i].price2}</div>
-                        <div class="cardInfo d-flex justify-content-between flex-row">
-                            <div class="starBox mt-1">
-                                <div class="d-flex justify-content-start">
-                                    <div class="starImg">
-                                        <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+            let mode = 0;
+            let ccc = 0;
+            let eachpage = 5;
+            let nowpages = 1;
+            let pagecount = 1;
+            let couponCount = Number($(".sellerCouponCount").html());
+            let couponPosition = 10;
+
+            const pagecountselect = document.querySelector("#divPage");
+            let searchflag = false;
+            let followFlag = false;
+            /*類別按下去就會一直保留限制 直到按下未分類*/
+            let customname = "";
+
+            jQuery.postJSON = function (url, data, callback) {
+                jQuery.post(url, data, callback, "json");
+            };
+
+            loadcustom();
+            load();
+            loaddescription();
+
+
+            function returnCard(data) {
+                let card = "";
+
+                for (let i = 0; i < data.length; i++) {
+                    card = card + `<div class="sellsitem">
+                            <a class="linknoline" href="${data[i].link}">`;
+                    if (data[i].pic != null) {
+                        card = card + `<img src="data:image;base64,${data[i].pic}" class="cardImg" alt="..." />`;
+                    }
+                    else {
+
+                        card = card + `<img src="/img/imageNotFound.png" class="cardImg" alt="..." />`;
+                    }
+                    card = card + `</a>
+                            <div class="px-1 d-flex flex-column justify-content-between">
+                                <div class="cardTitleBox">
+                                    <div class="cardTitle">${data[i].name}</div>
+                                </div>
+                                        <div class="cardPrice">${data[i].price1} - ${data[i].price2}</div>
+                                <div class="cardInfo d-flex justify-content-between flex-row">
+                                    <div class="starBox mt-1">
+                                        <div class="d-flex justify-content-start">
+                                            <div class="starImg">
+                                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                            </div>
+                                            <div class="text-black">${data[i].star}</div>
+                                        </div>
                                     </div>
-                                    <div class="text-black">${data[i].star}</div>
+                                    <div class="text-end text-black-50 sells">已賣出<span>${data[i].sales}</span></div>
                                 </div>
                             </div>
-                            <div class="text-end text-black-50 sells">已賣出<span>${data[i].sales}</span></div>
-                        </div>
-                    </div>
-                </div>`
+                        </div>`;
 
-        }
+                }
 
-            return card;
-        }
-
-    /*    let aa = $.map($(".check"),*/
-    //function loadbest() {
-    //    $.getJSON("/SalesCourt/GetBestSell", { id: SalesCourtSellerId }, function (data) {
-    //        $("#bestsellproduct").html("")
-    //        for (let i = 0; i < data.length; i++) {
-    //            $("#bestsellproduct").append(returnCard(data[i]));
-    //        }
-    //    })
-    //}
-
-
-
-    $(document).on("click", ".salescourtclick", function () {
-        customname = $(this).html();
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-
-    function returncust(data) {
-
-        return `
-           <div class=" salescourtclicklist" >
-                <a role="button" class="salescourtclick linknoline text-primary" href="#salescourtcardbody">${data.name}</a>
-            </div>`;
-    }
-
-
-    function loadcustom() {
-        $.getJSON("/SalesCourt/GetCustomize", { id: SalesCourtSellerId.value }, function (data) {
-            $("#customizename").html("")
-            for (let i = 0; i < data.length; i++) {
-                $("#customizename").append(returncust(data[i]));
+                return card;
             }
 
-        })
-
-    }
-
-    function load() {
-        let keyword;
-        if (searchflag) {
-            keyword = $("#orderkeyword").val();
-        }
-        else {
-            $("#orderkeyword").val("");
-            keyword = "";
-        }
-
-        $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, eachpage: eachpage, keyword: keyword, customname: customname}, function (data) {
-
-            $("#salescourtcardbody").html("");
+            /*    let aa = $.map($(".check"),*/
+            //function loadbest() {
+            //    $.getJSON("/SalesCourt/GetBestSell", { id: SalesCourtSellerId }, function (data) {
+            //        $("#bestsellproduct").html("")
+            //        for (let i = 0; i < data.length; i++) {
+            //            $("#bestsellproduct").append(returnCard(data[i]));
+            //        }
+            //    })
+            //}
 
 
-            if (data.list.length > 0) {
-                $("#salescourtcardbody").append(returnCard(data.list));
-                PageNumFill(data.count);
+
+            $(document).on("click", ".salescourtclick", function () {
+                customname = $(this).html();
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+
+            function returncust(data) {
+
+                return `
+                   <div class=" salescourtclicklist" >
+                        <a role="button" class="salescourtclick linknoline text-primary" href="#salescourtcardbody">${data.name}</a>
+                    </div>`;
             }
-            else {
-                PageNumFill(0);
-            }
-        })
-     }
 
 
-    function PageNumFill(c) {
-        pagecount = Math.ceil(Math.max(1, c) / eachpage);
-        $("#totalpagesdisplay").html(`共${pagecount}頁，${c}筆資料`);
-        let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
-        let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
-        $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
-        for (let i = startpage; i <= endpage; i++) {
-            if (i == nowpages) {
-                $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+            function loadcustom() {
+                $.getJSON("/SalesCourt/GetCustomize", { id: SalesCourtSellerId.value }, function (data) {
+                    $("#customizename").html("")
+                    for (let i = 0; i < data.length; i++) {
+                        $("#customizename").append(returncust(data[i]));
+                    }
+
+                })
+
             }
-            else {
-                $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+
+            function load() {
+                let keyword;
+                if (searchflag) {
+                    keyword = $("#orderkeyword").val();
+                }
+                else {
+                    $("#orderkeyword").val("");
+                    keyword = "";
+                }
+
+                $.getJSON("/SalesCourt/GetItems", { id: SalesCourtSellerId.value, mode: mode, pages: nowpages, eachpage: eachpage, keyword: keyword, customname: customname }, function (data) {
+
+                    $("#salescourtcardbody").html("");
+
+
+                    if (data.list.length > 0) {
+                        $("#salescourtcardbody").append(returnCard(data.list));
+                        PageNumFill(data.count);
+                    }
+                    else {
+                        PageNumFill(0);
+                    }
+                })
             }
-        }
-     }
+
+
+            function PageNumFill(c) {
+                pagecount = Math.ceil(Math.max(1, c) / eachpage);
+                $("#totalpagesdisplay").html(`共${pagecount}頁，${c}筆資料`);
+                let startpage = Math.max(1, Math.min(pagecount - 4, parseInt(nowpages) - 2));
+                let endpage = Math.min(pagecount, Math.max(5, parseInt(nowpages) + 2));
+                $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
+                for (let i = startpage; i <= endpage; i++) {
+                    if (i == nowpages) {
+                        $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+                    }
+                    else {
+                        $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#salescourtcardbody">${i}</a></li>`);
+                    }
+                }
+            }
+
+
+            $(".couponRight").click(function () {
+                $(".sellerCoupon").animate("left", "-315px");
+            });
+
+            $(function () {
+            const productID = $("#ProductId").val();
            
+                $(".sellerCoupon").each(function () {
+                    $(this).css("left", couponPosition);
+                    couponPosition += 315;
+                });
+                $(".couponLeft").prop("disabled", true);
+                if (couponCount <= 2) {
+                    $(".couponRight").prop("disabled", true);
+                }
+            });
+
+            $(".getCoupon").click(function () {
+                const couponID = Number($(this).attr("id"));
+                const quantity = 1;
+                $(".dollarIcon").children().html(quantity);
+                $(".dollarIcon").animate({
+                    top: "-=50",
+                    opacity: "1",
+                    zIndex: "0"
+                }, 50).animate({
+                    top: "-=30",
+                    opacity: "0",
+                }, 500).animate({
+                    top: "+=80",
+                    zIndex: "-1"
+                });
 
 
-    $(".getcoupon").click(function () {     
+                $.getJSON("/SalesCourt/GetCoupon", { couponid: couponID }, function (data) {
+                    console.log(data);
+                    if (data == "1") {
+                        Swal.fire("領取優惠券成功");
+                        $(this).closest(".sellerCoupon").addClass("opacity-50");
+                        $(this).prop("disabled", true);
+                    }
+                    else if (data == "0") {
+                        Swal.fire({
+                            title: "請先登入再領取優惠券",
+                            showDenyButton: false,
+                            showCancelButton: true,
+                            confirmButtonText: "登入",
+                        })
 
-        const quantity = 1;
-        $(".dollarIcon").children().html(quantity);
-        $(".dollarIcon").animate({
-            top: "-=50",
-            opacity: "1",
-            zIndex: "0"
-        }, 50).animate({
-            top: "-=30",
-            opacity: "0",
-        }, 500).animate({
-            top: "+=80",
-            zIndex: "-1"
-        });
+                    }
+                    else {
+                        Swal.fire("你已經領過此優惠券了");
+                    }
+                })
+            });
 
-    });
+            $(document).on("click", ".orderpagenumclick", function () {
+                nowpages = $(this).html();
+                /*$("#salescourtcardbody").empty();*/
+                load();
+            })
 
-    $(document).on("click", ".orderpagenumclick", function () {
-        nowpages = $(this).html();
-        /*$("#salescourtcardbody").empty();*/
-        load();
-    })
-
-    $("#pagecountselect").change(function () {
-        eachpage = $("#pagecountselect option:selected").val();
-        nowpages = 1;
-        load();
-    });
-
-
-    $("#orderpagedown").click(function () {
-        /*let pagescount = $(".orderpagenumclicklist").length;*/
-        nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
-        /*nowpages = 2;*/
-        /*$("#salescourtcardbody").empty();*/
-        load();
-    })
+            $("#pagecountselect").change(function () {
+                eachpage = $("#pagecountselect option:selected").val();
+                nowpages = 1;
+                load();
+            });
 
 
-    $("#orderpageup").click(function () {
-        nowpages = Math.max(parseInt(nowpages) - 1, 1);
-        /*nowpages = 1;*/
-        /*$("#salescourtcardbody").empty();*/
-        load();
-    })
+            $("#orderpagedown").click(function () {
+                /*let pagescount = $(".orderpagenumclicklist").length;*/
+                nowpages = Math.min(parseInt(nowpages) + 1, pagecount);
+                /*nowpages = 2;*/
+                /*$("#salescourtcardbody").empty();*/
+                load();
+            })
 
 
-    function returndescription(data) {
-        return `
-            ${data.text[0]}
-                `;
+            $("#orderpageup").click(function () {
+                nowpages = Math.max(parseInt(nowpages) - 1, 1);
+                /*nowpages = 1;*/
+                /*$("#salescourtcardbody").empty();*/
+                load();
+            })
+
+
+            function returndescription(data) {
+                return `
+                    ${data.text[0]}
+                        `;
+            }
+
+            function loaddescription() {
+
+                $.getJSON("/SalesCourt/GetAlterMe", { id: SalesCourtSellerId.value }, function (data) {
+                    console.log(data);
+                    var datas = JSON.parse(data);
+                    $(".courtdescript").append(returndescription(datas));
+                })
+
+            }
+
+            //打開蝦蝦通
+            $(document).on("click", ".orderopenmsg", function () {
+                happy_popup($("#SalesCourtSellerName").val());
+            });
+
+
+            //按追蹤賣家
+            $("#btnsalescourtfollowed").click(function () {
+                $.getJSON("/SalesCourt/WriteFollow", { id: $("#SalesCourtSellerId").val() }, function (data) {
+                    if (data == 1) {
+                        $("#btnsalescourtfollowed").attr('style', 'background-color:#b7b0bd');
+                        Swal.fire(
+                            '追蹤成功',
+                            '您已成功追蹤賣家' + $("#SalesCourtSellerName").val(),
+                            'success'
+                        );
+
+                    }
+                    else if (data == 0) {
+                        $("#btnsalescourtfollowed").attr('style', 'background-color:#f30959');
+                        Swal.fire(
+                            '移除追蹤',
+                            '您已移除追蹤賣家' + $("#SalesCourtSellerName").val(),
+                            'warning'
+                        );
+
+
+                    }
+                    else {
+                        Swal.fire(
+                            '錯誤',
+                            '不要按自己追蹤',
+                            'error'
+                        );
+                    }
+                });
+            })
+
+
+            $("#btnDate").click(function () {
+                if (searchflag) {
+                    searchflag = false;
+                    $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
+                    $("#btnDate").val("搜尋");
+                    $("#orderkeyword").removeAttr("readonly");
+                }
+
+                else {
+                    searchflag = true;
+                    $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
+                    $("#btnDate").val("解除搜尋");
+                    $("#orderkeyword").removeAttr("readonly", "readonly");
+                }
+                nowpages = 1;
+                load();
+            })
+
+
+
+            $("#SortOrder1").click(function () {
+                mode = 1;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#SortOrder2").click(function () {
+                mode = 2;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#SortOrder3").click(function () {
+                mode = 3;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#SortOrder4").click(function () {
+                mode = 4;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#SortOrder5").click(function () {
+                mode = 5;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#page1").click(function () {
+                nowpages = 1;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#page2").click(function () {
+                nowpages = 2;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+
+            $("#page3").click(function () {
+                nowpages = 3;
+                $("#salescourtcardbody").empty();
+                load();
+            })
+        </script>
+
+
+
     }
-
-    function loaddescription() {
-
-        $.getJSON("/SalesCourt/GetAlterMe", { id: SalesCourtSellerId.value }, function (data) {
-            console.log(data);
-            var datas = JSON.parse(data);
-            $(".courtdescript").append(returndescription(datas));
-        })
-
-    }
-
-    //打開蝦蝦通
-    $(document).on("click", ".orderopenmsg", function () {
-        happy_popup($("#SalesCourtSellerName").val());
-    });
-
-
-    //按追蹤賣家
-    $("#btnsalescourtfollowed").click(function(){
-        $.getJSON("/SalesCourt/WriteFollow", { id: $("#SalesCourtSellerId").val() },function(data){
-            if (data == 1) {
-                $("#btnsalescourtfollowed").attr('style', 'background-color:#b7b0bd');
-                Swal.fire(
-                    '追蹤成功',
-                    '您已成功追蹤賣家'+$("#SalesCourtSellerName").val(),
-                    'success'
-                );
-
-            }
-            else if (data == 0) {
-                $("#btnsalescourtfollowed").attr('style', 'background-color:#f30959');
-                Swal.fire(
-                    '移除追蹤',
-                    '您已移除追蹤賣家'+$("#SalesCourtSellerName").val(),
-                    'warning'
-                );
-
-
-            }
-            else{
-                Swal.fire(
-                    '錯誤',
-                    '不要按自己追蹤',
-                    'error'
-                );
-            }
-        });
-    })
-
-
-    $("#btnDate").click(function () {
-        if (searchflag) {
-            searchflag = false;
-            $("#btnDate").removeClass("btn-secondary").addClass("btn-primary");
-            $("#btnDate").val("搜尋");
-            $("#orderkeyword").removeAttr("readonly");
-        }
-
-        else {
-            searchflag = true;
-            $("#btnDate").removeClass("btn-primary").addClass("btn-secondary");
-            $("#btnDate").val("解除搜尋");
-            $("#orderkeyword").removeAttr("readonly", "readonly");
-        }
-        nowpages = 1;
-        load();
-    })
-
-
-
-    $("#SortOrder1").click(function () {
-        mode = 1;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#SortOrder2").click(function () {
-        mode = 2;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#SortOrder3").click(function () {
-        mode = 3;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#SortOrder4").click(function () {
-        mode = 4;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#SortOrder5").click(function () {
-        mode = 5;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#page1").click(function () {
-        nowpages = 1;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#page2").click(function () {
-        nowpages = 2;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-
-    $("#page3").click(function () {
-        nowpages = 3;
-        $("#salescourtcardbody").empty();
-        load();
-    })
-    </script>
-
-
-  
-}
