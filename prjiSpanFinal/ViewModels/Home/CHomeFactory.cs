@@ -184,6 +184,19 @@ namespace prjiSpanFinal.ViewModels.Home
             }
             return res;
         }
+        public List<OfficialEventList> toGetEvent(List<OfficialEventList> list)
+        {
+            List<OfficialEventList> res = new List<OfficialEventList>();
+            foreach (var item in list)
+            {
+                double evtPublishdAy = (DateTime.Now).Subtract(item.StartDate).TotalDays;
+                if (evtPublishdAy >= -7)
+                {
+                    res.Add(item);
+                }
+            }
+            return res;
+        }
 
 
     }

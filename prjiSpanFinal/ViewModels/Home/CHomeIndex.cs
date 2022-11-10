@@ -14,6 +14,7 @@ namespace prjiSpanFinal.ViewModels.Home
         public List<WebAd> WebADCarousel{get;set;}
         public List<WebAd> WebADSmall { get; set; }
         public List<WebAd> WebADBig { get; set; }
+        public List<OfficialEventList> Event { get; set; }
 
         public List<CShowBBItem> cShowBB { get; set; }
         public List<CShowFSItem> cShowFS { get; set; }

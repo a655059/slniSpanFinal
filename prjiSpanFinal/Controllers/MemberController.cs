@@ -1310,7 +1310,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult TakeTradeFee(int id)
         {
-            int total = _context.OrderDetails.Where(o => o.OrderId == id).Select(p => Convert.ToInt32(Math.Ceiling(Convert.ToInt32(p.Unitprice) * p.Quantity*p.Order.Coupon.Discount))).Sum(p => p);
+            int total = _context.OrderDetails.Where(o => o.OrderId == id).Select(p => Convert.ToInt32(Math.Ceiling(p.Unitprice * p.Quantity))).Sum(p => p);
             total += _context.Orders.Where(m => m.OrderId == id).Select(p => p.Payment.Fee + p.Shipper.Fee).FirstOrDefault();
             int tradefee = Convert.ToInt32(Math.Ceiling(total * 0.05));
 

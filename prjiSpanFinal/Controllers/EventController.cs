@@ -89,10 +89,10 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult FlashSales(int Eventid)
         {
-            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid && e.OfficialEventTypeId == 2).Any())
-            {
-
-            }
+            //if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid && e.OfficialEventTypeId == 2).Any())
+            //{
+                
+            //}
             return RedirectToAction("Index", "Home");
         }
     }

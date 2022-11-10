@@ -31,20 +31,22 @@ namespace prjiSpanFinal.Controllers
             List<CShowItem> listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(36).ToList();
             listProd = new CHomeFactory().rdnProd(_db.AdtoProducts.Where(p => p.IsSubActive && p.Ad.AdTypeId == 3).Select(p=>p.Product).ToList());
             List<CShowBBItem> listBB = new CHomeFactory().toShowBBItem(listProd.Take(15).ToList());
-            listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(p => p.VerifyId==2).Select(p => p.Product).ToList());
+            listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(p => p.VerifyId==2).Where(p=>p.SubOfficialEventList.OfficialEventList.OfficialEventTypeId==2).Select(p => p.Product).ToList());
             List<CShowFSItem> listFS = new CHomeFactory().toShowFSItem(listProd.Take(15).ToList());
             var webAds = _db.WebAds.Where(a => a.IsPublishing == true);
-            
+            List<OfficialEventList> NowEvent = new CHomeFactory().toGetEvent(_db.OfficialEventLists.Where(e => e.OfficialEventListId != 1).Where(e => e.OfficialEventTypeId == 1).Where(e => DateTime.Now.CompareTo(e.EndDate.AddDays(3)) < 0).ToList());
+
             CHomeIndex home = new CHomeIndex()
             {
                 lSmallType = _db.SmallTypes.Select(p => p).ToList(),
                 lBigType = _db.BigTypes.Select(p => p).ToList(),
                 cShowItem = listItem,
                 WebADCarousel = webAds.Where(a => a.WebAdimageTypeId == 1 && a.IsPublishing).ToList(),
-                WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a=>a.WebAdimageTypeId== 2 && a.IsPublishing).ToList()),
+                WebADSmall = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 2 && a.IsPublishing).ToList()),
                 WebADBig = (new CHomeFactory()).toRndImg(webAds.Where(a => a.WebAdimageTypeId == 3 && a.IsPublishing).ToList()),
-                cShowBB= listBB,
-                cShowFS= listFS,
+                cShowBB = listBB,
+                cShowFS = listFS,
+                Event = NowEvent,
             };
 
             isExpo(listBB);

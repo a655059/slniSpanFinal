@@ -212,7 +212,7 @@
                                             <img src="~/img/Homepage/BiddingADSmall.png" />
                                         </a>
                                     </div>
-                                                    }
+                                }
                             }
                         </div>
                     </div>
@@ -223,11 +223,58 @@
     </div>
     <div class="clearfix visible-xs"></div>
 
-    @if (Model.WebADBig.Count > 0)
+    @if (Model.Event.Any())
     {
         <div class="split"></div>
-        <div class="HP-Panel">
-            @await Component.InvokeAsync("WebADLarge", new { list = Model.WebADBig })
+        <div id="EventCarousel" class="carousel slide " data-bs-interval="4000" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @{
+
+                    <button type="button" data-bs-target="#EventCarousel" id="Ecarouselslide-0" data-bs-slide-to="0" class="active" aria-label="Slide 0"></button>
+                    if (Model.Event.Count > 1)
+                    {
+                        for (int i = 1; i < Model.Event.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#EventCarousel" id="Ecarouselslide-@i" data-bs-slide-to="@i" aria-label="Slide @i"></button>
+                        }
+                    }
+                }
+            </div>
+            <div class="carousel-inner d-flex">
+                @{
+
+                    <div class="carousel-item active">
+                        <a href="@Url.Content("~/Event/Event"+"?Eventid="+ Model.Event[0].OfficialEventListId)">
+                            @{var base64Image = Convert.ToBase64String(Model.Event[0].EventPic);
+                                var source = String.Format("data:image/png;base64,{0}", base64Image);
+                                <img src="@source" />
+                            }
+                        </a>
+                    </div>
+                    if (Model.Event.Count > 1)
+                    {
+                        for (int i = 1; i < Model.Event.Count; i++)
+                        {
+                            <div class="carousel-item">
+                                <a href="@Url.Content("~/Event/Event"+"?Eventid="+ Model.Event[i].OfficialEventListId)">
+                                    @{ base64Image = Convert.ToBase64String(Model.Event[i].EventPic);
+                                        source = String.Format("data:image/png;base64,{0}", base64Image);
+                                        <img src="@source" />
+                                    }
+                                </a>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#EventCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#EventCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     }
 

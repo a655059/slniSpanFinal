@@ -1,0 +1,93 @@
+﻿@using System.Collections.Generic;
+@using prjiSpanFinal.ViewModels.Event
+@model List<EventShowItem>
+@{
+}
+@{
+    foreach (var item in Model)
+    {        
+        <div class="sellsitem ">
+            <a class="linknoline sellsitem-imgbox" href="#!">
+                <input type="hidden" value="@item.product.ProductId" />
+                @if (!item.isDeliveryFree)
+                        {
+                            string discount = (item.discount*10).ToString("0.#");
+
+                    <div class="ItemIcon DiscountIcon">
+                        @discount 折
+                    </div>
+                }
+                else
+                {
+                    <div class="ItemIcon FreeDeliveryIcon">
+                        免運
+                    </div>
+                }
+
+                @if (item.pic != null)
+                {
+                    var base64Image = Convert.ToBase64String(item.pic);
+                    var source = String.Format("data:image/png;base64,{0}", base64Image);
+                    <img src="@source" class="cardImg" alt="..." />
+                }
+                else
+                {
+                    <img src="~/img/imageNotFound.png" class="cardImg" alt="此商品沒有圖片" />
+                }
+            </a>
+            <div class="px-1 d-flex flex-column justify-content-between cardInfoArea">
+                <div class="cardTitleBox">
+                    <div class="cardTitle ">@item.product.ProductName</div>
+                </div>
+                <div class="cardInfo">
+                    @{
+                        if (item.isStart)
+                        {
+                            if (!item.isDeliveryFree)
+                            {
+                                if (item.price.Count == 1)
+                                {
+
+                                    <div class="cardPriceDiscount">$@decimal.Round(item.price[0])</div>
+                                }
+                                else
+                                {
+                                    <div class="cardPriceDiscount">$@decimal.Round(item.price[0]) - $@decimal.Round(item.price[1])</div>
+                                }
+                                if (item.price.Count == 1)
+                                {
+                                    decimal discountPrice = decimal.Round(item.price[0] * item.discount);
+                                    <div class="cardPrice">$@discountPrice</div>
+                                }
+                                else
+                                {
+                                    decimal discountPrice = decimal.Round(item.price[0] * item.discount);
+                                    decimal discountPrice2 = decimal.Round(item.price[1] * item.discount);
+                                    <div class="cardPrice">$@discountPrice - $@discountPrice2</div>
+                                }
+                            }
+                            else
+                            {
+                                if (item.price.Count == 1)
+                                {
+                                    <div class="cardPrice">$@decimal.Round(item.price[0])</div>
+                                }
+                                else
+                                {
+                                    <div class="cardPrice">$@decimal.Round(item.price[0]) - $@decimal.Round(item.price[1])</div>
+                                }
+
+                                <div class="cardPrice">活動期間 不需運費</div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="cardPrice">活動尚未開始...</div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+    }
+}
