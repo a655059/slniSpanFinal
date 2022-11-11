@@ -971,8 +971,8 @@ namespace prjiSpanFinal.Controllers
                         _db.ProductPics.Add(asd);
                     }                    
                 }
-                _db.SaveChanges();
             }
+            _db.SaveChanges();
         }
 
 
