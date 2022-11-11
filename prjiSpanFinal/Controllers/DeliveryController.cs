@@ -322,7 +322,7 @@ namespace prjiSpanFinal.Controllers
                         productDetailID = (int)productDetailID,
                         productName = productDetail.productName,
                         productDetailPic = productDetail.productDetailPic,
-                        unitPrice = productDetail.unitPrice.ToString(),
+                        unitPrice = productDetail.unitPrice.ToString("0"),
                         sellerAcc = productDetail.seller.MemberAcc,
                         sellerID = productDetail.seller.MemberId,
                         purchaseCount = (int)purchaseCount,
@@ -621,12 +621,26 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult CheckoutForm(int sellerIDIndex)
         {
-            return ViewComponent("DeliveryFillCheckoutForm", sellerIDIndex);
+            return ViewComponent("DeliveryFillCheckoutForm", new { sellerIDIndex = sellerIDIndex });
         }
+
+        public IActionResult ShowCalTotalPriceVC(int id, int? sellerIDIndex, int? sellerMemberID)
+        {
+            return ViewComponent("CalTotalPrice", new { id = id, sellerIDIndex = sellerIDIndex, sellerMemberID = sellerMemberID });
+        }
+
         public IActionResult CheckoutConfirm()
         {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
             string jsonString = HttpContext.Session.GetString(CDictionary.SK_ALL_INFO_TO_SHOW_CHECKOUT);
             CDeliveryCheckoutViewModel cDeliveryCheckout = JsonSerializer.Deserialize<CDeliveryCheckoutViewModel>(jsonString);
+            foreach (var a in cDeliveryCheckout.sellerShipperPayments)
+            {
+                if (a.savedShipperPaymentCoupon.couponID > 0)
+                {
+                    a.savedShipperPaymentCoupon.selectedCoupon = dbContext.Coupons.Where(i => i.CouponId == a.savedShipperPaymentCoupon.couponID).FirstOrDefault();
+                }
+            }
             return View(cDeliveryCheckout);
         }
         public IActionResult OrderSuccess()
@@ -667,6 +681,12 @@ namespace prjiSpanFinal.Controllers
                     string address = cDeliveryCheckout.sellerShipperPayments.Where(i => i.seller.MemberId == sellerID).Select(i => i.savedShipperPaymentCoupon.address).FirstOrDefault();
                     int shipperID = cDeliveryCheckout.sellerShipperPayments.Where(i => i.seller.MemberId == sellerID).Select(i => i.savedShipperPaymentCoupon.shipperID).FirstOrDefault();
                     int paymentID = cDeliveryCheckout.sellerShipperPayments.Where(i => i.seller.MemberId == sellerID).Select(i => i.savedShipperPaymentCoupon.paymentID).FirstOrDefault();
+                    int couponID = cDeliveryCheckout.sellerShipperPayments.Where(i => i.seller.MemberId == sellerID).Select(i => i.savedShipperPaymentCoupon.couponID).FirstOrDefault();
+                    Coupon coupon = null;
+                    if (couponID > 1)
+                    {
+                        coupon = dbContext.Coupons.Where(i => i.CouponId == couponID).FirstOrDefault();
+                    }
                     string orderMessage = cDeliveryCheckout.sellerShipperPayments.Where(i => i.seller.MemberId == sellerID).Select(i => i.savedShipperPaymentCoupon.wordToSeller).FirstOrDefault();
                     if (purchaseOrderDetailCount < orderDetailCountInOrder)
                     {
@@ -682,6 +702,12 @@ namespace prjiSpanFinal.Controllers
                             PaymentId = paymentID,
                             OrderMessage = orderMessage,
                         };
+                        if (couponID > 1)
+                        {
+                            newOrder.CouponId = couponID;
+                            var selectedCoupon = dbContext.CouponWallets.Where(i => i.MemberId == cDeliveryCheckout.buyer.MemberId && i.CouponId == couponID).FirstOrDefault();
+                            selectedCoupon.IsExpired = true;
+                        }
                         dbContext.Orders.Add(newOrder);
                         dbContext.SaveChanges();
                         int newOrderID = dbContext.Orders.Where(i => i.MemberId == oldOrder.MemberId && i.StatusId == 2).OrderByDescending(i => i.OrderId).Select(i => i.OrderId).FirstOrDefault();
@@ -690,6 +716,10 @@ namespace prjiSpanFinal.Controllers
                             int productDetailID = allOrderOrderDetail.Where(i => i.orderDetails.OrderDetailId == b).Select(i => i.orderDetails.ProductDetailId).FirstOrDefault();
                             int quantity = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.purchaseCount).FirstOrDefault();
                             decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.unitPrice).FirstOrDefault());
+                            if (coupon != null && !coupon.IsFreeDelivery)
+                            {
+                                unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
+                            }
                             OrderDetail newOrderDetail = new OrderDetail
                             {
                                 OrderId = newOrderID,
@@ -714,11 +744,21 @@ namespace prjiSpanFinal.Controllers
                         order.ShipperId = shipperID;
                         order.PaymentId = paymentID;
                         order.OrderMessage = orderMessage;
+                        if (couponID > 1)
+                        {
+                            order.CouponId = couponID;
+                            var selectedCoupon = dbContext.CouponWallets.Where(i => i.MemberId == cDeliveryCheckout.buyer.MemberId && i.CouponId == couponID).FirstOrDefault();
+                            selectedCoupon.IsExpired = true;
+                        }
                         foreach (var b in purchaseOrderDetailID)
                         {
                             int productDetailID = allOrderOrderDetail.Where(i => i.orderDetails.OrderDetailId == b).Select(i => i.orderDetails.ProductDetailId).FirstOrDefault();
                             int quantity = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.purchaseCount).FirstOrDefault();
                             decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.unitPrice).FirstOrDefault());
+                            if (coupon != null && !coupon.IsFreeDelivery)
+                            {
+                                unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
+                            }
                             var orderDetail = dbContext.OrderDetails.Where(i => i.OrderDetailId == b).Select(i => i).FirstOrDefault();
                             orderDetail.Quantity = quantity;
                             orderDetail.Unitprice = unitPrice;
@@ -740,9 +780,22 @@ namespace prjiSpanFinal.Controllers
                     PaymentId = cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.paymentID,
                     OrderMessage = cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.wordToSeller,
                 };
+                Coupon coupon = null;
+                if (cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.couponID > 1)
+                {
+                    order.CouponId = cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.couponID;
+                    coupon = dbContext.Coupons.Where(i => i.CouponId == cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.couponID).FirstOrDefault();
+                    var selectedCoupon = dbContext.CouponWallets.Where(i => i.MemberId == cDeliveryCheckout.buyer.MemberId && i.CouponId == cDeliveryCheckout.sellerShipperPayments[0].savedShipperPaymentCoupon.couponID).FirstOrDefault();
+                    selectedCoupon.IsExpired = true;
+                }
                 dbContext.Orders.Add(order);
                 dbContext.SaveChanges();
                 int newOrderID = dbContext.Orders.Where(i => i.MemberId == cDeliveryCheckout.buyer.MemberId && i.StatusId == 2).OrderByDescending(i => i.OrderId).Select(i => i.OrderId).FirstOrDefault();
+                decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo[0].unitPrice);
+                if (coupon != null && !coupon.IsFreeDelivery)
+                {
+                    unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
+                }
 
                 OrderDetail orderDetail = new OrderDetail
                 {
@@ -750,7 +803,7 @@ namespace prjiSpanFinal.Controllers
                     ProductDetailId = cDeliveryCheckout.purchaseItemInfo[0].productDetailID,
                     Quantity = cDeliveryCheckout.purchaseItemInfo[0].purchaseCount,
                     ShippingStatusId = 1,
-                    Unitprice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo[0].unitPrice)
+                    Unitprice = unitPrice
                 };
                 dbContext.OrderDetails.Add(orderDetail);
                 dbContext.SaveChanges();
@@ -789,7 +842,10 @@ namespace prjiSpanFinal.Controllers
                         order = i.Order,
                         seller = i.ProductDetail.Product.Member,
                         productDetail = i.ProductDetail,
-                        productName = i.ProductDetail.Product.ProductName
+                        productName = i.ProductDetail.Product.ProductName,
+                        shipper = i.Order.Shipper,
+                        payment = i.Order.Payment,
+                        coupon = i.Order.Coupon,
                     }).ToList();
                 }
                 else
@@ -801,6 +857,9 @@ namespace prjiSpanFinal.Controllers
                         seller = i.ProductDetail.Product.Member,
                         productDetail = i.ProductDetail,
                         productName = i.ProductDetail.Product.ProductName,
+                        shipper = i.Order.Shipper,
+                        payment = i.Order.Payment,
+                        coupon = i.Order.Coupon,
                     }).ToList();
                 }
                 return View(orderedOrders);
@@ -818,12 +877,14 @@ namespace prjiSpanFinal.Controllers
             string tradeDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             List<CGoOPayCheckoutViewModel> cGoOPayCheckout = JsonSerializer.Deserialize<List<CGoOPayCheckoutViewModel>>(checkoutItems);
             string itemName = "";
-            int totalAmount = 0;
+            int totalAmount = cGoOPayCheckout[0].totalPrice;
             foreach (var i in cGoOPayCheckout)
             {
-                itemName += $"{i.productName}#";
-                totalAmount += i.productPrice;
+                itemName += $"{i.productName}  X{i.purchaseCount}  ${i.productPrice*i.purchaseCount}#";
             }
+            itemName = itemName + $"運費:{cGoOPayCheckout[0].shipperFee}#";
+            itemName = itemName + $"手續費:{cGoOPayCheckout[0].paymentFee}#";
+            itemName = itemName + $"優惠券:{cGoOPayCheckout[0].couponCode}#";
             itemName = itemName.TrimEnd('#');
             string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/IsExistPaidOrderSession";
             NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -879,6 +940,17 @@ namespace prjiSpanFinal.Controllers
                 Order paidOrder = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
                 paidOrder.StatusId = 3;
                 paidOrder.PaymentDate = DateTime.Now;
+                var paidOrderDetail = dbContext.OrderDetails.Where(i => i.OrderId == orderID).Select(i => new
+                {
+                    productDetailID = i.ProductDetailId,
+                    quantity = i.Quantity,
+                }).ToList();
+                foreach (var a in paidOrderDetail)
+                {
+                    var productDetail = dbContext.ProductDetails.Where(i => i.ProductDetailId == a.productDetailID).FirstOrDefault();
+                    productDetail.Quantity -= a.quantity;
+                }
+
                 dbContext.SaveChanges();
                 HttpContext.Session.Remove(CDictionary.SK_PAIDORDER);
                 return RedirectToAction("Order", "Member");

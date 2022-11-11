@@ -13,32 +13,34 @@
             orderList.Add(i.order);
         }
     }
+
 }
 
-@section Styles{ 
+@section Styles{
     <style>
-        .imgDiv{
-            width:100px;
-            aspect-ratio:1/1;
+        .imgDiv {
+            width: 100px;
+            aspect-ratio: 1/1;
         }
-        .imgDiv img{
-            width:100%;
-            aspect-ratio:1/1;
-            object-fit:contain;
-        }
+
+            .imgDiv img {
+                width: 100%;
+                aspect-ratio: 1/1;
+                object-fit: contain;
+            }
     </style>
 }
 
 
-<h1>花錢囉</h1>
-<a href="@Url.Content("~/Delivery/Order")">回會員中心</a>
+<h1>前往付款</h1>
+<a href="@Url.Content("~/Member/Order")">回會員中心</a>
 @{
     foreach (var i in orderList)
     {
-        <div class="border px-3 py-2 my-3">
+        <div class="layout border px-3 py-2 my-3">
             @{
                 string sellerAcc = Model.Where(j => j.order == i).Select(j => j.seller.MemberAcc).FirstOrDefault();
-            } 
+            }
             <div class="fs-6 border-bottom py-2"><span class="fs-4 fw-bold">@sellerAcc</span>賣場的訂單</div>
             <div class="border-bottom py-2">
                 @{
@@ -57,31 +59,84 @@
                                 imgSrc = Url.Content("~/img/imageNotFound.png");
                             }
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="imgDiv"><img src="@imgSrc" /></div>
+                            <div class="itemLayout d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="imgDiv me-3"><img src="@imgSrc" /></div>
                                     <div>
-                                        <div class="productName">@j.productName</div>
-                                        <div>@j.productDetail.Style</div>
-                                        <div class="productPrice">@j.productDetail.UnitPrice</div>
+                                        <div>
+                                            <div class="productName fs-5">@j.productName</div>
+                                            @{
+                                                if (j.productDetail.Style == "樣式一")
+                                                {
+                                                    <div class="d-none">@j.productDetail.Style</div>
+                                                }
+                                                else
+                                                {
+                                                    <div>@j.productDetail.Style</div>
+                                                }
+                                            }
+                                            <div class="productPrice text-danger">$<span class="unitPrice">@j.productDetail.UnitPrice.ToString("0")</span></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>X<span class="purchaseCount">@j.orderDetail.Quantity</span></div>
+                                <div class="fs-5">X<span class="purchaseCount">@j.orderDetail.Quantity</span></div>
                             </div>
                         }
                     }
                 }
             </div>
-            <button class="goOPayCheckout btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmCheckout" id="@i.OrderId">付款</button>
+            @{ 
+                var q = Model.Where(a => a.order == i).FirstOrDefault();
+            }
+            
+            <div class="border-bottom py-2 d-flex justify-content-between align-items-end">
+                <div>
+                    <div>物流方式:<span class="mx-2">@q.shipper.ShipperName</span><span class="text-danger me-2" style="font-size:14px">運費:<span class="ms-2">$</span><span class="shipperFee">@q.shipper.Fee</span></span></div>
+                    <div>付款方式:<span class="mx-2">@q.payment.PaymentName</span><span class="text-danger me-2" style="font-size:14px">手續費:<span class="ms-2">$</span><span class="paymentFee">@q.payment.Fee</span></span></div>
+                    @{
+                        if (q.coupon.CouponId > 1)
+                        {
+                            if (q.coupon.IsFreeDelivery)
+                            {
+                                if (q.coupon.MinimumOrder > 0)
+                                {
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span>免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
+                                }
+                                else
+                                {
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
+                                }
+                            }
+                            else
+                            {
+                                string discount = (q.coupon.Discount * 10).ToString();
+                                if (q.coupon.MinimumOrder > 0)
+                                {
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span><span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
+                                }
+                                else
+                                {
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額<span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
+                                }
+                            }
+                        }
+                    }
+                </div>
+                <div>
+                    <div>總計:<span class="fs-4 fw-bold text-danger ms-2">$<span class="totalPrice"></span></span></div>
+                </div>
+            </div>
+            <div class="py-2 text-center">
+                <button class="goOPayCheckout btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmCheckout" id="@i.OrderId">付款</button>
+            </div>
         </div>
-
     }
 }
 <div class="modal" tabindex="-1" id="confirmCheckout">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">請確認是否付款</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -125,27 +180,71 @@
 
 
 
-@section Scripts{ 
+@section Scripts{
     <script>
+        $($(".layout").each(function () {
+            let smallPrice = 0;
+            $(this).find(".itemLayout").each(function () {
+                smallPrice += Number($(this).find(".unitPrice").html()) * Number($(this).find(".purchaseCount").html());
+            });
+            let shipperFee = Number($(this).find(".shipperFee").html());
+            let paymentFee = Number($(this).find(".paymentFee").html());
+            let totalPrice = 0;
+            if ($(".freeShipper").length > 0) {
+                let discount = Number($(".freeShipper").html());
+                let isFreeShip = $(".freeShipper").attr("id");
+                if (isFreeShip == "freeShipper") {
+                    totalPrice = smallPrice + paymentFee;
+                }
+                else {
+                    $(this).find(".itemLayout").each(function () {
+                        totalPrice += Math.ceil(Number($(this).find(".unitPrice").html()) * discount / 10) * Number($(this).find(".purchaseCount").html());
+                    });
+                    totalPrice = totalPrice + shipperFee + paymentFee;
+                }
+            }
+            else {
+                totalPrice = smallPrice + shipperFee + paymentFee;
+            }
+            $(".totalPrice").html(totalPrice);
+        }));
+
 
         let orderID = "";
         $(".goOPayCheckout").click(async function () {
             orderID = $(this).attr("id");
             let checkoutItems = [];
-            $(this).siblings().find(".purchaseCount").each(function () {
+            $(this).closest("div").siblings().find(".purchaseCount").each(function () {
                 const productName = $(this).closest("div").siblings().find(".productName").html();
-                const productPrice = Number($(this).closest("div").siblings().find(".productPrice").html());
+                const productPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
                 const purchaseCount = Number($(this).html());
+                let couponCode = "";
+                if ($(this).closest(".layout").find(".couponCode").length > 0) {
+                    couponCode = $(this).closest(".layout").find(".couponCode").html();
+                }
+                const totalPrice = Number($(this).closest(".layout").find(".totalPrice").html());
+                const shipperFee = Number($(this).closest(".layout").find(".shipperFee").html());
+                const paymentFee = Number($(this).closest(".layout").find(".paymentFee").html());
                 const jsonObject = {
                     "productName": productName,
                     "productPrice": productPrice,
-                    "purchaseCount": purchaseCount
+                    "purchaseCount": purchaseCount,
+                    "couponCode": couponCode,
+                    "totalPrice": totalPrice,
+                    "shipperFee": shipperFee,
+                    "paymentFee": paymentFee,
                 };
                 checkoutItems.push(jsonObject);
             });
             const jsonString = JSON.stringify(checkoutItems);
             const response = await fetch("@Url.Content("~/Delivery/OPayCheckout")" + `?checkoutItems=${jsonString}`);
             const data = await response.json();
+            console.log(data.tradeNO);
+            console.log(data.tradeDate);
+            console.log(data.totalAmount);
+            console.log(data.itemName);
+            console.log(data.clientBackURL);
+            console.log(data.checkMacValue);
             $("input[name='MerchantTradeNo']").val(data.tradeNO);
             $("input[name='MerchantTradeDate']").val(data.tradeDate);
             $("input[name='TotalAmount']").val(data.totalAmount);
@@ -157,5 +256,6 @@
             let response = await fetch("@Url.Content("~/Delivery/SetPaidOrderToSession")" + `?orderID=${orderID}`);
             let data = response.text();
         });
+
     </script>
 }

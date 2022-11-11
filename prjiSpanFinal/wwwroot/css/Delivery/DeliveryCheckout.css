@@ -3,12 +3,13 @@
 .showCalTotalPriceVC {
     position: sticky;
     top: 80px;
+    z-index:1;
 }
 
-.modal {
+/*.modal {
     position: fixed;
     top: 80px;
-}
+}*/
 /*DeliveryFillCheckoutForm ViewComponent*/
 
 .itemThumbnail {
@@ -35,7 +36,7 @@
 
 /*CalTotalPrice ViewComponent*/
 
-.modal {
+/*.modal {
     position: fixed;
     top: 60px;
-}
+}*/

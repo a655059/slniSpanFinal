@@ -57,11 +57,21 @@
                                         </div>
                                     </div>
                                     <div>
-                                        @{ 
+                                        @{
                                             string productLink = Url.Content("~/Item/Index") + "?id=" + i.product.ProductId;
-                                        } 
-                                        <a href="@productLink" class="productLink"><label class="productName form-check-label">@i.product.ProductName</label></a>
-                                        <div class="productStyle text-black-50">@i.productDetail.Style</div>
+                                        }
+                                        <a href="@productLink" class="productLink"><label class="productName form-check-label fs-5" style="cursor:pointer">@i.product.ProductName</label></a>
+                                        @{
+                                            if (i.productDetail.Style == "樣式一")
+                                            {
+                                                <div class="productStyle text-black-50 d-none">@i.productDetail.Style</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="productStyle text-black-50">@i.productDetail.Style</div>
+                                            }
+                                        }
+
                                         <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
                                     </div>
                                 </div>
@@ -78,7 +88,6 @@
                                         <button class="btnDelete btn btn-sm" id="@i.orderDetail.OrderDetailId"><i class="fa-solid fa-trash-can text-danger"></i></button>
                                     </div>
                                 </div>
-
                             </div>
                         }
                     }
@@ -113,7 +122,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal" tabindex="-1" id="showNoItemInCart">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -130,30 +138,32 @@
     <script src="~/js/Delivery/DeliveryShowCart.js"></script>
     <script src="~/js/Delivery/ProgressBar.js"></script>
     <script>
-        $(".btnDelete").click(async function () {
-            const yes = confirm("確定要刪除嗎?");
-            if (yes) {
-                const orderDetailID = $(this).attr("id");
-                let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
-                let data = await response.text();
-                console.log(data);
-                if (data == 0) {
-                    $(this).closest(".sellerLayout").remove();
+        $(".btnDelete").click(function () {
+            Swal.fire({
+                title: "確定要刪除嗎?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "刪除",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const orderDetailID = $(this).attr("id");
+                    let response = await fetch("@Url.Content("~/Delivery/DeleteOrderDetail")" + `?orderDetailID=${orderDetailID}`);
+                    let data = await response.text();
+                    if (data == 0) {
+                        $(this).closest(".sellerLayout").remove();
+                    }
+                    if (data == 1) {
+                        $(this).closest(".itemLayout").remove();
+                    }
+                    if ($(".sellerLayout").length < 1) {
+                        $(".progressBar").addClass("d-none");
+                        $(".layout").load("@Url.Action("ShowNoItemInCart", "Delivery")");
+                    }
+                    else {
+                        CalTotalPrice();
+                    }
                 }
-                if (data == 1) {
-                    $(this).closest(".itemLayout").remove();
-                }
-                if ($(".sellerLayout").length < 1) {
-                    $(".progressBar").addClass("d-none");
-                    $(".layout").load("@Url.Action("ShowNoItemInCart", "Delivery")");
-                }
-                else {
-                    CalTotalPrice();
-                }
-            }
-            else {
-                return;
-            }
+            });
         });
         $("#goCheckout").click(async function () {
             if ($(".selectItem:checked").length >= 1) {
@@ -186,7 +196,7 @@
                     data: { purchaseItemInfo: data},
                 }).done(function (result) {
                     if (result == "0") {
-                        alert("請再點一次去結帳");
+                        Swal.fire("請再點一次去結帳");
                         return;
                     }
                     else {
@@ -195,7 +205,7 @@
                 })
             }
             else {
-                alert("請選取至少一個商品");
+                Swal.fire("請選取至少一個商品");
                 return;
             }
         });

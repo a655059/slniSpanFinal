@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prjiSpanFinal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,5 +22,6 @@ namespace prjiSpanFinal.ViewModels.Delivery
         public int couponID { get; set; }
         public string couponName { get; set; }
         public string wordToSeller { get; set; }
+        public Coupon selectedCoupon { get; set; }
     }
 }

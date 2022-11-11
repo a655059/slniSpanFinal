@@ -50,8 +50,6 @@ namespace prjiSpanFinal.HostedService
                         string productName = product.ProductName;
                         int sellerID = product.MemberId;
                     }
-
-
                     if (DateTime.Now >= a.bidding.EndTime && a.product.ProductStatusId == 4)
                     {
                         var product = dbContext.Products.Where(i => i.ProductId == a.product.ProductId).Select(i => i).FirstOrDefault();

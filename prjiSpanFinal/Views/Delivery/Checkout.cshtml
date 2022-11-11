@@ -25,10 +25,16 @@
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
-<div class="btn-group mb-3" role="group" aria-label="Basic radio toggle button group" id="choseStore">
+<div class="btn-group mb-3 position-relative" role="group" aria-label="Basic radio toggle button group" id="choseStore">
     <div class="sellerIDIndex d-none">0</div>
     <div class="sellerIDCount d-none">@sellerIDList.Count</div>
-    @{ 
+    @{
+        for (int i = 0; i < sellerIDList.Count; i++)
+        {
+            <div class="sellerIDNumber d-none">@sellerIDList[i]</div>
+        }
+    }
+    @{
         string sellerID = "seller" + sellerIDList[0];
     }
     <input type="radio" class="sellerID btn-check" name="btnradio" id="@sellerID" autocomplete="off" checked>
@@ -50,7 +56,8 @@
     </div>
     <div class="col-3">
         <div class="showCalTotalPriceVC">
-            @await Component.InvokeAsync("CalTotalPrice", new { id = 2 })
+            @await Component.InvokeAsync("CalTotalPrice", new { id = 2, sellerIDIndex = 0, sellerMemberID = sellerIDList[0] })
+
         </div>
     </div>
 </div>
@@ -58,7 +65,9 @@
 @section Scripts{
     <script>
         $(function () {
+            let sellerIDNumber = Number($(".sellerIDNumber").html());
             $(".checkoutFormVC").load("@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=0`);
+            $(".showCalTotalPriceVC").load("@Url.Content("~/Delivery/ShowCalTotalPriceVC")" + `?id=2&sellerIDIndex=0&sellerMemberID=${sellerIDNumber}`);
             if ($(".sellerIDCount").html() == "1") {
                 $("#nextStore").html("確認並前往下單");
             }
@@ -66,6 +75,8 @@
                 $("#nextStore").html("確認並前往下一筆");
             }
         });
+
+
         function changePage(NextOrPrevOrIndex) {
             const sellerCount = Number($(".sellerIDCount").html());
             const sellerIDIndex = Number($(".sellerIDIndex").html());
@@ -79,12 +90,14 @@
             else {
                 nextSellerIDIndex = NextOrPrevOrIndex;
             }
+            let nextSellerIDNumber = $(".sellerIDNumber").eq(nextSellerIDIndex).html();
             const _url = "@Url.Content("~/Delivery/CheckoutForm")" + `?sellerIDIndex=${nextSellerIDIndex}`;
+            const _CalTotalPriceUrl = "@Url.Content("~/Delivery/ShowCalTotalPriceVC")" + `?id=2&sellerIDIndex=${nextSellerIDIndex}&sellerMemberID=${nextSellerIDNumber}`;
             $(".checkoutFormVC").load(_url);
+            $(".showCalTotalPriceVC").load(_CalTotalPriceUrl);
             $(".sellerIDIndex").html(nextSellerIDIndex);
             if (nextSellerIDIndex >= sellerCount - 1) {
                 $("#nextStore").html("確認並前往下單");
-
             }
             else {
                 $("#nextStore").html("確認並前往下一筆");
@@ -97,12 +110,12 @@
             }
             $("#choseStore").find(".sellerID").eq(nextSellerIDIndex).prop("checked", true);
         };
-        $("#nextStore").click(async function () {
+        $(".showCalTotalPriceVC").on("click", "#nextStore", async function () {
             if ($("#finalShipper").html() == "") {
-                alert("請選擇一種運送方式");
+                Swal.fire("請選擇一種運送方式");
             }
             else if ($(".payment:checked").length<1) {
-                alert("請選擇一種付款方式");
+                Swal.fire("請選擇一種付款方式");
             }
             else {
                 const sellerID = Number($(".sellerID:checked").attr("id").substring(6));
@@ -112,7 +125,7 @@
                 const address = $("#address").val();
                 const shipperID = Number($("#finalShipperID").html());
                 const shipperName = $("#finalShipper").html();
-                const shipperFee = Number($(".finalShipperFee").html());
+                const shipperFee = Number($("#finalShipperFee").html());
                 const paymentID = Number($(".payment:checked").attr("id").substring(7));
                 const paymentName = $(".payment:checked").siblings("label").html().split('<')[0];
                 const paymentFee = Number($(".payment:checked").siblings("label").find(".paymentFee").html());
@@ -145,14 +158,12 @@
                      window.location.href = "@Url.Content("~/Delivery/CheckoutConfirm")"
                 }
             }
-        });
-        $("#previousStore").click(function () {
-            changePage("Prev");
         })
         $(".sellers").click(function () {
             changePage($(this).index("label"))
         });
-
+        
+        
     </script>
     @*<script src="~/js/Delivery/DeliveryFillCheckoutForm.js"></script>*@
     <script src="~/js/Delivery/DeliveryCheckout.js"></script>

@@ -6,7 +6,7 @@
     string address = Model.buyer.Address;
     string shipperID = "";
     string shipperName = "";
-    string shipperFee = "";
+    int shipperFee = 0;
     string wordToSeller = "";
     string selectedPaymentID = "";
     string IsSession = "session0";
@@ -18,7 +18,7 @@
         address = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.address;
         shipperID = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperID.ToString();
         shipperName = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperName;
-        shipperFee = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperFee.ToString();
+        shipperFee = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.shipperFee;
         wordToSeller = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.wordToSeller;
         selectedPaymentID = Model.sellerShipperPayments[0].savedShipperPaymentCoupon.paymentID.ToString();
         IsSession = "session1";
@@ -48,8 +48,18 @@
                     </div>
                     <div>
                         <div class="fs-5">@i.productName</div>
-                        <div>@i.productStyle</div>
-                        <div>$<span class="unitPrice">@i.unitPrice</span></div>
+                        @{
+                            if (i.productStyle == "樣式一")
+                            {
+                                <div class="d-none">@i.productStyle</div>
+                            }
+                            else
+                            {
+                                <div>@i.productStyle</div>
+                            }
+                        }
+
+                        <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
                     </div>
                 </div>
                 <div class="fs-5 text-black-50">x<span class="purchaseCount">@i.purchaseCount</span></div>
@@ -78,9 +88,9 @@
         </div>
         <div class="finalShipInfo my-1 d-none" id="@IsSession">
             <div class="d-flex justify-content-start align-items-end">
-                <div class="fw-bold" id="finalShipper">@shipperName</div>
-                <div class="d-none" id="finalShipperID">@shipperID</div>
-                <div class="text-danger ms-2" style="font-size:12px">運費:$<span class="finalShipperFee">@shipperFee</span></div>
+                <div class="finalShipper fw-bold" id="finalShipper">@shipperName</div>
+                <div class="finalShipperID d-none" id="finalShipperID">@shipperID</div>
+                <div class="text-danger ms-2" style="font-size:12px">運費:$<span class="finalShipperFee" id="finalShipperFee">@shipperFee</span></div>
             </div>
         </div>
         <div class="row my-1 align-items-center">
@@ -173,6 +183,5 @@
             paymentID = `payment${paymentID}`;
             $(`#${paymentID}`).prop("checked", true);
         }
-
     });
 </script>
