@@ -136,15 +136,6 @@ namespace prjiSpanFinal.ViewModels.Home
                 else if (!DeliveryFree)
                     obj.isDeliveryFree = false;
 
-                if (Sale > 0)
-                {
-                    decimal SaleD = Convert.ToDecimal(Sale);
-                    decimal a = Math.Round(((SaleD / (Stock + Sale)) * 100), 2);
-                    obj.Percentage = a + "%";
-                }
-                else
-                    obj.Percentage = "0%";
-
                 var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
                 if (Effect.Any())
                 {
@@ -190,6 +181,19 @@ namespace prjiSpanFinal.ViewModels.Home
                     obj.effects = new List<int>();
                 }
                 res.Add(obj);
+            }
+            return res;
+        }
+        public List<OfficialEventList> toGetEvent(List<OfficialEventList> list)
+        {
+            List<OfficialEventList> res = new List<OfficialEventList>();
+            foreach (var item in list)
+            {
+                double evtPublishdAy = (DateTime.Now).Subtract(item.StartDate).TotalDays;
+                if (evtPublishdAy >= -7)
+                {
+                    res.Add(item);
+                }
             }
             return res;
         }

@@ -1,0 +1,54 @@
+﻿.SubEventArea {
+    margin: 20px;
+}
+.menu-bar{
+
+}
+#itemArea {
+    width: 100%;
+    /*background-color: red;*/
+}
+.menu {
+    font-size:2rem;
+    width:50%;
+    background-color: #4F4F4F;
+    color:white;
+    user-select:none;
+}
+.active {
+    background-color: #FF5809!important;
+}
+
+.itemcol {
+    width: 100%;
+    overflow: hidden;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.SubEventTitle {
+    width: 100%;
+    font-size: 50px;
+    background-color: #FF9224;
+    text-align: center;
+    color: #AE0000;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+#EventEndNoti {
+    text-align: center;
+    width: 100%;
+    font-size: 40px;
+    color: red;
+}
+
+#eventDate {
+    font-size: 20px;
+    color: red;
+    width: 100%;
+    font-weight: bold;
+    text-align: end;
+}

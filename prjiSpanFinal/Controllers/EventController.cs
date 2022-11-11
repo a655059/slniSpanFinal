@@ -61,11 +61,11 @@ namespace prjiSpanFinal.Controllers
             return Content("2", "text/plain", Encoding.UTF8);
             }
         }
-        public IActionResult Event(int? Eventid)
+        public IActionResult Event(int Eventid)
         {
-            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid).Any())
+            if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid&&e.OfficialEventTypeId==1).Any())
             {
-                EventViewModel EventVM = (new EventFactory()).fToEvent(Convert.ToInt32(Eventid));
+                EventViewModel EventVM = (new EventFactory()).fToEvent(Eventid);
                 MemberAccount evtLoggedAcc = new MemberAccount();
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
@@ -87,5 +87,49 @@ namespace prjiSpanFinal.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult FreshSales(int Eventid)
+        {
+            //if (DateTime.Now.ToString("tt") == "AM")
+            //{
+
+            //}
+            //else if (DateTime.Now.ToString("tt") == "PM")
+            //{
+            //}
+            MemberAccount mem = new MemberAccount();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                mem = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            }
+            OfficialEventList evt = _db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid && e.OfficialEventTypeId == 2).FirstOrDefault();
+            if (evt!=null)
+            {
+                double evtPublishDay = (DateTime.Now).Subtract(evt.StartDate).TotalDays;
+                double endDay = (DateTime.Now).Subtract(evt.EndDate).TotalDays;
+                if (mem!=null && mem.MemberId == 1 || evtPublishDay >= -7 && endDay <=3)
+                {
+                    FreshSalesViewModel res = new FreshSalesViewModel
+                    {
+                        Event = evt,
+                    };
+                    return View(res);
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult getEventFSItem(int num,int eid) 
+        {
+            List<FreshSalesShowItem> res = new List<FreshSalesShowItem>();
+            if (num == 1)
+            {
+                res = new EventFactory().ftoFSShowItem(_db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == eid).Where(e => e.VerifyId == 2).Where(e => e.ProductId % 2 == 0).Select(p => p.Product).ToList());                   
+            }
+            else
+            {
+                res = new EventFactory().ftoFSShowItem(_db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == eid).Where(e => e.VerifyId == 2).Where(e => e.ProductId % 2 == 1).Select(p => p.Product).ToList());
+            }
+            return Json(res);
+        }
     }
 }
+

@@ -5,7 +5,9 @@
 
 @section Styles{
     <link href="~/css/Event/Discount.css" rel="stylesheet" />
-    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/Event/EventItemCard.css" rel="stylesheet" />
+    <link href="~/css/ADitem.css" rel="stylesheet" />
+    <link href="~/css/Event/EventProd.css" rel="stylesheet" />
 }
 <body>
     <div>
@@ -17,31 +19,55 @@
                 <img src="@source" alt="..." />
             }
         </div>
-        <div class="split"></div>
-        @if (Model.EventCoupons.Count > 0)
-        {
-            <div class="coupongroup">
-                @foreach (var item in Model.EventCoupons)
-                {
-                    @await Component.InvokeAsync("EventCoupon", new { showCoupon = item });
-                }
-            </div>
-        }
-        @if (Model.EventSubs.Count > 0) {
-            foreach(var Subs in Model.EventSubs) {
-                if (Subs.SubEventProducts.Count > 0) {
-                    <div>
-                        <div>@Subs.SubEvent.SubEventName</div>
-                        @await Component.InvokeAsync("HomeItemShow", new { shopProduct = Subs.SubEventProducts });
-                    </div>
-                }
+        <div id="eventDate"> 活動時間：@Model.Event.StartDate.ToString("yyyy/MM/dd") ～ @Model.Event.EndDate.ToString("yyyy/MM/dd")</div>
+        @{
+            if (DateTime.Now.CompareTo(Model.Event.EndDate) < 0)
+            {
+
+                <div class="split"></div>
+                <div>
+                    @if (Model.EventCoupons.Any())
+                    {
+                        <div class="coupongroup">
+                            @foreach (var item in Model.EventCoupons)
+                            {
+                                @await Component.InvokeAsync("EventCoupon", new { showCoupon = item });
+                            }
+                        </div>
+                    }
+                </div>
+                <div>
+                    @if (Model.EventSubs.Any())
+                    {
+                        foreach (var Subs in Model.EventSubs)
+                        {
+
+                            @if (Subs.SubEventProducts.Any())
+                            {
+                                <div class="SubEventArea">
+                                    <div class="SubEventTitle">@Subs.SubEvent.SubEventName</div>
+                                    <div class="itemArea" id="itemArea">
+                                        <div class="itemcol d-flex justify-content-center" id="itemcol">
+                                            @await Component.InvokeAsync("EventItem", new { list = Subs.SubEventProducts })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div id="EventEndNoti">活動已結束</div>
             }
         }
     </div>
 </body>
-@section Scripts{
+@section Scripts
+{
     <script src="~/js/Event/Coupon.js"></script>
-@*優惠券*@
+    @*優惠券*@
     <script>
         /*優惠券*/
         const evtCouponCount =@Model.EventCoupons.Count;
@@ -69,7 +95,26 @@
         }
     </script>
     <script>
+        const eventid =@Model.Event.OfficialEventListId;
 
+        
+        $(document).ready(function () {
+            if (eventid % 3 == 0) {
+                $(".Setionset").css("background-color", "#4F9D9D");
+                $("header").css("background-color", "#4F9D9D");
+                console.log(eventid);
+            }
+            else if (eventid % 3 == 1) {
+                $(".Setionset").css("background-color", "#0072E3");
+                $("header").css("background-color", "#0072E3");
+                console.log(eventid);
+            }
+            else if (eventid % 3 == 2) {
+                $(".Setionset").css("background-color", "#7373B9");
+                $("header").css("background-color", "#7373B9");
+                console.log(eventid);
+            }
+        })
     </script>
 }
 

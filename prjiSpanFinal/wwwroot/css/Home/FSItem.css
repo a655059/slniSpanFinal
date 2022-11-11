@@ -75,3 +75,12 @@
     top: -10%;
     pointer-events:none;
 }
+.FS-onFireBOX {
+    TOP: -15px;
+    POSITION: absolute;
+    LEFT: 10px;
+    WIDTH: 15%;
+}
+.FS-onFire {
+    width: 100%;
+}
