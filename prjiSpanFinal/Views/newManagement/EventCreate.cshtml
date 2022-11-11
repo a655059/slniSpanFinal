@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 活動類型
-                <select asp-for="OfficialEventTypeId" class="form-control mb-1">
+                <select id="OfficialEventTypeId" asp-for="OfficialEventTypeId" class="OfficialEventTypeId form-control mb-1">
                     @foreach(var a in ViewBag.EventType){
                         <option value="@a.OfficialEventTypeId">@a.OfficialEventTypeName</option>
                     }
@@ -70,23 +70,68 @@
             const file = this.files[0];
             const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
             $('#Preview').attr('src', objectURL);
-            console.log()
+            console.log();
         });
-        let demo=document.getElementById("demo");
-        
-        demo.addEventListener("click",function(){
-            let EventName=document.getElementById("EventName");
-            let StartDate=document.getElementById("StartDate");
-            let EndDate=document.getElementById("EndDate");
-            let JoinStartDate=document.getElementById("JoinStartDate");
-            let JoinEndDate=document.getElementById("JoinEndDate");
-            EventName.value="站主開心辦活動";
-            StartDate.value="2022-11-08";
-            EndDate.value="2022-12-01";
-            JoinStartDate.value="2022-11-08";
-            JoinEndDate.value="2022-12-01";
-        })
+        let demo = document.getElementById("demo");
 
+        demo.addEventListener("click", function () {
+            let EventName = document.getElementById("EventName");
+            let StartDate = document.getElementById("StartDate");
+            let EndDate = document.getElementById("EndDate");
+            let JoinStartDate = document.getElementById("JoinStartDate");
+            let JoinEndDate = document.getElementById("JoinEndDate");
+            EventName.value = "站主開心辦活動";
+            StartDate.value = "2022-11-08";
+            EndDate.value = "2022-12-01";
+            JoinStartDate.value = "2022-11-08";
+            JoinEndDate.value = "2022-11-07";
+        });
+
+
+        Date.prototype.addDays = function (days) {
+            this.setDate(this.getDate() + days);
+            return this;
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            return [year, month, day].join('-');
+        }
+
+        let OfficialEventTypeId = document.getElementById("OfficialEventTypeId");
+        OfficialEventTypeId.addEventListener("change", function () {
+            if (OfficialEventTypeId.value == 2) {
+                let EndDate = document.getElementById("EndDate");
+                let JoinStartDate = document.getElementById("JoinStartDate");
+                let JoinEndDate = document.getElementById("JoinEndDate");
+                let StartDate = document.getElementById("StartDate");
+                EndDate.readOnly = true;
+                JoinStartDate.readOnly = true;
+                JoinEndDate.readOnly = true;
+                let Datee = new Date(StartDate.value);
+                console.log(Datee);
+                EndDate.value = formatDate(Datee.addDays(1));
+                JoinStartDate.value = formatDate(Datee.addDays(-5));
+                JoinEndDate.value = formatDate(Datee.addDays(-1));
+            }
+            else {
+                let EndDate = document.getElementById("EndDate");
+                let JoinStartDate = document.getElementById("JoinStartDate");
+                let JoinEndDate = document.getElementById("JoinEndDate");
+                let StartDate = document.getElementById("StartDate");
+                EndDate.readOnly = false;
+                JoinStartDate.readOnly = false;
+                JoinEndDate.readOnly = false;
+                let Datee = StartDate.value;
+            }
+        });
 
     </script>
     }

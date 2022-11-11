@@ -17,20 +17,19 @@ namespace prjiSpanFinal.Controllers
 {
     public class newManagementController : Controller
     {
+        #region DBRegion
         private iSpanProjectContext db;
         public newManagementController(iSpanProjectContext _db)
         {
             db = _db;
         }
+        #endregion
         #region ProductRegion
-        public List<CProductListViewModel> GetProductsFromDatabase(int? page, int? pageSize)
+        public List<CProductListViewModel> GetProductsFromDatabase()
         {
-            page ??= 1;
-            pageSize ??= 5;
             List<CProductListViewModel> list = new();
             List<Product> Prods = null;
             Prods = Prods = db.Products.ToList();
-
             var MemberAcc = db.MemberAccounts.ToList();
             var ProductStatusName = db.ProductStatuses.ToList();
             var RegionName = db.RegionLists.ToList();
@@ -63,7 +62,7 @@ namespace prjiSpanFinal.Controllers
             if (page.HasValue && page < 1)
                 return null;
             // 從資料庫取得資料
-            var listUnpaged = GetProductsFromDatabase(page, pageSize);
+            var listUnpaged = GetProductsFromDatabase();
             IPagedList<CProductListViewModel> listUnpage = listUnpaged.ToPagedList(page ??= 1, pageSize);
             IPagedList<CProductListViewModel> list = null;
             int FilterId;
@@ -126,7 +125,7 @@ namespace prjiSpanFinal.Controllers
             ViewBag.Count = db.Products.Count();
             ViewBag.pageSize = pageSize;
             //每頁幾筆
-            pageSize ??= 100;//if null的寫法
+            pageSize ??= 5;//if null的寫法
             page ??= 1;
             //處理頁數
             ViewBag.Prods = GetPagedProcess(page, (int)pageSize, keyword, filter);
@@ -1741,7 +1740,6 @@ namespace prjiSpanFinal.Controllers
             }
             return View(list);
         }
-
         public IActionResult WebAdCreate()
         {
             ViewBag.WebADImageType = db.WebAdimageTypes.ToList();
@@ -1753,8 +1751,8 @@ namespace prjiSpanFinal.Controllers
             WebAd newWebAd = new()
             {
                 WebAdimageTypeId = webAd.WebAdimageTypeId,
-                MemberId = 1,
-                IsPublishing = false,
+                MemberId = webAd.MemberId,
+                IsPublishing = webAd.IsPublishing,
                 Path = webAd.Path,
             };
             using (var ms = new MemoryStream())
@@ -1807,8 +1805,6 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("WebAdList");
         }
-
-
         #endregion
     }
 }

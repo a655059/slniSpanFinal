@@ -128,8 +128,8 @@
         ps= 100;
         if (ViewBag.pageSize != null) { ps = ViewBag.pageSize;}
     }
-      @*@Html.Pager(pagedList).Url(page => Url.Action("newProductList", new {pageSize=ps, page=page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()*@
-      <div class="pagination-container"><ul class="pagination"><li class="activate page-item"><span class="page-link">1</span></li></ul></div>
+      @Html.Pager(pagedList).Url(page => Url.Action("newProductList", new {pageSize=ps, page=page })).DisplayEllipsesWhenNotShowingAllPageNumbers().MaximumPageNumbersToDisplay(ps).Build()
+      @*<div class="pagination-container"><ul class="pagination"><li class="activate page-item"><span class="page-link">1</span></li></ul></div>*@
     每頁
     <select id="pagesize" class="mt-1">
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
