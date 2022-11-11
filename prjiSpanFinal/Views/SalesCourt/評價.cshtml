@@ -1,11 +1,12 @@
 ﻿@model prjiSpanFinal.ViewModels.SalesCourt.C評價ViewModel
 @{
     ViewData["Title"] = "評價";
-
-    int AllWeekCommentCount = Model.BestCommentCountMethod.WeekCount + Model.MediumCommentCountMethod.WeekCount + Model.WorstCommentCountMethod.WeekCount;
-    int AllMonthCommentCount = Model.BestCommentCountMethod.MonthCount + Model.MediumCommentCountMethod.MonthCount + Model.WorstCommentCountMethod.MonthCount;
-    int AllHalfYearCommentCount = Model.BestCommentCountMethod.HalfYearCount + Model.MediumCommentCountMethod.HalfYearCount + Model.WorstCommentCountMethod.HalfYearCount;
-    int AllCounts = Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount;
+    iSpanProjectContext dbContext = new iSpanProjectContext();
+    var AllWeekCommentCount = Model.BestCommentCountMethod.WeekCount + Model.MediumCommentCountMethod.WeekCount + Model.WorstCommentCountMethod.WeekCount;
+    var AllMonthCommentCount = Model.BestCommentCountMethod.MonthCount + Model.MediumCommentCountMethod.MonthCount + Model.WorstCommentCountMethod.MonthCount;
+    var AllHalfYearCommentCount = Model.BestCommentCountMethod.HalfYearCount + Model.MediumCommentCountMethod.HalfYearCount + Model.WorstCommentCountMethod.HalfYearCount;
+    var AllCounts = Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount;
+    var followcount = dbContext.Follows.Where(a => a.FollowedMemId == Model.Memberid).Count();
 
 }
 
@@ -57,7 +58,7 @@
                         <div>
                             @for (int i = 0; i < Model.StarCount; i++)
                             {
-                                <span><img src="~/img/YellowStar.png" width="80" /></span>
+                                <span><img src="~/img/YellowStar.png" width="55" /></span>
                             }
 
 
@@ -72,7 +73,14 @@
                         <div class="ps-2">
                             <img src="~/img/truck.png" width="30">
                             <a href="#" class="text-primary linknoline" style="font-size:1.5em">平均出貨天數:</a>
-                            <span class="text-dark" style="font-size:1.5em">@Model.AvgShippingDate.ToString("0.00") 天</span>
+                            @if (Model.AvgShippingDate > 0)
+                            {
+                                <span class="text-dark" style="font-size:1.5em">@Model.AvgShippingDate.ToString("0.00") 天</span>
+                            }
+                            else
+                            {
+                                <span class="text-dark" style="font-size:1.5em">天</span>
+                            }
                         </div>
                         <div class="ps-2">
                             <img src="~/img/follow.png" width="30">
@@ -82,9 +90,10 @@
                         </div>
                         <div class="ps-2">
                             <img src="~/img/fans.png" width="30">
-                            <a href="#" class="text-primary linknoline" style="font-size:1.5em">被加入最愛賣家次數:</a>
+                            <a href="#" class="text-primary linknoline" style="font-size:1.5em">
+                            最愛賣家次數:</a>
                             @*<span class="text-dark" style="font-size:1.5em">737次</span>*@
-                            <span class="text-dark" style="font-size:1.5em">@Model.AddLoveCount</span>
+                            <span class="text-dark" style="font-size:1.5em">@followcount</span>
                         </div>
                         <div class="ps-2">
                             <img src="~/img/trashcan.png" width="30">
@@ -101,7 +110,7 @@
             </div>
 
             <div class="col-6">
-                <table class="table table-hover">
+                <table class="table table-hover ">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -120,7 +129,7 @@
                             <td></td>
                         </tr>
 
-                        <tr class="table-light">
+                        <tr class="table-light goodcomment" id="bestcomment">
                             <th scope="row"><i class="fa-regular fa-circle text-success"></i> 優良評價</th>
                             <td>@Model.BestCommentCountMethod.WeekCount</td>
                             <td>@Model.BestCommentCountMethod.MonthCount</td>
@@ -134,7 +143,7 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        <tr class="table-light">
+                        <tr class="table-light middlecomment" id="mediumcomment">
                             <th scope="row"><i class="fa-solid fa-square text-primary"></i>普通評價</th>
                             <td>@Model.MediumCommentCountMethod.WeekCount</td>
                             <td>@Model.MediumCommentCountMethod.MonthCount</td>
@@ -148,7 +157,7 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        <tr class="table-light">
+                        <tr class="table-light badcomment" id="worstcomment">
                             <th scope="row"><i class="fa-solid fa-xmark text-danger"></i>差勁評價</th>
                             <td>@Model.WorstCommentCountMethod.WeekCount</td>
                             <td>@Model.WorstCommentCountMethod.MonthCount</td>
@@ -162,7 +171,7 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        <tr class="table-light">
+                        <tr class="table-light" id="commentcount">
                             <th scope="row">評價次數</th>
                             <td>@AllWeekCommentCount</td>
                             <td>@AllMonthCommentCount</td>
@@ -181,10 +190,10 @@
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#">對賣場商品評價</a>
+                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#commentlist">對賣場商品評價</a>
                 </li>
                 <li class="nav-item">
-                    <a id="buyercomment" class="nav-link" href="#">對買家的評價</a>
+                    <a id="buyercomment" class="nav-link" href="#commentlist">對買家的評價</a>
                 </li>
 
             </ul>
@@ -194,16 +203,16 @@
         <div class="row my-4 bg-opacity-50" style="background-color:#e1dcd7">
 
             <div class="col">
-                <div id="commentrecord1" class="ps-2"><a href="#" class="linknoline text-primary">綜合評價紀錄( @AllCounts )</a></div>
+                <div id="commentrecord1" class="ps-2"><a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @AllCounts )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord2" class="ps-2"><a href="#" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord2" class="ps-2"><a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord3" class="ps-2"><a href="#" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord3" class="ps-2"><a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord4" class="ps-2"><a href="#" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord4" class="ps-2"><a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
             </div>
 
         </div>
@@ -279,18 +288,24 @@
                 let card = "";
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
-                                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                                            <div>
-                                                <img src="~/img/greencircle.png" width="20" />
-                                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
-                                            </div>
-                                            <div class="dashed-divider"></div>
-                                            <div class="ps-2" style="font-size:1.5em">
-                                            <a class="linknoline text-primary" href="">${data[i].sellername}</a>
-                                            </div>
+                        <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                        <div>
+                            <img src="~/img/greencircle.png" width="20" />
+                            <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                        </div>
+                        <div class="dashed-divider"></div>
+                        <div class="ps-2" style="font-size:1.5em">
+                        <a class="linknoline text-primary" href="">${data[i].sellername}</a>
+                        </div>`;
+                        if (data[i].commentcontent != null) {
+                            card = card + `<div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>`;
+                        }
 
-                                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                                            </div>`
+                        else {
+                            card = card + `<div class="my-2 text-dark" style="font-size:1.5em"></div>`;
+                        }
+
+                    card = card + `</div>`;
                 }
                 return card;
             }
@@ -317,8 +332,12 @@
                     else {
                         PageNumFill(0);
                     }
+
                 })
+                
             }
+
+           
 
             function PageNumFill(c) {
                 pagecount = Math.ceil(c / eachpage);
@@ -336,12 +355,26 @@
                 }
             }
 
-
+            $(".nav-link").click(function (event) {
+                if (buyerorseller == 1) {
+                    buyerorseller = 2;
+                }
+                else {
+                    buyerorseller = 1;
+                }
+                $(event.currentTarget).addClass("active");
+                $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+                nowpages = 1;
+                load();
+            })
             $("#sellercomment").click(function () {
-                buyerorseller = 1;
+                //buyerorseller = 1;
             })
             $("#buyercomment").click(function () {
-                buyerorseller = 2;
+                //buyerorseller = 2;
+                $.getJSON("/SalesCourt/GetcommentbuyerCount", { commentmemid: CommentId.value }, function (data) {
+                    console.log(data);
+                });
             })
 
             $("#pagecountselect").change(function () {

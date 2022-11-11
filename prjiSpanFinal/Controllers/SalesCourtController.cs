@@ -84,7 +84,7 @@ namespace prjiSpanFinal.Controllers
                 var staravg = starctsum / starct.Count();
                 //var prodpic = dbContext.Products.FirstOrDefault(a => a.ProductId == pd.ProductId).ProductPics;
 
-                var prodpic = dbContext.ProductPics.Where(a => a.ProductId == pd.ProductId).FirstOrDefault().Pic;
+                //var prodpic = dbContext.ProductPics.Where(a => a.ProductId == pd.ProductId).FirstOrDefault().Pic;
 
 
                 Card賣場ViewModel outCardContent = new Card賣場ViewModel
@@ -94,7 +94,7 @@ namespace prjiSpanFinal.Controllers
                     SoldQuantity = sales,
                     AddedTime = uptime,
                     StarCount = staravg,
-                    Producpic = prodpic,
+                    //Producpic = prodpic,
                     //星星數演算法
 
                     //var star_oddt = dbContext.OrderDetails.Where()
@@ -642,6 +642,7 @@ namespace prjiSpanFinal.Controllers
                 //優良
                 else if (mode == 2)
                 {
+                    
                     q = q.Where(a => a.commentstar == 5).ToList();
                     //foreach(var item in q)
                     //q = q.Where(a => a.commentstar.c).ToList();
@@ -665,7 +666,54 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
+        public IActionResult GetcommentbuyerCount(int commentmemid) {
+            //var q = dbContext.CommentForCustomers.Where();
+            var comment = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == commentmemid).Select(p => new
+            {
+                bestcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 5),
+                mediumcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 3 || a.CommentStar == 4),
+                worstcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 1 || a.CommentStar == 2),
+            }).ToList();
+            //var q =dbContext.Orders.Where(a => a.OrderDetails.ProductDetail.Product.MemberId == commentmemid)
+            //                            .Where(a=>a.Order.CommentForCustomers)
 
+            //int datacomment = comment.Select(a => a.bestcomment.Where(a => (DateTime.Now - a.CommentTime) <= 7));
+
+            //int q = 0;
+            return Json(comment);
+        }
+
+        public IActionResult GetCoupon(int couponid) {
+            getid();
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                var q = dbContext.CouponWallets.Where(a => a.MemberId == id && a.CouponId == couponid).FirstOrDefault();
+                if (q == null)
+                {
+                    CouponWallet couponwallet = new CouponWallet
+                    {
+                        MemberId = id,
+                        CouponId = couponid,
+                        IsExpired = false,
+                    };
+                    dbContext.CouponWallets.Add(couponwallet);
+                    dbContext.SaveChanges();
+                    return Json("1");
+                }
+
+                else
+                {
+                    return Json("2");
+                }
+
+            }
+
+
+            else {
+                return Json("0");
+            }
+        }
         public IActionResult GetCustomize(int id)
         {
             var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id).Select(p => new
@@ -706,9 +754,42 @@ namespace prjiSpanFinal.Controllers
 
         }
 
+        public IActionResult deleteCustName(int id,string custname)
+        {
+            var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id && a.CustomizedCategoryName == custname).FirstOrDefault();
+            dbContext.CustomizedCategories.Remove(q);
+
+            dbContext.SaveChanges();
+            
+            return Json(q);
+        }
+
+        public IActionResult getPay(int id) {
+            //抓 個人的 運送方式   付費方式
+                        
+            var payment = dbContext.PaymentToSellers.Where(a => a.MemberId == id).Select(p => new { 
+                
+                payid = p.PaymentId,                
+                payname = p.Payment.PaymentName,
+
+            }).ToList();
+                       
+
+            return Json(new {list = payment});
+        }
+
+        public IActionResult getShip(int id)
+        {
+            var shipper = dbContext.ShipperToSellers.Where(a => a.MemberId == id).Select(p => new { 
+                shipid = p.ShipperId,
+                shipname = p.Shipper.ShipperName,
+            }).ToList();
+            return Json(new {list = shipper});
+        }
+
         public IActionResult GetItems(int id, int mode, int pages, int eachpage, string keyword, string customname)
         {
-            var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
+            var q = dbContext.Products.Where(a => a.MemberId == id && a.ProductStatusId != 1 && a.ProductStatusId != 2).Select(p => new
             {
                 link = "/Item/Index?id=" + p.ProductId,
                 pic = p.ProductPics.FirstOrDefault().Pic,

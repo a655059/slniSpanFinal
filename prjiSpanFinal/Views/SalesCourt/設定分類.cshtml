@@ -122,7 +122,9 @@
     <script>
         /*let count = 0;*/
         let sortmax = 0;
-        let custname = [ "有機", "卷鬚", "葉菜" ,"熱火焰","茼蒿","雷夢"];
+        let custname = ["有機", "卷鬚", "葉菜", "熱火焰", "茼蒿", "雷夢"];
+        let custdlname = " ";
+
 
         let save = document.getElementById("save");
         /*let save_alter = document.getElementById("save");*/
@@ -140,7 +142,7 @@
                     }
                     $("tbody").append(`<tr class="custtr" draggable="true"><td class="sortnum">${data[i].sortNumber}</td><td>${data[i].count}</td><td class="custtext">${data[i].customizedCategoryName}</td><td><button type="button" class="d-flex justify-content-center btn btn btn-danger delete" style="font-size:0.8rem">刪除</button></td></tr>`);
                 }
-            });
+     y       });
             sortall();
         }
         load();
@@ -195,9 +197,18 @@
 
         $(document).on("click", ".delete", function (e) {       //單一個tr刪掉
             $(this).parent().parent().remove();
+            console.log($(this).parent().prev().html());
+            custdlname = $(this).parent().prev().html();
             sortall();
+            deletedb();
         })
 
+        function deletedb() {
+            $.postJSON("/SalesCourt/deleteCustName", { id: @Model.MemberId, custname: custdlname}, function (data) {
+
+            });
+                       
+        }
 
 
         $("#submitcategory").click(function () {
