@@ -203,9 +203,9 @@
                                 </div>
                                 <div class="st1">
                                     <label class="p1">信箱驗證</label>
+                                    <a style="display: none;" id="okmail">無須驗證</a>
                                     <button type="button" class="btn btn-outline-info" style="float:left;" id="EmailCheck">發送驗證信</button>
                                 </div>
-                                <br />
                                 <div class="st1">
                                     <label asp-for="BackUpEmail" class="p1">備用信箱</label>
                                     <input asp-for="BackUpEmail" class="form-control" type="text" name="BackUpEmail" size="40" />
@@ -308,7 +308,7 @@
             })
         });
 
-
+        //變更住址
         $("#country").on("change", function () {
             const selCity = document.querySelector("#country")
             const selSite = document.querySelector("#region")
@@ -343,11 +343,15 @@
             //var formData = new FormData(form);
             
             if (memStausID.value == 2) {
-                $('#EmailCheck').prop('disabled', true);
+/*                $('#EmailCheck').prop('disabled', true);*/
+                $('#EmailCheck').prop('style', "display:none");
+                $('#okmail').prop('style', "display:block;float:left;")
+/*                $('#EmailCheck').attr('style', "display:none");*/
             }
             else {
                 $('#EmailCheck').prop('disabled', false);
-
+                $('#EmailCheck').prop('style', "display:block");
+                $('#okmail').prop('style', "display:none")
             }
 
             $('#myform').on('submit', function (e) {

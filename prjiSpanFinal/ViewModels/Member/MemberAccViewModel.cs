@@ -116,13 +116,11 @@ namespace prjiSpanFinal.ViewModels.Member
 
         public string PWHasH()
         {
-            string afterhash = "abcdefghijklmnopqrstuvwxyz";
-            string number = "0123456789";
-            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string afterhash = "abcdefghijk0123456789lmnopqrsABCDEFGHIJKLMNOPQRSTUVWXYZtuvwxyz";
             Random crandom = new Random();
             int sub1 = crandom.Next(2);
             int sub2 = crandom.Next(8);
-            string newpw= afterhash.Substring(sub1, sub2) + number.Substring(sub1, sub2)+ABC.Substring(sub2, sub1);
+            string newpw= afterhash.Substring(sub1, sub2);
             //using (SHA256 mysha256 = SHA256.Create())
             //{
             //    //現在輸入的pw變成byte陣列
