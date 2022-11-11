@@ -46,7 +46,7 @@
                     </td>
                     <td>
                         @Html.ActionLink("修改", "BigTypeEdit", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "btn btn-warning" })
-                        @Html.ActionLink("刪除", "BigTypeDelete", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "Dele btn btn-danger" })
+                        @Html.ActionLink("刪除", "BigTypeDelete", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "Dele btn btn-danger",onclick= "return confirm(\"確定要將此大類別刪除嗎 ? 內容商品將會移至未分類類別，請進入該分類進行修改\")" })
                         @Html.ActionLink("檢視內部小分類", "SmallTypeList", "newManagement", new { id = item.BigType.BigTypeId }, new { @class = "btn btn-secondary" })
                     </td>
                 </tr>
@@ -55,11 +55,6 @@
     </table>
     @section Scripts{
         <script>
-            let Dele = document.querySelectorAll(".Dele");
-            for (let dele of Dele) {
-                dele.addEventListener("click", function () {
-                    confirm("確定要將此大類別刪除嗎?內容商品將會移至未分類類別，請進入該分類進行修改");
-                });
-            }
+           
         </script>
     }

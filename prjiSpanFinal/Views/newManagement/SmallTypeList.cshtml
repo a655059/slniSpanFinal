@@ -51,15 +51,9 @@
 }
     </tbody>
 </table>
-@Html.ActionLink("回到大分類列表","BigTypeList","newManagement",new{id=Model.First().SmallType.BigTypeId},new{@class="btn btn-danger mt-1"})
+@Html.ActionLink("回到大分類列表","BigTypeList","newManagement",new{id=Model.First().SmallType.BigTypeId},new{@class="btn btn-danger mt-1",onclick= "return confirm(\"確定要將此類別刪除嗎 ? 內容商品將會移至未分類類別，請進入該分類進行修改\")" })
 
 @section Scripts{ 
 <script>
-    let Dele = document.querySelectorAll(".Dele");
-    for (let dele of Dele) {
-        dele.addEventListener("click", function () {
-            confirm("確定要將此類別刪除嗎?內容商品將會移至未分類類別，請進入該分類進行修改");
-        })
-    }
 </script>
 }
