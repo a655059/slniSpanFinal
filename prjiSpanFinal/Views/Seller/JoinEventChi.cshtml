@@ -1,7 +1,7 @@
 ﻿@addTagHelper *, prjiSpanFinal
-@model List<prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel>
+@model prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel
 @{
-    ViewData["Title"] = "Event";
+    ViewData["Title"] = "JoinEvent";
 }
 @section Styles
     {
@@ -49,22 +49,31 @@
                         <td scope="col" align="center">審核結果</td>
                         <td scope="col" align="center">退出活動</td>
                     </tr>
-                <tbody id="selectcoupon">
-                    @{
-                        //foreach (var jo in Model) { 
-                            <tr class=" p-3">
-                                <td scope="col" align="center"><input type="checkbox" id="" /></td>
-                                <td scope="col" align="center">商品名稱</td>
-                                <td scope="col" align="center">參加活動名稱</td>
-                                <td scope="col" align="center">審核結果</td>
-                                <td scope="col" align="center">
-                                    @Html.ActionLink("取消參加", "", "Seller", new { @*id = Model.productId[i]*@},
-                                                                new { onclick = "return confirm('確定要取消嗎?')", @class = "btn btn-danger my-2" })
-                                </td>
-                            </tr>
-                        //}
+                    <tbody id="selectcoupon">
+                        @{
+                            for (int i = 0; i < Model.productname.Count; i++)
+                            {
+                                <tr class=" p-3">
+                                    <td scope="col" align="center"><input type="checkbox" id="" /></td>
+                                    <td scope="col" align="center">@Model.productname[i]</td>
+                                    <td scope="col" align="center">@Model.evename[i]</td>
+                                    <td scope="col" align="center">@Model.審核結果[i]</td>
+                                    <td scope="col" align="center">
+                                        @{ if (Model.審核結果[i] == "審核中")
+                                            {
+                                                @Html.ActionLink("取消參加", "DeleteEvent", "Seller", new { id = Model.SubOfficialEventToProductsID[i] },
+                                                                        new { onclick = "return confirm('確定要取消嗎?')", @class = "btn btn-danger my-2 DeleteEvent" })
+                                            }
+                                            else
+                                            {
+                                                <span>已參加不接受退出</span>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
-                </tbody>
+                    </tbody>
             </table>
         </div>
     </div>
@@ -73,7 +82,9 @@
 @section Scripts
 {
 <script>
-
+    $(".DeleteEvent").click(function () {
+        location.href = "/Seller/JoinEventChi";
+    })
 </script>
 }
 

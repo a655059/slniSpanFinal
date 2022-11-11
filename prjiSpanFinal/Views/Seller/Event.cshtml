@@ -132,7 +132,7 @@
     {
 <script>
     $("#checkjoin").click(function () {
-        location.href = "/Seller/JoinEventChi"
+        location.href = "/Seller/JoinEventChi";
     });
 
 
@@ -175,11 +175,11 @@
             '完成!',
             '完成參加!',
             'success'
-        );
+        ).then(function () { location.href = "/Seller/JoinEventChi"; });
 
-        setTimeout(function () {
-            location.href = "/Seller/Event"
-        }, 1000);
+        //setTimeout(function () {
+        //    location.href = "/Seller/Event"
+        //}, 1000);
     });
 </script>
 }

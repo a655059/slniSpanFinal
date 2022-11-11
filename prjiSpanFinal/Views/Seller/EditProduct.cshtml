@@ -267,6 +267,7 @@
                                 }
                                 else
                                 {
+                                    <input type="hidden" id="pic0" value="0" />
                                     <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                 }
                             }
@@ -293,11 +294,13 @@
                                                 }
                                                 else
                                                 {
+                                                    <input type="hidden" id="@pic" value="0" />
                                                     <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                                 }
                                             }
                                             else
                                             {
+                                                <input type="hidden" id="@pic" value="0" />
                                                 <img width="100" height="100" class="border " style="background-image: url('/img/plus.jpg'); background-size: contain; background-repeat:no-repeat; background-position:center" />
                                             }
                                         }
@@ -366,6 +369,7 @@
 </div>
 @section Scripts{
     <script>
+
         $("#demomadal").click(function () {
             $("#text1").val("橢圓形");
             $("#text2").val("100");
@@ -531,11 +535,25 @@
         //表單照片轉二進位儲存
 
         let dataphoto = [];
+        let dataphotoID = [];
 
         let appleclass = document.getElementsByClassName("commentphotoclass");
         $(".commentphotoclass").on("change", function () {
             let photos = [];
             dataphoto = [];
+            let chanpho = $(this).siblings().children().val();
+            if (chanpho == 0) {
+                chanpho = "1";
+            }
+            console.log(chanpho)
+            //for (let i = 0; i < dataphotoID.length;i++){
+            //    if (dataphotoID[i] != chanpho) {
+            //        dataphotoID.push(chanpho);
+            //        console.log(dataphotoID)
+            //    }
+            //}
+            //console.log(dataphotoID)
+
             for (let i = 0; i < appleclass.length; i++) {
                 if (appleclass[i].files.length != 0) {
                     photos.push(appleclass[i].files);
@@ -547,37 +565,57 @@
                     let reader = new FileReader();
                     reader.readAsDataURL(photo[0]);
                     reader.onload = function () {
-                        let src = reader.result;
-                        dataphoto.push(src.split(",")[1]);
+                        let src = reader.result.split(",")[1];
+                        //dataphoto.push(src.split(",")[1]);
                     };
                 });
             }
         })
+        
 //====================================================================
-         good.addEventListener("click", function () {
+        good.addEventListener("click", function () {
+            let photoval = [];
+             for (let i = 0; i < 5; i++) {
+                 let a = $(`#pic${i}`).val();
+                 if (a != 0) {
+                     dataphoto.push($(`#pic${i}`).next().attr("style").split(",")[1].split("'")[0]);
+                 }
+                 else {
+                     dataphoto.push($(`#pic${i}`).next().attr("style").split("'")[1].split("'")[0]);
+                 }
+                 photoval.push(a);
+            }
+            //dataphoto.push($("#pichead").children().children().eq(1).attr("style").split(",")[1].split("'")[0]);
+            //dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
+            //dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
+            //dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
+            //dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
+            console.log(photoval)
+            console.log(dataphoto)
 
-             //資料庫照片資料
-             if (!$("#commentPhoto1").change(function () { })) {
-                 let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
-                 dataphoto.push(hesdpic);
-             }
+             
+             ////資料庫照片資料
+             //if (!$("#commentPhoto1").change(function () { })) {
+             //    let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
+             //    dataphoto.push(hesdpic);
+             //}
 
-             for (let i = 0; i < 4; i++){                
-                 if (!$(`#commentPhoto${i}`).change(function () { })) {
-                    if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
-                        dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
-                     }
-                     if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
-                         dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
-                     }
-                     if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
-                         dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
-                     }
-                     if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
-                         dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
-                     }
-                }
-             }
+             //for (let i = 0; i < 4; i++){                
+             //    if (!$(`#commentPhoto${i}`).change(function () { })) {
+             //       if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
+             //           dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
+             //        }
+             //        if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
+             //            dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
+             //        }
+             //        if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
+             //            dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
+             //        }
+             //        if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
+             //            dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
+             //        }
+             //   }
+             //}
              
              
              
@@ -605,6 +643,7 @@
                 Description: document.getElementById("Description").value,
                 CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,
+                BodyPicID: photoval,
                 ShiperID: shiper,
                 PaymentID: payment,
                 ProductID: $("#pid").val(),

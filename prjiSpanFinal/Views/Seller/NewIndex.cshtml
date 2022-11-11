@@ -254,7 +254,7 @@
 
 
                 //=============上下架==============
-                $(".takedown").on("click", function () {
+                $(document).on("click", ".takedown", function () {
                     if ($(this).text() == "上架") {
                         if (isConfirm("確認要上架嗎?")) {
                             $(this).text("下架");
