@@ -33,7 +33,7 @@
 
 
 <h1>前往付款</h1>
-<a href="@Url.Content("~/Delivery/Order")">回會員中心</a>
+<a href="@Url.Content("~/Member/Order")">回會員中心</a>
 @{
     foreach (var i in orderList)
     {
@@ -100,11 +100,11 @@
                             {
                                 if (q.coupon.MinimumOrder > 0)
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span>免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span>免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
                                 }
                                 else
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額免運費<span class="ms-2">-$</span><span class="freeShipper" id="freeShipper">@q.shipper.Fee</span></span></div>
                                 }
                             }
                             else
@@ -112,27 +112,24 @@
                                 string discount = (q.coupon.Discount * 10).ToString();
                                 if (q.coupon.MinimumOrder > 0)
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span><span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">滿<span>@q.coupon.MinimumOrder</span><span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
                                 }
                                 else
                                 {
-                                    <div>優惠券代碼:<span class="mx-2 text-danger">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額<span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
+                                    <div>優惠券代碼:<span class="mx-2 text-danger couponCode">@q.coupon.CouponCode</span><span class="text-danger me-2" style="font-size:14px">不限金額<span class="freeShipper ms-2" id="notFreeShipper">@discount</span><span>折</span></span></div>
                                 }
                             }
                         }
                     }
                 </div>
                 <div>
-                    <div>總計:<span></span></div>
+                    <div>總計:<span class="fs-4 fw-bold text-danger ms-2">$<span class="totalPrice"></span></span></div>
                 </div>
             </div>
             <div class="py-2 text-center">
                 <button class="goOPayCheckout btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmCheckout" id="@i.OrderId">付款</button>
             </div>
-            
-
         </div>
-
     }
 }
 <div class="modal" tabindex="-1" id="confirmCheckout">
@@ -185,35 +182,69 @@
 
 @section Scripts{
     <script>
-        $(".layout").each(function () {
+        $($(".layout").each(function () {
             let smallPrice = 0;
             $(this).find(".itemLayout").each(function () {
                 smallPrice += Number($(this).find(".unitPrice").html()) * Number($(this).find(".purchaseCount").html());
             });
             let shipperFee = Number($(this).find(".shipperFee").html());
             let paymentFee = Number($(this).find(".paymentFee").html());
-
-        });
+            let totalPrice = 0;
+            if ($(".freeShipper").length > 0) {
+                let discount = Number($(".freeShipper").html());
+                let isFreeShip = $(".freeShipper").attr("id");
+                if (isFreeShip == "freeShipper") {
+                    totalPrice = smallPrice + paymentFee;
+                }
+                else {
+                    $(this).find(".itemLayout").each(function () {
+                        totalPrice += Math.ceil(Number($(this).find(".unitPrice").html()) * discount / 10) * Number($(this).find(".purchaseCount").html());
+                    });
+                    totalPrice = totalPrice + shipperFee + paymentFee;
+                }
+            }
+            else {
+                totalPrice = smallPrice + shipperFee + paymentFee;
+            }
+            $(".totalPrice").html(totalPrice);
+        }));
 
 
         let orderID = "";
         $(".goOPayCheckout").click(async function () {
             orderID = $(this).attr("id");
             let checkoutItems = [];
-            $(this).siblings().find(".purchaseCount").each(function () {
+            $(this).closest("div").siblings().find(".purchaseCount").each(function () {
                 const productName = $(this).closest("div").siblings().find(".productName").html();
-                const productPrice = Number($(this).closest("div").siblings().find(".productPrice").html());
+                const productPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
                 const purchaseCount = Number($(this).html());
+                let couponCode = "";
+                if ($(this).closest(".layout").find(".couponCode").length > 0) {
+                    couponCode = $(this).closest(".layout").find(".couponCode").html();
+                }
+                const totalPrice = Number($(this).closest(".layout").find(".totalPrice").html());
+                const shipperFee = Number($(this).closest(".layout").find(".shipperFee").html());
+                const paymentFee = Number($(this).closest(".layout").find(".paymentFee").html());
                 const jsonObject = {
                     "productName": productName,
                     "productPrice": productPrice,
-                    "purchaseCount": purchaseCount
+                    "purchaseCount": purchaseCount,
+                    "couponCode": couponCode,
+                    "totalPrice": totalPrice,
+                    "shipperFee": shipperFee,
+                    "paymentFee": paymentFee,
                 };
                 checkoutItems.push(jsonObject);
             });
             const jsonString = JSON.stringify(checkoutItems);
             const response = await fetch("@Url.Content("~/Delivery/OPayCheckout")" + `?checkoutItems=${jsonString}`);
             const data = await response.json();
+            console.log(data.tradeNO);
+            console.log(data.tradeDate);
+            console.log(data.totalAmount);
+            console.log(data.itemName);
+            console.log(data.clientBackURL);
+            console.log(data.checkMacValue);
             $("input[name='MerchantTradeNo']").val(data.tradeNO);
             $("input[name='MerchantTradeDate']").val(data.tradeDate);
             $("input[name='TotalAmount']").val(data.totalAmount);

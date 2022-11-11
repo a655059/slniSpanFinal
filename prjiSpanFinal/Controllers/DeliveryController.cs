@@ -877,12 +877,14 @@ namespace prjiSpanFinal.Controllers
             string tradeDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             List<CGoOPayCheckoutViewModel> cGoOPayCheckout = JsonSerializer.Deserialize<List<CGoOPayCheckoutViewModel>>(checkoutItems);
             string itemName = "";
-            int totalAmount = 0;
+            int totalAmount = cGoOPayCheckout[0].totalPrice;
             foreach (var i in cGoOPayCheckout)
             {
-                itemName += $"{i.productName}#";
-                totalAmount += i.productPrice;
+                itemName += $"{i.productName}  X{i.purchaseCount}  ${i.productPrice*i.purchaseCount}#";
             }
+            itemName = itemName + $"運費:{cGoOPayCheckout[0].shipperFee}#";
+            itemName = itemName + $"手續費:{cGoOPayCheckout[0].paymentFee}#";
+            itemName = itemName + $"優惠券:{cGoOPayCheckout[0].couponCode}#";
             itemName = itemName.TrimEnd('#');
             string clientBackURL = $"{Request.Scheme}://{Request.Host}/Delivery/IsExistPaidOrderSession";
             NameValueCollection parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -938,6 +940,17 @@ namespace prjiSpanFinal.Controllers
                 Order paidOrder = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
                 paidOrder.StatusId = 3;
                 paidOrder.PaymentDate = DateTime.Now;
+                var paidOrderDetail = dbContext.OrderDetails.Where(i => i.OrderId == orderID).Select(i => new
+                {
+                    productDetailID = i.ProductDetailId,
+                    quantity = i.Quantity,
+                }).ToList();
+                foreach (var a in paidOrderDetail)
+                {
+                    var productDetail = dbContext.ProductDetails.Where(i => i.ProductDetailId == a.productDetailID).FirstOrDefault();
+                    productDetail.Quantity -= a.quantity;
+                }
+
                 dbContext.SaveChanges();
                 HttpContext.Session.Remove(CDictionary.SK_PAIDORDER);
                 return RedirectToAction("Order", "Member");
