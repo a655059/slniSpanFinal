@@ -1,5 +1,5 @@
 ﻿@addTagHelper *, prjiSpanFinal
-@model prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel
+@model List<prjiSpanFinal.ViewModels.seller.CSubEventToProductViewModel>
 @{
     ViewData["Title"] = "JoinEvent";
 }
@@ -31,9 +31,7 @@
         </div>
         <div class="mx-2">
             <p>
-                雙12一日下殺📢12.12 當日，娛樂收藏店家商品折扣報名活動！<br />
-                通過商品即有資格娛樂收藏專屬折扣碼(屆時設定於娛樂分會場)<br />
-                折扣時間：12/12 12:12 - 12/12 23:12<br />
+                娛樂收藏店家商品折扣報名活動，商品即有資格娛樂收藏專屬折扣碼(屆時設定於娛樂分會場)<br />
                 主推商品: 不限商品<br />
                 注意事項：<br />
                 1. 關於審核狀況，通過後即可獲得參加資格，蝦到爆將不另行通知。<br />
@@ -42,38 +40,40 @@
         </div>
         <div class="">
             <table class="table border rounded-2">
-                    <tr class="text-bg-light p-3">
-                        <td scope="col" align="center"><input type="checkbox" id="checkall"/></td>
-                        <td scope="col" align="center">商品名稱</td>
-                        <td scope="col" align="center">參加活動名稱</td>
-                        <td scope="col" align="center">審核結果</td>
-                        <td scope="col" align="center">退出活動</td>
-                    </tr>
-                    <tbody id="selectcoupon">
-                        @{
-                            for (int i = 0; i < Model.productname.Count; i++)
-                            {
-                                <tr class=" p-3">
-                                    <td scope="col" align="center"><input type="checkbox" id="" /></td>
-                                    <td scope="col" align="center">@Model.productname[i]</td>
-                                    <td scope="col" align="center">@Model.evename[i]</td>
-                                    <td scope="col" align="center">@Model.審核結果[i]</td>
-                                    <td scope="col" align="center">
-                                        @{ if (Model.審核結果[i] == "審核中")
-                                            {
-                                                @Html.ActionLink("取消參加", "DeleteEvent", "Seller", new { id = Model.SubOfficialEventToProductsID[i] },
-                                                                        new { onclick = "return confirm('確定要取消嗎?')", @class = "btn btn-danger my-2 DeleteEvent" })
-                                            }
-                                            else
-                                            {
-                                                <span>已參加不接受退出</span>
-                                            }
+                <tr class="text-bg-light p-3">
+                    <td scope="col" align="center"><input type="checkbox" id="checkall" /></td>
+                    <td scope="col" align="center">商品名稱</td>
+                    <td scope="col" align="center">活動名稱</td>
+                    <td scope="col" align="center">子活動名稱</td>
+                    <td scope="col" align="center">審核結果</td>
+                    <td scope="col" align="center">退出活動</td>
+                </tr>
+                <tbody id="selectcoupon">
+                    @{
+                        for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr class=" p-3">
+                                <td scope="col" align="center"><input type="checkbox" id="" /></td>
+                                <td scope="col" align="center">@Model[i].productname</td>
+                                <td scope="col" align="center">@Model[i].evename</td>
+                                <td scope="col" align="center">@Model[i].subevename</td>
+                                <td scope="col" align="center">@Model[i].審核結果</td>
+                                <td scope="col" align="center">
+                                    @{ if (Model[i].審核結果.ToString() == "審核中")
+                                        {
+                                            @Html.ActionLink("取消參加", "DeleteEvent", "Seller", new { id = Model[i].SubOfficialEventToProductsID },
+                                                                    new { onclick = "return confirm('確定要取消嗎?')", @class = "btn btn-danger my-2 DeleteEvent" })
                                         }
-                                    </td>
-                                </tr>
-                            }
+                                        else
+                                        {
+                                            <span>已參加不接受退出</span>
+                                        }
+                                    }
+                                </td>
+                            </tr>
                         }
-                    </tbody>
+                    }
+                </tbody>
             </table>
         </div>
     </div>
