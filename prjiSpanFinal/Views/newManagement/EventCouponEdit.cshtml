@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                       <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" type="hidden" value="false"/> 
+                        <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" type="hidden" value="false" />
                     }
                 }
 
@@ -80,7 +80,7 @@
 </div>
 
 <div>
-    <a asp-action="CouponList" class="btn btn-danger mt-1">取消並回到列表</a>
+    @Html.ActionLink("取消並回到列表", "EventCouponList","newManagement",new { id = ViewBag.ID },new { @class= "btn btn-danger mt-1" })
 </div>
 
 @section Scripts {

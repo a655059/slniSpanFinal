@@ -823,10 +823,18 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult CouponEdit(int? id)
         {
-
             var cps = (from i in db.Coupons
                        where i.CouponId == id
                        select i).First();
+            var t = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == cps.OfficialEventListId).OfficialEventTypeId;
+            if (t== 1)
+            {
+                ViewBag.re = true;
+            }
+            else
+            {
+                ViewBag.re = false;
+            }
             return View(cps);
         }
         [HttpPost]
@@ -1200,6 +1208,15 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EventCouponCreate(int id)
         {
+            var t = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == id);
+            if (t.OfficialEventTypeId == 1)
+            {
+                ViewBag.re = true;
+            }
+            else
+            {
+                ViewBag.re = false;
+            }
             ViewBag.Id = id;
             return View();
         }
@@ -1209,6 +1226,41 @@ namespace prjiSpanFinal.Controllers
             db.Coupons.Add(coupon);
             db.SaveChanges();
             return RedirectToAction("EventCouponList", new { id = coupon.OfficialEventListId });
+        }
+        public IActionResult EventCouponEdit(int? id)
+        {
+            var cps = (from i in db.Coupons
+                       where i.CouponId == id
+                       select i).First();
+            ViewBag.ID = cps.OfficialEventListId;
+            var t = db.OfficialEventLists.FirstOrDefault(i => i.OfficialEventListId == cps.OfficialEventListId).OfficialEventTypeId;
+            if (t == 1)
+            {
+                ViewBag.re = true;
+            }
+            else
+            {
+                ViewBag.re = false;
+            }
+            return View(cps);
+        }
+        [HttpPost]
+        public IActionResult EventCouponEdit(Coupon coupon)
+        {
+            var cp = db.Coupons.FirstOrDefault(i => i.CouponId == coupon.CouponId);
+            cp.CouponName = coupon.CouponName;
+            cp.MemberId = coupon.MemberId;
+            cp.CouponName = coupon.CouponName;
+            cp.StartDate = coupon.StartDate;
+            cp.ExpiredDate = coupon.ExpiredDate;
+            cp.Discount = coupon.Discount;
+            cp.CouponCode = coupon.CouponCode;
+            cp.ReceiveStartDate = coupon.ReceiveStartDate;
+            cp.ReceiveEndDate = coupon.ReceiveEndDate;
+            cp.IsFreeDelivery = coupon.IsFreeDelivery;
+            cp.MinimumOrder = coupon.MinimumOrder;
+            db.SaveChanges();
+            return RedirectToAction("CouponList");
         }
         #endregion
         #region subEventRegion
@@ -1502,7 +1554,6 @@ namespace prjiSpanFinal.Controllers
         #region FAQRegion
         public IActionResult FAQList(int? filter)
         {
-
             List<Faq> FAQ = null;
             if (filter == null)
             {
@@ -1587,7 +1638,6 @@ namespace prjiSpanFinal.Controllers
         #region BigTypeRegion
         public IActionResult BigTypeList()
         {
-
             var bigtypes = db.BigTypes.ToList();
             List<BigTypeViewModel> list = new();
             foreach (var bt in bigtypes)
@@ -1616,7 +1666,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult BigTypeCreate(BigType bigType)
         {
-
             BigType type = new()
             {
                 BigTypeName = bigType.BigTypeName,
@@ -1634,7 +1683,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult BigTypeEdit(int id)
         {
-
             var type = db.BigTypes.FirstOrDefault(i => i.BigTypeId == id);
             return View(type);
         }
@@ -1669,7 +1717,6 @@ namespace prjiSpanFinal.Controllers
         #region SmallTypeRegion
         public IActionResult SmallTypeList(int id)
         {
-
             var st = db.SmallTypes.Where(i => i.BigTypeId == id).ToList();
             List<SmallTypeViewModel> list = new();
             var ProdCount = db.Products.ToList();
@@ -1759,7 +1806,7 @@ namespace prjiSpanFinal.Controllers
             {
                 webAd.WebAdimage.CopyTo(ms);
                 var filbytes = ms.ToArray();
-                newWebAd.WebAdimage= filbytes;
+                newWebAd.WebAdimage = filbytes;
             }
             db.WebAds.Add(newWebAd);
             db.SaveChanges();
@@ -1767,7 +1814,7 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult WebAdDelete(int id)
         {
-            var webAd = db.WebAds.FirstOrDefault(i=>i.WebAdid==id);
+            var webAd = db.WebAds.FirstOrDefault(i => i.WebAdid == id);
             if (webAd != null)
             {
                 db.WebAds.Remove(webAd);
@@ -1792,10 +1839,10 @@ namespace prjiSpanFinal.Controllers
         public IActionResult WebAdEdit(WebAdCreateViewModel Wbad)
         {
             WebAd Ev = db.WebAds.FirstOrDefault(i => i.WebAdid == Wbad.WebAdid);
-            Ev.WebAdimageTypeId=Wbad.WebAdimageTypeId;
+            Ev.WebAdimageTypeId = Wbad.WebAdimageTypeId;
             Ev.Path = Wbad.Path;
-            Ev.IsPublishing=Wbad.IsPublishing;
-            Ev.MemberId=Wbad.MemberId;
+            Ev.IsPublishing = Wbad.IsPublishing;
+            Ev.MemberId = Wbad.MemberId;
             using (var ms = new MemoryStream())
             {
                 Wbad.WebAdimage.CopyTo(ms);

@@ -96,14 +96,14 @@
                     @{
                         if (item.Coupon.MemberId == 1)
                         {
-                            @Html.ActionLink("修改", "CouponEdit", "newManagement", new { id = item.Coupon.CouponId }, new
+                            @Html.ActionLink("修改", "EventCouponEdit", "newManagement", new { id = item.Coupon.CouponId }, new
                             {
                 @class = "btn btn-outline-primary mb-2"
                             })
                         }
                         else
                         {
-                            @Html.ActionLink("修改", "CouponEdit", "newManagement", new { id = item.Coupon.CouponId }, new
+                            @Html.ActionLink("修改", "EventCouponEdit", "newManagement", new { id = item.Coupon.CouponId }, new
                             {
      @class = "btn btn-outline-primary disabled"
                             })
