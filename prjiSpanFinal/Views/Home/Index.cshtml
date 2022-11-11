@@ -280,10 +280,19 @@
 
     <div class="split"></div>
     <div class="HP-Panel" id="Flash-Sales">
-        <div class="HP-Header">
-            <img src="~/img/Homepage/SellsOnFire.png" />
-            <span class="HP-Header-Title">限時搶購</span>
-            @*<span class="HP-Header-SubTitle">大家都在看...</span>*@
+        <div class="HP-Header  d-flex justify-content-between">
+            <div class="d-flex flex-nowrap align-items-center">
+                <span class="HP-Header-Title">限時<i class="fa-solid fa-bolt"></i>搶購</span>
+                <span id="CountDown"></span>
+            </div>
+            <div>
+                @{ 
+                    if (Model.cShowFS.Any())
+                    {
+                        <a class="linknoline FSlink" href="@Url.Content("~/Event/FreshSales"+"?Eventid="+Model.cShowFS[0].eventid)">查看全部　<i class="fa-solid fa-right-to-bracket"></i></a>
+                    }
+                }
+            </div>
         </div>
         <div class="HP-Item">
             @{ if (Model.cShowFS.Any())
@@ -302,11 +311,16 @@
     <div class="split"></div>
 
     <div class="HP-Panel" id="Best-Buy">
-        <div class="HP-Header">
-            <img src="~/img/Homepage/BBIcon.png" />
-            <div class="HP-Header-Text">
-                <span class="HP-Header-Title">激推商品</span>
-                <span class="HP-Header-SubTitle">大家都在看</span>
+        <div class="HP-Header d-flex justify-content-between">
+            <div class="d-flex flex-nowrap ">
+                <img src="~/img/Homepage/BBIcon.png" />
+                <div class="HP-Header-Text">
+                    <span class="HP-Header-Title">激推商品</span>
+                    <span class="HP-Header-SubTitle">大家都在看</span>
+                </div>
+            </div>
+            <div>
+                @*123*@
             </div>
         </div>
         <div class="HP-Item">
@@ -395,6 +409,70 @@
                     disabledClass: 'my-button-disabled',
                 },
             });
+
+            $(document).ready(setTime);
+
+            let nowTime =[[0, 11, "上午"],[12, 23, "下午"]];
+            let Hour;
+            function setTime() {
+                hr = new Date().getHours();
+                for (var i = 0; i < nowTime.length; i++) {
+                    if (hr >= nowTime[i][0] && hr <= nowTime[i][1]) {
+                        Hour = nowTime[i][2]
+                    }
+                }
+            }
+
+            let TimeLimit = [[11, 59, 59], [23, 59, 59]];
+            let remaining = [];
+            function getCountDownTime() {
+                setTime();
+                let today = new Date();
+                if (Hour == "上午") {
+                    remaining = [toFixedTimeFormat(TimeLimit[0][0] - today.getHours()), toFixedTimeFormat(TimeLimit[0][1] - today.getMinutes()), toFixedTimeFormat(TimeLimit[0][2] - today.getSeconds())];
+                }
+                else if (Hour == "下午") {
+                    remaining = [toFixedTimeFormat(TimeLimit[1][0] - today.getHours()), toFixedTimeFormat(TimeLimit[1][1] - today.getMinutes()), toFixedTimeFormat(TimeLimit[1][2] - today.getSeconds())];
+                }
+                let hh = remaining[0];
+                let mm = remaining[1];
+                let ss = remaining[2];
+                $("#CountDown").html(hh + ":" + mm + ":" + ss);
+            }
+            function toFixedTimeFormat(time) {
+                if (time < 10) {
+                    return "0" + time;
+                }
+                else {
+                    return "" + time;
+                }
+            }
+
+            function interval(ms, callback) {
+                const start = document.timeline
+                    ? document.timeline.currentTime
+                    : performance.now();
+                function timer1(time) {
+                    const gaps = time - start;
+                    const seconds = Math.round(gaps / ms);
+                    callback(seconds);
+                    //console.log(seconds);
+                    const targetNext = (seconds + 1) * ms + start; // 算出下次interval开始的时间
+                    const delay = document.timeline
+                        ? document.timeline.currentTime
+                        : performance.now(); // 取出更新完UI的时间
+                    setTimeout(
+                        () => {
+                            requestAnimationFrame(timer1); // requestAnimationFrame 执行回调函数的时刻 当作参数，传入到callback
+                        },
+                        targetNext - delay // 算出距离下次interval开始时间
+                    );
+                }
+                timer1(start);
+            }
+
+            interval(1000, getCountDownTime);
+
         </script>
     }
 </body>

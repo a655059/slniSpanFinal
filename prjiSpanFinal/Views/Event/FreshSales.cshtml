@@ -10,6 +10,13 @@
 }
 <body>
     <div>
+        <div class="w-100 text-center" id="CountDownArea">
+            <div class="CountDownBox">
+                <span id="CountDownTitle">限時<i class="fa-solid fa-bolt"></i>特賣</span>
+                結束於
+                <span id="CountDown"></span>
+            </div>
+        </div>
         <div class="w-100 event-header">
             @if (Model.Event.EventPic != null)
             {
@@ -52,39 +59,41 @@
 @section Scripts{
     <script>
 
-    const eveid = @Model.Event.OfficialEventListId;
-    let num = 1;
-        let today = new Date();
-        let time;
+        const eveid = @Model.Event.OfficialEventListId;
+        let num = 1;
+        let Hour;
         const toFixedWithoutZeros = (num, precision) =>
             num.toFixed(precision).replace(/\.0+$/, '');
+
+        $(document).ready(getEventFSItems);
+
         let nowTime =
             [
                 [0, 11, "上午"],
-                [12, 23, "下午"],
+                [12, 23, "下午"]
             ];
-        $(document).ready(getEventFSItems);
 
+        function setTime() {
+            hr = new Date().getHours();
+
+            for (var i = 0; i < nowTime.length; i++) {
+                if (hr >= nowTime[i][0] && hr <= nowTime[i][1]) {
+                    Hour = nowTime[i][2]
+                }
+            }
+        }
 
         $(".menu").click(function () {
             $(".active").removeClass("active");
             $(this).addClass("active");
-
-            hr = new Date().getHours();
-
-            for (var i = 0; i < nowTime.length; i++)
-            {
-                if (hr >= nowTime[i][0] && hr <= nowTime[i][1]) {
-                    time = nowTime[i][2]
-                }
-            }
             num = $(this).find("input").val();
             getEventFSItems();
         })
 
     function getEventFSItems() {
+        setTime();
+        getCountDownTime();
         $.post('/Event/getEventFSItem', { num: num, eid: eveid }, function (data) {
-            //console.log(data);
             fillEventFSItems(data);
         })
     }
@@ -93,7 +102,6 @@
             $("#ItemArea").html("");
         let res = "";
             if (data.length > 0) {
-                console.log(data)
             for (let ele of data) {
                 let discount = toFixedWithoutZeros(ele.discount * 10, 2);
                 let percent = ele.percentage + "%";
@@ -101,10 +109,10 @@
                 res += `<div class="sellsitem ">
             <a class="linknoline sellsitem-imgbox" href="${productLink}">`;
                 res += `<input type="hidden" value="${ele.product.ProductId}" />`;
-                if (num == 2 && time == "上午") {
+                if (num == 2 && Hour == "上午") {
                     res += ` <div class="ItemIcon DiscountIcon">???</div>`;
                 }
-                else if (num == 1 && time == "下午") {
+                else if (num == 1 && Hour == "下午") {
 
                     res += ` <div class="ItemIcon DiscountIcon">${discount} 折</div>`;
                 }
@@ -129,11 +137,11 @@
                 </div>
                 <div class="cardInfo">`;
 
-                if (num == 2 && time=="上午")
+                if (num == 2 && Hour=="上午")
                 {
                     res += `<div class="cardPrice">活動尚未開始...</div>`;
                 }
-                else if (num == 1 && time=="下午") {
+                else if (num == 1 && Hour=="下午") {
 
                     res += `<div class="cardPrice">活動已經結束...</div>`;
                 }
@@ -154,18 +162,18 @@
                         res += `<div class="cardPrice">$${discountPrice}</div>
                         <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
                         if (ele.percentage > 50) {
-                            res += `< div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
                         }
                         res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
                     }   
                     else
                     {
-                        let discountPrice = Math.round(ele.price[0] * ele.discount);
-                        let discountPrice2 = Math.round(ele.price[1] * ele.discount);
+                        let discountPrice = Math.round(ele.price[1] * ele.discount);
+                        let discountPrice2 = Math.round(ele.price[0] * ele.discount);
                         res += `<div class="cardPrice">$${discountPrice} - $${discountPrice2}</div>
                         <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
                         if (ele.percentage > 50) {
-                            res += `< div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
                         }
                         res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
                     }
@@ -177,7 +185,60 @@
             res += `<div>活動尚待新增商品</div>`;
             }
             $("#ItemArea").html(res);
-    }
+        }
+
+
+        let TimeLimit = [[11, 59, 59], [23, 59, 59]];
+        let remaining=[];
+        function getCountDownTime() {
+            let today = new Date();
+            if (Hour == "上午") {
+                remaining = [toFixedTimeFormat(TimeLimit[0][0] - today.getHours()), toFixedTimeFormat(TimeLimit[0][1] - today.getMinutes()), toFixedTimeFormat(TimeLimit[0][2] - today.getSeconds())];
+            }
+            else if (Hour == "下午") {
+                remaining = [toFixedTimeFormat(TimeLimit[1][0] - today.getHours()), toFixedTimeFormat(TimeLimit[1][1] - today.getMinutes()), toFixedTimeFormat(TimeLimit[1][2] - today.getSeconds())];
+            }
+            let hh = remaining[0];
+            let mm = remaining[1];
+            let ss = remaining[2];
+            $("#CountDown").html(hh + ":" + mm + ":" + ss);
+        }
+        function toFixedTimeFormat(time) {
+            if (time < 10) {
+                return "0" + time;
+            }
+            else {
+                return ""+time;
+            }
+        }
+
+        function interval(ms, callback) {
+            const start = document.timeline
+                ? document.timeline.currentTime
+                : performance.now();
+            function timer1(time) {
+                const gaps = time - start;
+                const seconds = Math.round(gaps / ms);
+                callback(seconds);
+                //console.log(seconds);
+                const targetNext = (seconds + 1) * ms + start; // 算出下次interval开始的时间
+                const delay = document.timeline
+                    ? document.timeline.currentTime
+                    : performance.now(); // 取出更新完UI的时间
+                setTimeout(
+                    () => {
+                        requestAnimationFrame(timer1); // requestAnimationFrame 执行回调函数的时刻 当作参数，传入到callback
+                    },
+                    targetNext - delay // 算出距离下次interval开始时间
+                );
+            }
+            timer1(start);
+        }
+
+        interval(1000, getCountDownTime);
+
+
+
     </script>
 
 }

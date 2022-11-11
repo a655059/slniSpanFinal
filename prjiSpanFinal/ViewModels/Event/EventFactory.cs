@@ -130,7 +130,7 @@ namespace prjiSpanFinal.ViewModels.Event
             }
             return res;
         }
-        public List<FreshSalesShowItem> ftoFSShowItem(List<Product> list) 
+        public List<FreshSalesShowItem> ftoFSShowItem(List<Product> list,int eventID) 
         {
             List<FreshSalesShowItem> res = new List<FreshSalesShowItem>();
             if (!list.Any())
@@ -144,9 +144,11 @@ namespace prjiSpanFinal.ViewModels.Event
                     continue;
                 }
                 FreshSalesShowItem obj = new FreshSalesShowItem();
-                decimal Discount = Convert.ToDecimal(_db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault());
-
-                DateTime StartDate = _db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
+                var prodinfo = _db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == eventID).Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2);
+                decimal Discount = Convert.ToDecimal(prodinfo.Select(e => e.SubOfficialEventList.Discount).FirstOrDefault());
+                //decimal Discount = Convert.ToDecimal(_db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault());
+                DateTime StartDate = prodinfo.Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
+                //DateTime StartDate = _db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
                 int Sale = _db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o => (o.Order.ReceiveDate).CompareTo(StartDate) > 0).Select(o => o.Quantity).Sum(o => o);
                 byte[] Pic = _db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
                 var Detail = _db.ProductDetails.Where(p => p.ProductId == prod.ProductId);
@@ -177,6 +179,7 @@ namespace prjiSpanFinal.ViewModels.Event
                     obj.pic = Pic;
                 obj.stock = Stock;
                 obj.discount = Discount;
+                obj.sales = Sale;
                 obj.isStart = isStart;
                 obj.isOver = isOver;
 

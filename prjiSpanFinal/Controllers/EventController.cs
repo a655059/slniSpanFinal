@@ -89,13 +89,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult FreshSales(int Eventid)
         {
-            //if (DateTime.Now.ToString("tt") == "AM")
-            //{
-
-            //}
-            //else if (DateTime.Now.ToString("tt") == "PM")
-            //{
-            //}
             MemberAccount mem = new MemberAccount();
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -120,13 +113,16 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getEventFSItem(int num,int eid) 
         {
             List<FreshSalesShowItem> res = new List<FreshSalesShowItem>();
+            int FSevtID = _db.OfficialEventLists.Where(e => e.OfficialEventListId != 1 & e.OfficialEventTypeId == 2).Where(e => e.StartDate.CompareTo(DateTime.Now) <= 0 && e.EndDate.CompareTo(DateTime.Now) >= 0).Select(e => e.OfficialEventListId).FirstOrDefault();
+             var listProd = _db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == FSevtID).Where(p => p.VerifyId == 2).Where(e => e.SubOfficialEventList.IsFreeDelivery == false).Select(p => p.Product).ToList();
+            res = new EventFactory().ftoFSShowItem(listProd.ToList(), FSevtID);
             if (num == 1)
             {
-                res = new EventFactory().ftoFSShowItem(_db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == eid).Where(e => e.VerifyId == 2).Where(e => e.ProductId % 2 == 0).Select(p => p.Product).ToList());                   
+                res = res.Where(e => e.product.ProductId % 2 == 0).ToList();                   
             }
             else
             {
-                res = new EventFactory().ftoFSShowItem(_db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == eid).Where(e => e.VerifyId == 2).Where(e => e.ProductId % 2 == 1).Select(p => p.Product).ToList());
+                res = res.Where(e => e.product.ProductId % 2 == 1).ToList();
             }
             return Json(res);
         }
