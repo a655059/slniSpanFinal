@@ -94,7 +94,7 @@
                 <img src="@Url.Content("~/img/calender.png")" class="d-block opacity-50" style="width:100%;aspect-ratio:1/1;object-fit:contain" />
             </div>
             <div class="biddingItemCountdown" id="@Model.bidding.BiddingId">
-                <div class="remainingTime ps-2">剩<span class="remainingTime2 ms-2"></span></div> 
+                <div class="remainingTime ps-2">剩<span class="remainingTime2 ms-2"></span></div>
                 <div class="endTime ps-2 d-none"><span class="me-2">@endTime</span>結束</div>
             </div>
         </div>
@@ -228,7 +228,7 @@
                 <div class="ps-2"><a href="@Url.Content("~/SalesCourt/賣場?id="+Model.seller.MemberId)" class="text-primary">追蹤賣家</a></div>
             </div>
         </div>
-        
+
     </div>
 </div>
 <div>
@@ -273,6 +273,7 @@
 @section Scripts{
     <script src="@Url.Content("~/js/Item/ItemIndex.js")"></script>
     <script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>
+    
     <script>
         $(function () {
             const productID = $("#ProductId").html();

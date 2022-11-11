@@ -559,6 +559,12 @@ namespace prjiSpanFinal.Controllers
                 return Content("0");
             }
         }
+        public IActionResult ShowSelectedBiddingItems()
+        {
+            iSpanProjectContext dbContext = new iSpanProjectContext();
+            List<int> biddingIDs = dbContext.Biddings.Where(i => i.ProductDetail.Product.ProductStatusId == 4).OrderByDescending(i=>i.BiddingId).Select(i => i.BiddingId).ToList();
+            return ViewComponent("ShowSelectedBiddingItems", biddingIDs);
+        }
     }
 
 }

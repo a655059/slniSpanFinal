@@ -46,7 +46,7 @@ $(".addAddress").click(async function () {
             handleLocationError(false, infoWindow, map.getCenter());
         }
     });
-    const imgSrc = "https://localhost:44330/img/";
+    const imgSrc = "/img/";
     if (shipperName == "7-11取貨") {
         let marker_config = storeLocations.map(function (value, index) {
             let newObject = { position: { lat: value.Y, lng: value.X }, map: map, title: value.POIName };
