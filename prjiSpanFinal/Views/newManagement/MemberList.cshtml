@@ -212,7 +212,7 @@
                     let data = await response.text();
                     if (data == 1) {
                     $(this).closest("td").siblings().find(".statusname").val("已刪除");
-                    alert("已刪除!");
+                    Swal.fire('已刪除!');
                     }
                 }
             })
@@ -236,7 +236,7 @@
                 let data = await response.text();
                 if (data == 1) {
                     $(this).closest("td").siblings().find(".statusname").val("已停權");
-                    alert("已停權!")
+                    Swal.fire('已停權!')
                 }
             })
         }

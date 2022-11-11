@@ -76,9 +76,9 @@
                     @{
                         if (item.Argument.ArgumentTypeId == 5)
                         {
-                            <a name="@item.Argument.ArgumentId" class="Delete mt-1 btn btn-outline-secondary">未成案</a>
-                            <a name="@item.Argument.ArgumentId" class="Approve mt-1 btn btn-outline-primary">停權買家帳號</a>
-                            <a name="@item.Argument.ArgumentId" class="Approve2 mt-1 btn btn-outline-primary">停權賣家帳號</a>
+                                <a name="@item.Argument.ArgumentId" class="Delete mt-1 btn btn-outline-secondary">未成案</a>
+                                <a name="@item.Argument.ArgumentId" class="Approve mt-1 btn btn-outline-primary">停權買家帳號</a>
+                                <a name="@item.Argument.ArgumentId" class="Approve2 mt-1 btn btn-outline-primary">停權賣家帳號</a>
                         }
                     }
                 </td>
@@ -97,27 +97,27 @@
         @{
             if (ViewBag.pageSize != 3)
             {
-                <option value=3>3</option>
+                    <option value=3>3</option>
             }}
         @{
             if (ViewBag.pageSize != 5)
             {
-                <option value=5>5</option>
+                    <option value=5>5</option>
             }}
         @{
             if (ViewBag.pageSize != 10)
             {
-                <option value=10>10</option>
+                    <option value=10>10</option>
             }}
         @{
             if (ViewBag.pageSize != 20)
             {
-                <option value=20>20</option>
+                    <option value=20>20</option>
             }}
         @{
             if (ViewBag.pageSize != 100)
             {
-                <option value=100>100</option>
+                    <option value=100>100</option>
             }}
     </select>
     筆
@@ -153,7 +153,9 @@
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentDelete")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data == 1) {
-                    $(this).closest("td").siblings().find(".statusname").val("取消");
+                    $(this).closest("td").siblings().find(".statusname").val("取消")
+                    $(this).siblings().remove();
+                    $(this).remove();
                 }
             })
         }
@@ -167,7 +169,7 @@
                 let data = await response.text();
                 if (data !=null) {
                     $(this).closest("td").siblings().find(".statusname").val("處理完成");
-                    alert("已停權買家帳戶");
+                    Swal.fire("已停權買家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
                     happy_sendnoti(4, parseInt(data), "您的帳戶已被停權", "/Member/Order", "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權");
