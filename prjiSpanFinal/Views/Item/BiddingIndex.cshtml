@@ -272,9 +272,9 @@
 
 @section Scripts{
     <script src="@Url.Content("~/js/Item/ItemIndex.js")"></script>
-    <script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>
+    @*<script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>*@
     
-    <script>
+<script>
         $(function () {
             const productID = $("#ProductId").html();
             $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
@@ -286,6 +286,11 @@
             }
             $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
         });
+
+
+
+
+
         $(".bigPhoto .itemHeart").click(async function () {
             const memberID = Number($(".memberID").html());
             let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
@@ -385,6 +390,46 @@
             }
         });
 
+        let biddingID = 0;
+        let connection4 = new signalR.HubConnectionBuilder().withUrl("/specificItemCountdownHub").build();
+
+        connection4.on("ShowSpecificItemCountdown", function (remainingTime, id) {
+            if (id == biddingID) {
+                if (remainingTime.substring(0, 1) != "-") {
+                    $(".biddingItemCountdown").find(".remainingTime2").html(remainingTime);
+                }
+                else {
+                    $(".biddingItemCountdown").find(".remainingTime").html("競標已結束");
+                    $(".bidSubmit").prop("disabled", true);
+                }
+            }
+        });
+
+        connection4.on("UpdateAutoBidding", function (topPrice, biddingCount, topMember) {
+            $(".currentPrice").html(topPrice);
+            $(".biddingCount").html(biddingCount);
+            $(".topMember").html(topMember);
+            $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+        });
+
+
+        connection4.start().then(function () {
+            console.log("connect4 start");
+            biddingID = Number($(".biddingItemCountdown").attr("id"));
+            connection4.invoke("SpecificItemCountdown", biddingID);
+        }).catch(function (err) {
+            console.log(err);
+        });
+
+
+
+
+
+
+
+
+
+
         $(".messageBoardVC").on("click", ".messageSubmit", async function () {
             const message = $(this).siblings(".message").val();
             if (message == "") {
@@ -444,5 +489,5 @@
         });
 
 
-    </script>
+</script>
 }

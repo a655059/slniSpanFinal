@@ -15,8 +15,8 @@ namespace prjiSpanFinal.HostedService
     public class Countdown : IHostedService, IDisposable
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IHubContext<SelectedBiddingItemsCountdownHub> _hubContext;
-        public Countdown(IServiceScopeFactory serviceScopeFactory, IHubContext<SelectedBiddingItemsCountdownHub> hubContext)
+        private readonly IHubContext<CountdownHub> _hubContext;
+        public Countdown(IServiceScopeFactory serviceScopeFactory, IHubContext<CountdownHub> hubContext)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _hubContext = hubContext;
@@ -104,7 +104,7 @@ namespace prjiSpanFinal.HostedService
                                     };
                                     dbContext.OrderDetails.Add(orderDetail);
                                     dbContext.SaveChanges();
-                                    await _hubContext.Clients.All.SendAsync("ShowUploadItem");
+                                    
                                 }
                                 else
                                 {
@@ -119,7 +119,7 @@ namespace prjiSpanFinal.HostedService
                                     };
                                     dbContext.OrderDetails.Add(orderDetail);
                                     dbContext.SaveChanges();
-                                    await _hubContext.Clients.All.SendAsync("ShowUploadItem");
+                                    
                                 }
                             }
                         }

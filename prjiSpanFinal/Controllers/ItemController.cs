@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using prjiSpanFinal.Hubs;
 //using Newtonsoft.Json;
 using prjiSpanFinal.Models;
 using prjiSpanFinal.ViewModels;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -18,10 +21,12 @@ namespace prjiSpanFinal.Controllers
     public class ItemController : Controller
     {
         private IWebHostEnvironment _enviro;
+        private readonly IHubContext<SpecificItemCountdownHub> _hubContext; 
 
-        public ItemController(IWebHostEnvironment p)
+        public ItemController(IWebHostEnvironment p, IHubContext<SpecificItemCountdownHub> hubContext)
         {
             _enviro = p;
+            _hubContext = hubContext;
         }
         public IActionResult Index(int? id)
         {
@@ -438,7 +443,7 @@ namespace prjiSpanFinal.Controllers
             return View(infos);
         }
 
-        public IActionResult Bid(int biddingID, string biddingType, int price, int topPrice)
+        public async Task<IActionResult> BidAsync(int biddingID, string biddingType, int price, int topPrice)
         {
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -497,6 +502,16 @@ namespace prjiSpanFinal.Controllers
                             };
                             dbContext.BiddingDetails.Add(biddingDetail1);
                             dbContext.SaveChanges();
+                            var bidding2 = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => new
+                            {
+                                biddingDetail = i,
+                                member = i.Member,
+                            });
+                            int biddingCount2 = bidding2.Count();
+                            string topMember2 = bidding2.FirstOrDefault().member.MemberAcc;
+
+                            await _hubContext.Clients.All.SendAsync("UpdateAutoBidding", bidding2.FirstOrDefault().biddingDetail.Price.ToString(), biddingCount2.ToString(), topMember2);
+                            Thread.Sleep(1000);
                         }
                     }
                     var newBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
@@ -559,10 +574,18 @@ namespace prjiSpanFinal.Controllers
                 return Content("0");
             }
         }
-        public IActionResult ShowSelectedBiddingItems()
+        public IActionResult ShowSelectedBiddingItems(int type)
         {
             iSpanProjectContext dbContext = new iSpanProjectContext();
-            List<int> biddingIDs = dbContext.Biddings.Where(i => i.ProductDetail.Product.ProductStatusId == 4).OrderByDescending(i=>i.BiddingId).Select(i => i.BiddingId).ToList();
+            List<int> biddingIDs;
+            if (type == 1)
+            {
+                biddingIDs = dbContext.Biddings.Where(i => i.ProductDetail.Product.ProductStatusId == 4).OrderByDescending(i => i.BiddingId).Select(i => i.BiddingId).Take(20).ToList();
+            }
+            else
+            {
+                biddingIDs = dbContext.Biddings.Where(i => i.ProductDetail.Product.ProductStatusId == 4).OrderBy(i => i.EndTime).Select(i => i.BiddingId).Take(20).ToList();
+            }
             return ViewComponent("ShowSelectedBiddingItems", biddingIDs);
         }
     }
