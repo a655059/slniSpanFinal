@@ -670,9 +670,11 @@ namespace prjiSpanFinal.Controllers
             //var q = dbContext.CommentForCustomers.Where();
             var comment = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == commentmemid).Select(p => new
             {
-                bestcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 5),
-                mediumcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 3 || a.CommentStar == 4),
-                worstcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 1 || a.CommentStar == 2),
+                
+                //bestcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 5),
+                //mediumcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 3 || a.CommentStar == 4),
+                //worstcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 1 || a.CommentStar == 2),
+                //aa = p.Order.CommentForCustomers.Where(a => (DateTime.Now.Date - a.CommentTime.Date).Days <= 360).FirstOrDefault(),
             }).ToList();
             //var q =dbContext.Orders.Where(a => a.OrderDetails.ProductDetail.Product.MemberId == commentmemid)
             //                            .Where(a=>a.Order.CommentForCustomers)

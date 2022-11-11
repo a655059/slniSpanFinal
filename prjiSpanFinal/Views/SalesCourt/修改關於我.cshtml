@@ -6,6 +6,7 @@
 <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/編輯賣場資訊">編輯賣場資訊</a>
 
 <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/設定分類">設定分類</a>
+<a role="button" class="demobtn btn btn-outline-success rounded-2" >demo</a>
 <div class="row d-flex justify-content-start align-items-center  text-muted py-1 rounded-2" style="font-size:1.1em;background-color:burlywood">
     <div>修改關於我</div>
 
@@ -318,6 +319,30 @@
     }
     load();
 
+
+    $(".demobtn").click(function () {
+        $(".asdf")[0].textContent = "這是描述";
+        $(".asdf")[2].textContent = "這是賣家類型";
+        $(".asdf")[1].setAttribute("value", "每週幾公休");
+        $(".asdf")[3].setAttribute("value", "請於幾天完成結帳");
+        for (let i = 0; i < 3; i++) {            
+            $(".checklist")[i].checked = true;
+        }
+        for (let i = 9; i < 12; i++) {
+            $(".checklist")[i].checked = true;
+        }
+        for (let i = 16; i < 18; i++) {
+            $(".checklist")[i].checked = true;
+        }
+        $(".checklist")[6].checked = true;
+        $(".checklist")[14].checked = true;
+        $(".checklist")[21].checked = true;
+        $(".scst")[0].selectedIndex = 1;
+        $(".scst")[1].selectedIndex = 5;
+        $(".scst")[2].selectedIndex = 9;
+        $(".scst")[3].selectedIndex = 22;
+        $(".scst")[4].selectedIndex = 1;
+    })
     $("#btnSubmit").click(function () {
         loadpost();
         $.postJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function () {
@@ -351,6 +376,8 @@
         asd = JSON.stringify({ checkbox: aaa1, selectopt: bbb1, text: ccc1 });
 
     }
+
+    
 
 
     //------------------------------------------------------------------------------------------------------------

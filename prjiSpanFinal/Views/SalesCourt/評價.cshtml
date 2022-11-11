@@ -8,6 +8,9 @@
     var AllCounts = Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount;
     var followcount = dbContext.Follows.Where(a => a.FollowedMemId == Model.Memberid).Count();
 
+
+    //var bestweekcommentcount = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == Model.Memberid && (DateTime.Now-a.Order.CommentForCustomers.FirstOrDefault().CommentTime) <= 7).
+
 }
 
 @section Styles{
@@ -269,18 +272,18 @@
                 let card = "";
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
-                                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                                            <div>
-                                                <img src="~/img/greencircle.png" width="20" />
-                                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
-                                            </div>
-                                            <div class="dashed-divider"></div>
-                                            <div class="ps-2" style="font-size:1.5em">
-                                            <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
-                                            </div>
+                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                            <div>
+                                <img src="~/img/greencircle.png" width="20" />
+                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                            </div>
+                            <div class="dashed-divider"></div>
+                            <div class="ps-2" style="font-size:1.5em">
+                            <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
+                            </div>
 
-                                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                                            </div>`
+                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
+                            </div>`
                 }
                 return card;
             }
