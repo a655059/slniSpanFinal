@@ -305,7 +305,8 @@
         })
 
         let couponid;
-        $(".btnEdit").click(function () {
+        $(document).on("click", ".btnEdit", function () {
+
             $("#text00").val($(this).closest("#viewmodel").find(".Minimum").html());
             $("#text11").val($(this).closest("#viewmodel").find(".couponName").html());
             $("#text22").val($(this).closest("#viewmodel").find(".couponCode").html());
