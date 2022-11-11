@@ -173,19 +173,19 @@ namespace prjiSpanFinal.Controllers
             #region
             //每個不同時段評價計數
             var weekBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 7);
-            var monthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
-            var halfmonthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var monthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 31);
+            var halfmonthBestComment = Comment.ToList().Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days < 186);
             var allBestComment = Comment.ToList().Where(a => a.CommentStar == 5);
 
             var weekMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 7);
-            var monthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
-            var halfmonthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var monthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 31);
+            var halfmonthMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days < 186);
             var allMediumComment = Comment.ToList().Where(a => (a.CommentStar == 3 || a.CommentStar == 4));
 
 
             var weekWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 7);
-            var monthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 31 && (DateTime.Now - a.CommentTime).Days > 7);
-            var halfmonthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days < 186 && (DateTime.Now - a.CommentTime).Days > 31);
+            var monthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 31);
+            var halfmonthWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days < 186 );
             var allWorstComment = Comment.ToList().Where(a => (a.CommentStar == 1 || a.CommentStar == 2));
 
             BestCommentCount bstcmt = new BestCommentCount();
@@ -579,7 +579,7 @@ namespace prjiSpanFinal.Controllers
 
             if (buyerorseller == 1)
             {
-                var q = dbContext.Comments.Where(a => a.OrderDetail.Order.MemberId == id).Select(p => new
+                var q = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id).Select(p => new
                 {
                     link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
                     buyername = p.OrderDetail.Order.Member.MemberAcc,
@@ -621,15 +621,22 @@ namespace prjiSpanFinal.Controllers
 
             //賣家對買家的評價
             else {
-                
-                var q = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == id).Select(p => new
+
+                var q = dbContext.Orders.Where(a => a.MemberId == id).Select(p => new
                 {
-                    //link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
-                    buyername = p.Order.Member.MemberAcc,
-                    sellername = p.ProductDetail.Product.Member.MemberAcc,
-                    commentcontent = p.Order.CommentForCustomers.Select(b => b.Comment).FirstOrDefault(),
-                    commentstar = p.Order.CommentForCustomers.Select(b => b.CommentStar).FirstOrDefault(),
+                    buyername = p.Member.MemberAcc,
+                    sellername = p.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                    commentcontent = "",
+                    commentstar = 5,
                 }).ToList();
+                //var q = dbContext.OrderDetails.Where(a => a.or == id).Select(p => new
+                //{
+                //    //link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
+                //    buyername = p.Order.Member.MemberAcc,
+                //    sellername = p.ProductDetail.Product.Member.MemberAcc,
+                //    commentcontent = p.Order.CommentForCustomers.Select(b => b.Comment).FirstOrDefault(),
+                //    commentstar = p.Order.CommentForCustomers.Select(b => b.CommentStar).FirstOrDefault(),
+                //}).ToList();
 
                 if (mode == 0)
                 {
@@ -666,25 +673,7 @@ namespace prjiSpanFinal.Controllers
             }
         }
 
-        public IActionResult GetcommentbuyerCount(int commentmemid) {
-            //var q = dbContext.CommentForCustomers.Where();
-            var comment = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == commentmemid).Select(p => new
-            {
-                
-                //bestcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 5),
-                //mediumcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 3 || a.CommentStar == 4),
-                //worstcomment = p.Order.CommentForCustomers.Where(a => a.CommentStar == 1 || a.CommentStar == 2),
-                //aa = p.Order.CommentForCustomers.Where(a => (DateTime.Now.Date - a.CommentTime.Date).Days <= 360).FirstOrDefault(),
-            }).ToList();
-            //var q =dbContext.Orders.Where(a => a.OrderDetails.ProductDetail.Product.MemberId == commentmemid)
-            //                            .Where(a=>a.Order.CommentForCustomers)
-
-            //int datacomment = comment.Select(a => a.bestcomment.Where(a => (DateTime.Now - a.CommentTime) <= 7));
-
-            //int q = 0;
-            return Json(comment);
-        }
-
+        
         public IActionResult GetCoupon(int couponid) {
             getid();
 
@@ -759,7 +748,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult deleteCustName(int id,string custname)
         {
             var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id && a.CustomizedCategoryName == custname).FirstOrDefault();
-            dbContext.CustomizedCategories.Remove(q);
+            if(q != null) dbContext.CustomizedCategories.Remove(q);
 
             dbContext.SaveChanges();
             
