@@ -486,6 +486,30 @@ namespace prjiSpanFinal.Controllers
             return Json(dbcontext.OrderDetails.Where(o=>o.OrderId == orderid).ToList().Count);
         }
 
+        public IActionResult ShowCart(int bid, int sid)
+        {
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var q = dbcontext.Orders.Where(o => o.MemberId == bid && o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == sid && o.StatusId == 1).FirstOrDefault();
+            var q2 = dbcontext.OrderDetails.Where(o => o.OrderId == q.OrderId).Select(p => new
+            {
+                pic = IsNullPic(p.ProductDetail.Product.ProductPics.FirstOrDefault()),
 
+            });
+            return Json(new { });
+        }
+
+        byte[] IsNullPic(ProductPic pic)
+        {
+            if(pic == null)
+            {
+                string pName = "/img/imageNotFound.png";
+                string path = _enviro.WebRootPath + pName;
+                return System.IO.File.ReadAllBytes(path);
+            }
+            else
+            {
+                return pic.Pic;
+            }
+        }
     }
 }
