@@ -92,7 +92,7 @@ namespace prjiSpanFinal.ViewModels.Home
             List<WebAd> res = list.OrderBy(p => Guid.NewGuid()).ToList();
             return res;
         }
-        public List<CShowFSItem> toShowFSItem(List<Product> list)
+        public List<CShowFSItem> toShowFSItem(List<Product> list,int evtid)
         {
             List<CShowFSItem> res = new List<CShowFSItem>();
             if (!list.Any())
@@ -106,9 +106,10 @@ namespace prjiSpanFinal.ViewModels.Home
                     continue;
                 }
                 CShowFSItem obj = new CShowFSItem();
-                float Discount = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && !e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.Discount).FirstOrDefault();
-                bool DeliveryFree = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.IsFreeDelivery).FirstOrDefault();
-                DateTime StartDate = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId&&e.VerifyId==2).Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
+                var prodinfo = db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == evtid).Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2);
+                float Discount = prodinfo.Select(e => e.SubOfficialEventList.Discount).FirstOrDefault();
+                //bool DeliveryFree = db.SubOfficialEventToProducts.Where(e => e.ProductId == prod.ProductId && e.VerifyId == 2 && e.SubOfficialEventList.IsFreeDelivery).Select(e => e.SubOfficialEventList.IsFreeDelivery).FirstOrDefault();
+                DateTime StartDate = prodinfo.Select(e => e.SubOfficialEventList.OfficialEventList.StartDate).FirstOrDefault();
                 int Sale = db.OrderDetails.Where(o => o.ProductDetail.ProductId == prod.ProductId).Where(o => o.Order.StatusId == 7 || o.Order.StatusId == 6).Where(o=> (o.Order.ReceiveDate).CompareTo(StartDate)>0).Select(o=>o.Quantity).Sum(o => o);
                 byte[] Pic = db.ProductPics.Where(p => p.ProductId == prod.ProductId).Select(p => p.Pic).FirstOrDefault();
                 var Detail = db.ProductDetails.Where(p => p.ProductId == prod.ProductId);
@@ -131,10 +132,11 @@ namespace prjiSpanFinal.ViewModels.Home
                 obj.discount = Discount;                
                 obj.stock = Stock;
                 obj.sale = Sale;
-                if (DeliveryFree)
-                    obj.isDeliveryFree = true;
-                else if (!DeliveryFree)
-                    obj.isDeliveryFree = false;
+                //if (DeliveryFree)
+                //    obj.isDeliveryFree = true;
+                //else if (!DeliveryFree)
+                //    obj.isDeliveryFree = false;
+                obj.eventid = evtid;
 
                 var Effect = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Select(p => p.Ad.AdTypeId).ToList();
                 if (Effect.Any())

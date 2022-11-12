@@ -31,10 +31,20 @@ namespace prjiSpanFinal.Controllers
             List<CShowItem> listItem = ((new CHomeFactory()).toShowItem(listProd)).Take(36).ToList();
             listProd = new CHomeFactory().rdnProd(_db.AdtoProducts.Where(p => p.IsSubActive && p.Ad.AdTypeId == 3).Select(p=>p.Product).ToList());
             List<CShowBBItem> listBB = new CHomeFactory().toShowBBItem(listProd.Take(15).ToList());
-            listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(p => p.VerifyId==2).Where(p=>p.SubOfficialEventList.OfficialEventList.OfficialEventTypeId==2).Select(p => p.Product).ToList());
-            List<CShowFSItem> listFS = new CHomeFactory().toShowFSItem(listProd.Take(15).ToList());
+            int FSevtID = _db.OfficialEventLists.Where(e=>e.OfficialEventListId!=1 &e.OfficialEventTypeId==2).Where(e => e.StartDate.CompareTo(DateTime.Now) <= 0 && e.EndDate.CompareTo(DateTime.Now) >= 0).Select(e=>e.OfficialEventListId).FirstOrDefault();
+            listProd = new CHomeFactory().rdnProd(_db.SubOfficialEventToProducts.Where(e => e.SubOfficialEventList.OfficialEventListId == FSevtID).Where(p => p.VerifyId==2).Where(e=>e.SubOfficialEventList.IsFreeDelivery==false).Select(p => p.Product).ToList());
+            List<CShowFSItem> listFS = new CHomeFactory().toShowFSItem(listProd.ToList(), FSevtID);
             var webAds = _db.WebAds.Where(a => a.IsPublishing == true);
             List<OfficialEventList> NowEvent = new CHomeFactory().toGetEvent(_db.OfficialEventLists.Where(e => e.OfficialEventListId != 1).Where(e => e.OfficialEventTypeId == 1).Where(e => DateTime.Now.CompareTo(e.EndDate.AddDays(3)) < 0).ToList());
+            
+            if (DateTime.Now.ToString("tt") == "上午")
+            {
+                listFS = listFS.Where(p => p.product.ProductId % 2 == 0).Take(15).ToList();
+            }
+            else if (DateTime.Now.ToString("tt") == "下午")
+            {
+                listFS = listFS.Where(p => p.product.ProductId % 2 == 1).Take(15).ToList();
+            }
 
             CHomeIndex home = new CHomeIndex()
             {

@@ -1,8 +1,32 @@
-﻿.SubEventArea {
+﻿header{
+    height:52px;
+}
+
+.SubEventArea {
     margin: 20px;
 }
 .menu-bar{
 
+}
+#CountDownArea {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size:18px;
+    font-weight:bold;
+    user-select:none;
+}
+#CountDownBox {
+    background-color: #D0D0D0;
+}
+#CountDownTitle {
+    color: #FF8000;
+    margin-right:3px;
+}
+#CountDown {
+    background-color:red;
+    color: white;
+    margin-left: 5px;
+    padding:3px;
 }
 #itemArea {
     width: 100%;

@@ -48,6 +48,19 @@
     background-color: white;
     padding: 5px 20px;
 }
+.FSlink, .FSlink:hover, .FSlink:visited{
+    color: #F75000;
+    margin-right:10px;
+}
+#CountDown {
+    text-align: center;
+    color: white;
+    margin-left: 20px;
+    padding: 0px 8px;
+    font-size: 20px;
+    background-color: #5B5B5B;
+    user-select:none;
+}
 /* 左側 */
 .listview {
     box-sizing: border-box;

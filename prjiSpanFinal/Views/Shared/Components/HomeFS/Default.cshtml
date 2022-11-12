@@ -11,6 +11,12 @@
                         <div class="FSitem">
                             <a class="linknoline FSimgBox" href="#!">
                                 <input type="hidden" value="@item.product.ProductId" />
+                                
+                                    @{string discount = (item.discount * 10).ToString("0.#");
+                                    }
+                                    <div class="FSDiscountItemIcon FSDiscountIcon">
+                                        @discount 折
+                                    </div>
                                 @if (item.pic != null)
                                 {
                                     var base64Image = Convert.ToBase64String(item.pic);
@@ -23,20 +29,28 @@
                                     @*<img src="#!" class="FSitemImg" alt="此商品沒有圖片" />*@
                                 }
                             </a>
+
                             <div class="px-1 d-flex flex-column justify-content-between">
-                                <div class="FSitemPrice">$@decimal.Round(item.price[0])</div>
-                                <div class="FS-container">
-                                    @{
-                                        string percent = item.Percentage + "%";
+                                @{ 
+                                    decimal discountPrice =decimal.Round(item.price[0] * (decimal)item.discount);
+                                    
                                     }
-                                    <div class="FS-progress" style="width:@percent"></div>
-                                    @if (item.Percentage>50) { 
-                                        <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>                                    
-                                    }
-                                    <div class="FS-soldbar">售出 @item.sale</div>
+                                <div class="FSPriceDiscount">$@decimal.Round(item.price[0])</div>
+                                <div class="FSitemPrice">$@discountPrice</div>
+
+                                    <div class="FS-container">
+                                        @{
+                                            string percent = item.Percentage + "%";
+                                        }
+                                        <div class="FS-progress" style="width:@percent"></div>
+                                        @if (item.Percentage > 50)
+                                        {
+                                            <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>
+                                        }
+                                        <div class="FS-soldbar">售出 @item.sale</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 }
             }

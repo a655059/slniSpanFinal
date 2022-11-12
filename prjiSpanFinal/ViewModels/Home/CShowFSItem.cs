@@ -8,6 +8,7 @@ namespace prjiSpanFinal.ViewModels.Home
 {
     public class CShowFSItem
     {
+        public int eventid { get; set; }
         public Product product { get; set; }
         public List<decimal> price { get; set; }
         public byte[] pic { get; set; }
@@ -21,10 +22,10 @@ namespace prjiSpanFinal.ViewModels.Home
             }
         }
         public List<int> effects { get; set; }
-        public bool isDeliveryFree
-        {
-            get;
-            set;
-        }
+        //public bool isDeliveryFree
+        //{
+        //    get;
+        //    set;
+        //}
     }
 }
