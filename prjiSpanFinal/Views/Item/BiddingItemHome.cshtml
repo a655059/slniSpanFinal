@@ -4,16 +4,79 @@
 }
 
 <h1>蝦到爆競標</h1>
+<div class="biddingLayout">
+    <div class="fs-4 fw-bold fst-italic text-warning">最新上架</div>
+    <div class="newArrival">
+        @*@await Component.InvokeAsync("ShowSelectedBiddingItems", new { biddingIDs = Model })*@
+    </div>
+    <div class="fs-4 fw-bold fst-italic text-warning">即將結標</div>
+    <div class="endBidding">
 
-<div>
-    @await Component.InvokeAsync("ShowSelectedBiddingItems", new { biddingIDs = Model })
+    </div>
 </div>
 
 
 
-
 @section Scripts{
-    <script src="@Url.Content("~/js/Item/ShowItemCountdown.js")"></script>
     <script src="@Url.Content("~/js/ShowSelectedBiddingItems.js")"></script>
+    <script>
+        $(function () {
+            $(".newArrival").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 1 })");
+            $(".endBidding").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 2 })");
+        });
 
+
+        let connection2 = new signalR.HubConnectionBuilder().withUrl("/countdownHub").build();
+
+        connection2.on("ShowUploadItem", function () {
+            $(".newArrival").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 1 })");
+            $(".endBidding").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 2 })");
+        });
+
+        connection2.start().then(function () {
+            console.log("connect2 start");
+        }).catch(function (err) {
+            console.log(err);
+        });
+
+
+
+
+        function ControlPage() {
+            $(".page").each(function () {
+                let currentPage = Number($(this).html());
+                let totalPage = Number($(this).siblings(".totalPage").html());
+                if (currentPage == 1) {
+                    $(this).closest("div").siblings(".previousPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
+                }
+                else {
+                    $(this).closest("div").siblings(".previousPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
+                }
+                if (currentPage == totalPage) {
+                    $(this).closest("div").siblings(".nextPage").attr("disabled", true).css("background-color", "#FFDCB9").css("color", "#D0D0D0");
+                }
+                else {
+                    $(this).closest("div").siblings(".nextPage").attr("disabled", false).css("background-color", "#FFA042").css("color", "black");
+                }
+            });
+        }
+
+
+        $(".biddingLayout").on("click", ".nextPage", function () {
+            const page = Number($(this).siblings("div").find(".page").html()) + 1;
+            $(this).siblings("div").find(".page").html(page);
+            $(this).closest("div").siblings(".VCLayout").find(".biddingItemLayout").animate({ left: "-=1050px" });
+            ControlPage();
+        });
+
+
+        $(".biddingLayout").on("click", ".previousPage", function () {
+            const page = Number($(this).siblings("div").find(".page").html()) - 1;
+            $(this).siblings("div").find(".page").html(page);
+            $(this).closest("div").siblings(".VCLayout").find(".biddingItemLayout").animate({ left: "+=1050px" });
+            ControlPage();
+        });
+
+
+    </script>
 }

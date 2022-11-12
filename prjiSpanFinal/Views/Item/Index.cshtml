@@ -7,6 +7,7 @@
     {
         memberID = Model.user.MemberId;
     }
+    string bigTypeUrl = Url.Content("~/Category/Index") + $"?id={Model.bigType.BigTypeId}";
 }
 @section Styles{
     <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
@@ -18,7 +19,7 @@
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Content("~/Home/Index")">蝦到爆</a></li>
-        <li class="breadcrumb-item"><a href="#">@Model.bigType.BigTypeName</a></li>
+        <li class="breadcrumb-item"><a href="@bigTypeUrl">@Model.bigType.BigTypeName</a></li>
         <li class="breadcrumb-item active" aria-current="page">@Model.smallType.SmallTypeName</li>
     </ol>
 </nav>
@@ -799,7 +800,7 @@
 
         Save.addEventListener("click", () => {
             if (!Reason.value || ReportPic == null) {
-                alert("所有欄位皆是必填!");
+                Swal.fire("所有欄位皆是必填!");
             }
             else {
                 Report = {
@@ -814,7 +815,7 @@
                 };
                 console.log(Report);
                 $.postJSON("/Item/ReportCreate", { d: Report }, function () { });
-                alert("檢舉成功");
+                Swal.fire("檢舉成功");
                 $("#reportmodal").modal('hide');
             }
         })
@@ -882,8 +883,47 @@
                 }
             });
         });
+       
+        $(".messageBoardVC").on("click", ".collapseMessage", function () {
+            const thisLayerNumber = Number($(this).closest(".messageBoardID").attr("class").split(' ')[0].substring(5));
+            if ($(this).closest(".messageBoardID").nextAll(".messageBoardID").length > 0) {
+                if ($(this).html() == "收合") {
+                    $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function (event) {
+                        const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                        if (layerNumber > thisLayerNumber) {
+                            console.log($(this).attr("class"));
+                            $(this).removeClass("d-none").addClass("d-none");
+                            console.log($(this).attr("class"));
+                        }
+                        else {
+                            return;
+                        }
+                    })
+                    $(this).html("展開");
+                }
+                else {
+                    $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function () {
+                        const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                        if (layerNumber > thisLayerNumber) {
+                            console.log($(this).attr("class"));
+                            $(this).removeClass("d-none");
+                            console.log($(this).attr("class"));
+                            if ($(this).has(".collapseMessage").length > 0) {
+                                $(this).find(".collapseMessage").html("收合");
+                            }
+                        }
+                        else {
+                            return;
+                        }
+                    })
+                    $(this).html("收合");
+                }
+            }
+        })
 
-
+        $(".messageBoardVC").on("click", ".messageReplyBtn", function () {
+            $(this).closest(".messageFooter").siblings(".messageReplay").slideToggle();
+        });
 
     </script>
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using prjiSpanFinal.Hubs;
 using prjiSpanFinal.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,11 @@ namespace prjiSpanFinal.HostedService
     public class Countdown : IHostedService, IDisposable
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
-        public Countdown(IServiceScopeFactory serviceScopeFactory)
+        private readonly IHubContext<CountdownHub> _hubContext;
+        public Countdown(IServiceScopeFactory serviceScopeFactory, IHubContext<CountdownHub> hubContext)
         {
             _serviceScopeFactory = serviceScopeFactory;
+            _hubContext = hubContext;
         }
         public void Dispose()
         {
@@ -29,7 +32,7 @@ namespace prjiSpanFinal.HostedService
             return Task.CompletedTask;
         }
 
-        void BackgroundSearch(object state)
+        async void BackgroundSearch(object state)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -47,14 +50,17 @@ namespace prjiSpanFinal.HostedService
                         var product = dbContext.Products.Where(i => i.ProductId == a.product.ProductId).Select(i => i).FirstOrDefault();
                         product.ProductStatusId = 4;
                         dbContext.SaveChanges();
-                        string productName = product.ProductName;
-                        int sellerID = product.MemberId;
+                        await _hubContext.Clients.All.SendAsync("ShowUploadItem");
+                        //string productName = product.ProductName;
+                        //int sellerID = product.MemberId;
+                        
                     }
                     if (DateTime.Now >= a.bidding.EndTime && a.product.ProductStatusId == 4)
                     {
                         var product = dbContext.Products.Where(i => i.ProductId == a.product.ProductId).Select(i => i).FirstOrDefault();
                         product.ProductStatusId = 1;
                         dbContext.SaveChanges();
+                        await _hubContext.Clients.All.SendAsync("ShowUploadItem");
                         string productName = product.ProductName;
 
                         var biddingResult = dbContext.BiddingDetails.Where(i => i.BiddingId == a.bidding.BiddingId).OrderByDescending(i => i.Price).Select(i => new
@@ -98,6 +104,7 @@ namespace prjiSpanFinal.HostedService
                                     };
                                     dbContext.OrderDetails.Add(orderDetail);
                                     dbContext.SaveChanges();
+                                    
                                 }
                                 else
                                 {
@@ -112,6 +119,7 @@ namespace prjiSpanFinal.HostedService
                                     };
                                     dbContext.OrderDetails.Add(orderDetail);
                                     dbContext.SaveChanges();
+                                    
                                 }
                             }
                         }

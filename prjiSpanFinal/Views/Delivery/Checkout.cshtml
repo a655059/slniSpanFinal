@@ -25,6 +25,8 @@
 }
 
 @await Component.InvokeAsync("DeliveryProgressBar", new { checkoutPage = 1 })
+<div><a href="@Url.Content("~/Delivery/ShowCart")">回購物車</a></div>
+
 <div class="btn-group mb-3 position-relative" role="group" aria-label="Basic radio toggle button group" id="choseStore">
     <div class="sellerIDIndex d-none">0</div>
     <div class="sellerIDCount d-none">@sellerIDList.Count</div>
