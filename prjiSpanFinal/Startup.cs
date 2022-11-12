@@ -69,9 +69,11 @@ namespace prjiSpanFinal
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "notdefault",
                     pattern: "{controller=Item}/{action=BidAsync}/{id?}");
+
                 endpoints.MapHub<ChatHub>("/chatHub");
                 endpoints.MapHub<CountdownHub>("/countdownHub");
                 endpoints.MapHub<SelectedBiddingItemsCountdownHub>("/selectedBiddingItemsCountdownHub");
