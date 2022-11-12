@@ -31,6 +31,8 @@ namespace prjiSpanFinal.ViewModels.seller
         public List<decimal> UnitPrice { get; set; }
         public List<int> BodyPicID { get; set; }
         public List<byte[]> BodyPic { get; set; }
+
+        public List<int> Dataphotoindex { get; set; }
         public string Description { get; set; }
         public int ProductID { get; set; }
         public int CategoryID { get; set; }

@@ -305,7 +305,7 @@
                                             }
                                         }
                                     </label>
-                                    <input type="file" id="@id" class="commentphotoclass  @id" style="opacity:0;width:0px;" accept="image/*" multiple />
+                                    <input type="file" id="@id" class="commentphotoclass" style="opacity:0;width:0px;" accept="image/*" multiple />
                                 </div>
                             }
                         }
@@ -535,28 +535,19 @@
         //表單照片轉二進位儲存
 
         let dataphoto = [];
-        let dataphotoID = [];
+        let dataphotoindex = [];
 
         let appleclass = document.getElementsByClassName("commentphotoclass");
         $(".commentphotoclass").on("change", function () {
             let photos = [];
+            let photosindex = [];
             dataphoto = [];
-            let chanpho = $(this).siblings().children().val();
-            if (chanpho == 0) {
-                chanpho = "1";
-            }
-            console.log(chanpho)
-            //for (let i = 0; i < dataphotoID.length;i++){
-            //    if (dataphotoID[i] != chanpho) {
-            //        dataphotoID.push(chanpho);
-            //        console.log(dataphotoID)
-            //    }
-            //}
-            //console.log(dataphotoID)
+            dataphotoindex = [];
 
             for (let i = 0; i < appleclass.length; i++) {
                 if (appleclass[i].files.length != 0) {
                     photos.push(appleclass[i].files);
+                    photosindex.push(i);
                 }
             }
 
@@ -565,60 +556,16 @@
                     let reader = new FileReader();
                     reader.readAsDataURL(photo[0]);
                     reader.onload = function () {
-                        let src = reader.result.split(",")[1];
-                        //dataphoto.push(src.split(",")[1]);
+                        let src = reader.result;
+                        dataphoto.push(src.split(",")[1]);
+                        dataphotoindex.push(photosindex[idx]);
                     };
                 });
             }
         })
         
 //====================================================================
-        good.addEventListener("click", function () {
-            let photoval = [];
-             for (let i = 0; i < 5; i++) {
-                 let a = $(`#pic${i}`).val();
-                 if (a != 0) {
-                     dataphoto.push($(`#pic${i}`).next().attr("style").split(",")[1].split("'")[0]);
-                 }
-                 else {
-                     dataphoto.push($(`#pic${i}`).next().attr("style").split("'")[1].split("'")[0]);
-                 }
-                 photoval.push(a);
-            }
-            //dataphoto.push($("#pichead").children().children().eq(1).attr("style").split(",")[1].split("'")[0]);
-            //dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
-            //dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
-            //dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
-            //dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
-            console.log(photoval)
-            console.log(dataphoto)
-
-             
-             ////資料庫照片資料
-             //if (!$("#commentPhoto1").change(function () { })) {
-             //    let hesdpic = $("#pichead").children().children().attr("style").split(",")[1].split("'")[0];
-             //    dataphoto.push(hesdpic);
-             //}
-
-             //for (let i = 0; i < 4; i++){                
-             //    if (!$(`#commentPhoto${i}`).change(function () { })) {
-             //       if (!$("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]) {
-             //           dataphoto.push($("#picbody").children().children().eq(0).attr("style").split("'")[1].split("'")[0]);
-             //        }
-             //        if (!$("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]) {
-             //            dataphoto.push($("#picbody").children().children().eq(1).attr("style").split("'")[1].split("'")[0]);
-             //        }
-             //        if (!$("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]) {
-             //            dataphoto.push($("#picbody").children().children().eq(2).attr("style").split("'")[1].split("'")[0]);
-             //        }
-             //        if (!$("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]) {
-             //            dataphoto.push($("#picbody").children().children().eq(3).attr("style").split("'")[1].split("'")[0]);
-             //        }
-             //   }
-             //}
-             
-             
-             
+        good.addEventListener("click", function () {           
 
             //畫面的物流
             let shiper = [];
@@ -643,7 +590,8 @@
                 Description: document.getElementById("Description").value,
                 CategoryID: $("#category").children("option:selected").val(),
                 BodyPic: dataphoto,
-                BodyPicID: photoval,
+                Dataphotoindex: dataphotoindex,
+/*                BodyPicID: photoval,*/
                 ShiperID: shiper,
                 PaymentID: payment,
                 ProductID: $("#pid").val(),
@@ -666,6 +614,10 @@
             //    location.href = "/Seller/NewIndex"
             //}, 2000);
 
+        })
+
+        $("#cancle").click(function () {
+            location.href = "/Seller/NewIndex";
         })
     </script>
 

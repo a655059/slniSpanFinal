@@ -951,48 +951,28 @@ namespace prjiSpanFinal.Controllers
             }
 
             
-            if (jsonString.BodyPicID !=null)
+            if (jsonString.BodyPic !=null)
             {
                 var product = _db.ProductPics.Where(n => n.ProductId == jsonString.ProductID).Select(n => n).ToList();
 
-                for(int i=0;i< jsonString.BodyPicID.Count; i++)
+                for (int i = 0; i < jsonString.BodyPic.Count; i++)
                 {
-                    
-                    if (jsonString.BodyPicID[i] != 0)
+                    if(jsonString.Dataphotoindex[i] < product.Count)
                     {
-                        var pic=_db.ProductPics.Where(n => n.ProductPicId == jsonString.BodyPicID[i]).Select(n => n.Pic).FirstOrDefault();
-                        pic = jsonString.BodyPic[i];
+                        product[jsonString.Dataphotoindex[i]].Pic = jsonString.BodyPic[i];
                     }
                     else
                     {
-                        ProductPic Pic = new ProductPic()
+                        ProductPic asd = new ProductPic()
                         {
-                            ProductId = Convert.ToInt32(jsonString.ProductID),
-                            Pic = jsonString.BodyPic[i]
+                            Pic = jsonString.BodyPic[i],
+                            ProductId = jsonString.ProductID,
                         };
-                        _db.ProductPics.Add(Pic);
-                    }
+                        _db.ProductPics.Add(asd);
+                    }                    
                 }
-                _db.SaveChanges();
-
-                //for (int i = 0; i< jsonString.BodyPic.Count; i++)
-                //{
-                //    if (i < product.Count())
-                //    {
-                //        product[i].Pic = jsonString.BodyPic[i];
-                //    }
-                //    else
-                //    {
-                //        ProductPic Pic = new ProductPic()
-                //        {
-                //            ProductId = Convert.ToInt32(jsonString.ProductID),
-                //            Pic = jsonString.BodyPic[i]
-                //        };
-                //        _db.ProductPics.Add(Pic);
-                //    }
-                //}
-
             }
+            _db.SaveChanges();
         }
 
 
@@ -1127,23 +1107,21 @@ namespace prjiSpanFinal.Controllers
             int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
 
 
-            var E = _db.SubOfficialEventLists.Select(i => i).ToList();  //所有子活動
-            var P = _db.Products.Where(n=>n.MemberId== memId).Select(i => i).ToList();     //賣家所有商品
-           
+            var E = _db.SubOfficialEventLists.Select(i => i).ToList();  //所有子活動    
+            var OEtoPro = _db.SubOfficialEventToProducts.Select(i => i.ProductId).ToList();
+            var PID= _db.Products.Where(n => n.MemberId == memId&& !OEtoPro.Contains(n.ProductId)).Select(i => i).ToList();//賣家所有商品(不包含參加商品)
             var OE = _db.OfficialEventLists.Select(i => i).ToList(); //所有活動
+            
             List<CSubEventToProductViewModel> list = new();
             foreach (var e in E)
             {
-                //var A = from a in OE
-                //        where a.OfficialEventListId == e.OfficialEventListId
-                //        select a;
                 var B = E.Where(n => n.OfficialEventListId == e.OfficialEventListId).Select(n => n).ToList();
                 CSubEventToProductViewModel C = new()
                 {
-                    Products = P,
+                    Products = PID,
                     SubOfficialEventID = e,
                     OfficialEventList = OE,
-                    SubOfficialEventList=B
+                    SubOfficialEventList=B,
                 };
                 list.Add(C);
             }
@@ -1178,41 +1156,18 @@ namespace prjiSpanFinal.Controllers
             string logindata = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int memId = JsonSerializer.Deserialize<MemberAccount>(logindata).MemberId; //字串轉物件 MemberAccount
 
-            //所有商品ID
-            var productID = _db.Products.Where(n => n.MemberId == memId).Select(n => n.ProductId).ToList();
-            //參加商品的ID
-            var toproduct = _db.SubOfficialEventToProducts.Where(n => productID.Contains(n.ProductId)).Select(n => n.ProductId).ToList();
-            //參加商品的名稱
-            var productName = _db.Products.Where(n => toproduct.Contains(n.ProductId)).Select(n => n.ProductName).ToList();
-            //參加的活動ID
-            var toeventID= _db.SubOfficialEventToProducts.Where(n => productID.Contains(n.ProductId)).Select(n => n.SubOfficialEventListId).ToList();
-            //審核ID
-            var toverifyID= _db.SubOfficialEventToProducts.Where(n => productID.Contains(n.ProductId)).Select(n => n.VerifyId).ToList();
-            //子活動ID
-            var SubOfficialEventToProductsID = _db.SubOfficialEventToProducts.Where(n => productID.Contains(n.ProductId)).Select(n => n.SubOfficialEventToProductId).ToList();
-            
-            List<string> 審核結果 = new List<string>();
-            List<string> evename = new List<string>();
+            //多對一有導覽屬性，一對多沒有
 
-            for (int i =0;i< toeventID.Count; i++)
+
+             List<CSubEventToProductViewModel> cSubEventToProductViewModel = _db.SubOfficialEventToProducts.Where(i => i.Product.MemberId == memId).Select(i => new CSubEventToProductViewModel
             {
-                var toeventName = _db.SubOfficialEventLists.Where(n =>n.SubOfficialEventListId== toeventID[i]).Select(n => n.SubEventName).FirstOrDefault();
-                evename.Add(toeventName);
-            }
+                審核結果 = i.Verify.VerifyName,
+                productname = i.Product.ProductName,
+                evename = i.SubOfficialEventList.OfficialEventList.EventName,
+                subevename = i.SubOfficialEventList.SubEventName,
+                SubOfficialEventToProductsID = i.SubOfficialEventToProductId,
+            }).ToList();
             
-            for(int i=0; i<toverifyID.Count; i++)
-            {
-                var toverifyName = _db.Verifies.Where(n =>n.VerifyId== toverifyID[i]).Select(n => n.VerifyName).FirstOrDefault();
-                審核結果.Add(toverifyName);
-            }
-            
-            CSubEventToProductViewModel cSubEventToProductViewModel = new CSubEventToProductViewModel()
-            {
-                productname = productName,
-                審核結果 = 審核結果,
-                evename= evename,
-                SubOfficialEventToProductsID= SubOfficialEventToProductsID,
-            };
             return View(cSubEventToProductViewModel);
         }
 

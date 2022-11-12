@@ -69,11 +69,9 @@
             <div class="my-3 mx-2 內文優惠劵">商品活動</div>
             <div class="mx-2">
                 <p>
-                    1.曝光資源: 蝦爆專屬活動頁；曝光時間12/12 12:12 - 12/12 23:12 <br />
-                    2.提報時間為即日起至2022/12/12 23:12<br />
-                    3.審核成功後將於活動時間由系統變價 <br />
-                    4.價格必須為平台/市場優勢價 <br />
-                    5.提品方向(不符合主題者不會入選)：一旦入選，不另行通知，也無法取消活動資格，請提報商品時務必注意商品活動價
+                    1.審核成功後將於活動時間由系統變價。 <br />
+                    2.價格必須為平台/市場優勢價。<br />
+                    3.提品方向(不符合主題者不會入選)：一旦入選，不另行通知，也無法取消活動資格，請提報商品時務必注意商品活動價。
                 </p>
             </div>
             <div class="d-flex justify-content-start">
@@ -94,32 +92,36 @@
                     @{
                         foreach (var ev in Model.FirstOrDefault().OfficialEventList)
                         {
-                            <tr>
-                                <td class="col-3">
-                                    @{
-                                        var base64Image = Convert.ToBase64String(ev.EventPic);
-                                        var source = String.Format("data:image/png;base64,{0}", base64Image);
-                                    }
-                                    <img src="@source" alt="..." height="100" width="300" />
-                                </td>
-                                <td class="置中 col-6">
-                                    @ev.EventName
-                                    @{
-                                        if (ev.StartDate < DateTime.Now && ev.EndDate > DateTime.Now)
-                                        {
-                                            int Days = (ev.EndDate - DateTime.Now).Days;
-                                            int Hrs = (ev.EndDate - DateTime.Now).Hours - Days;
-                                            <p>報名:<span style="color:red;"> @ev.SubOfficialEventLists.Count </span>個子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
+                            if (ev.EventName != "沒有活動")
+                            {
+                                <tr>
+                                    <td class="col-3">
+                                        @{
+                                            var base64Image = Convert.ToBase64String(ev.EventPic);
+                                            var source = String.Format("data:image/png;base64,{0}", base64Image);
                                         }
-                                    }
-                                    <p>@ev.StartDate 到 @ev.EndDate</p>
-                                </td>
-                                <td class="置中 col-3">
-                                    <div>
-                                        <button class="btn btn-warning float-end w-50 建立按鈕 btnjoin" data-bs-toggle="modal" data-bs-target="#exampleModal" id="@ev.OfficialEventListId">參加活動</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                        <img src="@source" alt="..." height="100" width="300" />
+                                    </td>
+                                    <td class="置中 col-6">
+                                        @ev.EventName
+                                        @{
+                                            if (ev.StartDate < DateTime.Now && ev.EndDate > DateTime.Now)
+                                            {
+                                                int Days = (ev.EndDate - DateTime.Now).Days;
+                                                int Hrs = (ev.EndDate - DateTime.Now).Hours - Days;
+                                                <p>報名:<span style="color:red;"> @ev.SubOfficialEventLists.Count </span>個子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
+                                            }
+                                        }
+                                        <p>@ev.StartDate 到 @ev.EndDate</p>
+                                    </td>
+                                    <td class="置中 col-3">
+                                        <div>
+                                            <button class="btn btn-warning float-end w-50 建立按鈕 btnjoin" data-bs-toggle="modal" data-bs-target="#exampleModal" id="@ev.OfficialEventListId">參加活動</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
                         }
                     }
                 </table>
