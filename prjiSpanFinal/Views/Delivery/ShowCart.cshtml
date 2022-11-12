@@ -70,9 +70,17 @@
                                             {
                                                 <div class="productStyle text-black-50">@i.productDetail.Style</div>
                                             }
+                                            if (i.eventDiscount > 0)
+                                            {
+                                                string eventDiscountPrice = Math.Ceiling(i.productDetail.UnitPrice * i.eventDiscount).ToString("0");
+                                                <div class="text-dark opacity-50 text-decoration-line-through">$<span class="originPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
+                                                <div class="text-danger">$<span class="itemPrice">@eventDiscountPrice</span></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
+                                            }
                                         }
-
-                                        <div class="text-danger">$<span class="itemPrice">@i.productDetail.UnitPrice.ToString("0")</span></div>
                                     </div>
                                 </div>
                                 <div class="choseCount d-flex justify-content-end align-items-center w-25">

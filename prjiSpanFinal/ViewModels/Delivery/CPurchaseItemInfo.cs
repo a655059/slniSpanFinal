@@ -16,5 +16,6 @@ namespace prjiSpanFinal.ViewModels.Delivery
         public int sellerID { get; set; }
         public int purchaseCount { get; set; }
         public string productStyle { get; set; }
+        public decimal eventDiscount { get; set; }
     }
 }

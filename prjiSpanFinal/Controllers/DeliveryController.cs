@@ -188,6 +188,12 @@ namespace prjiSpanFinal.Controllers
                     });
                     var shippers = dbContext.Shippers.Select(i => i).ToList();
                     var shipperToSellers = dbContext.ShipperToSellers.Select(i => i).ToList();
+                    var events = dbContext.SubOfficialEventToProducts.Where(i => DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => new
+                    {
+                        subOfficialEventToProduct = i,
+                        subOfficialEventList = i.SubOfficialEventList,
+                        officialEventList = i.SubOfficialEventList.OfficialEventList,
+                    }).ToList();
                     foreach (var info in allInfo)
                     {
                         int sellerID = info.sellerID;
@@ -203,6 +209,11 @@ namespace prjiSpanFinal.Controllers
                             orderDetail = orderDetail,
                             productDetail = productDetail
                         };
+                        float eventDiscount = events.Where(i => i.subOfficialEventToProduct.ProductId == cDeliveryOrder.product.ProductId).Select(i => i.subOfficialEventList.Discount).FirstOrDefault();
+                        if (eventDiscount > 0)
+                        {
+                            cDeliveryOrder.eventDiscount = Convert.ToDecimal(eventDiscount);
+                        }
                         cDeliveryOrderList.Add(cDeliveryOrder);
                     }
                     List<int> sellerIDList = new List<int>();
@@ -316,6 +327,7 @@ namespace prjiSpanFinal.Controllers
                         unitPrice = i.UnitPrice,
                         seller = i.Product.Member,
                         productStyle = i.Style,
+                        productID = i.ProductId
                     }).FirstOrDefault();
                     CPurchaseItemInfo cPurchaseItemInfo = new CPurchaseItemInfo
                     {
@@ -328,6 +340,11 @@ namespace prjiSpanFinal.Controllers
                         purchaseCount = (int)purchaseCount,
                         productStyle = productDetail.productStyle
                     };
+                    var eventDiscount = dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == productDetail.productID && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault();
+                    if (eventDiscount > 0)
+                    {
+                        cPurchaseItemInfo.eventDiscount = Convert.ToDecimal(eventDiscount);
+                    }
                     List<CPurchaseItemInfo> purchaseItemInfo = new List<CPurchaseItemInfo>();
                     purchaseItemInfo.Add(cPurchaseItemInfo);
 
@@ -374,6 +391,7 @@ namespace prjiSpanFinal.Controllers
                     foreach (var a in purchaseItems)
                     {
                         byte[] productDetailPic = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.Pic).FirstOrDefault();
+                        int productID = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.ProductId).FirstOrDefault();
                         CPurchaseItemInfo cPurchaseItemInfo = new CPurchaseItemInfo
                         {
                             orderDetailID = a.orderDetailID,
@@ -385,6 +403,11 @@ namespace prjiSpanFinal.Controllers
                             purchaseCount = a.purchaseCount,
                             productStyle = a.productStyle,
                         };
+                        var eventDiscount = dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == productID && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault();
+                        if (eventDiscount > 0)
+                        {
+                            cPurchaseItemInfo.eventDiscount = Convert.ToDecimal(eventDiscount);
+                        }
                         cPurchaseItemList.Add(cPurchaseItemInfo);
                     }
                     List<int> sellerIDList = new List<int>();

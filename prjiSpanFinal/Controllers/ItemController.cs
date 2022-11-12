@@ -81,7 +81,7 @@ namespace prjiSpanFinal.Controllers
                 var sellerCoupons = dbContext.Coupons.Where(i => i.MemberId == product.seller.MemberId && (DateTime.Now >= i.StartDate || DateTime.Now >= i.ReceiveStartDate) && DateTime.Now < i.ExpiredDate).ToList();
                 var sellerCouponIDs = sellerCoupons.Select(i => i.CouponId).ToList();
                 var ReportType = dbContext.ReportTypes.Select(i => i).ToList();
-                
+                var activeDiscount = dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == product.product.ProductId && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault();
                 CItemIndexViewModel itemIndex = new();
                 itemIndex.product = product.product;
                 itemIndex.bigType = product.bigType;
@@ -101,6 +101,10 @@ namespace prjiSpanFinal.Controllers
                 itemIndex.avgSellerCommentStar = avgSellerCommentStar;
                 itemIndex.sellerCommentCount = sellerCommentCount;
                 itemIndex.sellerCoupons = sellerCoupons;
+                if (activeDiscount > 0)
+                {
+                    itemIndex.activeDiscount = Convert.ToDecimal(activeDiscount);
+                }
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
@@ -511,7 +515,7 @@ namespace prjiSpanFinal.Controllers
                             string topMember2 = bidding2.FirstOrDefault().member.MemberAcc;
 
                             await _hubContext.Clients.All.SendAsync("UpdateAutoBidding", bidding2.FirstOrDefault().biddingDetail.Price.ToString(), biddingCount2.ToString(), topMember2);
-                            Thread.Sleep(1000);
+                            Thread.Sleep(500);
                         }
                     }
                     var newBiddingDetail = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i).ToList();
@@ -520,8 +524,6 @@ namespace prjiSpanFinal.Controllers
                         isEnd = false;
                     }
                 }
-
-
                 var bidding = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => new
                 {
                     biddingDetail = i,
@@ -529,9 +531,7 @@ namespace prjiSpanFinal.Controllers
                 });
                 int biddingCount = bidding.Count();
                 string topMember = bidding.FirstOrDefault().member.MemberAcc;
-
                 List<string> result = new List<string> { bidding.FirstOrDefault().biddingDetail.Price.ToString(), biddingCount.ToString(), topMember };
-
                 return Json(result);
             }
             else
