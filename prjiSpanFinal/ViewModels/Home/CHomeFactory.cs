@@ -123,7 +123,7 @@ namespace prjiSpanFinal.ViewModels.Home
                     PriceList.Add(Price.Max());
                     PriceList.Add(Price.Min());
                 }
-                int Stock = Detail.Select(p => p.Quantity).Sum(q => q);
+                int Stock = db.ProductDetails.Where(p => p.ProductId == prod.ProductId).Select(p => p.Quantity).Sum(q => q);
 
                 obj.product = prod;
                 obj.price = PriceList;
@@ -182,6 +182,8 @@ namespace prjiSpanFinal.ViewModels.Home
                 {
                     obj.effects = new List<int>();
                 }
+                obj.slogan = db.AdtoProducts.Where(p => p.ProductId == prod.ProductId && p.IsSubActive).Where(p => p.AdId == 7 || p.AdId == 8 || p.AdId == 9).Select(p => p.AdSlogan).FirstOrDefault();
+                
                 res.Add(obj);
             }
             return res;

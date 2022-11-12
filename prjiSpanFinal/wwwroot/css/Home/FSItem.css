@@ -53,6 +53,7 @@
     height: 18px;
     border-radius: 25px;
     background: #D0D0D0;
+    /*overflow: hidden;*/
 }
 
 .FS-progress {

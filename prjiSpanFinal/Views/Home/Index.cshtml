@@ -283,7 +283,10 @@
         <div class="HP-Header  d-flex justify-content-between">
             <div class="d-flex flex-nowrap align-items-center">
                 <span class="HP-Header-Title">限時<i class="fa-solid fa-bolt"></i>搶購</span>
+                @if (Model.cShowFS.Any())
+                {
                 <span id="CountDown"></span>
+                }
             </div>
             <div>
                 @{ 
@@ -320,7 +323,6 @@
                 </div>
             </div>
             <div>
-                @*123*@
             </div>
         </div>
         <div class="HP-Item">
@@ -410,6 +412,7 @@
                 },
             });
 
+            let FSCount = @Model.cShowBB.Count;
             $(document).ready(setTime);
 
             let nowTime =[[0, 11, "上午"],[12, 23, "下午"]];
@@ -426,6 +429,7 @@
             let TimeLimit = [[11, 59, 59], [23, 59, 59]];
             let remaining = [];
             function getCountDownTime() {
+                if (FSCount > 0) {
                 setTime();
                 let today = new Date();
                 if (Hour == "上午") {
@@ -437,7 +441,8 @@
                 let hh = remaining[0];
                 let mm = remaining[1];
                 let ss = remaining[2];
-                $("#CountDown").html(hh + ":" + mm + ":" + ss);
+                    $("#CountDown").html(hh + ":" + mm + ":" + ss);
+                }
             }
             function toFixedTimeFormat(time) {
                 if (time < 10) {

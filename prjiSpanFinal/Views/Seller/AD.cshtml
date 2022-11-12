@@ -174,39 +174,7 @@
                 </tr>
             </thead>
             <tbody id="SubList">
-                @*<tr class="Sub-item">
-                        <td class="item-ckbox">
-                            <div>
-                                <input class="form-check-input checkboxitem" type="checkbox" value="" aria-label="...">
-                            </div>
-                        </td>
-                        <td class="item-num">1</td>
-                        <td class="item-effect">標題高光</td>
-
-                        <td class="item-prod">12 蘋果</td>
-                        <td class="item-date">
-                            2022-10-27
-                            14:07:34
-                            <br />
-                            ~
-                            <br />
-                            2022-10-27
-                            14:07:34
-                        </td>
-
-                        <td class="item-date">
-                            <label>12天 14:07:34</label>
-                        </td>
-
-                        <td class="item-status status-stop">已停止</td>
-                        <td class="item-times">2</td>
-                        <td class="item-times">2</td>
-                        <td class="item-action">
-                            <button class="btn btn-danger" disabled>
-                                中斷訂閱
-                            </button>
-                        </td>
-                    </tr>*@
+                
             </tbody>
         </table>
         <nav aria-label="SubList Pagination">
@@ -249,6 +217,8 @@
         let ADarea = $("#ADeffectArea");
         let isItemSelect = false;
         let isOKtoSub = false;
+        let isOKforEvt3 = false;
+        let ADtext = "";
         //========================================== LIST & FILTER
         let SubList = $("#SubList");
         let CheckListItemNum = [];
@@ -290,6 +260,12 @@
             itemNowpage = 1;
             getItem();
         })
+
+        $(document).load(function () {
+            
+        });
+        console.log($(".item-total-date"))
+        console.log($(".item-remaining-date"))
 
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
@@ -513,24 +489,57 @@
                 })
             }
         })
+
+        $("#Result-CheckedeffectList").on("input", ".Result-Effect3Text", function () {
+            ADtext = $(".Result-Effect3Text").val();
+        })
+
         $("#Result-btn").click(function (evt) {
+            if (!eid.includes(7) && !eid.includes(8) && !eid.includes(9)) {
+                isOKforEvt3 = true;
+            }
+            else {
+                if (ADtext == "") {
+                    isOKforEvt3 = false;
+                }
+                else {
+                    isOKforEvt3 = true;
+                }
+            }
+            if (isOKforEvt3) {
+                toAskaddSub();
+            }
+            else {
+                toWarningaddsubnotext();
+            }
+        })
+
+        function toWarningaddsubnotext() {
+            Swal.fire({
+                title: '廣告內容為空',
+                text: '請輸入登上首頁的廣宣內容',
+                icon: 'warning'
+            })
+        }
+
+        function toAskaddSub() {
             Swal.fire({
                 title: '確認訂閱？',
-                text:'按下同時即開啟訂閱與扣款',
+                text: '按下同時即開啟訂閱與扣款',
                 icon: 'question',
                 showDenyButton: true,
                 confirmButtonText: '確認',
-                denyButtonText: `取消`,
+                denyButtonText: '取消',
             }).then((result) => {
                 if (result.isConfirmed) {
                     addSub();
                 }
             })
+        }
 
-        })
         function addSub() {
-            if (isItemSelect || isOKtoSub) {
-                $.post("saveADSubs", { itemID: itemID, ADIDs: eid }, function (data) {
+            if (isItemSelect && isOKtoSub) {
+                $.post("saveADSubs", { itemID: itemID, ADIDs: eid, ADtext: ADtext }, function (data) {
                     if (data[0] == 3) {
                         Swal.fire({
                             icon: 'warning',
@@ -633,9 +642,12 @@
                     res += data[i].typeName + " (" + data[i].adPeriod + " 日) ";
                     res += `</div>
                                 <div class="text-end Result-Checkedeffect-Price">`;
-                    res += "$ " + data[i].adFee * data[i].adPeriod + ` 蝦蝦幣`;
-                    res += `</div>
-                            </div>`;
+                    res += "$ " + data[i].adFee+` 蝦蝦幣`;
+                    res += `</div >`;
+                    if (data[i].adid == 7 || data[i].adid == 8 || data[i].adid == 9) {
+                        res += `<div><input class="Result-Effect3Text" placeholder="請輸入廣告詞" maxlength="16" type="text"></div>`;
+                    }
+                    res += `</div>`;
                     tottalprice += data[i].totalCost;
                 }
 
@@ -699,13 +711,12 @@
                     res += `<td class="item-effect">${data[i].adTypeName}</td>`;
 
                     res += ` <td class="item-prod">${data[i].prod.productId} - ${data[i].prod.productName}</td>`;
-                    res += `<td class="item-date">
-                                ${data[i].startdate}
-                        <br />
+                    res += `<td class="item-date item-total-date">
                         ${data[i].enddate}
                     </td>`;
-
-                    res += ` <td class="item-date">
+                    //${data[i].startdate}
+                    //    <br />
+                    res += ` <td class="item-date item-remaining-date">
                                 <label>${data[i].remaining}</label>
                             </td>`;
                     if (data[i].isSubActive) {

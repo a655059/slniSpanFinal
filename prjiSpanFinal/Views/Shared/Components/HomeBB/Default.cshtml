@@ -54,8 +54,11 @@
                                     <div class="BBitemTitleBox">
                                         <div class="BBitemTitle @sub1">@item.product.ProductName</div>
                                     </div>
-                                    <div class="BBitemDescription">
-                                        <div></div>
+                                    <div class="BBitemDescription @sub1">
+                                        @{
+                                            if(item.slogan!="")
+                                                @item.slogan
+                                        }
                                     </div>
                                 </div>
                             </div>

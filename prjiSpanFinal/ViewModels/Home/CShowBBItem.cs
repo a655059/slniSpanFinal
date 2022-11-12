@@ -10,6 +10,7 @@ namespace prjiSpanFinal.ViewModels.Home
     {
         public Product product { get; set; }
         public byte[] pic { get; set; }
+        public string slogan { get; set; }
         public List<int> effects { get; set; }
     }
 }

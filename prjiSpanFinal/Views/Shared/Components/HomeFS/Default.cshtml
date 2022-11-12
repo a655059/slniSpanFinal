@@ -38,17 +38,34 @@
                                 <div class="FSPriceDiscount">$@decimal.Round(item.price[0])</div>
                                 <div class="FSitemPrice">$@discountPrice</div>
 
-                                    <div class="FS-container">
-                                        @{
-                                            string percent = item.Percentage + "%";
-                                        }
+                                <div class="FS-container">
+                                    @{
+                                        string percent = item.Percentage + "%";
+                                    }
+
+                                    @if (item.Percentage == 100)
+                                    {
+                                        <div class="FS-progress" style="width:@percent;border-radius:25px;"></div>
+                                        <div class="FS-soldbar">已售完</div>
+                                    }
+                                    else if (item.Percentage >= 80)
+                                    {
+                                        <div class="FS-progress" style="width:@percent;border-radius:25px;"></div>
+                                        <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>
+                                        <div class="FS-soldbar">即將完售</div>
+                                    }
+                                    else if (item.Percentage >= 50)
+                                    {
                                         <div class="FS-progress" style="width:@percent"></div>
-                                        @if (item.Percentage > 50)
-                                        {
-                                            <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>
-                                        }
+                                        <div class="FS-onFireBOX"><img class="FS-onFire" src="~/img/Homepage/SellsOnFire.png" /></div>
                                         <div class="FS-soldbar">售出 @item.sale</div>
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="FS-progress" style="width:@percent"></div>
+                                        <div class="FS-soldbar">售出 @item.sale</div>
+                                    }
+                                </div>
                                 </div>
                             </div>
                     </div>
