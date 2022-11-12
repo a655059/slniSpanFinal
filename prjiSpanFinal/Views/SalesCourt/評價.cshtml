@@ -8,6 +8,24 @@
     var AllCounts = Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount;
     var followcount = dbContext.Follows.Where(a => a.FollowedMemId == Model.Memberid).Count();
 
+
+    var buyer = dbContext.CommentForCustomers.Where(a => a.Order.MemberId == Model.Memberid).ToList();
+    var weekbestcount = buyer.Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 7).Count();
+    var monthbestcount = buyer.Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 31).Count();
+    var halfyearbestcount = buyer.Where(a => a.CommentStar == 5 && (DateTime.Now - a.CommentTime).Days <= 186).Count();
+    var allbestcount = buyer.Where(a => a.CommentStar == 5).Count();
+
+    var weekmediumcount = buyer.Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 7).Count();
+    var monthmediumcount = buyer.Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 31).Count();
+    var halfyearmediumcount = buyer.Where(a => (a.CommentStar == 3 || a.CommentStar == 4) && (DateTime.Now - a.CommentTime).Days <= 186).Count();
+    var allmediumcount = buyer.Where(a => (a.CommentStar == 3 || a.CommentStar == 4)).Count();
+
+    var weekworstcount = buyer.Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 7).Count();
+    var monthworstcount = buyer.Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 31).Count();
+    var halfyearworstcount = buyer.Where(a => (a.CommentStar == 1 || a.CommentStar == 2) && (DateTime.Now - a.CommentTime).Days <= 186).Count();
+    var allworstcount = buyer.Where(a => (a.CommentStar == 1 || a.CommentStar == 2) ).Count();
+    //var bestweekcommentcount = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.MemberId == Model.Memberid && (DateTime.Now-a.Order.CommentForCustomers.FirstOrDefault().CommentTime) <= 7).
+
 }
 
 @section Styles{
@@ -112,6 +130,9 @@
             <div class="col-6">
                 <table class="table table-hover ">
                     <thead>
+                        <tr id="showbuysellboard">
+                            <td>買家對我的評價</td>
+                        </tr>
                         <tr>
                             <th scope="col"></th>
                             <th scope="col">1週之內</th>
@@ -190,10 +211,10 @@
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#commentlist">對賣場商品評價</a>
+                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#commentlist">買家對我的評價</a>
                 </li>
                 <li class="nav-item">
-                    <a id="buyercomment" class="nav-link" href="#commentlist">對買家的評價</a>
+                    <a id="buyercomment" class="nav-link" href="#commentlist">賣家對我的評價</a>
                 </li>
 
             </ul>
@@ -269,18 +290,18 @@
                 let card = "";
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
-                                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                                            <div>
-                                                <img src="~/img/greencircle.png" width="20" />
-                                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
-                                            </div>
-                                            <div class="dashed-divider"></div>
-                                            <div class="ps-2" style="font-size:1.5em">
-                                            <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
-                                            </div>
+                            <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
+                            <div>
+                                <img src="~/img/greencircle.png" width="20" />
+                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                            </div>
+                            <div class="dashed-divider"></div>
+                            <div class="ps-2" style="font-size:1.5em">
+                            <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
+                            </div>
 
-                                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                                            </div>`
+                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
+                            </div>`
                 }
                 return card;
             }
@@ -334,10 +355,10 @@
                     }
 
                 })
-                
+
             }
 
-           
+
 
             function PageNumFill(c) {
                 pagecount = Math.ceil(c / eachpage);
@@ -369,12 +390,84 @@
             })
             $("#sellercomment").click(function () {
                 //buyerorseller = 1;
+                $("#showbuysellboard").html(" ");
+                $("#showbuysellboard").append(`<td>買家對我的評價</td>`);
+                 $("#bestcomment").html("");
+                $("#bestcomment").append(` <th scope="row"><i class="fa-regular fa-circle text-success"></i> 優良評價</th>
+                                        <td>@Model.BestCommentCountMethod.WeekCount</td>
+                                        <td>@Model.BestCommentCountMethod.MonthCount</td>
+                                        <td>@Model.BestCommentCountMethod.HalfYearCount</td>
+                                        <td>@Model.BestCommentCountMethod.AllCount</td>`);
+                $("#mediumcomment").html("");
+                $("#mediumcomment").append(`<th scope="row"><i class="fa-solid fa-square text-primary"></i>普通評價</th>
+                                        <td>@Model.MediumCommentCountMethod.WeekCount</td>
+                                        <td>@Model.MediumCommentCountMethod.MonthCount</td>
+                                        <td>@Model.MediumCommentCountMethod.HalfYearCount</td>
+                                        <td>@Model.MediumCommentCountMethod.AllCount</td>
+                                    `);
+                $("#worstcomment").html("");
+                $("#worstcomment").append(`<th scope="row"><i class="fa-solid fa-xmark text-danger"></i>差勁評價</th>
+                                        <td>@Model.WorstCommentCountMethod.WeekCount</td>
+                                        <td>@Model.WorstCommentCountMethod.MonthCount</td>
+                                        <td>@Model.WorstCommentCountMethod.HalfYearCount</td>
+                                        <td>@Model.WorstCommentCountMethod.AllCount</td>
+                                    `);
+                $("#commentcount").html("");
+                $("#commentcount").append(` <th scope="row">評價次數</th>
+                                    <td>@AllWeekCommentCount</td>
+                                    <td>@AllMonthCommentCount</td>
+                                    <td>@AllHalfYearCommentCount</td>
+                                    <td>@AllCounts</td>`);
+
+                $("#commentrecord1").html("");
+                $("#commentrecord2").html("");
+                $("#commentrecord3").html("");
+                $("#commentrecord4").html("");
+                $("#commentrecord1").append(`<a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @(Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount) )</a>`);
+                $("#commentrecord2").append(`<a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a>`);
+                $("#commentrecord3").append(`<a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a>`);
+                $("#commentrecord4").append(`<a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a>`);
+
             })
             $("#buyercomment").click(function () {
                 //buyerorseller = 2;
-                $.getJSON("/SalesCourt/GetcommentbuyerCount", { commentmemid: CommentId.value }, function (data) {
-                    console.log(data);
-                });
+                $("#showbuysellboard").html(" ");
+                $("#showbuysellboard").append(`<td>賣家對我的評價</td>`);
+                $("#bestcomment").html("");
+                $("#bestcomment").append(` <th scope="row"><i class="fa-regular fa-circle text-success"></i> 優良評價</th>
+                                        <td>@weekbestcount</td>
+                                        <td>@monthbestcount</td>
+                                        <td>@halfyearbestcount</td>
+                                        <td>@allbestcount</td>`);
+                $("#mediumcomment").html("");
+                $("#mediumcomment").append(`<th scope="row"><i class="fa-solid fa-square text-primary"></i>普通評價</th>
+                                        <td>@weekmediumcount</td>
+                                        <td>@monthmediumcount</td>
+                                        <td>@halfyearmediumcount</td>
+                                        <td>@allmediumcount</td>
+                                    `);
+                $("#worstcomment").html("");
+                $("#worstcomment").append(`<th scope="row"><i class="fa-solid fa-xmark text-danger"></i>差勁評價</th>
+                                        <td>@weekworstcount</td>
+                                        <td>@monthworstcount</td>
+                                        <td>@halfyearworstcount</td>
+                                        <td>@allworstcount</td>
+                                    `);
+                $("#commentcount").html("");
+                $("#commentcount").append(` <th scope="row">評價次數</th>
+                                    <td>@(weekbestcount + weekmediumcount + weekworstcount)</td>
+                                    <td>@(monthbestcount + monthmediumcount + monthworstcount)</td>
+                                    <td>@(halfyearbestcount + halfyearmediumcount + halfyearworstcount)</td>
+                                    <td>@(allbestcount + allmediumcount + allworstcount)</td>`);
+
+                $("#commentrecord1").html("");
+                $("#commentrecord2").html("");
+                $("#commentrecord3").html("");
+                $("#commentrecord4").html("");
+                $("#commentrecord1").append(`<a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @(allbestcount + allmediumcount + allworstcount) )</a>`);
+                $("#commentrecord2").append(`<a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @allbestcount )</a>`);
+                $("#commentrecord3").append(`<a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @allmediumcount )</a>`);
+                $("#commentrecord4").append(`<a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @allworstcount )</a>`);
             })
 
             $("#pagecountselect").change(function () {
