@@ -45,15 +45,36 @@
             </td>
             <td>
                 @Html.ActionLink("修改", "SmallTypeEdit", "newManagement",new {  id=item.SmallType.SmallTypeId },new { @class = "btn btn-warning" }) 
-                @Html.ActionLink("刪除", "SmallTypeDelete", "newManagement", new { id = item.SmallType.SmallTypeId }, new { @class = "Dele btn btn-danger" })
+                <a name="@item.SmallType.SmallTypeId" class="Dele btn btn-danger">刪除</a>    
             </td>
         </tr>
 }
     </tbody>
 </table>
-@Html.ActionLink("回到大分類列表","BigTypeList","newManagement",new{id=Model.First().SmallType.BigTypeId},new{@class="btn btn-danger mt-1",onclick= "return confirm(\"確定要將此類別刪除嗎 ? 內容商品將會移至未分類類別，請進入該分類進行修改\")" })
+@Html.ActionLink("回到大分類列表","BigTypeList","newManagement",new{id=Model.First().SmallType.BigTypeId},new{@class="btn btn-danger mt-1" })
 
 @section Scripts{ 
 <script>
+        let Dele = document.getElementsByClassName("Dele");
+        for (let dele of Dele){
+            dele.addEventListener("click",async function(){
+                Swal.fire({
+                title: '確定要刪除嗎??',
+                showCancelButton: true,
+                confirmButtonText: 'yes',
+                }).then(async function(result) {
+                    if (result.isConfirmed) {
+                    let e=dele.name;
+                    let data=await fetch("@Url.Content("~/newManagement/SmallTypeDelete")"+`?id=${e}`)
+                    let res=await data.text();
+                    if(res){
+                    dele.closest("tr").remove();
+                    Swal.fire('已刪除!', '', 'success')
+                    } 
+                 }
+              })
+            })
+        }
+  
 </script>
 }

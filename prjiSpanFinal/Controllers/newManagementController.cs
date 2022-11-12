@@ -311,7 +311,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult MemberUndo(int id)
         {
             var D = db.MemberAccounts.FirstOrDefault(d => d.MemberId == id);
-            if (D.MemStatusId == 5)
+            if (D.MemStatusId == 5||D.MemStatusId==4)
             {
                 D.MemStatusId = 2;
             }
@@ -1705,7 +1705,7 @@ namespace prjiSpanFinal.Controllers
                 var prods = db.Products.Where(i => i.SmallTypeId == o.SmallTypeId).ToList();
                 foreach (var prod in prods)
                 {
-                    prod.SmallTypeId = 294;
+                    prod.SmallTypeId = 299;
                 }
                 db.SmallTypes.Remove(o);
             }
@@ -1754,7 +1754,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult SmallTypeEdit(int id)
         {
-
             var ST = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == id);
             ViewBag.BigTypeName = db.BigTypes.FirstOrDefault(i => i.BigTypeId == ST.BigTypeId).BigTypeName;
             return View(ST);
@@ -1762,13 +1761,33 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult SmallTypeEdit(SmallType type)
         {
-
             var st = db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == type.SmallTypeId);
             st.SmallTypeName = type.SmallTypeName;
             st.BigTypeId = type.BigTypeId;
             db.SaveChanges();
-            return RedirectToAction("SmallTypeList");
+            return RedirectToAction("SmallTypeList", new {id=type.BigTypeId});
         }
+        //Todo:SmallTypeDelete
+        public IActionResult SmallTypeDelete(int id)
+        {
+            var st=db.SmallTypes.FirstOrDefault(i => i.SmallTypeId == id);
+            var prod = db.Products.Where(i => i.SmallTypeId == id);
+            foreach(var i in prod)
+            {
+                i.SmallTypeId = 299;
+            }
+            db.SmallTypes.Remove(st);
+            try
+            {
+                db.SaveChanges();
+                return Content("1");
+            }
+            catch(Exception)
+            {
+                return Content(null);
+            }
+        }
+
         #endregion
         #region WebAdRegion
         public IActionResult WebAdList()
