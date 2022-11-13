@@ -32,8 +32,11 @@
                     </span>
                     <input type="text" onkeypress="isNumberKey(event)" id="charge" />
                 </div>
-                <br />
-                <div class="btn btn-success" id="chargebtn" >儲值</div>
+                @*<br />
+                    <div class="btn btn-success" id="chargebtn" >儲值</div>*@
+                <div class="w-100 d-flex align-items-center justify-content-center" style="margin-top:30px;">
+                    <div id="payment-button"></div>
+                </div>
             </div>
 
             <nav>
@@ -113,8 +116,10 @@
         </div>
     </div>
 </div>
-                @section Scripts{
-                    <script>
+@section Scripts{
+    <script src="https://www.paypal.com/sdk/js?client-id=ASpZAGWEsFSnxRB-baOFXUaa_sjr30qqqBoAlJxzyebtZZkqscnnmRW97DlgQuZSAltULhmXVbpg2Bat&currency=TWD&components=buttons&disable-funding=credit,card"></script>
+
+    <script>
                         let currentFilter = 0;
                         let nowpages = 1;
                         const charge = $("#charge")
@@ -122,6 +127,66 @@
                         const pane = $(".tab-pane");
 
                         RefreshRecord();
+
+
+                          // Render the PayPal button into #paypal-button-container
+                            paypal.Buttons({
+                                // Set up the transaction
+                                style: {
+                                    layout: 'vertical',
+                                    color: 'gold',
+                                    shape: 'pill',
+                                    label: 'paypal',
+                                    tagline: 'false',
+
+                                },
+                                createOrder: function (data, actions) {
+                                    return actions.order.create({
+                                        purchase_units: [{
+                                            amount: {
+                                                value: charge.val(),
+                                                currency_code: 'TWD',
+                                                breakdown: { item_total: { value: charge.val(), currency_code: 'TWD' } }
+                                            }, items: [{
+                                                name: '蝦蝦幣儲值',
+                                                unit_amount: {
+                                                    value: charge.val(),
+                                                    currency_code: 'TWD' ,
+                                                },
+                                                quantity:'1',
+                                            }]
+
+                                        }]
+                                    });
+                                },
+                                onApprove: function (data, actions) {
+                                    return actions.order.capture().then(function (orderData) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: '儲值成功',
+                                            text: '已存入 ' + charge.val()+' 蝦蝦幣',
+                                        }).then(function () {
+                                            $.getJSON('/Member/SetBalanceRecordToSession', { Balance: charge.val() });
+                                            window.location.href = '@Url.Action("IsExistBalanceRecordSession", "Member")';
+                                        })
+                                    });
+                                },
+                                //付款取消後重導向
+                                onCancel: function (data) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: '交易取消',
+                                        text: '已中止交易',
+                                    })
+                                },
+                                onError: function (err) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: '交易取消',
+                                            text: '欄位不可為空',
+                                        })
+                                }
+                            }).render('#payment-button');
 
                         $("#chargebtn").click(function () {
                             if (parseInt(charge.val()) > 0) {
@@ -238,6 +303,6 @@
                         $("#BalanceDemo2").click(function () {
                             location.href = '@Url.Content("~/Seller/AD")';
                         })
-                    </script>
+    </script>
 
-                }
+}
