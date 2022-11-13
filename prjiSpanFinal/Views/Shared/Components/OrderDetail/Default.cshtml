@@ -47,7 +47,7 @@
                         <div class="track">
                             <div class="step @pay"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立<br />@(Model.OrderDatetime < new DateTime(2000, 12, 30) ? "等待中" : Model.OrderDatetime)</span> </div>
                             <div class="step @ship"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">完成付款<br />@(Model.PaymentDate < new DateTime(2000, 12, 30) ? "等待中" : Model.PaymentDate)</span> </div>
-                            <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="odshippingdemopro text">已出貨<br />@(Model.ShippingDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ShippingDate)</span> </div>
+                            <div class="odshippingdemoact step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="odshippingdemopro text">已出貨<br />@(Model.ShippingDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ShippingDate)</span> </div>
                             <div class="step @arrived"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已領收<br />@(Model.ReceiveDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ReceiveDate)</span> </div>
                         </div>
 

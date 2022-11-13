@@ -43,6 +43,7 @@
                     thisicon.parent().find(".fa-circle").eq(2).addClass("active");
                 }
                 if (data.shippingDate != undefined) {
+                    $(".odshippingdemoact").removeClass("active").addClass("active");
                     $(".odshippingdemopro").html(`已出貨<br />${datetimetostring((new Date(data.shippingDate)))}`);
                 }
                 
