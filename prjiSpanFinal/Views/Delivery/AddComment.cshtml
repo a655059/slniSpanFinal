@@ -203,8 +203,16 @@
                             const count = @Model.cAddComments.Count;
                             console.log(count);
                             if ($(".submit:disabled").length >= count) {
-                                Swal.fire(`為  ${productName}  新增評論成功，已無商品需要評論`);
-                                window.location.href = "@Url.Content("~/Member/Order")";
+                                Swal.fire({
+                                    title: `為  ${productName}  新增評論成功，已無商品需要評論`,
+                                    showDenyButton: false,
+                                    showCancelButton: false,
+                                    confirmButtonText: "回會員中心"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = "@Url.Content("~/Member/Order")";
+                                    }
+                                });
                             }
                             else {
                                 Swal.fire(`為  ${productName}  新增評論成功，繼續下一筆評論`);
@@ -221,7 +229,7 @@
                     $(this).closest(".orderDetailLayout").find(".previewCommentPhoto").empty();
                     $(this).closest(".orderDetailLayout").find("textarea").val("");
                     $(this).closest(".orderDetailLayout").find(".commentResult").html("");
-                    
+
                 });
 
                 $(".commentPhoto").change(function () {
