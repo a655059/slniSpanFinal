@@ -163,7 +163,7 @@
                         if (Model.activeDiscount > 0)
                         {
                             <div>
-                                <div class="ms-3 fs-6 text-dark opacity-50" style="text-decoration:line-through">@originPrice</div>
+                                <div class="originPrice ms-3 fs-6 text-dark opacity-50" style="text-decoration:line-through">@originPrice</div>
                                 <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                             </div>
                         }
@@ -202,22 +202,32 @@
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
                                 int quantity = i.Quantity;
-                                <div class="ms-1 mb-1">
-                                    @{
-                                        if (i.Style == "樣式一")
-                                        {
-                                            <input type="radio" class="btn-check d-none" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID" checked>
-                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1 d-none" for="@labelId">@style</label>
-                                        }
-                                        else
-                                        {
-                                            <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
-                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
-                                        }
-                                    }
-                                    <div class="d-none price">@unitPrice</div>
-                                    <img class="d-none itemStyleImg" src="@imgSrc2" />
-                                </div>
+                                                <div class="ms-1 mb-1">
+                                                    @{
+                                                        if (i.Style == "樣式一")
+                                                        {
+                                                            <input type="radio" class="btn-check d-none" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID" checked>
+                                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1 d-none" for="@labelId">@style</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                                        }
+                                                        if (Model.activeDiscount > 0)
+                                                        {
+                                                            string discountPrice = Math.Ceiling(i.UnitPrice * Model.activeDiscount).ToString("0");
+                                                            <div class="d-none origin">@unitPrice</div>
+                                                            <div class="d-none price">@discountPrice</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="d-none price">@unitPrice</div>
+                                                        }
+                                                    }
+
+                                                    <img class="d-none itemStyleImg" src="@imgSrc2" />
+                                                </div>
                             }
                         }
                     </div>
@@ -766,6 +776,10 @@
             }
         });
         $(".purchaseStyle").click(async function () {
+            if ($(".originPrice").length > 0) {
+                let originPrice = `$${$(this).siblings(".origin").html()}`;
+                $(".originPrice").html(originPrice);
+            }
             let price = $(this).siblings(".price").html();
             $(".itemPrice").html(`$${price}`);
             $(this).removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-danger").closest("div").siblings().children("label").removeClass("btn-outline-secondary").removeClass("btn-danger").addClass("btn-outline-secondary");

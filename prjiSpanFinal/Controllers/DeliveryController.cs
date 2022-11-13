@@ -324,6 +324,7 @@ namespace prjiSpanFinal.Controllers
                     {
                         productName = i.Product.ProductName,
                         productDetailPic = i.Pic,
+                        originPrice = i.UnitPrice,
                         unitPrice = i.UnitPrice,
                         seller = i.Product.Member,
                         productStyle = i.Style,
@@ -334,6 +335,7 @@ namespace prjiSpanFinal.Controllers
                         productDetailID = (int)productDetailID,
                         productName = productDetail.productName,
                         productDetailPic = productDetail.productDetailPic,
+                        originPrice = productDetail.originPrice.ToString("0"),
                         unitPrice = productDetail.unitPrice.ToString("0"),
                         sellerAcc = productDetail.seller.MemberAcc,
                         sellerID = productDetail.seller.MemberId,
@@ -344,6 +346,7 @@ namespace prjiSpanFinal.Controllers
                     if (eventDiscount > 0)
                     {
                         cPurchaseItemInfo.eventDiscount = Convert.ToDecimal(eventDiscount);
+                        cPurchaseItemInfo.unitPrice = Math.Ceiling(Convert.ToDecimal(cPurchaseItemInfo.unitPrice) * cPurchaseItemInfo.eventDiscount).ToString("0");
                     }
                     List<CPurchaseItemInfo> purchaseItemInfo = new List<CPurchaseItemInfo>();
                     purchaseItemInfo.Add(cPurchaseItemInfo);
@@ -390,20 +393,27 @@ namespace prjiSpanFinal.Controllers
                     List<CPurchaseItemInfo> cPurchaseItemList = new List<CPurchaseItemInfo>();
                     foreach (var a in purchaseItems)
                     {
-                        byte[] productDetailPic = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.Pic).FirstOrDefault();
-                        int productID = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.ProductId).FirstOrDefault();
+                        //byte[] productDetailPic = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.Pic).FirstOrDefault();
+                        //int productID = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => i.ProductId).FirstOrDefault();
+                        var specificProductDetail = productDetails.Where(i => i.ProductDetailId == a.productDetailID).Select(i => new
+                        {
+                            productDetailPic = i.Pic,
+                            productID = i.ProductId,
+                            originPrice = i.UnitPrice,
+                        }).FirstOrDefault();
                         CPurchaseItemInfo cPurchaseItemInfo = new CPurchaseItemInfo
                         {
                             orderDetailID = a.orderDetailID,
                             productName = a.productName,
-                            productDetailPic = productDetailPic,
+                            productDetailPic = specificProductDetail.productDetailPic,
+                            originPrice = specificProductDetail.originPrice.ToString("0"),
                             unitPrice = a.unitPrice,
                             sellerAcc = a.sellerAcc,
                             sellerID = a.sellerID,
                             purchaseCount = a.purchaseCount,
                             productStyle = a.productStyle,
                         };
-                        var eventDiscount = dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == productID && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault();
+                        var eventDiscount = dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == specificProductDetail.productID && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault();
                         if (eventDiscount > 0)
                         {
                             cPurchaseItemInfo.eventDiscount = Convert.ToDecimal(eventDiscount);
@@ -576,8 +586,6 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
-                //string commentString = $"品質: {cSubmitComment.quality}, 色差: {cSubmitComment.colorDifference}, 和圖片相符: {cSubmitComment.picMatch}, 更多評論: {cSubmitComment.other}";
-               
                 string moreComment = "";
                 if (cSubmitComment.other != null)
                 {
@@ -738,8 +746,15 @@ namespace prjiSpanFinal.Controllers
                         {
                             int productDetailID = allOrderOrderDetail.Where(i => i.orderDetails.OrderDetailId == b).Select(i => i.orderDetails.ProductDetailId).FirstOrDefault();
                             int quantity = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.purchaseCount).FirstOrDefault();
+                            decimal eventDiscount = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.eventDiscount).FirstOrDefault();
+                            
                             decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.unitPrice).FirstOrDefault());
-                            if (coupon != null && !coupon.IsFreeDelivery)
+                            if (coupon != null && !coupon.IsFreeDelivery && eventDiscount > 0)
+                            {
+                                decimal originPrice = dbContext.ProductDetails.Where(i => i.ProductDetailId == productDetailID).Select(i => i.UnitPrice).FirstOrDefault();
+                                unitPrice = Math.Ceiling(originPrice * Convert.ToDecimal(coupon.Discount) * eventDiscount);
+                            }
+                            else if (coupon != null && !coupon.IsFreeDelivery)
                             {
                                 unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
                             }
@@ -777,8 +792,14 @@ namespace prjiSpanFinal.Controllers
                         {
                             int productDetailID = allOrderOrderDetail.Where(i => i.orderDetails.OrderDetailId == b).Select(i => i.orderDetails.ProductDetailId).FirstOrDefault();
                             int quantity = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.purchaseCount).FirstOrDefault();
+                            decimal eventDiscount = cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.eventDiscount).FirstOrDefault();
                             decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo.Where(i => i.orderDetailID == b).Select(i => i.unitPrice).FirstOrDefault());
-                            if (coupon != null && !coupon.IsFreeDelivery)
+                            if (coupon != null && !coupon.IsFreeDelivery && eventDiscount > 0)
+                            {
+                                decimal originPrice = dbContext.ProductDetails.Where(i => i.ProductDetailId == productDetailID).Select(i => i.UnitPrice).FirstOrDefault();
+                                unitPrice = Math.Ceiling(originPrice * Convert.ToDecimal(coupon.Discount) * eventDiscount);
+                            }
+                            else if (coupon != null && !coupon.IsFreeDelivery)
                             {
                                 unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
                             }
@@ -815,7 +836,14 @@ namespace prjiSpanFinal.Controllers
                 dbContext.SaveChanges();
                 int newOrderID = dbContext.Orders.Where(i => i.MemberId == cDeliveryCheckout.buyer.MemberId && i.StatusId == 2).OrderByDescending(i => i.OrderId).Select(i => i.OrderId).FirstOrDefault();
                 decimal unitPrice = Convert.ToDecimal(cDeliveryCheckout.purchaseItemInfo[0].unitPrice);
-                if (coupon != null && !coupon.IsFreeDelivery)
+                int productID = dbContext.ProductDetails.Where(i => i.ProductDetailId == cDeliveryCheckout.purchaseItemInfo[0].productDetailID).Select(i => i.ProductId).FirstOrDefault();
+                decimal eventDiscount = Convert.ToDecimal(dbContext.SubOfficialEventToProducts.Where(i => i.ProductId == productID && DateTime.Now >= i.SubOfficialEventList.OfficialEventList.StartDate && DateTime.Now < i.SubOfficialEventList.OfficialEventList.EndDate).Select(i => i.SubOfficialEventList.Discount).FirstOrDefault());
+                if (coupon != null && !coupon.IsFreeDelivery && eventDiscount > 0)
+                {
+                    decimal originPrice = dbContext.ProductDetails.Where(i => i.ProductDetailId == cDeliveryCheckout.purchaseItemInfo[0].productDetailID).Select(i => i.UnitPrice).FirstOrDefault();
+                    unitPrice = Math.Ceiling(originPrice * Convert.ToDecimal(coupon.Discount) * eventDiscount);
+                }
+                else if (coupon != null && !coupon.IsFreeDelivery)
                 {
                     unitPrice = Math.Ceiling(unitPrice * Convert.ToDecimal(coupon.Discount));
                 }
@@ -857,6 +885,12 @@ namespace prjiSpanFinal.Controllers
                 MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
                 iSpanProjectContext dbContext = new iSpanProjectContext();
                 List<COrderedOrderViewModel> orderedOrders = new List<COrderedOrderViewModel>();
+                var events = dbContext.SubOfficialEventToProducts.Select(i => new
+                {
+                    subOfficialEventToProduct = i,
+                    subOfficialEventList = i.SubOfficialEventList,
+                    officialEventList = i.SubOfficialEventList.OfficialEventList
+                }).ToList();
                 if (id > 0)
                 {
                     orderedOrders = dbContext.OrderDetails.Where(i => i.OrderId == id).Select(i => new COrderedOrderViewModel
@@ -870,6 +904,14 @@ namespace prjiSpanFinal.Controllers
                         payment = i.Order.Payment,
                         coupon = i.Order.Coupon,
                     }).ToList();
+                    foreach (var a in orderedOrders)
+                    {
+                        decimal eventDiscount = Convert.ToDecimal(events.Where(i => i.subOfficialEventToProduct.ProductId == a.productDetail.ProductId && DateTime.Now >= i.officialEventList.StartDate && DateTime.Now < i.officialEventList.EndDate).Select(i => i.subOfficialEventList.Discount).FirstOrDefault());
+                        if (eventDiscount > 0)
+                        {
+                            a.eventDiscount = eventDiscount;
+                        }
+                    }
                 }
                 else
                 {
@@ -884,6 +926,14 @@ namespace prjiSpanFinal.Controllers
                         payment = i.Order.Payment,
                         coupon = i.Order.Coupon,
                     }).ToList();
+                    foreach (var a in orderedOrders)
+                    {
+                        decimal eventDiscount = Convert.ToDecimal(events.Where(i => i.subOfficialEventToProduct.ProductId == a.productDetail.ProductId && DateTime.Now >= i.officialEventList.StartDate && DateTime.Now < i.officialEventList.EndDate).Select(i => i.subOfficialEventList.Discount).FirstOrDefault());
+                        if (eventDiscount > 0)
+                        {
+                            a.eventDiscount = eventDiscount;
+                        }
+                    }
                 }
                 return View(orderedOrders);
             }
