@@ -152,7 +152,17 @@ namespace prjiSpanFinal.Controllers
             return Json("1");
         }
 
-
+        public IActionResult GetMemSta()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)) //&& o.StatusId == tab
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int id = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件 MemberAccount
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            return Json(dbcontext.MemberAccounts.Where(m=>m.MemberId == id).First().MemStatusId == 1);
+        }
 
 
 

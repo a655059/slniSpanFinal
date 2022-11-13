@@ -55,6 +55,7 @@
 }
 
 <div class="row">
+    <input type="hidden" id="StatusIdcheck" value=""/>
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-10 ">
         <h2 class="d-flex justify-content-center">我的商品</h2>
@@ -219,6 +220,19 @@
 @section Scripts
 {
             <script>
+            (function () {
+            $.getJSON("/Seller/GetMemSta",function(data){
+                if (data) {
+                    Swal.fire(
+                        '請註冊為正式會員',
+                        "請驗證Email，方可使用賣家功能",
+                        'warning',
+                    ).then(function () { location.href = "/Member/Edit"; });
+                }
+            })
+            }());
+
+
                 $("#selectbtn").click(function () {
                     $("#returndata").html("");
                     let selectname = $("#selectname").val();
