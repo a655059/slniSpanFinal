@@ -1050,6 +1050,26 @@ namespace prjiSpanFinal.Controllers
             }).FirstOrDefault();
             return View(vm);
         }
+
+        public IActionResult DemoAddButerOrder()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                return RedirectToAction("Login", "Member");
+            }
+            string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
+            int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件             
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var q = dbcontext.Orders.Where(o => o.MemberId == 28).Select(s=>s);
+            foreach(var item in q)
+            {
+                item.MemberId = memID;
+            }
+            dbcontext.SaveChanges();
+            return Json("1");
+        }
+
+
         public IActionResult forgetPw() 
         {
             return View();
