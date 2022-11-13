@@ -614,6 +614,7 @@ namespace prjiSpanFinal.Controllers
                 {
                     var q = dbContext.Orders.Where(i => i.OrderId == orderID).Select(i => i).FirstOrDefault();
                     q.StatusId = 7;
+                    q.FinishDate = DateTime.Now;
                     dbContext.SaveChanges();
                 }
                 return Content("1");
