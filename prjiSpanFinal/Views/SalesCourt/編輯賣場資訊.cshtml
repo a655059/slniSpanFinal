@@ -37,10 +37,10 @@
             </tr>
         </thead>
     </table>*@
-<div class="show">
+@*<div class="show">
     這裡測試
     <div style="font-size:2rem" class="test d-none">你已經滑過去</div>
-</div>
+</div>*@
 
 
 <input type="hidden" value="@Model.MemberId" id="editsalescourtid" />
@@ -108,7 +108,7 @@
 
     </div>*@
 
-
+@*<div class="justify-content-center"*@
 
 <div style="font-size:20px;background-color:#0caff7" class="m-2"></div>
 
@@ -150,7 +150,7 @@
 
                         </div>
 
-                     <div id="product${data.productid}" class= "row d-none">
+                     <div id="product${data.productid}" class= "row d-none justify-content-center">
                         <div class="sellsitem">
                             <a class="linknoline" href="${data.link}">
                                 <img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />
@@ -204,7 +204,7 @@
                                     </div>
 
                                 </div>
-                                <div id="product${data.productid}" class= "row d-none">
+                                <div id="product${data.productid}" class= "row d-none justify-content-center">
                                 <div class="sellsitem">
                                     <a class="linknoline" href="${data.link}">
                                         <img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />
