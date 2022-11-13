@@ -1,5 +1,5 @@
 ﻿@model prjiSpanFinal.ViewModels.Popup.PopupViewModel
-<div class="mt-3 noprintArea" style="position:fixed; bottom:0px; right:10px; width:900px;">
+<div class="mt-3 noprintArea" style="position:fixed; bottom:0px; right:10px; z-index:6;">
     @{
         if(Model.MemAcc == null)
         {
@@ -15,7 +15,7 @@
         {
             <input type="hidden" id="msgmemid" value="@Model.MemID" />
             <input type="hidden" id="msgmemacc" value="@Model.MemAcc" />
-            <button class="chatroom float-end" type="button" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <button class="chatroom float-end" type="button" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="position: absolute; top: -40px; right: 0;">
                 <i class="fa fa-comment">
                     <span>蝦蝦通</span>
                 </i>
@@ -25,7 +25,7 @@
                     <div class="card-body">
 
                         <div class="row">
-                            <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
+                            <div @*class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0"*@ class="col-sm-5 col-md-4 col-6 mb-4 mb-md-0">
 
                                 <div class="p-3">
                                     <div class="input-group rounded mb-3">
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-7 col-xl-8">
+                            <div @*class="col-md-6 col-lg-7 col-xl-8"*@ class="col-6 col-sm-7 col-md-8">
                                 <div class="pt-3 pe-3" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow-y: auto; " id="messagebody">
 
                                 </div>
@@ -116,7 +116,7 @@
     }
     
 </div>
-<div class="collapse rounded-2" id="collapseemoji" style="position:fixed; bottom:80px; right:80px; background-color:white;">
+<div class="collapse rounded-2" id="collapseemoji" style="position:fixed; bottom:80px; right:80px; background-color:white;z-index:7;">
     <div>
         <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
         <img src="~/img/emoji/emoji1.jpg" class="m-1 msgemoji1 msgemoji" width="100" height="100" />
