@@ -58,15 +58,16 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             CommentForCustomer a = new CommentForCustomer() { Comment = keyword, CommentStar = star, CommentTime = DateTime.Now, OrderId = id };
             dbcontext.CommentForCustomers.Add(a);
-            var aaa = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().OrderDetails.Select(o => o.Comments.Count).ToList();
-            if (aaa.Contains(0) || aaa.Count == 0)
+            var aaaaa = dbcontext.Orders.Where(o => o.OrderId == id).Select(o=>o.OrderDetails.FirstOrDefault().Comments.Count).ToList();
+            var bbbbb = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => o.OrderDetails.Count).FirstOrDefault();
+            if (aaaaa.Count == bbbbb)
             {
-            }
-            else
-            {
-                Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
-                b.FinishDate = DateTime.Now;
-                b.StatusId = 7;
+                if(!aaaaa.Contains(0))
+                {
+                    Order b = dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault();
+                    b.FinishDate = DateTime.Now;
+                    b.StatusId = 7;
+                }
             }
             dbcontext.SaveChanges();
             return Json("1");
