@@ -43,7 +43,7 @@ namespace prjiSpanFinal.Controllers
                 }).FirstOrDefault();
                 var productDetails = dbContext.ProductDetails.Where(i => i.ProductId == id).Select(i => i).ToList();
                 var productPics = dbContext.ProductPics.Where(i => i.ProductId == id).Select(i => i.Pic).ToList();
-                var sellerProductIDList = dbContext.Products.Where(i => i.MemberId == product.product.MemberId).Select(i => i.ProductId).ToList();
+                var sellerProductIDList = dbContext.Products.Where(i => i.MemberId == product.product.MemberId && (i.ProductStatusId == 0 || i.ProductStatusId == 4)).Select(i => i.ProductId).ToList();
                 List<CSellerShipperViewModel> sellerShipper = dbContext.ShipperToSellers.Where(i => i.MemberId == product.product.MemberId).Select(i => new CSellerShipperViewModel
                 {
                     shipper = i.Shipper.ShipperName,
