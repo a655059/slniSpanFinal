@@ -152,20 +152,20 @@
 
                     </div>
 
-                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
-                        <span>賣場優惠券</span>
+                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-white text-uppercase bg-warning">
+                        <span style="font-weight:bold" class="mx-3" >賣場優惠券</span>
                         <a class="link-secondary" href="#" aria-label="Add a new report">
                             <span data-feather="plus-circle" class="align-text-bottom"></span>
                         </a>
                     </h6>
 
                   
-                    <div class="sellerCouponLayout position-relative mb-2" style="width:640px;height:120px;overflow:hidden">
+                    <div class="HP-Item sellerCouponLayout position-relative mb-2" style="width:640px;height:120px;overflow:hidden">
                         @{
                             if (sellerCoupons.Count > 0)
                             {
                                 <div class="sellerCouponCount d-none">@sellerCoupons.Count</div>
-                                <button class="couponLeft btn btn-light position-absolute bg-transparent" style="left:0px;width:10px;height:120px;z-index:10"></button>
+                                <button class="couponLeft btn btn-light position-absolute bg-transparent" style="left:0px;width:10px;height:120px;z-index:10"><i class="fa-solid fa-chevron-left"></i></button>
                                 foreach (var i in sellerCoupons)
                                 {
                                     <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:305px;height:120px;margin-right:10px">
@@ -218,8 +218,12 @@
                                         <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
                                     </div>
                                 }
-                                <button class="couponRight btn btn-light position-absolute bg-transparent" style="right:0px;width:10px;height:120px;z-index:10"></button>
+                                <button class="couponRight btn btn-light position-absolute bg-transparent" style="right:0px;width:10px;height:120px;z-index:10"><i class="fa-solid fa-chevron-right"></i></button>
 
+                            }
+                            else
+                            {
+                                <div style="font-size:2rem">目前賣家沒有優惠券</div>
                             }
 
                         }
@@ -227,56 +231,68 @@
 
 
 
-                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-muted text-uppercase bg-warning">
-                        <span>精選商品</span>
+                    <h6 class="rounded display-6 d-flex justify-content-between align-items-center  text-white text-uppercase bg-warning">
+                        <span style="font-weight:bold" class="mx-3">精選商品</span>
                         <a class="link-secondary" href="#" aria-label="Add a new report">
                             <span data-feather="plus-circle" class="align-text-bottom"></span>
                         </a>
                     </h6>
 
                     <div class="row" id="bestsellproduct">
+                        @{
+                            if (bestsell.Count() > 0)
+                            {
+                                for (int i = 0; i < bestsell.Count(); i++)
+                                {
 
-                        @for (int i = 0; i < bestsell.Count(); i++)
-                        {
-
-                            <div class="sellsitem">
-                                <a class="linknoline" href="@bestsell[i].link">
-                                    @if (bestsell[i].pic != null)
-                                    {
-                                        <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
-                                    }
-                                    else
-                                    {
-                                        <img src="~/img/imageNotFound.png" class="cardImg" alt="..." />
-                                    }
-                                </a>
-                                <div class="px-1 d-flex flex-column justify-content-between">
-                                    <div class="cardTitleBox">
-                                        <div class="cardTitle">@bestsell[i].name</div>
-                                    </div>
-                                    <div class="cardPrice">@bestsell[i].price1.ToString("0.00") - @bestsell[i].price2.ToString("0.00")</div>
-                                    <div class="cardInfo d-flex justify-content-between flex-row">
-                                        <div class="starBox mt-1">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="starImg">
-                                                    <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                    <div class="sellsitem">
+                                        <a class="linknoline" href="@bestsell[i].link">
+                                            @if (bestsell[i].pic != null)
+                                            {
+                                                <img src="data:image;base64,@System.Convert.ToBase64String(bestsell[i].pic)" class="cardImg" alt="..." />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/img/imageNotFound.png" class="cardImg" alt="..." />
+                                            }
+                                        </a>
+                                        <div class="px-1 d-flex flex-column justify-content-between">
+                                            <div class="cardTitleBox">
+                                                <div class="cardTitle">@bestsell[i].name</div>
+                                            </div>
+                                            <div class="cardPrice">@bestsell[i].price1.ToString("0.00") - @bestsell[i].price2.ToString("0.00")</div>
+                                            <div class="cardInfo d-flex justify-content-between flex-row">
+                                                <div class="starBox mt-1">
+                                                    <div class="d-flex justify-content-start">
+                                                        <div class="starImg">
+                                                            <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                        </div>
+                                                        @if (bestsell[i].star > 0)
+                                                        {
+                                                            <div class="text-black">@bestsell[i].star.ToString("0.00")</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="text-black"></div>
+                                                        }
+                                                    </div>
                                                 </div>
-                                                @if (bestsell[i].star > 0)
-                                                {
-                                                    <div class="text-black">@bestsell[i].star.ToString("0.00")</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="text-black"></div>
-                                                }
+                                                <div class="text-end text-black-50 sells">已賣出<span>@bestsell[i].sales</span></div>
                                             </div>
                                         </div>
-                                        <div class="text-end text-black-50 sells">已賣出<span>@bestsell[i].sales</span></div>
                                     </div>
-                                </div>
-                            </div>
-                            <br>
+                                    <br>
+                                }
+                            }
+
+                            else
+                            {
+                                <div style="font-size:2rem">沒有精選商品</div>
+                            }
                         }
+
+
+
 
                     </div>
 
@@ -415,7 +431,8 @@
             let nowpages = 1;
             let pagecount = 1;
             let couponCount = Number($(".sellerCouponCount").html());
-            let couponPosition = 10;
+            let couponPosition = 15;
+            let couponPageClickCount = 2;
 
             const pagecountselect = document.querySelector("#divPage");
             let searchflag = false;
@@ -529,6 +546,9 @@
                         PageNumFill(data.count);
                     }
                     else {
+                        $("#salescourtcardbody").append(`
+                            <div style="font-size:2rem">目前尚未有上架商品</div>
+                        `);
                         PageNumFill(0);
                     }
                 })
@@ -563,11 +583,38 @@
                     $(this).css("left", couponPosition);
                     couponPosition += 315;
                 });
-                $(".couponLeft").prop("disabled", true);
-                if (couponCount <= 2) {
+                couponPageSelect();
+                //$(".couponLeft").prop("disabled", true);
+                //if (couponCount <= 2) {
+                //    $(".couponRight").prop("disabled", true);
+                //}
+            });
+
+
+            $(".couponRight").click(function () {
+                $(".sellerCoupon").animate({ left: "-=365px" });
+                couponPageClickCount += 1;
+                couponPageSelect();
+            });
+            $(".couponLeft").click(function () {
+                $(".sellerCoupon").animate({ left: "+=365px" });
+                couponPageClickCount -= 1;
+                couponPageSelect();
+            });
+            function couponPageSelect() {
+                if (couponPageClickCount <= 2) {
+                    $(".couponLeft").prop("disabled", true);
+                }
+                if (couponPageClickCount > 2) {
+                    $(".couponLeft").prop("disabled", false);
+                }
+                if (couponPageClickCount >= couponCount) {
                     $(".couponRight").prop("disabled", true);
                 }
-            });
+                if (couponPageClickCount < couponCount) {
+                    $(".couponRight").prop("disabled", false);
+                }
+            }
 
             $(".getCoupon").click(function () {
                 const couponID = Number($(this).attr("id"));
