@@ -55,12 +55,12 @@
 
                 <div class="row">
 
-                    <div class="col-4">
+                    <div class="col-4" style="margin-top:20px">
 
                         @if (Model.SellerPhoto != null)
                         {
 
-                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.SellerPhoto)" class="cardImg rounded-circle" alt="..." width="120" />
+                            <img src="data:image;base64,@System.Convert.ToBase64String(Model.SellerPhoto)"  class="cardImg rounded-circle" alt="..." width="120" />
                         }
                         else
                         {
@@ -68,7 +68,7 @@
                         }
 
 
-                        <button class="btn  btn-sm ms-2 text-white rounded-5" style="background-color:#f30959">
+                        <button class="btn  btn-sm  text-white rounded-5" style="margin-top:10px; width:100%; background-color:#f30959">
                             最<i class="fa-sharp fa-solid fa-heart"></i>賣家
                         </button>
                     </div>
@@ -211,10 +211,10 @@
         <div class="row">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#commentlist">買家對我的評價</a>
+                    <a id="sellercomment" class="nav-link active" aria-current="page" href="#">買家對我的評價</a>
                 </li>
                 <li class="nav-item">
-                    <a id="buyercomment" class="nav-link" href="#commentlist">賣家對我的評價</a>
+                    <a id="buyercomment" class="nav-link" href="#">賣家對我的評價</a>
                 </li>
 
             </ul>
@@ -224,16 +224,16 @@
         <div class="row my-4 bg-opacity-50" style="background-color:#e1dcd7">
 
             <div class="col">
-                <div id="commentrecord1" class="ps-2"><a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @AllCounts )</a></div>
+                <div id="commentrecord1" class="ps-2"><a href="#" class="linknoline text-primary">綜合評價紀錄( @AllCounts )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord2" class="ps-2"><a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord2" class="ps-2"><a href="#" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord3" class="ps-2"><a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord3" class="ps-2"><a href="#" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a></div>
             </div>
             <div class="col">
-                <div id="commentrecord4" class="ps-2"><a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
+                <div id="commentrecord4" class="ps-2"><a href="#" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a></div>
             </div>
 
         </div>
@@ -291,17 +291,38 @@
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
                             <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                            <div>
-                                <img src="~/img/greencircle.png" width="20" />
-                                <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                            <div>`;
+                    if (data[i].commentstar == 5) {
+                        card = card + `<i class="fa-regular fa-circle text-success"></i>`;
+                    }
+                    else if (data[i].commentstar == 4 || data[i].commentstar == 3) {
+                        card = card + `<i class="fa-solid fa-square text-primary"></i>`;
+                    }
+                    else if (data[i].commentstar == 2 || data[i].commentstar == 1) {
+                        card = card + `<i class="fa-solid fa-xmark text-danger"></i>`;
+                    }
+                    else {
+                        card = card + ``;
+                    }
+
+                    card = card +
+                        `<span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
                             </div>
                             <div class="dashed-divider"></div>
                             <div class="ps-2" style="font-size:1.5em">
                             <a class="linknoline text-primary" href="${data[i].link}">${data[i].productname}</a>
-                            </div>
+                            </div>`;
+                    if (data[i].commentcontent != null) {
+                        card = card + `<div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>`;
+                    }
 
-                            <div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>
-                            </div>`
+                    else {
+                        card = card + `<div class="my-2 text-dark" style="font-size:1.5em"></div>`;
+                    }
+                            
+                    card = card +`</div>`;
+
+
                 }
                 return card;
             }
@@ -310,13 +331,28 @@
                 for (let i = 0; i < data.length; i++) {
                     card = card + `
                         <div class="row rounded-5 bg-opacity-75" style="background-color:#f2f5ed">
-                        <div>
-                            <img src="~/img/greencircle.png" width="20" />
-                            <span class="text-dark" style="font-size:1.5em">買家:${data[i].buyername}</span>
+                        <div>`;
+                    if (data[i].commentstar == 5) {
+                        card = card + `<i class="fa-regular fa-circle text-success"></i>`;
+                    }
+                    else if (data[i].commentstar == 4 || data[i].commentstar == 3) {
+                        card = card + `<i class="fa-solid fa-square text-primary"></i>`;
+                    }
+                    else if (data[i].commentstar == 2 || data[i].commentstar == 1) {
+                        card = card + `<i class="fa-solid fa-xmark text-danger"></i>`;
+                    }
+                    else {
+                        card = card + ``;
+                    }
+
+                    card = card +
+                        `<a class="linknoline text-primary" href="${data[i].link}">
+                            <span class="text-dark" style="font-size:1.5em">評論我的賣家:${data[i].sellername}</span>
+                        </a>
                         </div>
                         <div class="dashed-divider"></div>
                         <div class="ps-2" style="font-size:1.5em">
-                        <a class="linknoline text-primary" href="">${data[i].sellername}</a>
+                        <a class="linknoline text-primary" href=""></a>
                         </div>`;
                         if (data[i].commentcontent != null) {
                             card = card + `<div class="my-2 text-dark" style="font-size:1.5em">${data[i].commentcontent}</div>`;
@@ -344,8 +380,16 @@
                             $("#commentlist").append(cmCard(data.list));
 
                         }
+                        else if (buyerorseller == 2) {
+                            if (data.count > 0) {
+                                $("#commentlist").append(cmsellerCard(data.list));
+                            }
+                            else {
+                                $("#commentlist").append(`尚無評論`);
+                            }
+
+                        }
                         else {
-                            $("#commentlist").append(cmsellerCard(data.list));
 
                         }
                         PageNumFill(data.count);
@@ -368,28 +412,20 @@
                 $("#orderpagedown").siblings(".orderpagenumclicklist").remove();
                 for (let i = startpage; i <= endpage; i++) {
                     if (i == nowpages) {
-                        $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#commentlist">${i}</a></li>`);
+                        $("#orderpagedown").before(`<li class="page-item active orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
                     }
                     else {
-                        $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#commentlist">${i}</a></li>`);
+                        $("#orderpagedown").before(`<li class="page-item orderpagenumclicklist"><a class="page-link orderpagenumclick" href="#">${i}</a></li>`);
                     }
                 }
             }
 
-            $(".nav-link").click(function (event) {
-                if (buyerorseller == 1) {
-                    buyerorseller = 2;
-                }
-                else {
-                    buyerorseller = 1;
-                }
-                $(event.currentTarget).addClass("active");
-                $(event.currentTarget).parent().siblings().children("a").removeClass("active");
-                nowpages = 1;
-                load();
-            })
+            //$(".nav-link").click(function (event) {
+               
+            //})
             $("#sellercomment").click(function () {
                 //buyerorseller = 1;
+                buyerorseller = 1;
                 $("#showbuysellboard").html(" ");
                 $("#showbuysellboard").append(`<td>買家對我的評價</td>`);
                  $("#bestcomment").html("");
@@ -423,13 +459,19 @@
                 $("#commentrecord2").html("");
                 $("#commentrecord3").html("");
                 $("#commentrecord4").html("");
-                $("#commentrecord1").append(`<a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @(Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount) )</a>`);
-                $("#commentrecord2").append(`<a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a>`);
-                $("#commentrecord3").append(`<a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a>`);
-                $("#commentrecord4").append(`<a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a>`);
+                $("#commentrecord1").append(`<a href="#" class="linknoline text-primary">綜合評價紀錄( @(Model.BestCommentCountMethod.AllCount + Model.MediumCommentCountMethod.AllCount + Model.WorstCommentCountMethod.AllCount) )</a>`);
+                $("#commentrecord2").append(`<a href="#" class="linknoline text-primary">優良評價紀錄( @Model.BestCommentCountMethod.AllCount )</a>`);
+                $("#commentrecord3").append(`<a href="#" class="linknoline text-primary">普通評價紀錄( @Model.MediumCommentCountMethod.AllCount )</a>`);
+                $("#commentrecord4").append(`<a href="#" class="linknoline text-primary">差勁評價紀錄( @Model.WorstCommentCountMethod.AllCount )</a>`);
+
+                $(event.currentTarget).addClass("active");
+                $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+                nowpages = 1;
+                load();
 
             })
             $("#buyercomment").click(function () {
+                buyerorseller = 2;
                 //buyerorseller = 2;
                 $("#showbuysellboard").html(" ");
                 $("#showbuysellboard").append(`<td>賣家對我的評價</td>`);
@@ -464,10 +506,15 @@
                 $("#commentrecord2").html("");
                 $("#commentrecord3").html("");
                 $("#commentrecord4").html("");
-                $("#commentrecord1").append(`<a href="#commentlist" class="linknoline text-primary">綜合評價紀錄( @(allbestcount + allmediumcount + allworstcount) )</a>`);
-                $("#commentrecord2").append(`<a href="#commentlist" class="linknoline text-primary">優良評價紀錄( @allbestcount )</a>`);
-                $("#commentrecord3").append(`<a href="#commentlist" class="linknoline text-primary">普通評價紀錄( @allmediumcount )</a>`);
-                $("#commentrecord4").append(`<a href="#commentlist" class="linknoline text-primary">差勁評價紀錄( @allworstcount )</a>`);
+                $("#commentrecord1").append(`<a href="#" class="linknoline text-primary">綜合評價紀錄( @(allbestcount + allmediumcount + allworstcount) )</a>`);
+                $("#commentrecord2").append(`<a href="#" class="linknoline text-primary">優良評價紀錄( @allbestcount )</a>`);
+                $("#commentrecord3").append(`<a href="#" class="linknoline text-primary">普通評價紀錄( @allmediumcount )</a>`);
+                $("#commentrecord4").append(`<a href="#" class="linknoline text-primary">差勁評價紀錄( @allworstcount )</a>`);
+
+                $(event.currentTarget).addClass("active");
+                $(event.currentTarget).parent().siblings().children("a").removeClass("active");
+                nowpages = 1;
+                load();
             })
 
             $("#pagecountselect").change(function () {

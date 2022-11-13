@@ -21,7 +21,7 @@
     </style>
 }
 
-
+<div class="show">這裡測試</div>
 
 
 <input type="hidden" value="@Model.MemberId" id="editsalescourtid" />
@@ -184,6 +184,15 @@
 
 
         }
+
+
+
+        $(".show").mouseenter(function () {   /*當modal打開要清空輸入欄位*/
+            $(".show").append(`<div style ="font-size:2rem">你已經滑過去</div>`);
+        })
+        $(".show").mouseleave(function () {   /*當modal打開要清空輸入欄位*/
+            $(".show").  append(``);
+        })
 
 
         $(".choiceproduct").click(function (data) {     //先從資料庫讀出資料   如果回傳的choice是true就不做postjson

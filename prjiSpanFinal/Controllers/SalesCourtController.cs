@@ -620,15 +620,23 @@ namespace prjiSpanFinal.Controllers
             }
 
             //賣家對買家的評價
-            else {
+            else if(buyerorseller ==2){
 
-                var q = dbContext.Orders.Where(a => a.MemberId == id).Select(p => new
+                var q = dbContext.CommentForCustomers.Where(a => a.Order.MemberId == id).Select(p => new
                 {
-                    buyername = p.Member.MemberAcc,
-                    sellername = p.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
-                    commentcontent = "",
-                    commentstar = 5,
+                    link = "/SalesCourt/賣場?id=" + p.Order.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberId,
+                    buyername = p.Order.Member.MemberAcc,   /*我的名字*/
+                    sellername = p.Order.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                    commentcontent = p.Comment,
+                    commentstar = p.CommentStar,
                 }).ToList();
+                //var q = dbContext.Orders.Where(a => a.MemberId == id).Select(p => new
+                //{
+                //    buyername = p.Member.MemberAcc,
+                //    sellername = p.OrderDetails.FirstOrDefault().ProductDetail.Product.Member.MemberAcc,
+                //    commentcontent = "",
+                //    commentstar = 5,
+                //}).ToList();
                 //var q = dbContext.OrderDetails.Where(a => a.or == id).Select(p => new
                 //{
                 //    //link = "/Item/Index?id=" + p.OrderDetail.ProductDetail.Product.ProductId,
@@ -670,6 +678,11 @@ namespace prjiSpanFinal.Controllers
                 int count = q.Count();
 
                 return Json(new { list = q.Skip((pages - 1) * eachpage).Take(eachpage).ToList(), count });
+            }
+
+            else
+            {
+                return Json(0);
             }
         }
 
@@ -739,6 +752,15 @@ namespace prjiSpanFinal.Controllers
             return Json(q);
         }
 
+        public IActionResult GetAvgStar(int id)
+        {
+            var allstar = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id).Select(a => (double)a.CommentStar).Sum();
+            var allstarcount = dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.MemberId == id).Count();
+
+            var avgstar = allstar / allstarcount;
+
+            return Json(avgstar);
+        }
         public IActionResult GetAlterMe(int id) {
             var q = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id).Description;
             return Json(q);
@@ -764,9 +786,9 @@ namespace prjiSpanFinal.Controllers
                 payname = p.Payment.PaymentName,
 
             }).ToList();
-                       
 
-            return Json(new {list = payment});
+            int count = payment.Count();
+            return Json(new {list = payment,count});
         }
 
         public IActionResult getShip(int id)
@@ -775,7 +797,8 @@ namespace prjiSpanFinal.Controllers
                 shipid = p.ShipperId,
                 shipname = p.Shipper.ShipperName,
             }).ToList();
-            return Json(new {list = shipper});
+            int count = shipper.Count();
+            return Json(new {list = shipper , count});
         }
 
         public IActionResult GetItems(int id, int mode, int pages, int eachpage, string keyword, string customname)

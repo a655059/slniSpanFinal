@@ -41,13 +41,13 @@
 
         .info-section {
             font-size: 15px;
-            margin: 30px 0;
-            padding: 45px 30px 20px;
+            margin: 30px;
+            padding: 2px;
             border: 11px solid #f78f1c;
             border-radius: 4px;
             /*background: url(/images/about_me_border_style.png) repeat-x;*/
-            background: url(/img/蝦到爆.png);
-            background-repeat: repeat-x;
+           
+            
             /*height:90px;*/
             background-size: 85px 100px;
         }
@@ -71,7 +71,7 @@
 
 
 <div class="container info-section">
-    <div class="p-4 p-md-5 mb-4 rounded  ">
+    <div class="p-4 p-md-5  rounded  ">
         <div class="col-md-6 px-0">
             <h1 style="font-size:3em">付款與運送的方式</h1>
         </div>
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+        
     </div>
 </div>
 
@@ -109,7 +109,7 @@
 <div class="first">
 
     <div class="container info-section">
-        <div class="p-4 p-md-5 mb-4 rounded  ">
+        <div class="p-4 p-md-5  rounded  ">
             <div class="col-md-6 px-0">
                 <h1 style="font-size:3em">@me.NickName 賣場資訊</h1>
             </div>
@@ -126,28 +126,40 @@
                 }
                 else
                 {
-                    <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:&nbsp;</div>
+                    <div class="col" style="font-size:2em"><i class="fa-regular fa-comment"></i>評價:無評價&nbsp;</div>
                 }
             </div>
 
             <div class="row" style="font-size:2em">
                 <div class="col">
                     <div class="text-warning">賣場服務時間</div>
-                    <p>
-                        星期 @Model.weekDown - 星期 @Model.weekUp
-                    </p>
-                    <p>
-                        時間  @Model.timeDown:00- @Model.timeUp:00
-                    </p>
-                    <p>
-                        國定例假日公休: @Model.takebreak
-                    </p>
+                    @{
+                        if (Model.weekDown != null)
+                        {
+                            <p>
+                                星期 @Model.weekDown - 星期 @Model.weekUp
+                            </p>
+                        }
+                        if (Model.timeDown != null)
+                        {
+                            <p>
+                                時間  @Model.timeDown:00- @Model.timeUp:00
+                            </p>
+                        }
+                        if (Model.takebreak != null) { 
+                            <p>
+                                國定例假日公休: @Model.takebreak
+                            </p>
+                        }
+                        
+
+                    }
+
                 </div>
                 <div class="col">
                     <div class="text-warning">新品上架時間</div>
-                    <p>
-
-                    </p>
+                    <div class="newproductonload">
+                    </div>
                 </div>
                 <div class="col">
                     <div class="text-warning">商品類型</div>
@@ -166,18 +178,18 @@
                 </div>
                 <div class="col">
                     <div class="text-warning">賣家類型</div>
-                    <p>
-
+                    <p class="sellertype">
+                       
                     </p>
                 </div>
             </div>
 
-            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+            
         </div>
     </div>
 
     <div class="container info-section">
-        <div class="p-4 p-md-5 mb-4 rounded  ">
+        <div class="p-4 p-md-5 rounded  ">
             <div class="col-md-6 px-0">
                 <h1 style="font-size:3em">注意事項及售後服務</h1>
                 <div>注意事項:</div>
@@ -188,7 +200,7 @@
                 <p class="lead my-3" style="font-size:2em">
 
                 </p>
-                <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+                
             </div>
 
 
@@ -199,6 +211,8 @@
 
 @section Scripts{
     <script>
+        let avgstar;
+                
         let image = ["/img/product.png", "~/img/follow.png", "~/img/star_null.png"];
         let shipPicture = ["/img/salescourt/shipping1.png ", "/img/salescourt/shipping2.png ", "/img/salescourt/shipping3.png "
             , "/img/salescourt/shipping4.png ", "/img/salescourt/shipping5.png ", "/img/payment10.png", "/img/payment9.jpg"];
@@ -213,19 +227,21 @@
 
         function returnoutShip(data) {
             let ship = "";
-            ship = ship + `<div>貨運</div>`;
+
+
             for (let i = 0; i < data.length; i++) {
                 if (data[i].shipid < 8) {
                     ship = ship + `<img src = "${shipPicture[data[i].shipid - 1]}" width="40" height="40" class="mx-2" />
-                                <span>${data[i].shipname}</span>
-                                <br />`;
+                            <span>${data[i].shipname}</span>
+                            <br />`;
                 }
                 else {
                     ship = ship + `
-                                <span>${data[i].shipname}</span>
-                                <br />`;
+                            <span>${data[i].shipname}</span>
+                            <br />`;
                 }
             }
+
 
             return ship;
         }
@@ -234,7 +250,7 @@
         function returnoutPay(data) {
             let pay = "";
             console.log(data);
-            pay = pay + `<div>付款</div>`;
+
             //要抓一個對應的payid  跟  payname
             for (let i = 0; i < data.length; i++) {
                 if (data[i].payid < 9) {
@@ -255,10 +271,14 @@
         function payshow() {
             $.getJSON("/SalesCourt/getPay", { id:@Model.Memberid}, function (data) {
                 /*for (let i = 0; i < data.length; i++) {*/
-                if (data.list.length > 0) {
+                if (data.count > 0) {
+                    $("#outPay").html("");
                     $("#outPay").append(returnoutPay(data.list));
                 }
-                    
+                else {
+                    $("#outPay").html("");
+                    $("#outPay").append(`<div style="font-size:2rem">目前尚未有付款方式</div>`);
+                }
                 //}
             });
 
@@ -266,8 +286,15 @@
 
         function shipshow() {
             $.getJSON("/SalesCourt/getShip", { id:@Model.Memberid}, function (data) {
-                if (data.list.length > 0) {
+                if (data.count > 0) {
+                    $("#outShip").html("");
                     $("#outShip").append(returnoutShip(data.list));
+                }
+                else {
+                    $("#outShip").html("");
+                    $("#outShip").append(`
+                        <div style="font-size:2rem">目前尚未有貨運方式</div>
+                    `);
                 }
             });
 
@@ -276,11 +303,10 @@
 
         function load() {
             $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
-                console.log(data);
-
-                console.log(datas);
-
-
+                
+                getavgstar();
+                payshow();
+                shipshow();
                 if (data != null) {
                     var datas = JSON.parse(data);
 
@@ -288,22 +314,36 @@
                     detail(datas);
                     cotion(datas);
                     serviceafterbuy(datas);
+                    
                     $(".first").html("");
                 }
 
-                payshow();
-                shipshow();
+
+                
                 /*$(".outlook").append(returnabme(datas));*/
             })
 
 
         }
 
+        function getavgstar() {
+            $.getJSON("/SalesCourt/GetAvgStar", { id:@Model.Memberid}, function (data) {
+                avgstar = data.avgstar;
+            })
+        };
         function serviceafterbuy(data) {
             let afterserve = "";
 
             if (data.checkbox[9] == true) {
-                afterserve = afterserve + `是否接受退貨:${data.selectopt[4]}<br/>`;
+                if (data.selectopt[4] == 1) {
+                    afterserve = afterserve + `可以接受退貨<br/>`;
+                }
+                else if (data.selectopt[4] == 2) {
+                    afterserve = afterserve + `不接受退貨<br/>`;
+                }
+                else {
+                    afterserve = afterserve + `尚未選擇是否接受退貨<br/>`;
+                }
             }
             if (data.checkbox[10] == true) {
                 afterserve = afterserve + `享有`;
@@ -352,6 +392,7 @@
                 caution = caution + `結帳完成後${data.text[4]}天內未完成"匯款"將發出蝦蝦通提醒`;
             }
 
+
             $(".cautiondetail").append(caution);
         }
 
@@ -383,9 +424,12 @@
         }
 
         function returnAbome(datas) {
-            return `
+            let abme = " ";
+
+            abme = abme +
+            `
                 <div class="container info-section">
-                    <div class="p-4 p-md-5 mb-4 rounded  ">
+                    <div class="p-4 p-md-5  rounded  ">
                         <div class="col-md-6 px-0">
                             <h1 style="font-size:3em"> 賣場資訊</h1>
                         </div>
@@ -402,11 +446,24 @@
                             <i class="fa-regular fa-heart"></i>
                             關注中:@followcount&nbsp;</div>
 
-                            <div class="col" style="font-size:2em">
+                            `;
+            if (avgstar > 0) {
+                abme = abme + `<div class="col" style="font-size:2em">
                             <i class="fa-regular fa-comment"></i>
-                            評價:@avgstar.ToString("0.00")</div>
-                       </div>
+                            評價:avgstar.ToString("0.00")</div >
+                            `;
+            }
+            else {
+                abme = abme + `<div class="col" style="font-size:2em">
+                            <i class="fa-regular fa-comment"></i>
+                            評價:無評價</div >
+                            `;
+            }
 
+
+
+                abme = abme +
+                `</div>
                         <div class="row" style="font-size:2em">
                             <div class="col">
                                 <div class="text-warning">賣場服務時間</div>
@@ -442,19 +499,19 @@
                             </div>
                             <div class="col">
                                 <div class="text-warning">賣家類型</div>
-                                <p>
+                                <p class ="sellertype">
                                     ${datas.text[2]}
                                 </p>
                             </div>
                         </div>
 
 
-                        <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+                        
                     </div>
                 </div>
 
                 <div class="container info-section">
-                    <div class="p-4 p-md-5 mb-4 rounded  " >
+                    <div class="p-4 p-md-5  rounded  " >
                         <div class="col-md-6 px-0">
                             <h1 style="font-size:3em">注意事項及售後服務</h1>
                             <div style="font-size:2.3em">注意事項:</div>
@@ -470,7 +527,7 @@
                             </div>
 
 
-                            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+                            
                         </div>
 
 
@@ -479,6 +536,8 @@
 
             `;
 
+
+            return abme;
         }
 
     </script>
