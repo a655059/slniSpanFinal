@@ -731,6 +731,25 @@ namespace prjiSpanFinal.Controllers
             return Json(q);
         }
 
+        public IActionResult GetproductCard(int id)
+        {
+            var q = dbContext.Products.Where(a => a.ProductId == id).Select(p => new
+            {
+                link = "/Item/Index?id=" + p.ProductId,
+                pic = p.ProductPics.FirstOrDefault().Pic,
+                name = p.ProductName,
+                price1 = p.ProductDetails.Select(a => a.UnitPrice).Min(),
+                price2 = p.ProductDetails.Select(a => a.UnitPrice).Max(),
+                star = (dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count == 0) ? 0 : dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => (int)a.CommentStar).Sum() / dbContext.Comments.Where(a => a.OrderDetail.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.CommentStar).ToList().Count,
+                sales = dbContext.OrderDetails.Where(a => a.ProductDetail.Product.ProductId == p.ProductId).Select(a => a.Quantity).Sum(),
+                upload = p.EditTime,
+                customizename = p.CustomizedCategory.CustomizedCategoryName,
+
+            }).ToList();
+
+            return Json(q);
+        }
+
         public IActionResult GetCard(int id)
         {
             var q = dbContext.Products.Where(a => a.MemberId == id).Select(p => new
@@ -800,6 +819,8 @@ namespace prjiSpanFinal.Controllers
             int count = shipper.Count();
             return Json(new {list = shipper , count});
         }
+
+        
 
         public IActionResult GetItems(int id, int mode, int pages, int eachpage, string keyword, string customname)
         {

@@ -8,6 +8,12 @@
 
 }
 @section Styles{
+    <link href="~/css/Home/ItemCard.css" rel="stylesheet" />
+    <link href="~/css/Item/ItemIndex.css" rel="stylesheet" />
+    <link href="~/css/Category/CategoryStyles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("~/css/Item/ItemIndex.css")" />
+    <link href="@Url.Content("~/css/ProductCard.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/Item/ShowItemComment.css")" rel="stylesheet" />
     <style>
         .ordersearchbar {
             padding: 3px;
@@ -21,7 +27,20 @@
     </style>
 }
 
-<div class="show">這裡測試</div>
+
+
+@*<table>
+        <thead>
+            <tr>
+                123213
+                <div>再試一次</div>
+            </tr>
+        </thead>
+    </table>*@
+<div class="show">
+    這裡測試
+    <div style="font-size:2rem" class="test d-none">你已經滑過去</div>
+</div>
 
 
 <input type="hidden" value="@Model.MemberId" id="editsalescourtid" />
@@ -33,35 +52,35 @@
 
 <a role="button" class="btn btn-outline-success rounded-2" href="~/SalesCourt/修改關於我">修改關於我</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
+<div class="table">
+    <div>
+        <div class="row">
+            <div class="col">
 
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 ID
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 商品名稱
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 商品價格
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 星星數
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 販賣數量
-            </th>
-            <th>
+            </div>
+            <div class="col">
                 選為精選商品
-            </th>
-        </tr>
-    </thead>
-    <tbody id="salescourtcardbody">
-    </tbody>
-</table>
+            </div>
+        </div>
+    </div>
+    <div id="salescourtcardbody" class="row">
+    </div>
+</div>
 
 
 
@@ -89,6 +108,8 @@
 
     </div>*@
 
+
+
 <div style="font-size:20px;background-color:#0caff7" class="m-2"></div>
 
 @section Scripts{
@@ -97,6 +118,7 @@
         let eachpages = 1;
         let nowpages = 1;
         let customname = "";
+        let productID = 0;
 
         jQuery.postJSON = function (url, data, callback) {
             jQuery.post(url, data, callback, "json");
@@ -104,56 +126,111 @@
 
 
         function returnCardblue(data) {
-            return `<tr>
-                            <td>編號:</td>
-                            <td>
-                                ${data.productid}
-                            </td>
-                            <td>
-                                ${data.name}
-                            </td>
-                            <td>
-                                ${data.price1} - ${data.price2}
-                            </td>
-                            <td>
-                                ${data.star}
-                            </td>
-                            <td>
-                                ${data.sales}
-                            </td>
-                            <td>
-                                <input type="hidden" value="${data.productid}" class="thisproduct" />
-                                <a style = "background-color:#b7b0bd" role="button" class="bottn btn choiceproduct my-2">移除精選商品</a>
-                            </td>
+            return `<div class="productcard row">
+                                    <div class="col">編號:</div>
+                                    <div class="col">
+                                        ${data.productid}
+                                    </div>
+                                    <div class="col">
+                                        ${data.name}
+                                    </div>
+                                    <div class="col">
+                                        ${data.price1} - ${data.price2}
+                                    </div>
+                                    <div class="col">
+                                        ${data.star}
+                                    </div>
+                                    <div class="col">
+                                        ${data.sales}
+                                    </div>
+                                    <div class="col">
+                                        <input type="hidden" value="${data.productid}" class="thisproduct" />
+                                        <a style = "background-color:#b7b0bd" role="button" class="bottn btn choiceproduct my-2">移除精選商品</a>
+                                    </div>
 
-                        </tr>`;
+                        </div>
+
+                     <div id="product${data.productid}" class= "row d-none">
+                        <div class="sellsitem">
+                            <a class="linknoline" href="${data.link}">
+                                <img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />
+
+                            </a>
+                            <div class="px-1 d-flex flex-column justify-content-between">
+                                <div class="cardTitleBox">
+                                    <div class="cardTitle">${data.name}</div>
+                                </div>
+                                <div class="cardPrice">${data.price1} - ${data.price2}</div>
+                                <div class="cardInfo d-flex justify-content-between flex-row">
+                                    <div class="starBox mt-1">
+                                        <div class="d-flex justify-content-start">
+                                            <div class="starImg">
+                                                <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                            </div>
+                                            <div class="text-black">${data.star}</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-end text-black-50 sells">已賣出<span>${data.sales}</span></div>
+                                </div>
+                            </div>
+                        </div >
+
+
+                    </div>`;
 
         }
 
         function returnCardgrey(data) {
-            return `<tr>
-                            <td>編號:</td>
-                            <td>
-                                ${data.productid}
-                            </td>
-                            <td>
-                                ${data.name}
-                            </td>
-                            <td>
-                                ${data.price1} - ${data.price2}
-                            </td>
-                            <td>
-                                ${data.star}
-                            </td>
-                            <td>
-                                ${data.sales}
-                            </td>
-                            <td>
-                                <input type="hidden" value="${data.productid}" class="thisproduct" />
-                                <a style = "background-color:#0caff7" role="button" class="bottn btn  choiceproduct my-2">選為精選商品</a>
-                            </td>
+            return `<div class = "productcard row">
+                                    <div class="col">編號:</div>
+                                    <div class="col">
+                                        ${data.productid}
+                                    </div>
+                                    <div class="col">
+                                        ${data.name}
+                                    </div>
+                                    <div class="col">
+                                        ${data.price1} - ${data.price2}
+                                    </div>
+                                    <div class="col">
+                                        ${data.star}
+                                    </div>
+                                    <div class="col">
+                                        ${data.sales}
+                                    </div>
+                                    <div class="col">
+                                        <input type="hidden" value="${data.productid}" class="thisproduct" />
+                                        <a style = "background-color:#0caff7" role="button" class="bottn btn  choiceproduct my-2">選為精選商品</a>
+                                    </div>
 
-                        </tr>`;
+                                </div>
+                                <div id="product${data.productid}" class= "row d-none">
+                                <div class="sellsitem">
+                                    <a class="linknoline" href="${data.link}">
+                                        <img src="data:image;base64,${data.pic}" class="cardImg" alt="..." />
+
+                                    </a>
+                                    <div class="px-1 d-flex flex-column justify-content-between">
+                                        <div class="cardTitleBox">
+                                            <div class="cardTitle">${data.name}</div>
+                                        </div>
+                                        <div class="cardPrice">${data.price1} - ${data.price2}</div>
+                                        <div class="cardInfo d-flex justify-content-between flex-row">
+                                            <div class="starBox mt-1">
+                                                <div class="d-flex justify-content-start">
+                                                    <div class="starImg">
+                                                        <img src="/img/YellowStar.png" alt="" class="me-1 d-block" />
+                                                    </div>
+                                                    <div class="text-black">${data.star}</div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end text-black-50 sells">已賣出<span>${data.sales}</span></div>
+                                        </div>
+                                    </div>
+                                </div >
+
+                            </div>
+                                `;
 
         }
 
@@ -163,11 +240,18 @@
             let keyword = " ";
 
             $.getJSON("/SalesCourt/GetCard", { id: editsalescourtid.value }, function (data) {
-                console.log(data);
+                //console.log(data);
                 $("#salescourtcardbody").html("");
                 for (let i = 0; i < data.length; i++) {
-                    console.log(data[i].isfeatureproduct);
+                    //console.log(data[i].isfeatureproduct);
+                    console.log("first productid");
+
+                    productID = data[i].productid;
+                    console.log(productID);
                     if (data[i].isfeatureproduct == true) {
+                        //console.log("this line");
+                        //console.log(data[i]);
+
                         $("#salescourtcardbody").append(
                             returnCardblue(data[i])
                         );
@@ -178,20 +262,28 @@
                         );
                     }
                     /*$(".check").eq(i).a*/
-
+                    /*loadproductcard();*/
                 }
             })
 
 
         }
+        
+        $(".productcard").click(function () {   /*當modal打開要清空輸入欄位*/
+            $(this).next().removeClass("d-none");
+        })
+        $(".productcard").dblclick(function () {   /*當modal打開要清空輸入欄位*/
+            $(this).next().addClass("d-none");
+        })
+
 
 
 
         $(".show").mouseenter(function () {   /*當modal打開要清空輸入欄位*/
-            $(".show").append(`<div style ="font-size:2rem">你已經滑過去</div>`);
+            $(".test").removeClass("d-none");
         })
         $(".show").mouseleave(function () {   /*當modal打開要清空輸入欄位*/
-            $(".show").  append(``);
+            $(".test").addClass("d-none");
         })
 
 
