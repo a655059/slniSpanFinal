@@ -490,26 +490,37 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             var q = dbcontext.Orders.Where(o => o.MemberId == bid && o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId == sid && o.StatusId == 1).FirstOrDefault();
-            var q2 = dbcontext.OrderDetails.Where(o => o.OrderId == q.OrderId).Select(p => new
+            if (q != null)
             {
-                pic = IsNullPic(p.ProductDetail.Product.ProductPics.FirstOrDefault()),
-
-            });
-            return Json(new { });
+                var q2 = dbcontext.OrderDetails.Where(o => o.OrderId == q.OrderId).Select(p => new ShowCartViewModel()
+                {
+                    oid = q.OrderId,
+                    pic = p.ProductDetail.Product.ProductPics.FirstOrDefault() == null ? null : p.ProductDetail.Product.ProductPics.FirstOrDefault().Pic,
+                    qty = p.Quantity,
+                    unitprice = p.Unitprice,
+                    name = p.ProductDetail.Product.ProductName,
+                    style = p.ProductDetail.Style,
+                    sellerPayment = dbcontext.PaymentToSellers.Where(p => p.MemberId == sid).Select(p => new CSellerPaymentViewModel() { fee = p.Payment.Fee, payment = p.Payment.PaymentName, id = p.PaymentId }).ToList(),
+                    sellerShipper = dbcontext.ShipperToSellers.Where(p => p.MemberId == sid).Select(p => new CSellerShipperViewModel() { fee = p.Shipper.Fee, shipper = p.Shipper.ShipperName, id = p.ShipperId }).ToList(),
+                }).ToList();
+                foreach (var item in q2)
+                {
+                    if (item.pic == null)
+                    {
+                        string pName = "/img/Member/nopicmem.jpg";
+                        string path = _enviro.WebRootPath + pName;
+                        item.pic = System.IO.File.ReadAllBytes(path);
+                    }
+                }
+                return Json(q2);
+            }
+            else 
+            {
+                return Json(new ShowCartViewModel());
+            }
         }
 
-        byte[] IsNullPic(ProductPic pic)
-        {
-            if(pic == null)
-            {
-                string pName = "/img/imageNotFound.png";
-                string path = _enviro.WebRootPath + pName;
-                return System.IO.File.ReadAllBytes(path);
-            }
-            else
-            {
-                return pic.Pic;
-            }
-        }
     }
+
+
 }
