@@ -306,7 +306,7 @@ function dialogsort(id) {
 
 function MyMessagePack(head, msg, time) {
     if (head == "asdf") {
-        let src = "/img/emoji/emoji" + msg + ".jpg";
+        let src = "/img/emoji/emoji" + msg + ".png";
         msg = `<img class="msgdisplayemoji" src="` + src + `" />`;
     }
     else if (head == "zxcv") {
@@ -354,7 +354,7 @@ function MyMessagePack(head, msg, time) {
 }
 function CMessagePack(head, msg, time, multiid = "0") {
     if (head == "asdf") {
-        let src = "/img/emoji/emoji" + msg + ".jpg";
+        let src = "/img/emoji/emoji" + msg + ".png";
         msg = `<img class="msgdisplayemoji" src="` + src + `" />`;
     }
     else if (head == "zxcv") {

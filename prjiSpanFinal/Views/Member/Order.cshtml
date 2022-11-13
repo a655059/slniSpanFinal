@@ -14,10 +14,12 @@
 }
 <vc:member-ui></vc:member-ui>
 <h2 class="d-flex justify-content-center">購買清單</h2>
+
 <div id="orderdetaildiv">
     <div class="row ">
         <div class="col-1"></div>
         <div class="col-11">
+                <button class="addMoreProduct btn btn-outline-success">Demo</button>
             <div class="ordersearchbar">
                 <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
                 <span>
@@ -65,12 +67,12 @@
             <table id="ordertable" class="table table-hover dataTable">
                 <thead>
                     <tr>
-                        <td>訂單資料</td>
-                        <td class="th-sm sorting sorting_desc" id="ordertime">結帳時間</td>
+                        <td width="80px">訂單資料</td>
+                        <td class="th-sm sorting sorting_desc" id="ordertime" width="86px">結帳時間</td>
                         <td>商品詳情</td>
-                        <td class="th-sm sorting" id="ordersales">訂單金額</td>
-                        <td>訂單狀態</td>
-                        <td>
+                        <td class="th-sm sorting" id="ordersales" width="80px">訂單金額</td>
+                        <td width="80px">訂單狀態</td>
+                        <td width="72px">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                 <label class="form-check-label" for="flexCheckDefault">
@@ -588,5 +590,13 @@
             nowpages = 1;
             reloaditem(sortmethod, tabid, nowpages, eachpage);
         });
+
+        $(".addMoreProduct").click(function(){
+            $.getJSON(`/Member/DemoAddButerOrder`, function (data) {
+                Swal.fire("Demo訂單新增成功");
+            });
+            nowpages = 1;
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        })
     </script>
 }
