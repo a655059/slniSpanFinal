@@ -453,12 +453,13 @@ namespace prjiSpanFinal.Controllers
             }
             return Json(q);
         }
-        //od = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1).FirstOrDefault();
+        //od = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1).FirstOrDefault();https://localhost:44322/msgapi/addcart?memid=2&id=2&qty=1
         public IActionResult AddCart(int memid, int id,int qty)
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             int orderid = 0;
-            if(!dbcontext.Orders.Where(o=>o.MemberId == memid && o.StatusId == 1 && o.OrderDetails.Where(d=>d.ProductDetail.Product.Member.MemberId == dbcontext.ProductDetails.Where(p=>p.ProductDetailId == id).Select(p=>p.Product.MemberId).FirstOrDefault()).Any()).Any())
+            int sid = dbcontext.ProductDetails.Where(o => o.ProductDetailId == id).Select(p => p.Product.MemberId).FirstOrDefault();
+            if (!dbcontext.Orders.Where(o=>o.MemberId == memid && o.StatusId == 1 && o.OrderDetails.First().ProductDetail.Product.MemberId == sid).Any())
             {
                 Order od = new Order() { CouponId = 1,MemberId=memid, StatusId=1,PaymentId=1,ShipperId=1, };
                 dbcontext.Orders.Add(od);
@@ -467,7 +468,7 @@ namespace prjiSpanFinal.Controllers
             }
             else
             {
-                orderid = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1).FirstOrDefault().OrderId;
+                orderid = dbcontext.Orders.Where(o => o.MemberId == memid && o.StatusId == 1 && o.OrderDetails.First().ProductDetail.Product.MemberId == sid).FirstOrDefault().OrderId;
             }
 
 
@@ -494,6 +495,7 @@ namespace prjiSpanFinal.Controllers
             {
                 var q2 = dbcontext.OrderDetails.Where(o => o.OrderId == q.OrderId).Select(p => new ShowCartViewModel()
                 {
+                    odid = p.OrderDetailId,
                     oid = q.OrderId,
                     pic = p.ProductDetail.Product.ProductPics.FirstOrDefault() == null ? null : p.ProductDetail.Product.ProductPics.FirstOrDefault().Pic,
                     qty = p.Quantity,
@@ -519,8 +521,35 @@ namespace prjiSpanFinal.Controllers
                 return Json(new ShowCartViewModel());
             }
         }
-
+        public IActionResult CheckOut(string asdf)
+        {
+            List<ShowCartViewModel> scvm = JsonConvert.DeserializeObject<List<ShowCartViewModel>>(asdf);
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            var oid = dbcontext.OrderDetails.Where(o => o.OrderDetailId == scvm[0].odid).First().OrderId;
+            var q = dbcontext.OrderDetails.Where(o => o.OrderId == oid);
+            var cartodidlist = scvm.Select(o => o.odid).ToList();
+            foreach(var item in q)
+            {
+                if (cartodidlist.Contains(item.OrderDetailId))
+                {
+                    item.Quantity = scvm.Where(o => o.odid == item.OrderDetailId).First().qty;
+                }
+                else
+                {
+                    dbcontext.Remove(item);
+                }
+            }
+            var theorder = dbcontext.Orders.Where(o => o.OrderId == oid).First();
+            theorder.PaymentId = scvm[0].pay;
+            theorder.ShipperId = scvm[0].ship;
+            theorder.StatusId = 3;
+            theorder.OrderDatetime = DateTime.Now.AddSeconds(-5);
+            theorder.PaymentDate = DateTime.Now;
+            theorder.RecieveAdr = "台北市復興南路一段390號3樓";
+            dbcontext.SaveChanges();
+            return Json("0");
+        }
     }
 
-
+    //
 }
