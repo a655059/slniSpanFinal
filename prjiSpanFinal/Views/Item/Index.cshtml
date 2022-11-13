@@ -115,8 +115,10 @@
                     </div>
                 }
                 <div class="ms-1">
-
-                    <span>(</span><a href="#">@Model.commentCount</a><span>)</span>
+                    @{
+                        string sellerCommentHref = Url.Content("~/SalesCourt/評價") + $"?id={Model.seller.MemberId}";
+                    }
+                    <span>(</span><a href="@sellerCommentHref">@Model.commentCount</a><span>)</span>
                 </div>
                 <div class="ms-3">|</div>
                 <div class="ms-3">已售出:<span>@Model.salesVolume</span></div>

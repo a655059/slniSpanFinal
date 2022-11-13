@@ -24,9 +24,9 @@ namespace prjiSpanFinal.ViewComponents
             {
                 buyer = g.Key,
                 buyCount = g.Sum(i => i.buyCount),
-                finishDate = g.Select(i=>i.finishDate).FirstOrDefault(),
+                finishDate = g.Select(i=>i.finishDate).LastOrDefault(),
                 page = page
-            }).ToList();
+            }).OrderByDescending(i=>i.finishDate).ToList();
             
             return View(q1);
         }
