@@ -47,7 +47,7 @@
                         <div class="track">
                             <div class="step @pay"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">訂單成立<br />@(Model.OrderDatetime < new DateTime(2000, 12, 30) ? "等待中" : Model.OrderDatetime)</span> </div>
                             <div class="step @ship"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text">完成付款<br />@(Model.PaymentDate < new DateTime(2000, 12, 30) ? "等待中" : Model.PaymentDate)</span> </div>
-                            <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">已出貨<br />@(Model.ShippingDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ShippingDate)</span> </div>
+                            <div class="step @shipping"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="odshippingdemopro text">已出貨<br />@(Model.ShippingDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ShippingDate)</span> </div>
                             <div class="step @arrived"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">已領收<br />@(Model.ReceiveDate< new DateTime(2000, 12, 30) ? "等待中" :Model.ReceiveDate)</span> </div>
                         </div>
 
@@ -82,23 +82,24 @@
                                         string ship2 = "";
                                         string receive = "";
 
-                                        if (ship == "active")
+                                        
+                                        
+                                        if (Model.ShipStatusName[i] == "已到貨" || Model.ShipStatusName[i] == "已完成取貨")
                                         {
-                                            procbar = "33%";
-
+                                            procbar = "100%";
+                                            receive = "active";
+                                            ship2 = "active";
                                         }
                                         else if (Model.ShipStatusName[i] == "已出貨" || Model.ShipStatusName[i] == "正在送往取貨地址")
                                         {
                                             procbar = "66%";
                                             ship2 = "active";
                                         }
-                                        else if (Model.ShipStatusName[i] == "已到貨" || Model.ShipStatusName[i] == "已完成取貨")
+                                        else if (ship == "active")
                                         {
-                                            procbar = "100%";
-                                            receive = "active";
-                                            ship2 = "active";
-                                        }
+                                            procbar = "33%";
 
+                                        }
                                             <div class="row">
                                                 <div class="col-md-3 mb-3 odrefresh"> <small> 更新進度 <span><input type="hidden" value="@Model.OrderDetailId[i]" /><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
                                                 <div class="col mt-auto">
@@ -119,7 +120,7 @@
                     <div>
                         <input type="hidden" value="@Model.OrderDetailId[i]" />
                         <button class="odshipping btn btn-success mx-1">Demo運送中</button>
-                        <button class="odarrived btn btn-success mx-1">Demo已到貨</button>
+                        <button class="odarrived btn btn-success mx-1" style="display:none">Demo已到貨</button>
                     </div>
                 }
                     <div class="row mt-4">

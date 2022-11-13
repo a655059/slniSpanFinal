@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using prjiSpanFinal.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Google.Apis.Sheets.v4.Data;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Metadata;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,7 +37,20 @@ namespace prjiSpanFinal.Controllers
             {
                 Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == thisorderid);
                 b.StatusId = 4;
+                b.ShippingDate = DateTime.Now;
+                SendNoti(2, b.MemberId, "賣家已經出貨囉，", "/Member/Order?sort=0&tab=4", "可以在購買清單中查看訂單狀況。");
             }
+            dbcontext.SaveChanges();
+        }
+        public void SendNoti(int type, int id, string text, string link, string content)
+        {
+            if (text == null)
+            {
+                text = "";
+            }
+            iSpanProjectContext dbcontext = new iSpanProjectContext();
+            Notification a = new Notification() { MemberId = id, IconTypeId = type, Text = text, Link = link, HaveRead = false, Time = DateTime.Now, TextContent = content };
+            dbcontext.Notifications.Add(a);
             dbcontext.SaveChanges();
         }
         public void SettoArrived(int id)
@@ -57,7 +73,8 @@ namespace prjiSpanFinal.Controllers
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             OrderDetail a = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
-            return Json(a.ShippingStatusId);
+            Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == a.OrderId);
+            return Json(new { a.ShippingStatusId, b.ShippingDate});
         }
     }
 }

@@ -10,7 +10,13 @@ namespace prjiSpanFinal.ViewModels.App
     {
         public int qty { get; set; }
         public int oid { get; set; }
+        public int odid { get; set; }
         public decimal unitprice { get; set; }
+        public string RecieveAdr { get; set; }
+
+        public int ship { get; set; }
+        public int pay { get; set; }
+        
 
         public string name { get; set; }
         public string style { get; set; }
