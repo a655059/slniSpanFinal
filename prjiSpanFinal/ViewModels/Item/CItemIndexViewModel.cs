@@ -31,6 +31,6 @@ namespace prjiSpanFinal.ViewModels.Item
         public List<Coupon> sellerCoupons { get; set; }
         public List<CouponWallet> userCouponWallet { get; set; }
         public int remainingQty { get; set; }
-        
+        public decimal activeDiscount { get; set; }
     }
 }

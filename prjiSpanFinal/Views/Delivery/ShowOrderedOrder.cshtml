@@ -74,8 +74,19 @@
                                                 {
                                                     <div>@j.productDetail.Style</div>
                                                 }
+                                                if (j.eventDiscount > 0)
+                                                {
+                                                    string discountPrice = Math.Ceiling(j.productDetail.UnitPrice * j.eventDiscount).ToString("0");
+                                                    string eventDiscount = "eventDiscount" + j.eventDiscount;
+                                                    <div class="text-dark opacity-50 text-decoration-line-through">$<span class="originPrice" id="@eventDiscount">@j.productDetail.UnitPrice.ToString("0")</span></div>
+                                                    <div class="productPrice text-danger">$<span class="unitPrice">@discountPrice</span></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="productPrice text-danger">$<span class="unitPrice">@j.productDetail.UnitPrice.ToString("0")</span></div>
+                                                }
                                             }
-                                            <div class="productPrice text-danger">$<span class="unitPrice">@j.productDetail.UnitPrice.ToString("0")</span></div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +209,15 @@
                 }
                 else {
                     $(this).find(".itemLayout").each(function () {
-                        totalPrice += Math.ceil(Number($(this).find(".unitPrice").html()) * discount / 10) * Number($(this).find(".purchaseCount").html());
+                        if ($(this).find(".originPrice").length > 0) {
+                            let originPrice = Number($(this).find(".originPrice").html());
+                            let eventDiscount = Number($(this).find(".originPrice").attr("id").substring(13));
+                            totalPrice += Math.ceil(originPrice * eventDiscount * discount / 10) * Number($(this).find(".purchaseCount").html());
+                        }
+                        else {
+                            totalPrice += Math.ceil(Number($(this).find(".unitPrice").html()) * discount / 10) * Number($(this).find(".purchaseCount").html());
+                        }
+                        
                     });
                     totalPrice = totalPrice + shipperFee + paymentFee;
                 }

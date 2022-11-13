@@ -16,5 +16,6 @@ namespace prjiSpanFinal.ViewModels.Delivery
         public Shipper shipper { get; set; }
         public Payment payment { get; set; }
         public Coupon coupon { get; set; }
+        public decimal eventDiscount { get; set; }
     }
 }

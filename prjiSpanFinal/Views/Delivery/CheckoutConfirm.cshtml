@@ -64,9 +64,19 @@
                                             {
                                                 <div>@i.productStyle</div>
                                             }
+                                            if (i.eventDiscount > 0)
+                                            {
+                                                string eventDiscount = "eventDiscount" + i.eventDiscount;
+                                                <div class="text-dark opacity-50 text-decoration-line-through">$<span class="originPrice" id="@eventDiscount">@i.originPrice</span></div>
+                                                <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-danger">$<span class="unitPrice">@i.originPrice</span></div>
+                                            }
                                         }
 
-                                        <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
+
                                     </div>
                                 </div>
                                 <div class="w-25">
@@ -109,7 +119,11 @@
                                                 }
                                                 else
                                                 {
-                                                    string discount = (i.savedShipperPaymentCoupon.selectedCoupon.Discount * 10).ToString("0");
+                                                    string discount = (i.savedShipperPaymentCoupon.selectedCoupon.Discount * 10).ToString("0.0");
+                                                    if (discount.Split('.')[1] == "0")
+                                                    {
+                                                        discount = discount.Split('.')[0];
+                                                    }
                                                     if (i.savedShipperPaymentCoupon.selectedCoupon.MinimumOrder > 0)
                                                     {
                                                         <div class="text-danger mx-2" style="font-size:12px">滿<span>@i.savedShipperPaymentCoupon.selectedCoupon.MinimumOrder</span><span class="mx-2 freeShipper" id="notFreeShipper">@discount</span>折</div>
@@ -156,7 +170,15 @@
                 else {
                     let discount = Number($(this).find(".freeShipper").html());
                     $(this).find(".itemLayout").each(function () {
-                        totalPrice += Math.ceil(Number($(this).find(".unitPrice").html())*discount/10) * Number($(this).find(".purchaseCount").html());
+                        if ($(this).find(".originPrice").length > 0) {
+                            let eventDiscount = Number($(this).find(".originPrice").attr("id").substring(13));
+                            console.log($(this).find(".originPrice"));
+                            let originPrice = Number($(this).find(".originPrice").html());
+                            totalPrice += Math.ceil(originPrice * eventDiscount * discount / 10) * Number($(this).find(".purchaseCount").html());
+                        }
+                        else {
+                            totalPrice += Math.ceil(Number($(this).find(".unitPrice").html()) * discount / 10) * Number($(this).find(".purchaseCount").html());
+                        }
                     });
                     totalPrice = totalPrice + shipperFee + paymentFee;
                 }

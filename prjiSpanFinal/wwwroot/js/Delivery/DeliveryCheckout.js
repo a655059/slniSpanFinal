@@ -41,8 +41,17 @@ function CalTotalPriceIncludeDiscountAndFee() {
             const discount = Number($(".discountPrice").html());
             $(".purchaseCount").each(function () {
                 let purchaseCount = Number($(this).html());
-                let unitPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
-                totalPrice += purchaseCount * Math.ceil(Number(unitPrice * discount/10));
+                if ($(this).closest("div").siblings().find(".originPrice").length > 0) {
+                    let eventDiscount = Number($(this).closest("div").siblings().find(".originPrice").attr("id").substring(13));
+                    let originPrice = Number($(this).closest("div").siblings().find(".originPrice").html());
+                    totalPrice += purchaseCount * Math.ceil(originPrice * eventDiscount * discount/10);
+                }
+                else {
+                    let unitPrice = Number($(this).closest("div").siblings().find(".unitPrice").html());
+                    totalPrice += purchaseCount * Math.ceil(Number(unitPrice * discount / 10));
+                }
+                
+                
             })
             totalPrice = totalPrice + shipperFee + paymentFee;
         }

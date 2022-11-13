@@ -57,9 +57,19 @@
                             {
                                 <div>@i.productStyle</div>
                             }
+                            if (i.eventDiscount > 0)
+                            {
+                                string eventDiscount = "eventDiscount" + i.eventDiscount;
+                                <div class="text-dark opacity-50 text-decoration-line-through">$<span class="originPrice" id="@eventDiscount">@i.originPrice</span></div>
+                                <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
+                            }
+                            else
+                            {
+                                <div class="text-danger">$<span class="unitPrice">@i.originPrice</span></div>
+                            }
                         }
 
-                        <div class="text-danger">$<span class="unitPrice">@i.unitPrice</span></div>
+
                     </div>
                 </div>
                 <div class="fs-5 text-black-50">x<span class="purchaseCount">@i.purchaseCount</span></div>
