@@ -230,6 +230,68 @@
         let ele2 = [], ele1 = [];
         //==========================================
         loaddata();
+        //==========================================
+        //      TimerCountDown
+
+        function interval(ms, callback) {
+            const start = document.timeline
+                ? document.timeline.currentTime
+                : performance.now();
+            function timer1(time) {
+                const gaps = time - start;
+                const seconds = Math.round(gaps / ms);
+                callback(seconds);
+                const targetNext = (seconds + 1) * ms + start; // 算出下次interval开始的时间
+                const delay = document.timeline
+                    ? document.timeline.currentTime
+                    : performance.now(); // 取出更新完UI的时间
+                setTimeout(
+                    () => {
+                        requestAnimationFrame(timer1); // requestAnimationFrame 执行回调函数的时刻 当作参数，传入到callback
+                    },
+                    targetNext - delay // 算出距离下次interval开始时间
+                );
+            }
+            timer1(start);
+        }
+
+        interval(1000, getRemainTime);
+
+        
+        function getRemainTime() {
+            let remain = $(".item-remaining-date")
+            remain.each(function () {
+                let endtime = $(this).siblings(".item-total-date").text();
+                let remaintime = getRemainTimetick(endtime);
+                if (remaintime <= 0) {
+                    $(this).html("0天 00:00:00");
+                }
+                else {
+                    let dd = Math.floor(remaintime / 86400000);
+                    let hh = Math.floor((remaintime % 86400000) / 3600000);
+                    let mm = Math.floor(((remaintime % 86400000) % 3600000) / 60000);
+                    let ss = Math.floor((((remaintime % 86400000) % 3600000) % 60000) / 1000);
+                    $(this).html(`${dd}天 ${toFixedTimeFormat(hh)}:${toFixedTimeFormat(mm)}:${toFixedTimeFormat(ss)}`);
+                }
+            });
+        }
+        function toFixedTimeFormat(time) {
+            if (time < 10) {
+                return "0" + time;
+            }
+            else {
+                return "" + time;
+            }
+        }
+        function getRemainTimetick(time) {
+            let splitsdate = time.split(/\s+/)[0].split("/").join("-");
+            let splitsday = time.split(/\s+/)[1];
+            let tt = Date.parse(splitsdate + "T" + splitsday);
+            let tn = Date.now();
+            return tt - tn;
+        }
+        //==========================================
+
 
         function loaddata() {
             getADfilter();
@@ -261,11 +323,8 @@
             getItem();
         })
 
-        $(document).load(function () {
-            
-        });
-        console.log($(".item-total-date"))
-        console.log($(".item-remaining-date"))
+
+
 
         Model.on("hidden.bs.modal", function (evt) {
             ModelCheckBox.prop("checked", false);
@@ -711,13 +770,11 @@
                     res += `<td class="item-effect">${data[i].adTypeName}</td>`;
 
                     res += ` <td class="item-prod">${data[i].prod.productId} - ${data[i].prod.productName}</td>`;
-                    res += `<td class="item-date item-total-date">
-                        ${data[i].enddate}
-                    </td>`;
+                    res += `<td class="item-date item-total-date">${data[i].enddate}</td>`;
                     //${data[i].startdate}
                     //    <br />
                     res += ` <td class="item-date item-remaining-date">
-                                <label>${data[i].remaining}</label>
+                                ${data[i].remaining}
                             </td>`;
                     if (data[i].isSubActive) {
                         res += `<td class="item-status status-active">運作中</td>`;
