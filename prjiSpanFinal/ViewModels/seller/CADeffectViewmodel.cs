@@ -17,7 +17,7 @@ namespace prjiSpanFinal.ViewModels.seller
         {
             get
             {
-                return Convert.ToInt32(ADFee) * ADPeriod;
+                return Convert.ToInt32(ADFee);
             }
         }
         public string TypeName

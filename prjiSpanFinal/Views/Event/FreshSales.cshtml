@@ -159,23 +159,50 @@
                     if (ele.price.length == 1)
                     {
                         let discountPrice = Math.round(ele.price[0] * ele.discount);
-                        res += `<div class="cardPrice">$${discountPrice}</div>
-                        <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
-                        if (ele.percentage > 50) {
-                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                        res += `<div class="cardPrice">$${discountPrice}</div>`;
+                        if (ele.percentage == 100) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent};border-radius: 25px"></div>`;
+                            res += ` <div class="FS-soldbar">已完售</div></div>`;
                         }
-                        res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        else if (ele.percentage >= 80) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent};border-radius: 25px"></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += ` <div class="FS-soldbar">即將完售</div></div>`;
+                        }
+                        else if (ele.percentage >= 50) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        }
+                        else {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                            res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        }
                     }   
                     else
                     {
                         let discountPrice = Math.round(ele.price[1] * ele.discount);
                         let discountPrice2 = Math.round(ele.price[0] * ele.discount);
-                        res += `<div class="cardPrice">$${discountPrice} - $${discountPrice2}</div>
-                        <div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
-                        if (ele.percentage > 50) {
-                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                        res += `<div class="cardPrice">$${discountPrice} - $${discountPrice2}</div>`;
+                        if (ele.percentage == 100) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent};border-radius: 25px"></div>`;
+                            res += ` <div class="FS-soldbar">已完售</div></div>`;
                         }
-                        res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        else if (ele.percentage >= 80) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent};border-radius: 25px"></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += ` <div class="FS-soldbar">即將完售</div></div>`;
+                        }
+                        else if (ele.percentage >= 50) {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                            res += `<div class="FS-onFireBOX"><img class="FS-onFire" src="/img/Homepage/SellsOnFire.png" /></div>`;
+                            res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        }
+                        else {
+                            res += `<div class="FS-container"><div class="FS-progress" style="width:${percent}"></div>`;
+                            res += ` <div class="FS-soldbar">售出 ${ele.sales}</div></div>`;
+                        }
+                        
                     }
                 }
                 res += `</div></div></div>`;

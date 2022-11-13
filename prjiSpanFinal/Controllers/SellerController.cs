@@ -292,7 +292,8 @@ namespace prjiSpanFinal.Controllers
 
             return Json(res);
         }
-        public IActionResult saveADSubs(int itemID,int[] ADIDs)
+        public IActionResult saveADSubs(int itemID, int[] ADIDs, string ADtext)
+
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
             MemberAccount acc = _db.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
@@ -313,7 +314,7 @@ namespace prjiSpanFinal.Controllers
             //=======
             foreach (var item in ADIDs)
             {
-                cost += Convert.ToInt32(_db.Ads.Where(a => a.AdId == item).Select(a => a.AdFee * a.AdPeriod).FirstOrDefault());                
+                cost += Convert.ToInt32(_db.Ads.Where(a => a.AdId == item).Select(a => a.AdFee).FirstOrDefault());                
             }
             if (balance - cost < 0)
             {
@@ -324,7 +325,7 @@ namespace prjiSpanFinal.Controllers
             foreach (var ads in ADIDs)
             {
 
-                decimal adscost = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdFee * a.AdPeriod).FirstOrDefault();
+                decimal adscost = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdFee).FirstOrDefault();
                     int period = _db.Ads.Where(a => a.AdId == ads).Select(a => a.AdPeriod).FirstOrDefault();
                     AdtoProduct res = new AdtoProduct()
                     {
@@ -335,6 +336,7 @@ namespace prjiSpanFinal.Controllers
                         IsSubActive = true,
                         ExpoTimes = 0,
                         ClickTimes = 0,
+                        AdSlogan = ADtext,
                     };
                     _db.AdtoProducts.Add(res);
 
