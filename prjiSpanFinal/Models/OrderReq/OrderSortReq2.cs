@@ -13,7 +13,7 @@ namespace prjiSpanFinal.Models.OrderReq2
         public List<OrderListViewModel> SortTab(int sort, int tab, int id, int pages, int eachpage, string keyword, DateTime startdate, DateTime enddate) 
         {
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            List<OrderListViewModel> q = dbcontext.Orders.Where(o => o.OrderDatetime >= startdate && o.OrderDatetime <= enddate).Select(o => new OrderListViewModel()
+            List<OrderListViewModel> q = dbcontext.Orders.Where(o => o.OrderDatetime >= startdate && o.OrderDatetime <= enddate && o.MemberId == id && o.StatusId != 1 && o.StatusId != 9).Select(o => new OrderListViewModel()
             {
                 OrderId = o.OrderId,
                 SellerId = o.OrderDetails.FirstOrDefault().ProductDetail.Product.MemberId,
@@ -52,11 +52,10 @@ namespace prjiSpanFinal.Models.OrderReq2
             }).ToList();
             if (tab == 0)
             {
-                q = q.Where(o => o.BuyerId == id && o.ShipperStatusId != 1 && o.ShipperStatusId != 9).ToList();
             }
             else
             {
-                q = q.Where(o => o.BuyerId == id && o.ShipperStatusId == tab && o.ShipperStatusId != 1 && o.ShipperStatusId != 9).ToList();
+                q = q.Where(o => o.ShipperStatusId == tab).ToList();
             }
             if(sort == 0)
             {
