@@ -76,7 +76,6 @@ namespace prjiSpanFinal
 
                 endpoints.MapHub<ChatHub>("/chatHub");
                 endpoints.MapHub<CountdownHub>("/countdownHub");
-                endpoints.MapHub<SelectedBiddingItemsCountdownHub>("/selectedBiddingItemsCountdownHub");
                 endpoints.MapHub<SpecificItemCountdownHub>("/specificItemCountdownHub");
             });
         }
