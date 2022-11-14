@@ -30,11 +30,11 @@
             @{
                 if (Model.Islike)
                 {
-                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50 text-danger"></i>
+                                <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50 text-danger"></i>
                 }
                 else
                 {
-                    <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
+                                <i class="itemHeart fa-solid fa-heart position-absolute top-0 end-0 fs-2 opacity-50"></i>
                 }
                 string imgSrc1 = "";
                 try
@@ -46,7 +46,7 @@
                 {
                     imgSrc1 = Url.Content("~/img/imageNotFound.png");
                 }
-                <img src="@imgSrc1" />
+                            <img src="@imgSrc1" />
             }
         </div>
         <div class="smallPhoto d-flex justify-content-center">
@@ -71,11 +71,11 @@
                 @{
                     if (Model.user == null)
                     {
-                        <label class="text-primary">登入後方可使用檢舉功能</label>
+                                    <label class="text-primary">登入後方可使用檢舉功能</label>
                     }
                     else
                     {
-                        <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
+                                    <a id="ReportBTN" href="#" class="text-primary" data-bs-toggle="modal" data-bs-target="#reportmodal">檢舉</a>
                     }
                 }
             </div>
@@ -94,7 +94,7 @@
             @{
                 if (Model.commentCount == 0)
                 {
-                    <div class="opacity-50">尚無評價</div>
+                                <div class="opacity-50">尚無評價</div>
                 }
                 else
                 {
@@ -103,25 +103,25 @@
                     {
                         if (i <= starCount)
                         {
-                            <i class="text-warning fa-solid fa-star"></i>
+                                        <i class="text-warning fa-solid fa-star"></i>
                         }
                         else
                         {
-                            <i class="fa-regular fa-star"></i>
+                                        <i class="fa-regular fa-star"></i>
                         }
                     }
-                    <div class="ms-3">
-                        @Model.avgCommentStar
-                    </div>
+                                <div class="ms-3">
+                                    @Model.avgCommentStar
+                                </div>
                 }
-                <div class="ms-1">
-                    @{
+                            <div class="ms-1">
+                                @{
                         string sellerCommentHref = Url.Content("~/SalesCourt/評價") + $"?id={Model.seller.MemberId}";
-                    }
-                    <span>(</span><a href="@sellerCommentHref">@Model.commentCount</a><span>)</span>
-                </div>
-                <div class="ms-3">|</div>
-                <div class="ms-3">已售出:<span>@Model.salesVolume</span></div>
+                                }
+                                <span>(</span><a href="@sellerCommentHref">@Model.commentCount</a><span>)</span>
+                            </div>
+                            <div class="ms-3">|</div>
+                            <div class="ms-3">已售出:<span>@Model.salesVolume</span></div>
             }
         </div>
         <div class="itemDetails mb-2">
@@ -165,14 +165,14 @@
                         }
                         if (Model.activeDiscount > 0)
                         {
-                            <div>
-                                <div class="originPrice ms-3 fs-6 text-dark opacity-50" style="text-decoration:line-through">@originPrice</div>
-                                <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
-                            </div>
+                                        <div>
+                                            <div class="originPrice ms-3 fs-6 text-dark opacity-50" style="text-decoration:line-through">@originPrice</div>
+                                            <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                                        </div>
                         }
                         else
                         {
-                            <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
+                                        <div class="itemPrice ms-3 fs-3 fw-bold text-danger">@price</div>
                         }
 
                     }
@@ -182,7 +182,7 @@
                     @{
                         if (Model.productDetails.Count > 1)
                         {
-                            <div class="itemKey">規格:</div>
+                                        <div class="itemKey">規格:</div>
                         }
                     }
 
@@ -205,32 +205,32 @@
                                 string labelId = "style" + productDetailID;
                                 string unitPrice = i.UnitPrice.ToString("0");
                                 int quantity = i.Quantity;
-                                                <div class="ms-1 mb-1">
-                                                    @{
+                                                            <div class="ms-1 mb-1">
+                                                                @{
                                                         if (i.Style == "樣式一")
                                                         {
-                                                            <input type="radio" class="btn-check d-none" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID" checked>
-                                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1 d-none" for="@labelId">@style</label>
+                                                                                    <input type="radio" class="btn-check d-none" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID" checked>
+                                                                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1 d-none" for="@labelId">@style</label>
                                                         }
                                                         else
                                                         {
-                                                            <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
-                                                            <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
+                                                                                    <input type="radio" class="btn-check" name="purchaseStyle" id="@labelId" autocomplete="off" value="@productDetailID">
+                                                                                    <label class="purchaseStyle btn btn-outline-secondary btn-sm rounded-1" for="@labelId">@style</label>
                                                         }
                                                         if (Model.activeDiscount > 0)
                                                         {
                                                             string discountPrice = Math.Ceiling(i.UnitPrice * Model.activeDiscount).ToString("0");
-                                                            <div class="d-none origin">@unitPrice</div>
-                                                            <div class="d-none price">@discountPrice</div>
+                                                                                    <div class="d-none origin">@unitPrice</div>
+                                                                                    <div class="d-none price">@discountPrice</div>
                                                         }
                                                         else
                                                         {
-                                                            <div class="d-none price">@unitPrice</div>
+                                                                                    <div class="d-none price">@unitPrice</div>
                                                         }
-                                                    }
+                                                                }
 
-                                                    <img class="d-none itemStyleImg" src="@imgSrc2" />
-                                                </div>
+                                                                <img class="d-none itemStyleImg" src="@imgSrc2" />
+                                                            </div>
                             }
                         }
                     </div>
@@ -241,17 +241,17 @@
                     @{
                         if (Model.productDetails.Count > 1)
                         {
-                            <div class="ms-3">還剩<span class="itemRemainingQty"></span>件數</div>
+                                        <div class="ms-3">還剩<span class="itemRemainingQty"></span>件數</div>
                         }
                         else
                         {
                             if (Model.user == null)
                             {
-                                <div class="ms-3">還剩<span class="itemRemainingQty">@Model.productDetails[0].Quantity</span>件數</div>
+                                            <div class="ms-3">還剩<span class="itemRemainingQty">@Model.productDetails[0].Quantity</span>件數</div>
                             }
                             else
                             {
-                                <div class="ms-3">還剩<span class="itemRemainingQty">@Model.remainingQty</span>件數</div>
+                                            <div class="ms-3">還剩<span class="itemRemainingQty">@Model.remainingQty</span>件數</div>
                             }
                         }
                     }
@@ -268,10 +268,10 @@
         @{
             if (Model.sellerCoupons.Count > 0)
             {
-                <div class="sellerCouponLayout position-relative mb-2" style="width:745px;height:120px;overflow:hidden">
-                    <div class="sellerCouponCount d-none">@Model.sellerCoupons.Count</div>
-                    <button class="couponLeft btn btn-light position-absolute bg-transparent border-0 p-0" style="left:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-left"></i></button>
-                    @{
+                            <div class="sellerCouponLayout position-relative mb-2" style="width:745px;height:120px;overflow:hidden">
+                                <div class="sellerCouponCount d-none">@Model.sellerCoupons.Count</div>
+                                <button class="couponLeft btn btn-light position-absolute bg-transparent border-0 p-0" style="left:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-left"></i></button>
+                                @{
                         if (Model.user != null)
                         {
                             foreach (var i in Model.sellerCoupons)
@@ -279,19 +279,19 @@
                                 var hasCoupon = Model.userCouponWallet.Where(a => a.CouponId == i.CouponId).ToList();
                                 if (hasCoupon.Count > 0)
                                 {
-                                    <div class="sellerCoupon border d-flex justify-content-between position-absolute opacity-50" style="font-size:14px;width:350px;height:120px;margin-right:10px">
-                                        <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
-                                            <div>@i.CouponName</div>
-                                            @{
+                                                            <div class="sellerCoupon border d-flex justify-content-between position-absolute opacity-50" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                                <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                                    <div>@i.CouponName</div>
+                                                                    @{
                                                 if (i.IsFreeDelivery)
                                                 {
                                                     if (i.MinimumOrder > 0)
                                                     {
-                                                        <div>滿$<span>@i.MinimumOrder</span>即享免運費</div>
+                                                                                            <div>滿$<span>@i.MinimumOrder</span>即享免運費</div>
                                                     }
                                                     else
                                                     {
-                                                        <div>不限金額皆享免運費</div>
+                                                                                            <div>不限金額皆享免運費</div>
                                                     }
                                                 }
                                                 else
@@ -304,45 +304,45 @@
                                                     if (i.MinimumOrder > 0)
                                                     {
 
-                                                        <div>滿$<span>@i.MinimumOrder</span>即享<span>@discount</span>折優惠</div>
+                                                                                            <div>滿$<span>@i.MinimumOrder</span>即享<span>@discount</span>折優惠</div>
                                                     }
                                                     else
                                                     {
-                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                                            <div>不限金額皆享<span>@discount</span>折優惠</div>
                                                     }
                                                 }
-                                            }
-                                            <div>折扣碼:<span>@i.CouponCode</span></div>
-                                            @{
+                                                                    }
+                                                                    <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                                    @{
                                                 string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
-                                            }
+                                                                    }
 
-                                            <div>活動期間:<span>@period</span></div>
-                                            @{
+                                                                    <div>活動期間:<span>@period</span></div>
+                                                                    @{
                                                 if (i.ExpiredDate != i.ReceiveEndDate)
                                                 {
-                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                                                        <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
                                                 }
-                                            }
-                                        </div>
-                                        <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button" disabled>領取</button>
-                                    </div>
+                                                                    }
+                                                                </div>
+                                                                <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button" disabled>領取</button>
+                                                            </div>
                                 }
                                 else
                                 {
-                                    <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
-                                        <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
-                                            <div>@i.CouponName</div>
-                                            @{
+                                                            <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                                <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                                    <div>@i.CouponName</div>
+                                                                    @{
                                                 if (i.IsFreeDelivery)
                                                 {
                                                     if (i.MinimumOrder > 0)
                                                     {
-                                                        <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                                                                            <div>滿$<span>@i.MinimumOrder</span>免運費</div>
                                                     }
                                                     else
                                                     {
-                                                        <div>不限金額都免運費</div>
+                                                                                            <div>不限金額都免運費</div>
                                                     }
                                                 }
                                                 else
@@ -355,29 +355,29 @@
                                                     if (i.MinimumOrder > 0)
                                                     {
 
-                                                        <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                                                                            <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
                                                     }
                                                     else
                                                     {
-                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                                            <div>不限金額皆享<span>@discount</span>折優惠</div>
                                                     }
                                                 }
-                                            }
-                                            <div>折扣碼:<span>@i.CouponCode</span></div>
-                                            @{
+                                                                    }
+                                                                    <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                                    @{
                                                 string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
-                                            }
+                                                                    }
 
-                                            <div>活動期間:<span>@period</span></div>
-                                            @{
+                                                                    <div>活動期間:<span>@period</span></div>
+                                                                    @{
                                                 if (i.ExpiredDate != i.ReceiveEndDate)
                                                 {
-                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                                                        <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
                                                 }
-                                            }
-                                        </div>
-                                        <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
-                                    </div>
+                                                                    }
+                                                                </div>
+                                                                <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                                                            </div>
                                 }
                             }
 
@@ -386,19 +386,19 @@
                         {
                             foreach (var i in Model.sellerCoupons)
                             {
-                                <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
-                                    <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
-                                        <div>@i.CouponName</div>
-                                        @{
+                                                        <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                            <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                                <div>@i.CouponName</div>
+                                                                @{
                                             if (i.IsFreeDelivery)
                                             {
                                                 if (i.MinimumOrder > 0)
                                                 {
-                                                    <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                                                                        <div>滿$<span>@i.MinimumOrder</span>免運費</div>
                                                 }
                                                 else
                                                 {
-                                                    <div>不限金額都免運費</div>
+                                                                                        <div>不限金額都免運費</div>
                                                 }
                                             }
                                             else
@@ -411,34 +411,34 @@
                                                 if (i.MinimumOrder > 0)
                                                 {
 
-                                                    <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                                                                        <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
                                                 }
                                                 else
                                                 {
-                                                    <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
                                                 }
                                             }
-                                        }
-                                        <div>折扣碼:<span>@i.CouponCode</span></div>
-                                        @{
+                                                                }
+                                                                <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                                @{
                                             string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
-                                        }
+                                                                }
 
-                                        <div>活動期間:<span>@period</span></div>
-                                        @{
+                                                                <div>活動期間:<span>@period</span></div>
+                                                                @{
                                             if (i.ExpiredDate != i.ReceiveEndDate)
                                             {
-                                                <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
                                             }
-                                        }
-                                    </div>
-                                    <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
-                                </div>
+                                                                }
+                                                            </div>
+                                                            <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                                                        </div>
                             }
                         }
-                    }
-                    <button class="couponRight btn btn-light position-absolute bg-transparent border-0 p-0" style="right:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
+                                }
+                                <button class="couponRight btn btn-light position-absolute bg-transparent border-0 p-0" style="right:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
             }
         }
         <div class="row">
@@ -449,7 +449,7 @@
                         @{
                             foreach (var i in Model.sellerPayment)
                             {
-                                <div>@i.payment<span class="mx-2 text-danger" style="font-size:12px"><span>手續費:</span>@i.fee</span></div>
+                                            <div>@i.payment<span class="mx-2 text-danger" style="font-size:12px"><span>手續費:</span>@i.fee</span></div>
                             }
                         }
                     </div>
@@ -460,7 +460,7 @@
                         @{
                             foreach (var i in Model.sellerShipper)
                             {
-                                <div>@i.shipper<span class="mx-2 text-danger" style="font-size:12px">$<span>@i.fee</span></span></div>
+                                            <div>@i.shipper<span class="mx-2 text-danger" style="font-size:12px">$<span>@i.fee</span></span></div>
                             }
                         }
                     </div>
@@ -498,11 +498,11 @@
                             if (Model.sellerCommentCount > 0)
                             {
                                 string sellerComment = Model.avgSellerCommentStar.ToString("0.0") + "  " + "(" + Model.sellerCommentCount + ")";
-                                <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@sellerComment</a>
+                                            <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="fs-5 fw-bold text-primary ">@sellerComment</a>
                             }
                             else
                             {
-                                <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="opacity-50 text-primary" style="font-size:14px">尚無賣場評價</a>
+                                            <a href="@Url.Content("~/SalesCourt/評價?id="+Model.seller.MemberId)" class="opacity-50 text-primary" style="font-size:14px">尚無賣場評價</a>
                             }
                         }
                     </div>
@@ -544,7 +544,7 @@
                     {
                         imgSrc3 = Url.Content("~/img/imageNotFound.png");
                     }
-                    <div class="productImg"><img src="@imgSrc3" /></div>
+                                <div class="productImg"><img src="@imgSrc3" /></div>
                 }
             }
         </div>
@@ -587,7 +587,7 @@
                         @{
                             foreach (var i in Model.ReportType)
                             {
-                                <option value="@i.ReportTypeId">@i.ReportTypeName</option>
+                                            <option value="@i.ReportTypeId">@i.ReportTypeName</option>
                             }
                         }
                     </select>
@@ -601,6 +601,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button id="demo" class="btn btn-success">demo</button>
                 <button id="save" type="button" class="btn btn-warning">新增</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
             </div>
@@ -971,5 +972,11 @@
             $(this).closest(".messageFooter").siblings(".messageReplay").slideToggle();
         });
 
+        //檢舉DEMO
+        let demo=document.getElementById("demo");
+        let Reasons=document.getElementById("Reason");
+        demo.addEventListener("click",function(){
+            Reasons.value="商品圖片和品名不符，請客服盡速處理。";
+        })
     </script>
 }
