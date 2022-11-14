@@ -399,10 +399,10 @@
                     sub3BGbox = "SubAD3BGBox";
                 }
 
-                let productLink = productLink = "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
-                if (data[i].product.productStatusID == 3 || data[i].product.productStatusID == 4) {
-                    productLink="@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
-                }
+                let productLink =  "@Url.Content("~/Item/Index")" + "?id=" + data[i].product.productId;
+                @*if (data[i].product.productStatusID == 3 || data[i].product.productStatusID == 4) {
+                    productLink="@Url.Content("~/Item/BiddingIndex")" + "?id=" + data[i].product.productId;
+                }*@
 
                 item += `<div class="sellsitem ${sub1BG} ${sub2}">`
                 if (data[i].effects.includes(3)) {
