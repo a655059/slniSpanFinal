@@ -65,12 +65,14 @@ namespace prjiSpanFinal.Controllers
         {
             if (_db.OfficialEventLists.Where(e => e.OfficialEventListId == Eventid&&e.OfficialEventTypeId==1).Any())
             {
-                EventViewModel EventVM = (new EventFactory()).fToEvent(Eventid);
                 MemberAccount evtLoggedAcc = new MemberAccount();
+                int memid = 0;
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
                     evtLoggedAcc = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+                    memid= JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
                 }
+                EventViewModel EventVM = (new EventFactory()).fToEvent(Eventid, memid);
                 EventVM.LogingMember = evtLoggedAcc;
                 //開始一周前開放看
                 double evtPublishDay = (DateTime.Now).Subtract(EventVM.Event.StartDate).TotalDays;

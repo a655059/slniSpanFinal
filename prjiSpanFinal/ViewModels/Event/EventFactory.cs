@@ -22,7 +22,7 @@ namespace prjiSpanFinal.ViewModels.Event
             return res;
         }
         //取得EventID轉成ViewModel
-        public EventViewModel fToEvent(int EventID)
+        public EventViewModel fToEvent(int EventID,int memid)
         {
             EventViewModel res = new EventViewModel();
             //活動為非預設活動
@@ -36,7 +36,7 @@ namespace prjiSpanFinal.ViewModels.Event
             //優惠券為 本次活動 可收券時間(早>晚)排序
             var Coupons = _db.Coupons.Where(c => c.OfficialEventListId == EventID).OrderBy(e => e.ReceiveStartDate);
             if (Coupons.Any())
-                evtShowCoupon = fCouponToShowCoupon(Coupons.ToList());
+                evtShowCoupon = fCouponToShowCoupon(Coupons.ToList(), memid);
 
             List<EventSubs> evtSubs = new List<EventSubs>();
             //子活動為本次活動 折價排序(低>高)
@@ -60,20 +60,25 @@ namespace prjiSpanFinal.ViewModels.Event
             return res;
         }
         //List<Coupon> 轉成List<CShowCoupon>
-        public List<CShowCoupon> fCouponToShowCoupon(List<Coupon> coupon)
+        public List<CShowCoupon> fCouponToShowCoupon(List<Coupon> coupon,int id)
         {
             List<CShowCoupon> res = new List<CShowCoupon>();
             if (coupon.Any())
             {
-                foreach(Coupon c in coupon)
+                foreach (Coupon coupons in coupon)
                 {
-                    CShowCoupon sc = new CShowCoupon()
+                    CShowCoupon showCoupon = new CShowCoupon
                     {
-                        coupon = c
+                        coupon = coupons,
                     };
-                    res.Add(sc);
+                    if (id > 0)
+                        showCoupon.loggeduser = _db.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
+                    res.Add(showCoupon);
                 }
+
             }
+
+
             return res;
         }
         public List<EventShowItem> ftoEvtShowItem(List<Product> list)

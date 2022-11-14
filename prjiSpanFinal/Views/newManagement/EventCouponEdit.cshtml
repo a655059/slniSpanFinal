@@ -1,7 +1,7 @@
 ﻿@model prjiSpanFinal.Models.Coupon
 
 @{
-    ViewData["Title"] = "CouponEdit";
+    ViewData["Title"] = "EventCouponEdit";
 }
 
 <h1>修改優惠券</h1>
@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CouponEdit">
+        <form asp-action="EventCouponEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="CouponId" class="form-control" type="hidden" />
@@ -56,7 +56,7 @@
                 @{ if (ViewBag.re)
                     {
                         <label class="form-check-label">
-                            <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" /> 是否為免運券
+                            是否為免運券 <input id="IsFreeDelivery" class="form-check-input" asp-for="IsFreeDelivery" />
                         </label>
                     }
                     else
