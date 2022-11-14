@@ -34,7 +34,9 @@
     }).ToList();
 
 
-    var sellerCoupons = dbContext.Coupons.Where(a => a.MemberId == Model.SellerId).ToList();
+    var sellerCoupons = dbContext.Coupons.Where(a => a.MemberId == Model.SellerId ).ToList();
+    var sellerCouponIDs = sellerCoupons.Select(i => i.CouponId).ToList();
+    //var userCouponWallet = dbContext.CouponWallets.Where(i => i.MemberId == user.MemberId && sellerCouponIDs.Contains(i.CouponId)).ToList();
 
 }
 @section Styles{
@@ -176,11 +178,200 @@
 
                   
                     <div class="HP-Item sellerCouponLayout position-relative mb-2" style="width:640px;height:120px;overflow:hidden">
+                        <button class="couponLeft btn btn-light position-absolute bg-transparent border-0 p-0" style="left:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-left"></i></button>
+                        @*@{
+                            if (sellerCoupons.Count > 0)
+                            {
+                                <div class="sellerCouponLayout position-relative mb-2" style="width:745px;height:120px;overflow:hidden">
+                                    <div class="sellerCouponCount d-none">@sellerCoupons.Count</div>
+                                    <button class="couponLeft btn btn-light position-absolute bg-transparent border-0 p-0" style="left:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-left"></i></button>
+                                    @{
+                                        if user != null)
+                                        {
+                                            foreach (var i in sellerCoupons)
+                                            {
+                                                var hasCoupon = userCouponWallet.Where(a => a.CouponId == i.CouponId).ToList();
+                                                if (hasCoupon.Count > 0)
+                                                {
+                                                    <div class="sellerCoupon border d-flex justify-content-between position-absolute opacity-50" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                        <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                            <div>@i.CouponName</div>
+                                                            @{
+                                                                if (i.IsFreeDelivery)
+                                                                {
+                                                                    if (i.MinimumOrder > 0)
+                                                                    {
+                                                                        <div>滿$<span>@i.MinimumOrder</span>即享免運費</div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div>不限金額皆享免運費</div>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    string discount = (i.Discount * 10).ToString("0.0");
+                                                                    if (discount.Split('.')[1] == "0")
+                                                                    {
+                                                                        discount = discount.Split('.')[0];
+                                                                    }
+                                                                    if (i.MinimumOrder > 0)
+                                                                    {
+
+                                                                        <div>滿$<span>@i.MinimumOrder</span>即享<span>@discount</span>折優惠</div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                    }
+                                                                }
+                                                            }
+                                                            <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                            @{
+                                                                string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                                            }
+
+                                                            <div>活動期間:<span>@period</span></div>
+                                                            @{
+                                                                if (i.ExpiredDate != i.ReceiveEndDate)
+                                                                {
+                                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button" disabled>領取</button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                        <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                            <div>@i.CouponName</div>
+                                                            @{
+                                                                if (i.IsFreeDelivery)
+                                                                {
+                                                                    if (i.MinimumOrder > 0)
+                                                                    {
+                                                                        <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div>不限金額都免運費</div>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    string discount = (i.Discount * 10).ToString("0.0");
+                                                                    if (discount.Split('.')[1] == "0")
+                                                                    {
+                                                                        discount = discount.Split('.')[0];
+                                                                    }
+                                                                    if (i.MinimumOrder > 0)
+                                                                    {
+
+                                                                        <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                    }
+                                                                }
+                                                            }
+                                                            <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                            @{
+                                                                string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                                            }
+
+                                                            <div>活動期間:<span>@period</span></div>
+                                                            @{
+                                                                if (i.ExpiredDate != i.ReceiveEndDate)
+                                                                {
+                                                                    <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                                                    </div>
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            foreach (var i in sellerCoupons)
+                                            {
+                                                <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:350px;height:120px;margin-right:10px">
+                                                    <div class="d-flex flex-column justify-content-around align-items-baseline ps-2">
+                                                        <div>@i.CouponName</div>
+                                                        @{
+                                                            if (i.IsFreeDelivery)
+                                                            {
+                                                                if (i.MinimumOrder > 0)
+                                                                {
+                                                                    <div>滿$<span>@i.MinimumOrder</span>免運費</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>不限金額都免運費</div>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                string discount = (i.Discount * 10).ToString("0.0");
+                                                                if (discount.Split('.')[1] == "0")
+                                                                {
+                                                                    discount = discount.Split('.')[0];
+                                                                }
+                                                                if (i.MinimumOrder > 0)
+                                                                {
+
+                                                                    <div>滿$<span>@i.MinimumOrder</span>打<span>@discount</span>折</div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>不限金額皆享<span>@discount</span>折優惠</div>
+                                                                }
+                                                            }
+                                                        }
+                                                        <div>折扣碼:<span>@i.CouponCode</span></div>
+                                                        @{
+                                                            string period = i.StartDate.ToString("yyyy/MM/dd") + " ~ " + i.ExpiredDate.ToString("yyyy/MM/dd");
+                                                        }
+
+                                                        <div>活動期間:<span>@period</span></div>
+                                                        @{
+                                                            if (i.ExpiredDate != i.ReceiveEndDate)
+                                                            {
+                                                                <div>最後領券時間:<span>@i.ReceiveEndDate.ToString("yyyy/MM/dd")</span></div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                    <button class="couponRight btn btn-light position-absolute bg-transparent border-0 p-0" style="right:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            }
+                        }*@
+
+
+
+
+
+
+
+
+
+
+
+
                         @{
                             if (sellerCoupons.Count > 0)
                             {
                                 <div class="sellerCouponCount d-none">@sellerCoupons.Count</div>
-                                <button class="couponLeft btn btn-light position-absolute bg-transparent" style="left:0px;width:10px;height:120px;z-index:10"><i class="fa-solid fa-chevron-left"></i></button>
+
                                 foreach (var i in sellerCoupons)
                                 {
                                     <div class="sellerCoupon border d-flex justify-content-between position-absolute" style="font-size:14px;width:305px;height:120px;margin-right:10px">
@@ -233,7 +424,7 @@
                                         <button class="getCoupon btn btn-warning rounded-0 fw-bold" id="@i.CouponId" type="button">領取</button>
                                     </div>
                                 }
-                                <button class="couponRight btn btn-light position-absolute bg-transparent" style="right:0px;width:10px;height:120px;z-index:10"><i class="fa-solid fa-chevron-right"></i></button>
+
 
                             }
                             else
@@ -242,6 +433,7 @@
                             }
 
                         }
+                        <button class="couponRight btn btn-light position-absolute bg-transparent border-0 p-0" style="right:0px;height:120px;font-size:8px"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
 
 
@@ -525,7 +717,7 @@
 
                 return `
                    <div class=" salescourtclicklist" >
-                        <a role="button" class="salescourtclick linknoline text-primary" href="#salescourtcardbody">${data.name}</a>
+                        <a role="button" class="salescourtclick linknoline text-primary" href="#salescourtcardbody">${data.name}</a><a>(${data.count})</a>
                     </div>`;
             }
 
@@ -593,10 +785,10 @@
 
             $(function () {
             const productID = $("#ProductId").val();
-           
+                userIsSeller();
                 $(".sellerCoupon").each(function () {
                     $(this).css("left", couponPosition);
-                    couponPosition += 315;
+                    couponPosition += 310;
                 });
                 couponPageSelect();
                 //$(".couponLeft").prop("disabled", true);
@@ -604,6 +796,15 @@
                 //    $(".couponRight").prop("disabled", true);
                 //}
             });
+
+            function userIsSeller() {
+                const userID = $(".memberID").html();
+                const sellerID = $(".sellerID").html();
+                if (userID == sellerID) {
+                    $(".sellerCoupon").addClass("opacity-50");
+                    $(".getCoupon").prop("disabled", true);
+                }
+            }
 
 
             $(".couponRight").click(function () {

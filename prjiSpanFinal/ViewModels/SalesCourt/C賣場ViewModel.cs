@@ -30,5 +30,7 @@ namespace prjiSpanFinal.ViewModels.SalesCourt
         public string? SearchKeyword { get; set; }
 
         public int? SellerId { get; set; }
+
+        public int MemberId { get; set; }
     }
 }

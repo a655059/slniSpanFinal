@@ -264,12 +264,12 @@
         </div>
     </div>
 
-    <div class="form-group ">
-        <input type="submit" value="送出" id="btnSubmit" class="btn btn-success" />
+    @*<div class="form-group ">
+        <input type="" value="送出" id="btnSubmit" class="btn btn-success" />
 
-    </div>
+    </div>*@
 
-
+    <a role="button" class="btn btn btn-success rounded-2" id="btnSubmit">送出</a>
 
 </form>
 
@@ -303,7 +303,7 @@
 
     }
 
-
+    load();
     function load() {
         $.getJSON("/SalesCourt/GetAlterMe", { id:@Model.Memberid}, function (data) {
             console.log(data);
@@ -317,14 +317,14 @@
             }
         })
     }
-    load();
+    
 
 
     $(".demobtn").click(function () {
-        $(".asdf")[0].textContent = "這是描述";
-        $(".asdf")[2].textContent = "這是賣家類型";
-        $(".asdf")[1].setAttribute("value", "每週幾公休");
-        $(".asdf")[3].setAttribute("value", "請於幾天完成結帳");
+        $(".asdf")[0].textContent = "我是位賣家";
+        $(".asdf")[2].textContent = "個人 有實體店面";
+        $(".asdf")[1].setAttribute("value", "五六日");
+        $(".asdf")[3].setAttribute("value", "三");
         for (let i = 0; i < 3; i++) {            
             $(".checklist")[i].checked = true;
         }
@@ -336,7 +336,7 @@
         }
         $(".checklist")[6].checked = true;
         $(".checklist")[14].checked = true;
-        $(".checklist")[21].checked = true;
+        $(".checklist")[20].checked = true;
         $(".scst")[0].selectedIndex = 1;
         $(".scst")[1].selectedIndex = 5;
         $(".scst")[2].selectedIndex = 9;
@@ -345,8 +345,26 @@
     })
     $("#btnSubmit").click(function () {
         loadpost();
-        $.postJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function () {
+        
+        $.getJSON("/SalesCourt/AlterMe", { Memberid: @Model.Memberid, asd: asd }, function (data) {
+            
+            if (data == 1) {
+                $("#btnSubmit").attr('style', 'background-color:#b7b0bd');
+                Swal.fire(
+                    '編輯成功',
+                    '您已成功編輯關於我',
+                    'success'
+                );
+            }
+            else {
+                Swal.fire(
+                    '編輯失敗',
+                    '您編輯失敗',
+                    'warning'
+                );
+            }
         });
+        
     })
 
     let aaa1 = "";
@@ -355,6 +373,7 @@
     let asd = "";
 
     function loadpost() {
+        
 
         let aaa = $.map($(".checklist"), function (data) {        /*物件變json checkbox  要怎麼限制*/
 
