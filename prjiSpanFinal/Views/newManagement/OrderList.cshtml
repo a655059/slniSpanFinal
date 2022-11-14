@@ -39,7 +39,7 @@
                     訂單ID
                 </th>
                 <th>
-                    買家
+                    買家帳號
                 </th>
                 <th>
                     下訂日期
@@ -124,11 +124,11 @@
                     @{ 
                         if (item.Order.StatusId != 7)
                         {
-                        <a name="@item.Order.OrderId" class="Out btn btn-outline-secondary mt-1">出貨</a>
-                        <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary mt-1">到貨</a>
-                        <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger mt-1">完成</a>
-                        <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger mt-1">爭議處理中</a>
-                        <a class="Dele btn btn-outline-danger mt-1" name="@item.Order.OrderId mt-1">取消並作廢訂單</a>}
+                            <a name="@item.Order.OrderId" class="Out btn btn-outline-secondary mt-1">出貨</a>
+                            <a name="@item.Order.OrderId" class="Delivered btn btn-outline-primary mt-1">到貨</a>
+                            <a name="@item.Order.OrderId" class="Fin btn btn-outline-danger mt-1">完成</a>
+                            <a name="@item.Order.OrderId" class="Stop btn btn-outline-danger mt-1">爭議處理中</a>
+                            <a class="Dele btn btn-outline-danger mt-1" name="@item.Order.OrderId mt-1">取消並作廢訂單</a>}
                         }
                     @*@Html.ActionLink("查看更多", "MemberList2", new { id=item.MemberAccount.MemberId },new{@class="btn btn-primary"})*@
                     @Html.ActionLink("檢視細節", "OrderDetailList", new { id=item.Order.OrderId },new{@class= "btn btn-primary mt-1 Detail" })
@@ -155,23 +155,23 @@
         <option value=@ViewBag.pageSize>@ViewBag.pageSize</option>
         @{
             if (ViewBag.pageSize != 3) {
-                        <option value=3>3</option>
+                            <option value=3>3</option>
             }}
             @{
             if (ViewBag.pageSize != 5) {
-                      <option value=5>5</option>
+                          <option value=5>5</option>
             }}
             @{
             if (ViewBag.pageSize != 10) {
-                   <option value=10>10</option>
+                       <option value=10>10</option>
             }}
             @{
             if (ViewBag.pageSize != 20) {
-                      <option value=20>20</option>
+                          <option value=20>20</option>
             }}
             @{
             if (ViewBag.pageSize != 100) {
-                        <option value=100>100</option>
+                            <option value=100>100</option>
             }}
      </select>
      筆
