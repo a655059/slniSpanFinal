@@ -97,7 +97,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
                     break;
                 case 3:
                     //熱銷排序
-                    list = ((new CHomeFactory()).toShowItem(prodlist)).OrderByDescending(s => s.salesVolume).ToList();
+                    list = list.OrderByDescending(s => s.salesVolume).ToList();
                     break;
                 case 4:
                     //價高排序
@@ -117,17 +117,14 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 
             #region  Price Min/Max
             //Price Min/Max
-            List<CShowItem> list1;
-            List<CShowItem> list2;
-            list1 = list.Where(p => p.Price.Count == 1).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax).ToList();
-            list2 = list.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
-            list1.AddRange(list2);
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            
             #endregion
 
             //Pages #todo
             //TBC
 
-            return list1;
+            return list;
         }
         public List<CShowItem> SmalltypeSortItem(int id, int priceMin, int priceMax, int SortOrder, int pages)
         {
@@ -170,17 +167,13 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 
             #region  Price Min/Max
             //Price Min/Max
-            List<CShowItem> list1;
-            List<CShowItem> list2;
-            list1 = list.Where(p => p.Price.Count == 1).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax).ToList();
-            list2 = list.Where(p => p.Price.Count == 2).Where(p => p.Price[0] >= priceMin && p.Price[0] <= priceMax || p.Price[1] >= priceMin && p.Price[1] <= priceMax).ToList();
-            list1.AddRange(list2);
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
             #endregion
 
             //Pages #todo
             //TBC
 
-            return list1;
+            return list;
         }
     }
 }
