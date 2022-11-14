@@ -17,18 +17,6 @@
             </li>
             <li class="mb-1" style="clear: left; ">
                 <div class="border-bottom my-3"></div>
-                <i class="fa-sharp fa-solid fa-cart-shopping"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                    我的賣場
-                </button>
-                <div class="sellerleftsiderbar collapse show" id="home-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a asp-action="賣場" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">賣場</a></li>
-                        
-                    </ul>
-                </div>
-            </li>
-            <li class="mb-1" style="clear: left; ">
-                <div class="border-bottom my-3"></div>
                 <i class="fa-solid fa-xl fa-box"></i><button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
                     商品管理
                 </button>
@@ -71,6 +59,7 @@
                 </button>
                 <div class="sellerleftsiderbar collapse show" id="court-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a asp-action="賣場" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">我的賣場</a></li>
                         <li><a asp-action="設定分類" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">設定分類</a></li>
                         <li><a asp-action="修改關於我" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯關於我</a></li>
                         <li><a asp-action="編輯賣場資訊" asp-controller="SalesCourt" class="link-dark d-inline-flex text-decoration-none rounded my-1">編輯賣場資訊</a></li>
