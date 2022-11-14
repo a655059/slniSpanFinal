@@ -60,7 +60,7 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 
             #region  Price Min/Max
             //Price Min/Max
-            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Max() <= priceMax ).ToList();
             #endregion
 
             //Pages #todo
@@ -117,8 +117,9 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 
             #region  Price Min/Max
             //Price Min/Max
-            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
-            
+            //list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Max() <= priceMax).ToList();
+
             #endregion
 
             //Pages #todo
@@ -167,7 +168,8 @@ namespace prjiSpanFinal.Models.CategoryItemSort
 
             #region  Price Min/Max
             //Price Min/Max
-            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            //list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Max() <= priceMax).ToList();
             #endregion
 
             //Pages #todo

@@ -98,7 +98,7 @@ namespace prjiSpanFinal.Controllers
 
             #region  Price Min/Max
             //Price Min/Max
-            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Min() <= priceMax || p.Price.Max() >= priceMin && p.Price.Max() <= priceMax).ToList();
+            list = list.Where(p => p.Price.Min() >= priceMin && p.Price.Max() <= priceMax).ToList();
             #endregion
 
             //Pages #todo
@@ -159,47 +159,7 @@ namespace prjiSpanFinal.Controllers
 
             return View(list);
         }
-        //List<CShowItem> fSortOrder(int sortOrder,List<Product> listprod)
-        //{
-        //    List<Product> Ordered=new List<Product>();
-        //    List<CShowItem> SIlist = new List<CShowItem>();
-        //    switch (sortOrder)
-        //    {
-        //        case 1:
-        //            //一般排序      
-        //            SIlist= (new CHomeFactory()).toShowItem(listprod);
-        //            return SIlist;
-        //        case 2:
-        //            //最新排序
-        //            SIlist = (new CHomeFactory()).toShowItem(listprod.OrderByDescending(p => p.ProductId).ToList());
-        //            return SIlist;
-        //        case 3:
-        //            //熱銷排序
-        //            SIlist = ((new CHomeFactory()).toShowItem(listprod)).OrderBy(s=>s.salesVolume).ToList();
-        //            return SIlist;
-        //        case 4:
-        //            //價高排序
-        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
-        //            return SIlist.OrderByDescending(p => p.Price.Max()).ToList();
-        //        case 5:
-        //            //價低排序
-        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
-        //            return SIlist.OrderBy(p => p.Price.Min()).ToList();
-        //        default:
-        //            SIlist = (new CHomeFactory()).toShowItem(listprod);
-        //            return SIlist;
-        //    }
-        //}
-        //List<Product> fFacetOrder(string keyword, List<Product> listprod)
-        //{
-        //    string[] temp= keyword.Split(',');
-        //    List<int> tempSmallTypeIDs = new List<int>();
-        //    foreach(var Idstring in temp)
-        //    {
-        //        tempSmallTypeIDs.Add(Convert.ToInt32(Idstring.Substring(5)));
-        //    }
-        //    return listprod.Where(p => tempSmallTypeIDs.Contains(p.SmallTypeId)).ToList();
-        //}
+
         public IActionResult CBselected(string keyword)
         {
             if (string.IsNullOrEmpty(keyword))

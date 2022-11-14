@@ -184,7 +184,7 @@
                 //todo#2
                 alert("數值設定錯誤！");
             }
-            if (minval <= maxval) {
+            if (parseInt(minval) <= parseInt(maxval)) {
                 priceMin = parseInt(minval);
                 priceMax = parseInt(maxval);
                 CallgetJSON();
