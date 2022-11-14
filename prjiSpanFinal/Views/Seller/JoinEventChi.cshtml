@@ -19,6 +19,14 @@
         .置中 {
             vertical-align: middle;
         }
+        #backbtn {
+            border: 1px solid #FF9224;
+            color:red;
+        }
+            #backbtn:hover, #backbtn:visited {
+                background-color: #FF9224;
+                color: white;
+            }
     </style>
 }
 
@@ -76,6 +84,9 @@
                 </tbody>
             </table>
         </div>
+        <div class="w-100 justify-content-center d-flex">
+            <div class="btn" id="backbtn" >回參加頁面</div>
+        </div>
     </div>
     <div class="col-1"></div>
 </div>
@@ -84,6 +95,9 @@
 <script>
     $(".DeleteEvent").click(function () {
         location.href = "/Seller/JoinEventChi";
+    })
+    $("#backbtn").click(() => {
+        location.href = "/Seller/Event";
     })
 </script>
 }

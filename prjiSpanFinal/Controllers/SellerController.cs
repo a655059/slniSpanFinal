@@ -1184,11 +1184,19 @@ namespace prjiSpanFinal.Controllers
             return View(cSubEventToProductViewModel);
         }
 
-        public void DeleteEvent(int? id)
+        //public void DeleteEvent(int? id)
+        //{
+        //    var SubOfficialEventToProductsID = _db.SubOfficialEventToProducts.Where(n => n.SubOfficialEventToProductId == id).Select(n => n).FirstOrDefault();
+        //    _db.SubOfficialEventToProducts.Remove(SubOfficialEventToProductsID);
+        //    _db.SaveChanges();
+        //}
+        public IActionResult DeleteEvent(int? id)
         {
             var SubOfficialEventToProductsID = _db.SubOfficialEventToProducts.Where(n => n.SubOfficialEventToProductId == id).Select(n => n).FirstOrDefault();
-            _db.SubOfficialEventToProducts.Remove(SubOfficialEventToProductsID);
+             _db.SubOfficialEventToProducts.Remove(SubOfficialEventToProductsID);
             _db.SaveChanges();
+            return RedirectToAction("JoinEventChi", "Seller");
+
         }
 
 
