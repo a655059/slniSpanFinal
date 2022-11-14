@@ -7,7 +7,7 @@
 <style>
     .VCLayout {
         width: 1060px;
-        height: 462px;
+        height: 418px;
         margin: 10px auto;
         padding: 16px 0;
         overflow: hidden;
@@ -16,7 +16,7 @@
 
     .biddingItemLayout {
         position: absolute;
-        top: 21px;
+        top: 19px;
     }
 </style>
 
@@ -51,30 +51,4 @@
         });
         ControlPage();
     });
-
-    let connection3 = new signalR.HubConnectionBuilder().withUrl("/selectedBiddingItemsCountdownHub").build();
-
-
-    let biddingIDs = [];
-    connection3.on("ShowItemCountdown", function (remainingTimes, ids) {
-        $(".biddingItemLayout").each(function (index, element) {
-            let biddingID = Number($(this).attr("id"));
-            for (let i = 0; i < ids.length; i++) {
-                if (ids[i] == biddingID) {
-                    $(this).find(".remainingTime").html(remainingTimes[i]);
-                }
-            }
-        });
-    });
-    connection3.start().then(function () {
-        console.log("connect3 start");
-        biddingIDs = [];
-        $(".biddingItemLayout").each(function () {
-            biddingIDs.push(Number($(this).attr("id")));
-        });
-        connection3.invoke("SelectedBiddingItemsCountdown", biddingIDs)
-    }).catch(function (err) {
-        console.log(err);
-    });
-
 </script>

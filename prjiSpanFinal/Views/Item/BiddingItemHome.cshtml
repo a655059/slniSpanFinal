@@ -23,8 +23,27 @@
         $(function () {
             $(".newArrival").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 1 })");
             $(".endBidding").load("@Url.Action("ShowSelectedBiddingItems", "Item", new { type = 2 })");
+            countdownLoop();
         });
-
+        function countdown() {
+            $(".biddingItemLayout").each(function () {
+                let itemEndTime = new Date($(this).find(".itemEndTime").html());
+                let now = new Date();
+                let diff = itemEndTime.getTime() - now.getTime();
+                let day = Math.floor(diff / 1000 / 60 / 60 / 24);
+                diff -= day * 1000 * 60 * 60 * 24;
+                let hour = Math.floor(diff / 1000 / 60 / 60);
+                diff -= hour * 1000 * 60 * 60;
+                let minute = Math.floor(diff / 1000 / 60);
+                diff -= minute * 1000 * 60;
+                let second = Math.floor(diff / 1000);
+                $(this).find(".remainingTime").html(`剩 ${day}天${hour}時${minute}分${second}秒`)
+            });
+        };
+        function countdownLoop() {
+            countdown();
+            requestAnimationFrame(countdownLoop);
+        }
 
         let connection2 = new signalR.HubConnectionBuilder().withUrl("/countdownHub").build();
 

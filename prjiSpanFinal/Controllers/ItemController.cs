@@ -452,6 +452,16 @@ namespace prjiSpanFinal.Controllers
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 iSpanProjectContext dbContext = new iSpanProjectContext();
+                var highestPrice = dbContext.BiddingDetails.Where(i => i.BiddingId == biddingID).OrderByDescending(i => i.Price).Select(i => i.Price).FirstOrDefault();
+                if (highestPrice == 0)
+                {
+                    highestPrice = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i.StartPrice).FirstOrDefault();
+                }
+                var stepPrice = dbContext.Biddings.Where(i => i.BiddingId == biddingID).Select(i => i.StepPrice).FirstOrDefault();
+                if (price < stepPrice + highestPrice)
+                {
+                    return Content("2");
+                }
                 string memberString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 MemberAccount user = JsonSerializer.Deserialize<MemberAccount>(memberString);
                 BiddingDetail biddingDetail = new BiddingDetail

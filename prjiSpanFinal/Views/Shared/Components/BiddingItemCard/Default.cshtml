@@ -19,7 +19,7 @@
         border: 1px solid #D0D0D0;
         border-radius: 5px;
         width: 200px;
-        height: 420px;
+        height: 380px;
         transition: all 0.5s;
     }
 
@@ -76,10 +76,11 @@
                     </div>
                     <div class="remainingTime"></div>
                 </div>
-                
             </div>
-            <div class="bg-warning text-white text-center fs-4">我要出價</div>
+            @*<div class="bg-warning text-white text-center fs-4">我要出價</div>*@
+            <div class="itemEndTime d-none">@Model.bidding.EndTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
         </div>
     </div>
 </a>
+
 

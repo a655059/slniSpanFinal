@@ -275,219 +275,256 @@
     @*<script src="@Url.Content("~/js/Item/ShowSpecificItemCountdown.js")"></script>*@
     
 <script>
-        $(function () {
-            const productID = $("#ProductId").html();
-            $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+    const itemEndTime = new Date("@Model.bidding.EndTime.ToString("yyyy-MM-dd HH:mm:ss")");
+    $(function () {
+        countdownLoop();
+        const productID = $("#ProductId").html();
+        $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
 
-            const userID = $(".memberID").html();
-            const sellerID = $(".sellerID").html();
-            if (userID == sellerID) {
-                $(".bidSubmit").prop("disabled", true);
-            }
-            $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
-        });
+        const userID = $(".memberID").html();
+        const sellerID = $(".sellerID").html();
+        if (userID == sellerID) {
+            $(".bidSubmit").prop("disabled", true);
+        }
+        $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+    });
 
-
-
-
-
-        $(".bigPhoto .itemHeart").click(async function () {
-            const memberID = Number($(".memberID").html());
-            let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
-            let response = await fetch(requestUrl);
-            let data = await response.text();
-            if (data == "0") {
-                Swal.fire("請先登入方可加入我的最愛");
-                return;
-            }
-            else if (data == "1") {
-                $(this).removeClass("text-danger").addClass("text-danger");
-            }
-            else {
-                $(this).removeClass("text-danger");
-            }
-        });
-
-
-        $(function () {
-            const currentPrice = $(".currentPrice").html();
-            const stepPrice = $(".stepPrice").html();
-            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
-            $("input[type='number']").attr("min", suggestedPrice);
-        });
-
-        $(".showRemainingTime").click(function () {
-            $(".remainingTime").removeClass("d-none");
-            $(".endTime").removeClass("d-none").addClass("d-none");
-            $(".showRemainingTime img").removeClass("opacity-50");
-            $(".showEndTime img").removeClass("opacity-50").addClass("opacity-50");
-        });
-        $(".showEndTime").click(function () {
-            $(".remainingTime").removeClass("d-none").addClass("d-none");
-            $(".endTime").removeClass("d-none");
-            $(".showRemainingTime img").removeClass("opacity-50").addClass("opacity-50");
-            $(".showEndTime img").removeClass("opacity-50");
-        });
+    function countdown() {
+        let now = new Date();
+        let diff = itemEndTime.getTime() - now.getTime();
+        let day = Math.floor(diff / 1000 / 60 / 60 / 24);
+        diff -= day * 1000 * 60 * 60 * 24;
+        let hour = Math.floor(diff / 1000 / 60 / 60);
+        diff -= hour * 1000 * 60 * 60;
+        let minute = Math.floor(diff / 1000 / 60);
+        diff -= minute * 1000 * 60;
+        let second = Math.floor(diff / 1000);
+        let remainingTime = `${day}天${hour}時${minute}分${second}秒`;
+        $(".remainingTime2").html(remainingTime);
+    }
+    function countdownLoop() {
+        countdown();
+        requestAnimationFrame(countdownLoop);
+    }
 
 
-        $("input[name='biddingPrice']").focus(function () {
-            const currentPrice = $(".currentPrice").html();
-            const stepPrice = $(".stepPrice").html();
-            const suggestedPrice = Number(currentPrice) + Number(stepPrice);
-            $(".suggestedPrice").html(suggestedPrice);
-            $("input[type='number']").val(suggestedPrice);
-            $(".suggestedPriceDiv").removeClass("d-none");
-        })
-        $("#autoBidding").change(function () {
-            if ($("#autoBidding").prop("checked") == true) {
-                $(".topPriceDiv").removeClass("d-none");
-            }
-            else {
-                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
-            }
-        })
-        $("#directBidding").change(function () {
-            if ($("#directBidding").prop("checked") == true) {
-                $(".topPriceDiv").removeClass("d-none").addClass("d-none");
-            }
-            else {
-                $(".topPriceDiv").removeClass("d-none");
-            }
-        });
-        $(".bidSubmit").click(function () {
-            const biddingID = Number($(".biddingItemCountdown").attr("id"));
-            const biddingType = $("input:checked").attr("id");
-            const suggestedPrice = Number($(".suggestedPrice").html());
-            const price = Number($("input[name='biddingPrice']").val());
-            const topPrice = Number($("input[name='topPrice']").val());
-            if (biddingType == null) {
-                Swal.fire("請選擇自動出價或直接出價");
-            }
-            else if (price < suggestedPrice || price <= 0) {
-                Swal.fire("出價金額有誤");
-            }
-            else if (biddingType == "autoBidding" && topPrice < price) {
-                Swal.fire("自動出價最高金額小於出價金額");
-            }
-            else {
-                $.ajax({
-                    url: "@Url.Content("~/Item/Bid")",
-                    type: "POST",
-                    data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice },
-                }).done(function (data) {
-                    if (data == "0") {
-                        Swal.fire("請先登入再出價");
-                    }
-                    else {
-                        $(".currentPrice").html(data[0]);
-                        $(".biddingCount").html(data[1]);
-                        $(".topMember").html(data[2]);
-                        Swal.fire("恭喜您成功出價");
 
-                        $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
-                    }
-                })
-            }
-        });
+    $(".bigPhoto .itemHeart").click(async function () {
+        const memberID = Number($(".memberID").html());
+        let requestUrl = "@Url.Content("~/Item/AddItemLike")" + `?memberID=${memberID}&productID=${@Model.product.ProductId}`;
+        let response = await fetch(requestUrl);
+        let data = await response.text();
+        if (data == "0") {
+            Swal.fire("請先登入方可加入我的最愛");
+            return;
+        }
+        else if (data == "1") {
+            $(this).removeClass("text-danger").addClass("text-danger");
+        }
+        else {
+            $(this).removeClass("text-danger");
+        }
+    });
 
-        let biddingID = 0;
-        let connection4 = new signalR.HubConnectionBuilder().withUrl("/specificItemCountdownHub").build();
 
-        connection4.on("ShowSpecificItemCountdown", function (remainingTime, id) {
-            if (id == biddingID) {
-                if (remainingTime.substring(0, 1) != "-") {
-                    $(".biddingItemCountdown").find(".remainingTime2").html(remainingTime);
+    $(function () {
+        const currentPrice = $(".currentPrice").html();
+        const stepPrice = $(".stepPrice").html();
+        const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+        $("input[type='number']").attr("min", suggestedPrice);
+    });
+
+    $(".showRemainingTime").click(function () {
+        $(".remainingTime").removeClass("d-none");
+        $(".endTime").removeClass("d-none").addClass("d-none");
+        $(".showRemainingTime img").removeClass("opacity-50");
+        $(".showEndTime img").removeClass("opacity-50").addClass("opacity-50");
+    });
+    $(".showEndTime").click(function () {
+        $(".remainingTime").removeClass("d-none").addClass("d-none");
+        $(".endTime").removeClass("d-none");
+        $(".showRemainingTime img").removeClass("opacity-50").addClass("opacity-50");
+        $(".showEndTime img").removeClass("opacity-50");
+    });
+
+
+    $("input[name='biddingPrice']").focus(function () {
+        const currentPrice = $(".currentPrice").html();
+        const stepPrice = $(".stepPrice").html();
+        const suggestedPrice = Number(currentPrice) + Number(stepPrice);
+        $(".suggestedPrice").html(suggestedPrice);
+        $("input[type='number']").val(suggestedPrice);
+        $(".suggestedPriceDiv").removeClass("d-none");
+    })
+    $("#autoBidding").change(function () {
+        if ($("#autoBidding").prop("checked") == true) {
+            $(".topPriceDiv").removeClass("d-none");
+        }
+        else {
+            $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+        }
+    })
+    $("#directBidding").change(function () {
+        if ($("#directBidding").prop("checked") == true) {
+            $(".topPriceDiv").removeClass("d-none").addClass("d-none");
+        }
+        else {
+            $(".topPriceDiv").removeClass("d-none");
+        }
+    });
+    $(".bidSubmit").click(function () {
+        const biddingID = Number($(".biddingItemCountdown").attr("id"));
+        const biddingType = $("input:checked").attr("id");
+        const suggestedPrice = Number($(".suggestedPrice").html());
+        const price = Number($("input[name='biddingPrice']").val());
+        const topPrice = Number($("input[name='topPrice']").val());
+        if (biddingType == null) {
+            Swal.fire("請選擇自動出價或直接出價");
+        }
+        else if (price < suggestedPrice || price <= 0) {
+            Swal.fire("出價金額有誤");
+        }
+        else if (biddingType == "autoBidding" && topPrice < price) {
+            Swal.fire("自動出價最高金額小於出價金額");
+        }
+        else {
+            $.ajax({
+                url: "@Url.Content("~/Item/Bid")",
+                type: "POST",
+                data: { biddingID: biddingID, biddingType: biddingType, price: price, topPrice: topPrice },
+            }).done(function (data) {
+                if (data == "0") {
+                    Swal.fire("請先登入再出價");
+                }
+                else if (data == "2") {
+                    Swal.fire("出價金額有誤");
                 }
                 else {
-                    $(".biddingItemCountdown").find(".remainingTime").html("競標已結束");
-                    $(".bidSubmit").prop("disabled", true);
+                    $(".currentPrice").html(data[0]);
+                    $(".biddingCount").html(data[1]);
+                    $(".topMember").html(data[2]);
+                    Swal.fire("恭喜您成功出價");
+
+                    $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
                 }
-            }
-        });
+            })
+        }
+    });
 
-        connection4.on("UpdateAutoBidding", function (topPrice, biddingCount, topMember) {
-            $(".currentPrice").html(topPrice);
-            $(".biddingCount").html(biddingCount);
-            $(".topMember").html(topMember);
-            $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
-        });
+    let connection4 = new signalR.HubConnectionBuilder().withUrl("/specificItemCountdownHub").build();
 
+    connection4.on("UpdateAutoBidding", function (topPrice, biddingCount, topMember) {
+        $(".currentPrice").html(topPrice);
+        $(".biddingCount").html(biddingCount);
+        $(".topMember").html(topMember);
+        $(".buyerCountVC").load("@Url.Action("ShowBiddingDetail", "Item", new { id = Model.bidding.BiddingId })");
+    });
 
-        connection4.start().then(function () {
-            console.log("connect4 start");
-            biddingID = Number($(".biddingItemCountdown").attr("id"));
-            connection4.invoke("SpecificItemCountdown", biddingID);
-        }).catch(function (err) {
-            console.log(err);
-        });
+    connection4.start().then(function () {
+        console.log("connect4 start");
 
+    }).catch(function (err) {
+        console.log(err);
+    });
 
-
-
-
-
-
-
-
-
-        $(".messageBoardVC").on("click", ".messageSubmit", async function () {
-            const message = $(this).siblings(".message").val();
-            if (message == "") {
-                Swal.fire("請輸入留言內容");
-            }
-            else {
-                const messageType = $(this).siblings(".message").attr("placeholder");
-                const productID = Number($(this).closest(".messageLayout").find(".productID").html());
-                let messageParentID = 0;
-                if (messageType == "回覆......") {
-                    messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
-                }
-                const response = await fetch("@Url.Content("~/Item/AddMessage")" + `?messageParentID=${messageParentID}&message=${message}&productID=${productID}`);
-                const data = await response.text();
-                if (data == "1") {
-                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
-                }
-                else {
-                    Swal.fire("請先登入再留言");
-                }
-            }
-        });
-
-        $(".messageBoardVC").on("click", ".messageLikeBtn", async function () {
-            const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+    $(".messageBoardVC").on("click", ".messageSubmit", async function () {
+        console.log("1111");
+        const message = $(this).siblings(".message").val();
+        if (message == "") {
+            Swal.fire("請輸入留言內容");
+        }
+        else {
+            const messageType = $(this).siblings(".message").attr("placeholder");
             const productID = Number($(this).closest(".messageLayout").find(".productID").html());
-            const response = await fetch("@Url.Content("~/Item/LikeMessageBoard")" + `?messageBoardID=${messageParentID}`);
+            let messageParentID = 0;
+            if (messageType == "回覆......") {
+                messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+            }
+            const response = await fetch("@Url.Content("~/Item/AddMessage")" + `?messageParentID=${messageParentID}&message=${message}&productID=${productID}`);
             const data = await response.text();
             if (data == "1") {
                 $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
             }
             else {
-                Swal.fire("請先登入再按讚");
+                Swal.fire("請先登入再留言");
+            }
+        }
+    });
+
+    $(".messageBoardVC").on("click", ".messageLikeBtn", async function () {
+        const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+        const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+        const response = await fetch("@Url.Content("~/Item/LikeMessageBoard")" + `?messageBoardID=${messageParentID}`);
+        const data = await response.text();
+        if (data == "1") {
+            $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+        }
+        else {
+            Swal.fire("請先登入再按讚");
+        }
+    });
+
+    $(".messageBoardVC").on("click", ".deleteReplyBtn", function () {
+        Swal.fire({
+            title: "確定要收回留言嗎?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "確定",
+            denyButtonText: "取消",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
+                const productID = Number($(this).closest(".messageLayout").find(".productID").html());
+                const response = await fetch("@Url.Content("~/Item/DeleteMessage")" + `?messageBoardID=${messageParentID}`);
+                const data = await response.text();
+                if (data == "1") {
+                    $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+                }
+            } else if (result.isDenied) {
+
             }
         });
-
-        $(".messageBoardVC").on("click", ".deleteReplyBtn", function () {
-            Swal.fire({
-                title: "確定要收回留言嗎?",
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: "確定",
-                denyButtonText: "取消",
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const messageParentID = Number($(this).closest(".messageBoardID").attr("id").substring(14));
-                    const productID = Number($(this).closest(".messageLayout").find(".productID").html());
-                    const response = await fetch("@Url.Content("~/Item/DeleteMessage")" + `?messageBoardID=${messageParentID}`);
-                    const data = await response.text();
-                    if (data == "1") {
-                        $(".messageBoardVC").load("@Url.Content("~/Item/ShowMessageBoard")" + `?productID=${productID}`);
+    });
+    $(".messageBoardVC").on("click", ".collapseMessage", function () {
+        const thisLayerNumber = Number($(this).closest(".messageBoardID").attr("class").split(' ')[0].substring(5));
+        if ($(this).closest(".messageBoardID").nextAll(".messageBoardID").length > 0) {
+            if ($(this).html() == "收合") {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function (event) {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none").addClass("d-none");
+                        console.log($(this).attr("class"));
                     }
-                } else if (result.isDenied) {
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("展開");
+            }
+            else {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function () {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none");
+                        console.log($(this).attr("class"));
+                        if ($(this).has(".collapseMessage").length > 0) {
+                            $(this).find(".collapseMessage").html("收合");
+                        }
+                    }
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("收合");
+            }
+        }
+    })
 
-                }
-            });
-        });
-
+    $(".messageBoardVC").on("click", ".messageReplyBtn", function () {
+        $(this).closest(".messageFooter").siblings(".messageReplay").slideToggle();
+    });
 
 </script>
 }
