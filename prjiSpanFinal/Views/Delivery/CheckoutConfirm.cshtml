@@ -172,7 +172,6 @@
                     $(this).find(".itemLayout").each(function () {
                         if ($(this).find(".originPrice").length > 0) {
                             let eventDiscount = Number($(this).find(".originPrice").attr("id").substring(13));
-                            console.log($(this).find(".originPrice"));
                             let originPrice = Number($(this).find(".originPrice").html());
                             totalPrice += Math.ceil(originPrice * eventDiscount * discount / 10) * Number($(this).find(".purchaseCount").html());
                         }
