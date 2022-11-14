@@ -176,6 +176,8 @@
                     $(this).closest("td").siblings().find(".statusname").val("給予賣家警告");
                     $(this).siblings("a").remove();
                     $(this).remove();
+                    Swal.fire("已將給予賣家警告!")
+
                 }
             })
         }
@@ -192,6 +194,7 @@
                     $(this).closest("td").siblings().find(".statusname").val("情節嚴重，下架該產品");
                     $(this).siblings("a").remove();
                     $(this).remove();
+                    Swal.fire("已將產品下架!")
                     }
                 }
             })
@@ -209,6 +212,8 @@
                     $(this).closest("td").siblings().find(".statusname").val("屢次違反，停權該賣家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
+                    Swal.fire("已停權賣家!!")
+
                 }
                 }
             })

@@ -168,7 +168,7 @@
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data !=null) {
-                    $(this).closest("td").siblings().find(".statusname").val("處理完成");
+                    $(this).closest("td").siblings().find(".statusname").val("取消");
                     Swal.fire("已停權買家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
@@ -186,8 +186,8 @@
                 let response = await fetch("@Url.Content("~/newManagement/ArgumentApprove2")" + `?id=${event.currentTarget.name}`)
                 let data = await response.text();
                 if (data !=null) {
-                    $(this).closest("td").siblings().find(".statusname").val("處理完成");
-                    alert("已停權賣家帳戶");
+                    $(this).closest("td").siblings().find(".statusname").val("取消");
+                    Swal.fire("已停權賣家帳戶");
                     $(this).siblings("a").remove();
                     $(this).remove();
                         happy_sendnoti(4, parseInt(data), "您的帳戶已被停權", "/Member/Order", "由於您被投訴棄單，情節屬實，因此您的帳戶已被停權");
