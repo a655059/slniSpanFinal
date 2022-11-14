@@ -12,21 +12,28 @@
         imgUrl = Url.Content("~/img/imageNotFound.png");
     }
     string productLink = Url.Content("~/Item/Index") + "?id=" + Model.productID;
+    if (Model.isBiddingItem)
+    {
+        productLink = Url.Content("~/Item/BiddingIndex") + "?id=" + Model.biddingID;
+    }
 }
 <a href="@productLink">
-    <div class="productCardLayout">
-        <div class="productCardImgDiv">
-            @if (Model.productPic != null)
-            {
-                <img src="data:image/gif;base64,@Convert.ToBase64String(Model.productPic)" alt="photo" />
-            }
-            else
-            {
-                <img src="#" alt="此商品沒有圖片" />
-            }
+    <div class="productCardLayout d-flex flex-column justify-content-between align-items-baseline">
+        <div>
+            <div class="productCardImgDiv">
+                @if (Model.productPic != null)
+                {
+                    <img src="data:image/gif;base64,@Convert.ToBase64String(Model.productPic)" alt="photo" />
+                }
+                else
+                {
+                    <img src="#" alt="此商品沒有圖片" />
+                }
+            </div>
+
+            <div class="productCardTitle px-2">@Model.productName</div>
         </div>
         <div class="p-2">
-            <div class="productCardTitle">@Model.productName</div>
             <div class="productCardPrice my-2">@Model.price</div>
             <div class="productCardInfo">
                 <div>
@@ -34,9 +41,6 @@
                     <div>@Model.starCount.ToString("0.0")</div>
                     <div class="mx-2">|</div>
                     <div class="productCardSalesVolume">銷售<span>@Model.salesVolume</span></div>
-                </div>
-                <div>
-
                 </div>
             </div>
         </div>

@@ -13,5 +13,7 @@ namespace prjiSpanFinal.ViewModels.Item
         public string price { get; set; }
         public double starCount { get; set; }
         public int salesVolume { get; set; }
+        public bool isBiddingItem { get; set; }
+        public int biddingID { get; set; }
     }
 }
