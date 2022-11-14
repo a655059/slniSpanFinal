@@ -21,6 +21,7 @@ namespace prjiSpanFinal.ViewComponents
                     productID = i.ProductId,
                     productName = i.Product.ProductName,
                     price = i.UnitPrice,
+                    productStatus = i.Product.ProductStatusId,
                 }).ToList();
                 byte[] productPic = dbContext.ProductPics.Where(i => i.ProductId == a).Select(i => i.Pic).FirstOrDefault();
                 int maxPrice = Convert.ToInt32(product.Max(i => i.price));
@@ -54,8 +55,23 @@ namespace prjiSpanFinal.ViewComponents
                     productPic = productPic,
                     price = price,
                     starCount = starCount,
-                    salesVolume = salesVolume
+                    salesVolume = salesVolume,
+                    isBiddingItem = false,
+                    biddingID = 0,
                 };
+                var biddingItem = dbContext.Biddings.Where(i => i.ProductDetail.ProductId == cItemIndexSellerProduct.productID && i.ProductDetail.Product.ProductStatusId == 4).FirstOrDefault();
+                if (biddingItem != null)
+                {
+                    cItemIndexSellerProduct.isBiddingItem = true;
+                    cItemIndexSellerProduct.price = "$" + dbContext.BiddingDetails.Where(i => i.Bidding.ProductDetail.ProductId == cItemIndexSellerProduct.productID).OrderByDescending(i => i.Price).Select(i => i.Price).FirstOrDefault().ToString("0");
+                    if (cItemIndexSellerProduct.price == "$0")
+                    {
+                        cItemIndexSellerProduct.price = "$" + dbContext.Biddings.Where(i => i.ProductDetail.ProductId == cItemIndexSellerProduct.productID && i.ProductDetail.Product.ProductStatusId == 4).Select(i => i.ProductDetail.UnitPrice).FirstOrDefault().ToString("0");
+                    }
+                    cItemIndexSellerProduct.biddingID = biddingItem.BiddingId;
+
+                }
+                
                 cItemIndexSellerProductList.Add(cItemIndexSellerProduct);
             }
             var x = cItemIndexSellerProductList.OrderByDescending(i => i.starCount).Select(i => i).ToList();

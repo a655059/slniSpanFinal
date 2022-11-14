@@ -141,6 +141,7 @@
                     <div class="commentResult text-black-50"></div>
                 </div>
                 <div class="mt-3 text-end">
+                    <button class="commentDemo btn btn-outline-success" type="button">Demo</button>
                     <button class="cancel border-0 bg-transparent w-25" id="cancel" type="button">清除</button>
                     <input type="submit" class="submit btn btn-warning w-25" value="完成" id="submit">
                 </div>
@@ -150,6 +151,12 @@
 </div>
         @section Scripts{
             <script>
+                $(".commentDemo").click(function () {
+                    $(this).closest(".orderDetailLayout").find("input[name='quality']").val("湯底夠辣，真不錯");
+                    $(this).closest(".orderDetailLayout").find("input[name='colorDifference']").val("包裝完整");
+                    $(this).closest(".orderDetailLayout").find("input[name='picMatch']").val("與圖片符合");
+                    $(this).closest(".orderDetailLayout").find("textarea[name='other']").val("賣家出貨快速，湯底好喝，一飲而盡的感覺真舒服。")
+                })
                 $(".star").click(function () {
                     $(this).removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").prevAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-solid text-warning").end().nextAll().removeClass("fa-regular fa-solid text-warning").addClass("fa-regular");
                     let resultDiv = $(this).parent().siblings(".commentResult");

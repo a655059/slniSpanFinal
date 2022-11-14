@@ -18,7 +18,7 @@ namespace prjiSpanFinal.ViewComponents
             iSpanProjectContext dbContext = new iSpanProjectContext();
             string buyerString = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
             MemberAccount buyer = JsonSerializer.Deserialize<MemberAccount>(buyerString);
-            List<Coupon> buyerCoupons = dbContext.CouponWallets.Where(i => i.MemberId == buyer.MemberId && DateTime.Now >= i.Coupon.StartDate && DateTime.Now < i.Coupon.ExpiredDate && i.Coupon.MemberId == sellerMemberID && i.IsExpired == false).Select(i => i.Coupon).ToList();
+            List<Coupon> buyerCoupons = dbContext.CouponWallets.Where(i => i.MemberId == buyer.MemberId && DateTime.Now >= i.Coupon.StartDate && DateTime.Now < i.Coupon.ExpiredDate && (i.Coupon.MemberId == sellerMemberID || i.Coupon.MemberId == 1) && i.IsExpired == false).Select(i => i.Coupon).ToList();
             CInfoForCalTotalPriceViewModel x = new CInfoForCalTotalPriceViewModel();
             x.isCheckoutPage = id;
             x.buyerCoupons = buyerCoupons;
