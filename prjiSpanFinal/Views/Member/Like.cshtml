@@ -328,11 +328,12 @@
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
                     $("#OriginShowItem").append(deletItems(data));
+                    ArrpdID.length = 0;
                 }
                 else {
                     $("#OriginShowItem").html("<div>暫待新增商品</div>");
                 }
-
+                
             }
 
             $.getJSON(`/Member/AllLike`, { filter: filter, SortOrder: SortOrder, priceMin: priceMin, priceMax: priceMax }, function (data) {
@@ -363,6 +364,7 @@
                 $("#OriginShowItem").html("");
                 if (data.length > 0) {
                     $("#OriginShowItem").append(deletItems(data));
+                    ArrpdID.length = 0;
                 }
                 else {
                     $("#OriginShowItem").html("<div>暫待新增商品</div>");
