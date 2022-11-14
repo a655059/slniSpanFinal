@@ -1080,7 +1080,7 @@ namespace prjiSpanFinal.Controllers
             string jsonstring = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER); //拿出session登入字串
             int memID = JsonSerializer.Deserialize<MemberAccount>(jsonstring).MemberId; //字串轉物件             
             iSpanProjectContext dbcontext = new iSpanProjectContext();
-            var q = dbcontext.Orders.Where(o => o.MemberId == memID && o.StatusId == 3).Select(s => s);
+            var q = dbcontext.Orders.Where(o => o.MemberId == memID && o.StatusId == 3 || o.StatusId == 2).Select(s => s);
             foreach (var item in q)
             {
                 item.StatusId = 6;
