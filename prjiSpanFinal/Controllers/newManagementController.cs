@@ -1260,7 +1260,7 @@ namespace prjiSpanFinal.Controllers
             cp.IsFreeDelivery = coupon.IsFreeDelivery;
             cp.MinimumOrder = coupon.MinimumOrder;
             db.SaveChanges();
-            return RedirectToAction("CouponList");
+            return RedirectToAction("EventCouponList");
         }
         #endregion
         #region subEventRegion
