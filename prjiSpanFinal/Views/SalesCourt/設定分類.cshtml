@@ -136,6 +136,7 @@
         function load() {
             $.getJSON("/SalesCourt/GetCustCategory", { id: @Model.MemberId}, function (data) {
                 console.log(data);
+                $("tbody").html("");
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].sortNumber > sortmax) {
                         sortmax = data[i].sortNumber;
@@ -173,7 +174,7 @@
                 console.log(data);
 
             });
-
+            load();
         })
 
 

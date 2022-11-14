@@ -38,7 +38,7 @@ namespace prjiSpanFinal.Controllers
 
         }
 
-        public void getid()
+        public int getid()
         {
             id = 2; //備用帳號
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -46,12 +46,16 @@ namespace prjiSpanFinal.Controllers
                 string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 id = (JsonSerializer.Deserialize<MemberAccount>(json)).MemberId;
             }
+
+            return id;
         }
 
 
         public IActionResult 賣場(int id)
         {
+            int memid = getid();
 
+            if(id == 0)     id = getid();
             //getid();
             var Seller = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
             var Product = dbContext.Products.Where(a => a.MemberId == Seller.MemberId).ToList();
@@ -130,7 +134,8 @@ namespace prjiSpanFinal.Controllers
                 //CardProduct = CardContent,
                 star = star_count,
                 Picture = MemPic,
-                SellerId = id
+                SellerId = id,
+                MemberId = memid
             };
 
             return View(showsalescourt);
@@ -264,7 +269,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 設定分類()
         {
-            getid();
+            id = getid();
             CustomizedCategory csct = new CustomizedCategory
             {
                 MemberId = id
@@ -350,7 +355,7 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult 關於我(int id)
         {
-            if(id.ToString().Equals(""))      getid();
+            if(id.ToString().Equals(""))      id = getid();
 
             //MemberAccount x = dbContext.MemberAccounts.Where(a => a.MemberId == id).FirstOrDefault();
 
@@ -456,7 +461,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult 修改關於我()
         {
 
-            getid();
+            id = getid();
 
             var servicetime = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == id);
             C關於我ViewModel me = new C關於我ViewModel();
@@ -527,17 +532,17 @@ namespace prjiSpanFinal.Controllers
             var add = dbContext.MemberAccounts.FirstOrDefault(a => a.MemberId == Memberid);
             add.Description = asd;
                       
-          
+            
             dbContext.SaveChanges();
 
             //return Json(add);
-           return View("關於我", new { id = Memberid });
+           return Json("1");
 
         }
 
         public IActionResult 編輯賣場資訊()
         {
-            getid();
+            id = getid();
 
 
             Card賣場ViewModel card = new Card賣場ViewModel()
@@ -688,7 +693,7 @@ namespace prjiSpanFinal.Controllers
 
         
         public IActionResult GetCoupon(int couponid) {
-            getid();
+            id = getid();
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
@@ -723,6 +728,7 @@ namespace prjiSpanFinal.Controllers
             var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id).Select(p => new
             {
                 name = p.CustomizedCategoryName,
+                count = p.Products.Where(a => a.CustomizedCategoryId == p.CustomizedCategoryId).Count(),
 
             }).ToList();
 
@@ -788,8 +794,14 @@ namespace prjiSpanFinal.Controllers
 
         public IActionResult deleteCustName(int id,string custname)
         {
+            
             var q = dbContext.CustomizedCategories.Where(a => a.MemberId == id && a.CustomizedCategoryName == custname).FirstOrDefault();
-            if(q != null) dbContext.CustomizedCategories.Remove(q);
+            var product = dbContext.Products.Where(a => a.CustomizedCategoryId == q.CustomizedCategoryId).ToList();
+            foreach(var prd in product)
+            {
+                prd.CustomizedCategoryId = 1;
+            }
+            if (q != null) dbContext.CustomizedCategories.Remove(q);
 
             dbContext.SaveChanges();
             
