@@ -66,6 +66,7 @@
     <div class="col-9 ">
         <h2 class="d-flex justify-content-center position-relative">
             蝦爆活動
+            <span class="btn btn-secondary" style="position:absolute;right:220px;" id="DemoJoinEvent">Demo活動</span>
             <span class="btn btn-danger" style="position:absolute;right:110px;" id="DemoCheckEvent">Demo審核</span>
             <span class="btn btn-success" style="position: absolute; right: 0px;" id="DemoGetOrder">Demo訂單</span>
         </h2>
@@ -215,7 +216,12 @@
                             }
                             location.reload();
                         })
-                                
+
+    $("#DemoJoinEvent").click(function () {
+        $.getJSON(`/Seller/DemoEventJoin`, function () {
+            Swal.fire('已成功加入商品', '', 'success')
+                });
+        });
                                     
                                     
 

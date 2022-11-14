@@ -271,7 +271,7 @@ namespace prjiSpanFinal.Controllers
         public IActionResult getItem(int nowpage)
         {
             int id = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
-            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).Where(p=>p.ProductStatusId!=1||p.ProductStatusId!=2).ToList(), nowpage);
+            List<CADProdViewModel> res = new CSellerADFactory().fgetShowITem(_db.Products.Where(p => p.MemberId == id).Where(p=> p.ProductStatusId!=1 && p.ProductStatusId!=2).ToList(), nowpage);
             return Json(res);
         }
         public IActionResult ADshowCheckItem(int itemID)
@@ -1330,6 +1330,27 @@ namespace prjiSpanFinal.Controllers
             }
             _db.SaveChanges();
             return Json(Oid);
+        }
+        public IActionResult DemoEventJoin()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<Product> prod = _db.Products.Where(p => p.MemberId == memId).Where(p => p.ProductStatusId == 0).ToList();
+            List<int> sl = _db.SubOfficialEventLists.OrderByDescending(s => s.SubOfficialEventListId).Select(s => s.SubOfficialEventListId).Take(4).ToList();
+            for (int i = 0; i < sl.Count; i++)
+            {
+                foreach (var item in prod.Skip(5 * i).Take(5 * (i + 1)))
+                {
+                    SubOfficialEventToProduct res = new SubOfficialEventToProduct
+                    {
+                        ProductId = item.ProductId,
+                        SubOfficialEventListId = sl[i],
+                        VerifyId = 1,
+                    };
+                    _db.SubOfficialEventToProducts.Add(res);
+                }
+            }
+            _db.SaveChanges();
+            return Json(0);
         }
     }
 }
