@@ -428,6 +428,7 @@
     });
 
     $(".messageBoardVC").on("click", ".messageSubmit", async function () {
+        console.log("1111");
         const message = $(this).siblings(".message").val();
         if (message == "") {
             Swal.fire("請輸入留言內容");
@@ -484,7 +485,46 @@
             }
         });
     });
+    $(".messageBoardVC").on("click", ".collapseMessage", function () {
+        const thisLayerNumber = Number($(this).closest(".messageBoardID").attr("class").split(' ')[0].substring(5));
+        if ($(this).closest(".messageBoardID").nextAll(".messageBoardID").length > 0) {
+            if ($(this).html() == "收合") {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function (event) {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none").addClass("d-none");
+                        console.log($(this).attr("class"));
+                    }
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("展開");
+            }
+            else {
+                $(this).closest(".messageBoardID").nextAll(".messageBoardID").each(function () {
+                    const layerNumber = Number($(this).attr("class").split(' ')[0].substring(5));
+                    if (layerNumber > thisLayerNumber) {
+                        console.log($(this).attr("class"));
+                        $(this).removeClass("d-none");
+                        console.log($(this).attr("class"));
+                        if ($(this).has(".collapseMessage").length > 0) {
+                            $(this).find(".collapseMessage").html("收合");
+                        }
+                    }
+                    else {
+                        return;
+                    }
+                })
+                $(this).html("收合");
+            }
+        }
+    })
 
+    $(".messageBoardVC").on("click", ".messageReplyBtn", function () {
+        $(this).closest(".messageFooter").siblings(".messageReplay").slideToggle();
+    });
 
 </script>
 }
