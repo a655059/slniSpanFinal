@@ -1191,6 +1191,7 @@ namespace prjiSpanFinal.Controllers
                     var mem = db.MemberAccounts.FirstOrDefault(m => m.MemberId == memID);
                     mem.MemberPw = txtNewPW;
                     db.SaveChanges();
+                    HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
                     return Content("OK", "text/plain", Encoding.UTF8);
                 }
                 return Content("NO", "text/plain", Encoding.UTF8);
