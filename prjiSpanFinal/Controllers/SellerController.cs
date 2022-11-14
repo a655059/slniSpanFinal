@@ -1331,6 +1331,54 @@ namespace prjiSpanFinal.Controllers
             _db.SaveChanges();
             return Json(Oid);
         }
+        public IActionResult DemoEventJoin()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            List<Product> prod = _db.Products.Where(p => p.MemberId == memId).Where(p=>p.ProductStatusId==0).ToList();
+            List<int> sl = _db.SubOfficialEventLists.OrderByDescending(s => s.SubOfficialEventListId).Select(s=>s.SubOfficialEventListId).Take(4).ToList();
+            foreach(var item in prod.Take(7))
+            {
+                SubOfficialEventToProduct res = new SubOfficialEventToProduct
+                {
+                    ProductId = item.ProductId,
+                    SubOfficialEventListId = sl[0],
+                    VerifyId = 1,
+                };
+                _db.SubOfficialEventToProducts.Add(res);
+            }
+            foreach(var item in prod.Skip(7).Take(7))
+            {
+                SubOfficialEventToProduct res = new SubOfficialEventToProduct
+                {
+                    ProductId = item.ProductId,
+                    SubOfficialEventListId = sl[1],
+                    VerifyId = 1,
+                };
+                _db.SubOfficialEventToProducts.Add(res);
+            }
+            foreach (var item in prod.Skip(14).Take(7))
+            {
+                SubOfficialEventToProduct res = new SubOfficialEventToProduct
+                {
+                    ProductId = item.ProductId,
+                    SubOfficialEventListId = sl[2],
+                    VerifyId = 1,
+                };
+                _db.SubOfficialEventToProducts.Add(res);
+            }
+            foreach (var item in prod.Skip(21))
+            {
+                SubOfficialEventToProduct res = new SubOfficialEventToProduct
+                {
+                    ProductId = item.ProductId,
+                    SubOfficialEventListId = sl[3],
+                    VerifyId = 1,
+                };
+                _db.SubOfficialEventToProducts.Add(res);
+            }
+            _db.SaveChanges();
+            return Json(0);
+        }
     }
 }
 
