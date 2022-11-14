@@ -189,13 +189,18 @@
                 });
                 $(".smallType").html(str);
             }
+            let dateTime = new Date();
+            let startDate = `${dateTime.getFullYear()}-${dateTime.getMonth() + 1}-${dateTime.getDate()}`;
+            let startTime = `${dateTime.getHours()}:${dateTime.getMinutes() + 2}:00`;
+            let endDate = startDate;
+            let endTime = `${dateTime.getHours()}:${dateTime.getMinutes() + 4}:00`;
             $(".smallType option:contains('穿戴裝置')").prop("selected", true);
             $("input[name='startPrice']").val("8900");
             $("input[name='stepPrice']").val("200");
-            $("input[name='startDate']").val("2022-11-08");
-            $("input[name='startTime']").val("14:00:00");
-            $("input[name='endDate']").val("2022-11-15");
-            $("input[name='endTime']").val("14:00:00");
+            $("input[name='startDate']").val(startDate);
+            $("input[name='startTime']").val(startTime);
+            $("input[name='endDate']").val(endDate);
+            $("input[name='endTime']").val(endTime);
             $("textarea[name='description']").val(`商品特色：
 
 ˙精美圓形凸面設計
