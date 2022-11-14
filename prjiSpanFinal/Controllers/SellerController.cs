@@ -1279,6 +1279,58 @@ namespace prjiSpanFinal.Controllers
             _db.SaveChanges();
             return Json(0);
         }
+        public IActionResult DemoEventDemoCheck()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            var a = _db.SubOfficialEventToProducts.Where(e => e.Product.MemberId == memId).Where(p => p.VerifyId == 1);
+            if (a.Any()) { 
+            foreach(var item in a)
+            {
+                item.VerifyId = 2;
+            }
+            _db.SaveChanges();
+            }
+
+            return Json(memId);
+        }
+        public IActionResult DemoGetOrder()
+        {
+            int memId = JsonSerializer.Deserialize<MemberAccount>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER)).MemberId;
+            ProductDetail proddetail = _db.ProductDetails.Where(p => p.Product.MemberId == memId).OrderByDescending(p => p.ProductDetailId).FirstOrDefault();
+            for(int i = 0; i < 3; i++) {
+                Order demo = new Order
+                {
+                    MemberId = 25,
+                    OrderDatetime = DateTime.Now,
+                    RecieveAdr = "106台北市大安區復興南路一段390號2樓",
+                    FinishDate = DateTime.Now,
+                    CouponId = 1,
+                    StatusId = 7,
+                    ShipperId = 1,
+                    PaymentDate = DateTime.Now,
+                    ShippingDate = DateTime.Now,
+                    ReceiveDate = DateTime.Now,
+                    PaymentId = 1,
+                };
+                _db.Orders.Add(demo);                
+            }
+            _db.SaveChanges();
+            var Oid = _db.Orders.Where(p => p.MemberId == 25).OrderByDescending(p => p.OrderId).Select(p => p.OrderId).Take(3).ToList();
+            for (int i = 0; i < 3; i++)
+            {
+                OrderDetail demo = new OrderDetail
+                {
+                    OrderId = Oid[i],
+                    ProductDetailId = proddetail.ProductDetailId,
+                    Quantity = (i + 1) * 2,
+                    ShippingStatusId=5,
+                    Unitprice=proddetail.UnitPrice,
+                };
+                _db.OrderDetails.Add(demo);
+            }
+            _db.SaveChanges();
+            return Json(Oid);
+        }
     }
 }
 

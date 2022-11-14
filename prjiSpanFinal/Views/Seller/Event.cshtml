@@ -64,7 +64,11 @@
 <div class="row">
     <div class="col-2"><vc:seller-ui></vc:seller-ui></div>
     <div class="col-9 ">
-        <h2 class="d-flex justify-content-center">蝦爆活動</h2>
+        <h2 class="d-flex justify-content-center position-relative">
+            蝦爆活動
+            <span class="btn btn-danger" style="position:absolute;right:110px;" id="DemoCheckEvent">Demo審核</span>
+            <span class="btn btn-success" style="position: absolute; right: 0px;" id="DemoGetOrder">Demo訂單</span>
+        </h2>
         <div class="">
             <div class="my-3 mx-2 內文優惠劵">商品活動</div>
             <div class="mx-2">
@@ -183,5 +187,37 @@
         //    location.href = "/Seller/Event"
         //}, 1000);
     });
+</script>
+<script>
+    //DEMO
+                        $("#DemoCheckEvent").click(function (evt) {
+                            $.getJSON(`/Seller/DemoEventDemoCheck`, function (data) {
+                                Swal.fire('已成功審核', '', 'success')
+                                    .then(() => {
+                                        happy_sendnoti(3, data, "審核通過", "/Seller/Event", "您的商品已審核通過！");
+                                        location.reload();
+                                    });
+                            })
+                        })
+
+                        $("#DemoGetOrder").click(function () {
+                            let ids = [];
+                            $.post(`/Seller/DemoGetOrder`, function (data) {
+                                for (let i = 0; i < data.length; i++) {
+                                    ids.push(data[i]);
+                                }
+                            })
+                            for (let i = 0; i < ids.length; i++) {
+                                $.getJSON(`/Member/TakeTradeFee`, { id: ids[i] }, function (data) {
+                                    console.log(data);
+                                    happy_sendnoti(2, data[0], `交易完成`, "/Seller/Order", `您的訂單編號 ${ids[i]} 交易已完成，總金額為 ${data[1]} 元，將酌收 ${data[2]} 元作為交易手續費。`);
+                                })
+                            }
+                            location.reload();
+                        })
+                                
+                                    
+                                    
+
 </script>
 }

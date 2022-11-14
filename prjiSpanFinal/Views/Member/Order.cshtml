@@ -481,7 +481,7 @@
                 if (data == "error")
                     console.log("儲存失敗");
                 else if (data.length > 1) {
-                    happy_sendnoti(2, data[0], `交易完成`, "/Seller/Order", `您的訂單筆數 ${recorderid} 交易已完成，總金額為 ${data[1]} 元，將酌收 ${data[2]} 元作為交易手續費。`);
+                    happy_sendnoti(2, data[0], `交易完成`, "/Seller/Order", `您的訂單編號 ${recorderid} 交易已完成，總金額為 ${data[1]} 元，將酌收 ${data[2]} 元作為交易手續費。`);
                 }
 
             });
