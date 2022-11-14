@@ -142,7 +142,7 @@ namespace prjiSpanFinal.Controllers
                 a.StatusId = 7;
                 MemberAccount b = dbcontext.Orders.Where(o => o.OrderId == id).Select(o => o.Member).FirstOrDefault();
                 b.Balance += dbcontext.Orders.Where(o => o.OrderId == id).Select(o => o.Payment.Fee + o.Shipper.Fee + o.OrderDetails.Select(o => Convert.ToInt32(o.Unitprice) * o.Quantity).Sum()).FirstOrDefault();
-                if (dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().Coupon.IsFreeDelivery == true)
+                if (dbcontext.Orders.Where(o => o.OrderId == id).Select(p=>p.Coupon.IsFreeDelivery).FirstOrDefault() == true)
                 {
                     b.Balance -= dbcontext.Orders.Where(o => o.OrderId == id).FirstOrDefault().Shipper.Fee;
                 }

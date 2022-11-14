@@ -45,8 +45,12 @@
                 if (data.shippingDate != undefined) {
                     $(".odshippingdemoact").removeClass("active").addClass("active");
                     $(".odshippingdemopro").html(`已出貨<br />${datetimetostring((new Date(data.shippingDate)))}`);
+                    $(".demochangesta").html(`<strong>狀態:</strong> <br> 已出貨`);
                 }
-                
+                if (data.statusId == 5)
+                {
+                    $(".demochangesta").html(`<strong>狀態:</strong> <br> 已到貨`);
+                }
             });
 
         });

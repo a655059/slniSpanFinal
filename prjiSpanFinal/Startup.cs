@@ -57,7 +57,6 @@ namespace prjiSpanFinal
                 app.UseHsts();
             }
             app.UseSession();
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
