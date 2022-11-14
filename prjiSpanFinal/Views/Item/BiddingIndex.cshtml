@@ -396,6 +396,9 @@
                 if (data == "0") {
                     Swal.fire("請先登入再出價");
                 }
+                else if (data == "2") {
+                    Swal.fire("出價金額有誤");
+                }
                 else {
                     $(".currentPrice").html(data[0]);
                     $(".biddingCount").html(data[1]);
