@@ -93,6 +93,10 @@ namespace prjiSpanFinal.ViewModels.seller
             }
             foreach (var item in list)
             {
+                if (item.ProductStatusId != 0)
+                {
+                    continue;
+                }
                 var price = db.ProductDetails.Where(p => p.ProductId == item.ProductId).OrderBy(p => p.UnitPrice).Select(p => p.UnitPrice);
                 decimal x = price.Min();
                 decimal y = price.Max();

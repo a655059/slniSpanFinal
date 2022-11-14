@@ -90,7 +90,7 @@ namespace prjiSpanFinal.ViewModels.Event
             }
             foreach (var item in list)
             {
-                if (item.ProductStatusId !=0)
+                if (item.ProductStatusId ==1 || item.ProductStatusId==2)
                 {
                     continue;
                 }
