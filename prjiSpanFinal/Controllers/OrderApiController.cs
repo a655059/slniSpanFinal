@@ -74,7 +74,7 @@ namespace prjiSpanFinal.Controllers
             iSpanProjectContext dbcontext = new iSpanProjectContext();
             OrderDetail a = dbcontext.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
             Order b = dbcontext.Orders.FirstOrDefault(o => o.OrderId == a.OrderId);
-            return Json(new { a.ShippingStatusId, b.ShippingDate});
+            return Json(new { a.ShippingStatusId, b.ShippingDate, b.StatusId });
         }
     }
 }

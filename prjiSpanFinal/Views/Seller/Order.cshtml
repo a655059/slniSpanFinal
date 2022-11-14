@@ -292,7 +292,7 @@
                 </select>
                 <div>請輸入補充資訊: </div>
                 <div class="mb-3">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea2" rows="3"></textarea>
                 </div>
                 <div id="previewCommentPhoto" class="d-flex"></div>
                 <label class="addPhoto btn btn-outline-warning btn-sm" for="commentPhoto">
@@ -636,7 +636,7 @@
                 return (item.src).split(',')[1];
             });
             happy_sendnoti(4, arguebuyerid, "你的訂單被賣家投訴了", "/Member/Order?sort=0&tab=8","");
-            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea1").val(), pics: pics }, function (data) {
+            $.postJSON(`/Member/WriteArgue`, { id: argueorderid, type: $("#arguetypeselect option:selected").val(), reason: $("#argueselect option:selected").val(), keyword: $("#exampleFormControlTextarea2").val(), pics: pics }, function (data) {
                 reloaditem(sortmethod, tabid);
             });
         })
