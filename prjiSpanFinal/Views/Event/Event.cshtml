@@ -81,14 +81,30 @@
             function GetCoupon(event, couponid) {
                 $.post('@Url.Content("~/Event/GetCoupon")', { "couponid": couponid }, function (data) {
                     if (data == "1") {
-                        window.alert("已經領取過此券！");
+                        Swal.fire({
+                            icon: 'error',
+                            title: '已領取過的優惠券',
+                            text: '也許出了什麼錯誤，這個優惠券已經領過了...',
+                        })
                     }
                     else if (data == "2") {
-                        location.reload();
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: '領取優惠券',
+                            text: '快樂購物去囉',
+                        }).then(function () {
+                            location.reload();
+                        })
                     }
                     else {
-                        window.alert("尚未登入");
-                        window.location = "/Member/Login";
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '尚未登入',
+                            text: '請登入帳號...',
+                        }).then(function () {
+                            window.location = "/Member/Login";
+                        })
                     }
                 })
             }
@@ -97,7 +113,7 @@
     <script>
         const eventid =@Model.Event.OfficialEventListId;
 
-        
+
         $(document).ready(function () {
             if (eventid % 3 == 0) {
                 $(".Setionset").css("background-color", "#4F9D9D");
