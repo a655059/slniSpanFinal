@@ -1389,7 +1389,7 @@ namespace prjiSpanFinal.Controllers
             return list;
         }
         #endregion
-        #region SubEventToProductRegion
+        #region subEventToProductRegion
         protected IPagedList<subEventtoProductListViewModel> GetEtoPsPagedProcess(int id, int? page, int pageSize, string keyword)
         {
             // 過濾從client傳送過來有問題頁數
@@ -1405,7 +1405,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult subEventtoProductList(int id, string keyword, int? pageSize, int? page = 1)
         {
-
             ViewBag.pageSize = pageSize;
             ViewBag.Verifies = db.Verifies.ToList();
             ViewBag.subEvent = db.SubOfficialEventLists.FirstOrDefault(i => i.SubOfficialEventListId == id).OfficialEventListId;
@@ -1420,7 +1419,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EtoPApprove(int id)
         {
-
             var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
             prod.VerifyId = 2;
             var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
@@ -1429,7 +1427,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult EtoPDeny(int id)
         {
-
             var prod = db.SubOfficialEventToProducts.FirstOrDefault(i => i.SubOfficialEventToProductId == id);
             prod.VerifyId = 3;
             var p = db.Products.FirstOrDefault(i => i.ProductId == prod.ProductId);
@@ -1587,7 +1584,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult FAQCreate(Faq faq)
         {
-
             Faq F = new()
             {
                 Answer = faq.Answer,
@@ -1598,10 +1594,8 @@ namespace prjiSpanFinal.Controllers
             db.SaveChanges();
             return RedirectToAction("FAQList");
         }
-
         public IActionResult FAQEdit(int id)
         {
-
             var FAQTypes = db.Faqtypes.ToList();
             ViewBag.FAQTypes = FAQTypes;
             var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == id);
@@ -1610,7 +1604,6 @@ namespace prjiSpanFinal.Controllers
         [HttpPost]
         public IActionResult FAQEdit(Faq faq)
         {
-
             var FAQTypes = db.Faqtypes.ToList();
             var FAQ = db.Faqs.FirstOrDefault(i => i.Faqid == faq.Faqid);
             FAQ.Answer = faq.Answer;
@@ -1621,7 +1614,6 @@ namespace prjiSpanFinal.Controllers
         }
         public IActionResult FAQDelete(int id)
         {
-
             var faq = db.Faqs.FirstOrDefault(i => i.Faqid == id);
             db.Faqs.Remove(faq);
             try
