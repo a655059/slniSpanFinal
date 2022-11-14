@@ -60,6 +60,8 @@ namespace prjiSpanFinal.Controllers
                     var q = db.MemberAccounts.FirstOrDefault(p => p.MemberId == memberID);
                     q.MemStatusId = 2;
                     db.SaveChanges();
+                    HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
+
                     return Content("1", "text/plain", Encoding.UTF8);
                 }
                 else
