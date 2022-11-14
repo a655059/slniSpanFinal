@@ -1083,7 +1083,7 @@ namespace prjiSpanFinal.Controllers
             var q = dbcontext.Orders.Where(o => o.MemberId == memID && o.StatusId == 3 || o.StatusId == 2).Select(s => s);
             foreach (var item in q)
             {
-                item.StatusId = 6;
+                item.StatusId = 5;
             }
             dbcontext.SaveChanges();
             return Json("1");
