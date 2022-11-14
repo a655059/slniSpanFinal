@@ -26,6 +26,9 @@
                 活動名稱
             </th>
             <th>
+                活動類型
+            </th>
+            <th>
                 開始日期
             </th>
             <th>
@@ -48,10 +51,22 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink($"{item.OfficialEventListId}","Event","Event",new{Eventid=item.OfficialEventListId},new{@class="btn btn-info"})
+                    @Html.ActionLink($"{item.OfficialEventListId}", "Event", "Event", new { Eventid = item.OfficialEventListId }, new { @class = "btn btn-info" })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EventName)
+                </td>
+                <td>
+                    @{
+                        if (item.OfficialEventTypeId == 1)
+                        {
+                            <label class="form-control-plaintext">普通活動</label>
+                        }
+                        else
+                        {
+                            <label class="form-control-plaintext">搶購活動</label>
+                        }
+                    }
                 </td>
                 <td>
                     <input value="@item.StartDate.ToString("yyyy-MM-dd")" readonly class="form-control-plaintext">
