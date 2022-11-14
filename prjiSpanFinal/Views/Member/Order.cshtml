@@ -20,6 +20,7 @@
         <div class="col-1"></div>
         <div class="col-11">
                 <button class="addMoreProduct btn btn-outline-success">Demo</button>
+                <button class="addMoreProduct2 btn btn-outline-success">Demo2</button>
             <div class="ordersearchbar">
                 <input type="text" class="form-control rounded" placeholder="搜尋訂單" aria-label="Search" aria-describedby="search-addon" style="display: inline; width: 400px;" id="orderkeyword" />
                 <span>
@@ -594,6 +595,13 @@
         $(".addMoreProduct").click(function(){
             $.getJSON(`/Member/DemoAddButerOrder`, function (data) {
                 Swal.fire("Demo訂單新增成功");
+            });
+            nowpages = 1;
+            reloaditem(sortmethod, tabid, nowpages, eachpage);
+        })
+        $(".addMoreProduct2").click(function () {
+            $.getJSON(`/Member/DemoShipping`, function (data) {
+                Swal.fire("Demo訂單出貨成功");
             });
             nowpages = 1;
             reloaditem(sortmethod, tabid, nowpages, eachpage);
