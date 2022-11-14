@@ -567,10 +567,10 @@ namespace prjiSpanFinal.Controllers
                 {
                 var DeltlikeID = dbcontext.Likes.Where(p => p.ProductId == item).Select(p => p).FirstOrDefault() ;
                 dbcontext.Likes.Remove(DeltlikeID);
-                
+                dbcontext.SaveChanges();
                 }
                 //var mylikeID = dbcontext.Likes.Where(p => p.LikeId == likeID).Select(p => p.LikeId).ToList();
-                dbcontext.SaveChanges();
+                
 
                 return Json(new LikeSortReq().MyLikeSortItems(filter.Select(o => Convert.ToInt32(o)).ToArray(), priceMin, priceMax, SortOrder, pages, memID));
 
