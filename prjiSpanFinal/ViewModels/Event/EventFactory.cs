@@ -105,9 +105,11 @@ namespace prjiSpanFinal.ViewModels.Event
                 if (_db.SubOfficialEventToProducts.Where(p => p.ProductId == item.ProductId).Where(p => p.VerifyId == 2).FirstOrDefault()!=null)
                 {
                     prodstatus = _db.SubOfficialEventToProducts.Where(p => p.ProductId == item.ProductId).Where(p => p.VerifyId == 2).FirstOrDefault();
-                    discount = Convert.ToDecimal(prodstatus.SubOfficialEventList.Discount);
-                    isDeliveryFree = prodstatus.SubOfficialEventList.IsFreeDelivery;
-                    if (DateTime.Now.CompareTo(prodstatus.SubOfficialEventList.OfficialEventList.StartDate) >= 0 && DateTime.Now.CompareTo(prodstatus.SubOfficialEventList.OfficialEventList.EndDate) <= 0)
+                    var prodSublist = _db.SubOfficialEventLists.Where(e => e.SubOfficialEventListId == prodstatus.SubOfficialEventListId).FirstOrDefault();
+                    var prodoflist = _db.SubOfficialEventLists.Where(e => e.SubOfficialEventListId == prodstatus.SubOfficialEventListId).Select(p => p.OfficialEventList).FirstOrDefault();
+                    discount = Convert.ToDecimal(prodSublist.Discount);
+                    isDeliveryFree = prodSublist.IsFreeDelivery;
+                    if (DateTime.Now.CompareTo(prodoflist.StartDate) >= 0 && DateTime.Now.CompareTo(prodoflist.EndDate) <= 0)
                         isStart = true;
                 }
 
