@@ -76,6 +76,11 @@
                 </tbody>
             </table>
         </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6 d-flex justify-content-center"><button class="btn btn-secondary" id="back">返回</button></div>
+            <div class="col-3"></div>
+        </div>
     </div>
     <div class="col-1"></div>
 </div>
@@ -84,6 +89,9 @@
 <script>
     $(".DeleteEvent").click(function () {
         location.href = "/Seller/JoinEventChi";
+    })
+    $("#back").click(function () {
+        location.href = "/Seller/Event";
     })
 </script>
 }

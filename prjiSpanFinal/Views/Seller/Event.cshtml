@@ -112,7 +112,8 @@
                                             if (ev.StartDate < DateTime.Now && ev.EndDate > DateTime.Now)
                                             {
                                                 int Days = (ev.EndDate - DateTime.Now).Days;
-                                                int Hrs = (ev.EndDate - DateTime.Now).Hours - Days;
+                                                int Hrs = (ev.EndDate - DateTime.Now).Hours;
+                                                
                                                 <p>報名:<span style="color:red;"> @ev.SubOfficialEventLists.Count </span>個子活動現在可報名，最早的報名將结束於 @Days 天 @Hrs 小時。</p>
                                             }
                                         }

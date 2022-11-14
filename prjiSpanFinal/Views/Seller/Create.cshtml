@@ -389,6 +389,11 @@
 </div>
 @section Scripts{
     <script>
+        let detailid = [];
+        $(document).on("click", ".delbtn", function () {   //刪除資料庫生成的規格
+            $(this).parents("tr").remove();
+            detailid.push($(this).parents("tr").find("#detail").val());
+        })
 
         /////////大類小類連接---------------------------------------------------------------------------------------------------------------
         let advancedmode = false;
@@ -514,7 +519,7 @@
                 tr.appendChild(td1);
 
                 let td = document.createElement('td');
-                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn btn-danger  規格按鈕"> X</button></a>`;
+                td.innerHTML = `<a href='javascript:;'><button type="button" class="btn btn-danger delbtn 規格按鈕"> X</button></a>`;
                 let a = td.children[0];
                 a.addEventListener('click', () => {
                     let parent = a.parentNode.parentNode;
@@ -591,12 +596,12 @@
         });
 
         demomodal.addEventListener("click", function () {
-            document.getElementById("text1").value="正方形";
+            document.getElementById("text1").value="圓形";
             document.getElementById("text2").value=2;
             document.getElementById("text3").value=5000;
         });
         $("#demomodal2").click(function () {
-            $("#text1").val("圓形");
+            $("#text1").val("心形");
             $("#text2").val("50");
             $("#text3").val("6666");
         });
