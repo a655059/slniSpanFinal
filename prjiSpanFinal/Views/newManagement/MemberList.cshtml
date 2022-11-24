@@ -257,7 +257,7 @@
             a.classList.add('pagination');
         }
 
-        //選取一頁幾筆
+       //選取一頁幾筆
         let pagesize=document.getElementById("pagesize");
         let pageSize=0;
         pagesize.addEventListener("change",function(){
@@ -266,7 +266,7 @@
             let link="@Url.Content("~/newManagement/MemberList")"+`?pageSize=${pageSize}&filter=${Filter}`;
        document.location.href=link;
         })
-            //選取全部
+       //選取全部
             let filtersubmit = document.getElementById("filtersubmit");
             let FFilter = "";
             filtersubmit.addEventListener("click", function () {
@@ -275,7 +275,7 @@
             let link="@Url.Content("~/newManagement/MemberList")"+`?pageSize=${pageSize}`;
        document.location.href=link;
         })
-        //篩選ProductStauts
+       //篩選ProductStauts
         let filter=document.getElementById("filter");
         let Filter="";
         filter.addEventListener("change",function(){
